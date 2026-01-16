@@ -1,0 +1,9 @@
+{
+  "DashboardAlerts": {
+    "title": "Alertas",
+    "noAlerts": "No hay nuevas alertas",
+    "critical": "Crítico",
+    "warning": "Advertencia",
+    "info": "Información"
+  }
+}

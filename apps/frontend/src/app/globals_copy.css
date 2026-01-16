@@ -1,0 +1,272 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@clerk/themes/shadcn.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Agricultural-inspired color palette with high contrast for greenhouse environments */
+  /* Core shadcn/ui colors with agricultural theming */
+  --background: oklch(0.98 0.01 85); /* Warm cream background */
+  --foreground: oklch(0.25 0.02 120); /* Deep forest text */
+  --card: oklch(1 0 0); /* Pure white cards for contrast */
+  --card-foreground: oklch(0.25 0.02 120);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.25 0.02 120);
+  --primary: oklch(0.45 0.15 145); /* Leaf green primary */
+  --primary-foreground: oklch(0.98 0.01 85);
+  --secondary: oklch(0.55 0.05 135); /* Sage green secondary */
+  --secondary-foreground: oklch(0.98 0.01 85);
+  --muted: oklch(0.96 0.01 85); /* Light muted */
+  --muted-foreground: oklch(0.45 0.02 120);
+  --accent: oklch(0.75 0.15 85); /* Sun gold accent */
+  --accent-foreground: oklch(0.25 0.02 120);
+  --destructive: oklch(0.55 0.18 25); /* Agricultural critical red */
+  --destructive-foreground: oklch(0.98 0.01 85);
+  --border: oklch(0.92 0.01 85);
+  --input: oklch(1 0 0);
+  --ring: oklch(0.45 0.15 145);
+  --chart-1: oklch(0.55 0.18 145); /* Healthy green */
+  --chart-2: oklch(0.65 0.15 65); /* Warning amber */
+  --chart-3: oklch(0.55 0.12 220); /* Info blue */
+  --chart-4: oklch(0.75 0.15 85); /* Performance gold */
+  --chart-5: oklch(0.55 0.05 135); /* Secondary sage */
+  --radius: 0.75rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Agricultural-specific color variables */
+  --ag-earth-brown: oklch(0.35 0.08 45);
+  --ag-leaf-green: oklch(0.45 0.15 145);
+  --ag-sky-blue: oklch(0.75 0.08 220);
+  --ag-sun-gold: oklch(0.75 0.15 85);
+  --ag-healthy: oklch(0.55 0.18 145);
+  --ag-warning: oklch(0.65 0.15 65);
+  --ag-critical: oklch(0.55 0.18 25);
+  --ag-info: oklch(0.55 0.12 220);
+  --ag-temp-optimal: oklch(0.55 0.15 160);
+  --ag-temp-warning: oklch(0.65 0.15 65);
+  --ag-temp-critical: oklch(0.55 0.18 25);
+  --ag-sage-green: oklch(0.55 0.05 135);
+  --ag-warm-cream: oklch(0.98 0.01 85);
+  --ag-deep-forest: oklch(0.25 0.02 120);
+  --ag-soft-coral: oklch(0.65 0.12 15);
+}
+
+.dark {
+  --background: oklch(0.25 0.02 120); /* Deep forest background */
+  --foreground: oklch(0.98 0.01 85); /* Warm cream text */
+  --card: oklch(0.28 0.02 120); /* Slightly lighter cards */
+  --card-foreground: oklch(0.98 0.01 85);
+  --popover: oklch(0.25 0.02 120);
+  --popover-foreground: oklch(0.98 0.01 85);
+  --primary: oklch(0.55 0.18 145); /* Bright healthy green */
+  --primary-foreground: oklch(0.25 0.02 120);
+  --secondary: oklch(0.55 0.05 135); /* Sage green */
+  --secondary-foreground: oklch(0.98 0.01 85);
+  --muted: oklch(0.32 0.02 120); /* Darker muted */
+  --muted-foreground: oklch(0.65 0.02 120);
+  --accent: oklch(0.75 0.15 85); /* Sun gold */
+  --accent-foreground: oklch(0.25 0.02 120);
+  --destructive: oklch(0.55 0.18 25); /* Critical red */
+  --destructive-foreground: oklch(0.98 0.01 85);
+  --border: oklch(0.55 0.05 135);
+  --input: oklch(0.28 0.02 120);
+  --ring: oklch(0.55 0.18 145);
+  --chart-1: oklch(0.55 0.18 145);
+  --chart-2: oklch(0.65 0.15 65);
+  --chart-3: oklch(0.75 0.08 220);
+  --chart-4: oklch(0.75 0.15 85);
+  --chart-5: oklch(0.65 0.12 15);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Agricultural-specific color utilities */
+  --color-ag-earth-brown: var(--ag-earth-brown);
+  --color-ag-leaf-green: var(--ag-leaf-green);
+  --color-ag-sky-blue: var(--ag-sky-blue);
+  --color-ag-sun-gold: var(--ag-sun-gold);
+  --color-ag-healthy: var(--ag-healthy);
+  --color-ag-warning: var(--ag-warning);
+  --color-ag-critical: var(--ag-critical);
+  --color-ag-info: var(--ag-info);
+  --color-ag-temp-optimal: var(--ag-temp-optimal);
+  --color-ag-temp-warning: var(--ag-temp-warning);
+  --color-ag-temp-critical: var(--ag-temp-critical);
+  --color-ag-sage-green: var(--ag-sage-green);
+  --color-ag-warm-cream: var(--ag-warm-cream);
+  --color-ag-deep-forest: var(--ag-deep-forest);
+  --color-ag-soft-coral: var(--ag-soft-coral);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* Agricultural-specific utility classes */
+  .ag-status-healthy {
+    background-color: var(--ag-healthy);
+    color: white;
+  }
+
+  .ag-status-warning {
+    background-color: var(--ag-warning);
+    color: white;
+  }
+
+  .ag-status-critical {
+    background-color: var(--ag-critical);
+    color: white;
+    animation: ag-critical-pulse 2s ease-in-out infinite;
+  }
+
+  .ag-status-info {
+    background-color: var(--ag-info);
+    color: white;
+  }
+
+  .ag-temp-optimal {
+    background-color: var(--ag-temp-optimal);
+    color: white;
+  }
+
+  .ag-temp-warning {
+    background-color: var(--ag-temp-warning);
+    color: white;
+    animation: ag-warning-pulse 3s ease-in-out infinite;
+  }
+
+  .ag-temp-critical {
+    background-color: var(--ag-temp-critical);
+    color: white;
+    animation: ag-critical-pulse 2s ease-in-out infinite;
+  }
+
+  .ag-high-contrast {
+    filter: contrast(1.5) saturate(1.1);
+  }
+
+  .ag-touch-target {
+    min-width: 3rem;
+    min-height: 3rem;
+    padding: 0.75rem;
+  }
+
+  .ag-card {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .ag-card:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
+  @keyframes ag-critical-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 var(--ag-critical);
+    }
+    50% {
+      box-shadow: 0 0 0 8px transparent;
+    }
+  }
+
+  @keyframes ag-warning-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 var(--ag-warning);
+    }
+    50% {
+      box-shadow: 0 0 0 6px transparent;
+    }
+  }
+}
+
+@layer utilities {
+  .ag-mobile-optimized {
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+
+  .ag-mobile-touch {
+    min-height: 3rem;
+    min-width: 3rem;
+  }
+
+  @media print {
+    .ag-print-hide {
+      display: none;
+    }
+    .ag-print-show {
+      display: block;
+    }
+  }
+}

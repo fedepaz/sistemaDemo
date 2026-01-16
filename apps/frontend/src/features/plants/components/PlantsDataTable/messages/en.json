@@ -1,0 +1,24 @@
+{
+  "PlantsDataTable": {
+    "title": "Plants",
+    "description": "Complete plant inventory with health monitoring and environmental data",
+    "searchPlaceholder": "Search plants...",
+    "selectAll": "Select all",
+    "selectRow": "Select row",
+    "healthy": "Healthy",
+    "warning": "Warning",
+    "critical": "Critical",
+    "temperatureValue": "{value}°C",
+    "humidityValue": "{value}%",
+    "growthStage": "Growth Stage",
+    "plantedDate": "Planted Date",
+    "lastWatered": "Last Watered",
+    "createTitle": "Create New Plant",
+    "createDescription": "Fill in the details below to create a new plant.",
+    "editTitle": "Edit Plant: {name}",
+    "editDescription": "Update the details for {name}.",
+    "addNew": "Add New Plant",
+    "update": "Update",
+    "create": "Create"
+  }
+}

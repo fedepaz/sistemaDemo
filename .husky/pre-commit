@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Obtener el nombre de la rama actual
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+# Definir las ramas protegidas
+PROTECTED_BRANCHES="^(main|frontendDev|backendDev)$"
+
+# Comprobar si la rama actual está protegida
+if echo "$BRANCH_NAME" | grep -qE "$PROTECTED_BRANCHES"; then
+  echo "❌ Error: Los commits directos a la rama '$BRANCH_NAME' no están permitidos."
+  echo "Esta es una rama protegida para asegurar la estabilidad del código."
+  echo ""
+  echo "👉 ¿Hiciste cambios en esta rama por error? No te preocupes. Sigue estos pasos para moverlos a una nueva rama:"
+  echo "   1. Guarda tus cambios temporalmente con: git stash"
+  echo "   2. Ve a la rama de desarrollo correcta (ej: git checkout frontendDev)"
+  echo "   3. Crea tu nueva rama con: git checkout -b feat/nombre-de-tu-feature"
+  echo "   4. Recupera tus cambios con: git stash pop"
+  echo "   5. Ahora puedes hacer el commit: git add . && git commit -m \"tu mensaje\""
+  exit 1
+fi
+
+echo "✅ Comprobación de rama superada. Ejecutando verificaciones pre-commit..."
+
+# Ejecutar el linter para verificar la calidad del código
+pnpm lint
+if [ $? -ne 0 ]; then
+
+  echo "❌ Las verificaciones pre-commit han fallado. Por favor, corrige los problemas de linting antes de continuar."
+  exit 1
+fi
+
+echo "✅ ¡Todas las verificaciones han pasado! Commit realizado con éxito."

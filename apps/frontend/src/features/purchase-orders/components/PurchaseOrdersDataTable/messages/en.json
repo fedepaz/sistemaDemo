@@ -1,0 +1,29 @@
+{
+  "PurchaseOrdersDataTable": {
+    "title": "Purchase Orders",
+    "description": "Complete procurement management with supplier tracking and delivery status",
+    "searchPlaceholder": "Search purchase orders...",
+    "selectAll": "Select all",
+    "selectRow": "Select row",
+    "delivered": "Delivered",
+    "approved": "Approved",
+    "pending": "Pending",
+    "cancelled": "Cancelled",
+    "received": "Received",
+    "createTitle": "Create New Purchase Order",
+    "createDescription": "Fill in the details below to create a new purchase order.",
+    "editTitle": "Edit Purchase Order: {orderNumber}",
+    "editDescription": "Update the details for {orderNumber}.",
+    "orderNumber": "Order Number",
+    "supplier": "Supplier",
+    "items": "Items",
+    "totalAmount": "Total Amount",
+    "status": "Status",
+    "orderDate": "Order Date",
+    "deliveryDate": "Delivery Date",
+    "addNew": "Add New",
+    "updateButton": "Update",
+    "createButton": "Create",
+    "entityName": "Purchase Orders"
+  }
+}

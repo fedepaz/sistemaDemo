@@ -1,0 +1,24 @@
+{
+  "PlantsDataTable": {
+    "title": "Plantas",
+    "description": "Inventario completo de plantas con monitoreo de salud y datos ambientales",
+    "searchPlaceholder": "Buscar plantas...",
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar fila",
+    "healthy": "Saludable",
+    "warning": "Advertencia",
+    "critical": "Crítico",
+    "temperatureValue": "{value}°C",
+    "humidityValue": "{value}%",
+    "growthStage": "Etapa de crecimiento",
+    "plantedDate": "Fecha de plantado",
+    "lastWatered": "Última limpieza",
+    "createTitle": "Crear Nueva Planta",
+    "createDescription": "Rellene los detalles a continuación para crear una nueva planta.",
+    "editTitle": "Editar Planta: {name}",
+    "editDescription": "Actualice los detalles de {name}.",
+    "addNew": "Añadir Nueva Planta",
+    "update": "Actualizar",
+    "create": "Crear"
+  }
+}

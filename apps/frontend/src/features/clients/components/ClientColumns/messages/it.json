@@ -1,0 +1,17 @@
+{
+  "ClientColumns": {
+    "selectRow": "Seleziona riga",
+    "selectAll": "Seleziona tutto",
+    "name": "Nome",
+    "contactPerson": "Persona di Contatto",
+    "email": "Email",
+    "phone": "Telefono",
+    "status": "Stato",
+    "totalOrders": "Ordini Totali",
+    "totalRevenue": "Ricavo Totale",
+    "lastOrder": "Ultimo Ordine",
+    "prospect": "Potenziale Cliente",
+    "active": "Attivo",
+    "inactive": "Inattivo"
+  }
+}

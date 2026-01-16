@@ -1,0 +1,17 @@
+{
+  "InvoicesDataTable": {
+    "title": "Tabla de Datos de Facturas",
+    "description": "Gestión completa de usuarios con roles, permisos y seguimiento de actividad",
+    "createTitle": "Crear Nueva Factura",
+    "createDescription": "Rellene los detalles a continuación para crear una nueva factura.",
+    "editTitle": "Editar Factura",
+    "editDescription": "Actualice los detalles de esta factura.",
+    "addNew": "Añadir Nuevo",
+    "editInvoiceTitle": "Editar {invoiceNumber}",
+    "createInvoiceTitle": "Crear Factura",
+    "editInvoiceDescription": "Actualiza los detalles de {invoiceNumber}.",
+    "createInvoiceDescription": "Rellena los detalles a continuación para crear una nueva factura.",
+    "update": "Actualizar",
+    "create": "Crear"
+  }
+}

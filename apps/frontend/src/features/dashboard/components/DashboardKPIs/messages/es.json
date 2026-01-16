@@ -1,0 +1,13 @@
+{
+  "DashboardKPIs": {
+    "totalPlants": "Plantas Totales",
+    "totalPlantsDescription": "Número total de plantas",
+    "fromLastMonth": "desde el mes pasado",
+    "activePlants": "Plantas Activas",
+    "activePlantsDescription": "Número de plantas activas",
+    "monthlyRevenue": "Ingresos Mensuales",
+    "openInvoices": "{count, plural, one {# factura abierta} other {# facturas abiertas}}",
+    "pendingOrders": "Órdenes Pendientes",
+    "awaitingApproval": "Esperando aprobación"
+  }
+}

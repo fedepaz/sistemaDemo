@@ -1,0 +1,18 @@
+{
+  "UserColumns": {
+    "selectRow": "Seleccionar fila",
+    "selectAll": "Seleccionar todo",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "role": "Rol",
+    "status": "Estado",
+    "department": "Departamento",
+    "lastLogin": "Último acceso",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "admin": "Administrador",
+    "user": "Usuario",
+    "manager": "Gerente",
+    "worker": "Trabajador"
+  }
+}

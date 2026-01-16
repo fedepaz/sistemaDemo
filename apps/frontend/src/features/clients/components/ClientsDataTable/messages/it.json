@@ -1,0 +1,31 @@
+{
+  "ClientsDataTable": {
+    "title": "Clienti",
+    "description": "Gestisci i tuoi clienti e visualizza i loro dettagli.",
+    "searchPlaceholder": "Cerca clienti...",
+    "selectAll": "Seleziona tutto",
+    "selectRow": "Seleziona riga",
+    "active": "Attivo",
+    "inactive": "Inattivo",
+    "prospect": "Potenziale",
+    "name": "Nome",
+    "contactPerson": "Persona di Contatto",
+    "email": "Email",
+    "phone": "Telefono",
+    "status": "Stato",
+    "totalOrders": "Ordini Totali",
+    "totalRevenue": "Entrate Totali",
+    "lastOrder": "Ultimo Ordine",
+    "createTitle": "Crea Nuovo Cliente",
+    "createDescription": "Compila i dettagli qui sotto per creare un nuovo cliente.",
+    "editTitle": "Modifica Cliente",
+    "editDescription": "Aggiorna i dettagli per questo cliente.",
+    "addNew": "Aggiungi Nuovo",
+    "editClientTitle": "Modifica {name}",
+    "createClientTitle": "Crea Cliente",
+    "editClientDescription": "Aggiorna i dettagli per {name}.",
+    "createClientDescription": "Compila i dettagli qui sotto per creare un nuovo cliente.",
+    "update": "Aggiorna",
+    "create": "Crea"
+  }
+}

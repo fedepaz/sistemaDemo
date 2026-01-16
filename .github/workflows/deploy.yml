@@ -1,0 +1,80 @@
+name: Deploy (Promotion Gate)
+
+on:
+  push:
+    branches:
+      - main
+      - frontendDev
+      - backendDev
+
+jobs:
+  frontend:
+    if: github.ref_name == 'frontendDev' || github.ref_name == 'main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - run: pnpm install
+
+      - name: Build frontend
+        run: pnpm turbo run build --filter=frontend
+
+      - name: Promote frontend
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+            echo "🚀 Frontend → PRODUCTION"
+          else
+            echo "🧪 Frontend → STAGING"
+          fi
+
+  backend:
+    if: github.ref_name == 'backendDev' || github.ref_name == 'main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run database migrations
+        run: pnpm --filter backend db:migrate
+        env:
+          DATABASE_URL: mysql://user:password@localhost:3306/vivero_app
+
+
+      - name: Check Frontend Test Coverage
+        if: matrix.app == 'frontend'
+        id: coverage
+        run: |
+          COVERAGE_SUMMARY=$(pnpm --filter frontend test:unit --coverage.reporter=text-summary)
+          echo "$COVERAGE_SUMMARY"
+          COVERAGE_PERCENTAGE=$(echo "$COVERAGE_SUMMARY" | grep 'All files' | awk -F '|' '{print $2}' | xargs)
+          echo "Coverage is ${COVERAGE_PERCENTAGE}% --- Required 80%"
+
+      - name: Build application
+        run: pnpm build
+      - name: Deploy to Vercel (Frontend)
+        if: matrix.app == 'frontend'
+        run: echo "Deploying to Vercel..."
+      - name: Deploy to Render (Backend)
+        if: matrix.app == 'backend'
+        run: echo "Deploying to Render..."

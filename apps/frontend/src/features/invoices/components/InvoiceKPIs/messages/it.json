@@ -1,0 +1,13 @@
+{
+  "InvoiceKPIs": {
+    "totalInvoices": "Fatture Totali",
+    "paidInvoices": "Fatture Pagate",
+    "pendingInvoices": "Fatture Pendenti",
+    "allTime": "All time",
+    "fromLastMonth": "from last month",
+    "totalRevenue": "Total Revenue",
+    "fromAllInvoices": "From all invoices",
+    "pending": "{count, plural, one {# pending} other {# pending}}",
+    "requireFollowUp": "Require follow-up"
+  }
+}

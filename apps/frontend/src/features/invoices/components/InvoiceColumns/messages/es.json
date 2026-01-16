@@ -1,0 +1,17 @@
+{
+  "InvoiceColumns": {
+    "invoiceNumber": "Número de Factura",
+    "client": "Cliente",
+    "amount": "Monto",
+    "status": "Estado",
+    "createdDate": "Fecha de Creación",
+    "dueDate": "Fecha de Vencimiento",
+    "draft": "Draft",
+    "sent": "Sent",
+    "paid": "Paid",
+    "overdue": "Overdue",
+    "cancelled": "Cancelled",
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar fila"
+  }
+}

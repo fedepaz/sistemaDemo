@@ -1,0 +1,23 @@
+{
+  "PurchaseOrderForm": {
+    "orderNumberLabel": "Número de Pedido",
+    "orderNumberPlaceholder": "Ingrese el número de pedido",
+    "supplierLabel": "Proveedor",
+    "supplierPlaceholder": "Ingrese el nombre del proveedor",
+    "itemsLabel": "Artículos",
+    "itemsPlaceholder": "Ingrese el número de artículos",
+    "totalAmountLabel": "Monto Total",
+    "totalAmountPlaceholder": "Ingrese el monto total",
+    "statusLabel": "Estado",
+    "selectStatusPlaceholder": "Seleccione un estado",
+    "pendingStatus": "Pendiente",
+    "approvedStatus": "Aprobado",
+    "receivedStatus": "Recibido",
+    "cancelledStatus": "Cancelado",
+    "orderDateLabel": "Fecha de Pedido",
+    "deliveryDateLabel": "Fecha de Entrega",
+    "cancelButton": "Cancelar",
+    "submitButton": "Enviar",
+    "updateButton": "Actualizar"
+  }
+}

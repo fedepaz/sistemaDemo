@@ -1,0 +1,17 @@
+{
+  "InvoicesDataTable": {
+    "title": "Invoices Data Table",
+    "description": "Complete invoice management with statuses, dates, and more.",
+    "createTitle": "Create New Invoice",
+    "createDescription": "Fill in the details below to create a new invoice.",
+    "editTitle": "Edit Invoice",
+    "editDescription": "Update the details for this invoice.",
+    "addNew": "Add New",
+    "editInvoiceTitle": "Edit {invoiceNumber}",
+    "createInvoiceTitle": "Create Invoice",
+    "editInvoiceDescription": "Update the details for {invoiceNumber}.",
+    "createInvoiceDescription": "Fill in the details below to create a new invoice.",
+    "update": "Update",
+    "create": "Create"
+  }
+}

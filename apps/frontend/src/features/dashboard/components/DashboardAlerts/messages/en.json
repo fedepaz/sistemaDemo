@@ -1,0 +1,13 @@
+{
+  "DashboardAlerts": {
+    "title": "Alerts",
+    "noAlerts": "No new alerts",
+    "critical": "Critical",
+    "warning": "Warning",
+    "info": "Info",
+    "alert": {
+      "messageKey": "Message Key",
+      "location": "Location"
+    }
+  }
+}

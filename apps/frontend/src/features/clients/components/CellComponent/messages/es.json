@@ -1,0 +1,25 @@
+{
+  "CellComponent": {
+    "name": "Nombre",
+    "namePlaceholder": "Introduzca el nombre",
+    "contactPerson": "Persona de contacto",
+    "contactPersonPlaceholder": "Introduzca la persona de contacto",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Introduzca el correo electrónico",
+    "phone": "Teléfono",
+    "phonePlaceholder": "Introduzca el teléfono",
+    "status": "Estado",
+    "statusPlaceholder": "Seleccione el estado",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "prospect": "Prospecto",
+    "totalOrders": "Pedidos totales",
+    "totalOrdersPlaceholder": "Introduzca los pedidos totales",
+    "totalRevenue": "Ingresos totales",
+    "totalRevenuePlaceholder": "Introduzca los ingresos totales",
+    "lastOrder": "Último pedido",
+    "lastOrderPlaceholder": "Introduzca el último pedido",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  }
+}

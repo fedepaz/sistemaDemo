@@ -1,0 +1,20 @@
+{
+  "ClientForm": {
+    "nameLabel": "Nombre del Cliente",
+    "namePlaceholder": "Ingrese el nombre del cliente",
+    "contactPersonLabel": "Persona de Contacto",
+    "contactPersonPlaceholder": "Ingrese el nombre de la persona de contacto",
+    "emailLabel": "Correo Electrónico",
+    "emailPlaceholder": "Ingrese el correo electrónico del cliente",
+    "phoneLabel": "Teléfono",
+    "phonePlaceholder": "Ingrese el número de teléfono del cliente",
+    "statusLabel": "Estado",
+    "selectStatusPlaceholder": "Seleccione un estado",
+    "activeStatus": "Activo",
+    "inactiveStatus": "Inactivo",
+    "prospectStatus": "Prospecto",
+    "cancelButton": "Cancelar",
+    "submitButton": "Enviar",
+    "updateButton": "Actualizar"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "PurchaseOrderColumns": {
+    "selectAll": "Select all",
+    "selectRow": "Select row",
+    "orderNumber": "Order Number",
+    "supplier": "Supplier",
+    "items": "Items",
+    "totalAmount": "Total Amount",
+    "status": "Status",
+    "orderDate": "Order Date",
+    "deliveryDate": "Delivery Date",
+    "delivered": "Delivered",
+    "approved": "Approved",
+    "pending": "Pending",
+    "cancelled": "Cancelled",
+    "received": "Received"
+  }
+}

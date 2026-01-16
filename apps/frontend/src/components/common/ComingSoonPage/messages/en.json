@@ -1,0 +1,22 @@
+{
+  "ComingSoonPage": {
+    "title": "We'll be back soon",
+    "description": "We are currently performing scheduled maintenance to improve our platform. We expect to be back online shortly. Thank you for your patience.",
+    "status": "Currently in Maintenance",
+    "feature1": {
+      "title": "Real-Time Insights",
+      "description": "Monitor operations with live data and analytics"
+    },
+    "feature2": {
+      "title": "Mobile First",
+      "description": "Manage from anywhere with native mobile support"
+    },
+    "feature3": {
+      "title": "Enterprise Ready",
+      "description": "Built for scale with security and compliance"
+    },
+    "footer": {
+      "inquiries": "For urgent inquiries, contact us at"
+    }
+  }
+}

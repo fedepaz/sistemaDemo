@@ -1,0 +1,12 @@
+{
+  "UserKPIs": {
+    "totalUsers": "Usuarios Totales",
+    "inSystem": "En el sistema",
+    "fromLastMonth": "del mes pasado",
+    "activeUsers": "Usuarios Activos",
+    "newUsersToday": "Nuevos Usuarios Hoy",
+    "needAttention": "Necesitan atención",
+    "administrators": "Administradores",
+    "fullAccess": "Acceso completo"
+  }
+}

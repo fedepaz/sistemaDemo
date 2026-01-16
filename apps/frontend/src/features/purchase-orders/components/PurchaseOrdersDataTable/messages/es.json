@@ -1,0 +1,29 @@
+{
+  "PurchaseOrdersDataTable": {
+    "title": "Órdenes de Compra",
+    "description": "Gestión completa de adquisiciones con seguimiento de proveedores y estado de entrega",
+    "searchPlaceholder": "Buscar órdenes de compra...",
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar fila",
+    "delivered": "Entregado",
+    "approved": "Aprobado",
+    "pending": "Pendiente",
+    "cancelled": "Cancelado",
+    "received": "Recibido",
+    "createTitle": "Crear Nueva Orden de Compra",
+    "createDescription": "Rellene los detalles a continuación para crear una nueva orden de compra.",
+    "editTitle": "Editar Orden de Compra: {orderNumber}",
+    "editDescription": "Actualice los detalles de {orderNumber}.",
+    "orderNumber": "Número de Pedido",
+    "supplier": "Proveedor",
+    "items": "Artículos",
+    "totalAmount": "Monto Total",
+    "status": "Estado",
+    "orderDate": "Fecha de Pedido",
+    "deliveryDate": "Fecha de Entrega",
+    "addNew": "Añadir Nuevo",
+    "updateButton": "Actualizar",
+    "createButton": "Crear",
+    "entityName": "Órdenes de Compra"
+  }
+}

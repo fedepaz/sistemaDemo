@@ -1,0 +1,20 @@
+{
+  "ClientForm": {
+    "nameLabel": "Client Name",
+    "namePlaceholder": "Enter client name",
+    "contactPersonLabel": "Contact Person",
+    "contactPersonPlaceholder": "Enter contact person's name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter client email",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "Enter client phone number",
+    "statusLabel": "Status",
+    "selectStatusPlaceholder": "Select a status",
+    "activeStatus": "Active",
+    "inactiveStatus": "Inactive",
+    "prospectStatus": "Prospect",
+    "cancelButton": "Cancel",
+    "submitButton": "Submit",
+    "updateButton": "Update"
+  }
+}

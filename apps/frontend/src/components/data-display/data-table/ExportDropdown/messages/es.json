@@ -1,0 +1,10 @@
+{
+  "ExportDropdown": {
+    "export": "Exportar",
+    "exportSelected": "Exportar {count} seleccionados",
+    "exportAll": "Exportar todos {count}",
+    "csvFormat": "CSV",
+    "excelFormat": "Excel",
+    "jsonFormat": "JSON"
+  }
+}

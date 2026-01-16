@@ -1,0 +1,7 @@
+{
+  "DataTableFacetedFilter": {
+    "selectedCount": "{count} selected",
+    "noResults": "No results found.",
+    "clearFilters": "Clear filters"
+  }
+}

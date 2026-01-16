@@ -1,0 +1,25 @@
+{
+  "CellComponent": {
+    "name": "Name",
+    "namePlaceholder": "Enter name",
+    "contactPerson": "Contact Person",
+    "contactPersonPlaceholder": "Enter contact person",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "phone": "Phone",
+    "phonePlaceholder": "Enter phone",
+    "status": "Status",
+    "statusPlaceholder": "Select status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "prospect": "Prospect",
+    "totalOrders": "Total Orders",
+    "totalOrdersPlaceholder": "Enter total orders",
+    "totalRevenue": "Total Revenue",
+    "totalRevenuePlaceholder": "Enter total revenue",
+    "lastOrder": "Last Order",
+    "lastOrderPlaceholder": "Enter last order",
+    "cancel": "Cancel",
+    "save": "Save"
+  }
+}

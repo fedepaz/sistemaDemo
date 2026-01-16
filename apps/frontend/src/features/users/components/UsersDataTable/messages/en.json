@@ -1,0 +1,24 @@
+{
+  "UsersDataTable": {
+    "title": "Users",
+    "description": "Complete user management with roles, permissions, and activity tracking",
+    "searchPlaceholder": "Search users...",
+    "selectAll": "Select all",
+    "selectRow": "Select row",
+    "admin": "Admin",
+    "user": "User",
+    "active": "Active",
+    "inactive": "Inactive",
+    "worker": "Worker",
+    "manager": "Manager",
+    "createTitle": "Create User",
+    "createDescription": "Create a new user and assign a role.",
+    "editTitle": "Edit User: {name}",
+    "editDescription": "Update the details for {name}.",
+    "addNew": "Add New",
+    "createUserDescription": "Fill in the details below to create a new user.",
+    "updateButton": "Update",
+    "createButton": "Create",
+    "entityName": "Users"
+  }
+}

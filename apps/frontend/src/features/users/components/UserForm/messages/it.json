@@ -1,0 +1,23 @@
+{
+  "UserForm": {
+    "nameLabel": "Nome",
+    "namePlaceholder": "Inserisci il nome utente",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Inserisci l'email utente",
+    "roleLabel": "Ruolo",
+    "selectRolePlaceholder": "Seleziona un ruolo",
+    "adminRole": "Amministratore",
+    "managerRole": "Manager",
+    "workerRole": "Lavoratore",
+    "statusLabel": "Stato",
+    "selectStatusPlaceholder": "Seleziona uno stato",
+    "activeStatus": "Attivo",
+    "inactiveStatus": "Inattivo",
+    "lastLoginLabel": "Ultimo Accesso",
+    "departmentLabel": "Dipartimento",
+    "departmentPlaceholder": "Inserisci il dipartimento",
+    "cancelButton": "Annulla",
+    "submitButton": "Invia",
+    "updateButton": "Aggiorna"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "common": {
+    "mobileNavigation": "Navegación Móvil",
+    "agriManage": "AgriManage",
+    "plantManagement": "Gestión de Plantas",
+    "johnDoe": "John Doe",
+    "greenhouseManager": "Gerente de Invernadero",
+    "areYouSure": "¿Estás seguro?",
+    "confirmDelete": "Esto eliminará permanentemente {count, plural, one {1 elemento} other {# elementos}}.",
+    "cancelButton": "Cancelar",
+    "deletingButton": "Eliminando...",
+    "deleteButton": "Eliminar",
+    "deleteSuccess": "Eliminado exitosamente.",
+    "deleteError": "Error al eliminar.",
+    "exportSuccess": "Exportación exitosa."
+  }
+}

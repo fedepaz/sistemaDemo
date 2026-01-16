@@ -1,0 +1,6 @@
+{
+  "alerts": {
+    "criticalAlerts": "Critical Alerts",
+    "temperatureIssues": "Temperature issues in {location}"
+  }
+}

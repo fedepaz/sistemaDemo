@@ -1,0 +1,25 @@
+{
+  "PlantForm": {
+    "nameLabel": "Plant Name",
+    "namePlaceholder": "Enter plant name",
+    "speciesLabel": "Species",
+    "speciesPlaceholder": "Enter plant species",
+    "locationLabel": "Location",
+    "locationPlaceholder": "Enter plant location",
+    "statusLabel": "Status",
+    "statusPlaceholder": "Enter plant status",
+    "healthyStatus": "Healthy",
+    "warningStatus": "Warning",
+    "criticalStatus": "Critical",
+    "harvestedStatus": "Harvested",
+    "growthStageLabel": "Growth Stage",
+    "growthStagePlaceholder": "Enter growth stage",
+    "plantedDateLabel": "Planted Date",
+    "plantedDatePlaceholder": "Enter planted date",
+    "lastWateredLabel": "Last Watered",
+    "lastWateredPlaceholder": "Enter last watered date",
+    "cancelButton": "Cancel",
+    "submitButton": "Submit",
+    "updateButton": "Update"
+  }
+}

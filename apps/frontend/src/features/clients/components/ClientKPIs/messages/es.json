@@ -1,0 +1,13 @@
+{
+  "ClientKPIs": {
+    "totalClients": "Clientes Totales",
+    "inDatabase": "En base de datos",
+    "fromLastMonth": "desde el mes pasado",
+    "activeClients": "Clientes Activos",
+    "prospects": "{count, plural, one {# prospecto} other {# prospectos}}",
+    "totalRevenue": "Ingresos Totales",
+    "fromAllClients": "De todos los clientes",
+    "newProspects": "Nuevos Prospectos",
+    "potentialClients": "Clientes potenciales"
+  }
+}

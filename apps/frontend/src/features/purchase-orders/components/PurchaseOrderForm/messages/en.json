@@ -1,0 +1,23 @@
+{
+  "PurchaseOrderForm": {
+    "orderNumberLabel": "Order Number",
+    "orderNumberPlaceholder": "Enter order number",
+    "supplierLabel": "Supplier",
+    "supplierPlaceholder": "Enter supplier name",
+    "itemsLabel": "Items",
+    "itemsPlaceholder": "Enter number of items",
+    "totalAmountLabel": "Total Amount",
+    "totalAmountPlaceholder": "Enter total amount",
+    "statusLabel": "Status",
+    "selectStatusPlaceholder": "Select a status",
+    "pendingStatus": "Pending",
+    "approvedStatus": "Approved",
+    "receivedStatus": "Received",
+    "cancelledStatus": "Cancelled",
+    "orderDateLabel": "Order Date",
+    "deliveryDateLabel": "Delivery Date",
+    "cancelButton": "Cancel",
+    "submitButton": "Submit",
+    "updateButton": "Update"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "FeatureNavigation": {
+    "plants": "Plants",
+    "managePlantInventory": "Manage your plant inventory and lifecycle",
+    "activePlants": "active plants",
+    "clients": "Clients",
+    "manageClients": "Track and manage client relationships",
+    "activeClients": "active clients",
+    "invoices": "Invoices",
+    "manageInvoices": "Create and track invoices",
+    "openInvoices": "open invoices",
+    "purchaseOrders": "Purchase Orders",
+    "managePurchaseOrders": "Manage purchase orders and suppliers",
+    "pendingOrders": "pending orders",
+    "users": "Users",
+    "manageUsers": "Manage system users and permissions",
+    "activeUsers": "active users"
+  }
+}

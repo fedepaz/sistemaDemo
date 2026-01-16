@@ -1,0 +1,18 @@
+{
+  "PurchaseOrderColumns": {
+    "selectAll": "Seleziona tutto",
+    "selectRow": "Seleziona riga",
+    "orderNumber": "Numero Ordine",
+    "supplier": "Fornitore",
+    "items": "Articoli",
+    "totalAmount": "Importo Totale",
+    "status": "Stato",
+    "orderDate": "Data Ordine",
+    "deliveryDate": "Data di Consegna",
+    "delivered": "Consegnato",
+    "approved": "Approvato",
+    "pending": "In attesa",
+    "cancelled": "Annullato",
+    "received": "Ricevuto"
+  }
+}

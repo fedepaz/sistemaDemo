@@ -1,0 +1,23 @@
+{
+  "UserForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Enter user name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter user email",
+    "roleLabel": "Role",
+    "selectRolePlaceholder": "Select a role",
+    "adminRole": "Admin",
+    "managerRole": "Manager",
+    "workerRole": "Worker",
+    "statusLabel": "Status",
+    "selectStatusPlaceholder": "Select a status",
+    "activeStatus": "Active",
+    "inactiveStatus": "Inactive",
+    "lastLoginLabel": "Last Login",
+    "departmentLabel": "Department",
+    "departmentPlaceholder": "Enter department",
+    "cancelButton": "Cancel",
+    "submitButton": "Submit",
+    "updateButton": "Update"
+  }
+}

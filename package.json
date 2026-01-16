@@ -1,0 +1,51 @@
+{
+  "name": "viveroApp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Enterprise Agricultural Management System",
+  "packageManager": "pnpm@8.6.1",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "db:migrate:test": "dotenv -e .env.test pnpm --filter backend prisma migrate deploy",
+    "prepare": "husky install"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "@playwright/test": "^1.57.0",
+    "concurrently": "^9.2.1",
+    "husky": "^9.1.7",
+    "turbo": "^2.7.2",
+    "zod": "^3.22.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "glob": "11.1.0",
+      "validator": "13.15.22",
+      "jws": "3.2.3",
+      "esbuild": "0.25.0",
+      "@nestjs/common": "11.0.16",
+      "vite": "5.4.21",
+      "tar": "7.5.2",
+      "js-yaml": "4.1.1",
+      "body-parser": "2.2.1",
+      "@eslint/plugin-kit": "0.3.4",
+      "hono": "^4.11.4"
+    }
+  }
+}

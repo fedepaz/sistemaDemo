@@ -1,0 +1,13 @@
+{
+  "PurchaseOrderKPIs": {
+    "totalOrders": "Total Orders",
+    "allTime": "All time",
+    "fromLastMonth": "from last month",
+    "totalSpend": "Total Spend",
+    "fromAllOrders": "From all orders",
+    "pendingOrders": "Pending Orders",
+    "awaitingReview": "Awaiting review",
+    "completedOrders": "Completed Orders",
+    "completedOrdersDescription": "Completed orders"
+  }
+}

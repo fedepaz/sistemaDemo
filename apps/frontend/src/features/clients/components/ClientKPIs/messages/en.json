@@ -1,0 +1,13 @@
+{
+  "ClientKPIs": {
+    "totalClients": "Total Clients",
+    "inDatabase": "In database",
+    "fromLastMonth": "from last month",
+    "activeClients": "Active Clients",
+    "prospects": "{count, plural, one {# prospect} other {# prospects}}",
+    "totalRevenue": "Total Revenue",
+    "fromAllClients": "From all clients",
+    "newProspects": "New Prospects",
+    "potentialClients": "Potential clients"
+  }
+}

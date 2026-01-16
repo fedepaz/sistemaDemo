@@ -1,0 +1,16 @@
+{
+  "InvoiceForm": {
+    "title": "Create Invoice",
+    "invoiceNumberLabel": "Invoice Number",
+    "clientLabel": "Client",
+    "amountLabel": "Amount",
+    "statusLabel": "Status",
+    "submitButton": "Save Invoice",
+    "updateButton": "Update Invoice",
+    "cancelButton": "Cancel",
+    "clientPlaceholder": "Acme Corp",
+    "invoiceNumberPlaceholder": "INV-001",
+    "amountPlaceholder": "100.00",
+    "statusPlaceholder": "draft"
+  }
+}

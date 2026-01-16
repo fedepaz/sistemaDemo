@@ -1,0 +1,16 @@
+{
+  "InvoiceForm": {
+    "title": "Crea Fattura",
+    "invoiceNumberLabel": "Numero Fattura",
+    "clientLabel": "Cliente",
+    "amountLabel": "Importo",
+    "statusLabel": "Stato",
+    "submitButton": "Salva Fattura",
+    "updateButton": "Update Invoice",
+    "cancelButton": "Cancel",
+    "clientPlaceholder": "Acme Corp",
+    "invoiceNumberPlaceholder": "INV-001",
+    "amountPlaceholder": "100.00",
+    "statusPlaceholder": "draft"
+  }
+}

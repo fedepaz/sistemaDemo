@@ -1,0 +1,23 @@
+{
+  "ClientsDataTable": {
+    "title": "Clientes",
+    "description": "Gestiona tus clientes y mira sus detalles.",
+    "searchPlaceholder": "Buscar clientes...",
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar fila",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "prospect": "Prospecto",
+    "createTitle": "Crear Nuevo Cliente",
+    "createDescription": "Rellene los detalles a continuación para crear un nuevo cliente.",
+    "editTitle": "Editar Cliente",
+    "editDescription": "Actualice los detalles de este cliente.",
+    "addNew": "Añadir Nuevo",
+    "editClientTitle": "Editar {name}",
+    "createClientTitle": "Crear Cliente",
+    "editClientDescription": "Actualiza los detalles de {name}.",
+    "createClientDescription": "Rellena los detalles a continuación para crear un nuevo cliente.",
+    "update": "Actualizar",
+    "create": "Crear"
+  }
+}

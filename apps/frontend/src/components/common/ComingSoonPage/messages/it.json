@@ -1,0 +1,22 @@
+{
+  "ComingSoonPage": {
+    "title": "Stiamo tornando",
+    "description": "Attualmente stiamo svolgendo un manutenzione programmata per migliorare la nostra piattaforma. Aspetteremo che ritorniamo online presto. Grazie per la vostra pazienza.",
+    "status": "Attualmente in manutenzione",
+    "feature1": {
+      "title": "Insights in tempo reale",
+      "description": "Monitora le operazioni con dati in tempo reale e analisi"
+    },
+    "feature2": {
+      "title": "Prima per dispositivi mobili",
+      "description": "Gestisci da qualsiasi luogo con supporto nativo per dispositivi mobili"
+    },
+    "feature3": {
+      "title": "Pronto per azienda",
+      "description": "Costruito per scalare con sicurezza e conformità"
+    },
+    "footer": {
+      "inquiries": "Per domande urgenti, contattaci a"
+    }
+  }
+}

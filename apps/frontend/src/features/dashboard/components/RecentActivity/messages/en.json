@@ -1,0 +1,13 @@
+{
+  "RecentActivity": {
+    "title": "Recent Activity",
+    "noActivity": "No recent activity to display.",
+    "byUser": "by {user}",
+    "activityActionPlaceholder": "Activity Action",
+    "activity": {
+      "action": "Action",
+      "user": "User",
+      "timestamp": "Timestamp"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+// prisma/schema.prisma
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma" // Required: you must now specify an output path
+  moduleFormat = "cjs"                      // Vital for your CommonJS project
+}
+
+
+datasource db {
+  provider = "mysql"  
+}

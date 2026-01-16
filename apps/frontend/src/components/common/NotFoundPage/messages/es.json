@@ -1,0 +1,8 @@
+{
+  "NotFoundPage": {
+    "title": "Parece que algo salió mal.",
+    "description": "No te preocupes, nuestro equipo ya está en él. Por favor, intenta actualizar la página o regresa más tarde.",
+    "backToHome": "Volver a Inicio",
+    "goBack": "Volver"
+  }
+}

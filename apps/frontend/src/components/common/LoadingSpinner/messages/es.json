@@ -1,0 +1,16 @@
+{
+  "LoadingSpinner": {
+    "message1": "Compilando con Internet Explorer 6...",
+    "message2": "Esperando que Flash Player se actualice...",
+    "message3": "Desfragmentando el disco duro del servidor...",
+    "message4": "Reiniciando Windows ME por tercera vez...",
+    "message5": "Descargando 56k de pura nostalgia...",
+    "message6": "Buscando drivers en DriverGuide.com...",
+    "message7": "Esperando que termine de cargar RealPlayer...",
+    "message8": "Liberando memoria con el Administrador de Tareas...",
+    "message9": "Rogando que no sea una Pantalla Azul...",
+    "message10": "Conectando por dial-up a las 3 AM...",
+    "message11": "Instalando 47 barras de herramientas de Ask Jeeves...",
+    "message12": "Esperando que WinRAR deje de pedir licencia..."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "PlantsColumns": {
+    "selectRow": "Select row",
+    "selectAll": "Select all",
+    "name": "Nombre",
+    "species": "Especie",
+    "location": "Ubicación",
+    "status": "Estado",
+    "growthStage": "Growth Stage",
+    "plantedDate": "Fecha de Plantación",
+    "lastWatered": "Last Watered",
+    "healthy": "Healthy",
+    "warning": "Warning",
+    "critical": "Critical"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "plants": "Plants",
+    "environment": "Environment",
+    "tasks": "Tasks",
+    "analytics": "Analytics",
+    "clients": "Clients",
+    "inventory": "Inventory",
+    "settings": "Settings",
+    "overviewAndAlerts": "Overview & Alerts",
+    "plantManagement": "Plant Management",
+    "climateMonitoring": "Climate Monitoring",
+    "dailyOperations": "Daily Operations",
+    "clientManagement": "Client Management",
+    "supplyTracking": "Supply Tracking",
+    "performanceMetrics": "Performance Metrics",
+    "systemConfiguration": "System Configuration",
+    "invoices": "Invoices",
+    "purchaseOrders": "Purchase Orders",
+    "users": "Users",
+    "groupOperations": "Operations",
+    "groupManagement": "Management",
+    "groupAdmin": "Administration"
+  }
+}

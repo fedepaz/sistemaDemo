@@ -1,0 +1,22 @@
+// prisma/schema/enums.prisma
+
+/// Enum for the type of action performed in an audit log.
+enum AuditActionType {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  ACCESS
+}
+
+/// Enum for the types of entities that can be audited.
+enum EntityType {
+  USER
+  TENANT
+  ROLE
+  AUDIT_LOG
+  LOCALE
+  MESSAGE
+  USER_PREFERENCE
+}

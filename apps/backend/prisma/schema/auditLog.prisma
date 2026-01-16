@@ -1,0 +1,22 @@
+// prisma/schema/auditLog.prisma
+
+model AuditLog {
+  id         String          @id @default(cuid())
+  tenantId   String
+  tenant     Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action     AuditActionType
+  entityType EntityType
+  entityId   String
+  changes    Json
+  timestamp  DateTime        @default(now())
+  ipAddress  String?
+  userAgent  String?
+
+  @@index([action])
+  @@index([tenantId, timestamp])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}

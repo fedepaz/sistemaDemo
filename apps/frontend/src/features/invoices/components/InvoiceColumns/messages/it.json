@@ -1,0 +1,17 @@
+{
+  "InvoiceColumns": {
+    "invoiceNumber": "Numero Fattura",
+    "client": "Cliente",
+    "amount": "Importo",
+    "status": "Stato",
+    "createdDate": "Created Date",
+    "dueDate": "Due Date",
+    "draft": "Draft",
+    "sent": "Sent",
+    "paid": "Paid",
+    "overdue": "Overdue",
+    "cancelled": "Cancelled",
+    "selectAll": "Seleziona tutto",
+    "selectRow": "Seleziona riga"
+  }
+}

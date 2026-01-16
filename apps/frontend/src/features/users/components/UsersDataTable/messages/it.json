@@ -1,0 +1,24 @@
+{
+  "UsersDataTable": {
+    "title": "Utenti",
+    "description": "Gestione completa degli utenti con ruoli, autorizzazioni e monitoraggio delle attività",
+    "searchPlaceholder": "Cerca utenti...",
+    "selectAll": "Seleziona tutto",
+    "selectRow": "Seleziona riga",
+    "admin": "Amministratore",
+    "user": "Utente",
+    "active": "Attivo",
+    "inactive": "Inattivo",
+    "worker": "Lavoratore",
+    "manager": "Manager",
+    "createTitle": "Crea Utente",
+    "createDescription": "Crea un nuovo utente e assegnagli un ruolo.",
+    "editTitle": "Modifica Utente: {name}",
+    "editDescription": "Modifica i dettagli di {name}.",
+    "addNew": "Aggiungi Nuovo",
+    "createUserDescription": "Compila i dettagli qui sotto per creare un nuovo utente.",
+    "updateButton": "Aggiorna",
+    "createButton": "Crea",
+    "entityName": "Utenti"
+  }
+}

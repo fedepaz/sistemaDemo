@@ -1,0 +1,17 @@
+{
+  "common": {
+    "mobileNavigation": "Mobile Navigation",
+    "agriManage": "AgriManage",
+    "plantManagement": "Plant Management",
+    "johnDoe": "John Doe",
+    "greenhouseManager": "Greenhouse Manager",
+    "areYouSure": "Are you sure?",
+    "confirmDelete": "This will permanently delete {count, plural, one {1 item} other {# items}}.",
+    "cancelButton": "Cancel",
+    "deletingButton": "Deleting...",
+    "deleteButton": "Delete",
+    "deleteSuccess": "Successfully deleted.",
+    "deleteError": "Failed to delete.",
+    "exportSuccess": "Export successful."
+  }
+}

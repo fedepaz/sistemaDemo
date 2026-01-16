@@ -1,0 +1,14 @@
+{
+  "PlantKPIs": {
+    "totalPlants": "Piante Totali",
+    "activeInSystem": "Attive nel sistema",
+    "fromLastMonth": "dall'ultimo mese",
+    "healthyPlants": "Piante Sane",
+    "ofTotal": "{percentage}% del totale",
+    "fromLastWeek": "dalla scorsa settimana",
+    "alertPlants": "Piante in Allerta",
+    "requireImmediateAttention": "Richiedono attenzione immediata",
+    "readyForHarvest": "Pronte per il Raccolto",
+    "matureOrFruitingStage": "Stadio maturo o di fruttificazione"
+  }
+}

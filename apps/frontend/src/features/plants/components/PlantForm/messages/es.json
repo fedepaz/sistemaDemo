@@ -1,0 +1,25 @@
+{
+  "PlantForm": {
+    "nameLabel": "Nombre de la Planta",
+    "namePlaceholder": "Ingrese el nombre de la planta",
+    "speciesLabel": "Especie",
+    "speciesPlaceholder": "Ingrese la especie de la planta",
+    "locationLabel": "Ubicación",
+    "locationPlaceholder": "Ingrese la ubicación de la planta",
+    "statusLabel": "Estado",
+    "statusPlaceholder": "Ingrese el estado de la planta",
+    "healthyStatus": "Saludable",
+    "warningStatus": "Advertencia",
+    "criticalStatus": "Crítico",
+    "harvestedStatus": "Cosechado",
+    "growthStageLabel": "Etapa de Crecimiento",
+    "growthStagePlaceholder": "Ingrese la etapa de crecimiento",
+    "plantedDateLabel": "Fecha de Plantación",
+    "plantedDatePlaceholder": "Ingrese la fecha de plantación",
+    "lastWateredLabel": "Último Riego",
+    "lastWateredPlaceholder": "Ingrese la fecha del último riego",
+    "cancelButton": "Cancelar",
+    "submitButton": "Enviar",
+    "updateButton": "Actualizar"
+  }
+}
