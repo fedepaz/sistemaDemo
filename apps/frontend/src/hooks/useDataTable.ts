@@ -1,7 +1,7 @@
 //src/hooks/useDataTable.ts
 
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
+
 import { useState } from "react";
 
 interface UseDataTableActionsOptions<T> {
@@ -15,7 +15,6 @@ export function useDataTableActions<T extends { id: string }>({
   onDelete,
   onExport,
 }: UseDataTableActionsOptions<T>) {
-  const t = useTranslations("common");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEntity, setSelectedEntity] = useState<T | null>(null);
@@ -33,15 +32,15 @@ export function useDataTableActions<T extends { id: string }>({
   const handleDelete = async (entity: T) => {
     if (!onDelete) return;
 
-    const confirmed = window.confirm(t("confirmDelete", { id: entity.id }));
+    const confirmed = window.confirm(`¿Estás seguro de que quieres eliminar este ${entityName} (${entity.id})?`);
 
     if (!confirmed) return;
 
     try {
       await onDelete(entity.id);
-      toast.success(t("deleteSuccess"));
+      toast.success(`${entityName} eliminado(a) con éxito.`);
     } catch (error) {
-      toast.error(t("deleteError"));
+      toast.error(`Error al eliminar ${entityName}.`);
       console.error(`Failed to delete ${entityName}:`, error);
     }
   };
@@ -63,7 +62,7 @@ export function useDataTableActions<T extends { id: string }>({
       a.click();
       window.URL.revokeObjectURL(url);
 
-      toast.success(t("exportSuccess"));
+      toast.success(`${entityName} exportado(a) con éxito.`);
     }
   };
 

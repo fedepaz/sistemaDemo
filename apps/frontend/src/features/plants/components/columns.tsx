@@ -7,7 +7,6 @@ import {
   StatusBadge,
 } from "@/components/data-display/data-table";
 import { Plant } from "../types";
-import { useTranslations } from "next-intl";
 
 interface CellProps {
   row?: Row<Plant>;
@@ -15,13 +14,12 @@ interface CellProps {
 }
 
 function CellComponent({ row, table }: CellProps) {
-  const t = useTranslations("PlantsColumns");
   if (row) {
     return (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label={t("selectRow")}
+        aria-label="Seleccionar fila"
       />
     );
   }
@@ -30,7 +28,7 @@ function CellComponent({ row, table }: CellProps) {
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label={t("selectAll")}
+        aria-label="Seleccionar todo"
       />
     );
   }
@@ -43,19 +41,19 @@ interface HeaderProps {
 }
 
 function HeaderComponent({ column, translationKey }: HeaderProps) {
-  const t = useTranslations("PlantsColumns");
-  return <SortableHeader column={column}>{t(translationKey)}</SortableHeader>;
+  return <SortableHeader column={column}>{translationKey}</SortableHeader>;
 }
 
 function CellBadgeComponent({ row }: CellProps) {
-  const t = useTranslations("PlantsColumns");
   if (!row) return null;
   const status = row.getValue("status") as string;
+  const statusText =
+    status === "healthy" ? "Saludable" : status === "warning" ? "Advertencia" : "Crítico";
   return (
     <StatusBadge
       status={row.getValue("status") as "healthy" | "warning" | "critical"}
     >
-      {t(status)}
+      {statusText}
     </StatusBadge>
   );
 }
@@ -75,25 +73,25 @@ export const plantColumns: ColumnDef<Plant>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="name" />;
+      return <HeaderComponent column={column} translationKey="Nombre" />;
     },
   },
   {
     accessorKey: "species",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="species" />;
+      return <HeaderComponent column={column} translationKey="Especie" />;
     },
   },
   {
     accessorKey: "location",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="location" />;
+      return <HeaderComponent column={column} translationKey="Ubicación" />;
     },
   },
   {
     accessorKey: "status",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="status" />;
+      return <HeaderComponent column={column} translationKey="Estado" />;
     },
     cell: ({ row }) => {
       return <CellBadgeComponent row={row} />;
@@ -102,19 +100,19 @@ export const plantColumns: ColumnDef<Plant>[] = [
   {
     accessorKey: "growthStage",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="growthStage" />;
+      return <HeaderComponent column={column} translationKey="Etapa de crecimiento" />;
     },
   },
   {
     accessorKey: "plantedDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="plantedDate" />;
+      return <HeaderComponent column={column} translationKey="Fecha de siembra" />;
     },
   },
   {
     accessorKey: "lastWatered",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="lastWatered" />;
+      return <HeaderComponent column={column} translationKey="Último riego" />;
     },
   },
 ];

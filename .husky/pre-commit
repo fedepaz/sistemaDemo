@@ -4,7 +4,7 @@
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
 
 # Definir las ramas protegidas
-PROTECTED_BRANCHES="^(main|frontendDev|backendDev)$"
+PROTECTED_BRANCHES="^(main|dev)$"
 
 # Comprobar si la rama actual está protegida
 if echo "$BRANCH_NAME" | grep -qE "$PROTECTED_BRANCHES"; then
@@ -13,7 +13,7 @@ if echo "$BRANCH_NAME" | grep -qE "$PROTECTED_BRANCHES"; then
   echo ""
   echo "👉 ¿Hiciste cambios en esta rama por error? No te preocupes. Sigue estos pasos para moverlos a una nueva rama:"
   echo "   1. Guarda tus cambios temporalmente con: git stash"
-  echo "   2. Ve a la rama de desarrollo correcta (ej: git checkout frontendDev)"
+  echo "   2. Ve a la rama de desarrollo correcta (ej: git checkout dev)"
   echo "   3. Crea tu nueva rama con: git checkout -b feat/nombre-de-tu-feature"
   echo "   4. Recupera tus cambios con: git stash pop"
   echo "   5. Ahora puedes hacer el commit: git add . && git commit -m \"tu mensaje\""

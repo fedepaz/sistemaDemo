@@ -1,0 +1,45 @@
+feat(frontend): replace useTranslations with hardcoded Spanish strings
+
+This commit replaces all instances of `useTranslations` and `t(...)` calls with hardcoded Spanish strings across the frontend application. This aligns with the decision to make the application Spanish-only and removes the `next-intl` dependency entirely.
+
+The following files were modified:
+- apps/frontend/src/components/common/coming-soon.tsx
+- apps/frontend/src/components/common/loading-spinner.tsx
+- apps/frontend/src/components/common/not-found.tsx
+- apps/frontend/src/components/common/theme-toggle.tsx
+- apps/frontend/src/components/data-display/data-table/column-filters.tsx
+- apps/frontend/src/components/data-display/data-table/data-table.tsx
+- apps/frontend/src/components/data-display/data-table/delete-dialog-button.tsx
+- apps/frontend/src/components/data-display/data-table/export-dropdown.tsx
+- apps/frontend/src/components/data-display/data-table/floating-action-button.tsx
+- apps/frontend/src/components/data-display/data-table/inline-edit-row.tsx
+- apps/frontend/src/components/data-display/data-table/slide-over-form.tsx
+- apps/frontend/src/components/layout/dashboard-header.tsx
+- apps/frontend/src/components/layout/desktop-sidebar.tsx
+- apps/frontend/src/components/layout/mobile-navigation.tsx
+- apps/frontend/src/features/clients/components/client-form.tsx
+- apps/frontend/src/features/clients/components/clients-data-table.tsx
+- apps/frontend/src/features/clients/components/clients-kpi.tsx
+- apps/frontend/src/features/clients/components/columns.tsx
+- apps/frontend/src/features/clients/components/render-inline-edit.tsx
+- apps/frontend/src/features/dashboard/components/dashboard-alerts.tsx
+- apps/frontend/src/features/dashboard/components/dashboard-kpi.tsx
+- apps/frontend/src/features/dashboard/components/feature-navigation.tsx
+- apps/frontend/src/features/dashboard/components/recent-activity.tsx
+- apps/frontend/src/features/invoices/components/columns.tsx
+- apps/frontend/src/features/invoices/components/invoice-form.tsx
+- apps/frontend/src/features/invoices/components/invoices-data-table.tsx
+- apps/frontend/src/features/invoices/components/invoices-kpi.tsx
+- apps/frontend/src/features/plants/components/columns.tsx
+- apps/frontend/src/features/plants/components/plants-data-table.tsx
+- apps/frontend/src/features/plants/components/plants-form.tsx
+- apps/frontend/src/features/plants/components/plants-kpi.tsx
+- apps/frontend/src/features/purchase-orders/components/columns.tsx
+- apps/frontend/src/features/purchase-orders/components/purchase-order-data-table.tsx
+- apps/frontend/src/features/purchase-orders/components/purchase-order-form.tsx
+- apps/frontend/src/features/purchase-orders/components/purchase-orders-kpi.tsx
+- apps/frontend/src/features/users/components/columns.tsx
+- apps/frontend/src/features/users/components/user-data-table.tsx
+- apps/frontend/src/features/users/components/user-form.tsx
+- apps/frontend/src/features/users/components/user-kpi.tsx
+- apps/frontend/src/hooks/useDataTable.ts

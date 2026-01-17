@@ -14,7 +14,6 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Plant, PlantFormData, plantSchema } from "../types";
-import { useTranslations } from "next-intl";
 
 interface PlantFormProps {
   initialData?: Plant;
@@ -24,7 +23,6 @@ interface PlantFormProps {
 }
 
 export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
-  const t = useTranslations("PlantForm");
   const form = useForm<PlantFormData>({
     resolver: zodResolver(plantSchema),
     defaultValues: initialData
@@ -48,9 +46,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("nameLabel")}</FormLabel>
+              <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("namePlaceholder")} />
+                <Input {...field} placeholder="Nombre de la planta" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -62,9 +60,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="species"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("speciesLabel")}</FormLabel>
+              <FormLabel>Especie</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("speciesPlaceholder")} />
+                <Input {...field} placeholder="Ej: Tomate, Rosa" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,9 +74,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("locationLabel")}</FormLabel>
+              <FormLabel>Ubicación</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("locationPlaceholder")} />
+                <Input {...field} placeholder="Ej: Invernadero 1, Parcela B" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -90,9 +88,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("statusLabel")}</FormLabel>
+              <FormLabel>Estado</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("statusPlaceholder")} />
+                <Input {...field} placeholder="Ej: Saludable, Crítico" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -104,9 +102,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="growthStage"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("growthStageLabel")}</FormLabel>
+              <FormLabel>Etapa de crecimiento</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("growthStagePlaceholder")} />
+                <Input {...field} placeholder="Ej: Semilla, Crecimiento, Floración" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -118,9 +116,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="plantedDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("plantedDateLabel")}</FormLabel>
+              <FormLabel>Fecha de siembra</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("plantedDatePlaceholder")} />
+                <Input {...field} placeholder="Fecha de siembra" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -132,9 +130,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="lastWatered"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("lastWateredLabel")}</FormLabel>
+              <FormLabel>Último riego</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("lastWateredPlaceholder")} />
+                <Input {...field} placeholder="Fecha del último riego" />
               </FormControl>
               <FormMessage />
             </FormItem>

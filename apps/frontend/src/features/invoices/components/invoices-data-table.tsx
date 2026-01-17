@@ -15,13 +15,12 @@ import {
 } from "../hooks/hooks";
 import { Invoice } from "../types";
 import { useDataTableActions } from "@/hooks/useDataTable";
-import { useTranslations } from "next-intl";
+
 import { InvoiceForm } from "./invoice-form";
 import { useState } from "react";
 
 export function InvoicesDataTable() {
   const { data: invoices = [] } = useInvoices();
-  const t = useTranslations("InvoicesDataTable");
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
@@ -60,7 +59,7 @@ export function InvoicesDataTable() {
 
   const handleExport = (
     format: "csv" | "excel" | "json" | "pdf",
-    selectedRows: Invoice[]
+    selectedRows: Invoice[],
   ) => {
     console.log("Export Invoices:", selectedRows);
   };
@@ -80,8 +79,8 @@ export function InvoicesDataTable() {
       <DataTable
         columns={invoiceColumns}
         data={invoices}
-        title={t("title")}
-        description={t("description")}
+        title="Facturas"
+        description="Gestión y seguimiento de facturas"
         searchKey="invoiceNumber"
         totalCount={invoices.length}
         onEdit={handleEdit}
@@ -92,24 +91,24 @@ export function InvoicesDataTable() {
         }
       />
 
-      <FloatingActionButton onClick={handleAdd} label={t("addNew")} />
+      <FloatingActionButton onClick={handleAdd} label="Añadir nueva factura" />
 
       <SlideOverForm
         open={slideOverOpen}
         onOpenChange={setSlideOverOpen}
         title={
           selectedInvoice
-            ? t("editInvoiceTitle", { invoiceNumber: selectedInvoice.invoiceNumber })
-            : t("createInvoiceTitle")
+            ? `Editar factura: ${selectedInvoice.invoiceNumber}`
+            : "Crear nueva factura"
         }
         description={
           selectedInvoice
-            ? t("editInvoiceDescription", { invoiceNumber: selectedInvoice.invoiceNumber })
-            : t("createInvoiceDescription")
+            ? `Edita los detalles de la factura ${selectedInvoice.invoiceNumber}.`
+            : "Rellena los campos para crear una nueva factura."
         }
         onSave={handleSave}
         onCancel={() => setSlideOverOpen(false)}
-        saveLabel={selectedInvoice ? t("update") : t("create")}
+        saveLabel={selectedInvoice ? "Actualizar" : "Crear"}
       >
         <div className="space-y-2">
           <InvoiceForm

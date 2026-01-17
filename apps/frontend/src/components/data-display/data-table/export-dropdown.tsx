@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTranslations } from "next-intl";
 
 interface ExportDropdownProps {
   onExport: (format: "csv" | "excel" | "json" | "pdf") => void;
@@ -25,11 +24,10 @@ export function ExportDropdown({
   totalCount = 0,
   disabled = false,
 }: ExportDropdownProps) {
-  const t = useTranslations("ExportDropdown");
   const exportLabel =
     selectedCount > 0
-      ? t("exportSelected", { count: selectedCount })
-      : t("exportAll", { count: totalCount });
+      ? `Exportar ${selectedCount} seleccionado(s)`
+      : `Exportar todo (${totalCount})`;
 
   return (
     <DropdownMenu>
@@ -41,7 +39,7 @@ export function ExportDropdown({
           className="min-h-[40px] bg-transparent"
         >
           <Download className="mr-2 h-4 w-4" />
-          {t("export")}
+          Exportar
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
@@ -49,15 +47,15 @@ export function ExportDropdown({
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => onExport("csv")}>
           <FileText className="mr-2 h-4 w-4" />
-          {t("csvFormat")}
+          CSV
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onExport("excel")}>
           <FileSpreadsheet className="mr-2 h-4 w-4" />
-          {t("excelFormat")}
+          Excel
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onExport("json")}>
           <FileJson className="mr-2 h-4 w-4" />
-          {t("jsonFormat")}
+          JSON
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

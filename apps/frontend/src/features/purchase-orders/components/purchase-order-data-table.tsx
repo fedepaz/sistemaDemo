@@ -14,13 +14,12 @@ import {
   useUpdatePurchaseOrder,
 } from "../hooks/hooks";
 import { PurchaseOrder } from "../types";
-import { useTranslations } from "next-intl";
+
 import { useDataTableActions } from "@/hooks/useDataTable";
 import { PurchaseOrderForm } from "./purchase-order-form";
 import { useState } from "react";
 
 export function PurchaseOrdersDataTable() {
-  const t = useTranslations("PurchaseOrdersDataTable");
   const { data: purchaseOrders = [] } = usePurchaseOrders();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
@@ -33,7 +32,7 @@ export function PurchaseOrdersDataTable() {
   const deletePurchaseOrder = useDeletePurchaseOrder();
 
   const {} = useDataTableActions<PurchaseOrder>({
-    entityName: t("entityName"),
+    entityName: "Órdenes de Compra",
     onDelete: (id) => deletePurchaseOrder.mutateAsync(id),
   });
 
@@ -62,7 +61,7 @@ export function PurchaseOrdersDataTable() {
 
   const handleExport = (
     format: "csv" | "excel" | "json" | "pdf",
-    selectedRows: PurchaseOrder[]
+    selectedRows: PurchaseOrder[],
   ) => {
     console.log("Export Purchase Orders:", selectedRows);
   };
@@ -82,8 +81,8 @@ export function PurchaseOrdersDataTable() {
       <DataTable
         columns={purchaseOrderColumns}
         data={purchaseOrders}
-        title={t("title")}
-        description={t("description")}
+        title="Órdenes de Compra"
+        description="Gestión y seguimiento de órdenes de compra"
         searchKey="orderNumber"
         totalCount={purchaseOrders.length}
         onEdit={handleEdit}
@@ -94,24 +93,26 @@ export function PurchaseOrdersDataTable() {
         }
       />
 
-      <FloatingActionButton onClick={handleAdd} label={t("addNew")} />
+      <FloatingActionButton onClick={handleAdd} label="Añadir nueva orden de compra" />
 
       <SlideOverForm
         open={slideOverOpen}
         onOpenChange={setSlideOverOpen}
         title={
           selectedPurchaseOrder
-            ? t("editTitle", { orderNumber: selectedPurchaseOrder.orderNumber })
-            : t("createTitle")
+            ? `Editar orden de compra: ${selectedPurchaseOrder.orderNumber}`
+            : "Crear nueva orden de compra"
         }
         description={
           selectedPurchaseOrder
-            ? t("editDescription", { orderNumber: selectedPurchaseOrder.orderNumber })
-            : t("createDescription")
+            ? `Edita los detalles de la orden de compra ${selectedPurchaseOrder.orderNumber}.`
+            : "Rellena los campos para crear una nueva orden de compra."
         }
         onSave={handleSave}
         onCancel={() => setSlideOverOpen(false)}
-        saveLabel={selectedPurchaseOrder ? t("updateButton") : t("createButton")}
+        saveLabel={
+          selectedPurchaseOrder ? "Actualizar" : "Crear"
+        }
       >
         <div className="space-y-2">
           <PurchaseOrderForm

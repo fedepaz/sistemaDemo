@@ -14,7 +14,6 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Invoice, InvoiceFormData, invoiceSchema } from "../types";
-import { useTranslations } from "next-intl";
 
 interface InvoiceFormProps {
   initialData?: Invoice;
@@ -24,7 +23,6 @@ interface InvoiceFormProps {
 }
 
 export function InvoiceForm({ initialData, onSubmit }: InvoiceFormProps) {
-  const t = useTranslations("InvoiceForm");
   const form = useForm<InvoiceFormData>({
     resolver: zodResolver(invoiceSchema),
     defaultValues: initialData
@@ -47,9 +45,9 @@ export function InvoiceForm({ initialData, onSubmit }: InvoiceFormProps) {
           name="invoiceNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("invoiceNumberLabel")}</FormLabel>
+              <FormLabel>Número de Factura</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("invoiceNumberPlaceholder")} />
+                <Input {...field} placeholder="Ej: INV-2023-001" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,9 +59,9 @@ export function InvoiceForm({ initialData, onSubmit }: InvoiceFormProps) {
           name="client"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("clientLabel")}</FormLabel>
+              <FormLabel>Cliente</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("clientPlaceholder")} />
+                <Input {...field} placeholder="Nombre del cliente" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -75,7 +73,7 @@ export function InvoiceForm({ initialData, onSubmit }: InvoiceFormProps) {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("amountLabel")}</FormLabel>
+              <FormLabel>Importe</FormLabel>
               <FormControl>
                 <Input
                   {...field}

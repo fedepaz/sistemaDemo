@@ -14,14 +14,13 @@ import {
   useUpdatePlant,
 } from "../hooks/hooks";
 import { Plant } from "../types";
-import { useTranslations } from "next-intl";
+
 import { useDataTableActions } from "@/hooks/useDataTable";
 import { PlantForm } from "./plants-form";
 import { useState } from "react";
 
 export function PlantsDataTable() {
   const { data: plants = [] } = usePlants();
-  const t = useTranslations("PlantsDataTable");
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
@@ -61,7 +60,7 @@ export function PlantsDataTable() {
 
   const handleExport = (
     format: "csv" | "excel" | "json" | "pdf",
-    selectedRows: Plant[]
+    selectedRows: Plant[],
   ) => {
     console.log("Export Plants:", selectedRows);
   };
@@ -80,8 +79,8 @@ export function PlantsDataTable() {
       <DataTable
         columns={plantColumns}
         data={plants}
-        title={t("title")}
-        description={t("description")}
+        title="Plantas"
+        description="Gestión de la información de las plantas"
         searchKey="name"
         totalCount={plants.length}
         onEdit={handleEdit}
@@ -90,19 +89,23 @@ export function PlantsDataTable() {
         onQuickEdit={(plant) => console.log(`Quick edit plant: ${plant.name}`)}
       />
 
-      <FloatingActionButton onClick={handleAdd} label={t("addNew")} />
+      <FloatingActionButton onClick={handleAdd} label="Añadir nueva planta" />
       <SlideOverForm
         open={slideOverOpen}
         onOpenChange={setSlideOverOpen}
-        title={selectedPlant ? t("editTitle", { name: selectedPlant.name }) : t("createTitle")}
+        title={
+          selectedPlant
+            ? `Editar planta: ${selectedPlant.name}`
+            : "Crear nueva planta"
+        }
         description={
           selectedPlant
-            ? t("editDescription", { name: selectedPlant.name })
-            : t("createDescription")
+            ? `Edita los detalles de la planta ${selectedPlant.name}.`
+            : "Rellena los campos para crear una nueva planta."
         }
         onSave={handleSave}
         onCancel={() => setSlideOverOpen(false)}
-        saveLabel={selectedPlant ? t("update") : t("create")}
+        saveLabel={selectedPlant ? "Actualizar" : "Crear"}
       >
         <div className="space-y-2">
           <PlantForm

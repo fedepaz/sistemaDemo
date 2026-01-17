@@ -8,7 +8,7 @@ import {
   useUpdateUser,
   useUsers,
 } from "../hooks/hooks";
-import { useTranslations } from "next-intl";
+
 import {
   DataTable,
   FloatingActionButton,
@@ -21,7 +21,6 @@ import { User } from "../types";
 
 export function UsersDataTable() {
   const { data: users = [] } = useUsers();
-  const t = useTranslations("UsersDataTable");
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -32,7 +31,7 @@ export function UsersDataTable() {
   const deleteUser = useDeleteUser();
 
   const {} = useDataTableActions<User>({
-    entityName: t("entityName"),
+    entityName: "Usuarios",
     onDelete: (id) => deleteUser.mutateAsync(id),
   });
 
@@ -59,7 +58,7 @@ export function UsersDataTable() {
 
   const handleExport = (
     format: "csv" | "excel" | "json" | "pdf",
-    selectedRows: User[]
+    selectedRows: User[],
   ) => {
     console.log("Export Users:", selectedRows);
   };
@@ -79,8 +78,8 @@ export function UsersDataTable() {
       <DataTable
         columns={userColumns}
         data={users}
-        title={t("title")}
-        description={t("description")}
+        title="Usuarios"
+        description="Gestión de los usuarios del sistema"
         searchKey="name"
         totalCount={users.length}
         onEdit={handleEdit}
@@ -88,20 +87,24 @@ export function UsersDataTable() {
         onExport={handleExport}
         onQuickEdit={(user) => console.log(`Quick edit user: ${user.name}`)}
       />
-      <FloatingActionButton onClick={handleAdd} label={t("addNew")} />
+      <FloatingActionButton onClick={handleAdd} label="Añadir nuevo usuario" />
 
       <SlideOverForm
         open={slideOverOpen}
         onOpenChange={setSlideOverOpen}
-        title={selectedUser ? t("editTitle", { name: selectedUser.name }) : t("createTitle")}
+        title={
+          selectedUser
+            ? `Editar usuario: ${selectedUser.name}`
+            : "Crear nuevo usuario"
+        }
         description={
           selectedUser
-            ? t("editDescription", { name: selectedUser.name })
-            : t("createUserDescription")
+            ? `Edita los detalles del usuario ${selectedUser.name}.`
+            : "Rellena los campos para crear un nuevo usuario."
         }
         onSave={handleSave}
         onCancel={() => setSlideOverOpen(false)}
-        saveLabel={selectedUser ? t("updateButton") : t("createButton")}
+        saveLabel={selectedUser ? "Actualizar" : "Crear"}
       >
         <div className="space-y-2">
           <UserForm

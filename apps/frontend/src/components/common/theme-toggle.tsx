@@ -5,14 +5,11 @@ import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
 import { useIsMounted } from "@/hooks/useIsMounted";
-import { useTranslations } from "next-intl";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   const mounted = useIsMounted();
-
-  const t = useTranslations("ThemeToggle");
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -35,8 +32,8 @@ export function ThemeToggle() {
       size="icon"
       onClick={toggleTheme}
       className="agricultural-touch-target"
-      aria-label={theme === "dark" ? t("lightMode") : t("darkMode")}
-      title={theme === "dark" ? t("lightMode") : t("darkMode")}
+      aria-label={theme === "dark" ? "Modo claro" : "Modo oscuro"}
+      title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
     >
       {theme === "dark" ? (
         <Sun className="h-5 w-5" />
