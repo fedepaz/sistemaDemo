@@ -5,7 +5,6 @@ import {
   StatusBadge,
 } from "@/components/data-display/data-table";
 import { User } from "../types";
-import { useTranslations } from "next-intl";
 
 interface CellProps {
   row?: Row<User>;
@@ -13,13 +12,12 @@ interface CellProps {
 }
 
 function CellComponent({ row, table }: CellProps) {
-  const t = useTranslations("UserColumns");
   if (row) {
     return (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label={t("selectRow")}
+        aria-label="Seleccionar fila"
       />
     );
   }
@@ -28,7 +26,7 @@ function CellComponent({ row, table }: CellProps) {
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label={t("selectAll")}
+        aria-label="Seleccionar todo"
       />
     );
   }
@@ -41,28 +39,27 @@ interface HeaderProps {
 }
 
 function HeaderComponent({ column, translationKey }: HeaderProps) {
-  const t = useTranslations("UserColumns");
-  return <SortableHeader column={column}>{t(translationKey)}</SortableHeader>;
+  return <SortableHeader column={column}>{translationKey}</SortableHeader>;
 }
 
 function CellBadgeRoleComponent({ row }: CellProps) {
-  const t = useTranslations("UserColumns");
   if (!row) return null;
   const role = row.getValue("role") as string;
+  const roleText = role === "admin" ? "Administrador" : "Usuario";
   return (
     <StatusBadge status={role === "admin" ? "critical" : "info"}>
-      {t(role)}
+      {roleText}
     </StatusBadge>
   );
 }
 
 function CellBadgeStatusComponent({ row }: CellProps) {
-  const t = useTranslations("UserColumns");
   if (!row) return null;
   const status = row.getValue("status") as string;
+  const statusText = status === "active" ? "Activo" : "Inactivo";
   return (
     <StatusBadge status={status === "active" ? "healthy" : "inactive"}>
-      {t(status)}
+      {statusText}
     </StatusBadge>
   );
 }
@@ -82,19 +79,19 @@ export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="name" />;
+      return <HeaderComponent column={column} translationKey="Nombre" />;
     },
   },
   {
     accessorKey: "email",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="email" />;
+      return <HeaderComponent column={column} translationKey="Correo electrónico" />;
     },
   },
   {
     accessorKey: "role",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="role" />;
+      return <HeaderComponent column={column} translationKey="Rol" />;
     },
     cell: ({ row }) => {
       return <CellBadgeRoleComponent row={row} />;
@@ -103,7 +100,7 @@ export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="status" />;
+      return <HeaderComponent column={column} translationKey="Estado" />;
     },
     cell: ({ row }) => {
       return <CellBadgeStatusComponent row={row} />;
@@ -112,13 +109,13 @@ export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "department",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="department" />;
+      return <HeaderComponent column={column} translationKey="Departamento" />;
     },
   },
   {
     accessorKey: "lastLogin",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="lastLogin" />;
+      return <HeaderComponent column={column} translationKey="Último inicio de sesión" />;
     },
   },
 ];

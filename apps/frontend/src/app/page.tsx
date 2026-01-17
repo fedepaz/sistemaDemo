@@ -1,19 +1,10 @@
 // Should check cookie before defaulting to 'en'
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-type LocaleKey = "en" | "es" | "it";
 
 export default async function RootPage() {
-  // Check cookie here before redirecting
-  const cookieStore = await cookies();
-  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
-  const locale =
-    cookieLocale &&
-    (cookieLocale === "en" || cookieLocale === "es" || cookieLocale === "it")
-      ? (cookieLocale as LocaleKey)
-      : "en";
-
-  // Redirect to /{locale} instead of hardcoded /en
-  redirect(`/${locale}`);
+  // Redirect to the dashboard or login page, as the root page itself should not cause an infinite loop.
+  // For now, redirect to a placeholder, or the new dashboard structure.
+  // Assuming the new dashboard is under /dashboard for now.
+  redirect("/dashboard");
 }

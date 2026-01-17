@@ -3,51 +3,49 @@
 
 import { KPICard } from "@/components/data-display/kpi-card";
 import { Building2, TrendingUp, UserCheck, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
 
 import { useClients } from "../hooks/hooks";
 
 function ClientsKPI() {
-  const t = useTranslations("ClientKPIs");
   const { data: clients = [] } = useClients();
   const totalClients = clients.length;
   const activeClients = clients.filter(
-    (client) => client.status === "active"
+    (client) => client.status === "active",
   ).length;
   const totalRevenue = clients.reduce(
     (acc, client) => acc + client.totalRevenue,
-    0
+    0,
   );
   const prospects = clients.filter(
-    (client) => client.status === "prospect"
+    (client) => client.status === "prospect",
   ).length;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title={t("totalClients")}
+        title="Total de Clientes"
         value={totalClients.toLocaleString()}
-        description={t("inDatabase")}
+        description="en la base de datos"
         icon={Building2}
-        trend={{ value: 6.5, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 6.5, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("activeClients")}
+        title="Clientes Activos"
         value={activeClients.toLocaleString()}
-        description={t("prospects", { count: prospects })}
+        description={`${prospects} prospectos`}
         icon={UserCheck}
       />
       <KPICard
-        title={t("totalRevenue")}
+        title="Ingresos Totales"
         value={`€${(totalRevenue / 1000).toFixed(0)}k`}
-        description={t("fromAllClients")}
+        description="de todos los clientes"
         icon={TrendingUp}
-        trend={{ value: 18.2, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 18.2, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("newProspects")}
+        title="Nuevos Prospectos"
         value={prospects}
-        description={t("potentialClients")}
+        description="clientes potenciales"
         icon={Users}
       />
     </div>

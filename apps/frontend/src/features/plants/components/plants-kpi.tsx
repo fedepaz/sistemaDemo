@@ -4,48 +4,44 @@
 import { KPICard } from "@/components/data-display/kpi-card";
 import { usePlants } from "../hooks/hooks";
 import { Sprout, Leaf, AlertTriangle, Droplets } from "lucide-react";
-import { useTranslations } from "next-intl";
 
 function PlantKPIs() {
-  const t = useTranslations("PlantKPIs");
   const { data: mockPlants = [] } = usePlants();
   const totalPlants = mockPlants.length;
   const healthyPlants = mockPlants.filter((p) => p.status === "healthy").length;
   const criticalPlants = mockPlants.filter(
-    (p) => p.status === "critical"
+    (p) => p.status === "critical",
   ).length;
   const readyForHarvest = mockPlants.filter(
-    (p) => p.growthStage === "Fruiting" || p.growthStage === "Mature"
+    (p) => p.growthStage === "Fruiting" || p.growthStage === "Mature",
   ).length;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title={t("totalPlants")}
+        title="Total de Plantas"
         value={totalPlants}
-        description={t("activeInSystem")}
+        description="activas en el sistema"
         icon={Sprout}
-        trend={{ value: 12.5, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 12.5, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("healthyPlants")}
+        title="Plantas Saludables"
         value={healthyPlants}
-        description={t("ofTotal", {
-          percentage: ((healthyPlants / totalPlants) * 100).toFixed(0),
-        })}
+        description={`${((healthyPlants / totalPlants) * 100).toFixed(0)}% del total`}
         icon={Leaf}
-        trend={{ value: 5.2, label: t("fromLastWeek"), isPositive: true }}
+        trend={{ value: 5.2, label: "desde la semana pasada", isPositive: true }}
       />
       <KPICard
-        title={t("alertPlants")}
+        title="Plantas en Alerta"
         value={criticalPlants}
-        description={t("requireImmediateAttention")}
+        description="requieren atención inmediata"
         icon={AlertTriangle}
       />
       <KPICard
-        title={t("readyForHarvest")}
+        title="Listas para Cosecha"
         value={readyForHarvest}
-        description={t("matureOrFruitingStage")}
+        description="en etapa de madurez o fructificación"
         icon={Droplets}
       />
     </div>

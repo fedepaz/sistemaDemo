@@ -21,8 +21,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { useTranslations } from "next-intl"; // Import useTranslations
-import { Link, usePathname } from "@/i18n/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface NavigationItem {
   title: string;
@@ -45,8 +45,6 @@ interface NavigationGroup {
 export function DesktopSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
-  const t = useTranslations("navigation"); // Use 'navigation' namespace for menu items
-  const tCommon = useTranslations("common"); // Use 'common' namespace for general terms
 
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["operations"]),
@@ -64,42 +62,42 @@ export function DesktopSidebar() {
   const navigationGroups: NavigationGroup[] = [
     {
       id: "operations",
-      title: t("groupOperations"),
+      title: "Operaciones",
       icon: Sprout,
       items: [
         {
-          title: t("dashboard"),
+          title: "Dashboard",
           href: "/",
           icon: Home,
-          description: t("overviewAndAlerts"),
+          description: "Vista general y alertas",
         },
         {
-          title: t("environment"),
+          title: "Entorno",
           href: "/environment",
           icon: Thermometer,
-          description: t("climateMonitoring"),
+          description: "Monitorización climática",
           badge: "3",
           badgeVariant: "destructive" as const,
         },
         {
-          title: t("tasks"),
+          title: "Tareas",
           href: "/tasks",
           icon: Calendar,
-          description: t("dailyOperations"),
+          description: "Operaciones diarias",
           badge: "12",
         },
       ],
     },
     {
       id: "management",
-      title: t("groupManagement"),
+      title: "Gestión",
       icon: Building,
       items: [
-        { title: t("plants"), href: "/plants", icon: Sprout },
-        { title: t("clients"), href: "/clients", icon: Users },
-        { title: t("invoices"), href: "/invoices", icon: FileText },
+        { title: "Plantas", href: "/plants", icon: Sprout },
+        { title: "Clientes", href: "/clients", icon: Users },
+        { title: "Facturas", href: "/invoices", icon: FileText },
         {
-          title: t("purchaseOrders"),
+          title: "Órdenes de compra",
           href: "/purchase-orders",
           icon: ShoppingCart,
         },
@@ -107,15 +105,15 @@ export function DesktopSidebar() {
     },
     {
       id: "admin",
-      title: t("groupAdmin"),
+      title: "Administración",
       icon: Settings,
       items: [
-        { title: t("users"), href: "/users", icon: UserCircle },
+        { title: "Usuarios", href: "/users", icon: UserCircle },
         {
-          title: t("analytics"),
+          title: "Analíticas",
           href: "/analytics",
           icon: BarChart3,
-          description: t("analytics"),
+          description: "Analíticas",
         },
       ],
     },
@@ -137,9 +135,9 @@ export function DesktopSidebar() {
                 <span className="text-white font-bold text-sm">AG</span>
               </div>
               <div>
-                <h2 className="font-bold">{tCommon("agriManage")}</h2>
+                <h2 className="font-bold">AgriManage</h2>
                 <p className="text-xs text-muted-foreground">
-                  {tCommon("plantManagement")}
+                  Gestión de Plantas
                 </p>
               </div>
             </div>
@@ -260,9 +258,9 @@ export function DesktopSidebar() {
               <span className="text-white text-sm font-medium">JD</span>
             </div>
             <div>
-              <p className="text-sm font-medium">{tCommon("johnDoe")}</p>
+              <p className="text-sm font-medium">John Doe</p>
               <p className="text-xs text-muted-foreground">
-                {tCommon("greenhouseManager")}
+                Gerente de Invernadero
               </p>
             </div>
           </div>

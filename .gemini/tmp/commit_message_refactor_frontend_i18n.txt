@@ -1,0 +1,16 @@
+refactor(frontend): simplify authentication and remove internationalization
+
+This commit refactors the frontend by:
+- Removing the third-party Clerk authentication library in favor of the custom
+  username/password authentication model managed by the backend, aligning with
+  `tech_stack_guide.md` and `product-manager-agent.md`.
+- Eliminating `next-intl` internationalization, hardcoding all UI text to Spanish,
+  and simplifying routing by removing locale-based dynamic paths. This streamlines
+  the frontend for a Spanish-only application.
+- Updating the project name to "Vivero" in the frontend's metadata.
+- Adjusting frontend layout and page structures to reflect the removal of i18n
+  and Clerk.
+
+Additionally, this commit updates `GEMINI.md` to clarify the testing mandate, detail
+the database schema change workflow, and refine the commit and push workflow,
+improving agent operational guidelines.

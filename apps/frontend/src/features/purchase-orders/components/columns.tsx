@@ -5,7 +5,6 @@ import {
   StatusBadge,
 } from "@/components/data-display/data-table";
 import { PurchaseOrder } from "../types";
-import { useLocale, useTranslations } from "next-intl";
 
 interface CellProps {
   row?: Row<PurchaseOrder>;
@@ -13,13 +12,12 @@ interface CellProps {
 }
 
 function CellComponent({ row, table }: CellProps) {
-  const t = useTranslations("PurchaseOrderColumns");
   if (table) {
     return (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label={t("selectAll")}
+        aria-label="Seleccionar todo"
       />
     );
   }
@@ -28,7 +26,7 @@ function CellComponent({ row, table }: CellProps) {
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label={t("selectRow")}
+        aria-label="Seleccionar fila"
       />
     );
   }
@@ -43,15 +41,13 @@ interface HeaderProps {
 }
 
 function HeaderComponent({ column, translationKey }: HeaderProps) {
-  const t = useTranslations("PurchaseOrderColumns");
-  return <SortableHeader column={column}>{t(translationKey)}</SortableHeader>;
+  return <SortableHeader column={column}>{translationKey}</SortableHeader>;
 }
 
 function CellTotalAmountComponent({ row }: CellProps) {
-  const locale = useLocale();
   if (!row) return null;
   const amount = Number.parseFloat(row.getValue("totalAmount"));
-  const formatted = new Intl.NumberFormat(locale, {
+  const formatted = new Intl.NumberFormat("es-ES", {
     style: "currency",
     currency: "EUR",
   }).format(amount);
@@ -59,7 +55,6 @@ function CellTotalAmountComponent({ row }: CellProps) {
 }
 
 function CellBadgeComponent({ row }: CellProps) {
-  const t = useTranslations("PurchaseOrderColumns");
   if (!row) return null;
   const status = row.getValue("status") as string;
   const statusMap = {
@@ -68,9 +63,17 @@ function CellBadgeComponent({ row }: CellProps) {
     pending: "warning",
     cancelled: "critical",
   } as const;
+  const statusText =
+    status === "delivered"
+      ? "Entregado"
+      : status === "approved"
+        ? "Aprobado"
+        : status === "pending"
+          ? "Pendiente"
+          : "Cancelado";
   return (
     <StatusBadge status={statusMap[status as keyof typeof statusMap]}>
-      {t(status)}
+      {statusText}
     </StatusBadge>
   );
 }
@@ -89,25 +92,25 @@ export const purchaseOrderColumns: ColumnDef<PurchaseOrder>[] = [
   {
     accessorKey: "orderNumber",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="orderNumber" />;
+      return <HeaderComponent column={column} translationKey="Número de Pedido" />;
     },
   },
   {
     accessorKey: "supplier",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="supplier" />;
+      return <HeaderComponent column={column} translationKey="Proveedor" />;
     },
   },
   {
     accessorKey: "items",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="items" />;
+      return <HeaderComponent column={column} translationKey="Artículos" />;
     },
   },
   {
     accessorKey: "totalAmount",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="totalAmount" />;
+      return <HeaderComponent column={column} translationKey="Importe Total" />;
     },
     cell: ({ row }) => {
       return <CellTotalAmountComponent row={row} />;
@@ -116,7 +119,7 @@ export const purchaseOrderColumns: ColumnDef<PurchaseOrder>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="status" />;
+      return <HeaderComponent column={column} translationKey="Estado" />;
     },
     cell: ({ row }) => {
       return <CellBadgeComponent row={row} />;
@@ -125,13 +128,13 @@ export const purchaseOrderColumns: ColumnDef<PurchaseOrder>[] = [
   {
     accessorKey: "orderDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="orderDate" />;
+      return <HeaderComponent column={column} translationKey="Fecha de Pedido" />;
     },
   },
   {
     accessorKey: "deliveryDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="deliveryDate" />;
+      return <HeaderComponent column={column} translationKey="Fecha de Entrega" />;
     },
   },
 ];

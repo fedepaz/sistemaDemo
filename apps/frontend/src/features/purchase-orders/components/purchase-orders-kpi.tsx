@@ -4,49 +4,47 @@
 import { KPICard } from "@/components/data-display/kpi-card";
 import { usePurchaseOrders } from "../hooks/hooks";
 import { ShoppingCart, Package, Clock, CheckCircle2 } from "lucide-react";
-import { useTranslations } from "next-intl";
 
 function PurchaseOrderKPIs() {
-  const t = useTranslations("PurchaseOrderKPIs");
   const { data: purchaseOrders = [] } = usePurchaseOrders();
   const totalOrders = purchaseOrders.length;
   const totalSpend = purchaseOrders.reduce(
     (sum, po) => sum + po.totalAmount,
-    0
+    0,
   );
   const pendingOrders = purchaseOrders.filter(
-    (po) => po.status === "pending"
+    (po) => po.status === "pending",
   ).length;
   const receivedOrders = purchaseOrders.filter(
-    (po) => po.status === "received"
+    (po) => po.status === "received",
   ).length;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title={t("totalOrders")}
+        title="Total de Pedidos"
         value={totalOrders}
-        description={t("allTime")}
+        description="de todos los tiempos"
         icon={ShoppingCart}
-        trend={{ value: 10.5, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 10.5, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("totalSpend")}
+        title="Gasto Total"
         value={`€${(totalSpend / 1000).toFixed(1)}k`}
-        description={t("fromAllOrders")}
+        description="de todas las órdenes"
         icon={Package}
-        trend={{ value: 12.8, label: t("fromLastMonth"), isPositive: false }}
+        trend={{ value: 12.8, label: "desde el mes pasado", isPositive: false }}
       />
       <KPICard
-        title={t("pendingOrders")}
+        title="Pedidos Pendientes"
         value={pendingOrders}
-        description={t("awaitingReview")}
+        description="Esperando revisión"
         icon={Clock}
       />
       <KPICard
-        title={t("completedOrders")}
+        title="Pedidos Completados"
         value={receivedOrders}
-        description={t("completedOrdersDescription")}
+        description="Órdenes de compra recibidas y cerradas"
         icon={CheckCircle2}
       />
     </div>

@@ -1,0 +1,15 @@
+feat(husky): configure Husky for updated branch strategy and project name
+
+This commit configures Husky to align with recent project changes:
+
+- Updated Protected Branches: The pre-commit hook now recognizes 'main' and 'dev'
+  as protected branches, reflecting the consolidation of 'frontendDev' and
+  'backendDev' into a single 'dev' branch.
+- Project Renaming: The 'package.json' has been updated to reflect the new
+  project name, 'vivero-client-alpha'.
+- Husky Prepare Script: The 'prepare' script in 'package.json' has been updated
+  to the recommended 'husky' for modern Husky versions, ensuring proper hook
+  initialization.
+
+These changes enhance development workflow by enforcing consistent branch usage
+and linting before commits.
