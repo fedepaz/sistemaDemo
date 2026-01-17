@@ -3,7 +3,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { backendFetch } from "@/lib/api/backend";
-import { useUser } from "@clerk/nextjs";
+
 import { UserProfileDto } from "@vivero/shared";
 
 // This is the key for the query cache

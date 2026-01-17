@@ -7,7 +7,7 @@ import { useAuthUserProfile } from "../hooks/use-authUser";
 type UserProfileContextType = ReturnType<typeof useAuthUserProfile>;
 
 const AuthUserProfileContext = createContext<UserProfileContextType | null>(
-  null
+  null,
 );
 
 export function AuthUserProfileProvider({
@@ -15,7 +15,7 @@ export function AuthUserProfileProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const authUserProfile = useAuthUserProfile();
+  //const authUserProfile = useAuthUserProfile();
 
   return (
     <AuthUserProfileContext.Provider value={authUserProfile}>
@@ -28,7 +28,7 @@ export const useAuthUserProfileContext = () => {
   const context = useContext(AuthUserProfileContext);
   if (!context) {
     throw new Error(
-      "useAuthUserProfileContext must be used within an AuthUserProfileProvider"
+      "useAuthUserProfileContext must be used within an AuthUserProfileProvider",
     );
   }
   return context;

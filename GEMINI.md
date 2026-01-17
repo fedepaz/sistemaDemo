@@ -50,7 +50,7 @@ When the user asks me to **commit, push, or otherwise save new work**, I will ex
     - I will then follow the steps of the "Workflow for Reviewing Code Changes" on the output of that diff, which includes summarizing the changes and performing an internal alignment check against the agent documentation.
 
 2.  **Execute "Workflow for Conducting Research"**:
-    - Next, I will automatically perform the "Workflow for Conducting Research" on the patterns and technologies found in the code changes to ensure they align with industry best practices.
+    - Next, I will perform the "Workflow for Conducting Research" on the patterns and technologies found in the code changes to ensure they align with industry best practices.
 
 3.  **Generate and Internally Validate Commit Message**:
     - I will generate a draft commit message based on the changes.
@@ -65,10 +65,14 @@ When the user asks me to **commit, push, or otherwise save new work**, I will ex
 
 5.  **Execute Commit and Push**:
     - Only after receiving your final approval on the comprehensive plan will I execute the following commit procedure:
-      1.  **Save Commit Message**: Create a `.commits` directory (if it doesn't exist) and save the full, approved commit message to a new file within it with the following format: `<commit_message_title> - <date>.txt`.
+      1.  **Save Commit Message**: Save the full, approved commit message to a new file within it with the following format: `<commit_message_title> - <date>.txt`, on the ".commits/" directory.
       2.  **Stage All Changes**: Run `git add .` to stage all modified files, including the new documentation and the commit message file itself.
       3.  **Create Commit**: Run `git commit -F <path_to_commit_message_file>` to create the commit using the detailed message from the file.
       4.  **Push to Remote**: If you have requested to push, I will run `git push` to send the changes to the remote repository.
+
+### Clarification on Testing Mandate:
+
+While the project adheres to a TDD workflow, the comprehensive test suite (including unit, integration, and e2e tests) is primarily executed and enforced at the GitHub Actions CI/CD level to optimize local development speed. Local pre-commit hooks focus on essential quality gates like linting and commit message validation.
 
 ### Rule: Pull Request Message Generation Workflow
 
@@ -132,22 +136,27 @@ This workflow outlines the steps to effectively draft a comprehensive Pull Reque
 To ensure database consistency and prevent data loss, all changes to the Prisma schema **must** follow this exact procedure:
 
 1.  **Check for Drift**: Before making any changes, verify that your local database is in sync with the repository's migration history.
+
     ```bash
     pnpm --filter backend db:status
     ```
+
     If this command reports anything other than "Database schema is up to date!", you must resolve the issues before proceeding. A common cause for drift is making manual changes to the database.
 
 2.  **Modify the Schema**: Make your desired changes to the `.prisma` files in the `apps/backend/prisma/schema` directory.
 
 3.  **Validate the Schema**: After saving your changes, check the schema for any syntax or validation errors.
+
     ```bash
     pnpm --filter backend db:validate
     ```
 
 4.  **Create the Migration**: Once the schema is valid, create a new migration file. Give it a descriptive name when prompted.
+
     ```bash
     pnpm --filter backend db:migrate:dev
     ```
+
     This command will also apply the migration to your local database and regenerate the Prisma client.
 
 5.  **Commit the Changes**: Commit the new migration file located in `apps/backend/prisma/migrations/` along with your schema changes. The CI/CD pipeline will fail if you commit schema changes without a corresponding migration.
