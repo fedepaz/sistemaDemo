@@ -35,7 +35,6 @@ export function PurchaseOrderForm({
   initialData,
   onSubmit,
 }: PurchaseOrderFormProps) {
-  const t = "PurchaseOrderForm";
   const form = useForm<PurchaseOrderFormData>({
     resolver: zodResolver(purchaseOrderSchema),
     defaultValues: initialData
@@ -59,9 +58,9 @@ export function PurchaseOrderForm({
           name="orderNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("orderNumberLabel")}</FormLabel>
+              <FormLabel>Número de Pedido</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("orderNumberPlaceholder")} />
+                <Input {...field} placeholder="Ej: PO-2023-001" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -73,9 +72,9 @@ export function PurchaseOrderForm({
           name="supplier"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("supplierLabel")}</FormLabel>
+              <FormLabel>Proveedor</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("supplierPlaceholder")} />
+                <Input {...field} placeholder="Nombre del proveedor" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -87,13 +86,13 @@ export function PurchaseOrderForm({
           name="items"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("itemsLabel")}</FormLabel>
+              <FormLabel>Artículos</FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   type="number"
                   onChange={(e) => field.onChange(parseInt(e.target.value))}
-                  placeholder={t("itemsPlaceholder")}
+                  placeholder="Número de artículos"
                 />
               </FormControl>
               <FormMessage />
@@ -106,14 +105,14 @@ export function PurchaseOrderForm({
           name="totalAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("totalAmountLabel")}</FormLabel>
+              <FormLabel>Importe Total</FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   type="number"
                   step="0.01"
                   onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                  placeholder={t("totalAmountPlaceholder")}
+                  placeholder="Importe total del pedido"
                 />
               </FormControl>
               <FormMessage />
@@ -126,24 +125,18 @@ export function PurchaseOrderForm({
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("statusLabel")}</FormLabel>
+              <FormLabel>Estado</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={t("selectStatusPlaceholder")} />
+                    <SelectValue placeholder="Selecciona un estado" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="pending">{t("pendingStatus")}</SelectItem>
-                  <SelectItem value="approved">
-                    {t("approvedStatus")}
-                  </SelectItem>
-                  <SelectItem value="received">
-                    {t("receivedStatus")}
-                  </SelectItem>
-                  <SelectItem value="cancelled">
-                    {t("cancelledStatus")}
-                  </SelectItem>
+                  <SelectItem value="pending">Pendiente</SelectItem>
+                  <SelectItem value="approved">Aprobado</SelectItem>
+                  <SelectItem value="received">Recibido</SelectItem>
+                  <SelectItem value="cancelled">Cancelado</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -156,7 +149,7 @@ export function PurchaseOrderForm({
           name="orderDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("orderDateLabel")}</FormLabel>
+              <FormLabel>Fecha de Pedido</FormLabel>
               <FormControl>
                 <Input {...field} type="date" />
               </FormControl>
@@ -170,7 +163,7 @@ export function PurchaseOrderForm({
           name="deliveryDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("deliveryDateLabel")}</FormLabel>
+              <FormLabel>Fecha de Entrega</FormLabel>
               <FormControl>
                 <Input {...field} type="date" />
               </FormControl>

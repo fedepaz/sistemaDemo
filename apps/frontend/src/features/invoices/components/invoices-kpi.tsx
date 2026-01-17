@@ -7,7 +7,6 @@ import { useInvoices } from "../hooks/hooks";
 
 function InvoiceKPIs() {
   const { data: mockInvoices = [] } = useInvoices();
-  const t = "InvoiceKPIs";
   const totalInvoices = mockInvoices.length;
   const totalRevenue = mockInvoices.reduce((sum, inv) => sum + inv.amount, 0);
   const paidInvoices = mockInvoices.filter(
@@ -20,29 +19,29 @@ function InvoiceKPIs() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title={t("totalInvoices")}
+        title="Facturas Totales"
         value={totalInvoices}
-        description={t("allTime")}
+        description="de todos los tiempos"
         icon={FileText}
-        trend={{ value: 8.3, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 8.3, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("totalRevenue")}
+        title="Ingresos Totales"
         value={`€${(totalRevenue / 1000).toFixed(1)}k`}
-        description={t("fromAllInvoices")}
+        description="de todas las facturas"
         icon={DollarSign}
-        trend={{ value: 15.2, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 15.2, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("paidInvoices")}
+        title="Facturas Pagadas"
         value={paidInvoices}
-        description={t("pending", { count: totalInvoices - paidInvoices })}
+        description={`${totalInvoices - paidInvoices} pendientes`}
         icon={CheckCircle2}
       />
       <KPICard
-        title={t("pendingInvoices")}
+        title="Facturas Pendientes"
         value={overdueInvoices}
-        description={t("requireFollowUp")}
+        description="requieren seguimiento"
         icon={Clock}
       />
     </div>

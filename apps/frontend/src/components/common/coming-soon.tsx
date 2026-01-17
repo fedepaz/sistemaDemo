@@ -22,17 +22,17 @@ export default function ComingSoonPage() {
         {/* Main Message */}
         <div className="space-y-4">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
-            {t("title")}
+            ¡Próximamente!
           </h2>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto">
-            {t("description")}
+            Estamos trabajando arduamente para brindarle una solución de gestión agrícola innovadora y eficiente.
           </p>
         </div>
 
         {/* Status Indicator */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary">
           <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          <span className="text-sm font-medium">{t("status")}</span>
+          <span className="text-sm font-medium">En desarrollo</span>
         </div>
 
         {/* Features Preview */}
@@ -42,10 +42,10 @@ export default function ComingSoonPage() {
               <BarChart className="w-5 h-5 text-primary" />
             </div>
             <h3 className="font-semibold text-foreground">
-              {t("feature1.title")}
+              Análisis de Datos Avanzado
             </h3>
             <p className="text-sm text-muted-foreground px-2">
-              {t("feature1.description")}
+              Obtenga información valiosa sobre sus cultivos y operaciones.
             </p>
           </div>
 
@@ -54,10 +54,10 @@ export default function ComingSoonPage() {
               <Smartphone className="w-5 h-5 text-primary" />
             </div>
             <h3 className="font-semibold text-foreground">
-              {t("feature2.title")}
+              Gestión Móvil
             </h3>
             <p className="text-sm text-muted-foreground px-2">
-              {t("feature2.description")}
+              Administre su granja desde cualquier lugar con nuestra aplicación móvil.
             </p>
           </div>
 
@@ -66,10 +66,10 @@ export default function ComingSoonPage() {
               <Cloud className="w-5 h-5 text-primary" />
             </div>
             <h3 className="font-semibold text-foreground">
-              {t("feature3.title")}
+              Integración en la Nube
             </h3>
             <p className="text-sm text-muted-foreground px-2">
-              {t("feature3.description")}
+              Acceda a sus datos de forma segura y en tiempo real.
             </p>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function ComingSoonPage() {
         {/* Footer */}
         <div className="pt-6 md:pt-8 text-sm text-muted-foreground">
           <p>
-            {t("footer.inquiries")}{" "}
+            Para consultas, contáctenos en{" "}
             <a
               href="mailto:info@agriflow.com"
               className="text-primary hover:underline"

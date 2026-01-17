@@ -31,7 +31,7 @@ export function DeleteDialog({
   itemCount = 1,
   isLoading = false,
 }: DeleteDialogProps) {
-  const dialogTitle = title || t("areYouSure");
+  const dialogTitle = title || "¿Estás seguro?";
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -46,7 +46,7 @@ export function DeleteDialog({
             </AlertDialogTitle>
           </div>
           <AlertDialogDescription className="text-base pt-2">
-            {description || t("confirmDelete", { count: itemCount })}
+            {description || `¿Estás seguro de que quieres eliminar ${itemCount} elemento(s)? Esta acción no se puede deshacer.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -54,14 +54,14 @@ export function DeleteDialog({
             disabled={isLoading}
             className="min-h-[48px] min-w-[100px]"
           >
-            {t("cancelButton")}
+            Cancelar
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             disabled={isLoading}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90 min-h-[48px] min-w-[100px]"
           >
-            {isLoading ? t("deletingButton") : t("deleteButton")}
+            {isLoading ? "Eliminando..." : "Eliminar"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -61,10 +61,10 @@ export function SlideOverForm({
         <SheetFooter>
           <div className="flex w-full justify-end gap-4">
             <Button variant="outline" onClick={handleCancel} className="w-full">
-              {t("cancelButton")}
+              Cancelar
             </Button>
             <Button onClick={handleSave} className="w-full">
-              {saveLabel || t("saveChanges")}
+              {saveLabel || "Guardar cambios"}
             </Button>
           </div>
         </SheetFooter>

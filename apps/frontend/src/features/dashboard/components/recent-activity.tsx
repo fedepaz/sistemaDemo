@@ -10,14 +10,13 @@ import {
 import { useDashboardRecentActivity } from "../hooks/hooks";
 
 function RecentActivity() {
-  const t = "RecentActivity";
   const { data: recentActivity } = useDashboardRecentActivity();
 
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle>{t("title")}</CardTitle>
-        <CardDescription>{t("noActivity")}</CardDescription>
+        <CardTitle>Actividad Reciente</CardTitle>
+        <CardDescription>No hay actividad reciente.</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 min-h-0 pb-4">
         <div className="h-full overflow-y-auto pr-1 space-y-3">
@@ -32,8 +31,7 @@ function RecentActivity() {
               <div className="flex-1">
                 <p className="text-sm font-medium">{activity.action}</p>
                 <p className="text-xs text-muted-foreground">
-                  {t("byUser", { user: activity.user })} •{" "}
-                  {activity.timestamp.toISOString()}
+                  Por {activity.user} • {activity.timestamp.toISOString()}
                 </p>
               </div>
             </div>

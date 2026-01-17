@@ -13,22 +13,22 @@ export function NotFoundPage() {
           Error 404
         </h1>
         <p className="mt-3 text-xl font-bold text-pretty text-gray-200 sm:text-xl/8">
-          {t("title")}
+          Página no encontrada
         </p>
 
         <p className="mt-6 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-          {t("description")}
+          Lo sentimos, no pudimos encontrar la página que estás buscando.
         </p>
 
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <button className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90">
-            {t("goBack")}
+            Volver
           </button>
           <Link
             href={"/"}
             className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
           >
-            {t("backToHome")}
+            Volver a la página de inicio
           </Link>
         </div>
       </div>

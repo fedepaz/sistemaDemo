@@ -28,7 +28,6 @@ interface ClientFormProps {
 }
 
 export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
-  const t = "ClientForm";
   const form = useForm<ClientFormData>({
     resolver: zodResolver(clientSchema),
     defaultValues: initialData
@@ -53,9 +52,9 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("nameLabel")}</FormLabel>
+              <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("namePlaceholder")} />
+                <Input {...field} placeholder="Nombre del cliente" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -67,9 +66,9 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
           name="contactPerson"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("contactPersonLabel")}</FormLabel>
+              <FormLabel>Persona de contacto</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("contactPersonPlaceholder")} />
+                <Input {...field} placeholder="Nombre de la persona de contacto" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,9 +80,9 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("emailLabel")}</FormLabel>
+              <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("emailPlaceholder")} />
+                <Input {...field} placeholder="Correo electrónico del cliente" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,9 +94,9 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("phoneLabel")}</FormLabel>
+              <FormLabel>Teléfono</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("phonePlaceholder")} />
+                <Input {...field} placeholder="Número de teléfono del cliente" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -108,21 +107,17 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("statusLabel")}</FormLabel>
+              <FormLabel>Estado</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={t("selectStatusPlaceholder")} />
+                    <SelectValue placeholder="Selecciona un estado" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="active">{t("activeStatus")}</SelectItem>
-                  <SelectItem value="inactive">
-                    {t("inactiveStatus")}
-                  </SelectItem>
-                  <SelectItem value="prospect">
-                    {t("prospectStatus")}
-                  </SelectItem>
+                  <SelectItem value="active">Activo</SelectItem>
+                  <SelectItem value="inactive">Inactivo</SelectItem>
+                  <SelectItem value="prospect">Prospecto</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

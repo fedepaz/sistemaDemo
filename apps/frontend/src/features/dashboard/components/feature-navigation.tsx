@@ -11,47 +11,46 @@ import {
 import { useDashboardKPIs } from "../hooks/hooks";
 
 function FeatureNavigation() {
-  const t = "FeatureNavigation";
   const { data: kpis } = useDashboardKPIs();
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <FeatureCard
-        title={t("plants")}
-        description={t("managePlantInventory")}
+        title="Plantas"
+        description="Gestionar inventario de plantas"
         icon={Sprout}
         href="/plants"
         stats={{
-          label: t("activePlants"),
+          label: "Plantas activas",
           value: kpis.activePlants.toLocaleString(),
         }}
       />
       <FeatureCard
-        title={t("clients")}
-        description={t("manageClients")}
+        title="Clientes"
+        description="Gestionar clientes"
         icon={Users}
         href="/clients"
-        stats={{ label: t("activeClients"), value: kpis.activeClients }}
+        stats={{ label: "Clientes activos", value: kpis.activeClients }}
       />
       <FeatureCard
-        title={t("invoices")}
-        description={t("manageInvoices")}
+        title="Facturas"
+        description="Gestionar facturas"
         icon={FileText}
         href="/invoices"
-        stats={{ label: t("openInvoices"), value: kpis.openInvoices }}
+        stats={{ label: "Facturas pendientes", value: kpis.openInvoices }}
       />
       <FeatureCard
-        title={t("purchaseOrders")}
-        description={t("managePurchaseOrders")}
+        title="Órdenes de compra"
+        description="Gestionar órdenes de compra"
         icon={ShoppingCart}
         href="/purchase-orders"
-        stats={{ label: t("pendingOrders"), value: kpis.pendingOrders }}
+        stats={{ label: "Pedidos pendientes", value: kpis.pendingOrders }}
       />
       <FeatureCard
-        title={t("users")}
-        description={t("manageUsers")}
+        title="Usuarios"
+        description="Gestionar usuarios"
         icon={UserCircle}
         href="/users"
-        stats={{ label: t("activeUsers"), value: kpis.activeUsers }}
+        stats={{ label: "Usuarios activos", value: kpis.activeUsers }}
       />
     </div>
   );

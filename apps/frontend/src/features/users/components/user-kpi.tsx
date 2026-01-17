@@ -7,7 +7,6 @@ import { Users, UserCheck, UserX, Shield } from "lucide-react";
 import { useUsers } from "../hooks/hooks";
 
 function UserKPIs() {
-  const t = "UserKPIs";
   const { data: mockUsers = [] } = useUsers();
   const totalUsers = mockUsers.length;
   const activeUsers = mockUsers.filter((u) => u.status === "active").length;
@@ -17,23 +16,23 @@ function UserKPIs() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title={t("totalUsers")}
+        title="Total de Usuarios"
         value={totalUsers}
-        description={t("inSystem")}
+        description="en el sistema"
         icon={Users}
-        trend={{ value: 5.0, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 5.0, label: "desde el mes pasado", isPositive: true }}
       />
-      <KPICard title={t("activeUsers")} value={activeUsers} icon={UserCheck} />
+      <KPICard title="Usuarios Activos" value={activeUsers} icon={UserCheck} />
       <KPICard
-        title={t("newUsersToday")}
+        title="Usuarios Inactivos"
         value={inactiveUsers}
-        description={t("needAttention")}
+        description="Necesitan atención"
         icon={UserX}
       />
       <KPICard
-        title={t("administrators")}
+        title="Administradores"
         value={adminUsers}
-        description={t("fullAccess")}
+        description="Acceso total"
         icon={Shield}
       />
     </div>

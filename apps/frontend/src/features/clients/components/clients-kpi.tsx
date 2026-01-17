@@ -7,7 +7,6 @@ import { Building2, TrendingUp, UserCheck, Users } from "lucide-react";
 import { useClients } from "../hooks/hooks";
 
 function ClientsKPI() {
-  const t = "ClientKPIs";
   const { data: clients = [] } = useClients();
   const totalClients = clients.length;
   const activeClients = clients.filter(
@@ -24,29 +23,29 @@ function ClientsKPI() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title={t("totalClients")}
+        title="Total de Clientes"
         value={totalClients.toLocaleString()}
-        description={t("inDatabase")}
+        description="en la base de datos"
         icon={Building2}
-        trend={{ value: 6.5, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 6.5, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("activeClients")}
+        title="Clientes Activos"
         value={activeClients.toLocaleString()}
-        description={t("prospects", { count: prospects })}
+        description={`${prospects} prospectos`}
         icon={UserCheck}
       />
       <KPICard
-        title={t("totalRevenue")}
+        title="Ingresos Totales"
         value={`€${(totalRevenue / 1000).toFixed(0)}k`}
-        description={t("fromAllClients")}
+        description="de todos los clientes"
         icon={TrendingUp}
-        trend={{ value: 18.2, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 18.2, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("newProspects")}
+        title="Nuevos Prospectos"
         value={prospects}
-        description={t("potentialClients")}
+        description="clientes potenciales"
         icon={Users}
       />
     </div>

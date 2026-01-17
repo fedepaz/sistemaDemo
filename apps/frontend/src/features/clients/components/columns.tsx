@@ -10,13 +10,12 @@ interface CellProps {
 }
 
 function CellComponent({ row, table }: CellProps) {
-  const t = "ClientColumns";
   if (row) {
     return (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label={t("selectRow")}
+        aria-label="Seleccionar fila"
       />
     );
   }
@@ -25,7 +24,7 @@ function CellComponent({ row, table }: CellProps) {
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label={t("selectAll")}
+        aria-label="Seleccionar todo"
       />
     );
   }
@@ -38,12 +37,10 @@ interface HeaderProps {
 }
 
 function HeaderComponent({ column, translationKey }: HeaderProps) {
-  const t = "ClientColumns";
-  return <SortableHeader column={column}>{t(translationKey)}</SortableHeader>;
+  return <SortableHeader column={column}>{translationKey}</SortableHeader>;
 }
 
 function CellBadgeComponent({ row }: CellProps) {
-  const t = "ClientColumns";
   if (!row) return null;
   const status = row.getValue("status") as string;
   const variants: Record<string, "default" | "destructive" | "outline"> = {
@@ -51,9 +48,11 @@ function CellBadgeComponent({ row }: CellProps) {
     inactive: "destructive",
     prospect: "outline",
   };
+  const statusText =
+    status === "active" ? "Activo" : status === "inactive" ? "Inactivo" : "Prospecto";
   return (
     <Badge variant={variants[status]} className="capitalize">
-      {t(status)}
+      {statusText}
     </Badge>
   );
 }
@@ -73,20 +72,20 @@ export const clientColumns: ColumnDef<Client>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="name" />;
+      return <HeaderComponent column={column} translationKey="Nombre" />;
     },
   },
   {
     accessorKey: "contactPerson",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="contactPerson" />;
+      return <HeaderComponent column={column} translationKey="Persona de Contacto" />;
     },
   },
 
   {
     accessorKey: "email",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="email" />;
+      return <HeaderComponent column={column} translationKey="Correo Electrónico" />;
     },
     cell: ({ row }) => (
       <a
@@ -100,13 +99,13 @@ export const clientColumns: ColumnDef<Client>[] = [
   {
     accessorKey: "phone",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="phone" />;
+      return <HeaderComponent column={column} translationKey="Teléfono" />;
     },
   },
   {
     accessorKey: "status",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="status" />;
+      return <HeaderComponent column={column} translationKey="Estado" />;
     },
     cell: ({ row }) => {
       return <CellBadgeComponent row={row} />;
@@ -115,21 +114,21 @@ export const clientColumns: ColumnDef<Client>[] = [
   {
     accessorKey: "totalOrders",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="totalOrders" />;
+      return <HeaderComponent column={column} translationKey="Total de Pedidos" />;
     },
     cell: ({ row }) => `${row.getValue("totalOrders")}`,
   },
   {
     accessorKey: "totalRevenue",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="totalRevenue" />;
+      return <HeaderComponent column={column} translationKey="Ingresos Totales" />;
     },
     cell: ({ row }) => `${row.getValue("totalRevenue")}`,
   },
   {
     accessorKey: "lastOrder",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="lastOrder" />;
+      return <HeaderComponent column={column} translationKey="Último Pedido" />;
     },
     cell: ({ row }) => `${row.getValue("lastOrder")}`,
   },

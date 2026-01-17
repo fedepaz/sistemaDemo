@@ -29,7 +29,6 @@ interface UserFormProps {
 }
 
 export function UserForm({ initialData, onSubmit }: UserFormProps) {
-  const t = "UserForm";
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
     defaultValues: initialData
@@ -52,9 +51,9 @@ export function UserForm({ initialData, onSubmit }: UserFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("nameLabel")}</FormLabel>
+              <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("namePlaceholder")} />
+                <Input {...field} placeholder="Nombre del usuario" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -66,9 +65,9 @@ export function UserForm({ initialData, onSubmit }: UserFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("emailLabel")}</FormLabel>
+              <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("emailPlaceholder")} />
+                <Input {...field} placeholder="Correo electrónico del usuario" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,17 +79,17 @@ export function UserForm({ initialData, onSubmit }: UserFormProps) {
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("roleLabel")}</FormLabel>
+              <FormLabel>Rol</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={t("selectRolePlaceholder")} />
+                    <SelectValue placeholder="Selecciona un rol" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="admin">{t("adminRole")}</SelectItem>
-                  <SelectItem value="manager">{t("managerRole")}</SelectItem>
-                  <SelectItem value="worker">{t("workerRole")}</SelectItem>
+                  <SelectItem value="admin">Administrador</SelectItem>
+                  <SelectItem value="manager">Gerente</SelectItem>
+                  <SelectItem value="worker">Trabajador</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -103,18 +102,16 @@ export function UserForm({ initialData, onSubmit }: UserFormProps) {
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("statusLabel")}</FormLabel>
+              <FormLabel>Estado</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={t("selectStatusPlaceholder")} />
+                    <SelectValue placeholder="Selecciona un estado" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="active">{t("activeStatus")}</SelectItem>
-                  <SelectItem value="inactive">
-                    {t("inactiveStatus")}
-                  </SelectItem>
+                  <SelectItem value="active">Activo</SelectItem>
+                  <SelectItem value="inactive">Inactivo</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -127,7 +124,7 @@ export function UserForm({ initialData, onSubmit }: UserFormProps) {
           name="lastLogin"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("lastLoginLabel")}</FormLabel>
+              <FormLabel>Último inicio de sesión</FormLabel>
               <FormControl>
                 <Input {...field} type="date" />
               </FormControl>
@@ -141,9 +138,9 @@ export function UserForm({ initialData, onSubmit }: UserFormProps) {
           name="department"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("departmentLabel")}</FormLabel>
+              <FormLabel>Departamento</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={t("departmentPlaceholder")} />
+                <Input {...field} placeholder="Ej: Ventas, Producción" />
               </FormControl>
               <FormMessage />
             </FormItem>

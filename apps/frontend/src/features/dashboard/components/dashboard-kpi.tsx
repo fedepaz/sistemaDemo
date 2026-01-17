@@ -5,35 +5,34 @@ import { useDashboardKPIs } from "../hooks/hooks";
 import { ShoppingCart, Sprout, TrendingUp, Users } from "lucide-react";
 
 function DashboardKPI() {
-  const t = "DashboardKPIs";
   const { data: kpi } = useDashboardKPIs();
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title={t("totalPlants")}
+        title="Plantas totales"
         value={kpi?.totalPlants}
-        description={t("totalPlantsDescription")}
+        description="Plantas cultivadas en total"
         icon={Sprout}
-        trend={{ value: 12.5, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 12.5, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("activePlants")}
+        title="Plantas activas"
         value={kpi?.activePlants}
-        description={t("activePlantsDescription")}
+        description="Plantas actualmente en crecimiento"
         icon={Users}
-        trend={{ value: 8.2, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 8.2, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("monthlyRevenue")}
+        title="Ingresos mensuales"
         value={`${(kpi?.monthlyRevenue / 1000).toFixed(1)} $`}
-        description={t("openInvoices", { count: kpi?.openInvoices })}
+        description={`${kpi?.openInvoices} Facturas pendientes`}
         icon={TrendingUp}
-        trend={{ value: 15.5, label: t("fromLastMonth"), isPositive: true }}
+        trend={{ value: 15.5, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title={t("pendingOrders")}
+        title="Pedidos pendientes"
         value={kpi?.pendingOrders}
-        description={t("awaitingApproval")}
+        description="Pendiente de aprobación"
         icon={ShoppingCart}
       />
     </div>

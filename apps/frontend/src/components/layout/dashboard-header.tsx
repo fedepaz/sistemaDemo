@@ -64,7 +64,7 @@ export function DashboardHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>{t("userRole")}</DropdownMenuLabel>
+                <DropdownMenuLabel>Rol de usuario</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <SignedIn>
                   <div className="flex items-center justify-center">

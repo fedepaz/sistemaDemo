@@ -24,10 +24,10 @@ export function FloatingActionButton({
         "md:h-auto md:w-auto md:rounded-md md:px-6",
         className,
       )}
-      aria-label={label || t("addNew")}
+      aria-label={label || "Añadir nuevo"}
     >
       <Plus className="h-6 w-6 md:mr-2" />
-      <span className="hidden md:inline">{label || t("addNew")}</span>
+      <span className="hidden md:inline">{label || "Añadir nuevo"}</span>
     </Button>
   );
 }

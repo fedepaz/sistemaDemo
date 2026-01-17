@@ -12,7 +12,6 @@ import { AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 function DashboardAlerts() {
-  const t = "DashboardAlerts";
   const { data: alerts } = useDashboardAlerts();
 
   return (
@@ -20,9 +19,9 @@ function DashboardAlerts() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <AlertTriangle className="size-5" />
-          {t("title")}
+          Alertas
         </CardTitle>
-        <CardDescription>{t("noAlerts")}</CardDescription>
+        <CardDescription>No hay alertas activas en este momento.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">

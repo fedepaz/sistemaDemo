@@ -22,7 +22,6 @@ import { useState } from "react";
 import { RenderInlineEdit } from "./render-inline-edit";
 
 export function ClientsDataTable() {
-  const t = "ClientsDataTable";
   const { data: clients = [] } = useClients();
   //const {toast} = useToast()
 
@@ -85,8 +84,8 @@ export function ClientsDataTable() {
       <DataTable
         columns={clientColumns}
         data={clients}
-        title={t("title")}
-        description={t("description")}
+        title="Clientes"
+        description="Gestión de la información de los clientes"
         searchKey="name"
         totalCount={clients.length}
         onEdit={handleEdit}
@@ -97,24 +96,24 @@ export function ClientsDataTable() {
           console.log(`Quick edit client: ${client.name}`)
         }
       />
-      <FloatingActionButton onClick={handleAdd} label={t("addNew")} />
+      <FloatingActionButton onClick={handleAdd} label="Añadir nuevo cliente" />
 
       <SlideOverForm
         open={slideOverOpen}
         onOpenChange={setSlideOverOpen}
         title={
           selectedClient
-            ? t("editClientTitle", { name: selectedClient.name })
-            : t("createClientTitle")
+            ? `Editar cliente: ${selectedClient.name}`
+            : "Crear nuevo cliente"
         }
         description={
           selectedClient
-            ? t("editClientDescription", { name: selectedClient.name })
-            : t("createClientDescription")
+            ? `Edita los detalles del cliente ${selectedClient.name}.`
+            : "Rellena los campos para crear un nuevo cliente."
         }
         onSave={handleSave}
         onCancel={() => setSlideOverOpen(false)}
-        saveLabel={selectedClient ? t("update") : t("create")}
+        saveLabel={selectedClient ? "Actualizar" : "Crear"}
       >
         <div className="space-y-2">
           <ClientForm

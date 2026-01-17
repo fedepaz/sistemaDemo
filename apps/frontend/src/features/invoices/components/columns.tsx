@@ -7,7 +7,6 @@ import {
 
 import { ColumnDef, Row, Table } from "@tanstack/react-table";
 import { Invoice } from "../types";
-import { useLocale } from "next-intl";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface CellProps {
@@ -16,14 +15,12 @@ interface CellProps {
 }
 
 function CellComponent({ row, table }: CellProps) {
-  const t = "InvoiceColumns";
-
   if (table) {
     return (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label={t("selectAll")}
+        aria-label="Seleccionar todo"
       />
     );
   }
@@ -33,7 +30,7 @@ function CellComponent({ row, table }: CellProps) {
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label={t("selectRow")}
+        aria-label="Seleccionar fila"
       />
     );
   }
@@ -46,12 +43,10 @@ interface HeaderProps {
 }
 
 function HeaderComponent({ column, translationKey }: HeaderProps) {
-  const t = "InvoiceColumns";
-  return <SortableHeader column={column}>{t(translationKey)}</SortableHeader>;
+  return <SortableHeader column={column}>{translationKey}</SortableHeader>;
 }
 
 function CellBadgeComponent({ row }: CellProps) {
-  const t = "InvoiceColumns";
   if (!row) return null;
   const status = row.getValue("status") as string;
   const statusMap = {
@@ -61,18 +56,27 @@ function CellBadgeComponent({ row }: CellProps) {
     overdue: "pending",
     cancelled: "inactive",
   } as const;
+  const statusText =
+    status === "draft"
+      ? "Borrador"
+      : status === "sent"
+        ? "Enviada"
+        : status === "paid"
+          ? "Pagada"
+          : status === "overdue"
+            ? "Vencida"
+            : "Cancelada";
   return (
     <StatusBadge status={statusMap[status as keyof typeof statusMap]}>
-      {t(status)}
+      {statusText}
     </StatusBadge>
   );
 }
 
 function CellAmountComponent({ row }: CellProps) {
-  const locale = useLocale();
   if (!row) return null;
   const amount = Number.parseFloat(row.getValue("amount"));
-  const formatted = new Intl.NumberFormat(locale, {
+  const formatted = new Intl.NumberFormat("es-ES", {
     style: "currency",
     currency: "EUR",
   }).format(amount);
@@ -94,19 +98,19 @@ const invoiceColumns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "invoiceNumber",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="invoiceNumber" />;
+      return <HeaderComponent column={column} translationKey="Número de Factura" />;
     },
   },
   {
     accessorKey: "client",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="client" />;
+      return <HeaderComponent column={column} translationKey="Cliente" />;
     },
   },
   {
     accessorKey: "amount",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="amount" />;
+      return <HeaderComponent column={column} translationKey="Importe" />;
     },
     cell: ({ row }) => {
       return <CellAmountComponent row={row} />;
@@ -115,7 +119,7 @@ const invoiceColumns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="status" />;
+      return <HeaderComponent column={column} translationKey="Estado" />;
     },
     cell: ({ row }) => {
       return <CellBadgeComponent row={row} />;
@@ -124,13 +128,13 @@ const invoiceColumns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "createdDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="createdDate" />;
+      return <HeaderComponent column={column} translationKey="Fecha de Creación" />;
     },
   },
   {
     accessorKey: "dueDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="dueDate" />;
+      return <HeaderComponent column={column} translationKey="Fecha de Vencimiento" />;
     },
   },
 ];
