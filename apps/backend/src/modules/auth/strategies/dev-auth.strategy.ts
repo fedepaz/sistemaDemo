@@ -34,7 +34,6 @@ export class DevAuthStrategy implements AuthStrategy {
 
       request.user = {
         id: 'cmk1mgw6i0001j88x5kkx215h',
-        clerkId: 'abc123',
         email: 'dev@example.com',
         tenantId: '12345678-1234-1234-1234-123456789012',
         roleId: 'cmk1lzh3y0000j8l5ojy2xon2',

@@ -6,15 +6,15 @@ import { AuthService } from './auth.service';
 import { UserAuthRepository } from './repositories/userAuth.repository';
 import { AuthStrategy } from './interfaces/auth-strategy.abstract';
 import { DevAuthStrategy } from './strategies/dev-auth.strategy';
-import { ClerkAuthStrategy } from './strategies/clerk-auth.strategy';
 import { ConfigService } from '@nestjs/config';
+import { JwtAuthStrategy } from './strategies/jwt-auth.strategy';
 
 // Factory provider to select the correct strategy based on the environment
 const authStrategyProvider: Provider<AuthStrategy> = {
   provide: AuthStrategy,
   useFactory: (
     devStrategy: DevAuthStrategy,
-    clerkStrategy: ClerkAuthStrategy,
+    jwtStrategy: JwtAuthStrategy,
     config: ConfigService,
   ) => {
     const env = config.get<string>('config.environment');
@@ -24,10 +24,10 @@ const authStrategyProvider: Provider<AuthStrategy> = {
       console.log('🔧 AUTH STRATEGY FACTORY | Using DevAuthStrategy');
       return devStrategy;
     }
-    console.log('🔧 AUTH STRATEGY FACTORY | Using ClerkAuthStrategy');
-    return clerkStrategy;
+    console.log('🔧 AUTH STRATEGY FACTORY | Using JwtAuthStrategy');
+    return jwtStrategy;
   },
-  inject: [DevAuthStrategy, ClerkAuthStrategy, ConfigService],
+  inject: [DevAuthStrategy, JwtAuthStrategy, ConfigService],
 };
 
 @Module({
@@ -37,7 +37,7 @@ const authStrategyProvider: Provider<AuthStrategy> = {
     UserAuthRepository,
     authStrategyProvider,
     DevAuthStrategy,
-    ClerkAuthStrategy,
+    JwtAuthStrategy,
   ],
 
   exports: [GlobalAuthGuard, AuthService, AuthStrategy],

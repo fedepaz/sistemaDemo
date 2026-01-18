@@ -9,10 +9,10 @@ import { PrismaService } from '../../../infra/prisma/prisma.service';
 export class UserAuthRepository {
   constructor(private prisma: PrismaService) {}
 
-  findByClerkId(clerkId: string): Promise<User | null> {
+  findByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
-        clerkId,
+        email,
       },
     });
   }
@@ -50,11 +50,11 @@ export class UserAuthRepository {
   }
 
   createUser(data: {
-    tenantId: string;
-    clerkId: string;
     email: string;
     firstName: string;
     lastName: string;
+    passwordHash: string;
+    tenantId: string;
     roleId: string;
   }): Promise<User> {
     return this.prisma.user.create({
@@ -71,6 +71,7 @@ export class UserAuthRepository {
       email?: string;
       firstName?: string;
       lastName?: string;
+      passwordHash?: string;
     },
   ): Promise<User> {
     return this.prisma.user.update({
