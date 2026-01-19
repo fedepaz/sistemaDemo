@@ -1,15 +1,19 @@
 // src/auth/strategies/dev-auth.strategy.ts
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { AuthStrategy } from '../interfaces/auth-strategy.abstract';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { UserAuthRepository } from '../repositories/userAuth.repository';
 
 @Injectable()
 export class DevAuthStrategy implements AuthStrategy {
   private readonly logger = new Logger(DevAuthStrategy.name);
 
-  constructor(private readonly config: ConfigService) {}
+  constructor(
+    private readonly config: ConfigService,
+    private readonly userRepository: UserAuthRepository,
+  ) {}
 
   getName(): string {
     return 'DevAuthStrategy';
@@ -26,20 +30,27 @@ export class DevAuthStrategy implements AuthStrategy {
       throw new Error('Not in development environment');
     }
 
+    const userId = 'cmklnae6b0003vsj8wu4jf13z';
     try {
       // Add a microtask to satisfy linting (and prepare for real async ops)
-      await Promise.resolve(); // No-op that makes method truly async
+      const user = await this.userRepository.findById(userId);
+      if (!user) {
+        this.logger.warn(`❌ User not found: ${userId}`);
+        throw new UnauthorizedException('User not found');
+      }
 
       // Same logic devauthguard but integrated globally
 
       request.user = {
-        id: 'cmk1mgw6i0001j88x5kkx215h',
-        email: 'dev@example.com',
-        tenantId: '12345678-1234-1234-1234-123456789012',
-        roleId: 'cmk1lzh3y0000j8l5ojy2xon2',
+        id: user.id,
+        email: user.email,
+        tenantId: user.tenantId,
+        roleId: user.roleId,
       };
 
-      this.logger.log('✅ DEV AUTH SUCCESS | Hardcoded user authenticated');
+      this.logger.log('✅ DEV AUTH SUCCESS', {
+        user: user,
+      });
       return true;
     } catch (error) {
       this.logger.error(

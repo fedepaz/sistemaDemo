@@ -29,11 +29,7 @@ export type AppConfig = {
     secret: string;
     expiresIn: string;
   };
-  clerk: {
-    secretKey: string;
-    publishableKey: string;
-    jwtKey: string;
-  };
+
   awsS3: {
     accessKeyId: string;
     secretAccessKey: string;
@@ -74,11 +70,7 @@ const configFactory = (): AppConfig => ({
       process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-prod',
     expiresIn: process.env.JWT_EXPIRES_IN || '15m',
   },
-  clerk: {
-    secretKey: process.env.CLERK_SECRET_KEY || '',
-    publishableKey: process.env.CLERK_PUBLISHABLE_KEY || '',
-    jwtKey: process.env.CLERK_JWT_KEY || '',
-  },
+
   awsS3: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
@@ -117,10 +109,6 @@ export const validationSchema = Joi.object({
 
   JWT_SECRET: Joi.string().min(32).required(),
   JWT_EXPIRES_IN: Joi.string().default('15m'),
-
-  CLERK_SECRET_KEY: Joi.string().required(),
-  CLERK_PUBLISHABLE_KEY: Joi.string().required(),
-  CLERK_JWT_KEY: Joi.string().optional().allow(''),
 
   AWS_ACCESS_KEY_ID: Joi.string().optional().allow(''),
   AWS_SECRET_ACCESS_KEY: Joi.string().optional().allow(''),

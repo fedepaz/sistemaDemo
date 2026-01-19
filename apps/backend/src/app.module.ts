@@ -1,3 +1,5 @@
+// src/app.module.ts
+
 import { Module } from '@nestjs/common';
 import { configuration, validationSchema } from './config/configuration';
 import { ConfigModule } from '@nestjs/config';
