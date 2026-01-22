@@ -9,7 +9,7 @@ import PlantKPIs from "./plants-kpi";
 
 export function PlantsDashboard() {
   return (
-    <div className="container mx-auto py-8 space-y-8">
+    <>
       <Suspense
         fallback={
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -27,6 +27,6 @@ export function PlantsDashboard() {
       >
         <PlantsDataTable />
       </Suspense>
-    </div>
+    </>
   );
 }
