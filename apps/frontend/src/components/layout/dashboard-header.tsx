@@ -18,16 +18,22 @@ import { useLogout } from "@/features/auth/hooks/useLogout";
 import { LoadingSpinner } from "../common/loading-spinner";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { useEffect } from "react";
 
 export function DashboardHeader() {
   const { isLoading, logoutAsync } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
 
+  useEffect(() => {
+    if (!userProfile) {
+      router.push("/");
+    }
+  }, [userProfile, router]);
+
   const handleLogout = async () => {
     try {
       await logoutAsync();
-      router.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }

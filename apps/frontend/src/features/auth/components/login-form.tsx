@@ -1,34 +1,38 @@
 // src/features/auth/components/login-form.tsx
 "use client";
-import { Sprout, Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Sprout, Loader2, Lock, Eye, EyeOff, User } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { useAuthContext } from "../providers/AuthProvider";
-//import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  //const router = useRouter();
+  const router = useRouter();
 
   const { loginAsync, isLoading } = useLogin();
-  const { signIn: setAuthState } = useAuthContext();
+  const { isLoginComplete } = useAuthContext();
+
+  useEffect(() => {
+    if (isLoginComplete) {
+      router.push("/");
+    }
+  }, [isLoginComplete, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    // router.push("/");
-    window.location.href = "/";
     try {
       const data = await loginAsync({ username, password });
-      setAuthState(data.accessToken, data.user);
+      console.log("Success (?)", data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     }
@@ -74,7 +78,7 @@ export function LoginForm() {
                 </Label>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Mail className="h-4 w-4 text-primary" />
+                    <User className="h-4 w-4 text-primary" />
                   </div>
                   <Input
                     id="username"

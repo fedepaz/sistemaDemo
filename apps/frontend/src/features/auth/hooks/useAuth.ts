@@ -30,6 +30,7 @@ export function useAuth() {
       user: null,
       isSignedIn: false,
     });
+    console.log("Signout");
     window.dispatchEvent(new Event(AUTH_EVENT));
   }, []);
 

@@ -1,414 +1,1011 @@
-# Pure Permission-Based Authorization (No Roles!)
+# Permission System Technical Design Document
 
-## 🎯 The Architecture You Want
+## 1. Overview
 
-**Core Principle**: Every user has their own unique permission set. No pre-defined roles.
+**Simple, flat permission model:**
+- Per-user, per-table CRUD permissions
+- No roles, no inheritance, no groups
+- Optional row-level filtering (ALL vs OWN)
+- Cache-first architecture for performance
+- Explicit permission grants only
 
 ---
 
-## 📊 Database Schema (Pure Permissions)
+## 2. Database Schema
+
+### 2.1 Prisma Models
 
 ```prisma
-// Permission catalog - all possible permissions in the system
-model Permission {
-  id          String   @id @default(cuid())
-  resource    String   // "plants", "inventory", "clients", "financial"
-  action      String   // "create", "read", "update", "delete", "export"
-  code        String   @unique // "plants.create", "inventory.read"
-  description String   // "Allows creating new plant entries"
-  category    String   // "Plants", "Inventory", "Reports" (for UI grouping)
-  
-  userPermissions UserPermission[]
-  
-  createdAt   DateTime @default(now())
-  
-  @@unique([resource, action])
-  @@index([category]) // For UI: show all "Plants" permissions together
-  @@map("permissions")
-}
+// schema.prisma
 
-// User's assigned permissions (the core of the system!)
-model UserPermission {
-  id           String     @id @default(cuid())
-  userId       String
-  permissionId String
-  
-  // Optional: temporal permissions
-  expiresAt    DateTime?  // Permission expires automatically
-  grantedAt    DateTime   @default(now())
-  grantedBy    String     // Admin who granted this
-  reason       String?    // Why was this granted? (audit trail)
-  
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, permissionId]) // User can't have duplicate permissions
-  @@index([userId]) // Fast lookup: what permissions does this user have?
-  @@map("user_permissions")
-}
-
-// Updated User model (NO roleId!)
 model User {
-  id           String           @id @default(cuid())
-  email        String           @unique
-  firstName    String?
-  lastName     String?
-  passwordHash String
-  isActive     Boolean          @default(true)
-  
-  tenantId     String
-  tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  
-  // Direct permissions (no role!)
-  permissions  UserPermission[]
-  
-  auditLogs    AuditLog[]
-  preference   UserPreference?
-  
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  
-  @@index([tenantId])
-  @@index([email])
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String   // bcrypt hashed
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([username])
   @@map("users")
 }
 
-// OPTIONAL: Permission Templates (for convenience, not required!)
-model PermissionTemplate {
+model UserPermission {
+  id        String   @id @default(cuid())
+  userId    String
+  tableName String   // e.g., "plants", "greenhouses", "reports"
+  
+  // CRUD flags
+  canCreate Boolean  @default(false)
+  canRead   Boolean  @default(false)
+  canUpdate Boolean  @default(false)
+  canDelete Boolean  @default(false)
+  
+  // Row-level scope
+  scope     PermissionScope @default(NONE)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, tableName])
+  @@index([userId])
+  @@index([tableName])
+  @@map("user_permissions")
+}
+
+enum PermissionScope {
+  NONE // No access
+  OWN  // Only records created by this user
+  ALL  // All records in the table
+}
+
+// Example entity: Plant
+model Plant {
   id          String   @id @default(cuid())
-  name        String   // "Suggested: Field Worker", "Suggested: Manager"
-  description String?  // "Common permissions for field workers"
-  tenantId    String
-  permissions String[] // ["plants.read", "inventory.read"] - just suggestions!
-  
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  
-  @@unique([tenantId, name])
-  @@map("permission_templates")
+  name        String
+  species     String
+  location    String?
+  createdById String   // Foreign key to User
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@index([createdById])
+  @@map("plants")
+}
+```
+
+### 2.2 Migration Example
+
+```sql
+-- Migration: 001_create_permissions.sql
+
+CREATE TABLE `users` (
+  `id` VARCHAR(191) NOT NULL,
+  `username` VARCHAR(191) NOT NULL,
+  `password` VARCHAR(191) NOT NULL,
+  `email` VARCHAR(191) NOT NULL,
+  `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `users_username_key`(`username`),
+  UNIQUE INDEX `users_email_key`(`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `user_permissions` (
+  `id` VARCHAR(191) NOT NULL,
+  `user_id` VARCHAR(191) NOT NULL,
+  `table_name` VARCHAR(191) NOT NULL,
+  `can_create` BOOLEAN NOT NULL DEFAULT false,
+  `can_read` BOOLEAN NOT NULL DEFAULT false,
+  `can_update` BOOLEAN NOT NULL DEFAULT false,
+  `can_delete` BOOLEAN NOT NULL DEFAULT false,
+  `scope` ENUM('NONE', 'OWN', 'ALL') NOT NULL DEFAULT 'NONE',
+  `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_permissions_user_id_table_name_key`(`user_id`, `table_name`),
+  INDEX `user_permissions_user_id_idx`(`user_id`),
+  INDEX `user_permissions_table_name_idx`(`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `plants` (
+  `id` VARCHAR(191) NOT NULL,
+  `name` VARCHAR(191) NOT NULL,
+  `species` VARCHAR(191) NOT NULL,
+  `location` VARCHAR(191),
+  `created_by_id` VARCHAR(191) NOT NULL,
+  `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `plants_created_by_id_idx`(`created_by_id`),
+  CONSTRAINT `plants_created_by_id_fkey` 
+    FOREIGN KEY (`created_by_id`) REFERENCES `users`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```
+
+---
+
+## 3. Backend Implementation (NestJS)
+
+### 3.1 Permission Service
+
+```typescript
+// src/permissions/permissions.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CacheService } from '../cache/cache.service';
+
+export interface PermissionCheck {
+  tableName: string;
+  action: 'create' | 'read' | 'update' | 'delete';
+  scope?: 'OWN' | 'ALL';
+}
+
+export interface UserPermissions {
+  [tableName: string]: {
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDelete: boolean;
+    scope: 'NONE' | 'OWN' | 'ALL';
+  };
+}
+
+@Injectable()
+export class PermissionsService {
+  constructor(
+    private prisma: PrismaService,
+    private cache: CacheService,
+  ) {}
+
+  /**
+   * Get all permissions for a user (with caching)
+   */
+  async getUserPermissions(userId: string): Promise<UserPermissions> {
+    const cacheKey = `permissions:${userId}`;
+    
+    // L2 Cache: Check Valkey
+    const cached = await this.cache.get<UserPermissions>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    // Fetch from database
+    const permissions = await this.prisma.userPermission.findMany({
+      where: { userId },
+    });
+
+    // Transform to map
+    const permissionMap: UserPermissions = {};
+    permissions.forEach((perm) => {
+      permissionMap[perm.tableName] = {
+        canCreate: perm.canCreate,
+        canRead: perm.canRead,
+        canUpdate: perm.canUpdate,
+        canDelete: perm.canDelete,
+        scope: perm.scope,
+      };
+    });
+
+    // Cache for 1 hour
+    await this.cache.set(cacheKey, permissionMap, 3600);
+
+    return permissionMap;
+  }
+
+  /**
+   * Check if user can perform action on table
+   */
+  async canPerform(
+    userId: string,
+    check: PermissionCheck,
+  ): Promise<boolean> {
+    const permissions = await this.getUserPermissions(userId);
+    const tablePerm = permissions[check.tableName];
+
+    if (!tablePerm) {
+      return false; // No permissions for this table
+    }
+
+    // Check CRUD permission
+    const hasActionPermission = tablePerm[`can${this.capitalize(check.action)}`];
+    if (!hasActionPermission) {
+      return false;
+    }
+
+    // Check scope if specified
+    if (check.scope) {
+      if (check.scope === 'ALL' && tablePerm.scope !== 'ALL') {
+        return false;
+      }
+      if (check.scope === 'OWN' && tablePerm.scope === 'NONE') {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Check if user can access specific record (row-level check)
+   */
+  async canAccessRecord(
+    userId: string,
+    tableName: string,
+    action: 'read' | 'update' | 'delete',
+    recordOwnerId: string,
+  ): Promise<boolean> {
+    const permissions = await this.getUserPermissions(userId);
+    const tablePerm = permissions[tableName];
+
+    if (!tablePerm) {
+      return false;
+    }
+
+    const hasActionPermission = tablePerm[`can${this.capitalize(action)}`];
+    if (!hasActionPermission) {
+      return false;
+    }
+
+    // Check scope
+    if (tablePerm.scope === 'ALL') {
+      return true; // Can access all records
+    }
+
+    if (tablePerm.scope === 'OWN') {
+      return recordOwnerId === userId; // Can only access own records
+    }
+
+    return false; // NONE scope
+  }
+
+  /**
+   * Invalidate user permissions cache
+   */
+  async invalidateCache(userId: string): Promise<void> {
+    const cacheKey = `permissions:${userId}`;
+    await this.cache.delete(cacheKey);
+  }
+
+  /**
+   * Grant permission to user
+   */
+  async grantPermission(
+    userId: string,
+    tableName: string,
+    permissions: {
+      canCreate?: boolean;
+      canRead?: boolean;
+      canUpdate?: boolean;
+      canDelete?: boolean;
+      scope?: 'NONE' | 'OWN' | 'ALL';
+    },
+  ): Promise<void> {
+    await this.prisma.userPermission.upsert({
+      where: {
+        userId_tableName: { userId, tableName },
+      },
+      create: {
+        userId,
+        tableName,
+        ...permissions,
+      },
+      update: permissions,
+    });
+
+    await this.invalidateCache(userId);
+  }
+
+  /**
+   * Revoke all permissions for a table
+   */
+  async revokeTablePermissions(
+    userId: string,
+    tableName: string,
+  ): Promise<void> {
+    await this.prisma.userPermission.delete({
+      where: {
+        userId_tableName: { userId, tableName },
+      },
+    });
+
+    await this.invalidateCache(userId);
+  }
+
+  private capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+}
+```
+
+### 3.2 Permission Guard
+
+```typescript
+// src/permissions/permissions.guard.ts
+
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { PermissionsService } from './permissions.service';
+
+export const REQUIRE_PERMISSION = 'requirePermission';
+
+export interface RequirePermissionMetadata {
+  tableName: string;
+  action: 'create' | 'read' | 'update' | 'delete';
+  scope?: 'OWN' | 'ALL';
+}
+
+@Injectable()
+export class PermissionsGuard implements CanActivate {
+  constructor(
+    private reflector: Reflector,
+    private permissionsService: PermissionsService,
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const requiredPermission = this.reflector.get<RequirePermissionMetadata>(
+      REQUIRE_PERMISSION,
+      context.getHandler(),
+    );
+
+    if (!requiredPermission) {
+      return true; // No permission required
+    }
+
+    const request = context.switchToHttp().getRequest();
+    const userId = request.user?.id;
+
+    if (!userId) {
+      throw new ForbiddenException('User not authenticated');
+    }
+
+    const canPerform = await this.permissionsService.canPerform(userId, {
+      tableName: requiredPermission.tableName,
+      action: requiredPermission.action,
+      scope: requiredPermission.scope,
+    });
+
+    if (!canPerform) {
+      throw new ForbiddenException(
+        `You do not have permission to ${requiredPermission.action} on ${requiredPermission.tableName}`,
+      );
+    }
+
+    return true;
+  }
+}
+```
+
+### 3.3 Permission Decorator
+
+```typescript
+// src/permissions/permissions.decorator.ts
+
+import { SetMetadata } from '@nestjs/common';
+import { REQUIRE_PERMISSION, RequirePermissionMetadata } from './permissions.guard';
+
+export const RequirePermission = (permission: RequirePermissionMetadata) =>
+  SetMetadata(REQUIRE_PERMISSION, permission);
+```
+
+### 3.4 Example Controller
+
+```typescript
+// src/plants/plants.controller.ts
+
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  ForbiddenException,
+} from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { PermissionsGuard } from '../permissions/permissions.guard';
+import { RequirePermission } from '../permissions/permissions.decorator';
+import { PlantsService } from './plants.service';
+import { PermissionsService } from '../permissions/permissions.service';
+
+@Controller('plants')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+export class PlantsController {
+  constructor(
+    private plantsService: PlantsService,
+    private permissionsService: PermissionsService,
+  ) {}
+
+  @Post()
+  @RequirePermission({ tableName: 'plants', action: 'create' })
+  async create(@Request() req, @Body() createDto: any) {
+    return this.plantsService.create({
+      ...createDto,
+      createdById: req.user.id,
+    });
+  }
+
+  @Get()
+  @RequirePermission({ tableName: 'plants', action: 'read' })
+  async findAll(@Request() req) {
+    const permissions = await this.permissionsService.getUserPermissions(
+      req.user.id,
+    );
+    const plantPerm = permissions['plants'];
+
+    if (plantPerm?.scope === 'ALL') {
+      return this.plantsService.findAll();
+    } else if (plantPerm?.scope === 'OWN') {
+      return this.plantsService.findByCreator(req.user.id);
+    }
+
+    return [];
+  }
+
+  @Get(':id')
+  @RequirePermission({ tableName: 'plants', action: 'read' })
+  async findOne(@Request() req, @Param('id') id: string) {
+    const plant = await this.plantsService.findOne(id);
+
+    const canAccess = await this.permissionsService.canAccessRecord(
+      req.user.id,
+      'plants',
+      'read',
+      plant.createdById,
+    );
+
+    if (!canAccess) {
+      throw new ForbiddenException('You cannot access this plant');
+    }
+
+    return plant;
+  }
+
+  @Put(':id')
+  @RequirePermission({ tableName: 'plants', action: 'update' })
+  async update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateDto: any,
+  ) {
+    const plant = await this.plantsService.findOne(id);
+
+    const canAccess = await this.permissionsService.canAccessRecord(
+      req.user.id,
+      'plants',
+      'update',
+      plant.createdById,
+    );
+
+    if (!canAccess) {
+      throw new ForbiddenException('You cannot update this plant');
+    }
+
+    return this.plantsService.update(id, updateDto);
+  }
+
+  @Delete(':id')
+  @RequirePermission({ tableName: 'plants', action: 'delete' })
+  async remove(@Request() req, @Param('id') id: string) {
+    const plant = await this.plantsService.findOne(id);
+
+    const canAccess = await this.permissionsService.canAccessRecord(
+      req.user.id,
+      'plants',
+      'delete',
+      plant.createdById,
+    );
+
+    if (!canAccess) {
+      throw new ForbiddenException('You cannot delete this plant');
+    }
+
+    return this.plantsService.remove(id);
+  }
 }
 ```
 
 ---
 
-## 🎨 How You Manage John Doe's Permissions
+## 4. Frontend Implementation (Next.js)
 
-### Admin UI Flow:
-
-```
-┌──────────────────────────────────────────────────────────┐
-│  Manage User: John Doe                                   │
-├──────────────────────────────────────────────────────────┤
-│  Email: john.doe@company.com                             │
-│  Status: Active                                          │
-│                                                          │
-│  ┌────────────────────────────────────────────────────┐ │
-│  │ Permissions                        [+ Add More]    │ │
-│  ├────────────────────────────────────────────────────┤ │
-│  │                                                    │ │
-│  │ 🌱 Plants                                          │ │
-│  │   ☑ plants.create    [Remove] [Expires: Never]   │ │
-│  │   ☑ plants.read      [Remove] [Expires: Never]   │ │
-│  │   ☑ plants.update    [Remove] [Expires: Never]   │ │
-│  │   ☐ plants.delete    [Grant]                      │ │
-│  │   ☐ plants.export    [Grant]                      │ │
-│  │                                                    │ │
-│  │ 📦 Inventory                                       │ │
-│  │   ☑ inventory.read   [Remove] [Expires: Never]   │ │
-│  │   ☐ inventory.create [Grant]                      │ │
-│  │   ☐ inventory.update [Grant]                      │ │
-│  │                                                    │ │
-│  │ 👥 Clients                                         │ │
-│  │   ☐ clients.read     [Grant]                      │ │
-│  │   ☐ clients.create   [Grant]                      │ │
-│  │                                                    │ │
-│  │ 💰 Financial                                       │ │
-│  │   ☐ financial.read   [Grant]                      │ │
-│  │                                                    │ │
-│  │ 📊 Reports                                         │ │
-│  │   ☑ reports.create   [Remove] [Expires: 2026-12-31]│ │
-│  │   ☐ reports.export   [Grant]                      │ │
-│  │                                                    │ │
-│  └────────────────────────────────────────────────────┘ │
-│                                                          │
-│  Quick Templates (optional suggestions):                 │
-│  [Apply: Common Field Worker]  ← Adds typical perms     │
-│  [Apply: Common Manager]        ← Just a starting point │
-│                                                          │
-│  [Save Changes]                                          │
-└──────────────────────────────────────────────────────────┘
-```
-
-### What Happens:
+### 4.1 Permission Context
 
 ```typescript
-// When you check "plants.create" for John
-await prisma.userPermission.create({
-  data: {
-    userId: 'john-doe-id',
-    permissionId: 'plants-create-permission-id',
-    grantedBy: 'admin-id', // You
-    reason: 'Needs to add new plants to inventory'
-  }
+// src/contexts/PermissionsContext.tsx
+
+'use client';
+
+import { createContext, useContext, useEffect, useState } from 'react';
+
+export interface UserPermissions {
+  [tableName: string]: {
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDelete: boolean;
+    scope: 'NONE' | 'OWN' | 'ALL';
+  };
+}
+
+interface PermissionsContextType {
+  permissions: UserPermissions | null;
+  loading: boolean;
+  canPerform: (tableName: string, action: 'create' | 'read' | 'update' | 'delete') => boolean;
+  refetch: () => Promise<void>;
+}
+
+const PermissionsContext = createContext<PermissionsContextType>({
+  permissions: null,
+  loading: true,
+  canPerform: () => false,
+  refetch: async () => {},
 });
 
-// When you check "reports.create" with expiration
-await prisma.userPermission.create({
-  data: {
-    userId: 'john-doe-id',
-    permissionId: 'reports-create-permission-id',
-    expiresAt: new Date('2026-12-31'),
-    grantedBy: 'admin-id',
-    reason: 'Temporary for Q4 reporting'
-  }
-});
+export function PermissionsProvider({ children }: { children: React.ReactNode }) {
+  const [permissions, setPermissions] = useState<UserPermissions | null>(null);
+  const [loading, setLoading] = useState(true);
 
-// When you uncheck "inventory.update"
-await prisma.userPermission.delete({
-  where: {
-    userId_permissionId: {
-      userId: 'john-doe-id',
-      permissionId: 'inventory-update-permission-id'
+  const fetchPermissions = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/permissions/me', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setPermissions(data.permissions);
+      }
+    } catch (error) {
+      console.error('Failed to fetch permissions:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchPermissions();
+  }, []);
+
+  const canPerform = (
+    tableName: string,
+    action: 'create' | 'read' | 'update' | 'delete',
+  ): boolean => {
+    if (!permissions) return false;
+
+    const tablePerm = permissions[tableName];
+    if (!tablePerm) return false;
+
+    const actionKey = `can${action.charAt(0).toUpperCase() + action.slice(1)}` as keyof typeof tablePerm;
+    return tablePerm[actionKey] === true;
+  };
+
+  return (
+    <PermissionsContext.Provider
+      value={{
+        permissions,
+        loading,
+        canPerform,
+        refetch: fetchPermissions,
+      }}
+    >
+      {children}
+    </PermissionsContext.Provider>
+  );
+}
+
+export const usePermissions = () => useContext(PermissionsContext);
+```
+
+### 4.2 Protected Component Example
+
+```typescript
+// src/components/PlantsList.tsx
+
+'use client';
+
+import { usePermissions } from '@/contexts/PermissionsContext';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+
+export function PlantsList() {
+  const { canPerform, permissions } = usePermissions();
+
+  const canCreatePlant = canPerform('plants', 'create');
+  const canReadPlant = canPerform('plants', 'read');
+  const plantScope = permissions?.['plants']?.scope;
+
+  if (!canReadPlant) {
+    return <div>You do not have permission to view plants.</div>;
   }
-});
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <h1>Plants {plantScope === 'OWN' && '(My Plants)'}</h1>
+        {canCreatePlant && (
+          <Button asChild>
+            <Link href="/plants/new">Create Plant</Link>
+          </Button>
+        )}
+      </div>
+      {/* Plant list here */}
+    </div>
+  );
+}
+```
+
+### 4.3 API Route to Fetch Permissions
+
+```typescript
+// src/app/api/permissions/me/route.ts
+
+import { NextRequest, NextResponse } from 'next/server';
+import { verifyToken } from '@/lib/auth';
+
+export async function GET(request: NextRequest) {
+  try {
+    const token = request.headers.get('authorization')?.replace('Bearer ', '');
+    
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const payload = verifyToken(token);
+    const userId = payload.sub;
+
+    // Fetch from backend
+    const res = await fetch(`${process.env.BACKEND_URL}/permissions/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const permissions = await res.json();
+
+    return NextResponse.json({ permissions });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch permissions' }, { status: 500 });
+  }
+}
 ```
 
 ---
 
-## 🚀 Seed Script (Permissions Catalog)
+## 5. Request Flow
+
+```
+┌─────────────┐
+│   Client    │
+│  (Browser)  │
+└──────┬──────┘
+       │ 1. POST /api/plants
+       │    Authorization: Bearer <JWT>
+       ▼
+┌─────────────────┐
+│  JWT Auth Guard │ ← Validates token, extracts userId
+└──────┬──────────┘
+       │ 2. userId extracted
+       ▼
+┌──────────────────┐
+│ Permissions Guard│
+└──────┬───────────┘
+       │ 3. Check @RequirePermission({ tableName: 'plants', action: 'create' })
+       ▼
+┌──────────────────────┐
+│ PermissionsService   │
+└──────┬───────────────┘
+       │ 4. getUserPermissions(userId)
+       ▼
+┌──────────────────┐     Cache HIT?
+│  Valkey Cache    │────────Yes────────┐
+└──────┬───────────┘                   │
+       │ No                             │
+       │ 5. Query DB                    │
+       ▼                                │
+┌──────────────────┐                   │
+│  MariaDB         │                   │
+│  user_permissions│                   │
+└──────┬───────────┘                   │
+       │ 6. Return permissions          │
+       └────────────────────────────────┤
+                                        │
+       ┌────────────────────────────────┘
+       │ 7. Cache result in Valkey
+       ▼
+┌──────────────────┐
+│  Permission Check│
+│  canCreate=true? │
+└──────┬───────────┘
+       │ 8. YES → Allow
+       ▼
+┌──────────────────┐
+│  Controller      │
+│  create()        │
+└──────────────────┘
+```
+
+---
+
+## 6. Seed Data Example
 
 ```typescript
 // prisma/seed.ts
 
-async function seedPermissions() {
-  console.log('🔐 Creating permission catalog...');
+import { PrismaClient, PermissionScope } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
 
-  // Define ALL possible permissions in your system
-  const permissions = [
-    // Plants
-    { resource: 'plants', action: 'create', category: 'Plants', description: 'Create new plant entries' },
-    { resource: 'plants', action: 'read', category: 'Plants', description: 'View plant information' },
-    { resource: 'plants', action: 'update', category: 'Plants', description: 'Update plant details' },
-    { resource: 'plants', action: 'delete', category: 'Plants', description: 'Delete plants (soft delete)' },
-    { resource: 'plants', action: 'export', category: 'Plants', description: 'Export plant data' },
-    
-    // Inventory
-    { resource: 'inventory', action: 'create', category: 'Inventory', description: 'Add inventory items' },
-    { resource: 'inventory', action: 'read', category: 'Inventory', description: 'View inventory' },
-    { resource: 'inventory', action: 'update', category: 'Inventory', description: 'Update inventory levels' },
-    { resource: 'inventory', action: 'delete', category: 'Inventory', description: 'Remove inventory items' },
-    
-    // Clients
-    { resource: 'clients', action: 'create', category: 'Clients', description: 'Add new clients' },
-    { resource: 'clients', action: 'read', category: 'Clients', description: 'View client information' },
-    { resource: 'clients', action: 'update', category: 'Clients', description: 'Update client details' },
-    { resource: 'clients', action: 'delete', category: 'Clients', description: 'Archive clients' },
-    
-    // Orders
-    { resource: 'orders', action: 'create', category: 'Orders', description: 'Create new orders' },
-    { resource: 'orders', action: 'read', category: 'Orders', description: 'View orders' },
-    { resource: 'orders', action: 'update', category: 'Orders', description: 'Modify orders' },
-    { resource: 'orders', action: 'cancel', category: 'Orders', description: 'Cancel orders' },
-    
-    // Financial
-    { resource: 'financial', action: 'read', category: 'Financial', description: 'View financial data' },
-    { resource: 'financial', action: 'create', category: 'Financial', description: 'Record transactions' },
-    { resource: 'financial', action: 'export', category: 'Financial', description: 'Export financial reports' },
-    
-    // Reports
-    { resource: 'reports', action: 'create', category: 'Reports', description: 'Generate reports' },
-    { resource: 'reports', action: 'read', category: 'Reports', description: 'View reports' },
-    { resource: 'reports', action: 'export', category: 'Reports', description: 'Export reports' },
-    
-    // Users (admin functions)
-    { resource: 'users', action: 'create', category: 'Administration', description: 'Create new users' },
-    { resource: 'users', action: 'read', category: 'Administration', description: 'View users' },
-    { resource: 'users', action: 'update', category: 'Administration', description: 'Update user details' },
-    { resource: 'users', action: 'delete', category: 'Administration', description: 'Deactivate users' },
-    { resource: 'users', action: 'manage_permissions', category: 'Administration', description: 'Grant/revoke permissions' },
-    
-    // Settings
-    { resource: 'settings', action: 'read', category: 'Settings', description: 'View system settings' },
-    { resource: 'settings', action: 'update', category: 'Settings', description: 'Modify system settings' },
-  ];
+const prisma = new PrismaClient();
 
-  for (const perm of permissions) {
-    await prisma.permission.upsert({
-      where: { code: `${perm.resource}.${perm.action}` },
+async function main() {
+  // 1. Create Admin User with Full Permissions
+  const admin = await prisma.user.upsert({
+    where: { username: 'admin' },
+    update: {},
+    create: {
+      username: 'admin',
+      email: 'admin@vivero.com',
+      password: await bcrypt.hash('admin-password-123', 10),
+    },
+  });
+
+  // Grant admin full access to all tables
+  const tables = ['plants', 'greenhouses', 'reports', 'users'];
+  for (const tableName of tables) {
+    await prisma.userPermission.upsert({
+      where: {
+        userId_tableName: { userId: admin.id, tableName },
+      },
       update: {},
       create: {
-        resource: perm.resource,
-        action: perm.action,
-        code: `${perm.resource}.${perm.action}`,
-        description: perm.description,
-        category: perm.category,
+        userId: admin.id,
+        tableName,
+        canCreate: true,
+        canRead: true,
+        canUpdate: true,
+        canDelete: true,
+        scope: PermissionScope.ALL,
       },
     });
   }
 
-  console.log(`✅ Created ${permissions.length} permissions`);
+  console.log('✅ Admin created with full permissions on all tables');
+
+  // 2. Create Regular User with Full Access to Plants
+  const john = await prisma.user.upsert({
+    where: { username: 'john' },
+    update: {},
+    create: {
+      username: 'john',
+      email: 'john@vivero.com',
+      password: await bcrypt.hash('password123', 10),
+      isRoot: false,
+    },
+  });
+
+  await prisma.userPermission.upsert({
+    where: {
+      userId_tableName: { userId: john.id, tableName: 'plants' },
+    },
+    update: {},
+    create: {
+      userId: john.id,
+      tableName: 'plants',
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: true,
+      scope: PermissionScope.ALL, // Can see all plants
+    },
+  });
+
+  console.log('✅ John created with ALL scope on plants');
+
+  // 3. Create Limited User (OWN scope only)
+  const jane = await prisma.user.upsert({
+    where: { username: 'jane' },
+    update: {},
+    create: {
+      username: 'jane',
+      email: 'jane@vivero.com',
+      password: await bcrypt.hash('password123', 10),
+      isRoot: false,
+    },
+  });
+
+  await prisma.userPermission.upsert({
+    where: {
+      userId_tableName: { userId: jane.id, tableName: 'plants' },
+    },
+    update: {},
+    create: {
+      userId: jane.id,
+      tableName: 'plants',
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: false, // Cannot delete
+      scope: PermissionScope.OWN, // Can only see own plants
+    },
+  });
+
+  console.log('✅ Jane created with OWN scope on plants (no delete)');
+
+  // 4. Create Read-Only User
+  const bob = await prisma.user.upsert({
+    where: { username: 'bob' },
+    update: {},
+    create: {
+      username: 'bob',
+      email: 'bob@vivero.com',
+      password: await bcrypt.hash('password123', 10),
+      isRoot: false,
+    },
+  });
+
+  await prisma.userPermission.upsert({
+    where: {
+      userId_tableName: { userId: bob.id, tableName: 'plants' },
+    },
+    update: {},
+    create: {
+      userId: bob.id,
+      tableName: 'plants',
+      canCreate: false,
+      canRead: true,
+      canUpdate: false,
+      canDelete: false,
+      scope: PermissionScope.ALL, // Read all, but cannot modify
+    },
+  });
+
+  console.log('✅ Bob created with read-only access to all plants');
+
+  // 5. Create some test plants
+  await prisma.plant.createMany({
+    data: [
+      {
+        name: 'Tomato Plant',
+        species: 'Solanum lycopersicum',
+        location: 'Greenhouse A',
+        createdById: john.id,
+      },
+      {
+        name: 'Basil',
+        species: 'Ocimum basilicum',
+        location: 'Greenhouse B',
+        createdById: jane.id,
+      },
+    ],
+  });
+
+  console.log('✅ Test plants created');
 }
 
-async function seedRootUser(tenantId: string) {
-  // Get ALL permissions
-  const allPermissions = await prisma.permission.findMany();
-
-  // Create root admin
-  const passwordHash = await bcrypt.hash('Admin123!', 12);
-  const rootUser = await prisma.user.create({
-    data: {
-      email: 'admin@admin.com',
-      firstName: 'Root',
-      lastName: 'Admin',
-      passwordHash,
-      isActive: true,
-      tenantId,
-    },
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
+```
 
-  // Grant ALL permissions to root admin
-  await prisma.userPermission.createMany({
-    data: allPermissions.map(perm => ({
-      userId: rootUser.id,
-      permissionId: perm.id,
-      grantedBy: rootUser.id, // Self-granted
-      reason: 'Root admin - full access',
-    })),
-  });
-
-  console.log(`✅ Root admin created with ${allPermissions.length} permissions`);
-  return rootUser;
-}
-
-async function main() {
-  const tenant = await prisma.tenant.create({
-    data: {
-      name: 'Default Organization',
-    },
-  });
-
-  await seedPermissions();
-  await seedRootUser(tenant.id);
-  
-  // Optional: Create templates for convenience
-  await prisma.permissionTemplate.create({
-    data: {
-      name: 'Suggested: Basic Field Worker',
-      description: 'Common permissions for field workers',
-      tenantId: tenant.id,
-      permissions: ['plants.read', 'plants.update', 'inventory.read'],
-    },
-  });
-
-  await prisma.permissionTemplate.create({
-    data: {
-      name: 'Suggested: Manager',
-      description: 'Common permissions for managers',
-      tenantId: tenant.id,
-      permissions: [
-        'plants.create', 'plants.read', 'plants.update',
-        'inventory.create', 'inventory.read', 'inventory.update',
-        'clients.read',
-        'reports.create', 'reports.read',
-      ],
-    },
-  });
-}
+**Run seed:**
+```bash
+pnpm db:seed
 ```
 
 ---
 
-## 🛡️ Permission Checking (Updated)
+## 7. Cache Strategy
+
+### 7.1 Cache Service (Valkey)
 
 ```typescript
-// src/shared/guards/permissions.guard.ts
+// src/cache/cache.service.ts
 
-async canActivate(context: ExecutionContext): Promise<boolean> {
-  const requiredPermissions = this.reflector.get<string[]>(
-    'permissions',
-    context.getHandler(),
-  );
+import { Injectable } from '@nestjs/common';
+import Redis from 'ioredis';
+import { ConfigService } from '@nestjs/config';
 
-  if (!requiredPermissions?.length) return true;
+@Injectable()
+export class CacheService {
+  private client: Redis;
 
-  const request = context.switchToHttp().getRequest();
-  const user = request.user;
-
-  // Get user's permissions (with caching in production!)
-  const userPermissions = await prisma.userPermission.findMany({
-    where: {
-      userId: user.id,
-      OR: [
-        { expiresAt: null },
-        { expiresAt: { gte: new Date() } },
-      ],
-    },
-    include: { permission: true },
-  });
-
-  const permissionCodes = userPermissions.map(up => up.permission.code);
-
-  // Check if user has required permissions
-  const hasAllPermissions = requiredPermissions.every(required =>
-    permissionCodes.includes(required)
-  );
-
-  if (!hasAllPermissions) {
-    throw new ForbiddenException(
-      `Missing permissions: ${requiredPermissions.join(', ')}`
-    );
+  constructor(private config: ConfigService) {
+    this.client = new Redis(config.get('VALKEY_URL'));
   }
 
-  return true;
+  async get<T>(key: string): Promise<T | null> {
+    const data = await this.client.get(key);
+    return data ? JSON.parse(data) : null;
+  }
+
+  async set(key: string, value: any, ttl?: number): Promise<void> {
+    const serialized = JSON.stringify(value);
+    if (ttl) {
+      await this.client.setex(key, ttl, serialized);
+    } else {
+      await this.client.set(key, serialized);
+    }
+  }
+
+  async delete(key: string): Promise<void> {
+    await this.client.del(key);
+  }
+
+  async deletePattern(pattern: string): Promise<void> {
+    const keys = await this.client.keys(pattern);
+    if (keys.length > 0) {
+      await this.client.del(...keys);
+    }
+  }
+}
+```
+
+### 7.2 Cache Invalidation
+
+**When to invalidate:**
+- User permissions are granted/revoked
+- User is deleted
+- Manual invalidation endpoint (admin)
+
+```typescript
+// Example: Admin endpoint to flush user cache
+@Post('permissions/invalidate/:userId')
+@UseGuards(JwtAuthGuard, RootGuard)
+async invalidateUserCache(@Param('userId') userId: string) {
+  await this.permissionsService.invalidateCache(userId);
+  return { message: 'Cache invalidated' };
 }
 ```
 
 ---
 
-## ✅ Why This is PERFECT for Your Case
+## 8. Frontend Login Flow
 
-### ✅ Total Flexibility
-- John has exactly HIS permissions
-- Maria has exactly HER permissions
-- No "roles" forcing people into boxes
+### 8.1 Login Component
 
-### ✅ Granular Control
-- Grant permission: Click checkbox
-- Revoke permission: Uncheck checkbox
-- Temporary permission: Set expiration date
+```typescript
+// src/app/login/page.tsx
 
-### ✅ Full Audit Trail
-- Who granted each permission? → `grantedBy`
-- When was it granted? → `grantedAt`
-- Why was it granted? → `reason`
-- When does it expire? → `expiresAt`
+'use client';
 
-### ✅ Performance
-- Single query to get all user permissions
-- Can cache aggressively (permissions don't change often)
-- No complex joins
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-### ✅ UI is Simple
-```
-Admin sees:
-- List of ALL permissions (grouped by category)
-- Checkboxes for each
-- John's checkboxes are checked/unchecked
-- Click Save → Done!
-```
+export default function LoginPage() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
 
----
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-## 🎯 Summary: Your Workflow
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
 
-1. **Add new user John**
-2. **Go to "Manage Permissions" for John**
-3. **Check boxes** for what John can do:
-   - ☑ plants.create
-   - ☑ plants.read
-   - ☑ inventory.read
-   - ☐ financial.read (unchecked = can't do it)
-4. **Save**
-5. **Done!** John has exactly those permissions, nothing more, nothing less.
-
-**No roles. Just permissions. Pure and simple.** ✨
+    if (res.ok) {
+      const { token } = await res.json();
+      
+      // Store token
+      localStorage.set
