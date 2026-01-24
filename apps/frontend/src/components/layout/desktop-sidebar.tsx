@@ -3,27 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-import {
-  Home,
-  Thermometer,
-  Users,
-  BarChart3,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  FileText,
-  ShoppingCart,
-  Sprout,
-  UserCircle,
-  Building,
-  Settings,
-  ChevronDown,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
 
 interface NavigationItem {
   title: string;
@@ -47,7 +33,9 @@ export function DesktopSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
-  const { userProfile } = useAuthContext();
+  const { userProfile, permissions } = useAuthContext();
+  console.log("Permissions:", permissions);
+  console.log("User Profile:", userProfile);
 
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["operations"]),
@@ -62,65 +50,23 @@ export function DesktopSidebar() {
     }
     setExpandedGroups(newExpandedGroups);
   };
-  const navigationGroups: NavigationGroup[] = [
-    {
-      id: "operations",
-      title: "Operaciones",
-      icon: Sprout,
-      items: [
-        {
-          title: "Dashboard",
-          href: "/",
-          icon: Home,
-          description: "Vista general y alertas",
-        },
-        {
-          title: "Entorno",
-          href: "/environment",
-          icon: Thermometer,
-          description: "Monitorización climática",
-          badge: "3",
-          badgeVariant: "destructive" as const,
-        },
-        {
-          title: "Tareas",
-          href: "/tasks",
-          icon: Calendar,
-          description: "Operaciones diarias",
-          badge: "12",
-        },
-      ],
-    },
-    {
-      id: "management",
-      title: "Gestión",
-      icon: Building,
-      items: [
-        { title: "Plantas", href: "/plants", icon: Sprout },
-        { title: "Clientes", href: "/clients", icon: Users },
-        { title: "Facturas", href: "/invoices", icon: FileText },
-        {
-          title: "Órdenes de compra",
-          href: "/purchase-orders",
-          icon: ShoppingCart,
-        },
-      ],
-    },
-    {
-      id: "admin",
-      title: "Administración",
-      icon: Settings,
-      items: [
-        { title: "Usuarios", href: "/users", icon: UserCircle },
-        {
-          title: "Analíticas",
-          href: "/analytics",
-          icon: BarChart3,
-          description: "Analíticas",
-        },
-      ],
-    },
-  ];
+
+  const visibleNavigation: NavigationGroup[] = useMemo(() => {
+    return NAVIGATION_CONFIG.map((group) => {
+      const filteredItems = group.items.filter((item) => {
+        if (!item.requiredPermission) return true;
+
+        const { table } = item.requiredPermission;
+        const perm = permissions[table];
+        return !!perm?.canRead;
+      });
+
+      return {
+        ...group,
+        items: filteredItems,
+      };
+    }).filter((group) => group.items.length > 0);
+  }, [permissions]);
 
   return (
     <aside
@@ -162,7 +108,7 @@ export function DesktopSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 overflow-y-auto p-2">
-        {navigationGroups.map((group) => {
+        {visibleNavigation.map((group) => {
           const GroupIcon = group.icon;
           const isExpanded = expandedGroups.has(group.id);
 

@@ -1,0 +1,11 @@
+feat(frontend): implement permission-based dynamic sidebar
+
+Replaces the static sidebar with a dynamic navigation menu that renders
+links based on the authenticated user's permissions.
+
+- Introduces a central `NAVIGATION_CONFIG` to define all possible
+  sidebar links and their required permissions.
+- The `DesktopSidebar` component now consumes permissions from the `AuthContext`.
+- A `useMemo` hook filters the navigation config, only showing links
+  for which the user has `canRead` access.
+- Expands the `ROUTES` constant to include all new application sections.
