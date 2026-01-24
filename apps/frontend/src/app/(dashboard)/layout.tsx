@@ -2,13 +2,13 @@
 
 import type React from "react";
 import { Suspense } from "react";
-import { LoadingSpinner } from "@/components/common/loading-spinner";
 
 import { DesktopSidebar } from "@/components/layout/desktop-sidebar";
 import { DashboardHeader } from "@/components/layout/dashboard-header";
 
 import ComingSoonPage from "@/components/common/coming-soon";
 import { DashboardProtectedLayout } from "@/components/common/dashboard-protected-layout";
+import { RootDashboardSkeleton } from "@/features/dashboard";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <Suspense fallback={<RootDashboardSkeleton />}>
       <DashboardProtectedLayout>
         <div className="flex h-screen overflow-hidden">
           <DesktopSidebar />

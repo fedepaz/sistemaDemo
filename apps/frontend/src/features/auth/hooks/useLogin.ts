@@ -16,11 +16,10 @@ export const useLogin = () => {
         method: "POST",
         body: JSON.stringify(credentials),
       });
-      console.log("Login Response", response);
+
       return response;
     },
     onSuccess: (data) => {
-      console.log("onSuccess", data);
       // Store refresh token
       localStorage.setItem("refreshToken", data.refreshToken);
 

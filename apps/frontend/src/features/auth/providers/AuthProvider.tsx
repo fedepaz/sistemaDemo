@@ -4,7 +4,12 @@
 import { createContext, useContext } from "react";
 import { useAuthUserProfile } from "../hooks/use-authUser";
 import { useAuth } from "../hooks/useAuth";
-import { AuthResponseDto, UserProfileDto } from "@vivero/shared";
+import {
+  AuthResponseDto,
+  UserPermissions,
+  UserProfileDto,
+} from "@vivero/shared";
+import { usePermissions } from "../hooks/use-permissions";
 
 type AuthContextType = {
   userProfile: UserProfileDto | undefined;
@@ -18,6 +23,7 @@ type AuthContextType = {
   loading: boolean;
   signIn: (accessToken: string, user: AuthResponseDto["user"]) => void;
   signOut: () => void;
+  permissions: UserPermissions;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -25,6 +31,13 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const auth = useAuth();
   const profile = useAuthUserProfile();
+  const permissions = usePermissions();
+
+  // Detect pending permissions
+  const isPendingPermissions =
+    auth.isSignedIn &&
+    permissions.isSuccess &&
+    Object.keys(permissions.data || {}).length === 0;
 
   const isLoginComplete = auth.isSignedIn && profile.userProfile !== undefined;
 
@@ -38,7 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isLoading: profile.isLoading,
     isError: profile.isError,
     isDatabaseUnavailable: profile.isDatabaseUnavailable,
-    isPendingPermissions: profile.isPendingPermissions,
+    isPendingPermissions,
+    permissions: permissions.data || {},
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

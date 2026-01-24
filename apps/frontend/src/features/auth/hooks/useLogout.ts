@@ -24,7 +24,6 @@ export const useLogout = () => {
       // Clear refresh token
       localStorage.removeItem("refreshToken");
 
-      console.log("Logout Success");
       signOut();
     },
   });

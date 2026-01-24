@@ -22,7 +22,7 @@ export const useRegister = () => {
       localStorage.setItem("refreshToken", data.refreshToken);
 
       // Automatically sign in after registration
-      signIn(data.accessToken, data);
+      signIn(data.accessToken, data.user);
     },
     onError: (error) => {
       console.error("Registration failed:", error);

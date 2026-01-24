@@ -47,7 +47,6 @@ export const useAuthUserProfile = () => {
       (query.error.status === 401 || query.error.status === 403)
     );
   const isPendingPermissions = isSignedIn && query.isSuccess && !query.data;
-  console.log("Tokens and Profile", isSignedIn, isLoading, query.data);
 
   return {
     userProfile: query.data,

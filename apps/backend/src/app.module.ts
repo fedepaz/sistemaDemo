@@ -16,6 +16,7 @@ import { AuthController } from './modules/auth/auth.controller';
 import { PermissionsGuard } from './modules/permissions/guards/permissions.guard';
 import { PermissionsService } from './modules/permissions/permissions.service';
 import { PermissionsRepository } from './modules/permissions/repositories/permissions.repository';
+import { PermissionsController } from './modules/permissions/permissions.controller';
 
 @Module({
   imports: [
@@ -31,7 +32,12 @@ import { PermissionsRepository } from './modules/permissions/repositories/permis
     PrismaModule,
     AuthModule,
   ],
-  controllers: [HealthController, UsersController, AuthController],
+  controllers: [
+    HealthController,
+    UsersController,
+    AuthController,
+    PermissionsController,
+  ],
   providers: [
     {
       provide: APP_FILTER,

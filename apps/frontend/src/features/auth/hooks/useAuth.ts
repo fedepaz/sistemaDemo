@@ -30,7 +30,7 @@ export function useAuth() {
       user: null,
       isSignedIn: false,
     });
-    console.log("Signout");
+
     window.dispatchEvent(new Event(AUTH_EVENT));
   }, []);
 
@@ -83,8 +83,6 @@ export function useAuth() {
     window.addEventListener(AUTH_EVENT, handleAuthChange);
     return () => window.removeEventListener(AUTH_EVENT, handleAuthChange);
   }, [loadFromStorage]);
-
-  console.log("AuthState", authState);
 
   return {
     ...authState,

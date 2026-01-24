@@ -31,8 +31,7 @@ export function LoginForm() {
     e.preventDefault();
     setError(null);
     try {
-      const data = await loginAsync({ username, password });
-      console.log("Success (?)", data);
+      await loginAsync({ username, password });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     }

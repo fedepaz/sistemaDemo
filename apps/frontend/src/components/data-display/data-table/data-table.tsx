@@ -70,7 +70,6 @@ interface HeaderProps {
 }
 
 function HeaderComponent({ translationKey }: HeaderProps) {
-  console.log(translationKey);
   return (
     <div className="items-center justify-between">
       <div className="text-center">{translationKey}</div>
