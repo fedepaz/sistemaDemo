@@ -5,6 +5,6 @@ import { RequirePermissionMetadata } from '../guards/permissions.guard';
 
 export const REQUIRE_PERMISSION_KEY = 'requirePermission';
 
-export const RequirePermission = (permission: RequirePermissionMetadata) => {
-  SetMetadata(REQUIRE_PERMISSION_KEY, permission);
+export const RequirePermission = (meta: RequirePermissionMetadata) => {
+  return SetMetadata(REQUIRE_PERMISSION_KEY, meta);
 };

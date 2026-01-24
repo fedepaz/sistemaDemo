@@ -6,17 +6,20 @@ import { UpdateUserProfileDto, UpdateUserProfileSchema } from '@vivero/shared';
 import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
+import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
   @Get('me')
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
   getMe(@CurrentUser() user: AuthUser) {
     return this.service.getProfile(user.id);
   }
 
   @Patch('me')
+  @RequirePermission({ tableName: 'users', action: 'update', scope: 'OWN' })
   updateProfile(
     @CurrentUser() user: AuthUser,
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
@@ -26,11 +29,13 @@ export class UsersController {
   }
 
   @Get('all')
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
   getAllUsers() {
     return this.service.getAllUsers();
   }
 
   @Get('username/:username')
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
   getUserByUsername(
     @CurrentUser() user: AuthUser,
     @Param('username') username: string,
@@ -39,6 +44,7 @@ export class UsersController {
   }
 
   @Get('tenant/:tenantId')
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
   getUserByTenantId(
     @CurrentUser() user: AuthUser,
     @Param('tenant') tenantId: string,
