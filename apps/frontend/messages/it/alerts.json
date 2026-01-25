@@ -1,6 +1,0 @@
-{
-  "alerts": {
-    "criticalAlerts": "{count, plural, one {# avviso} other {# avvisi}} critici",
-    "temperatureIssues": "Problemi di temperatura in {location}"
-  }
-}

@@ -1,0 +1,15 @@
+feat(auth): integrate frontend with backend permission system
+
+Implements the client-side functionality to fetch, manage, and utilize
+user permissions from the backend.
+
+- Creates a new `use-permissions` hook to fetch permissions from the
+  `/api/permissions/me` endpoint.
+- Updates `AuthProvider` to store user permissions in the global auth context.
+- Exposes a `hasPermission` function via the `useAuth` hook, allowing for
+  conditional UI rendering based on user rights.
+- Adds permission-related schemas to the `@vivero/shared` package to ensure
+  type safety.
+- Replaces the main dashboard loading spinner with a skeleton component
+  for an improved user experience.
+- Refactors the `use-authUser` hook from `.tsx` to `.ts`.

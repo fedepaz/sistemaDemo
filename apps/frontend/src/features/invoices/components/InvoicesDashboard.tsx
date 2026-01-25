@@ -9,7 +9,7 @@ import { invoiceColumns } from "./columns";
 
 export function InvoicesDashboard() {
   return (
-    <div className="container mx-auto py-8 space-y-8">
+    <>
       <Suspense
         fallback={
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -27,6 +27,6 @@ export function InvoicesDashboard() {
       >
         <InvoicesDataTable />
       </Suspense>
-    </div>
+    </>
   );
 }

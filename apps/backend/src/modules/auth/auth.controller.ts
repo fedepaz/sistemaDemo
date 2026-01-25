@@ -23,6 +23,7 @@ import { AuthUser } from './types/auth-user.type';
 import { Public } from 'src/shared/decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorators';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation-pipe';
+import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -54,7 +55,7 @@ export class AuthController {
   async login(
     @Body(new ZodValidationPipe(LoginAuthSchema)) dto: LoginAuthDto,
   ): Promise<AuthResponseDto> {
-    this.logger.log(`🔑 Login attempt: ${dto.email}`);
+    this.logger.log(`🔑 Login attempt: ${dto.username}`);
     return this.authService.login(dto);
   }
 
@@ -77,8 +78,9 @@ export class AuthController {
    */
   @Post('logout')
   @HttpCode(HttpStatus.OK)
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
   logout(@CurrentUser() user: AuthUser) {
-    this.logger.log(`👋 Logout: ${user.email}`);
+    this.logger.log(`👋 Logout: ${user.username}`);
     return { message: 'Logged out successfully' };
   }
 }

@@ -1,19 +1,22 @@
 // src/features/auth/hooks/useAuth.ts
 "use client";
 
-import { UserProfileDto } from "@vivero/shared";
-import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { AuthResponseDto } from "@vivero/shared";
+import { useCallback, useEffect, useState } from "react";
 
 interface AuthState {
   accessToken: string | null;
-  user: UserProfileDto | null;
+  user: AuthResponseDto["user"] | null;
   isSignedIn: boolean;
 }
 
 const TOKEN_KEY = "accessToken";
 const USER_KEY = "userProfile";
+const AUTH_EVENT = "auth-state-change";
 
 export function useAuth() {
+  const queryClient = useQueryClient();
   const [authState, setAuthState] = useState<AuthState>({
     accessToken: null,
     user: null,
@@ -21,7 +24,18 @@ export function useAuth() {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const signOut = useCallback(() => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    queryClient.clear();
+    setAuthState({
+      accessToken: null,
+      user: null,
+      isSignedIn: false,
+    });
+  }, [queryClient]);
+
+  const loadFromStorage = useCallback(() => {
     try {
       const token = localStorage.getItem(TOKEN_KEY);
       const user = localStorage.getItem(USER_KEY);
@@ -30,7 +44,7 @@ export function useAuth() {
       setAuthState({
         accessToken: token,
         user: parsedUser,
-        isSignedIn: !!token && !!parsedUser,
+        isSignedIn: !!token,
       });
     } catch (error) {
       console.error("Error loading auth state:", error);
@@ -38,27 +52,38 @@ export function useAuth() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [signOut]);
 
-  const signIn = async (accessToken: string, user: UserProfileDto) => {
-    localStorage.setItem(TOKEN_KEY, accessToken);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
-    setAuthState({
-      accessToken,
-      user,
-      isSignedIn: true,
-    });
-  };
+  useEffect(() => {
+    loadFromStorage();
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === TOKEN_KEY || e.key === USER_KEY) {
+        loadFromStorage();
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [loadFromStorage]);
 
-  const signOut = () => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    setAuthState({
-      accessToken: null,
-      user: null,
-      isSignedIn: false,
-    });
-  };
+  const signIn = useCallback(
+    async (accessToken: string, user: AuthResponseDto["user"]) => {
+      localStorage.setItem(TOKEN_KEY, accessToken);
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      setAuthState({
+        accessToken,
+        user,
+        isSignedIn: true,
+      });
+      window.dispatchEvent(new Event(AUTH_EVENT));
+    },
+    [],
+  );
+
+  useEffect(() => {
+    const handleAuthChange = () => loadFromStorage();
+    window.addEventListener(AUTH_EVENT, handleAuthChange);
+    return () => window.removeEventListener(AUTH_EVENT, handleAuthChange);
+  }, [loadFromStorage]);
 
   return {
     ...authState,

@@ -2,29 +2,16 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { useAuth } from "./useAuth";
 import { clientFetch } from "@/lib/api/client-fetch";
-import { UserProfileDto } from "@vivero/shared";
-
-interface RegisterRequest {
-  email: string;
-  password: string;
-  name?: string;
-  // Add other registration fields as needed
-}
-
-interface RegisterResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: UserProfileDto;
-}
+import { AuthResponseDto, RegisterAuthDto } from "@vivero/shared";
+import { useAuthContext } from "../providers/AuthProvider";
 
 export const useRegister = () => {
-  const { signIn } = useAuth();
+  const { signIn } = useAuthContext();
 
-  const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
+  const mutation = useMutation<AuthResponseDto, Error, RegisterAuthDto>({
     mutationFn: async (userData) => {
-      const response = await clientFetch<RegisterResponse>("auth/register", {
+      const response = await clientFetch<AuthResponseDto>("auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
       });

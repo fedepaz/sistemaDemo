@@ -1,4 +1,4 @@
-//src/app/[locale]/(dashboard)/users/loading.tsx
+//src/app/(dashboard)/users/loading.tsx
 
 import { UsersDashboardSkeleton } from "@/features/users";
 
