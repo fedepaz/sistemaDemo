@@ -4,38 +4,73 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '../../generated/prisma/client';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(PrismaService.name);
 
-  constructor(private configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     const url = configService.get<string>('config.database.databaseUrl');
+    const host = configService.get<string>('config.database.host');
+    const port = configService.get<number>('config.database.port');
+    const user = configService.get<string>('config.database.username');
+    const password = configService.get<string>('config.database.password');
+    const database = configService.get<string>('config.database.name');
 
     if (!url) {
       throw new Error('DATABASE_URL not found in .env file');
     }
-    const adapter = new PrismaMariaDb(url);
+    const certPath = path.resolve(
+      process.cwd(),
+      'certs',
+      'globalsignrootca.pem',
+    );
+    let serverCert: string;
+    try {
+      serverCert = fs.readFileSync(certPath, 'utf8');
+    } catch (error) {
+      console.error('Error reading cert file:', error);
+      throw new Error('DATABASE_SSL not found in .env file');
+    }
 
-    super({ adapter });
+    const adapter = new PrismaMariaDb({
+      host,
+      port,
+      user,
+      password,
+      database,
+      ssl: {
+        ca: serverCert,
+        rejectUnauthorized: true, // Set to false only for testing
+      },
+      connectionLimit: 10,
+    });
+
+    super({ adapter, log: ['query', 'info', 'warn', 'error'] });
   }
 
   async onModuleInit() {
+    this.logger.log('✅ DATABASE CONNECTION STARTED ON ');
+    this.logger.log(this.configService.get<string>('config.database.host'));
+    this.logger.log(this.configService.get<string>('config.database.port'));
+    this.logger.log(this.configService.get<string>('config.database.username'));
+    this.logger.log(this.configService.get<string>('config.database.password'));
+    this.logger.log(this.configService.get<string>('config.database.name'));
+
     try {
       await this.$connect();
-      const testQuery = await this.user.findFirst();
+
       this.logger.log('✅ DATABASE CONNECTION SUCCESSFUL');
       this.logger.log(
         `   Database: ${this.configService.get<string>('config.database.name')}`,
-      );
-      this.logger.log(
-        `   Sample data check: ${testQuery ? 'Data exists' : 'Empty database (normal for first run)'}`,
       );
     } catch (error) {
       this.logger.error('❌ DATABASE CONNECTION FAILED');
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       this.logger.error(`   Error: ${error.message}`);
-      this.logger.error(`   Check your DATABASE_URL in .env file`);
+      this.logger.error(error);
       process.exit(1); // Crash immediately - no point continuing
     }
   }
