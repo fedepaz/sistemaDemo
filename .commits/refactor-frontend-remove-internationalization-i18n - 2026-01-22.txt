@@ -1,0 +1,10 @@
+refactor(frontend): remove internationalization (i18n)
+
+Removes the internationalization (i18n) implementation from the frontend.
+
+This change aligns the codebase with the documented "Spanish-only"
+architectural standard, which does not require an i18n library.
+
+- Deleted all translation files (`messages/{en,es,it}/*.json`).
+- Removed the `[locale]` parameter from the routing structure.
+- Simplified the application by removing unused i18n infrastructure.

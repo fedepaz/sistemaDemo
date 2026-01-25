@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 const messages = [
   "Compilando con Internet Explorer 6...",
@@ -23,17 +23,13 @@ function getRandomMessage() {
 }
 
 export function LoadingSpinner() {
-  const [currentMessage, setCurrentMessage] = useState(getRandomMessage);
-  const [isVisible, setIsVisible] = useState(true);
+  const [currentMessage, setCurrentMessage] = useState("Iniciando sesión...");
 
   useEffect(() => {
+    setCurrentMessage(getRandomMessage());
     const interval = setInterval(() => {
-      setIsVisible(false);
-      setTimeout(() => {
-        setCurrentMessage(getRandomMessage());
-        setIsVisible(true);
-      }, 300);
-    }, 3000);
+      setCurrentMessage(getRandomMessage());
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
@@ -94,9 +90,7 @@ export function LoadingSpinner() {
           <p
             className={cn(
               "text-sm font-medium text-muted-foreground text-center transition-all duration-300",
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-2",
+              "opacity-100 translate-y-0",
             )}
           >
             {currentMessage}

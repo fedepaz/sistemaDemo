@@ -124,7 +124,8 @@ src/
 │   └── utils/              # Generic utilities (e.g., `formatDate`, `slugify`)
 ├── hooks/                  # ONLY truly global, reusable hooks (e.g., `useLocalStorage`)
 ├── stores/                 # ONLY global state (e.g., `useUserStore`, `useNotificationsStore`)
-├── providers/              # Context providers (e.g., `ThemeProvider`, `QueryClientProvider`)
+├── providers/              # Centralized context providers via `AppProviders`
+│   └── app-providers.tsx   # Consolidates all global context providers (`QueryClientProvider`, `ThemeProvider`, `AuthUserProfileProvider`, etc.)
 └── types/                  # ONLY global or shared types (e.g., `ApiResponse<T>`)
 ```
 
@@ -234,6 +235,17 @@ The platform uses a traditional username/password authentication model.
 2.  **Token Retrieval:** If the credentials are valid, the backend returns a JWT. The frontend must store this token securely (e.g., in an HttpOnly cookie managed by the server or in local storage for a client-side approach).
 3.  **API Request Authorization:** For any subsequent authenticated API request to the backend, the frontend must include the JWT in the `Authorization` header, using the `Bearer` scheme. A shared API client should be configured to handle this automatically.
 4.  **Backend Communication:** The stateless NestJS backend will then receive this token, validate it, and authorize the request based on the user's permissions contained within the token.
+
+### JWT Refresh Token Mechanism (client-fetch.ts)
+
+The `clientFetch` utility (`src/lib/api/client-fetch.ts`) implements a robust, automatic JWT refresh token mechanism to ensure continuous user sessions without requiring re-authentication.
+
+1.  **Automatic 401 Handling**: When an API request returns a `401 Unauthorized` status, `clientFetch` automatically intercepts the response.
+2.  **Request Queuing**: If a token refresh is already in progress, subsequent 401-triggered requests are queued.
+3.  **Token Refresh**: A dedicated `/auth/refresh` endpoint is called using the stored `refreshToken`.
+4.  **Request Retry**: Upon successful token refresh, the queued requests (and the original failed request) are automatically re-sent with the new `accessToken`.
+5.  **Session Expiration**: If the `refreshToken` itself is invalid or expires, the user is automatically logged out, and `ApiError` is thrown, prompting re-authentication.
+6.  **`ApiError`**: Custom `ApiError` class (`src/lib/api/client-fetch.ts`) is used for all API-related errors, providing detailed status codes and messages.
 
 ### Shared Contract Integration
 

@@ -1,47 +1,39 @@
 // src/features/auth/components/login-form.tsx
 "use client";
-
-import * as React from "react";
-import Link from "next/link";
-import { Sprout, Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Sprout, Loader2, Lock, Eye, EyeOff, User } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
+import { useLogin } from "../hooks/useLogin";
+import { useAuthContext } from "../providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
-interface LoginFormProps extends React.ComponentProps<"div"> {
-  onSubmit?: (email: string, password: string) => Promise<void>;
-  registerUrl?: string;
-  forgotPasswordUrl?: string;
-}
+export function LoginForm() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-export function LoginForm({
-  className,
-  onSubmit,
-  registerUrl = "/register",
-  forgotPasswordUrl = "/forgot-password",
-  ...props
-}: LoginFormProps) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const { loginAsync, isLoading } = useLogin();
+  const { isLoginComplete } = useAuthContext();
+
+  useEffect(() => {
+    if (isLoginComplete) {
+      router.push("/");
+    }
+  }, [isLoginComplete, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true);
-
     try {
-      if (onSubmit) {
-        await onSubmit(email, password);
-      }
+      await loginAsync({ username, password });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Ocurrió un error");
-    } finally {
-      setIsLoading(false);
+      setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     }
   };
 
@@ -49,9 +41,7 @@ export function LoginForm({
     <div
       className={cn(
         "min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8",
-        className,
       )}
-      {...props}
     >
       <div className="max-w-md w-full space-y-6 md:space-y-8">
         {/* Logo */}
@@ -64,16 +54,6 @@ export function LoginForm({
               AgriFlow
             </h1>
           </div>
-        </div>
-
-        {/* Main Message */}
-        <div className="space-y-2 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-            ¡Bienvenido de nuevo!
-          </h2>
-          <p className="text-muted-foreground">
-            Ingresa tus credenciales para acceder a tu cuenta
-          </p>
         </div>
 
         {/* Form Card */}
@@ -90,23 +70,23 @@ export function LoginForm({
                 </div>
               )}
 
-              {/* Email Field */}
+              {/* Username Field */}
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-foreground">
-                  Correo electrónico
+                <Label htmlFor="username" className="text-foreground">
+                  Nombre de usuario
                 </Label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Mail className="h-4 w-4 text-primary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <User className="h-4 w-4 text-primary" />
                   </div>
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="nombre@ejemplo.com"
-                    autoComplete="email"
+                    id="username"
+                    type="text"
+                    placeholder="juanperez"
+                    autoComplete="username"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     disabled={isLoading}
                     className="pl-14 h-12 rounded-lg"
                     aria-describedby={error ? "login-error" : undefined}
@@ -120,16 +100,9 @@ export function LoginForm({
                   <Label htmlFor="password" className="text-foreground">
                     Contraseña
                   </Label>
-                  <Link
-                    href={forgotPasswordUrl}
-                    className="text-sm text-primary underline-offset-4 hover:underline"
-                    tabIndex={isLoading ? -1 : 0}
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </Link>
                 </div>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Lock className="h-4 w-4 text-primary" />
                   </div>
                   <Input
@@ -179,18 +152,6 @@ export function LoginForm({
             </div>
           </form>
         </div>
-
-        {/* Footer */}
-        <p className="text-center text-sm text-muted-foreground">
-          ¿No tienes una cuenta?{" "}
-          <Link
-            href={registerUrl}
-            className="font-medium text-primary underline-offset-4 hover:underline"
-            tabIndex={isLoading ? -1 : 0}
-          >
-            Crear cuenta
-          </Link>
-        </p>
       </div>
     </div>
   );

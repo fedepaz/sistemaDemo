@@ -13,6 +13,13 @@ import { UsersController } from './modules/users/users.controller';
 import { UsersService } from './modules/users/users.service';
 import { UsersRepository } from './modules/users/repositories/users.repository';
 import { AuthController } from './modules/auth/auth.controller';
+import { PermissionsGuard } from './modules/permissions/guards/permissions.guard';
+import { PermissionsService } from './modules/permissions/permissions.service';
+import { PermissionsRepository } from './modules/permissions/repositories/permissions.repository';
+import { PermissionsController } from './modules/permissions/permissions.controller';
+import { AuditLogController } from './modules/auditLog/auditLog.controller';
+import { AuditLogService } from './modules/auditLog/auditLog.service';
+import { AuditLogRepository } from './modules/auditLog/repositories/auditLog.repository';
 
 @Module({
   imports: [
@@ -28,7 +35,13 @@ import { AuthController } from './modules/auth/auth.controller';
     PrismaModule,
     AuthModule,
   ],
-  controllers: [HealthController, UsersController, AuthController],
+  controllers: [
+    HealthController,
+    UsersController,
+    AuthController,
+    PermissionsController,
+    AuditLogController,
+  ],
   providers: [
     {
       provide: APP_FILTER,
@@ -38,8 +51,16 @@ import { AuthController } from './modules/auth/auth.controller';
       provide: APP_GUARD,
       useClass: GlobalAuthGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
     UsersService,
     UsersRepository,
+    PermissionsService,
+    PermissionsRepository,
+    AuditLogService,
+    AuditLogRepository,
   ],
   exports: [UsersService],
 })

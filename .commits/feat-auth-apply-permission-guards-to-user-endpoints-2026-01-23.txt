@@ -1,0 +1,10 @@
+feat(auth): apply permission guards to user endpoints
+
+Secures the user-related API endpoints by applying the
+`@RequirePermission` decorator.
+
+- All endpoints in `UsersController` now require specific permissions
+  (e.g., reading your own profile vs. reading all users).
+- Adds a new Prisma seed script (`seed-permissions.ts`) to populate
+  initial user permissions in the database.
+- Includes a minor stylistic refactor to the decorator itself.
