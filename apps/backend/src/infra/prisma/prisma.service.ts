@@ -32,7 +32,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       serverCert = fs.readFileSync(certPath, 'utf8');
     } catch (error) {
       console.error('Error reading cert file:', error);
-      throw new Error('DATABASE_SSL not found in .env file');
+      throw new Error('Cert not found in file');
     }
 
     const adapter = new PrismaMariaDb({
@@ -53,11 +53,15 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
   async onModuleInit() {
     this.logger.log('✅ DATABASE CONNECTION STARTED ON ');
-    this.logger.log(this.configService.get<string>('config.database.host'));
-    this.logger.log(this.configService.get<string>('config.database.port'));
-    this.logger.log(this.configService.get<string>('config.database.username'));
-    this.logger.log(this.configService.get<string>('config.database.password'));
-    this.logger.log(this.configService.get<string>('config.database.name'));
+    this.logger.warn(this.configService.get<string>('config.database.host'));
+    this.logger.warn(this.configService.get<string>('config.database.port'));
+    this.logger.warn(
+      this.configService.get<string>('config.database.username'),
+    );
+    this.logger.warn(
+      this.configService.get<string>('config.database.password'),
+    );
+    this.logger.warn(this.configService.get<string>('config.database.name'));
 
     try {
       await this.$connect();
