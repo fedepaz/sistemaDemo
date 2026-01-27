@@ -20,8 +20,10 @@ export class UsersService {
     return user;
   }
 
-  async updateProfile(userId: string, data: UpdateUserProfileDto) {
-    return this.repo.updateProfile(userId, data);
+  async updateProfile(username: string, data: UpdateUserProfileDto) {
+    const user = await this.repo.findByUsername(username);
+    if (!user) throw new NotFoundException('User not found');
+    return this.repo.updateProfile(user.id, data);
   }
 
   async getAllUsers() {

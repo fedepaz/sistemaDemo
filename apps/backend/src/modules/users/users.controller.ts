@@ -37,7 +37,7 @@ export class UsersController {
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
     body: UpdateUserProfileDto,
   ) {
-    return this.service.updateProfile(user.id, body);
+    return this.service.updateProfile(user.username, body);
   }
 
   @Get('all')
@@ -57,19 +57,13 @@ export class UsersController {
 
   @Get('username/:username')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
-  getUserByUsername(
-    @CurrentUser() user: AuthUser,
-    @Param('username') username: string,
-  ) {
+  getUserByUsername(@Param('username') username: string) {
     return this.service.getUserByUsername(username);
   }
 
   @Get('tenant/:tenantId')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
-  getUserByTenantId(
-    @CurrentUser() user: AuthUser,
-    @Param('tenant') tenantId: string,
-  ) {
+  getUserByTenantId(@Param('tenant') tenantId: string) {
     return this.service.getUserByTenantId(tenantId);
   }
 
@@ -86,6 +80,8 @@ export class UsersController {
       action: 'update',
       scope: 'ALL',
     });
+    console.error(canUpdateAll);
+    console.error(body);
     if (canUpdateAll) {
       return this.service.updateProfile(username, body);
     } else {
@@ -109,11 +105,11 @@ export class UsersController {
   }
 
   @Get('allAdmin')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'users', action: 'delete', scope: 'ALL' })
   async getAllUsersAdmin(@CurrentUser() user: AuthUser) {
     const canReadAll = await this.permissionsService.canPerform(user.id, {
       tableName: 'users',
-      action: 'read',
+      action: 'delete',
       scope: 'ALL',
     });
     if (canReadAll) {

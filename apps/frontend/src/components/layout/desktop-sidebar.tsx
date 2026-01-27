@@ -81,7 +81,7 @@ export function DesktopSidebar() {
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8  rounded-lg flex items-center  bg-secondary">
+              <div className="w-8 h-8  rounded-lg bg-secondary flex items-center justify-center ">
                 <span className="text-primary font-bold text-sm">DM</span>
               </div>
               <div>

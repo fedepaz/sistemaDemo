@@ -1,10 +1,10 @@
 // src/components/data-display/data-table/data-table.tsx
+"use client";
 
-import * as React from "react";
+import { Fragment, ReactNode, useMemo, useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
-  Row,
   type SortingState,
   type VisibilityState,
   flexRender,
@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Filter, Trash2 } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Filter } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -42,7 +42,6 @@ import {
 
 import { ExportDropdown } from "@/components/data-display/data-table/export-dropdown";
 import { DeleteDialog } from "@/components/data-display/data-table/delete-dialog-button";
-import { InlineEditRow } from "./inline-edit-row";
 import { usePermission } from "@/hooks/usePermission";
 
 interface DataTableProps<TData, TValue> {
@@ -53,7 +52,7 @@ interface DataTableProps<TData, TValue> {
   description?: string;
 
   onEdit?: (row: TData) => void;
-  onDelete?: (rows: TData[]) => void;
+  onDelete?: (row: TData) => void;
   onExport?: (
     format: "csv" | "excel" | "json" | "pdf",
     selectedRows: TData[],
@@ -64,8 +63,7 @@ interface DataTableProps<TData, TValue> {
     row: TData,
     onSave: () => void,
     onCancel: () => void,
-  ) => React.ReactNode;
-  onQuickEdit?: (row: TData) => void;
+  ) => ReactNode;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -86,22 +84,16 @@ export function DataTable<TData, TValue>({
   onDelete,
   onExport,
   totalCount,
-  renderInlineEdit,
-  onQuickEdit,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [globalFilter, setGlobalFilter] = React.useState("");
-  const [expandedRow, setExpandedRow] = React.useState<string | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
-  const [itemsToDelete, setItemsToDelete] = React.useState<TData[]>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemsToDelete, setItemsToDelete] = useState<TData | null>(null);
   const dataTablePermissions = usePermission(tableName);
-  console.log(dataTablePermissions);
 
   const actionColumn: ColumnDef<TData, TValue> = {
     id: "actions",
@@ -146,7 +138,7 @@ export function DataTable<TData, TValue>({
     },
   };
 
-  const enhancedColumns = React.useMemo(() => {
+  const enhancedColumns = useMemo(() => {
     return [...columns, actionColumn];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns]);
@@ -173,38 +165,20 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const handleQuickEdit = (row: Row<TData>) => {
-    const rowId = row.id;
-    if (expandedRow === rowId) {
-      setExpandedRow(null);
-    } else {
-      setExpandedRow(rowId);
-      if (onQuickEdit) {
-        onQuickEdit(row.original);
-      }
-    }
-  };
-
   const handleDeleteSingle = (item: TData) => {
-    setItemsToDelete([item]);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleBulkDelete = () => {
-    const selectedRows = table
-      .getFilteredSelectedRowModel()
-      .rows.map((row) => row.original);
-    setItemsToDelete(selectedRows);
+    setItemsToDelete(item);
     setDeleteDialogOpen(true);
   };
 
   const confirmDelete = () => {
-    if (onDelete && itemsToDelete.length > 0) {
-      onDelete(itemsToDelete);
+    if (onDelete) {
+      if (itemsToDelete) {
+        onDelete(itemsToDelete);
+      }
       setRowSelection({});
     }
     setDeleteDialogOpen(false);
-    setItemsToDelete([]);
+    setItemsToDelete(null);
   };
 
   const handleExport = (format: "csv" | "excel" | "json" | "pdf") => {
@@ -280,16 +254,6 @@ export function DataTable<TData, TValue>({
                 disabled={data.length === 0}
               />
             )}
-            {selectedCount > 0 && dataTablePermissions.canDelete && (
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleBulkDelete}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Eliminar ({selectedCount})
-              </Button>
-            )}
           </div>
           <div className="rounded-md border">
             <Table>
@@ -314,19 +278,10 @@ export function DataTable<TData, TValue>({
               <TableBody>
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
-                    <React.Fragment key={row.id}>
+                    <Fragment key={row.id}>
                       <TableRow
                         data-state={row.getIsSelected() && "selected"}
                         className="hover:bg-accent/50"
-                        onClick={(e) => {
-                          const target = e.target as HTMLElement;
-                          if (
-                            !target.closest("button") &&
-                            !target.closest('[role="checkbox"]')
-                          ) {
-                            handleQuickEdit(row);
-                          }
-                        }}
                       >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id}>
@@ -337,21 +292,7 @@ export function DataTable<TData, TValue>({
                           </TableCell>
                         ))}
                       </TableRow>
-                      {renderInlineEdit && (
-                        <InlineEditRow
-                          isExpanded={expandedRow === row.id}
-                          onToggle={() => setExpandedRow(null)}
-                          onMoreDetails={() => onEdit && onEdit(row.original)}
-                          colSpan={enhancedColumns.length}
-                        >
-                          {renderInlineEdit(
-                            row.original,
-                            () => setExpandedRow(null),
-                            () => setExpandedRow(null),
-                          )}
-                        </InlineEditRow>
-                      )}
-                    </React.Fragment>
+                    </Fragment>
                   ))
                 ) : (
                   <TableRow>
@@ -436,7 +377,6 @@ export function DataTable<TData, TValue>({
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         onConfirm={confirmDelete}
-        itemCount={itemsToDelete.length}
       />
     </>
   );
@@ -449,7 +389,7 @@ export function SortableHeader({
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   column: any;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <Button

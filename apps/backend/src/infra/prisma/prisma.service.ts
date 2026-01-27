@@ -48,7 +48,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       connectionLimit: 2,
     });
 
-    super({ adapter, log: ['query', 'info', 'warn', 'error'] });
+    super({ adapter, log: ['info', 'warn', 'error'] });
   }
 
   async onModuleInit() {

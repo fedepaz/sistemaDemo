@@ -2,36 +2,20 @@
 "use client";
 
 import { useDataTableActions } from "@/hooks/useDataTable";
-import {
-  useCreateUser,
-  useDeleteUser,
-  useUpdateUser,
-  useUsers,
-  useUsersByUserName,
-  useUsersByTenantId,
-} from "../hooks/useUsers";
+import { useDeleteUser, useUpdateUser, useUsers } from "../hooks/usersHooks";
 
-import {
-  DataTable,
-  FloatingActionButton,
-  SlideOverForm,
-} from "@/components/data-display/data-table";
+import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { userColumns } from "./columns";
 import { UserForm } from "./user-form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { usePermission } from "@/hooks/usePermission";
 
 export function UsersDataTable() {
-  const canCreate = usePermission("users").canCreate;
   const { data: users = [] } = useUsers();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfileDto>();
-  const [formData, setFormData] = useState<Partial<UpdateUserProfileDto>>({});
 
-  const createUser = useCreateUser();
   const updateUser = useUpdateUser();
   const deleteUser = useDeleteUser();
 
@@ -42,26 +26,13 @@ export function UsersDataTable() {
 
   const handleEdit = (row: UserProfileDto) => {
     setSelectedUser(row);
-    setFormData({
-      firstName: row.firstName || "",
-      lastName: row.lastName || "",
-      email: row.email || "",
-      passwordHash: row.passwordHash || "",
-    });
     setSlideOverOpen(true);
   };
 
-  const handleAdd = () => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      passwordHash: "",
-    });
-    setSlideOverOpen(true);
-  };
-  const handleDelete = (rows: UserProfileDto[]) => {
-    console.log("Delete Users:", rows);
+  const handleDelete = async (row: UserProfileDto) => {
+    if (row.username) {
+      await deleteUser.mutateAsync(row.username);
+    }
   };
 
   const handleExport = (
@@ -71,12 +42,16 @@ export function UsersDataTable() {
     console.log("Export Users:", selectedRows);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (formData: UpdateUserProfileDto) => {
     if (selectedUser) {
-      await updateUser.mutateAsync({
-        id: selectedUser.id,
-        userUpdate: formData,
-      });
+      try {
+        await updateUser.mutateAsync({
+          username: selectedUser.username,
+          userUpdate: formData,
+        });
+      } catch (error) {
+        throw error;
+      }
       setSlideOverOpen(false);
     }
   };
@@ -93,30 +68,19 @@ export function UsersDataTable() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onExport={handleExport}
-        onQuickEdit={(user) => console.log(`Quick edit user: ${user.username}`)}
       />
       {}
-      {canCreate && (
-        <FloatingActionButton
-          onClick={handleAdd}
-          label="Añadir nuevo usuario"
-        />
-      )}
 
       <SlideOverForm
+        formId={selectedUser ? `edit-${selectedUser.username}` : "create"}
         open={slideOverOpen}
         onOpenChange={setSlideOverOpen}
-        title={
-          selectedUser
-            ? `Editar usuario: ${selectedUser.username}`
-            : "Crear nuevo usuario"
-        }
+        title={selectedUser ? `Editar usuario` : "Crear nuevo usuario"}
         description={
           selectedUser
             ? `Edita los detalles del usuario ${selectedUser.username}.`
             : "Rellena los campos para crear un nuevo usuario."
         }
-        onSave={handleSave}
         onCancel={() => setSlideOverOpen(false)}
         saveLabel={selectedUser ? "Actualizar" : "Crear"}
       >
@@ -125,7 +89,7 @@ export function UsersDataTable() {
             initialData={selectedUser}
             onSubmit={handleSave}
             onCancel={() => setSlideOverOpen(false)}
-            isSubmitting={createUser.isPending}
+            formId={selectedUser ? `edit-${selectedUser.username}` : "create"}
           />
         </div>
       </SlideOverForm>

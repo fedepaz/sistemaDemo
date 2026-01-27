@@ -23,6 +23,7 @@ interface SlideOverFormProps {
   onCancel?: () => void;
   saveLabel?: string;
   isLoading?: boolean;
+  formId: string;
 }
 
 export function SlideOverForm({
@@ -34,18 +35,13 @@ export function SlideOverForm({
   onSave,
   onCancel,
   saveLabel,
+  formId,
 }: SlideOverFormProps) {
   const handleCancel = () => {
     if (onCancel) {
       onCancel();
     }
     onOpenChange(false);
-  };
-
-  const handleSave = () => {
-    if (onSave) {
-      onSave();
-    }
   };
 
   return (
@@ -63,7 +59,12 @@ export function SlideOverForm({
             <Button variant="outline" onClick={handleCancel} className="w-full">
               Cancelar
             </Button>
-            <Button onClick={handleSave} className="w-full">
+            <Button
+              type={formId ? "submit" : "button"}
+              form={formId || undefined} // Only set if provided
+              onClick={!formId ? () => onSave?.() : undefined}
+              className="w-full"
+            >
               {saveLabel || "Guardar cambios"}
             </Button>
           </div>

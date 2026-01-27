@@ -1,22 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import {
-  Home,
-  Thermometer,
-  Calendar,
-  Users,
-  BarChart3,
-  Settings,
-  Menu,
-  AlertTriangle,
-  FileText,
-  ShoppingCart,
-  Sprout,
-  UserCircle,
-  Building,
-  ChevronDown,
-} from "lucide-react";
+import { Menu, AlertTriangle, ChevronDown } from "lucide-react";
 
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";

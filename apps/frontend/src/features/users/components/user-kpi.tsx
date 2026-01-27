@@ -4,7 +4,7 @@
 import { KPICard } from "@/components/data-display/kpi-card";
 import { Users, UserCheck, UserX, Shield } from "lucide-react";
 
-import { useUsers } from "../hooks/useUsers";
+import { useUsers } from "../hooks/usersHooks";
 
 function UserKPIs() {
   const { data } = useUsers();
