@@ -5,7 +5,7 @@ model Tenant {
   name      String
   users     User[]
   auditLogs AuditLog[]
-  createdByUserId String  
+  createdByUserId String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   deletedByUserId String?

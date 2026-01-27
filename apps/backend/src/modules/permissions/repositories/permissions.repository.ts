@@ -13,7 +13,10 @@ export class PermissionsRepository implements IPermissionRepository {
 
   async findManyByUserId(userId: string): Promise<UserPermissionRecord[]> {
     const records = await this.prisma.userPermission.findMany({
-      where: { userId },
+      where: {
+        userId,
+        deletedAt: null,
+      },
       select: {
         userId: true,
         tableName: true,

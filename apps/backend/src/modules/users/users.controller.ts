@@ -1,6 +1,14 @@
 // app/modules/users/users.controller.ts
 
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserProfileDto, UpdateUserProfileSchema } from '@vivero/shared';
 import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
@@ -63,5 +71,57 @@ export class UsersController {
     @Param('tenant') tenantId: string,
   ) {
     return this.service.getUserByTenantId(tenantId);
+  }
+
+  @Patch(':username')
+  @RequirePermission({ tableName: 'users', action: 'update' })
+  async updateUserByUsername(
+    @CurrentUser() user: AuthUser,
+    @Param('username') username: string,
+    @Body(new ZodValidationPipe(UpdateUserProfileSchema))
+    body: UpdateUserProfileDto,
+  ) {
+    const canUpdateAll = await this.permissionsService.canPerform(user.id, {
+      tableName: 'users',
+      action: 'update',
+      scope: 'ALL',
+    });
+    if (canUpdateAll) {
+      return this.service.updateProfile(username, body);
+    } else {
+      if (user.username === username) {
+        return this.service.updateProfile(username, body);
+      } else {
+        throw new ForbiddenException(
+          'No tiene permisos para actualizar el usuario',
+        );
+      }
+    }
+  }
+
+  @Delete(':username')
+  @RequirePermission({ tableName: 'users', action: 'delete', scope: 'ALL' })
+  async deleteUserByUsername(
+    @CurrentUser() user: AuthUser,
+    @Param('username') username: string,
+  ) {
+    return this.service.softDeleteUserByUsername(username, user.id);
+  }
+
+  @Get('allAdmin')
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  async getAllUsersAdmin(@CurrentUser() user: AuthUser) {
+    const canReadAll = await this.permissionsService.canPerform(user.id, {
+      tableName: 'users',
+      action: 'read',
+      scope: 'ALL',
+    });
+    if (canReadAll) {
+      return this.service.getAllUsersAdmin();
+    } else {
+      throw new ForbiddenException(
+        'No tiene permisos para ver esta información',
+      );
+    }
   }
 }
