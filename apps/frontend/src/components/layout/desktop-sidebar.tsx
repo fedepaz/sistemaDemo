@@ -7,9 +7,10 @@ import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
+
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
+import Link from "next/link";
 
 interface NavigationItem {
   title: string;
@@ -80,13 +81,13 @@ export function DesktopSidebar() {
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8  rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">AG</span>
+              <div className="w-8 h-8  rounded-lg flex items-center  bg-secondary">
+                <span className="text-primary font-bold text-sm">DM</span>
               </div>
               <div>
-                <h2 className="font-bold">AgriManage</h2>
+                <h2 className="font-bold">Demo</h2>
                 <p className="text-xs text-muted-foreground">
-                  Gestión de Plantas
+                  Sistema de gestión
                 </p>
               </div>
             </div>
