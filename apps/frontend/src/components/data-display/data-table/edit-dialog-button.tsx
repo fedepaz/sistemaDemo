@@ -1,4 +1,4 @@
-// src/components/common/delete-dialog-button.tsx
+// src/components/common/edit-dialog-button.tsx
 
 import { AlertTriangle } from "lucide-react";
 import {
@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface DeleteDialogProps {
+interface EditDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title?: string;
@@ -22,7 +22,7 @@ interface DeleteDialogProps {
   isLoading?: boolean;
 }
 
-export function DeleteDialog({
+export function EditDialog({
   open,
   onOpenChange,
   title,
@@ -30,8 +30,8 @@ export function DeleteDialog({
   onConfirm,
   itemCount = 1,
   isLoading = false,
-}: DeleteDialogProps) {
-  const dialogTitle = title || "¿Estás seguro que quieres eliminar?";
+}: EditDialogProps) {
+  const dialogTitle = title || "¿Estás seguro que quieres editar?";
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -47,7 +47,7 @@ export function DeleteDialog({
           </div>
           <AlertDialogDescription className="text-base pt-2">
             {description ||
-              `¿Estás seguro de que quieres eliminar ${itemCount} elemento(s)? Esta acción no se puede deshacer.`}
+              `¿Estás seguro de que quieres editar ${itemCount} elemento(s)? Esta acción no se puede deshacer.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -62,7 +62,7 @@ export function DeleteDialog({
             disabled={isLoading}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90 min-h-[48px] min-w-[100px]"
           >
-            {isLoading ? "Eliminando..." : "Eliminar"}
+            {isLoading ? "Editando..." : "Editar"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

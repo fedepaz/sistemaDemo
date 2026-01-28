@@ -23,23 +23,26 @@ interface UserFormProps {
   initialData?: UserProfileDto;
   onSubmit: (data: UpdateUserProfileDto) => Promise<void>;
   onCancel: () => void;
-  isSubmitting?: boolean;
+  formId: string;
 }
 
-export function UserForm({ initialData, onSubmit }: UserFormProps) {
+export function UserForm({ initialData, onSubmit, formId }: UserFormProps) {
   const form = useForm<UpdateUserProfileDto>({
     resolver: zodResolver(UpdateUserProfileSchema),
     defaultValues: {
       firstName: initialData?.firstName || "",
       lastName: initialData?.lastName || "",
       email: initialData?.email || "",
-      passwordHash: "",
     },
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        id={formId}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="firstName"
@@ -76,20 +79,6 @@ export function UserForm({ initialData, onSubmit }: UserFormProps) {
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
                 <Input {...field} placeholder={initialData?.email || ""} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="passwordHash"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Contraseña</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Actualizar contraseña ?" />
               </FormControl>
               <FormMessage />
             </FormItem>

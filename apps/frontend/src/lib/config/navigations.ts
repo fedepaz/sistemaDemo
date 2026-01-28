@@ -2,7 +2,6 @@
 
 import { ROUTES } from "@/constants/routes";
 import {
-  Sprout,
   Home,
   FileText,
   Settings,
@@ -44,14 +43,13 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
   {
     id: "operations",
     title: "Operaciones",
-    icon: Sprout,
+    icon: Home,
     items: [
       {
         title: "Dashboard",
         href: ROUTES.DASHBOARD,
         icon: Home,
         description: "Vista general y alertas",
-        // Always visible - no permission required
       },
     ],
   },
@@ -60,14 +58,6 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
     title: "Gestión",
     icon: Building,
     items: [
-      {
-        title: "Plantas",
-        href: ROUTES.PLANTS,
-        icon: Sprout,
-        description: "Inventario de plantas",
-        dashboard: { statsLabel: "Plantas activas" },
-        requiredPermission: { table: "plants", action: "read" },
-      },
       {
         title: "Clientes",
         href: ROUTES.CLIENTS,
@@ -115,14 +105,7 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         dashboard: { statsLabel: "Registros de auditoría" },
         requiredPermission: { table: "audit_logs", action: "read" },
       },
-      {
-        title: "Tenants",
-        href: ROUTES.TENANTS,
-        icon: Building,
-        description: "Gestión de organizaciones",
-        dashboard: { statsLabel: "Organizaciones activas" },
-        requiredPermission: { table: "tenants", action: "read" },
-      },
+
       {
         title: "Permisos de Usuario",
         href: ROUTES.USER_PERMISSIONS,

@@ -42,11 +42,6 @@ export { Prisma }
  */
 export type AuditLog = Prisma.AuditLogModel
 /**
- * Model Message
- * 
- */
-export type Message = Prisma.MessageModel
-/**
  * Model Tenant
  * 
  */

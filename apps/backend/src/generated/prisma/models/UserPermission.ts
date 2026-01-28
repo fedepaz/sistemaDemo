@@ -34,6 +34,8 @@ export type UserPermissionMinAggregateOutputType = {
   scope: $Enums.PermissionScope | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedByUserId: string | null
+  deletedAt: Date | null
 }
 
 export type UserPermissionMaxAggregateOutputType = {
@@ -47,6 +49,8 @@ export type UserPermissionMaxAggregateOutputType = {
   scope: $Enums.PermissionScope | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedByUserId: string | null
+  deletedAt: Date | null
 }
 
 export type UserPermissionCountAggregateOutputType = {
@@ -60,6 +64,8 @@ export type UserPermissionCountAggregateOutputType = {
   scope: number
   createdAt: number
   updatedAt: number
+  deletedByUserId: number
+  deletedAt: number
   _all: number
 }
 
@@ -75,6 +81,8 @@ export type UserPermissionMinAggregateInputType = {
   scope?: true
   createdAt?: true
   updatedAt?: true
+  deletedByUserId?: true
+  deletedAt?: true
 }
 
 export type UserPermissionMaxAggregateInputType = {
@@ -88,6 +96,8 @@ export type UserPermissionMaxAggregateInputType = {
   scope?: true
   createdAt?: true
   updatedAt?: true
+  deletedByUserId?: true
+  deletedAt?: true
 }
 
 export type UserPermissionCountAggregateInputType = {
@@ -101,6 +111,8 @@ export type UserPermissionCountAggregateInputType = {
   scope?: true
   createdAt?: true
   updatedAt?: true
+  deletedByUserId?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -187,6 +199,8 @@ export type UserPermissionGroupByOutputType = {
   scope: $Enums.PermissionScope
   createdAt: Date
   updatedAt: Date
+  deletedByUserId: string | null
+  deletedAt: Date | null
   _count: UserPermissionCountAggregateOutputType | null
   _min: UserPermissionMinAggregateOutputType | null
   _max: UserPermissionMaxAggregateOutputType | null
@@ -221,6 +235,9 @@ export type UserPermissionWhereInput = {
   scope?: Prisma.EnumPermissionScopeFilter<"UserPermission"> | $Enums.PermissionScope
   createdAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
+  deletedByUserId?: Prisma.StringNullableFilter<"UserPermission"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"UserPermission"> | Date | string | null
+  deletedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type UserPermissionOrderByWithRelationInput = {
@@ -234,6 +251,9 @@ export type UserPermissionOrderByWithRelationInput = {
   scope?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedByUser?: Prisma.UserOrderByWithRelationInput
   _relevance?: Prisma.UserPermissionOrderByRelevanceInput
 }
 
@@ -252,6 +272,9 @@ export type UserPermissionWhereUniqueInput = Prisma.AtLeast<{
   scope?: Prisma.EnumPermissionScopeFilter<"UserPermission"> | $Enums.PermissionScope
   createdAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
+  deletedByUserId?: Prisma.StringNullableFilter<"UserPermission"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"UserPermission"> | Date | string | null
+  deletedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "userId_tableName">
 
 export type UserPermissionOrderByWithAggregationInput = {
@@ -265,6 +288,8 @@ export type UserPermissionOrderByWithAggregationInput = {
   scope?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserPermissionCountOrderByAggregateInput
   _max?: Prisma.UserPermissionMaxOrderByAggregateInput
   _min?: Prisma.UserPermissionMinOrderByAggregateInput
@@ -284,6 +309,8 @@ export type UserPermissionScalarWhereWithAggregatesInput = {
   scope?: Prisma.EnumPermissionScopeWithAggregatesFilter<"UserPermission"> | $Enums.PermissionScope
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserPermission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserPermission"> | Date | string
+  deletedByUserId?: Prisma.StringNullableWithAggregatesFilter<"UserPermission"> | string | null
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserPermission"> | Date | string | null
 }
 
 export type UserPermissionCreateInput = {
@@ -297,6 +324,8 @@ export type UserPermissionCreateInput = {
   scope?: $Enums.PermissionScope
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletedByUser?: Prisma.UserCreateNestedOneWithoutDeletedPermissionsInput
 }
 
 export type UserPermissionUncheckedCreateInput = {
@@ -310,6 +339,8 @@ export type UserPermissionUncheckedCreateInput = {
   scope?: $Enums.PermissionScope
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedByUserId?: string | null
+  deletedAt?: Date | string | null
 }
 
 export type UserPermissionUpdateInput = {
@@ -323,6 +354,8 @@ export type UserPermissionUpdateInput = {
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUser?: Prisma.UserUpdateOneWithoutDeletedPermissionsNestedInput
 }
 
 export type UserPermissionUncheckedUpdateInput = {
@@ -336,6 +369,8 @@ export type UserPermissionUncheckedUpdateInput = {
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserPermissionCreateManyInput = {
@@ -349,6 +384,8 @@ export type UserPermissionCreateManyInput = {
   scope?: $Enums.PermissionScope
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedByUserId?: string | null
+  deletedAt?: Date | string | null
 }
 
 export type UserPermissionUpdateManyMutationInput = {
@@ -362,6 +399,7 @@ export type UserPermissionUpdateManyMutationInput = {
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserPermissionUncheckedUpdateManyInput = {
@@ -375,6 +413,18 @@ export type UserPermissionUncheckedUpdateManyInput = {
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type UserPermissionListRelationFilter = {
+  every?: Prisma.UserPermissionWhereInput
+  some?: Prisma.UserPermissionWhereInput
+  none?: Prisma.UserPermissionWhereInput
+}
+
+export type UserPermissionOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserPermissionOrderByRelevanceInput = {
@@ -399,6 +449,8 @@ export type UserPermissionCountOrderByAggregateInput = {
   scope?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type UserPermissionMaxOrderByAggregateInput = {
@@ -412,6 +464,8 @@ export type UserPermissionMaxOrderByAggregateInput = {
   scope?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type UserPermissionMinOrderByAggregateInput = {
@@ -425,10 +479,182 @@ export type UserPermissionMinOrderByAggregateInput = {
   scope?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+}
+
+export type UserPermissionCreateNestedManyWithoutDeletedByUserInput = {
+  create?: Prisma.XOR<Prisma.UserPermissionCreateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput> | Prisma.UserPermissionCreateWithoutDeletedByUserInput[] | Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput[]
+  connectOrCreate?: Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput | Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput[]
+  createMany?: Prisma.UserPermissionCreateManyDeletedByUserInputEnvelope
+  connect?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+}
+
+export type UserPermissionUncheckedCreateNestedManyWithoutDeletedByUserInput = {
+  create?: Prisma.XOR<Prisma.UserPermissionCreateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput> | Prisma.UserPermissionCreateWithoutDeletedByUserInput[] | Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput[]
+  connectOrCreate?: Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput | Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput[]
+  createMany?: Prisma.UserPermissionCreateManyDeletedByUserInputEnvelope
+  connect?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+}
+
+export type UserPermissionUpdateManyWithoutDeletedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserPermissionCreateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput> | Prisma.UserPermissionCreateWithoutDeletedByUserInput[] | Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput[]
+  connectOrCreate?: Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput | Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput[]
+  upsert?: Prisma.UserPermissionUpsertWithWhereUniqueWithoutDeletedByUserInput | Prisma.UserPermissionUpsertWithWhereUniqueWithoutDeletedByUserInput[]
+  createMany?: Prisma.UserPermissionCreateManyDeletedByUserInputEnvelope
+  set?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  disconnect?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  delete?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  connect?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  update?: Prisma.UserPermissionUpdateWithWhereUniqueWithoutDeletedByUserInput | Prisma.UserPermissionUpdateWithWhereUniqueWithoutDeletedByUserInput[]
+  updateMany?: Prisma.UserPermissionUpdateManyWithWhereWithoutDeletedByUserInput | Prisma.UserPermissionUpdateManyWithWhereWithoutDeletedByUserInput[]
+  deleteMany?: Prisma.UserPermissionScalarWhereInput | Prisma.UserPermissionScalarWhereInput[]
+}
+
+export type UserPermissionUncheckedUpdateManyWithoutDeletedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserPermissionCreateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput> | Prisma.UserPermissionCreateWithoutDeletedByUserInput[] | Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput[]
+  connectOrCreate?: Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput | Prisma.UserPermissionCreateOrConnectWithoutDeletedByUserInput[]
+  upsert?: Prisma.UserPermissionUpsertWithWhereUniqueWithoutDeletedByUserInput | Prisma.UserPermissionUpsertWithWhereUniqueWithoutDeletedByUserInput[]
+  createMany?: Prisma.UserPermissionCreateManyDeletedByUserInputEnvelope
+  set?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  disconnect?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  delete?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  connect?: Prisma.UserPermissionWhereUniqueInput | Prisma.UserPermissionWhereUniqueInput[]
+  update?: Prisma.UserPermissionUpdateWithWhereUniqueWithoutDeletedByUserInput | Prisma.UserPermissionUpdateWithWhereUniqueWithoutDeletedByUserInput[]
+  updateMany?: Prisma.UserPermissionUpdateManyWithWhereWithoutDeletedByUserInput | Prisma.UserPermissionUpdateManyWithWhereWithoutDeletedByUserInput[]
+  deleteMany?: Prisma.UserPermissionScalarWhereInput | Prisma.UserPermissionScalarWhereInput[]
 }
 
 export type EnumPermissionScopeFieldUpdateOperationsInput = {
   set?: $Enums.PermissionScope
+}
+
+export type UserPermissionCreateWithoutDeletedByUserInput = {
+  id?: string
+  userId: string
+  tableName: string
+  canCreate?: boolean
+  canRead?: boolean
+  canUpdate?: boolean
+  canDelete?: boolean
+  scope?: $Enums.PermissionScope
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type UserPermissionUncheckedCreateWithoutDeletedByUserInput = {
+  id?: string
+  userId: string
+  tableName: string
+  canCreate?: boolean
+  canRead?: boolean
+  canUpdate?: boolean
+  canDelete?: boolean
+  scope?: $Enums.PermissionScope
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type UserPermissionCreateOrConnectWithoutDeletedByUserInput = {
+  where: Prisma.UserPermissionWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserPermissionCreateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput>
+}
+
+export type UserPermissionCreateManyDeletedByUserInputEnvelope = {
+  data: Prisma.UserPermissionCreateManyDeletedByUserInput | Prisma.UserPermissionCreateManyDeletedByUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserPermissionUpsertWithWhereUniqueWithoutDeletedByUserInput = {
+  where: Prisma.UserPermissionWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserPermissionUpdateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedUpdateWithoutDeletedByUserInput>
+  create: Prisma.XOR<Prisma.UserPermissionCreateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedCreateWithoutDeletedByUserInput>
+}
+
+export type UserPermissionUpdateWithWhereUniqueWithoutDeletedByUserInput = {
+  where: Prisma.UserPermissionWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserPermissionUpdateWithoutDeletedByUserInput, Prisma.UserPermissionUncheckedUpdateWithoutDeletedByUserInput>
+}
+
+export type UserPermissionUpdateManyWithWhereWithoutDeletedByUserInput = {
+  where: Prisma.UserPermissionScalarWhereInput
+  data: Prisma.XOR<Prisma.UserPermissionUpdateManyMutationInput, Prisma.UserPermissionUncheckedUpdateManyWithoutDeletedByUserInput>
+}
+
+export type UserPermissionScalarWhereInput = {
+  AND?: Prisma.UserPermissionScalarWhereInput | Prisma.UserPermissionScalarWhereInput[]
+  OR?: Prisma.UserPermissionScalarWhereInput[]
+  NOT?: Prisma.UserPermissionScalarWhereInput | Prisma.UserPermissionScalarWhereInput[]
+  id?: Prisma.StringFilter<"UserPermission"> | string
+  userId?: Prisma.StringFilter<"UserPermission"> | string
+  tableName?: Prisma.StringFilter<"UserPermission"> | string
+  canCreate?: Prisma.BoolFilter<"UserPermission"> | boolean
+  canRead?: Prisma.BoolFilter<"UserPermission"> | boolean
+  canUpdate?: Prisma.BoolFilter<"UserPermission"> | boolean
+  canDelete?: Prisma.BoolFilter<"UserPermission"> | boolean
+  scope?: Prisma.EnumPermissionScopeFilter<"UserPermission"> | $Enums.PermissionScope
+  createdAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
+  deletedByUserId?: Prisma.StringNullableFilter<"UserPermission"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"UserPermission"> | Date | string | null
+}
+
+export type UserPermissionCreateManyDeletedByUserInput = {
+  id?: string
+  userId: string
+  tableName: string
+  canCreate?: boolean
+  canRead?: boolean
+  canUpdate?: boolean
+  canDelete?: boolean
+  scope?: $Enums.PermissionScope
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type UserPermissionUpdateWithoutDeletedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  tableName?: Prisma.StringFieldUpdateOperationsInput | string
+  canCreate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type UserPermissionUncheckedUpdateWithoutDeletedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  tableName?: Prisma.StringFieldUpdateOperationsInput | string
+  canCreate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type UserPermissionUncheckedUpdateManyWithoutDeletedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  tableName?: Prisma.StringFieldUpdateOperationsInput | string
+  canCreate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -444,6 +670,9 @@ export type UserPermissionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   scope?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedByUserId?: boolean
+  deletedAt?: boolean
+  deletedByUser?: boolean | Prisma.UserPermission$deletedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["userPermission"]>
 
 
@@ -459,13 +688,20 @@ export type UserPermissionSelectScalar = {
   scope?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedByUserId?: boolean
+  deletedAt?: boolean
 }
 
-export type UserPermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "tableName" | "canCreate" | "canRead" | "canUpdate" | "canDelete" | "scope" | "createdAt" | "updatedAt", ExtArgs["result"]["userPermission"]>
+export type UserPermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "tableName" | "canCreate" | "canRead" | "canUpdate" | "canDelete" | "scope" | "createdAt" | "updatedAt" | "deletedByUserId" | "deletedAt", ExtArgs["result"]["userPermission"]>
+export type UserPermissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  deletedByUser?: boolean | Prisma.UserPermission$deletedByUserArgs<ExtArgs>
+}
 
 export type $UserPermissionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserPermission"
-  objects: {}
+  objects: {
+    deletedByUser: Prisma.$UserPayload<ExtArgs> | null
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
@@ -477,6 +713,8 @@ export type $UserPermissionPayload<ExtArgs extends runtime.Types.Extensions.Inte
     scope: $Enums.PermissionScope
     createdAt: Date
     updatedAt: Date
+    deletedByUserId: string | null
+    deletedAt: Date | null
   }, ExtArgs["result"]["userPermission"]>
   composites: {}
 }
@@ -817,6 +1055,7 @@ readonly fields: UserPermissionFieldRefs;
  */
 export interface Prisma__UserPermissionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  deletedByUser<T extends Prisma.UserPermission$deletedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserPermission$deletedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -856,6 +1095,8 @@ export interface UserPermissionFieldRefs {
   readonly scope: Prisma.FieldRef<"UserPermission", 'PermissionScope'>
   readonly createdAt: Prisma.FieldRef<"UserPermission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserPermission", 'DateTime'>
+  readonly deletedByUserId: Prisma.FieldRef<"UserPermission", 'String'>
+  readonly deletedAt: Prisma.FieldRef<"UserPermission", 'DateTime'>
 }
     
 
@@ -872,6 +1113,10 @@ export type UserPermissionFindUniqueArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the UserPermission
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
   /**
    * Filter, which UserPermission to fetch.
    */
@@ -891,6 +1136,10 @@ export type UserPermissionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
+  /**
    * Filter, which UserPermission to fetch.
    */
   where: Prisma.UserPermissionWhereUniqueInput
@@ -908,6 +1157,10 @@ export type UserPermissionFindFirstArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the UserPermission
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
   /**
    * Filter, which UserPermission to fetch.
    */
@@ -957,6 +1210,10 @@ export type UserPermissionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
+  /**
    * Filter, which UserPermission to fetch.
    */
   where?: Prisma.UserPermissionWhereInput
@@ -1005,6 +1262,10 @@ export type UserPermissionFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
+  /**
    * Filter, which UserPermissions to fetch.
    */
   where?: Prisma.UserPermissionWhereInput
@@ -1048,6 +1309,10 @@ export type UserPermissionCreateArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
+  /**
    * The data needed to create a UserPermission.
    */
   data: Prisma.XOR<Prisma.UserPermissionCreateInput, Prisma.UserPermissionUncheckedCreateInput>
@@ -1076,6 +1341,10 @@ export type UserPermissionUpdateArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the UserPermission
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
   /**
    * The data needed to update a UserPermission.
    */
@@ -1117,6 +1386,10 @@ export type UserPermissionUpsertArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
+  /**
    * The filter to search for the UserPermission to update in case it exists.
    */
   where: Prisma.UserPermissionWhereUniqueInput
@@ -1143,6 +1416,10 @@ export type UserPermissionDeleteArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
+  /**
    * Filter which UserPermission to delete.
    */
   where: Prisma.UserPermissionWhereUniqueInput
@@ -1163,6 +1440,25 @@ export type UserPermissionDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
+ * UserPermission.deletedByUser
+ */
+export type UserPermission$deletedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
  * UserPermission without action
  */
 export type UserPermissionDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1174,4 +1470,8 @@ export type UserPermissionDefaultArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the UserPermission
    */
   omit?: Prisma.UserPermissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserPermissionInclude<ExtArgs> | null
 }
