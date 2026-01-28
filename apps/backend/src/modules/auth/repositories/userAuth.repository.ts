@@ -1,25 +1,21 @@
 // src/auth/user/userAuth.repository.ts
 
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Tenant, User } from '../../../generated/prisma/client';
+import { User, Tenant } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
 
 @Injectable()
 export class UserAuthRepository {
   constructor(private prisma: PrismaService) {}
 
-  findByEmail(email: string): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-  }
-
   findByUsername(username: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
         username,
+        isActive: true,
+        tenant: {
+          deletedAt: null,
+        },
       },
     });
   }
@@ -28,14 +24,10 @@ export class UserAuthRepository {
     return this.prisma.user.findUnique({
       where: {
         id,
-      },
-    });
-  }
-
-  findAllByTenantId(tenantId: string): Promise<User[]> {
-    return this.prisma.user.findMany({
-      where: {
-        tenantId,
+        isActive: true,
+        tenant: {
+          deletedAt: null,
+        },
       },
     });
   }
@@ -44,6 +36,7 @@ export class UserAuthRepository {
     return this.prisma.tenant.findUnique({
       where: {
         id,
+        deletedAt: null,
       },
     });
   }
@@ -57,44 +50,34 @@ export class UserAuthRepository {
     tenantId: string;
   }): Promise<User> {
     try {
-      const user = await this.prisma.user.create({
-        data: {
-          ...data,
-          isActive: true,
-        },
-      });
+      return this.prisma.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            ...data,
+            isActive: true,
+          },
+        });
 
-      await this.prisma.userPermission.upsert({
-        where: { userId_tableName: { userId: user.id, tableName: 'users' } },
-        create: {
-          userId: user.id,
-          tableName: 'users',
-          canRead: true,
-          scope: 'OWN',
-        },
-        update: { canRead: true, scope: 'OWN' },
+        await tx.userPermission.upsert({
+          where: {
+            userId_tableName: {
+              userId: user.id,
+              tableName: 'users',
+            },
+          },
+          create: {
+            userId: user.id,
+            tableName: 'users',
+            canRead: true,
+            scope: 'OWN',
+          },
+          update: { canRead: true, scope: 'OWN' },
+        });
+        return user;
       });
-      return user;
     } catch (error) {
       console.error('Error granting user permissions:', error);
       throw new InternalServerErrorException('Error creating user');
     }
-  }
-
-  updateUser(
-    id: string,
-    data: {
-      email?: string;
-      firstName?: string;
-      lastName?: string;
-      passwordHash?: string;
-    },
-  ): Promise<User> {
-    return this.prisma.user.update({
-      where: {
-        id,
-      },
-      data,
-    });
   }
 }

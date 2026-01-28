@@ -51,7 +51,6 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   AuditLog: 'AuditLog',
-  Message: 'Message',
   Tenant: 'Tenant',
   User: 'User',
   UserPermission: 'UserPermission'
@@ -89,20 +88,14 @@ export const AuditLogScalarFieldEnum = {
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
-export const MessageScalarFieldEnum = {
-  id: 'id',
-  locale_code: 'locale_code',
-  value: 'value'
-} as const
-
-export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
-
-
 export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  createdByUserId: 'createdByUserId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedByUserId: 'deletedByUserId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
@@ -118,7 +111,9 @@ export const UserScalarFieldEnum = {
   isActive: 'isActive',
   tenantId: 'tenantId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedByUserId: 'deletedByUserId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -134,7 +129,9 @@ export const UserPermissionScalarFieldEnum = {
   canDelete: 'canDelete',
   scope: 'scope',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedByUserId: 'deletedByUserId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type UserPermissionScalarFieldEnum = (typeof UserPermissionScalarFieldEnum)[keyof typeof UserPermissionScalarFieldEnum]
@@ -192,18 +189,11 @@ export const AuditLogOrderByRelevanceFieldEnum = {
 export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
 
 
-export const MessageOrderByRelevanceFieldEnum = {
-  id: 'id',
-  locale_code: 'locale_code',
-  value: 'value'
-} as const
-
-export type MessageOrderByRelevanceFieldEnum = (typeof MessageOrderByRelevanceFieldEnum)[keyof typeof MessageOrderByRelevanceFieldEnum]
-
-
 export const TenantOrderByRelevanceFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  createdByUserId: 'createdByUserId',
+  deletedByUserId: 'deletedByUserId'
 } as const
 
 export type TenantOrderByRelevanceFieldEnum = (typeof TenantOrderByRelevanceFieldEnum)[keyof typeof TenantOrderByRelevanceFieldEnum]
@@ -216,7 +206,8 @@ export const UserOrderByRelevanceFieldEnum = {
   firstName: 'firstName',
   lastName: 'lastName',
   passwordHash: 'passwordHash',
-  tenantId: 'tenantId'
+  tenantId: 'tenantId',
+  deletedByUserId: 'deletedByUserId'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -225,7 +216,8 @@ export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnu
 export const UserPermissionOrderByRelevanceFieldEnum = {
   id: 'id',
   userId: 'userId',
-  tableName: 'tableName'
+  tableName: 'tableName',
+  deletedByUserId: 'deletedByUserId'
 } as const
 
 export type UserPermissionOrderByRelevanceFieldEnum = (typeof UserPermissionOrderByRelevanceFieldEnum)[keyof typeof UserPermissionOrderByRelevanceFieldEnum]

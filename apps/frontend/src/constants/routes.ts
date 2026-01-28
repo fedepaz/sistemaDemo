@@ -5,7 +5,6 @@ export const ROUTES = {
   REGISTER: "/register",
   CLIENTS: "/clients",
   INVOICES: "/invoices",
-  PLANTS: "/plants",
   PURCHASE_ORDERS: "/purchase-orders",
   USERS: "/users",
   AUDIT_LOGS: "/audit-logs",

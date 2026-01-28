@@ -7,21 +7,7 @@ import { ShoppingCart, Sprout, TrendingUp, Users } from "lucide-react";
 function DashboardKPI() {
   const { data: kpi } = useDashboardKPIs();
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <KPICard
-        title="Plantas totales"
-        value={kpi?.totalPlants}
-        description="Plantas cultivadas en total"
-        icon={Sprout}
-        trend={{ value: 12.5, label: "desde el mes pasado", isPositive: true }}
-      />
-      <KPICard
-        title="Plantas activas"
-        value={kpi?.activePlants}
-        description="Plantas actualmente en crecimiento"
-        icon={Users}
-        trend={{ value: 8.2, label: "desde el mes pasado", isPositive: true }}
-      />
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
       <KPICard
         title="Ingresos mensuales"
         value={`${(kpi?.monthlyRevenue / 1000).toFixed(1)} $`}

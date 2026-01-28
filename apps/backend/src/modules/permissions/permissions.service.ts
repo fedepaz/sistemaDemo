@@ -55,8 +55,6 @@ export class PermissionsService {
         scope: r.scope,
       };
     }
-
-    this.logger.debug(`User permissions: ${JSON.stringify(map)}`);
     return map;
   }
 
@@ -84,7 +82,6 @@ export class PermissionsService {
     if (check.scope === 'ALL' && tablePerm.scope !== 'ALL') return false;
     if (check.scope === 'OWN' && tablePerm.scope === 'NONE') return false;
 
-    this.logger.debug(`User can perform ${check.action} on ${check.tableName}`);
     return true;
   }
 
@@ -109,8 +106,6 @@ export class PermissionsService {
     if (tablePerm.scope === 'ALL') return true; // Can access all records
     if (tablePerm.scope === 'OWN') return recordOwnerId === userId; // Can only access own records
 
-    this.logger.debug(`User can access ${action} on ${tableName}`);
-
     return false; // NONE scope
   }
 
@@ -130,7 +125,6 @@ export class PermissionsService {
   ): Promise<void> {
     this.validateTableName(tableName);
 
-    this.logger.debug(`Granting permissions for ${userId} on ${tableName}`);
     await this.permissionsRepo.upsert(userId, tableName, data);
   }
 
@@ -143,7 +137,6 @@ export class PermissionsService {
   ): Promise<void> {
     this.validateTableName(tableName);
 
-    this.logger.debug(`Revoking permissions for ${userId} on ${tableName}`);
     await this.permissionsRepo.deleteByUserIdTableName(userId, tableName);
   }
 }
