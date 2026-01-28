@@ -12,16 +12,12 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(PrismaService.name);
 
   constructor(private readonly configService: ConfigService) {
-    const url = configService.get<string>('config.database.databaseUrl');
     const host = configService.get<string>('config.database.host');
     const port = configService.get<number>('config.database.port');
     const user = configService.get<string>('config.database.username');
     const password = configService.get<string>('config.database.password');
     const database = configService.get<string>('config.database.name');
 
-    if (!url) {
-      throw new Error('DATABASE_URL not found in .env file');
-    }
     const certPath = path.resolve(
       process.cwd(),
       'certs',

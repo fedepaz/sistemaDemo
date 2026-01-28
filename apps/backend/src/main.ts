@@ -11,10 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
-  const port =
-    Number(process.env.PORT) ||
-    configService.get<number>('config.port') ||
-    3000;
+  const port = Number(process.env.PORT);
   const isProd =
     configService.get<string>('config.environment') === 'production';
   const corsOrigins = configService
