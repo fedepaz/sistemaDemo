@@ -27,7 +27,7 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   });
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   console.log('🚀 Backend started', {
     port,
     environment: isProd ? 'production' : 'development',

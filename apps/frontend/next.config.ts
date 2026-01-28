@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  reactStrictMode: true,
+  transpilePackages: ["@vivero/shared"],
+  output: "standalone",
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  },
 };
 
 export default nextConfig;
