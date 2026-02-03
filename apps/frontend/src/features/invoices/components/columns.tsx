@@ -98,7 +98,9 @@ const invoiceColumns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "invoiceNumber",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Número de Factura" />;
+      return (
+        <HeaderComponent column={column} translationKey="Número de Factura" />
+      );
     },
   },
   {
@@ -128,13 +130,20 @@ const invoiceColumns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "createdDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Fecha de Creación" />;
+      return (
+        <HeaderComponent column={column} translationKey="Fecha de Creación" />
+      );
     },
   },
   {
     accessorKey: "dueDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Fecha de Vencimiento" />;
+      return (
+        <HeaderComponent
+          column={column}
+          translationKey="Fecha de Vencimiento"
+        />
+      );
     },
   },
 ];

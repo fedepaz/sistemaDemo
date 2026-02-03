@@ -59,7 +59,7 @@ export function useUpdateInvoice() {
       queryClient.invalidateQueries({ queryKey: INVOICE_QUERY_KEYS.lists() });
       queryClient.setQueryData(
         INVOICE_QUERY_KEYS.detail(updatedInvoice.id),
-        updatedInvoice
+        updatedInvoice,
       );
     },
     onError: (error) => {

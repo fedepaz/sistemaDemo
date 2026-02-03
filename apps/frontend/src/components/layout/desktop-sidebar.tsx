@@ -114,16 +114,16 @@ export function DesktopSidebar() {
           return (
             <div key={group.id}>
               {/* Group Header */}
-              <Button
-                variant="ghost"
-                onClick={() => !isCollapsed && toggleGroup(group.id)}
-                className={cn(
-                  "w-full justify-start gap-2 font-medium",
-                  isCollapsed && "justify-center",
-                )}
-              >
-                <GroupIcon className="h-5 w-5 shrink-0" />
-                {!isCollapsed && (
+              {!isCollapsed && (
+                <Button
+                  variant="ghost"
+                  onClick={() => !isCollapsed && toggleGroup(group.id)}
+                  className={cn(
+                    "w-full justify-start gap-2 font-medium",
+                    isCollapsed && "justify-center",
+                  )}
+                >
+                  <GroupIcon className="h-5 w-5 shrink-0" />
                   <>
                     <span className="flex-1 text-left text-sm">
                       {group.title}
@@ -135,8 +135,8 @@ export function DesktopSidebar() {
                       )}
                     />
                   </>
-                )}
-              </Button>
+                </Button>
+              )}
 
               {/* Group Items */}
               {(isExpanded || isCollapsed) && (

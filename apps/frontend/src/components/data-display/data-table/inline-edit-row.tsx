@@ -45,9 +45,7 @@ export function InlineEditRow({
                   Más detalles
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
-                <Button className="min-h-[48px] min-w-[100px]">
-                  Guardar
-                </Button>
+                <Button className="min-h-[48px] min-w-[100px]">Guardar</Button>
               </div>
             </div>
           </TableCell>

@@ -70,7 +70,7 @@ export const mockInvoiceService = {
 
   async updateInvoice(
     id: string,
-    invoiceUpdate: UpdateInvoiceDto
+    invoiceUpdate: UpdateInvoiceDto,
   ): Promise<Invoice> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -83,7 +83,7 @@ export const mockInvoiceService = {
     invoicesData.splice(
       invoicesData.indexOf(existingInvoice),
       1,
-      updatedInvoice
+      updatedInvoice,
     );
     return updatedInvoice;
   },

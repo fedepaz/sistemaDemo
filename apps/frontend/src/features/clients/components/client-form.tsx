@@ -68,7 +68,10 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
             <FormItem>
               <FormLabel>Persona de contacto</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nombre de la persona de contacto" />
+                <Input
+                  {...field}
+                  placeholder="Nombre de la persona de contacto"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -82,7 +85,10 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Correo electrónico del cliente" />
+                <Input
+                  {...field}
+                  placeholder="Correo electrónico del cliente"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +102,10 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
             <FormItem>
               <FormLabel>Teléfono</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Número de teléfono del cliente" />
+                <Input
+                  {...field}
+                  placeholder="Número de teléfono del cliente"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -4,11 +4,9 @@ import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
-import * as fs from 'fs';
-import * as path from 'path';
 
-const certPath = path.join(process.cwd(), 'certs', 'globalsignrootca.pem');
-const serverCert = fs.readFileSync(certPath, 'utf8');
+//const certPath = path.join(process.cwd(), 'certs', 'globalsignrootca.pem');
+//const serverCert = fs.readFileSync(certPath, 'utf8');
 
 // Create adapter with SSL
 const adapter = new PrismaMariaDb({
@@ -17,10 +15,6 @@ const adapter = new PrismaMariaDb({
   user: process.env.DATABASE_USERNAME!,
   password: process.env.DATABASE_PASSWORD!,
   database: process.env.DATABASE_NAME!,
-  ssl: {
-    ca: serverCert,
-    rejectUnauthorized: true,
-  },
 });
 
 const prisma = new PrismaClient({ adapter });

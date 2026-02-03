@@ -10,7 +10,7 @@ describe("RootDashboard Component", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <RootDashboard />
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     const skeletons = await screen.findAllByTestId("kpi-card-skeleton");

@@ -1,0 +1,10 @@
+feat(frontend): enhance theming, branding, and dashboard layout
+
+- Implemented theme-aware colors in dashboard-alerts and dashboard-kpi components
+  using chart-specific CSS variables for dynamic theming.
+- Updated application branding with a custom SVG favicon ("DM" logo) and changed
+  the global title to "Sistema de gestión".
+- Refactored `ComingSoonPage` for a simpler, branded placeholder.
+- Adjusted dashboard layout padding and removed UserKPIs from the UsersDashboard.
+- Optimized `desktop-sidebar.tsx` JSX structure without functional changes.
+- Removed unused `useState` import from `useIsMounted.ts`.

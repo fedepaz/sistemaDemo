@@ -104,7 +104,10 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
             <FormItem>
               <FormLabel>Etapa de crecimiento</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Ej: Semilla, Crecimiento, Floración" />
+                <Input
+                  {...field}
+                  placeholder="Ej: Semilla, Crecimiento, Floración"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

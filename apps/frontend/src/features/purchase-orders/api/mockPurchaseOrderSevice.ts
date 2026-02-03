@@ -33,7 +33,7 @@ const generatePurchaseOrders = (count: number): PurchaseOrder[] => {
       .toISOString()
       .split("T")[0],
     deliveryDate: new Date(
-      Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000
+      Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000,
     )
       .toISOString()
       .split("T")[0],
@@ -65,7 +65,7 @@ export const mockPurchaseOrderSevice = {
   },
 
   async createPurchaseOrder(
-    purchaseOrderCreate: CreatePurchaseOrderDto
+    purchaseOrderCreate: CreatePurchaseOrderDto,
   ): Promise<PurchaseOrder> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -81,14 +81,14 @@ export const mockPurchaseOrderSevice = {
 
   async updatePurchaseOrder(
     id: string,
-    purchaseOrderUpdate: UpdatePurchaseOrderDto
+    purchaseOrderUpdate: UpdatePurchaseOrderDto,
   ): Promise<PurchaseOrder> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
     // Replace API response with purchase order
     // Simulate updating purchase order in the database
     const existingPurchaseOrder = purchaseOrdersData.find(
-      (purchaseOrder) => purchaseOrder.id === id
+      (purchaseOrder) => purchaseOrder.id === id,
     );
     if (!existingPurchaseOrder) throw new Error("Purchase order not found");
     const updatedPurchaseOrder = {
@@ -98,7 +98,7 @@ export const mockPurchaseOrderSevice = {
     purchaseOrdersData.splice(
       purchaseOrdersData.indexOf(existingPurchaseOrder),
       1,
-      updatedPurchaseOrder
+      updatedPurchaseOrder,
     );
     return updatedPurchaseOrder;
   },
@@ -109,12 +109,12 @@ export const mockPurchaseOrderSevice = {
     // Replace API response with purchase order
     // Simulate deleting purchase order from the database
     const existingPurchaseOrder = purchaseOrdersData.find(
-      (purchaseOrder) => purchaseOrder.id === id
+      (purchaseOrder) => purchaseOrder.id === id,
     );
     if (!existingPurchaseOrder) throw new Error("Purchase order not found");
     purchaseOrdersData.splice(
       purchaseOrdersData.indexOf(existingPurchaseOrder),
-      1
+      1,
     );
     return;
   },

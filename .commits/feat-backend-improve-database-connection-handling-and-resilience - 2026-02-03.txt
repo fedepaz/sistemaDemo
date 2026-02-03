@@ -1,0 +1,10 @@
+feat(backend): improve database connection handling and resilience
+
+- Implemented `executeWithRetry` in `PrismaService` to handle transient database
+  connection errors, such as pool timeouts.
+- Added `onModuleDestroy` hook to `PrismaService` for graceful database disconnection.
+- Added a health check query (`SELECT 1`) after initial connection to verify
+  database responsiveness.
+- Removed SSL connection for local development and seeding scripts to simplify
+  the local setup.
+- Made database connection logging conditional to avoid verbose logs in production.

@@ -4,14 +4,18 @@
 import { useDataTableActions } from "@/hooks/useDataTable";
 import { useDeleteUser, useUpdateUser, useUsers } from "../hooks/usersHooks";
 
-import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
+import {
+  DataTable,
+  DataTableSkeleton,
+  SlideOverForm,
+} from "@/components/data-display/data-table";
 import { userColumns } from "./columns";
 import { UserForm } from "./user-form";
 import { useState } from "react";
 import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
 
 export function UsersDataTable() {
-  const { data: users = [] } = useUsers();
+  const { data: users = [], isLoading } = useUsers();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfileDto>();
@@ -55,6 +59,8 @@ export function UsersDataTable() {
       setSlideOverOpen(false);
     }
   };
+
+  if (isLoading) return <DataTableSkeleton columnCount={userColumns.length} />;
 
   return (
     <>

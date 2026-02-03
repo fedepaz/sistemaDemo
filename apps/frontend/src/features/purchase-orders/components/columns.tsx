@@ -92,7 +92,9 @@ export const purchaseOrderColumns: ColumnDef<PurchaseOrder>[] = [
   {
     accessorKey: "orderNumber",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Número de Pedido" />;
+      return (
+        <HeaderComponent column={column} translationKey="Número de Pedido" />
+      );
     },
   },
   {
@@ -128,13 +130,17 @@ export const purchaseOrderColumns: ColumnDef<PurchaseOrder>[] = [
   {
     accessorKey: "orderDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Fecha de Pedido" />;
+      return (
+        <HeaderComponent column={column} translationKey="Fecha de Pedido" />
+      );
     },
   },
   {
     accessorKey: "deliveryDate",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Fecha de Entrega" />;
+      return (
+        <HeaderComponent column={column} translationKey="Fecha de Entrega" />
+      );
     },
   },
 ];
