@@ -3,37 +3,40 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { useDashboardAlerts } from "../hooks/hooks";
-import {
-  DollarSign,
-  Minus,
-  RefreshCw,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
+import { DollarSign, RefreshCw } from "lucide-react";
 
-const currencyColors: Record<
-  string,
-  { bg: string; text: string; icon: string; accent: string }
-> = {
-  USD: {
-    bg: "bg-emerald-50",
-    text: "text-emerald-700",
-    icon: "text-emerald-500",
-    accent: "bg-emerald-500",
+const chartColors = [
+  {
+    bg: "bg-chart-1/10",
+    text: "text-chart-1",
+    accent: "bg-chart-1",
+    icon: "text-chart-1",
   },
-  BLUE: {
-    bg: "bg-sky-50",
-    text: "text-sky-700",
-    icon: "text-sky-500",
-    accent: "bg-sky-500",
+  {
+    bg: "bg-chart-2/10",
+    text: "text-chart-2",
+    accent: "bg-chart-2",
+    icon: "text-chart-2",
   },
-  EUR: {
-    bg: "bg-violet-50",
-    text: "text-violet-700",
-    icon: "text-violet-500",
-    accent: "bg-violet-500",
+  {
+    bg: "bg-chart-3/10",
+    text: "text-chart-3",
+    accent: "bg-chart-3",
+    icon: "text-chart-3",
   },
-};
+  {
+    bg: "bg-chart-4/10",
+    text: "text-chart-4",
+    accent: "bg-chart-4",
+    icon: "text-chart-4",
+  },
+  {
+    bg: "bg-chart-5/10",
+    text: "text-chart-5",
+    accent: "bg-chart-5",
+    icon: "text-chart-5",
+  },
+];
 
 function formatNumber(value: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -51,20 +54,22 @@ function DashboardAlerts() {
   });
 
   return (
-    <Card className="h-full overflow-hidden flex flex-col">
+    <Card className="overflow-hidden flex flex-col">
       {/* Header - compact */}
-      <div className="bg-gradient-to-r from-emerald-700 to-emerald-600 px-3 py-2 shrink-0">
+      <div className="bg-gradient-to-r from-primary to-primary/80 px-3 py-2 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center">
-              <DollarSign className="h-3.5 w-3.5 text-white" />
+            <div className="h-6 w-6 rounded-full bg-primary-foreground/10 flex items-center justify-center">
+              <DollarSign className="h-3.5 w-3.5 text-primary-foreground" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-white">Cotizaciones</h2>
-              <p className="text-[10px] text-emerald-100">ARS</p>
+              <h2 className="text-sm font-semibold text-primary-foreground">
+                Cotizaciones
+              </h2>
+              <p className="text-[10px] text-primary-foreground/80">ARS</p>
             </div>
           </div>
-          <div className="flex items-center gap-1 text-emerald-100 text-[10px]">
+          <div className="flex items-center gap-1 text-primary-foreground/80 text-[10px]">
             <RefreshCw className="h-2.5 w-2.5" />
             <span>{currentTime}</span>
           </div>
@@ -72,9 +77,9 @@ function DashboardAlerts() {
       </div>
 
       <CardContent className="p-2 flex-1 overflow-auto">
-        <div className="flex flex-col gap-2 h-full">
-          {currencyRates.map((currency) => {
-            const colors = currencyColors[currency.code] || currencyColors.USD;
+        <div className="flex flex-col gap-2 ">
+          {currencyRates.map((currency, index) => {
+            const colors = chartColors[index % chartColors.length];
 
             return (
               <div

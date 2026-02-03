@@ -64,7 +64,7 @@ export function useUpdatePurchaseOrder() {
       });
       queryClient.setQueryData(
         PURCHASE_ORDER_QUERY_KEYS.detail(updatedPurchaseOrder.id),
-        updatedPurchaseOrder
+        updatedPurchaseOrder,
       );
     },
     onError: (error) => {
@@ -78,7 +78,9 @@ export function useDeletePurchaseOrder() {
   return useMutation({
     mutationFn: mockPurchaseOrderSevice.deletePurchaseOrder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PURCHASE_ORDER_QUERY_KEYS.lists() });
+      queryClient.invalidateQueries({
+        queryKey: PURCHASE_ORDER_QUERY_KEYS.lists(),
+      });
     },
     onError: (error) => {
       console.log(error);

@@ -96,17 +96,14 @@ pnpm dev
 Si bajaste el ZIP originalmente:
 
 1. **Respaldar tus cambios**:
-
    - Copia las carpetas/archivos que modificaste a otro lugar
 
 2. **Descargar el ZIP actualizado**:
-
    - Ve a https://github.com/fedepaz/viveroApp
    - Click en `Code` → `Download ZIP`
    - Extrae en una carpeta temporal
 
 3. **Reemplazar archivos**:
-
    - Borra tu carpeta vieja del proyecto
    - Copia la nueva carpeta descargada
    - Restaura tus cambios personalizados (si los hay)

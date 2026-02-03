@@ -11,7 +11,7 @@ import { DashboardAlertsSkeleton } from "./dashboard-alerts-skeleton";
 
 export function RootDashboard() {
   return (
-    <div className="flex flex-col h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] lg:h-[calc(100vh-2rem)] p-4 gap-4 overflow-hidden">
+    <div className="mx-auto w-full max-w-[1600px] px-2 py-2 space-y-8">
       <div className="shrink-0">
         <Suspense fallback={<DashboardKPISkeleton />}>
           <DashboardKPI />

@@ -30,7 +30,11 @@ function PlantKPIs() {
         value={healthyPlants}
         description={`${((healthyPlants / totalPlants) * 100).toFixed(0)}% del total`}
         icon={Leaf}
-        trend={{ value: 5.2, label: "desde la semana pasada", isPositive: true }}
+        trend={{
+          value: 5.2,
+          label: "desde la semana pasada",
+          isPositive: true,
+        }}
       />
       <KPICard
         title="Plantas en Alerta"

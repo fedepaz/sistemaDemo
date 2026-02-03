@@ -17,7 +17,8 @@ export function PendingPermissionsPage() {
         </h1>
 
         <p className="mt-6 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
-          Tu cuenta ha sido creada exitosamente, pero aún no tienes roles o permisos asignados.
+          Tu cuenta ha sido creada exitosamente, pero aún no tienes roles o
+          permisos asignados.
         </p>
 
         <div className="mt-8 p-6 rounded-lg bg-muted/50 border border-border">
@@ -25,9 +26,9 @@ export function PendingPermissionsPage() {
             ¿Qué sigue?
           </p>
           <p className="text-sm text-muted-foreground text-balance">
-            Un administrador del sistema necesita asignarte un rol antes de que puedas
-            acceder a la aplicación. Esto suele ocurrir dentro de las 24 horas posteriores a la
-            creación de la cuenta.
+            Un administrador del sistema necesita asignarte un rol antes de que
+            puedas acceder a la aplicación. Esto suele ocurrir dentro de las 24
+            horas posteriores a la creación de la cuenta.
           </p>
         </div>
 

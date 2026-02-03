@@ -59,7 +59,7 @@ export function useUpdateClient() {
       queryClient.invalidateQueries({ queryKey: CLIENT_QUERY_KEYS.lists() });
       queryClient.setQueryData(
         CLIENT_QUERY_KEYS.detail(updatedUser.id),
-        updatedUser
+        updatedUser,
       );
     },
     onError: (error) => {

@@ -44,7 +44,6 @@ The `nest g resource` command generates files directly under `apps/backend/src/`
 mv src/<feature-name> src/modules/
 ```
 
-
 **Step 2: Define the Core Entity in Prisma**
 
 The CLI generates a generic entity file. **Ignore this file** and define the canonical data model in the Prisma schema. The schema is split into multiple files inside `apps/backend/prisma/schema`.
@@ -79,6 +78,7 @@ As per `tdd_cicd_guide.md`, write tests before or during implementation.
 ---
 
 ### Core Technology Stack (Per tech_stack_guide.md)
+
 ```typescript
 Framework: NestJS (TypeScript-first)
 Database ORM: Prisma
@@ -96,39 +96,42 @@ Testing: Jest + Supertest + Vitest
 
 While not all of the following modules are in use, they were part of the initial project scaffolding and are recommended for future implementation as the application's needs grow. They are industry-standard solutions for a robust NestJS application.
 
--   **Security & Performance:**
-    -   `@nestjs/throttler`: For rate-limiting to prevent API abuse.
-    -   `helmet`: To automatically set important security-related HTTP headers.
-    -   `compression`: Middleware to compress response bodies and improve client-side performance.
+- **Security & Performance:**
+  - `@nestjs/throttler`: For rate-limiting to prevent API abuse.
+  - `helmet`: To automatically set important security-related HTTP headers.
+  - `compression`: Middleware to compress response bodies and improve client-side performance.
 
--   **API Documentation:**
-    -   `@nestjs/swagger`: To generate interactive API documentation (Swagger/OpenAPI), which is invaluable for frontend developers and API consumers.
+- **API Documentation:**
+  - `@nestjs/swagger`: To generate interactive API documentation (Swagger/OpenAPI), which is invaluable for frontend developers and API consumers.
 
--   **Asynchronous Processing:**
-    -   `@nestjs/bull` & `bullmq`: For implementing a robust background job processing system with Redis, suitable for handling long-running tasks like report generation or sending emails without blocking the main application thread.
+- **Asynchronous Processing:**
+  - `@nestjs/bull` & `bullmq`: For implementing a robust background job processing system with Redis, suitable for handling long-running tasks like report generation or sending emails without blocking the main application thread.
 
--   **Health Checks:**
-    -   `@nestjs/terminus`: For creating detailed and comprehensive health check endpoints, which can provide granular information about the status of the database, external services, and more.
+- **Health Checks:**
+  - `@nestjs/terminus`: For creating detailed and comprehensive health check endpoints, which can provide granular information about the status of the database, external services, and more.
 
 ### Validation
 
 All incoming data to the API (e.g., request bodies, query parameters) **must** be validated to ensure type safety and correctness.
 
--   **Library**: Use **Zod** for all schema definitions and validation.
--   **Implementation**: A custom `ZodValidationPipe` should be used in controllers to validate data against a Zod schema.
+- **Library**: Use **Zod** for all schema definitions and validation.
+- **Implementation**: A custom `ZodValidationPipe` should be used in controllers to validate data against a Zod schema.
 
 **Example:**
 
 ```typescript
 // src/modules/users/users.controller.ts
-import { Body, Controller, Patch, Req } from '@nestjs/common';
-import { UpdateUserProfileDto, UpdateUserProfileSchema } from '@plant-mgmt/shared';
-import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
+import { Body, Controller, Patch, Req } from "@nestjs/common";
+import {
+  UpdateUserProfileDto,
+  UpdateUserProfileSchema,
+} from "@plant-mgmt/shared";
+import { ZodValidationPipe } from "../../shared/pipes/zod-validation-pipe";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   // ...
-  @Patch('me')
+  @Patch("me")
   updateMe(
     @Req() req,
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
@@ -144,29 +147,33 @@ export class UsersController {
 Your implementations must understand these core agricultural entities and workflows:
 
 **Plant Lifecycle Management:**
+
 - Seed inventory → Planting → Growth stages → Harvest → Post-harvest processing
 - Environmental monitoring (temperature, humidity, light, nutrients)
 - Quality control checkpoints and compliance tracking
 - Batch tracking for food safety regulations
 
 **Supply Chain Operations:**
+
 - Supplier relationship management (seeds, fertilizers, equipment)
 - Procurement planning and seasonal ordering
 - Inventory optimization across multiple locations
 - Distribution logistics and client delivery coordination
 
 **Client Relationship Systems:**
+
 - Contract management for wholesale buyers
-- Order processing and fulfillment tracking  
+- Order processing and fulfillment tracking
 - Pricing management for different agricultural products
 - Seasonal demand forecasting and planning
 
 ## Multi-Tenant Architecture Requirements
 
 ### Database-per-Tenant Strategy (Per product-manager-agent.md)
+
 ```typescript
 Pattern: Complete tenant isolation with separate databases
-Rationale: 
+Rationale:
   - GDPR compliance for European agricultural clients
   - Custom schemas per agricultural operation type
   - Easy backup/restore per client
@@ -180,6 +187,7 @@ Implementation Requirements:
 ```
 
 ### Tenant Management Implementation
+
 ```typescript
 // Example tenant-aware service pattern
 @Injectable()
@@ -192,21 +200,21 @@ export class TenantAwarePlantService {
   async getPlants(tenantId: string, userId: string) {
     // Verify tenant access before database query
     await this.tenantService.verifyTenantAccess(tenantId, userId);
-    
+
     // Use tenant-specific database connection
     const tenantDb = await this.prisma.getTenantDatabase(tenantId);
-    
+
     return tenantDb.plant.findMany({
-      where: { 
+      where: {
         tenantId,
         // Additional security: user can only see authorized plants
-        authorized: { some: { userId } }
+        authorized: { some: { userId } },
       },
       include: {
         growthStages: true,
-        environmentalData: { take: 10, orderBy: { createdAt: 'desc' } },
-        qualityChecks: true
-      }
+        environmentalData: { take: 10, orderBy: { createdAt: "desc" } },
+        qualityChecks: true,
+      },
     });
   }
 }
@@ -215,17 +223,18 @@ export class TenantAwarePlantService {
 ## Performance Requirements for Agricultural Scale
 
 ### Database Performance Targets (Per solo_developer_roadmap.md)
+
 ```typescript
 Query Performance:
   - Sub-100ms queries with 200k+ plant records per tenant
   - Optimized indexes for plant lifecycle queries
   - Efficient search across plant varieties, locations, growth stages
-  
+
 Concurrent User Support:
   - 10+ field workers per tenant accessing mobile API simultaneously
   - Real-time plant status updates across all users
   - Conflict resolution for simultaneous plant data updates
-  
+
 API Performance:
   - Plant creation: <500ms
   - Dashboard data loads: <2 seconds (critical for the frontend's skeleton-to-content transition)
@@ -234,6 +243,7 @@ API Performance:
 ```
 
 ### Required Database Optimizations
+
 ```sql
 -- Example agricultural-specific indexes
 CREATE INDEX idx_plants_lifecycle ON plants(tenant_id, growth_stage, created_at);
@@ -245,6 +255,7 @@ CREATE INDEX idx_quality_checks ON quality_checks(plant_id, check_type, status);
 ## Trial System Implementation
 
 ### Trial Management Requirements (Per solo_developer_roadmap.md)
+
 ```typescript
 Trial System Features:
   - Automated 30-day trial tenant provisioning
@@ -261,29 +272,30 @@ Business Conversion Tracking:
 ```
 
 ### Trial Implementation Pattern
+
 ```typescript
-@Controller('api/v1/trials')
+@Controller("api/v1/trials")
 export class TrialController {
-  @Post('provision')
-  @ApiOperation({ summary: 'Create new 30-day agricultural trial' })
+  @Post("provision")
+  @ApiOperation({ summary: "Create new 30-day agricultural trial" })
   async provisionTrial(@Body() dto: CreateTrialDto) {
     // Validate company agricultural profile
     await this.validateAgriculturalProfile(dto.companyInfo);
-    
+
     // Provision tenant database with agricultural schema
     const tenant = await this.tenantService.provisionTrialTenant({
       companyName: dto.companyName,
       agricultureType: dto.agricultureType, // greenhouse, field, hydroponic
       trialEndDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      features: this.getTrialFeatures()
+      features: this.getTrialFeatures(),
     });
-    
+
     // Seed with sample agricultural data
     await this.seedTrialData(tenant.id, dto.agricultureType);
-    
+
     // Setup trial monitoring and engagement tracking
     await this.setupTrialAnalytics(tenant.id);
-    
+
     return { tenantId: tenant.id, dashboardUrl: tenant.dashboardUrl };
   }
 }
@@ -292,6 +304,7 @@ export class TrialController {
 ## Enterprise Security & Compliance
 
 ### Security Implementation Requirements (Per tech_stack_guide.md)
+
 ```typescript
 Authentication & Authorization:
   - Multi-factor authentication for all users
@@ -307,6 +320,7 @@ Data Protection:
 ```
 
 ### Compliance Implementation
+
 ```typescript
 @Injectable()
 export class AuditService {
@@ -314,9 +328,9 @@ export class AuditService {
     tenantId: string,
     userId: string,
     action: AgriculturalAction,
-    entityType: 'plant' | 'supplier' | 'client' | 'order',
+    entityType: "plant" | "supplier" | "client" | "order",
     entityId: string,
-    changes: Record<string, any>
+    changes: Record<string, any>,
   ) {
     // Create audit trail for regulatory compliance
     await this.prisma.auditLog.create({
@@ -329,10 +343,13 @@ export class AuditService {
         changes: JSON.stringify(changes),
         timestamp: new Date(),
         ipAddress: this.request.ip,
-        userAgent: this.request.get('user-agent'),
+        userAgent: this.request.get("user-agent"),
         // Required for food safety traceability
-        regulatoryCompliance: this.generateComplianceMetadata(action, entityType)
-      }
+        regulatoryCompliance: this.generateComplianceMetadata(
+          action,
+          entityType,
+        ),
+      },
     });
   }
 }
@@ -341,17 +358,17 @@ export class AuditService {
 ## API Design Patterns
 
 ### Agricultural API Standards
+
 ```typescript
 // Plant Lifecycle Management API
-@Controller('api/v1/:tenantId/plants')
+@Controller("api/v1/:tenantId/plants")
 @UseGuards(TenantGuard, AuthGuard)
 export class PlantController {
-  
   @Get()
-  @ApiOperation({ summary: 'Get plants with agricultural filtering' })
+  @ApiOperation({ summary: "Get plants with agricultural filtering" })
   async getPlants(
-    @Param('tenantId') tenantId: string,
-    @Query() query: PlantQueryDto
+    @Param("tenantId") tenantId: string,
+    @Query() query: PlantQueryDto,
   ): Promise<PaginatedPlantResponse> {
     // Support complex agricultural queries
     const filters = {
@@ -359,28 +376,32 @@ export class PlantController {
       growthStage: query.growthStage,
       location: query.location,
       harvestDate: query.harvestDateRange,
-      healthStatus: query.healthStatus
+      healthStatus: query.healthStatus,
     };
-    
+
     return this.plantService.getPlants(tenantId, filters, query.pagination);
   }
 
   @Post()
-  @ApiOperation({ summary: 'Create new plant record' })
+  @ApiOperation({ summary: "Create new plant record" })
   async createPlant(
-    @Param('tenantId') tenantId: string,
+    @Param("tenantId") tenantId: string,
     @Body() dto: CreatePlantDto,
-    @Req() req: any
+    @Req() req: any,
   ): Promise<PlantResponse> {
     // Validate agricultural business rules
     await this.plantService.validatePlantCreation(tenantId, dto);
-    
+
     // Create plant with full audit trail
-    const plant = await this.plantService.createPlant(tenantId, dto, req.user.id);
-    
+    const plant = await this.plantService.createPlant(
+      tenantId,
+      dto,
+      req.user.id,
+    );
+
     // Trigger agricultural workflows (planting schedule, resource allocation)
     await this.workflowService.triggerPlantCreationWorkflows(plant);
-    
+
     return plant;
   }
 }
@@ -395,31 +416,31 @@ To maintain type safety across the entire platform, the data structures defined 
 3.  **Collaboration:** When creating or modifying DTOs or database entities, the backend agent must ensure they are clear and well-documented, as they will be consumed by the shared package agent to create contracts used by the frontend and for API testing.
 
 ### Background Job Processing (BullMQ Integration)
+
 ```typescript
-@Processor('agricultural-workflows')
+@Processor("agricultural-workflows")
 export class AgriculturalWorkflowProcessor {
-  
-  @Process('plant-growth-monitoring')
+  @Process("plant-growth-monitoring")
   async processGrowthMonitoring(job: Job<GrowthMonitoringData>) {
     const { tenantId, plantId } = job.data;
-    
+
     // Check growth stage transitions
     await this.checkGrowthStageProgress(tenantId, plantId);
-    
+
     // Generate alerts for critical conditions
     await this.generateGrowthAlerts(tenantId, plantId);
-    
+
     // Update agricultural forecasts
     await this.updateHarvestForecasts(tenantId, plantId);
   }
 
-  @Process('trial-engagement-tracking')
+  @Process("trial-engagement-tracking")
   async processTrialEngagement(job: Job<TrialEngagementData>) {
     const { tenantId, userId, action } = job.data;
-    
+
     // Update trial user engagement score
     await this.trialService.updateEngagementScore(tenantId, userId, action);
-    
+
     // Check for conversion triggers
     await this.trialService.checkConversionOpportunity(tenantId, userId);
   }
@@ -429,6 +450,7 @@ export class AgriculturalWorkflowProcessor {
 ## Database Schema Management with Prisma
 
 ### Agricultural Schema Design
+
 ```prisma
 // Example Prisma schema for agricultural entities
 model Plant {
@@ -439,27 +461,27 @@ model Plant {
   plantType   PlantType
   location    Location @relation(fields: [locationId], references: [id])
   locationId  String
-  
+
   // Agricultural lifecycle
   plantedDate     DateTime
   expectedHarvest DateTime?
   actualHarvest   DateTime?
   growthStage     GrowthStage @default(PLANTED)
-  
+
   // Environmental monitoring
   environmentalData EnvironmentalData[]
   qualityChecks     QualityCheck[]
-  
+
   // Supply chain
   supplier      Supplier? @relation(fields: [supplierId], references: [id])
   supplierId    String?
   batchNumber   String?
-  
+
   // Metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   createdBy String
-  
+
   @@index([tenantId, growthStage, createdAt])
   @@index([tenantId, locationId, variety])
 }
@@ -468,15 +490,15 @@ model EnvironmentalData {
   id          String   @id @default(cuid())
   plantId     String
   plant       Plant    @relation(fields: [plantId], references: [id])
-  
+
   temperature Float?
   humidity    Float?
   lightLevel  Float?
   soilMoisture Float?
-  
+
   recordedAt  DateTime @default(now())
   recordedBy  String
-  
+
   @@index([plantId, recordedAt])
 }
 ```
@@ -487,9 +509,9 @@ model EnvironmentalData {
 
 To ensure optimal performance and compatibility with serverless database environments (e.g., Vercel Postgres, Neon), the backend **must** use a Prisma adapter.
 
--   **Adapter**: `@prisma/adapter-mariadb`
--   **Configuration**: The connection is configured via a single `DATABASE_URL` environment variable.
--   **Implementation**: The `PrismaService` is instantiated with the adapter, which handles connection pooling and management.
+- **Adapter**: `@prisma/adapter-mariadb`
+- **Configuration**: The connection is configured via a single `DATABASE_URL` environment variable.
+- **Implementation**: The `PrismaService` is instantiated with the adapter, which handles connection pooling and management.
 
 This approach is critical for preventing connection exhaustion and ensuring resilient connections to databases that may "sleep".
 
@@ -497,13 +519,13 @@ This approach is critical for preventing connection exhaustion and ensuring resi
 
 ```typescript
 // src/infra/prisma/prisma.service.ts
-import { PrismaClient } from '@prisma/client';
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaClient } from "@prisma/client";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
 @Injectable()
 export class PrismaService extends PrismaClient {
   constructor(private configService: ConfigService) {
-    const url = configService.get<string>('config.database.databaseUrl');
+    const url = configService.get<string>("config.database.databaseUrl");
     const adapter = new PrismaMariaDb(url);
     super({ adapter });
   }
@@ -511,30 +533,33 @@ export class PrismaService extends PrismaClient {
 ```
 
 ### Migration Management
+
 ```typescript
 // Migration service for tenant database management
 @Injectable()
 export class MigrationService {
-  
   async migrateTenantDatabase(tenantId: string): Promise<void> {
     const tenantDbUrl = this.getTenantDatabaseUrl(tenantId);
-    
+
     // Run Prisma migrations for tenant
-    await this.prismaService.executeRaw(`
+    await this.prismaService.executeRaw(
+      `
       npx prisma migrate deploy --schema=./prisma/schema
-    `, { DATABASE_URL: tenantDbUrl });
-    
+    `,
+      { DATABASE_URL: tenantDbUrl },
+    );
+
     // Verify agricultural schema integrity
     await this.verifyAgriculturalSchema(tenantId);
   }
-  
+
   async createTenantDatabase(tenantId: string): Promise<void> {
     // Create isolated database for new tenant
     await this.databaseService.createDatabase(`plant_mgmt_${tenantId}`);
-    
+
     // Apply full agricultural schema
     await this.migrateTenantDatabase(tenantId);
-    
+
     // Seed with agricultural reference data
     await this.seedAgriculturalReferenceData(tenantId);
   }
@@ -544,8 +569,9 @@ export class MigrationService {
 ## Testing Requirements (Per tdd_cicd_guide.md)
 
 ### Unit Testing Pattern
+
 ```typescript
-describe('PlantService', () => {
+describe("PlantService", () => {
   let service: PlantService;
   let prisma: PrismaService;
 
@@ -555,22 +581,22 @@ describe('PlantService', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  describe('createPlant', () => {
-    it('creates plant with agricultural validation', async () => {
+  describe("createPlant", () => {
+    it("creates plant with agricultural validation", async () => {
       const plantData = {
-        name: 'Premium Tulip Red',
-        variety: 'tulip-red-premium',
-        plantType: 'FLOWER',
-        tenantId: 'test-greenhouse-1',
-        locationId: 'greenhouse-section-a'
+        name: "Premium Tulip Red",
+        variety: "tulip-red-premium",
+        plantType: "FLOWER",
+        tenantId: "test-greenhouse-1",
+        locationId: "greenhouse-section-a",
       };
 
       const result = await service.createPlant(plantData);
 
       expect(result).toMatchObject({
-        name: 'Premium Tulip Red',
-        growthStage: 'PLANTED',
-        plantedDate: expect.any(Date)
+        name: "Premium Tulip Red",
+        growthStage: "PLANTED",
+        plantedDate: expect.any(Date),
       });
 
       // Verify agricultural business rules
@@ -578,36 +604,38 @@ describe('PlantService', () => {
       expect(result.batchNumber).toMatch(/^TUL-\d{8}-\d{3}$/);
     });
 
-    it('validates planting season constraints', async () => {
+    it("validates planting season constraints", async () => {
       const offSeasonData = {
-        name: 'Winter Tulip',
-        variety: 'tulip-red',
-        plantType: 'FLOWER',
-        tenantId: 'test-greenhouse-1',
-        plantedDate: new Date('2024-08-15') // Off-season
+        name: "Winter Tulip",
+        variety: "tulip-red",
+        plantType: "FLOWER",
+        tenantId: "test-greenhouse-1",
+        plantedDate: new Date("2024-08-15"), // Off-season
       };
 
-      await expect(service.createPlant(offSeasonData))
-        .rejects.toThrow('Tulips cannot be planted in August');
+      await expect(service.createPlant(offSeasonData)).rejects.toThrow(
+        "Tulips cannot be planted in August",
+      );
     });
   });
 });
 ```
 
 ### Integration Testing for Agricultural Workflows
+
 ```typescript
-describe('Agricultural Workflow Integration', () => {
-  it('completes plant-to-harvest workflow', async () => {
-    const jwt = await getValidJWT('greenhouse-tenant-1', 'farm-manager');
+describe("Agricultural Workflow Integration", () => {
+  it("completes plant-to-harvest workflow", async () => {
+    const jwt = await getValidJWT("greenhouse-tenant-1", "farm-manager");
 
     // Create plant
     const plantResponse = await request(app.getHttpServer())
-      .post('/api/v1/greenhouse-tenant-1/plants')
-      .set('Authorization', `Bearer ${jwt}`)
+      .post("/api/v1/greenhouse-tenant-1/plants")
+      .set("Authorization", `Bearer ${jwt}`)
       .send({
-        name: 'Integration Test Tulip',
-        variety: 'tulip-red',
-        locationId: 'section-a-row-1'
+        name: "Integration Test Tulip",
+        variety: "tulip-red",
+        locationId: "section-a-row-1",
       })
       .expect(201);
 
@@ -616,28 +644,28 @@ describe('Agricultural Workflow Integration', () => {
     // Progress through growth stages
     await request(app.getHttpServer())
       .patch(`/api/v1/greenhouse-tenant-1/plants/${plantId}/growth-stage`)
-      .set('Authorization', `Bearer ${jwt}`)
-      .send({ stage: 'SPROUTING' })
+      .set("Authorization", `Bearer ${jwt}`)
+      .send({ stage: "SPROUTING" })
       .expect(200);
 
     // Record harvest
     await request(app.getHttpServer())
       .post(`/api/v1/greenhouse-tenant-1/plants/${plantId}/harvest`)
-      .set('Authorization', `Bearer ${jwt}`)
-      .send({ 
+      .set("Authorization", `Bearer ${jwt}`)
+      .send({
         harvestDate: new Date().toISOString(),
         quantity: 150,
-        quality: 'PREMIUM'
+        quality: "PREMIUM",
       })
       .expect(201);
 
     // Verify complete agricultural workflow
     const finalPlant = await request(app.getHttpServer())
       .get(`/api/v1/greenhouse-tenant-1/plants/${plantId}`)
-      .set('Authorization', `Bearer ${jwt}`)
+      .set("Authorization", `Bearer ${jwt}`)
       .expect(200);
 
-    expect(finalPlant.body.growthStage).toBe('HARVESTED');
+    expect(finalPlant.body.growthStage).toBe("HARVESTED");
     expect(finalPlant.body.harvestData).toBeDefined();
   });
 });
@@ -648,24 +676,28 @@ describe('Agricultural Workflow Integration', () => {
 Your implementations must deliver:
 
 **Production-Ready Agricultural Systems:**
+
 - Handle 200k+ plant records per tenant with sub-100ms queries
 - Support 10+ concurrent field workers with real-time updates
 - Process agricultural workflows (planting → harvest → distribution)
 - Maintain 99.9% uptime for agricultural operations
 
 **Enterprise Security & Compliance:**
+
 - Multi-tenant isolation with complete data separation
 - GDPR compliance for European agricultural operations
 - Food safety traceability audit trails
 - Secure API endpoints for mobile field workers
 
 **Business Model Integration:**
+
 - Trial system supporting 30-day full-featured evaluations
 - Usage analytics for trial-to-paid conversion optimization
 - Lead scoring based on agricultural workflow engagement
 - Automated conversion triggers for €50k+ enterprise contracts
 
 **Modern Agricultural Workflows:**
+
 - Real-time plant lifecycle tracking
 - Supply chain management with supplier integration
 - Client relationship management for wholesale buyers
@@ -674,18 +706,21 @@ Your implementations must deliver:
 ## Success Metrics
 
 **Technical Achievement:**
+
 - Database queries: <100ms with 200k+ plants per tenant
 - API response times: <200ms for mobile field operations
 - Concurrent users: 10+ per tenant without performance degradation
 - Multi-tenant isolation: Zero cross-tenant data access incidents
 
 **Business Impact:**
+
 - Trial conversion rate: >25% from trial to paid subscription
 - Enterprise contracts: €50k+ annual value per converted client
 - Time to first value: Trial users productive within 2 hours
 - Customer satisfaction: >90% retention rate for paying clients
 
 **Agricultural Domain Success:**
+
 - Complete plant lifecycle tracking from seed to harvest
 - Supply chain optimization reducing procurement costs by 15%
 - Quality control compliance meeting food safety regulations

@@ -1,0 +1,13 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="8" fill="oklch(0.9276 0.0058 264.5313)"/>
+  <text 
+    x="16" 
+    y="16" 
+    dominant-baseline="central" 
+    text-anchor="middle" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-size="28" 
+    font-weight="600"
+    fill="oklch(0.5854 0.2041 277.1173)"
+  >DM</text>
+</svg>

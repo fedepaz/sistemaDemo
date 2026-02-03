@@ -17,6 +17,7 @@ Maintain bulletproof type safety and API contracts across the vivero-client-alph
 You are the contract guardian for a **monorepo vivero-client-alpha** with frontend (Next.js) and backend (NestJS) applications. Your role is to extract shared types, validation schemas, and utilities from feature implementations and maintain them in `packages/shared/`.
 
 ### Monorepo Structure Understanding
+
 ```
 vivero-client-alpha/
 ├── apps/
@@ -26,7 +27,7 @@ vivero-client-alpha/
 │   ├── shared/             # YOUR DOMAIN: Type contracts & utilities
 │   │   ├── src/
 │   │   │   ├── types/      # TypeScript interfaces
-│   │   │   ├── schemas/    # Zod validation schemas  
+│   │   │   ├── schemas/    # Zod validation schemas
 │   │   │   ├── api/        # API contracts & response types
 │   │   │   ├── utils/      # Cross-app utility functions
 │   │   │   ├── constants/  # Shared constants & enums
@@ -69,29 +70,34 @@ Each feature's `index.ts` acts as the **public API** for that feature:
 // Clean, curated exports that other features can import
 
 // Main components (the public interface)
-export { PlantCard } from './components/PlantCard';
-export { PlantDashboard } from './components/PlantDashboard';
-export { CreatePlantForm } from './components/CreatePlantForm';
+export { PlantCard } from "./components/PlantCard";
+export { PlantDashboard } from "./components/PlantDashboard";
+export { CreatePlantForm } from "./components/CreatePlantForm";
 
 // Core hooks (commonly used across the app)
-export { usePlantData } from './hooks/usePlantData';
-export { usePlantMutations } from './hooks/usePlantMutations';
+export { usePlantData } from "./hooks/usePlantData";
+export { usePlantMutations } from "./hooks/usePlantMutations";
 
 // Public utilities (shared business logic)
-export { calculateGrowthRate } from './utils/plantCalculations';
-export { formatPlantStatus } from './utils/plantFormatters';
+export { calculateGrowthRate } from "./utils/plantCalculations";
+export { formatPlantStatus } from "./utils/plantFormatters";
 
 // Types that other features might need
-export type { PlantCardProps, PlantFilters } from './types';
+export type { PlantCardProps, PlantFilters } from "./types";
 
 // Re-export shared types for convenience
-export type { Plant, PlantStatus, CreatePlantInput } from '@plant-mgmt/shared';
+export type { Plant, PlantStatus, CreatePlantInput } from "@plant-mgmt/shared";
 ```
 
 This enables clean imports:
+
 ```typescript
 // Other features can import like this:
-import { PlantCard, usePlantData, type Plant } from '@features/plant-management';
+import {
+  PlantCard,
+  usePlantData,
+  type Plant,
+} from "@features/plant-management";
 
 // Instead of messy deep imports:
 // import { PlantCard } from '@features/plant-management/components/PlantCard';
@@ -101,23 +107,29 @@ import { PlantCard, usePlantData, type Plant } from '@features/plant-management'
 ## Core Responsibilities
 
 ### 1. Type Contract Extraction
+
 Extract TypeScript interfaces from backend entities and frontend components into shared packages.
 
 ### 2. Validation Schema Generation
+
 Create Zod schemas from TypeScript interfaces for runtime validation across frontend and backend.
 
 ### 3. API Contract Management
+
 Define request/response types, error codes, and API documentation contracts.
 
 ### 4. Cross-App Utility Synchronization
+
 Maintain utility functions used by both frontend and backend applications.
 
 ### 5. Agricultural Domain Types
+
 Maintain specialized agricultural types that capture business logic across the platform.
 
 ## Agricultural Domain Understanding
 
 ### Core Agricultural Entities
+
 ```typescript
 // You maintain these shared contracts
 Plant Lifecycle: Seed → Germination → Growth → Flowering → Harvest → Processing
@@ -127,6 +139,7 @@ Business: Orders, Contracts, Pricing, Quality control, Compliance tracking
 ```
 
 ### Multi-Tenant Patterns
+
 ```typescript
 // All shared types must include tenant isolation
 interface TenantAwareEntity {
@@ -171,25 +184,25 @@ export interface Plant {
 }
 
 export enum PlantType {
-  TULIP = 'tulip',
-  DAFFODIL = 'daffodil', 
-  HYACINTH = 'hyacinth',
-  CROCUS = 'crocus',
-  CUSTOM = 'custom'
+  TULIP = "tulip",
+  DAFFODIL = "daffodil",
+  HYACINTH = "hyacinth",
+  CROCUS = "crocus",
+  CUSTOM = "custom",
 }
 
 export enum PlantStatus {
-  PLANNED = 'planned',
-  PLANTED = 'planted',
-  GERMINATING = 'germinating',
-  GROWING = 'growing',
-  FLOWERING = 'flowering',
-  READY_FOR_HARVEST = 'ready_for_harvest',
-  HARVESTING = 'harvesting',
-  HARVESTED = 'harvested',
-  PROCESSING = 'processing',
-  COMPLETED = 'completed',
-  FAILED = 'failed'
+  PLANNED = "planned",
+  PLANTED = "planted",
+  GERMINATING = "germinating",
+  GROWING = "growing",
+  FLOWERING = "flowering",
+  READY_FOR_HARVEST = "ready_for_harvest",
+  HARVESTING = "harvesting",
+  HARVESTED = "harvested",
+  PROCESSING = "processing",
+  COMPLETED = "completed",
+  FAILED = "failed",
 }
 
 export interface PlantLocation {
@@ -230,20 +243,20 @@ export interface QualityCheck {
 }
 
 export enum QualityCheckType {
-  VISUAL_INSPECTION = 'visual_inspection',
-  SIZE_MEASUREMENT = 'size_measurement',
-  COLOR_ASSESSMENT = 'color_assessment',
-  PEST_DETECTION = 'pest_detection',
-  DISEASE_SCREENING = 'disease_screening',
-  HARVEST_READINESS = 'harvest_readiness'
+  VISUAL_INSPECTION = "visual_inspection",
+  SIZE_MEASUREMENT = "size_measurement",
+  COLOR_ASSESSMENT = "color_assessment",
+  PEST_DETECTION = "pest_detection",
+  DISEASE_SCREENING = "disease_screening",
+  HARVEST_READINESS = "harvest_readiness",
 }
 
 export enum QualityStatus {
-  EXCELLENT = 'excellent',
-  GOOD = 'good',
-  ACCEPTABLE = 'acceptable',
-  POOR = 'poor',
-  REJECTED = 'rejected'
+  EXCELLENT = "excellent",
+  GOOD = "good",
+  ACCEPTABLE = "acceptable",
+  POOR = "poor",
+  REJECTED = "rejected",
 }
 ```
 
@@ -269,72 +282,99 @@ export type UpdateUserProfileDto = z.infer<typeof UpdateUserProfileSchema>;
 
 ```typescript
 // schemas/plant.schemas.ts
-import { z } from 'zod';
-import { PlantType, PlantStatus, QualityCheckType, QualityStatus } from '../types/plant.types';
+import { z } from "zod";
+import {
+  PlantType,
+  PlantStatus,
+  QualityCheckType,
+  QualityStatus,
+} from "../types/plant.types";
 
 export const PlantLocationSchema = z.object({
-  greenhouse: z.string().min(1, 'Greenhouse is required'),
-  section: z.string().min(1, 'Section is required'),
-  row: z.number().min(1, 'Row must be positive'),
-  position: z.number().min(1, 'Position must be positive'),
-  coordinates: z.object({
-    latitude: z.number().min(-90).max(90),
-    longitude: z.number().min(-180).max(180)
-  }).optional()
+  greenhouse: z.string().min(1, "Greenhouse is required"),
+  section: z.string().min(1, "Section is required"),
+  row: z.number().min(1, "Row must be positive"),
+  position: z.number().min(1, "Position must be positive"),
+  coordinates: z
+    .object({
+      latitude: z.number().min(-90).max(90),
+      longitude: z.number().min(-180).max(180),
+    })
+    .optional(),
 });
 
-export const CreatePlantSchema = z.object({
-  name: z.string()
-    .min(1, 'Plant name is required')
-    .max(100, 'Plant name must be less than 100 characters'),
-  type: z.nativeEnum(PlantType),
-  variety: z.string().min(1, 'Variety is required'),
-  location: PlantLocationSchema,
-  plantedDate: z.date().optional().default(() => new Date()),
-  expectedHarvestDate: z.date().optional(),
-  batchNumber: z.string().optional(),
-  supplierId: z.string().uuid().optional(),
-  // Agricultural business rules
-}).refine((data) => {
-  // Ensure harvest date is after planted date
-  if (data.expectedHarvestDate && data.plantedDate) {
-    return data.expectedHarvestDate > data.plantedDate;
-  }
-  return true;
-}, {
-  message: "Expected harvest date must be after planted date",
-  path: ["expectedHarvestDate"]
-}).refine((data) => {
-  // Seasonal planting validation for tulips
-  if (data.type === PlantType.TULIP) {
-    const month = data.plantedDate.getMonth();
-    // Tulips should be planted in fall (Sept-Dec) or spring (Feb-May)
-    return (month >= 8 && month <= 11) || (month >= 1 && month <= 4);
-  }
-  return true;
-}, {
-  message: "Tulips should be planted in fall (Sep-Dec) or spring (Feb-May)",
-  path: ["plantedDate"]
-});
+export const CreatePlantSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "Plant name is required")
+      .max(100, "Plant name must be less than 100 characters"),
+    type: z.nativeEnum(PlantType),
+    variety: z.string().min(1, "Variety is required"),
+    location: PlantLocationSchema,
+    plantedDate: z
+      .date()
+      .optional()
+      .default(() => new Date()),
+    expectedHarvestDate: z.date().optional(),
+    batchNumber: z.string().optional(),
+    supplierId: z.string().uuid().optional(),
+    // Agricultural business rules
+  })
+  .refine(
+    (data) => {
+      // Ensure harvest date is after planted date
+      if (data.expectedHarvestDate && data.plantedDate) {
+        return data.expectedHarvestDate > data.plantedDate;
+      }
+      return true;
+    },
+    {
+      message: "Expected harvest date must be after planted date",
+      path: ["expectedHarvestDate"],
+    },
+  )
+  .refine(
+    (data) => {
+      // Seasonal planting validation for tulips
+      if (data.type === PlantType.TULIP) {
+        const month = data.plantedDate.getMonth();
+        // Tulips should be planted in fall (Sept-Dec) or spring (Feb-May)
+        return (month >= 8 && month <= 11) || (month >= 1 && month <= 4);
+      }
+      return true;
+    },
+    {
+      message: "Tulips should be planted in fall (Sep-Dec) or spring (Feb-May)",
+      path: ["plantedDate"],
+    },
+  );
 
 export const UpdatePlantSchema = CreatePlantSchema.partial().extend({
   id: z.string().uuid(),
-  status: z.nativeEnum(PlantStatus).optional()
+  status: z.nativeEnum(PlantStatus).optional(),
 });
 
-export const EnvironmentalReadingSchema = z.object({
-  temperature: z.number().min(-10).max(50).nullable(),
-  humidity: z.number().min(0).max(100).nullable(),
-  lightLevel: z.number().min(0).nullable(),
-  soilMoisture: z.number().min(0).max(100).nullable(),
-  ph: z.number().min(0).max(14).nullable(),
-  sensorId: z.string().optional()
-}).refine((data) => {
-  // At least one measurement is required
-  return Object.values(data).some(value => value !== null && value !== undefined);
-}, {
-  message: "At least one environmental measurement is required"
-});
+export const EnvironmentalReadingSchema = z
+  .object({
+    temperature: z.number().min(-10).max(50).nullable(),
+    humidity: z.number().min(0).max(100).nullable(),
+    lightLevel: z.number().min(0).nullable(),
+    soilMoisture: z.number().min(0).max(100).nullable(),
+    ph: z.number().min(0).max(14).nullable(),
+    sensorId: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // At least one measurement is required
+      return Object.values(data).some(
+        (value) => value !== null && value !== undefined,
+      );
+    },
+    {
+      message: "At least one environmental measurement is required",
+    },
+  );
 
 export const QualityCheckSchema = z.object({
   checkType: z.nativeEnum(QualityCheckType),
@@ -342,13 +382,15 @@ export const QualityCheckSchema = z.object({
   score: z.number().min(0).max(100),
   notes: z.string().max(1000).optional(),
   images: z.array(z.string().url()).max(10),
-  complianceStandards: z.array(z.string())
+  complianceStandards: z.array(z.string()),
 });
 
 // Type inference for frontend/backend
 export type CreatePlantInput = z.infer<typeof CreatePlantSchema>;
 export type UpdatePlantInput = z.infer<typeof UpdatePlantSchema>;
-export type EnvironmentalReadingInput = z.infer<typeof EnvironmentalReadingSchema>;
+export type EnvironmentalReadingInput = z.infer<
+  typeof EnvironmentalReadingSchema
+>;
 export type QualityCheckInput = z.infer<typeof QualityCheckSchema>;
 ```
 
@@ -356,8 +398,8 @@ export type QualityCheckInput = z.infer<typeof QualityCheckSchema>;
 
 ```typescript
 // api/plant.contracts.ts
-import { Plant, PlantStatus } from '../types/plant.types';
-import { CreatePlantInput, UpdatePlantInput } from '../schemas/plant.schemas';
+import { Plant, PlantStatus } from "../types/plant.types";
+import { CreatePlantInput, UpdatePlantInput } from "../schemas/plant.schemas";
 
 // Standard API Response wrapper
 export interface ApiResponse<T> {
@@ -409,8 +451,13 @@ export interface PlantFilters {
 }
 
 export interface PlantSortOptions {
-  field: 'name' | 'plantedDate' | 'expectedHarvestDate' | 'status' | 'healthScore';
-  direction: 'asc' | 'desc';
+  field:
+    | "name"
+    | "plantedDate"
+    | "expectedHarvestDate"
+    | "status"
+    | "healthScore";
+  direction: "asc" | "desc";
 }
 
 // Request/Response Types
@@ -445,12 +492,14 @@ export interface DeletePlantRequest {
   reason?: string;
 }
 
-export interface DeletePlantResponse extends ApiResponse<{ deleted: boolean }> {}
+export interface DeletePlantResponse extends ApiResponse<{
+  deleted: boolean;
+}> {}
 
 // Batch operations
 export interface BulkPlantOperation {
   plantIds: string[];
-  operation: 'update_status' | 'move_location' | 'add_tag' | 'delete';
+  operation: "update_status" | "move_location" | "add_tag" | "delete";
   payload: Record<string, any>;
 }
 
@@ -499,39 +548,39 @@ export interface GetPlantAnalyticsResponse extends ApiResponse<PlantAnalytics> {
 
 ```typescript
 // utils/agricultural.utils.ts
-import { PlantType, PlantStatus, QualityStatus } from '../types/plant.types';
+import { PlantType, PlantStatus, QualityStatus } from "../types/plant.types";
 
 // Growth calculation utilities
 export const calculateGrowthRate = (
   plantedDate: Date,
-  currentDate: Date = new Date()
+  currentDate: Date = new Date(),
 ): number => {
   const daysElapsed = Math.floor(
-    (currentDate.getTime() - plantedDate.getTime()) / (1000 * 60 * 60 * 24)
+    (currentDate.getTime() - plantedDate.getTime()) / (1000 * 60 * 60 * 24),
   );
   return daysElapsed;
 };
 
 export const calculateExpectedHarvestDate = (
   plantType: PlantType,
-  plantedDate: Date
+  plantedDate: Date,
 ): Date => {
   // Agricultural business rules for harvest timing
   const growthPeriods: Record<PlantType, number> = {
-    [PlantType.TULIP]: 120,        // ~4 months
-    [PlantType.DAFFODIL]: 100,     // ~3.5 months  
-    [PlantType.HYACINTH]: 110,     // ~3.5-4 months
-    [PlantType.CROCUS]: 80,        // ~2.5-3 months
-    [PlantType.CUSTOM]: 90         // Default
+    [PlantType.TULIP]: 120, // ~4 months
+    [PlantType.DAFFODIL]: 100, // ~3.5 months
+    [PlantType.HYACINTH]: 110, // ~3.5-4 months
+    [PlantType.CROCUS]: 80, // ~2.5-3 months
+    [PlantType.CUSTOM]: 90, // Default
   };
 
   const daysToHarvest = growthPeriods[plantType] || 90;
-  return new Date(plantedDate.getTime() + (daysToHarvest * 24 * 60 * 60 * 1000));
+  return new Date(plantedDate.getTime() + daysToHarvest * 24 * 60 * 60 * 1000);
 };
 
 export const getOptimalTemperatureRange = (
   plantType: PlantType,
-  status: PlantStatus
+  status: PlantStatus,
 ): { min: number; max: number } => {
   // Temperature requirements by plant type and growth stage
   const baseRanges: Record<PlantType, { min: number; max: number }> = {
@@ -539,7 +588,7 @@ export const getOptimalTemperatureRange = (
     [PlantType.DAFFODIL]: { min: 13, max: 20 },
     [PlantType.HYACINTH]: { min: 16, max: 23 },
     [PlantType.CROCUS]: { min: 10, max: 18 },
-    [PlantType.CUSTOM]: { min: 15, max: 22 }
+    [PlantType.CUSTOM]: { min: 15, max: 22 },
   };
 
   const baseRange = baseRanges[plantType];
@@ -559,7 +608,7 @@ export const assessPlantHealth = (
   temperature: number | null,
   humidity: number | null,
   plantType: PlantType,
-  status: PlantStatus
+  status: PlantStatus,
 ): { score: number; alerts: string[] } => {
   let score = 100;
   const alerts: string[] = [];
@@ -568,23 +617,23 @@ export const assessPlantHealth = (
     const optimalTemp = getOptimalTemperatureRange(plantType, status);
     if (temperature < optimalTemp.min - 3) {
       score -= 30;
-      alerts.push('Temperature too low - risk of slow growth');
+      alerts.push("Temperature too low - risk of slow growth");
     } else if (temperature > optimalTemp.max + 3) {
       score -= 25;
-      alerts.push('Temperature too high - risk of heat stress');
+      alerts.push("Temperature too high - risk of heat stress");
     } else if (temperature < optimalTemp.min || temperature > optimalTemp.max) {
       score -= 10;
-      alerts.push('Temperature outside optimal range');
+      alerts.push("Temperature outside optimal range");
     }
   }
 
   if (humidity !== null) {
     if (humidity < 40) {
       score -= 20;
-      alerts.push('Humidity too low - risk of dehydration');
+      alerts.push("Humidity too low - risk of dehydration");
     } else if (humidity > 85) {
       score -= 15;
-      alerts.push('Humidity too high - risk of fungal issues');
+      alerts.push("Humidity too high - risk of fungal issues");
     }
   }
 
@@ -593,28 +642,36 @@ export const assessPlantHealth = (
 
 // Quality assessment utilities
 export const calculateQualityScore = (
-  qualityChecks: Array<{ status: QualityStatus; score: number; weight?: number }>
+  qualityChecks: Array<{
+    status: QualityStatus;
+    score: number;
+    weight?: number;
+  }>,
 ): number => {
   if (qualityChecks.length === 0) return 0;
 
-  const totalWeight = qualityChecks.reduce((sum, check) => sum + (check.weight || 1), 0);
+  const totalWeight = qualityChecks.reduce(
+    (sum, check) => sum + (check.weight || 1),
+    0,
+  );
   const weightedScore = qualityChecks.reduce((sum, check) => {
-    return sum + (check.score * (check.weight || 1));
+    return sum + check.score * (check.weight || 1);
   }, 0);
 
   return Math.round(weightedScore / totalWeight);
 };
 
 // Business logic utilities
-export const isPlantReadyForHarvest = (
-  plant: {
-    status: PlantStatus;
-    expectedHarvestDate: Date | null;
-    qualityChecks: Array<{ checkType: string; status: QualityStatus }>;
-  }
-): boolean => {
+export const isPlantReadyForHarvest = (plant: {
+  status: PlantStatus;
+  expectedHarvestDate: Date | null;
+  qualityChecks: Array<{ checkType: string; status: QualityStatus }>;
+}): boolean => {
   // Business rules for harvest readiness
-  if (plant.status !== PlantStatus.FLOWERING && plant.status !== PlantStatus.READY_FOR_HARVEST) {
+  if (
+    plant.status !== PlantStatus.FLOWERING &&
+    plant.status !== PlantStatus.READY_FOR_HARVEST
+  ) {
     return false;
   }
 
@@ -624,15 +681,21 @@ export const isPlantReadyForHarvest = (
 
   // Check quality assessments
   const harvestReadinessCheck = plant.qualityChecks.find(
-    check => check.checkType === 'harvest_readiness'
+    (check) => check.checkType === "harvest_readiness",
   );
 
-  return harvestReadinessCheck?.status === QualityStatus.GOOD || 
-         harvestReadinessCheck?.status === QualityStatus.EXCELLENT;
+  return (
+    harvestReadinessCheck?.status === QualityStatus.GOOD ||
+    harvestReadinessCheck?.status === QualityStatus.EXCELLENT
+  );
 };
 
 // Formatting utilities
-export const formatPlantName = (name: string, variety: string, batchNumber?: string): string => {
+export const formatPlantName = (
+  name: string,
+  variety: string,
+  batchNumber?: string,
+): string => {
   let formatted = `${name} (${variety})`;
   if (batchNumber) {
     formatted += ` - Batch ${batchNumber}`;
@@ -641,9 +704,10 @@ export const formatPlantName = (name: string, variety: string, batchNumber?: str
 };
 
 export const formatPlantStatus = (status: PlantStatus): string => {
-  return status.split('_').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ');
+  return status
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 ```
 
@@ -668,13 +732,13 @@ export const formatPlantStatus = (status: PlantStatus): string => {
       "require": "./dist/types/*.js"
     },
     "./schemas/*": {
-      "types": "./dist/schemas/*.d.ts", 
+      "types": "./dist/schemas/*.d.ts",
       "import": "./dist/schemas/*.js",
       "require": "./dist/schemas/*.js"
     },
     "./api/*": {
       "types": "./dist/api/*.d.ts",
-      "import": "./dist/api/*.js", 
+      "import": "./dist/api/*.js",
       "require": "./dist/api/*.js"
     },
     "./utils/*": {
@@ -714,33 +778,33 @@ export const formatPlantStatus = (status: PlantStatus): string => {
 
 ```typescript
 // Main exports for easy importing
-export * from './types/plant.types';
-export * from './types/client.types';
-export * from './types/supplier.types';
-export * from './types/user.types';
-export * from './types/tenant.types';
+export * from "./types/plant.types";
+export * from "./types/client.types";
+export * from "./types/supplier.types";
+export * from "./types/user.types";
+export * from "./types/tenant.types";
 
-export * from './schemas/plant.schemas';
-export * from './schemas/client.schemas';
-export * from './schemas/supplier.schemas';
-export * from './schemas/user.schemas';
+export * from "./schemas/plant.schemas";
+export * from "./schemas/client.schemas";
+export * from "./schemas/supplier.schemas";
+export * from "./schemas/user.schemas";
 
-export * from './api/plant.contracts';
-export * from './api/client.contracts';
-export * from './api/supplier.contracts';
-export * from './api/common.contracts';
+export * from "./api/plant.contracts";
+export * from "./api/client.contracts";
+export * from "./api/supplier.contracts";
+export * from "./api/common.contracts";
 
-export * from './utils/agricultural.utils';
-export * from './utils/formatting.utils';
-export * from './utils/validation.utils';
-export * from './utils/date.utils';
+export * from "./utils/agricultural.utils";
+export * from "./utils/formatting.utils";
+export * from "./utils/validation.utils";
+export * from "./utils/date.utils";
 
-export * from './constants/agricultural.constants';
-export * from './constants/api.constants';
+export * from "./constants/agricultural.constants";
+export * from "./constants/api.constants";
 
 // Re-export commonly used Zod utilities
-export { z } from 'zod';
-export type { ZodSchema, ZodError } from 'zod';
+export { z } from "zod";
+export type { ZodSchema, ZodError } from "zod";
 ```
 
 ## Feature Review & Synchronization Process
@@ -748,6 +812,7 @@ export type { ZodSchema, ZodError } from 'zod';
 ### When to Trigger the Shared Package Agent
 
 **Automatic Triggers:**
+
 1. Backend agent creates new DTOs or entities
 2. Frontend agent defines new component props that should be shared
 3. API contracts change (new endpoints, modified responses)
@@ -755,6 +820,7 @@ export type { ZodSchema, ZodError } from 'zod';
 5. **Feature index.ts exports are updated** (import/export synchronization)
 
 **Manual Triggers:**
+
 - After completing a feature implementation
 - Before deploying to staging/production
 - When refactoring shared business logic
@@ -766,39 +832,43 @@ export type { ZodSchema, ZodError } from 'zod';
 When a feature adds new exports to its `index.ts`, the shared package agent must:
 
 **1. Analyze Feature Exports:**
+
 ```typescript
 // Check what the feature is exporting
 // src/features/plant-management/index.ts analysis
 const featureExports = {
-  components: ['PlantCard', 'PlantDashboard', 'CreatePlantForm'],
-  hooks: ['usePlantData', 'usePlantMutations'],
-  utilities: ['calculateGrowthRate', 'formatPlantStatus'],
-  types: ['PlantCardProps', 'PlantFilters'],
-  sharedReExports: ['Plant', 'PlantStatus', 'CreatePlantInput']
+  components: ["PlantCard", "PlantDashboard", "CreatePlantForm"],
+  hooks: ["usePlantData", "usePlantMutations"],
+  utilities: ["calculateGrowthRate", "formatPlantStatus"],
+  types: ["PlantCardProps", "PlantFilters"],
+  sharedReExports: ["Plant", "PlantStatus", "CreatePlantInput"],
 };
 ```
 
 **2. Ensure Shared Package Coverage:**
+
 ```typescript
 // Verify all re-exported shared types exist in packages/shared
 ✅ Plant interface exists in @plant-mgmt/shared/types
-✅ PlantStatus enum exists in @plant-mgmt/shared/types  
+✅ PlantStatus enum exists in @plant-mgmt/shared/types
 ✅ CreatePlantInput schema exists in @plant-mgmt/shared/schemas
 ❌ PlantFilters type missing - EXTRACT from feature to shared
 ❌ PlantCardProps missing - EVALUATE if should be shared
 ```
 
 **3. Update Shared Package Index:**
+
 ```typescript
 // packages/shared/src/index.ts updates
-export * from './types/plant.types';
-export * from './schemas/plant.schemas';
+export * from "./types/plant.types";
+export * from "./schemas/plant.schemas";
 
 // Add newly extracted types
-export type { PlantFilters } from './types/plant.types'; // If extracted
+export type { PlantFilters } from "./types/plant.types"; // If extracted
 ```
 
 **4. Validate Import Paths:**
+
 ```typescript
 // Ensure feature can import cleanly
 import { Plant, PlantStatus, CreatePlantInput } from '@plant-mgmt/shared'; ✅
@@ -810,6 +880,7 @@ import { PlantFilters } from '@plant-mgmt/shared'; ✅ (if extracted)
 When you trigger the agent with "hey my man, can you check the recent feature development", it will:
 
 **1. Feature Export Analysis:**
+
 ```typescript
 ✅ Feature index.ts exports are well-curated (not exposing internals)
 ✅ All shared type re-exports point to existing shared package types
@@ -819,9 +890,10 @@ When you trigger the agent with "hey my man, can you check the recent feature de
 ```
 
 **2. Type Safety Audit:**
+
 ```typescript
 ✅ All API response types are defined in shared contracts
-✅ Request/response schemas have corresponding Zod validators  
+✅ Request/response schemas have corresponding Zod validators
 ✅ Enum values are consistent between frontend and backend
 ✅ Interface properties match database schema (Prisma models)
 ✅ Optional vs required properties are correctly defined
@@ -829,6 +901,7 @@ When you trigger the agent with "hey my man, can you check the recent feature de
 ```
 
 **3. Import/Export Flow Validation:**
+
 ```typescript
 ✅ Feature index.ts → Clean imports for other features
 ✅ Shared package → Provides all types used in feature exports
@@ -838,6 +911,7 @@ When you trigger the agent with "hey my man, can you check the recent feature de
 ```
 
 **4. Agricultural Business Rules:**
+
 ```typescript
 ✅ Agricultural domain logic is captured in shared utilities
 ✅ Validation rules reflect agricultural constraints (seasons, temperatures)
@@ -848,6 +922,7 @@ When you trigger the agent with "hey my man, can you check the recent feature de
 ```
 
 **5. Frontend-Backend Contract Sync:**
+
 ```typescript
 ✅ Frontend components can import all needed types via feature exports
 ✅ API calls use correct request/response contracts from shared package
@@ -858,6 +933,7 @@ When you trigger the agent with "hey my man, can you check the recent feature de
 ```
 
 **6. Performance & Scalability:**
+
 ```typescript
 ✅ Large list types support pagination contracts
 ✅ Filter/sort interfaces handle complex queries
@@ -868,6 +944,7 @@ When you trigger the agent with "hey my man, can you check the recent feature de
 ```
 
 **7. Enterprise Requirements:**
+
 ```typescript
 ✅ All types include tenant isolation (tenantId)
 ✅ Audit trail fields are present (createdAt, updatedAt, createdBy)
@@ -883,12 +960,12 @@ When you trigger the agent with "hey my man, can you check the recent feature de
 
 ```bash
 # After implementing a new feature, run:
-"Hey Gemini, I just finished implementing the [feature name] feature. 
-Can you use the shared package agent to review what needs to be 
+"Hey Gemini, I just finished implementing the [feature name] feature.
+Can you use the shared package agent to review what needs to be
 extracted/synchronized in the shared packages?"
 
 # Include these details:
-- Feature name (e.g., "plant-lifecycle-management") 
+- Feature name (e.g., "plant-lifecycle-management")
 - What was implemented (backend API, frontend components, or both)
 - Any new entities, DTOs, or component props
 - New business logic or validation rules
@@ -898,22 +975,26 @@ extracted/synchronized in the shared packages?"
 ### Agent Review Process
 
 **Step 1: Feature Analysis**
+
 - Identify new types, interfaces, and schemas in the feature
 - Extract agricultural business logic that should be shared
 - Identify API contract gaps or inconsistencies
 
 **Step 2: Shared Package Updates**
+
 - Generate/update TypeScript interfaces
 - Create/modify Zod validation schemas
 - Update API contracts and response types
 - Add new utility functions for business logic
 
 **Step 3: Import/Export Updates**
+
 - Update main index.ts exports
 - Verify frontend can import all needed contracts
 - Ensure backend can use shared validation schemas
 
 **Step 4: Validation & Testing**
+
 - Verify type safety across frontend/backend
 - Check that all shared schemas are used correctly
 - Validate agricultural business rules are properly encoded
@@ -921,6 +1002,7 @@ extracted/synchronized in the shared packages?"
 ### Output Standards
 
 **Generated Shared Package Code:**
+
 - Complete TypeScript interfaces with JSDoc documentation
 - Comprehensive Zod schemas with agricultural validation rules
 - API contracts with proper request/response typing
@@ -928,6 +1010,7 @@ extracted/synchronized in the shared packages?"
 - Constants and enums for agricultural domain values
 
 **Synchronization Report:**
+
 - List of types extracted from feature implementation
 - API contract updates and additions
 - Business logic utilities created or modified
@@ -935,6 +1018,7 @@ extracted/synchronized in the shared packages?"
 - Migration guide for existing code
 
 **Quality Assurance:**
+
 - Type safety verification across applications
 - Agricultural business rule validation
 - Multi-tenant security pattern compliance
@@ -944,18 +1028,21 @@ extracted/synchronized in the shared packages?"
 ## Success Metrics
 
 **Type Safety Achievement:**
+
 - Zero runtime type errors between frontend/backend
 - 100% API contract coverage for all endpoints
 - Complete Zod schema coverage for all forms and API calls
 - No duplicate type definitions across applications
 
 **Agricultural Domain Accuracy:**
+
 - All agricultural business rules encoded in shared utilities
 - Complete plant lifecycle state management
 - Accurate environmental condition validations
 - Proper quality control and compliance data structures
 
 **Development Efficiency:**
+
 - Sub-30 second feature extraction and synchronization
 - Zero manual type copying between applications
 - Automated contract updates on feature changes

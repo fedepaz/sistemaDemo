@@ -15,7 +15,8 @@ export default defineConfig({
       },
     },
   },
-  css: { // Explicitly configure CSS for Vitest
+  css: {
+    // Explicitly configure CSS for Vitest
     postcss: {
       config: "./postcss.config.test.mjs", // Correctly point to the test-specific config file
     },

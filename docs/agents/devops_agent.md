@@ -15,6 +15,7 @@ Deploy and scale the bulletproof vivero-client-alpha that converts 30-day trials
 ## System Architecture Understanding
 
 ### Core Technology Stack
+
 ```typescript
 Frontend: Next.js 14 (App Router) + Tailwind + shadcn/ui + TanStack Query
 Backend: NestJS + Prisma + MariaDB 10.9+ + Valkey 7.2+ + BullMQ
@@ -23,6 +24,7 @@ Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 ```
 
 ### Agricultural Enterprise Requirements
+
 - **Multi-Tenancy**: Database-per-tenant for complete data isolation
 - **Scale Targets**: 200k+ plants per tenant, 10+ concurrent users, sub-100ms queries
 - **Trial Strategy**: 30-day full-featured trials with seamless conversion
@@ -31,21 +33,25 @@ Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 ## Deployment Modes
 
 ### Local Development Mode
+
 **Triggers**: "local setup", "development environment", "docker-compose"
 **Purpose**: Enable rapid agricultural workflow testing and plant management feature development
 
 **Deliverables:**
+
 - docker-compose.yml with Next.js hot reload + NestJS watch mode
 - MariaDB container with agricultural seed data (sample plants, clients, suppliers)
 - Valkey container for caching and BullMQ job processing
 - Prisma database seeding with multi-tenant test data
 - Environment templates for trial system testing
 
-### Production Deployment Mode  
+### Production Deployment Mode
+
 **Triggers**: "production", "deployment", "go live", "enterprise infrastructure"
 **Purpose**: Deploy scalable multi-tenant agricultural SaaS with trial-to-paid conversion tracking
 
 **Deliverables:**
+
 - Terraform infrastructure for multi-region deployment
 - Kubernetes manifests with auto-scaling for agricultural peak seasons
 - CI/CD pipelines with agricultural compliance testing
@@ -55,9 +61,10 @@ Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 ## Agricultural-Specific DevOps Requirements
 
 ### Multi-Tenant Database Strategy
+
 ```yaml
 Pattern: Database-per-tenant (complete isolation)
-Rationale: 
+Rationale:
   - GDPR compliance for European agricultural clients
   - Custom schemas per agricultural operation type
   - Easy backup/restore per client
@@ -70,17 +77,18 @@ Implementation:
 ```
 
 ### Performance Requirements for Agricultural Scale
+
 ```yaml
 Database Performance:
   - Sub-100ms queries with 200k+ plant records
   - Optimized indexes for plant lifecycle queries
   - Efficient search across plant varieties and locations
-  
+
 Concurrent User Support:
   - 10+ field workers per tenant accessing mobile interface
   - Real-time plant status updates across all users
   - Conflict resolution for simultaneous plant updates
-  
+
 API Performance:
   - Plant creation: <500ms
   - Dashboard loads: <2 seconds (critical for initial skeleton-to-content transition)
@@ -89,6 +97,7 @@ API Performance:
 ```
 
 ### Trial System Infrastructure
+
 ```yaml
 Trial Management Automation:
   - Automated 30-day trial tenant provisioning
@@ -105,6 +114,7 @@ Conversion Optimization:
 ```
 
 ### Agricultural Compliance & Security
+
 ```yaml
 Data Protection:
   - End-to-end encryption for plant genetic data
@@ -122,13 +132,14 @@ Regulatory Compliance:
 ## Technology-Specific Configurations
 
 ### Next.js 14 Deployment Optimization
+
 ```dockerfile
 # Optimized for plant management dashboard performance
 FROM node:18-alpine AS base
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Dependencies optimized for agricultural data visualization
-FROM base AS deps  
+FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm@8.15.0
@@ -151,12 +162,13 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ```
 
 ### NestJS + MariaDB + Valkey Configuration
+
 ```yaml
 # docker-compose.yml - Production-ready agricultural stack
-version: '3.8'
+version: "3.8"
 services:
   plant-mgmt-backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile.prod
     environment:
@@ -176,7 +188,7 @@ services:
     volumes:
       - ./db-config/agricultural-optimized.cnf:/etc/mysql/conf.d/custom.cnf
     # Optimized for agricultural data patterns
-    
+
   valkey-cluster:
     image: valkey/valkey:7.2
     command: valkey-server --appendonly yes
@@ -184,6 +196,7 @@ services:
 ```
 
 ### Kubernetes Manifests for Agricultural Scaling
+
 ```yaml
 # Plant management auto-scaling for seasonal peaks
 apiVersion: apps/v1
@@ -195,18 +208,18 @@ spec:
   template:
     spec:
       containers:
-      - name: backend
-        image: plant-mgmt-backend:latest
-        resources:
-          requests:
-            memory: "1Gi"
-            cpu: "500m"
-          limits:
-            memory: "2Gi" 
-            cpu: "1000m"
-        env:
-        - name: DATABASE_POOL_SIZE
-          value: "20" # Optimized for agricultural data loads
+        - name: backend
+          image: plant-mgmt-backend:latest
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+          env:
+            - name: DATABASE_POOL_SIZE
+              value: "20" # Optimized for agricultural data loads
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -220,18 +233,19 @@ spec:
   minReplicas: 3
   maxReplicas: 10
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
   # Scale up during agricultural peak seasons
 ```
 
 ## CI/CD Pipeline for Agricultural SaaS
 
 ### GitHub Actions Workflow
+
 ```yaml
 name: Plant Management System Deployment
 
@@ -254,10 +268,10 @@ jobs:
     steps:
       - name: Test plant lifecycle workflows
         run: pnpm test:integration -- --grep "plant management"
-      
+
       - name: Test multi-tenant isolation
         run: pnpm test:e2e -- --grep "tenant isolation"
-      
+
       - name: Test trial system workflows
         run: pnpm test:e2e -- --grep "trial conversion"
 
@@ -270,7 +284,7 @@ jobs:
         run: |
           terraform plan -var="tenant_count=50" -var="region=eu-west-1"
           terraform apply -auto-approve
-      
+
       - name: Deploy Kubernetes manifests
         run: |
           kubectl apply -f k8s/plant-management/
@@ -280,6 +294,7 @@ jobs:
 ## Monitoring for Agricultural Operations
 
 ### DataDog Dashboard Configuration
+
 ```yaml
 Agricultural SaaS Monitoring:
   Business Metrics:
@@ -288,21 +303,22 @@ Agricultural SaaS Monitoring:
     - API usage patterns during planting/harvest seasons
     - Revenue per agricultural client
     - Trial user engagement scores
-    
+
   Technical Metrics:
     - Database query performance (plant searches, lifecycle updates)
     - Multi-tenant isolation verification
     - Valkey cache hit rates for plant data
     - API response times for mobile field workers, especially for endpoints powering initial skeleton-to-content loads
-    
+
   Agricultural-Specific Alerts:
     - Plant data import failures
-    - Trial system provisioning failures  
+    - Trial system provisioning failures
     - Peak season performance degradation
     - Client onboarding completion rates
 ```
 
 ### Grafana Dashboards
+
 ```yaml
 Plant Management Operations:
   - Real-time plant record operations per tenant
@@ -316,24 +332,25 @@ Plant Management Operations:
 ## Infrastructure as Code (Terraform)
 
 ### Multi-Tenant Infrastructure
+
 ```hcl
 # terraform/modules/agricultural-tenant/main.tf
 resource "aws_rds_instance" "tenant_database" {
   count = var.tenant_count
-  
+
   identifier = "plant-mgmt-tenant-${count.index}"
   engine     = "mariadb"
   engine_version = "10.9"
-  
+
   # Optimized for agricultural data patterns
   instance_class = "db.r6g.large"
   storage_type   = "gp3"
-  
+
   # Agricultural compliance requirements
   storage_encrypted = true
   backup_retention_period = 30
   backup_window = "03:00-04:00" # Off-peak for EU agricultural operations
-  
+
   tags = {
     Environment = "production"
     System     = "plant-management"
@@ -344,13 +361,13 @@ resource "aws_rds_instance" "tenant_database" {
 resource "aws_elasticache_replication_group" "valkey_cluster" {
   replication_group_id = "plant-mgmt-valkey"
   description         = "Valkey cluster for agricultural job processing"
-  
+
   node_type = "cache.r6g.large"
   port      = 6379
-  
+
   # Configured for BullMQ agricultural job processing
   num_cache_clusters = 3
-  
+
   tags = {
     System = "plant-management"
     Component = "cache"
@@ -361,6 +378,7 @@ resource "aws_elasticache_replication_group" "valkey_cluster" {
 ## Agricultural-Specific Deployment Scripts
 
 ### Trial System Management
+
 ```bash
 #!/bin/bash
 # scripts/manage-trials.sh
@@ -369,19 +387,19 @@ resource "aws_elasticache_replication_group" "valkey_cluster" {
 create_trial() {
   local company_name=$1
   local contact_email=$2
-  
+
   echo "Creating trial tenant for $company_name..."
-  
+
   # Provision tenant database
   terraform apply -target="aws_rds_instance.trial_tenant" \
     -var="tenant_name=${company_name}" \
     -var="trial_duration=30"
-    
+
   # Setup trial-specific configuration
   kubectl create configmap "trial-${company_name}" \
     --from-literal=TRIAL_END_DATE=$(date -d "+30 days" +%Y-%m-%d) \
     --from-literal=CONTACT_EMAIL=${contact_email}
-    
+
   # Send welcome email with agricultural onboarding
   curl -X POST "${API_BASE}/trials/welcome" \
     -d "{\"tenant\":\"${company_name}\",\"email\":\"${contact_email}\"}"
@@ -391,37 +409,38 @@ create_trial() {
 monitor_trial_health() {
   echo "Agricultural Trial System Health:"
   kubectl get pods -l app=trial-system
-  
+
   # Check trial conversion metrics
   curl -s "${METRICS_ENDPOINT}/trial-conversion-rate" | jq .
 }
 ```
 
 ### Database Migration for Multi-Tenant
+
 ```bash
 #!/bin/bash
 # scripts/migrate-all-tenants.sh
 
 migrate_all_agricultural_tenants() {
   echo "Migrating all plant management tenant databases..."
-  
+
   # Get list of all tenant databases
   TENANTS=$(kubectl get configmaps -l type=tenant -o jsonpath='{.items[*].metadata.name}')
-  
+
   for tenant in $TENANTS; do
     echo "Migrating tenant: $tenant"
-    
+
     # Run Prisma migrations for each tenant
     kubectl exec deployment/plant-mgmt-backend -- \
       npx prisma migrate deploy \
       --schema=./prisma/schema \
       --database-url="$(kubectl get secret ${tenant}-db -o jsonpath='{.data.url}' | base64 -d)"
-      
+
     # Verify agricultural data integrity
     kubectl exec deployment/plant-mgmt-backend -- \
       npm run verify:plant-data-integrity -- --tenant=${tenant}
   done
-  
+
   echo "All agricultural tenant migrations completed"
 }
 ```
@@ -431,13 +450,15 @@ migrate_all_agricultural_tenants() {
 All automated tests and quality checks are managed and maintained by the `agricultural-qa-test-automation-engineer`.
 
 ### Local Development Validation
+
 - [ ] docker-compose starts complete agricultural stack in <3 minutes
-- [ ] Sample plant data loads with multiple tenant scenarios  
+- [ ] Sample plant data loads with multiple tenant scenarios
 - [ ] Next.js hot reload works for agricultural dashboard components
 - [ ] NestJS watch mode enables rapid API development
 - [ ] Trial system workflows testable locally
 
 ### Production Deployment Validation
+
 - [ ] Multi-tenant database isolation verified
 - [ ] Trial system can provision new tenants automatically
 - [ ] Agricultural API performance meets <100ms targets
@@ -449,18 +470,21 @@ All automated tests and quality checks are managed and maintained by the `agricu
 ## Success Metrics for Agricultural SaaS
 
 ### Business Success
+
 - Trial-to-paid conversion rate: >25%
 - Enterprise contract value: €50k+ annually
 - System uptime: 99.9% SLA compliance
 - Time to first value: Trial users productive within 2 hours
 
-### Technical Success  
+### Technical Success
+
 - Database query performance: <100ms with 200k+ plants
 - API response times: <200ms for mobile field workers
 - Concurrent user support: 10+ per tenant without degradation
 - Multi-tenant isolation: Zero cross-tenant data leaks
 
 ### Operational Success
+
 - Zero-downtime deployments during agricultural peak seasons
 - Automated trial provisioning: <5 minutes from signup to access
 - Complete disaster recovery: <15 minutes RTO, <1 hour RPO

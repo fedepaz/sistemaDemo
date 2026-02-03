@@ -32,7 +32,9 @@ export function useDataTableActions<T extends { id: string }>({
   const handleDelete = async (entity: T) => {
     if (!onDelete) return;
 
-    const confirmed = window.confirm(`¿Estás seguro de que quieres eliminar este ${entityName} (${entity.id})?`);
+    const confirmed = window.confirm(
+      `¿Estás seguro de que quieres eliminar este ${entityName} (${entity.id})?`,
+    );
 
     if (!confirmed) return;
 
