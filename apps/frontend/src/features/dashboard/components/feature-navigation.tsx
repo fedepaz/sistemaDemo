@@ -1,4 +1,5 @@
 // src/features/dashboard/components/feature-navigation.tsx
+"use client";
 
 import { FeatureCard } from "@/components/data-display/feature-card";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
@@ -38,7 +39,7 @@ function FeatureNavigation() {
   }, [permissions]);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-2">
       {featureCards.map((card) => (
         <FeatureCard
           key={card.title}

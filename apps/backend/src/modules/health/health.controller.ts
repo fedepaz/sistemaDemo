@@ -4,6 +4,9 @@ import { Controller, Get, Logger } from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { Public } from '../../shared/decorators/public.decorator';
 
+let lastDBCheck = 0;
+let dbStatus: 'connected' | 'disconnected' = 'connected';
+
 @Controller('health')
 export class HealthController {
   private readonly logger = new Logger(HealthController.name);
@@ -11,35 +14,23 @@ export class HealthController {
   @Get()
   @Public()
   async healthCheck() {
-    try {
-      // ACTUAL DATABASE CONNECTIVITY TEST
-      await this.prisma.$queryRaw`SELECT 1`;
-
-      return {
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        database: 'connected',
-        version: process.env.npm_package_version || 'development',
-        environment: process.env.NODE_ENV || 'development',
-      };
-    } catch (error) {
-      if (error instanceof Error) {
-        this.logger.error('Database health check failed', error.stack);
-        return {
-          status: 'degraded',
-          timestamp: new Date().toISOString(),
-          database: 'disconnected',
-          error: error.message,
-        };
-      } else {
+    const now = Date.now();
+    if (now - lastDBCheck > 30_000) {
+      try {
+        await this.prisma.$executeRaw`SELECT 1`;
+        dbStatus = 'connected';
+      } catch (error) {
         this.logger.error('Database health check failed', error);
-        return {
-          status: 'degraded',
-          timestamp: new Date().toISOString(),
-          database: 'disconnected',
-        };
+        dbStatus = 'disconnected';
       }
+      lastDBCheck = now;
     }
+    this.logger.log('Database health check result:', dbStatus);
+    return {
+      status: dbStatus === 'connected' ? 'ok' : 'degraded',
+      timestamp: new Date().toISOString(),
+      database: dbStatus,
+    };
   }
 
   @Get('auth')

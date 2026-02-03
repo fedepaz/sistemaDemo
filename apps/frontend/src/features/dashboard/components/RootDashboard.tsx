@@ -5,34 +5,31 @@ import { Suspense } from "react";
 import DashboardKPI from "./dashboard-kpi";
 import FeatureNavigation from "./feature-navigation";
 import DashboardAlerts from "./dashboard-alerts";
-import RecentActivity from "./recent-activity";
 import { DashboardKPISkeleton } from "./dashboard-kpi-skeleton";
 import { FeatureNavigationSkeleton } from "./feature-navigation-skeleton";
 import { DashboardAlertsSkeleton } from "./dashboard-alerts-skeleton";
-import { RecentActivitySkeleton } from "./recent-activity-skeleton";
 
 export function RootDashboard() {
   return (
-    <>
-      <Suspense fallback={<DashboardKPISkeleton />}>
-        <DashboardKPI />
-      </Suspense>
+    <div className="flex flex-col h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] lg:h-[calc(100vh-2rem)] p-4 gap-4 overflow-hidden">
+      <div className="shrink-0">
+        <Suspense fallback={<DashboardKPISkeleton />}>
+          <DashboardKPI />
+        </Suspense>
+      </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-4 min-h-0">
+        <div className="lg:col-span-3 min-h-0 overflow-auto">
           <Suspense fallback={<FeatureNavigationSkeleton />}>
             <FeatureNavigation />
           </Suspense>
         </div>
-        <div className="space-y-6">
+        <div className="lg:col-span-1 min-h-0 overflow-auto">
           <Suspense fallback={<DashboardAlertsSkeleton />}>
             <DashboardAlerts />
           </Suspense>
-          <Suspense fallback={<RecentActivitySkeleton />}>
-            <RecentActivity />
-          </Suspense>
         </div>
       </div>
-    </>
+    </div>
   );
 }
