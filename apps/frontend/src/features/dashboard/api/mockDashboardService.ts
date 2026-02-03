@@ -1,52 +1,75 @@
 //src/features/dashboard/api/mockDashboardService.ts
 
 import {
-  DashboardKpiInterface,
-  AlertInterface,
+  ClimateKpiInterface,
+  CurrencyRateInterface,
   RecentActivityInterface,
 } from "../types";
 
-const generateKpi = (): DashboardKpiInterface => {
-  return {
-    totalPlants: 1500,
-    activePlants: 500,
-    totalClients: 200,
-    activeClients: 200,
-    openInvoices: 100,
-    monthlyRevenue: 100000,
-    pendingOrders: 50,
-    activeUsers: 25,
-  };
+const generateKpi = (): ClimateKpiInterface[] => {
+  return [
+    {
+      label: "Temperatura",
+      value: "24.5",
+      unit: "°C",
+
+      trend: "up",
+      trendValue: "+1.2°C",
+    },
+    {
+      label: "Humedad",
+      value: "68",
+      unit: "%",
+
+      trend: "stable",
+      trendValue: "0%",
+    },
+    {
+      label: "Luz Solar",
+      value: "850",
+      unit: "lux",
+
+      trend: "down",
+      trendValue: "-120 lux",
+    },
+    {
+      label: "Viento",
+      value: "12",
+      unit: "km/h",
+
+      trend: "up",
+      trendValue: "+3 km/h",
+    },
+  ];
 };
 
-const generateAlert = (count: number): AlertInterface[] => {
-  const types: AlertInterface["type"][] = ["critical", "warning", "info"];
-  const messages = [
-    "Stock limitado",
-    "Nueva orden recibida",
-    "Nuevo cliente registrado",
-    "Factura recibida",
-    "Sistema en mantenimiento",
-    "Usuario eliminado",
+const generateAlert = (): CurrencyRateInterface[] => {
+  return [
+    {
+      name: "Dólar Oficial",
+      code: "USD",
+      buyRate: 1055.0,
+      sellRate: 1095.0,
+      variation: 5.0,
+      variationPercent: 0.46,
+    },
+    {
+      name: "Dólar Blue",
+      code: "BLUE",
+      buyRate: 1205.0,
+      sellRate: 1225.0,
+      variation: -10.0,
+      variationPercent: -0.81,
+    },
+    {
+      name: "Euro",
+      code: "EUR",
+      buyRate: 1145.0,
+      sellRate: 1185.0,
+      variation: 8.0,
+      variationPercent: 0.68,
+    },
   ];
-
-  const locations = [
-    // Provinces of Argentina
-    "Sucursal Buenos Aires",
-    "Sucursal Catamarca",
-    "Sucursal Chaco",
-    "Sucursal Chubut",
-    "Sucursal Corrientes",
-    "Sucursal Entre Rios",
-    "Sucursal Formosa",
-  ];
-  return Array.from({ length: count }, (_, i) => ({
-    id: `alert-${i + 1}`,
-    type: types[Math.floor(Math.random() * types.length)],
-    messageKey: messages[Math.floor(Math.random() * messages.length)],
-    location: locations[Math.floor(Math.random() * locations.length)],
-    timestamp: new Date(),
-  }));
 };
 
 const generateRecentActivity = (count: number): RecentActivityInterface[] => {
@@ -76,18 +99,18 @@ const generateRecentActivity = (count: number): RecentActivityInterface[] => {
 // for now we'll just return mock data
 
 const dashboardData = generateKpi();
-const alertsData = generateAlert(3);
+const alertsData = generateAlert();
 const recentActivityData = generateRecentActivity(4);
 
 export const mockDashboardService = {
-  async fetchKPIs(): Promise<DashboardKpiInterface> {
+  async fetchKPIs(): Promise<ClimateKpiInterface[]> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000)); // Replace API response with KPIs
     // Simulate receiving KPIs from the API
     return dashboardData;
   },
 
-  async fetchAlerts(): Promise<AlertInterface[]> {
+  async fetchAlerts(): Promise<CurrencyRateInterface[]> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000)); // Replace API response with alerts
     // Simulate receiving alerts from the API
