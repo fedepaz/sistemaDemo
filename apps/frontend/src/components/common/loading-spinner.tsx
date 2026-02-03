@@ -23,8 +23,8 @@ function getRandomMessage() {
 }
 
 export function LoadingSpinner() {
-  const [currentMessage, setCurrentMessage] = useState(() =>
-    getRandomMessage(),
+  const [currentMessage, setCurrentMessage] = useState(
+    () => "Actualizando biblioteca de Winamp...",
   );
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export function LoadingSpinner() {
         <div className="flex flex-col items-center gap-3 max-w-sm px-6">
           <p
             className={cn(
-              "text-sm font-medium text-muted-foreground text-center transition-all duration-300",
+              "text-base font-medium text-muted-foreground text-center transition-all duration-300",
               "opacity-100 translate-y-0",
             )}
           >

@@ -1,22 +1,19 @@
 //src/features/dashboard/types.ts
 
-interface DashboardKpiInterface {
-  totalPlants: number;
-  activePlants: number;
-  totalClients: number;
-  activeClients: number;
-  openInvoices: number;
-  monthlyRevenue: number;
-  pendingOrders: number;
-  activeUsers: number;
+interface ClimateKpiInterface {
+  label: string;
+  value: string;
+  unit: string;
+  icon?: React.ReactNode;
+  trend?: "up" | "down" | "stable";
+  trendValue?: string;
 }
 
-interface AlertInterface {
-  id: string;
-  type: "critical" | "warning" | "info";
-  messageKey: string;
-  location: string;
-  timestamp: Date;
+interface CurrencyRateInterface {
+  name: string;
+  code: string;
+  buyRate: number;
+  sellRate: number;
 }
 
 interface RecentActivityInterface {
@@ -26,4 +23,8 @@ interface RecentActivityInterface {
   timestamp: Date;
 }
 
-export type { DashboardKpiInterface, AlertInterface, RecentActivityInterface };
+export type {
+  ClimateKpiInterface,
+  CurrencyRateInterface,
+  RecentActivityInterface,
+};

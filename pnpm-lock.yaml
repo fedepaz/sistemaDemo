@@ -315,13 +315,16 @@ importers:
         version: 0.544.0(react@19.1.0)
       next:
         specifier: ^16.1.6
-        version: 16.1.6(@babel/core@7.28.6)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
+        version: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
       next-intl:
         specifier: ^4.6.1
         version: 4.6.1(next@16.1.6)(react@19.1.0)(typescript@5.9.3)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0)(react@19.1.0)
+      openmeteo:
+        specifier: ^1.2.3
+        version: 1.2.3
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -552,6 +555,7 @@ packages:
       '@babel/helper-validator-identifier': 7.28.5
       js-tokens: 4.0.0
       picocolors: 1.1.1
+    dev: true
 
   /@babel/code-frame@7.29.0:
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -586,6 +590,7 @@ packages:
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@babel/core@7.29.0:
     resolution: {integrity: sha512-CGOfOJqWjg2qW/Mb6zNsDm+u5vFQ8DxXfbM09z69p5Z6+mE1ikP2jUXw+j42Pf1XTYED2Rni5f95npYeuwMDQA==}
@@ -608,7 +613,6 @@ packages:
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/generator@7.28.6:
     resolution: {integrity: sha512-lOoVRwADj8hjf7al89tvQ2a1lf53Z+7tiXMgpZJL3maQPDxh0DgLMN62B2MKUOFcoodBHLMbDM6WAbKgNy5Suw==}
@@ -619,6 +623,7 @@ packages:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
       jsesc: 3.1.0
+    dev: true
 
   /@babel/generator@7.29.0:
     resolution: {integrity: sha512-vSH118/wwM/pLR38g/Sgk05sNtro6TlTJKuiMXDaZqPUfjTFcudpCOt00IhOfj+1BFAX+UFAlzCU+6WXr3GLFQ==}
@@ -665,6 +670,7 @@ packages:
       '@babel/traverse': 7.29.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@babel/helper-module-transforms@7.28.6(@babel/core@7.29.0):
     resolution: {integrity: sha512-67oXFAYr2cDLDVGLXTEABjdBJZ6drElUSI7WKp70NrpyISso3plG9SAGEF6y7zbha/wOzUByWWTJvEDVNIUGcA==}
@@ -678,7 +684,6 @@ packages:
       '@babel/traverse': 7.29.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/helper-plugin-utils@7.28.6:
     resolution: {integrity: sha512-S9gzZ/bz83GRysI7gAD4wPT/AI3uCnY+9xn+Mx/KPs2JwHJIz1W8PZkg2cqyt3RNOBM8ejcXhV6y8Og7ly/Dug==}
@@ -710,6 +715,7 @@ packages:
     hasBin: true
     dependencies:
       '@babel/types': 7.29.0
+    dev: true
 
   /@babel/parser@7.29.0:
     resolution: {integrity: sha512-IyDgFV5GeDUVX4YdF/3CPULtVGSXXMLh1xVIgdCgxApktqnQV0r7/8Nqthg+8YLGaAtdyIlo2qIdZrbCv4+7ww==}
@@ -922,6 +928,7 @@ packages:
       debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@babel/traverse@7.29.0:
     resolution: {integrity: sha512-4HPiQr0X7+waHfyXPZpWPfWL/J7dcN1mx9gL6WdQVMbPnF3+ZhSMs8tCxN7oHddJE9fhNE7+lxdnlyemKfJRuA==}
@@ -943,6 +950,7 @@ packages:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
+    dev: true
 
   /@babel/types@7.29.0:
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
@@ -3054,6 +3062,13 @@ packages:
     hasBin: true
     dependencies:
       consola: 3.4.2
+
+  /@openmeteo/sdk@1.25.0:
+    resolution: {integrity: sha512-tpX2d/HOPn95NIU+/IU1VFFzOM3m/PqSpPSJnWuGQGEW5GogB50xUOUMrsD2N/6LCMy12e3cZEQd6c3Gb0lmtA==}
+    engines: {node: '>=12.0'}
+    dependencies:
+      flatbuffers: 25.9.23
+    dev: false
 
   /@parcel/watcher-android-arm64@2.5.4:
     resolution: {integrity: sha512-hoh0vx4v+b3BNI7Cjoy2/B0ARqcwVNrzN/n7DLq9ZB4I3lrsvhrkCViJyfTj/Qi5xM9YFiH4AmHGK6pgH1ss7g==}
@@ -6205,7 +6220,7 @@ packages:
       react:
         optional: true
     dependencies:
-      next: 16.1.6(@babel/core@7.28.6)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
+      next: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
       react: 19.1.0
       server-only: 0.0.1
     dev: false
@@ -8874,6 +8889,10 @@ packages:
       keyv: 4.5.4
     dev: true
 
+  /flatbuffers@25.9.23:
+    resolution: {integrity: sha512-MI1qs7Lo4Syw0EOzUl0xjs2lsoeqFku44KpngfIduHBYvzm8h2+7K8YMQh1JtVVVrUvhLpNwqVi4DERegUJhPQ==}
+    dev: false
+
   /flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
     dev: true
@@ -8984,7 +9003,7 @@ packages:
     peerDependencies:
       next: '>=13.2.0'
     dependencies:
-      next: 16.1.6(@babel/core@7.28.6)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
+      next: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
     dev: false
 
   /generate-function@2.3.1:
@@ -10917,7 +10936,7 @@ packages:
       '@parcel/watcher': 2.5.4
       '@swc/core': 1.15.8
       negotiator: 1.0.0
-      next: 16.1.6(@babel/core@7.28.6)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
+      next: 16.1.6(@babel/core@7.29.0)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0)
       next-intl-swc-plugin-extractor: 4.7.0
       po-parser: 2.1.1
       react: 19.1.0
@@ -10937,7 +10956,7 @@ packages:
       react-dom: 19.1.0(react@19.1.0)
     dev: false
 
-  /next@16.1.6(@babel/core@7.28.6)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0):
+  /next@16.1.6(@babel/core@7.29.0)(@playwright/test@1.57.0)(react-dom@19.1.0)(react@19.1.0):
     resolution: {integrity: sha512-hkyRkcu5x/41KoqnROkfTm2pZVbKxvbZRuNvKXLRXxs3VfyO0WhY50TQS40EuKO9SW3rBj/sF3WbVwDACeMZyw==}
     engines: {node: '>=20.9.0'}
     hasBin: true
@@ -10966,7 +10985,7 @@ packages:
       postcss: 8.4.31
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
-      styled-jsx: 5.1.6(@babel/core@7.28.6)(react@19.1.0)
+      styled-jsx: 5.1.6(@babel/core@7.29.0)(react@19.1.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.1.6
       '@next/swc-darwin-x64': 16.1.6
@@ -11138,6 +11157,14 @@ packages:
     dependencies:
       mimic-fn: 2.1.0
     dev: true
+
+  /openmeteo@1.2.3:
+    resolution: {integrity: sha512-3updmgCMnCAAjAgV3RfhMdIBPi/43RtbjQ4CizHGn52RP9SpgmVCDRpun+Ex75NG3jTF3pZp+d1BPlP9DWMHiQ==}
+    engines: {node: '>=12.0'}
+    dependencies:
+      '@openmeteo/sdk': 1.25.0
+      flatbuffers: 25.9.23
+    dev: false
 
   /optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -12591,7 +12618,7 @@ packages:
     dependencies:
       '@tokenizer/token': 0.3.0
 
-  /styled-jsx@5.1.6(@babel/core@7.28.6)(react@19.1.0):
+  /styled-jsx@5.1.6(@babel/core@7.29.0)(react@19.1.0):
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
@@ -12604,7 +12631,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
-      '@babel/core': 7.28.6
+      '@babel/core': 7.29.0
       client-only: 0.0.1
       react: 19.1.0
     dev: false
