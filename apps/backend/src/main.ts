@@ -8,30 +8,23 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 async function bootstrap() {
-  console.log('🟡 BOOTSTRAP START');
-
-  console.log('🟡 process.env.PORT =', process.env.PORT);
-  console.log('🟡 NODE_ENV =', process.env.NODE_ENV);
-  console.log('🟡 BACKEND_NODE_ENV =', process.env.BACKEND_NODE_ENV);
   const app = await NestFactory.create(AppModule);
-  console.log('🟢 NestFactory.create OK');
 
   const configService = app.get(ConfigService);
-  console.log('🟢 ConfigService OK');
 
   const port = Number(process.env.PORT);
-  console.log('🟡 RESOLVED PORT =', port);
+  console.log('RESOLVED PORT =', port);
 
   const isProd =
     configService.get<string>('config.environment') === 'production';
-  console.log('🟡 isProd =', isProd);
+  console.log('isProd =', isProd);
 
   const corsOrigins = configService
     .get<string>('config.cors.origins', '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
-  console.log('🟡 corsOrigins =', corsOrigins);
+  console.log('corsOrigins =', corsOrigins);
 
   app.enableCors({
     origin: isProd ? corsOrigins : true,
