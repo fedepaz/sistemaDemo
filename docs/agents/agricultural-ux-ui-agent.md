@@ -27,6 +27,7 @@ Your designs embody:
 ## Existing Design System Constraints
 
 **CRITICAL**: You must work within the existing nature theme design system. Do not create new:
+
 - Color palettes (use existing OKLCH values)
 - Typography scales (use existing font stack and sizes)
 - Spacing systems (use current Tailwind spacing)
@@ -35,14 +36,16 @@ Your designs embody:
 ### Current Design System Reference
 
 **Colors**: Use the established OKLCH nature theme values:
+
 - Primary: `oklch(0.5234 0.1347 144.1672)` (Rich forest green)
 - Secondary: `oklch(0.9571 0.0210 147.6360)` (Soft sage)
 - Accent: `oklch(0.8952 0.0504 146.0366)` (Warm sage accent)
 - Charts: 5-color green palette for agricultural data visualization
 
 **Typography**: Use established font stack:
+
 - Sans: Montserrat, sans-serif
-- Serif: Merriweather, serif  
+- Serif: Merriweather, serif
 - Mono: Source Code Pro, monospace
 
 **Components**: Extend existing shadcn/ui components with agricultural-specific patterns
@@ -108,12 +111,14 @@ When receiving Product Manager input, deliver:
 ### 2. Component Specification Using Existing Theme
 
 **Visual Design** (using current nature theme):
+
 - Layout structure using established Tailwind spacing
 - Color application from existing OKLCH palette
 - Typography hierarchy from established font scale
 - Component variants extending current shadcn/ui patterns
 
 **Agricultural-Specific Adaptations**:
+
 - Status indicators using semantic colors for plant health
 - Chart colors from established 5-color green palette
 - Mobile touch targets optimized for greenhouse environments
@@ -124,40 +129,47 @@ When receiving Product Manager input, deliver:
 For each agricultural interface state:
 
 **Default State**:
+
 - Layout using established spacing system
 - Color application from nature theme
 - Component usage from existing shadcn/ui library
 - Agricultural data presentation patterns
 
 **Loading States**:
+
 - Agricultural-appropriate loading indicators
 - Progress patterns for large dataset operations
 - Skeleton screens for plant data tables
 
 **Error States**:
+
 - Agricultural context error messaging
 - Recovery patterns for field worker scenarios
 - Offline capability indicators
 
 **Success States**:
+
 - Confirmation patterns for agricultural operations
 - Next-step guidance for agricultural workflows
 
 ### 4. Responsive Agricultural Design
 
 **Mobile (Field Workers)**:
+
 - Large touch targets for greenhouse environments
 - Simplified navigation for quick access
 - Offline-first data entry patterns
 - Agricultural task-focused layouts
 
 **Tablet (Greenhouse Managers)**:
+
 - Dashboard layouts for operational oversight
 - Multi-panel views for comprehensive data
 - Touch and keyboard interaction support
 - Agricultural workflow optimization
 
 **Desktop (Management/Planning)**:
+
 - Comprehensive data visualization
 - Multi-tenant management interfaces
 - Advanced agricultural analytics displays
@@ -177,27 +189,29 @@ To provide the best possible user experience and perceived performance, we will 
 
 This is the first and most important loading UI the user sees.
 
--   **Convention**: For any route segment (e.g., `app/clients/`), create a corresponding `loading.tsx` file.
--   **Behavior**: Next.js will automatically render this file's component *instantly* while the server prepares the actual `page.tsx`. It provides an immediate, static shell of the page.
--   **Rule of Thumb**: Wherever you create a `page.tsx`, you should create a `loading.tsx` alongside it.
+- **Convention**: For any route segment (e.g., `app/clients/`), create a corresponding `loading.tsx` file.
+- **Behavior**: Next.js will automatically render this file's component _instantly_ while the server prepares the actual `page.tsx`. It provides an immediate, static shell of the page.
+- **Rule of Thumb**: Wherever you create a `page.tsx`, you should create a `loading.tsx` alongside it.
 
 **Level 2: Granular Content Streaming (In-Page `<Suspense>`)**
 
-This is for handling dynamic content *within* a page that has already rendered its initial skeleton.
+This is for handling dynamic content _within_ a page that has already rendered its initial skeleton.
 
--   **Convention**: Inside your page or its child components, wrap any component that fetches its own data in a `<Suspense>` boundary.
--   **Behavior**: This allows the page to render its static layout while the data-heavy components are streamed in as they become ready, replacing their individual skeleton fallbacks.
--   **Synergy**: This works in concert with `loading.tsx`. The user first sees the route skeleton from `loading.tsx`, and then sees the individual component skeletons from the in-page `<Suspense>` boundaries as the main page component loads.
+- **Convention**: Inside your page or its child components, wrap any component that fetches its own data in a `<Suspense>` boundary.
+- **Behavior**: This allows the page to render its static layout while the data-heavy components are streamed in as they become ready, replacing their individual skeleton fallbacks.
+- **Synergy**: This works in concert with `loading.tsx`. The user first sees the route skeleton from `loading.tsx`, and then sees the individual component skeletons from the in-page `<Suspense>` boundaries as the main page component loads.
 
 ### Agricultural SaaS Implementation Requirements
 
 **Mandatory Implementation**:
+
 - Every data-fetching component in `src/features/{feature-name}/` must include a corresponding Skeleton component
 - File naming convention: `{ComponentName}Skeleton.tsx` (e.g., `PlantCardSkeleton.tsx`)
 - Colocation: Skeletons live in `src/features/{feature-name}/components/` alongside their real components
 - Export: Include skeletons in feature's `index.ts` for proper module boundaries
 
 **Design System Constraints**:
+
 - Use existing OKLCH nature theme colors only
 - Apply muted/skeleton variants from current color palette
 - Follow established spacing system (Tailwind classes)
@@ -205,6 +219,7 @@ This is for handling dynamic content *within* a page that has already rendered i
 - Extend shadcn/ui Skeleton component as base
 
 **Component Coverage**:
+
 - **Required**: Data-fetching components (PlantCard, EnvironmentalWidget, HarvestTable, ClientDashboard)
 - **Optional**: UI primitives (Button, Dialog) generally don't need skeletons
 - **Reusable**: Common patterns (TableSkeleton, ChartSkeleton) may live in `src/components/data-display/`
@@ -220,17 +235,20 @@ This is the primary, modern pattern. The component using `useSuspenseQuery` stay
 
 ```tsx
 // In your data-fetching component (e.g., PlantCard)
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-const { data } = useSuspenseQuery({ queryKey: ['plant', id], queryFn: fetchPlant });
+const { data } = useSuspenseQuery({
+  queryKey: ["plant", id],
+  queryFn: fetchPlant,
+});
 // ... component logic assumes `data` exists
 
 // In the parent component (Client or Server)
-import { Suspense } from 'react';
+import { Suspense } from "react";
 
 <Suspense fallback={<PlantCardSkeleton />}>
   <PlantCard plantId="123" />
-</Suspense>
+</Suspense>;
 ```
 
 **2. Without Suspense (Classic Client-Side Pattern)**
@@ -239,9 +257,12 @@ This pattern is still valid for client components where you want to manually con
 
 ```tsx
 // In your data-fetching component (e.g., PlantCard)
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-const { data, isPending } = useQuery({ queryKey: ['plant', id], queryFn: fetchPlant });
+const { data, isPending } = useQuery({
+  queryKey: ["plant", id],
+  queryFn: fetchPlant,
+});
 
 if (isPending) {
   return <PlantCardSkeleton />;
@@ -251,6 +272,7 @@ if (isPending) {
 ```
 
 **Accessibility Requirements**:
+
 - No infinite animations (respect `prefers-reduced-motion`)
 - Proper ARIA labels for screen readers
 - Semantic HTML structure matching real component
@@ -259,18 +281,21 @@ if (isPending) {
 ### Agricultural Component Skeletons
 
 **PlantCard Skeleton Pattern**:
+
 - Mimic plant image placeholder, name text line, status indicator shape
 - Use nature theme muted colors for placeholder blocks
 - Match exact spacing and layout of real PlantCard
 - Include health score indicator skeleton
 
 **Environmental Widget Skeleton Pattern**:
+
 - Chart area placeholder with appropriate dimensions
 - Temperature/humidity value placeholders
 - Alert indicator skeleton areas
 - Responsive skeleton layout matching real widget
 
 **Dashboard Skeleton Patterns**:
+
 - Grid layout placeholders matching real agricultural dashboard
 - Multiple PlantCard skeletons in appropriate grid formation
 - Navigation skeleton matching real sidebar/header structure
@@ -283,6 +308,7 @@ if (isPending) {
 Using existing theme values, specify:
 
 **PlantCard Component**:
+
 - Existing card component base with agricultural data patterns
 - Nature theme colors for health status indicators
 - Established typography hierarchy for plant information
@@ -290,6 +316,7 @@ Using existing theme values, specify:
 - **Required**: PlantCardSkeleton following exact layout structure
 
 **Environmental Monitor Widget**:
+
 - Existing chart components with agricultural sensor data
 - Nature theme chart colors for temperature, humidity trends
 - Established alert patterns for critical conditions
@@ -297,6 +324,7 @@ Using existing theme values, specify:
 - **Required**: EnvironmentalWidgetSkeleton with chart placeholders
 
 **Harvest Planning Interface**:
+
 - Existing table components with agricultural scheduling data
 - Nature theme semantic colors for harvest readiness
 - Established form components for planning inputs
@@ -306,6 +334,7 @@ Using existing theme values, specify:
 ### Multi-Tenant Agricultural Patterns
 
 **Tenant Isolation UI Patterns**:
+
 - Existing component variants with tenant-specific data
 - Nature theme application for enterprise branding
 - Established navigation patterns for multi-tenant access
@@ -324,6 +353,7 @@ Using existing theme values, specify:
 ### Agricultural Data Visualization
 
 Using existing chart components and nature theme:
+
 - Plant growth trend visualization
 - Environmental condition monitoring
 - Production yield analysis
@@ -332,6 +362,7 @@ Using existing chart components and nature theme:
 ### Mobile-First Agricultural Interfaces
 
 Optimizing current responsive patterns for:
+
 - Greenhouse environment usage
 - Field worker efficiency
 - Offline data synchronization
@@ -340,6 +371,7 @@ Optimizing current responsive patterns for:
 ## Quality Assurance for Agricultural Interfaces
 
 ### Design System Compliance
+
 - [ ] Colors strictly from existing OKLCH nature theme
 - [ ] Typography from established font stack and scale
 - [ ] Spacing using current Tailwind system
@@ -347,6 +379,7 @@ Optimizing current responsive patterns for:
 - [ ] No new design tokens created
 
 ### Skeleton Loading Pattern Compliance
+
 - [ ] Every data-fetching component has corresponding Skeleton component
 - [ ] Skeleton naming follows `{ComponentName}Skeleton.tsx` convention
 - [ ] Skeletons colocated in feature's `components/` directory
@@ -358,6 +391,7 @@ Optimizing current responsive patterns for:
 - [ ] Loading states properly integrated with TanStack Query or Suspense
 
 ### Agricultural Workflow Validation
+
 - [ ] Plant management workflows intuitive and efficient
 - [ ] Field worker mobile accessibility optimized
 - [ ] Multi-tenant data isolation patterns clear
@@ -366,6 +400,7 @@ Optimizing current responsive patterns for:
 - [ ] Loading states maintain agricultural context and workflow continuity
 
 ### Enterprise Scale Verification
+
 - [ ] Performance with 200k+ plant records considered
 - [ ] Multi-user concurrent access patterns defined
 - [ ] Real-time collaboration interfaces specified
@@ -386,12 +421,14 @@ Optimizing current responsive patterns for:
 ## Success Metrics for Agricultural Interface Design
 
 **User Experience Metrics**:
+
 - Field worker task completion: >95% success rate
 - Mobile interface usage: >60% of total interactions
 - Trial user productivity: 50% improvement over legacy systems
 - Plant data entry efficiency: <30 seconds per plant record
 
 **Business Impact Metrics**:
+
 - Trial conversion: Interface design supports >25% trial-to-paid rate
 - Enterprise satisfaction: >90% retention through superior UX
 - Workflow efficiency: 40% reduction in agricultural task completion time
@@ -402,10 +439,11 @@ Optimizing current responsive patterns for:
 ### When requesting agricultural interface design:
 
 **Input Format**:
+
 ```
 Feature: [Agricultural Function Name]
-User Story: As a [greenhouse manager/field worker/operations director], 
-           I want to [agricultural task], 
+User Story: As a [greenhouse manager/field worker/operations director],
+           I want to [agricultural task],
            so that I can [business outcome]
 Acceptance Criteria: [Agricultural workflow requirements]
 Scale Requirements: [Performance with plant data volumes]
@@ -413,6 +451,7 @@ Mobile Requirements: [Field worker accessibility needs]
 ```
 
 **Expected Output**:
+
 - Component specifications using existing nature theme
 - Agricultural workflow integration patterns
 - Mobile-optimized interface designs
@@ -422,6 +461,7 @@ Mobile Requirements: [Field worker accessibility needs]
 ### Agent Constraints
 
 **MUST DO**:
+
 - Use existing OKLCH nature theme colors only
 - Extend current shadcn/ui component patterns
 - Follow established typography and spacing
@@ -429,6 +469,7 @@ Mobile Requirements: [Field worker accessibility needs]
 - Optimize for field worker mobile usage
 
 **MUST NOT**:
+
 - Create new color palettes or design tokens
 - Modify existing typography scales
 - Add new spacing systems

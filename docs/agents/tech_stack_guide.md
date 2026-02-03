@@ -1,6 +1,7 @@
 # TECH-STACK.md - vivero-client-alpha
 
 ## 🎯 Mission Statement
+
 Build a bulletproof, enterprise-grade plant management system that converts 30-day trials into €50k+ annual contracts while you sleep peacefully knowing nothing will break at 3 AM.
 
 ---
@@ -8,6 +9,7 @@ Build a bulletproof, enterprise-grade plant management system that converts 30-d
 ## 🏗️ Core Technology Stack
 
 ### Frontend Stack
+
 ```typescript
 Framework: Next.js 14+ (App Router)
 ├── UI Foundation: Tailwind CSS
@@ -24,6 +26,7 @@ Framework: Next.js 14+ (App Router)
 ```
 
 ### Backend Stack
+
 ```typescript
 Framework: NestJS (TypeScript-first)
 ├── Database ORM: Prisma
@@ -38,6 +41,7 @@ Framework: NestJS (TypeScript-first)
 ```
 
 ### Infrastructure & DevOps
+
 ```yaml
 Package Manager: pnpm 8+
 Container Runtime: Docker + Docker Compose
@@ -54,6 +58,7 @@ CDN: Cloudflare / AWS CloudFront
 ```
 
 ### Testing Stack
+
 ```typescript
 Unit Testing: Vitest + Testing Library
 Integration Testing: Jest + Supertest
@@ -68,40 +73,41 @@ Coverage: Vitest coverage (80%+ required)
 ## 📦 Package.json Dependencies
 
 ### Frontend Dependencies
+
 ```json
 {
   "dependencies": {
     "next": "^14.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    
+
     "tailwindcss": "^3.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "tailwind-merge": "^2.2.0",
-    
+
     // shadcn/ui dependencies
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-select": "^2.0.0",
-    
+
     // Icons
     "lucide-react": "^0.263.0",
-    
+
     "react-hook-form": "^7.48.0",
     "zod": "^3.22.0",
     "@hookform/resolvers": "^3.3.0",
-    
+
     "@tanstack/react-query": "^5.17.0",
     "@tanstack/react-table": "^8.11.0",
-    
+
     "ag-grid-react": "^31.0.0",
     "ag-grid-enterprise": "^31.0.0",
-    
+
     "recharts": "^2.9.0",
     "@tremor/react": "^3.14.0",
-    
+
     "date-fns": "^3.0.0",
     "lodash": "^4.17.21"
   },
@@ -121,6 +127,7 @@ Coverage: Vitest coverage (80%+ required)
 ```
 
 ### Backend Dependencies
+
 ```json
 {
   "dependencies": {
@@ -176,6 +183,7 @@ Coverage: Vitest coverage (80%+ required)
 ```
 
 ### Testing & Development Dependencies
+
 ```json
 {
   "devDependencies": {
@@ -204,6 +212,7 @@ Coverage: Vitest coverage (80%+ required)
 ## 🏛️ Architecture Decisions
 
 ### Multi-Tenancy Strategy
+
 ```typescript
 Pattern: Database-per-tenant (maximum isolation)
 
@@ -218,6 +227,7 @@ Rationale:
 ```
 
 ### Authentication Strategy
+
 ```typescript
 Authentication Workflow:
 
@@ -235,6 +245,7 @@ The platform uses a traditional username/password authentication model managed b
 ```
 
 ### Caching Strategy
+
 ```typescript
 Multi-Level Caching:
 
@@ -245,6 +256,7 @@ L4: CDN (static assets) - 30 days
 ```
 
 ### Data Flow Architecture
+
 ```
 Landing Page → Trial Signup → Tenant Provisioning → Usage Analytics → Lead Scoring → Sales Conversion
 ```
@@ -254,6 +266,7 @@ Landing Page → Trial Signup → Tenant Provisioning → Usage Analytics → Le
 ## 🚀 Development Environment Setup
 
 ### Prerequisites
+
 ```bash
 # Required software versions
 Node.js: 18.18.0+
@@ -264,6 +277,7 @@ Valkey: 7.2+
 ```
 
 ### Initial Setup Commands
+
 ```bash
 # Clone and setup
 git clone <repository>
@@ -288,6 +302,7 @@ pnpm dev
 ```
 
 ### Development Scripts
+
 ```json
 {
   "scripts": {
@@ -296,13 +311,13 @@ pnpm dev
     "dev:frontend": "next dev -p 3000",
     "dev:backend": "nest start --watch -p 3001",
     "dev:docs": "swagger-ui serve docs/openapi.json -p 3002",
-    
+
     // Building
     "build": "pnpm build:frontend && pnpm build:backend",
     "build:frontend": "next build",
     "build:backend": "nest build",
     "build:docker": "docker build -t plant-mgmt:latest .",
-    
+
     // Testing
     "test": "pnpm test:unit && pnpm test:integration",
     "test:unit": "vitest run --coverage",
@@ -310,27 +325,27 @@ pnpm dev
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:load": "k6 run tests/load/api-load-test.js",
-    
+
     // Database
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",
-    
+
     // Linting & Formatting
     "lint": "next lint && eslint \"src/**/*.{js,ts}\"",
     "lint:fix": "next lint --fix && eslint \"src/**/*.{js,ts}\" --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
-    
+
     // Trial Management
     "trial:create": "tsx scripts/create-trial.ts",
     "trial:expire": "tsx scripts/expire-trials.ts",
     "trial:stats": "tsx scripts/trial-stats.ts",
     "trial:notify": "tsx scripts/notify-trial-ending.ts",
-    
+
     // Production
     "start": "node dist/main.js",
     "start:prod": "NODE_ENV=production pnpm start"
@@ -343,6 +358,7 @@ pnpm dev
 ## 🔒 Security Configuration
 
 ### Environment Variables Template
+
 ```bash
 # Database
 DATABASE_URL="mysql://user:password@localhost:3306/plant_mgmt"
@@ -376,6 +392,7 @@ TRIAL_DURATION_DAYS="30"
 ```
 
 ### Security Checklist
+
 ```typescript
 ✅ JWT tokens with short expiration (15 min access + refresh tokens)
 ✅ Rate limiting (100 requests/minute per IP)
@@ -396,6 +413,7 @@ TRIAL_DURATION_DAYS="30"
 ## 📊 Monitoring & Observability
 
 ### Key Metrics to Track
+
 ```typescript
 Business Metrics:
 - Trial conversion rate (target: 25%)
@@ -422,26 +440,27 @@ User Experience Metrics:
 ```
 
 ### Alerting Rules
+
 ```yaml
 Critical Alerts (Phone/SMS):
-- API error rate > 1%
-- Database connection failures
-- Service downtime
-- Trial system failures
-- Payment processing errors
+  - API error rate > 1%
+  - Database connection failures
+  - Service downtime
+  - Trial system failures
+  - Payment processing errors
 
 Warning Alerts (Slack):
-- API response time > 500ms
-- High memory usage (>80%)
-- Failed background jobs
-- Trial conversion drop
-- Security scan failures
+  - API response time > 500ms
+  - High memory usage (>80%)
+  - Failed background jobs
+  - Trial conversion drop
+  - Security scan failures
 
 Info Alerts (Email):
-- Daily trial report
-- Weekly performance summary
-- Monthly business metrics
-- Dependency update notifications
+  - Daily trial report
+  - Weekly performance summary
+  - Monthly business metrics
+  - Dependency update notifications
 ```
 
 ---
@@ -449,6 +468,7 @@ Info Alerts (Email):
 ## 🚢 Deployment Strategy
 
 ### Environment Pipeline
+
 ```
 Development → Staging → Production
      ↓           ↓          ↓
@@ -458,6 +478,7 @@ Development → Staging → Production
 ```
 
 ### Docker Configuration
+
 ```dockerfile
 # Dockerfile
 FROM node:18-alpine AS base
@@ -495,6 +516,7 @@ CMD ["pnpm", "start"]
 ```
 
 ### Kubernetes Deployment
+
 ```yaml
 # k8s/deployment.yaml
 apiVersion: apps/v1
@@ -512,35 +534,35 @@ spec:
         app: plant-mgmt
     spec:
       containers:
-      - name: app
-        image: plant-mgmt:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: url
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "250m"
-          limits:
-            memory: "1Gi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        - name: app
+          image: plant-mgmt:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: url
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
 ```
 
 ---
@@ -548,6 +570,7 @@ spec:
 ## 🎯 Performance Targets
 
 ### Response Time Requirements
+
 ```typescript
 Target Performance (95th percentile):
 - Landing pages: < 1 second
@@ -561,6 +584,7 @@ Target Performance (95th percentile):
 ```
 
 ### Scalability Targets
+
 ```typescript
 System Capacity:
 - Concurrent users: 10,000+
@@ -576,6 +600,7 @@ System Capacity:
 ## 💰 Business Model Integration
 
 ### Pricing Tiers
+
 ```typescript
 Trial (30 days):
 - Full feature access
@@ -604,6 +629,7 @@ Enterprise (€15,000+/month):
 ```
 
 ### Revenue Tracking
+
 ```typescript
 Metrics to Track:
 - Monthly Recurring Revenue (MRR)
@@ -621,6 +647,7 @@ Metrics to Track:
 ## ✅ Pre-Launch Checklist
 
 ### Technical Readiness
+
 - [ ] All tests passing (unit, integration, E2E)
 - [ ] Security audit completed
 - [ ] Performance testing passed
@@ -633,6 +660,7 @@ Metrics to Track:
 - [ ] SSL certificates configured
 
 ### Business Readiness
+
 - [ ] Trial signup flow tested
 - [ ] Payment processing integrated
 - [ ] Legal terms updated
@@ -644,6 +672,7 @@ Metrics to Track:
 - [ ] Marketing campaigns prepared
 
 ### Operational Readiness
+
 - [ ] 24/7 monitoring alerts configured
 - [ ] On-call rotation established
 - [ ] Incident response procedures documented
@@ -660,18 +689,21 @@ Metrics to Track:
 ## 🎉 Success Metrics
 
 **Month 1 Targets:**
+
 - 50+ trial signups
 - 10% trial conversion rate
 - 99.5% uptime
 - < 2 second average page load
 
 **Month 6 Targets:**
+
 - 500+ trial signups
 - 25% trial conversion rate
 - 10 paying enterprise clients
 - €500k ARR pipeline
 
 **Year 1 Targets:**
+
 - 25+ enterprise clients
 - €1.5M ARR
 - 99.9% uptime SLA

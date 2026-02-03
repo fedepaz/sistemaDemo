@@ -82,7 +82,7 @@ export const mockClientService = {
 
   async updateClient(
     id: string,
-    clientUpdate: UpdateClientDto
+    clientUpdate: UpdateClientDto,
   ): Promise<Client> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1000));

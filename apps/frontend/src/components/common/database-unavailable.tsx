@@ -18,7 +18,8 @@ export function DatabaseUnavailablePage() {
         </h1>
 
         <p className="mt-6 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
-          Actualmente estamos realizando mantenimiento en nuestros sistemas de base de datos.
+          Actualmente estamos realizando mantenimiento en nuestros sistemas de
+          base de datos.
         </p>
 
         <div className="mt-8 p-6 rounded-lg bg-muted/50 border border-border">
@@ -26,8 +27,9 @@ export function DatabaseUnavailablePage() {
             Mantenimiento del Sistema
           </p>
           <p className="text-sm text-muted-foreground text-balance">
-            Nuestro equipo está trabajando para restaurar el servicio completo lo antes posible.
-            Lamentamos cualquier inconveniente que esto pueda causar.
+            Nuestro equipo está trabajando para restaurar el servicio completo
+            lo antes posible. Lamentamos cualquier inconveniente que esto pueda
+            causar.
           </p>
         </div>
 

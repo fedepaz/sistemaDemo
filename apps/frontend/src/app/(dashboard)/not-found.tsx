@@ -1,7 +1,7 @@
 // src/app/(dashboard)/not-found.tsx
 
-import { NotFoundPage } from "@/components/common/not-found";
+import ComingSoonPage from "@/components/common/coming-soon";
 
 export default function NotFound() {
-  return <NotFoundPage />;
+  return <ComingSoonPage />;
 }

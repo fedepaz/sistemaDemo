@@ -12,23 +12,12 @@ const climateIcons: Record<string, React.ReactNode> = {
   Viento: <Wind className="h-5 w-5" />,
 };
 
-const climateColors: Record<
-  string,
-  { bg: string; text: string; icon: string }
-> = {
-  Temperatura: {
-    bg: "bg-amber-50",
-    text: "text-amber-700",
-    icon: "text-amber-500",
-  },
-  Humedad: { bg: "bg-sky-50", text: "text-sky-700", icon: "text-sky-500" },
-  Amanecer: {
-    bg: "bg-yellow-50",
-    text: "text-yellow-700",
-    icon: "text-yellow-500",
-  },
-  Viento: { bg: "bg-teal-50", text: "text-teal-700", icon: "text-teal-500" },
-};
+const kpiChartColors = [
+  { bg: "bg-chart-1/10", text: "text-chart-1", icon: "text-chart-1" },
+  { bg: "bg-chart-2/10", text: "text-chart-2", icon: "text-chart-2" },
+  { bg: "bg-chart-3/10", text: "text-chart-3", icon: "text-chart-3" },
+  { bg: "bg-chart-4/10", text: "text-chart-4", icon: "text-chart-4" },
+];
 
 function isToday(date: Date): boolean {
   const today = new Date();
@@ -62,30 +51,25 @@ function DashboardKPI() {
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
-        <div className="flex flex-col lg:flex-row lg:items-center">
+        <div className="flex flex-col lg:flex-row lg:items-center px-1">
           {/* Left: Date header */}
-          <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-4 py-2.5 lg:rounded-l-lg shrink-0">
+          <div className="bg-secondary px-2 py-2 lg:rounded-l-lg shrink-0">
             <div className="flex items-center gap-2">
-              <div className="h-7 w-7 rounded-full bg-white/10 flex items-center justify-center">
-                <Calendar className="h-3.5 w-3.5 text-white" />
+              <div className="h-7 w-7 rounded-full bg-black/10 dark:bg-white/10 flex items-center justify-center">
+                <Calendar className="h-3.5 w-3.5 text-secondary-foreground" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-white capitalize">
+                <p className="text-sm font-semibold text-secondary-foreground capitalize">
                   {formattedDate}
                 </p>
-                <p className="text-[10px] text-slate-300">Clima actual</p>
               </div>
             </div>
           </div>
 
           {/* Middle: Current conditions - inline */}
-          <div className="flex items-center gap-2 px-4 py-2 flex-1 overflow-x-auto">
-            {data.map((kpi) => {
-              const colors = climateColors[kpi.label] || {
-                bg: "bg-muted",
-                text: "text-foreground",
-                icon: "text-muted-foreground",
-              };
+          <div className="flex items-center gap-4 px-4 py-2 flex-1 overflow-x-auto">
+            {data.map((kpi, index) => {
+              const colors = kpiChartColors[index % kpiChartColors.length];
               return (
                 <div
                   key={kpi.label}
@@ -110,10 +94,7 @@ function DashboardKPI() {
           </div>
 
           {/* Right: Forecast - compact horizontal */}
-          <div className="flex items-center gap-1 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0 overflow-x-auto">
-            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mr-1 shrink-0">
-              Pronóstico
-            </span>
+          <div className="flex items-center gap-2 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0 overflow-x-auto">
             {forecastData.map((day, index) => {
               const today = isToday(day.date);
               const past = isPast(day.date);
@@ -121,26 +102,26 @@ function DashboardKPI() {
               return (
                 <div
                   key={index}
-                  className={`relative rounded-md px-2 py-1 text-center shrink-0 ${
+                  className={`relative rounded-md px-4 py-1 text-center shrink-0 ${
                     today
-                      ? "bg-slate-800 text-white"
+                      ? "bg-primary text-primary-foreground"
                       : past
                         ? "opacity-50"
                         : "bg-muted/30"
                   }`}
                 >
                   <p
-                    className={`text-[9px] font-medium ${today ? "text-slate-300" : "text-muted-foreground"}`}
+                    className={`text-[9px] font-medium ${today ? "text-primary-foreground/80" : "text-muted-foreground"}`}
                   >
                     {day.date.toLocaleDateString("es-AR", { weekday: "short" })}
                   </p>
                   <p
-                    className={`text-xs font-bold ${today ? "text-white" : "text-foreground"}`}
+                    className={`text-xs font-bold ${today ? "text-primary-foreground" : "text-foreground"}`}
                   >
                     {Math.round(day.maxTemp)}°
                   </p>
                   <p
-                    className={`text-[9px] ${today ? "text-slate-400" : "text-muted-foreground"}`}
+                    className={`text-[9px] ${today ? "text-primary-foreground/80" : "text-muted-foreground"}`}
                   >
                     {Math.round(day.minTemp)}°
                   </p>

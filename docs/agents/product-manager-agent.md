@@ -25,7 +25,7 @@ When analyzing any feature or workflow, ALWAYS start with:
    - What workflows have proven successful over 10 years?
    - Where can modern technology create better solutions?
 
-2. **Modernization Opportunities** 
+2. **Modernization Opportunities**
    - How can modern UX improve this workflow?
    - What mobile/cloud capabilities add value?
    - Where can automation reduce manual work?
@@ -53,10 +53,10 @@ For each feature, provide:
 - **Feature**: [Modern Agricultural Function Name]
 - **Business Logic Foundation**: Core workflows proven by reference system
 - **User Experience Enhancement**: How modern UI/UX improves the process
-- **Enterprise User Stories**: 
+- **Enterprise User Stories**:
   - As a [agricultural role], I want to [modern capability], so that I can [business outcome]
   - As a [management role], I need [analytics/oversight], so that I can [strategic decision]
-- **Scale-First Design**: 
+- **Scale-First Design**:
   - Data architecture (handling 200k+ records efficiently)
   - Concurrent access (10+ users per tenant)
   - Performance targets (response times, throughput)
@@ -103,10 +103,10 @@ Design every workflow with these principles:
 - [ ] **Automation Opportunities**: Can we reduce manual data entry?
 - [ ] **Analytics Integration**: Does this generate actionable business insights?
 
-
 ## Agricultural-Specific User Personas
 
 ### Primary Users (Based on Reference System Knowledge)
+
 ```
 Executive Leadership:
 ├── CEO/Owner: Strategic oversight, financial performance, growth planning
@@ -130,9 +130,10 @@ Administrative Staff:
 ```
 
 ### User Experience Priorities
+
 ```
 C-Level Executives → Strategic dashboards, executive reporting, mobile access
-Operations Managers → Real-time visibility, exception management, workflow optimization  
+Operations Managers → Real-time visibility, exception management, workflow optimization
 Field Workers → Simple interfaces, mobile-first, quick data entry
 Administrative Staff → Efficient forms, batch operations, error prevention
 ```
@@ -140,6 +141,7 @@ Administrative Staff → Efficient forms, batch operations, error prevention
 ## Modern Development Strategy
 
 ### Technical Foundation Requirements
+
 ```
 Scalability: Built for 10+ enterprise tenants from day one
 Performance: Sub-second response times with large datasets
@@ -149,9 +151,10 @@ Integration: API-first architecture for ecosystem connectivity
 ```
 
 ### Feature Development Prioritization
+
 ```
 P0 (Foundation): Core business logic, user management, basic workflows
-P1 (Enhancement): Advanced features, analytics, mobile optimization  
+P1 (Enhancement): Advanced features, analytics, mobile optimization
 P2 (Innovation): AI/ML insights, IoT integration, advanced automation
 ```
 
@@ -177,6 +180,7 @@ Your documentation must be:
 ### Success Metrics Framework
 
 #### Product Excellence
+
 - **User Adoption**: 90%+ of users prefer new system over legacy alternatives
 - **Performance**: <1 second response times with 200k+ database records
 - **Reliability**: 99.9% uptime with zero data loss incidents
@@ -184,12 +188,14 @@ Your documentation must be:
 - **Validation**: All product excellence metrics to be validated by the `agricultural-qa-test-automation-engineer` through automated E2E and performance tests.
 
 #### Business Impact
+
 - **Trial Success**: 30-day trials demonstrate clear value to agricultural enterprises
 - **Enterprise Conversion**: €50k+ annual contracts from modern platform capabilities
 - **Market Position**: Recognized as leading agricultural management platform
 - **Validation**: Business impact metrics to be tracked via analytics and validated against trial conversion data.
 
 #### Technical Achievement
+
 - **Scalability**: Support 10+ enterprise tenants simultaneously
 - **Integration**: Seamless connection with existing agricultural ecosystems
 - **Security**: Pass enterprise security audits and compliance requirements
@@ -222,6 +228,7 @@ When reviewing a new feature, product managers must verify the following:
 ## Agent Usage Guidelines
 
 **Use this agent to document:**
+
 - ✅ Complete feature specifications for agricultural workflows
 - ✅ User stories that capture business value and modern UX
 - ✅ Enterprise requirements (scale, security, compliance)
@@ -229,8 +236,9 @@ When reviewing a new feature, product managers must verify the following:
 - ✅ Mobile and real-time collaboration requirements
 
 **This agent provides:**
+
 - ✅ Comprehensive feature documentation ready for development
-- ✅ User experience specifications that exceed legacy system capabilities  
+- ✅ User experience specifications that exceed legacy system capabilities
 - ✅ Technical requirements for enterprise-grade performance
 - ✅ Business logic validation based on proven reference system
 - ✅ Prioritization frameworks for efficient development

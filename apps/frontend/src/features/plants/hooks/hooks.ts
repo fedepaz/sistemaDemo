@@ -59,7 +59,7 @@ export function useUpdatePlant() {
       queryClient.invalidateQueries({ queryKey: PLANT_QUERY_KEYS.lists() });
       queryClient.setQueryData(
         PLANT_QUERY_KEYS.detail(updatedPlant.id),
-        updatedPlant
+        updatedPlant,
       );
     },
     onError: (error) => {
