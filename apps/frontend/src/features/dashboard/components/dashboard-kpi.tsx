@@ -47,14 +47,6 @@ function isPast(date: Date): boolean {
   return compareDate < today;
 }
 
-function getTemperatureGradient(maxTemp: number): string {
-  if (maxTemp >= 30) return "from-orange-500 to-red-500";
-  if (maxTemp >= 25) return "from-amber-400 to-orange-500";
-  if (maxTemp >= 20) return "from-yellow-400 to-amber-500";
-  if (maxTemp >= 15) return "from-emerald-400 to-yellow-500";
-  return "from-sky-400 to-emerald-500";
-}
-
 function DashboardKPI() {
   const { data } = useDashboardKPIs();
   const { data: forecastData } = useForecastKPIs();
@@ -68,28 +60,26 @@ function DashboardKPI() {
   });
 
   return (
-    <Card className="mb-1 overflow-hidden">
-      {/* Header with current date */}
-      <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center">
-            <Calendar className="h-5 w-5 text-white" />
+    <Card className="overflow-hidden">
+      <CardContent className="p-0">
+        <div className="flex flex-col lg:flex-row lg:items-center">
+          {/* Left: Date header */}
+          <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-4 py-2.5 lg:rounded-l-lg shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="h-7 w-7 rounded-full bg-white/10 flex items-center justify-center">
+                <Calendar className="h-3.5 w-3.5 text-white" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white capitalize">
+                  {formattedDate}
+                </p>
+                <p className="text-[10px] text-slate-300">Clima actual</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <h2 className="text-lg font-semibold text-white capitalize">
-              {formattedDate}
-            </h2>
-          </div>
-        </div>
-      </div>
 
-      <CardContent className="p-6">
-        {/* Current Conditions */}
-        <div className="mb-8">
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
-            Condiciones Actuales
-          </h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Middle: Current conditions - inline */}
+          <div className="flex items-center gap-2 px-4 py-2 flex-1 overflow-x-auto">
             {data.map((kpi) => {
               const colors = climateColors[kpi.label] || {
                 bg: "bg-muted",
@@ -99,22 +89,17 @@ function DashboardKPI() {
               return (
                 <div
                   key={kpi.label}
-                  className={`${colors.bg} rounded-xl p-4 transition-all hover:scale-[1.02]`}
+                  className={`${colors.bg} rounded-lg px-3 py-2 flex items-center gap-2 shrink-0`}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span
-                      className={`text-xs font-medium ${colors.text} uppercase tracking-wide`}
-                    >
-                      {kpi.label}
-                    </span>
-                    <div className={colors.icon}>{climateIcons[kpi.label]}</div>
+                  <div className={`${colors.icon} [&>svg]:h-4 [&>svg]:w-4`}>
+                    {climateIcons[kpi.label]}
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className={`text-3xl font-bold ${colors.text}`}>
+                  <div className="flex items-baseline gap-0.5">
+                    <span className={`text-lg font-bold ${colors.text}`}>
                       {kpi.value}
                     </span>
                     <span
-                      className={`text-sm font-medium ${colors.text} opacity-70`}
+                      className={`text-[10px] font-medium ${colors.text} opacity-70`}
                     >
                       {kpi.unit}
                     </span>
@@ -123,84 +108,42 @@ function DashboardKPI() {
               );
             })}
           </div>
-        </div>
 
-        {/* Forecast Section */}
-        <div>
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
-            Pronóstico Extendido
-          </h3>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+          {/* Right: Forecast - compact horizontal */}
+          <div className="flex items-center gap-1 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0 overflow-x-auto">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mr-1 shrink-0">
+              Pronóstico
+            </span>
             {forecastData.map((day, index) => {
               const today = isToday(day.date);
               const past = isPast(day.date);
-              const gradient = getTemperatureGradient(day.maxTemp);
 
               return (
                 <div
                   key={index}
-                  className={`relative rounded-xl p-4 text-center transition-all ${
+                  className={`relative rounded-md px-2 py-1 text-center shrink-0 ${
                     today
-                      ? "bg-gradient-to-br from-slate-800 to-slate-700 text-white ring-2 ring-slate-600 ring-offset-2"
+                      ? "bg-slate-800 text-white"
                       : past
-                        ? "bg-muted/50 opacity-60"
-                        : "bg-muted/30 hover:bg-muted/50"
+                        ? "opacity-50"
+                        : "bg-muted/30"
                   }`}
                 >
-                  {/* Today badge */}
-                  {today && (
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                      <span className="bg-emerald-500 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded-full">
-                        Hoy
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Day name */}
                   <p
-                    className={`text-xs font-medium mb-2 ${
-                      today ? "text-slate-300" : "text-muted-foreground"
-                    }`}
+                    className={`text-[9px] font-medium ${today ? "text-slate-300" : "text-muted-foreground"}`}
                   >
                     {day.date.toLocaleDateString("es-AR", { weekday: "short" })}
                   </p>
-
-                  {/* Date number */}
                   <p
-                    className={`text-lg font-bold mb-3 ${
-                      today ? "text-white" : "text-foreground"
-                    }`}
+                    className={`text-xs font-bold ${today ? "text-white" : "text-foreground"}`}
                   >
-                    {day.date.getDate()}
+                    {Math.round(day.maxTemp)}°
                   </p>
-
-                  {/* Temperature bar */}
-                  <div className="h-16 w-2 mx-auto rounded-full bg-muted/50 mb-3 overflow-hidden relative">
-                    <div
-                      className={`absolute bottom-0 w-full rounded-full bg-gradient-to-t ${gradient}`}
-                      style={{
-                        height: `${Math.min(100, Math.max(20, ((day.maxTemp + 10) / 50) * 100))}%`,
-                      }}
-                    />
-                  </div>
-
-                  {/* Max/Min temps */}
-                  <div className="space-y-0.5">
-                    <p
-                      className={`text-sm font-bold ${
-                        today ? "text-white" : "text-foreground"
-                      }`}
-                    >
-                      {Math.round(day.maxTemp)}°
-                    </p>
-                    <p
-                      className={`text-xs ${
-                        today ? "text-slate-400" : "text-muted-foreground"
-                      }`}
-                    >
-                      {Math.round(day.minTemp)}°
-                    </p>
-                  </div>
+                  <p
+                    className={`text-[9px] ${today ? "text-slate-400" : "text-muted-foreground"}`}
+                  >
+                    {Math.round(day.minTemp)}°
+                  </p>
                 </div>
               );
             })}

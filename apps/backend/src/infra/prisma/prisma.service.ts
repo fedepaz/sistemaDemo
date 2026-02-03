@@ -37,7 +37,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         ca: serverCert,
         rejectUnauthorized: true, // Set to false only for testing
       },
-      connectionLimit: 2,
+      connectionLimit: 10,
     });
 
     super({ adapter, log: ['info', 'warn', 'error'] });
