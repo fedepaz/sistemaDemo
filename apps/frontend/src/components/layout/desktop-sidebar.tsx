@@ -74,9 +74,13 @@ export function DesktopSidebar() {
         isCollapsed ? "w-16" : "w-60 mx-0.5",
       )}
     >
-      {/* Header */}
+      {/* Header 
+      <div className={`p-3 border-b flex items-center ${isCollapsed ? 'justify-center min-h-[65px]' : 'justify-between'}`}>
+      */}
       <div className="p-3 border-b">
-        <div className="flex items-center justify-between">
+        <div
+          className={`flex items-center ${isCollapsed ? "justify-center py-1" : "justify-between"}`}
+        >
           {!isCollapsed && (
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center ">
@@ -94,7 +98,7 @@ export function DesktopSidebar() {
             variant="ghost"
             size="icon"
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="h-8 w-8"
+            className="h-8 w-8 "
           >
             {isCollapsed ? (
               <ChevronRight className="h-4 w-4" />
