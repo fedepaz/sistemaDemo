@@ -7,7 +7,7 @@ import { PrismaModule } from './infra/prisma/prisma.module';
 import { HealthController } from './modules/health/health.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { SecurityExceptionFilter } from './shared/exceptions/security-exception.filter';
+import { GlobalExceptionFilter } from './shared/exceptions/security-exception.filter';
 import { GlobalAuthGuard } from './modules/auth/guards/global-auth.guard';
 import { UsersController } from './modules/users/users.controller';
 import { UsersService } from './modules/users/users.service';
@@ -45,7 +45,7 @@ import { AuditLogRepository } from './modules/auditLog/repositories/auditLog.rep
   providers: [
     {
       provide: APP_FILTER,
-      useClass: SecurityExceptionFilter,
+      useClass: GlobalExceptionFilter,
     },
     {
       provide: APP_GUARD,
