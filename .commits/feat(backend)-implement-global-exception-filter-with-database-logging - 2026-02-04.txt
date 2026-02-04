@@ -1,0 +1,16 @@
+feat(backend): implement global exception filter with database logging - 2026-02-04.txt
+
+feat(backend): implement global exception filter with database logging
+
+This commit introduces a new `GlobalExceptionFilter` that replaces the
+previous `SecurityExceptionFilter`. The new filter is a global error
+handler that catches all exceptions in the backend.
+
+Key features:
+- Catches all exceptions, not just `HttpException`.
+- Logs detailed error information to the `audit_log` table in the database.
+- Handles Prisma-specific errors.
+- Provides a more detailed and structured error response.
+
+This change enhances the security and observability of the application by
+providing a persistent record of all errors.
