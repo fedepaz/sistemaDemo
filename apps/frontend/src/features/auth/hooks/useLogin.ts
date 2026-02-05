@@ -26,18 +26,15 @@ export const useLogin = () => {
       // Update auth state via useAuth
       signIn(data.accessToken, data.user);
     },
-    onError: (error) => {
-      console.error("Login failed:", error);
-    },
   });
 
   return {
     login: mutation.mutate,
     loginAsync: mutation.mutateAsync,
     isLoading: mutation.isPending,
-    isError: mutation.isError,
+
     isSuccess: mutation.isSuccess,
-    error: mutation.error,
+
     reset: mutation.reset,
   };
 };

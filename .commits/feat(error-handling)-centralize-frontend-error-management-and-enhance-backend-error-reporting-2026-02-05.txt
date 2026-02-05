@@ -1,0 +1,15 @@
+feat(error-handling): Centralize frontend error management and enhance backend error reporting
+
+Refactors and centralizes error handling across the frontend application and improves backend database error reporting.
+
+The frontend now utilizes a new `ErrorProvider` and `useError` hook to manage all API and application-level errors uniformly. This includes:
+- Global `ErrorBoundary` to catch UI rendering errors.
+- Centralized `handleError` and `handleFormError` functions for consistent error display via `sonner` toasts.
+- Automated redirection to login for fatal authentication errors (e.g., expired refresh tokens).
+- Integration with TanStack Query's `QueryCache` and `MutationCache` to globally catch and process errors from data fetching and mutations.
+- Enhanced `ApiError` class with more detailed error information.
+- Removal of redundant error handling logic from individual feature hooks.
+
+On the backend, the `GlobalExceptionFilter` has been updated to specifically identify and report `HttpStatus.SERVICE_UNAVAILABLE` (503) and a `DATABASE_UNAVAILABLE` error code for database connection issues, providing more granular error context to the frontend.
+
+These changes improve the overall robustness, consistency, and user experience of error handling in the application.

@@ -61,6 +61,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     let status: number;
     let message: string;
     let stack: string | undefined;
+    let isDatabaseError = false;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
@@ -68,12 +69,27 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       message =
         exceptionResponse.message || exception.message || 'Baddy Request';
     } else if (exception instanceof Error) {
-      status = HttpStatus.INTERNAL_SERVER_ERROR;
-      message =
-        process.env.NODE_ENV === 'production'
-          ? 'Baddy Request'
-          : exception.message;
-      stack = exception.stack;
+      const msg = exception.message.toLowerCase();
+      isDatabaseError =
+        msg.includes('pool_timeout') ||
+        msg.includes('econnrefused') ||
+        msg.includes('etimedout') ||
+        msg.includes('connection timeout') ||
+        msg.includes('connection refused') ||
+        (msg.includes('database') && msg.includes('unavailable')) ||
+        msg.includes('timeout') ||
+        ('code' in exception && exception.code === 'P1001');
+      if (isDatabaseError) {
+        status = HttpStatus.SERVICE_UNAVAILABLE;
+        message = 'Database Unavailable';
+      } else {
+        status = HttpStatus.INTERNAL_SERVER_ERROR;
+        message =
+          process.env.NODE_ENV === 'production'
+            ? 'Baddy Request'
+            : exception.message;
+        stack = exception.stack;
+      }
     } else {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
       message = 'Baddy Uknown Error';
@@ -88,10 +104,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       );
     }
 
+    const errorCode = isDatabaseError
+      ? 'DATABASE_UNAVAILABLE'
+      : this.getStatusCodeString(status);
+
     const jsonResponse = {
       success: false,
       error: {
-        code: this.getStatusCodeString(status),
+        code: errorCode,
         message: safeMessage,
         timestamp: new Date().toISOString(),
         path: request.url,

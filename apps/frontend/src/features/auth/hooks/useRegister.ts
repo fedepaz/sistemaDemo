@@ -24,18 +24,13 @@ export const useRegister = () => {
       // Automatically sign in after registration
       signIn(data.accessToken, data.user);
     },
-    onError: (error) => {
-      console.error("Registration failed:", error);
-    },
   });
 
   return {
     register: mutation.mutate,
     registerAsync: mutation.mutateAsync,
     isLoading: mutation.isPending,
-    isError: mutation.isError,
     isSuccess: mutation.isSuccess,
-    error: mutation.error,
     reset: mutation.reset,
   };
 };

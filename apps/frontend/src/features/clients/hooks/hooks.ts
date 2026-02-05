@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { mockClientService } from "../api/mockClientService";
 import { Client, UpdateClientDto } from "../types";
+import { useError } from "@/providers/error-provider";
 
 export const CLIENT_QUERY_KEYS = {
   all: "clients" as const,
@@ -34,18 +35,20 @@ export function useClient(id: string) {
 
 export function useCreateClient() {
   const queryClient = useQueryClient();
+  const { handleError } = useError();
   return useMutation({
     mutationFn: mockClientService.createClient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CLIENT_QUERY_KEYS.lists() });
     },
     onError: (error) => {
-      console.log(error);
+      handleError(error, { context: "Crear cliente", shouldRedirect: false });
     },
   });
 }
 
 export function useUpdateClient() {
+  const { handleError } = useError();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
@@ -63,12 +66,16 @@ export function useUpdateClient() {
       );
     },
     onError: (error) => {
-      console.log(error);
+      handleError(error, {
+        context: "Actualizar cliente",
+        shouldRedirect: false,
+      });
     },
   });
 }
 
 export function useDeleteClient() {
+  const { handleError } = useError();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: mockClientService.deleteClient,
@@ -76,7 +83,10 @@ export function useDeleteClient() {
       queryClient.invalidateQueries({ queryKey: CLIENT_QUERY_KEYS.lists() });
     },
     onError: (error) => {
-      console.log(error);
+      handleError(error, {
+        context: "Eliminar cliente",
+        shouldRedirect: false,
+      });
     },
   });
 }

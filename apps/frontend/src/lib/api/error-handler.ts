@@ -42,6 +42,14 @@ export function parseApiError(error: unknown): ParsedError {
 
   // API errors
   if (error instanceof ApiError) {
+    // ✅ CASO ESPECIAL: 401 con mensaje "Access denied" = credenciales incorrectas
+    if (error.status === 401 && error.message === "Access denied") {
+      return {
+        type: "FORBIDDEN",
+        title: "Credenciales incorrectas",
+        message: "El nombre de usuario o contraseña son incorrectos.",
+      };
+    }
     switch (error.status) {
       case 400:
         return {
