@@ -1,0 +1,16 @@
+feat(backend): improve database connection handling and resilience
+
+Enhances the `PrismaService` to include a retry mechanism for database connections,
+improving application resilience against transient database availability issues.
+The connection logic now attempts to connect up to 5 times with a 3-second delay
+between attempts, specifically addressing connection timeouts or refusals.
+Additionally, sensitive database credentials are no longer logged, even in development
+environments, aligning with security best practices.
+
+The changes include:
+- Implemented a retry loop for database connection with a maximum of 5 attempts
+  and a 3-second delay.
+- Enhanced logging to provide clearer feedback on connection attempts, successes,
+  and failures, distinguishing between transient and persistent errors.
+- Removed the logging of sensitive database configuration details (host, port,
+  username, password, database name) to improve security.
