@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { clientFetch } from "@/lib/api/client-fetch";
 import { LoginAuthDto, AuthResponseDto } from "@vivero/shared";
 import { useAuthContext } from "../providers/AuthProvider";
+import { toast } from "sonner";
 
 export const useLogin = () => {
   const { signIn } = useAuthContext();
@@ -22,12 +23,14 @@ export const useLogin = () => {
     onSuccess: (data) => {
       // Store refresh token
       localStorage.setItem("refreshToken", data.refreshToken);
+      const toastMessage = `Inicio de sesión exitoso como ${data.user.username}`;
+      toast.success(toastMessage, {
+        position: "top-right",
+        duration: 3000,
+      });
 
       // Update auth state via useAuth
       signIn(data.accessToken, data.user);
-    },
-    onError: (error) => {
-      console.error("Login failed:", error);
     },
   });
 
@@ -35,9 +38,9 @@ export const useLogin = () => {
     login: mutation.mutate,
     loginAsync: mutation.mutateAsync,
     isLoading: mutation.isPending,
-    isError: mutation.isError,
+
     isSuccess: mutation.isSuccess,
-    error: mutation.error,
+
     reset: mutation.reset,
   };
 };

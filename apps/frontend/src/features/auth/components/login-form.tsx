@@ -15,7 +15,7 @@ export function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
 
   const { loginAsync, isLoading } = useLogin();
@@ -29,12 +29,8 @@ export function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    try {
-      await loginAsync({ username, password });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al iniciar sesión");
-    }
+
+    await loginAsync({ username, password });
   };
 
   return (
@@ -65,16 +61,6 @@ export function LoginForm() {
         <div className="rounded-2xl border bg-card p-6 sm:p-8 shadow-sm space-y-6">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-5">
-              {/* Error Message */}
-              {error && (
-                <div
-                  role="alert"
-                  className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-                >
-                  {error}
-                </div>
-              )}
-
               {/* Username Field */}
               <div className="grid gap-2">
                 <Label htmlFor="username" className="text-foreground">
@@ -94,7 +80,6 @@ export function LoginForm() {
                     onChange={(e) => setUsername(e.target.value)}
                     disabled={isLoading}
                     className="pl-14 h-12 rounded-lg"
-                    aria-describedby={error ? "login-error" : undefined}
                   />
                 </div>
               </div>

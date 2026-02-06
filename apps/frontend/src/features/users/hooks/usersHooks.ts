@@ -3,6 +3,7 @@
 import { clientFetch } from "@/lib/api/client-fetch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
+import { toast } from "sonner";
 
 export const userProfileQueryKeys = {
   all: () => ["users"] as const,
@@ -27,7 +28,12 @@ export const useUpdateUserProfile = () => {
         body: JSON.stringify(userUpdate),
       });
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
+      toast.success(toastMessage, {
+        position: "top-right",
+        duration: 3000,
+      });
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
@@ -83,7 +89,12 @@ export const useUpdateUser = () => {
         body: JSON.stringify(userUpdate),
       });
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
+      toast.success(toastMessage, {
+        position: "top-right",
+        duration: 3000,
+      });
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
@@ -99,6 +110,11 @@ export const useDeleteUser = () => {
       });
     },
     onSuccess: () => {
+      const toastMessage = `Usuario eliminado exitosamente`;
+      toast.success(toastMessage, {
+        position: "top-right",
+        duration: 3000,
+      });
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });

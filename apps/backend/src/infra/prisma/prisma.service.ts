@@ -41,37 +41,47 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
   async onModuleInit() {
     this.logger.log(' DATABASE CONNECTION STARTED ON >>>>>> ');
-    if (process.env.NODE_ENV !== 'production') {
-      this.logger.warn(this.configService.get<string>('config.database.host'));
-      this.logger.warn(this.configService.get<string>('config.database.port'));
-      this.logger.warn(
-        this.configService.get<string>('config.database.username'),
-      );
-      this.logger.warn(
-        this.configService.get<string>('config.database.password'),
-      );
-      this.logger.warn(this.configService.get<string>('config.database.name'));
-    }
+    const maxRetries = 5;
+    const retryDelay = 3000;
 
-    try {
-      await this.$connect();
-      await this.$queryRaw`SELECT 1 as health`;
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        this.logger.error('❌ DATABASE CONNECTION FAILED');
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        this.logger.error(`   Error: ${error.message}`);
-        this.logger.error(error);
-        process.exit(1); // Crash immediately - no point continuing
-      } else {
-        this.logger.error('❌ DATABASE CONNECTION FAILED');
-        throw error;
+    this.logger.warn(this.configService.get<string>('config.database.host'));
+    this.logger.warn(this.configService.get<string>('config.database.port'));
+    this.logger.warn(
+      this.configService.get<string>('config.database.username'),
+    );
+    this.logger.warn(
+      this.configService.get<string>('config.database.password'),
+    );
+    this.logger.warn(this.configService.get<string>('config.database.name'));
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await this.$connect();
+        await this.$queryRaw`SELECT 1 as health`;
+        this.logger.log('✅ DATABASE CONNECTION SUCCESSFUL');
+        return;
+      } catch (error) {
+        const errorMsg = (error as Error).message;
+
+        const isTimeOut =
+          errorMsg.includes('pool timeout') ||
+          errorMsg.includes('ETIMEDOUT') ||
+          errorMsg.includes('ECONNREFUSED');
+
+        if (attempt === maxRetries) {
+          this.logger.error('❌ DATABASE CONNECTION FAILED AFTER RETRIES');
+          this.logger.error(`   Error: ${errorMsg}`);
+          throw error;
+        }
+
+        this.logger.warn(
+          `⚠️  Connection attempt ${attempt}/${maxRetries} failed (${isTimeOut ? 'transient error' : 'other error'}), retrying in ${retryDelay}ms...`,
+        );
+        this.logger.warn(`   Error: ${errorMsg}`);
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        continue;
       }
     }
-    this.logger.log('✅ DATABASE CONNECTION SUCCESSFUL');
-    this.logger.log(
-      `   Database: ${this.configService.get<string>('config.database.name')}`,
-    );
   }
   async onModuleDestroy() {
     this.logger.log(' DATABASE CONNECTION FINISHING >>>>>> ');
@@ -113,7 +123,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     throw lastError;
   }
 
-  async checkHealth(timeout = 5000): Promise<boolean> {
+  async checkHealth(timeout = 10000): Promise<boolean> {
     try {
       const result = await Promise.race([
         this.$executeRaw`SELECT 1 as health`,
@@ -125,7 +135,16 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       return true;
     } catch (error) {
       this.logger.error('Database health check failed', error);
-      return false;
+      try {
+        this.logger.warn('Trying to reconnect');
+        await this.$disconnect();
+        await this.$connect();
+        this.logger.log('Database connection recovered');
+        return true;
+      } catch (recoverError) {
+        this.logger.error('Database connection recovery failed', recoverError);
+        return false;
+      }
     }
   }
 }

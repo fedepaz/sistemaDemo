@@ -26,9 +26,17 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 
 export class ApiError extends Error {
   status: number;
-  constructor(message: string, status: number) {
+  code?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  details?: Record<string, any>;
+  path?: string;
+  timestamp?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(message: string, status: number, details?: Record<string, any>) {
     super(message);
+    this.name = "ApiError";
     this.status = status;
+    this.details = details;
   }
 }
 
@@ -51,8 +59,9 @@ async function refreshAccessToken(): Promise<string> {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new ApiError(
-      errorData.message || response.statusText,
+      errorData.error?.message || errorData.message || response.statusText,
       response.status,
+      errorData.error,
     );
   }
   const data = await response.json();
@@ -140,9 +149,6 @@ export async function clientFetch<T>(
           isRefreshing = false;
         }
       }
-
-      const errorData = await res.json().catch(() => ({}));
-      throw new ApiError(errorData.message || res.statusText, res.status);
     }
 
     return res.json() as Promise<T>;
