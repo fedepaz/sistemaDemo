@@ -4,6 +4,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { clientFetch } from "@/lib/api/client-fetch";
 import { useAuthContext } from "../providers/AuthProvider";
+import { toast } from "sonner";
 
 export const useLogout = () => {
   const { signOut } = useAuthContext();
@@ -23,6 +24,10 @@ export const useLogout = () => {
     onSuccess: () => {
       // Clear refresh token
       localStorage.removeItem("refreshToken");
+      toast.success("Sesión cerrada exitosamente", {
+        position: "top-right",
+        duration: 3000,
+      });
 
       signOut();
     },

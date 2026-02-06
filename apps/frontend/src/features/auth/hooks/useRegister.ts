@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { clientFetch } from "@/lib/api/client-fetch";
 import { AuthResponseDto, RegisterAuthDto } from "@vivero/shared";
 import { useAuthContext } from "../providers/AuthProvider";
+import { toast } from "sonner";
 
 export const useRegister = () => {
   const { signIn } = useAuthContext();
@@ -20,6 +21,10 @@ export const useRegister = () => {
     onSuccess: (data) => {
       // Store refresh token
       localStorage.setItem("refreshToken", data.refreshToken);
+      toast.success("Registro exitoso", {
+        position: "top-right",
+        duration: 3000,
+      });
 
       // Automatically sign in after registration
       signIn(data.accessToken, data.user);

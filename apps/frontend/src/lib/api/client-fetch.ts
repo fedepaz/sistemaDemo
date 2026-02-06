@@ -149,14 +149,6 @@ export async function clientFetch<T>(
           isRefreshing = false;
         }
       }
-
-      const errorData = await res.json().catch(() => ({}));
-      const errorInfo = errorData.error || errorData;
-      throw new ApiError(
-        errorInfo.message || res.statusText,
-        res.status,
-        errorInfo,
-      );
     }
 
     return res.json() as Promise<T>;

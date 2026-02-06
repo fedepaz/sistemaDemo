@@ -20,6 +20,7 @@ export const useAuthUserProfile = () => {
     queryFn: () => clientFetch<UserProfileDto>("users/me", { method: "GET" }),
     enabled: isSignedIn,
     retry: 1, // Retry once to account for transient network issues
+    throwOnError: false,
   });
 
   // Determine if the database is unavailable
