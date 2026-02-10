@@ -4,23 +4,16 @@ import { Injectable } from '@nestjs/common';
 import { UpdateUserProfileDto } from '@vivero/shared';
 import { User } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
+import { BaseRepository } from 'src/shared/baseModule/base.repository';
 
 @Injectable()
-export class UsersRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
-  findById(id: string): Promise<User | null> {
-    return this.prisma.user.findFirst({
-      where: {
-        id,
-        deletedAt: null,
-        isActive: true,
-      },
-    });
+export class UsersRepository extends BaseRepository<User> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.user);
   }
 
   updateProfile(id: string, data: UpdateUserProfileDto) {
-    return this.prisma.user.update({
+    return this.model.update({
       where: {
         id,
       },
@@ -28,18 +21,8 @@ export class UsersRepository {
     });
   }
 
-  findAll(): Promise<User[]> {
-    return this.prisma.user.findMany({
-      where: { deletedAt: null, isActive: true },
-    });
-  }
-
-  findAllAdmin(): Promise<User[]> {
-    return this.prisma.user.findMany();
-  }
-
   findByUsername(username: string): Promise<User | null> {
-    return this.prisma.user.findFirst({
+    return this.model.findFirst({
       where: {
         username,
         deletedAt: null,
@@ -49,7 +32,7 @@ export class UsersRepository {
   }
 
   findByTenantId(tenantId: string): Promise<User[]> {
-    return this.prisma.user.findMany({
+    return this.model.findMany({
       where: {
         tenantId,
         deletedAt: null,
@@ -62,7 +45,7 @@ export class UsersRepository {
     username: string,
     deletedByUserId: string,
   ): Promise<User> {
-    return this.prisma.user.update({
+    return this.model.update({
       where: {
         username,
       },
@@ -70,6 +53,17 @@ export class UsersRepository {
         deletedAt: new Date(),
         deletedByUserId,
         isActive: false,
+      },
+    });
+  }
+
+  recoverById(id: string): Promise<User> {
+    return this.model.update({
+      where: { id },
+      data: {
+        deletedAt: null,
+        isActive: true,
+        updatedAt: new Date(),
       },
     });
   }

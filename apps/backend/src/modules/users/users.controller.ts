@@ -51,7 +51,7 @@ export class UsersController {
     if (canReadAll) {
       return this.service.getAllUsers();
     } else {
-      return [await this.service.gerUserById(user.id)];
+      return [await this.service.getUserById(user.id)];
     }
   }
 
@@ -100,7 +100,13 @@ export class UsersController {
     @CurrentUser() user: AuthUser,
     @Param('username') username: string,
   ) {
-    return this.service.softDeleteUserByUsername(username, user.id);
+    return this.service.softRemoveUserByUsername(username, user.id);
+  }
+
+  @Patch(':userId/recover')
+  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
+  async recoverUserById(@Param('userId') userId: string) {
+    return this.service.recoverUserById(userId);
   }
 
   @Get('allAdmin')
