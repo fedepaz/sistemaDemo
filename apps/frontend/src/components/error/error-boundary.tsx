@@ -69,26 +69,25 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      // Default agricultural-themed error UI
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[oklch(0.98_0_0)] to-[oklch(0.95_0.02_147)] p-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-card to-background p-4">
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 rounded-full bg-[oklch(0.92_0.05_146)] flex items-center justify-center">
-                  <AlertTriangle className="w-8 h-8 text-[oklch(0.52_0.13_144)]" />
+                <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center">
+                  <AlertTriangle className="w-8 h-8 text-primary" />
                 </div>
               </div>
-              <CardTitle className="text-2xl font-bold text-[oklch(0.25_0.03_147)]">
+              <CardTitle className="text-2xl font-bold text-foreground">
                 Algo salió mal
               </CardTitle>
-              <CardDescription className="text-[oklch(0.45_0.02_147)]">
-                No te preocupes, los cultivos siguen creciendo
+              <CardDescription className="text-muted-foreground">
+                No te preocupes, estamos trabajando en ello.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-[oklch(0.98_0.01_147)] border-l-4 border-[oklch(0.89_0.05_146)] p-4 rounded">
-                <p className="text-sm text-[oklch(0.4_0.02_147)]">
+              <div className="bg-muted border-l-4 border-accent p-4 rounded">
+                <p className="text-sm text-muted-foreground">
                   {this.state.error?.message ||
                     "Ha ocurrido un error inesperado"}
                 </p>
@@ -96,11 +95,11 @@ export class ErrorBoundary extends Component<Props, State> {
 
               {process.env.NODE_ENV === "development" &&
                 this.state.errorInfo?.componentStack && (
-                  <details className="text-xs text-[oklch(0.5_0.02_147)]">
+                  <details className="text-xs text-muted-foreground">
                     <summary className="cursor-pointer font-medium mb-2">
                       Detalles técnicos
                     </summary>
-                    <pre className="bg-[oklch(0.99_0_0)] p-3 rounded overflow-auto max-h-48">
+                    <pre className="bg-card p-3 rounded overflow-auto max-h-48">
                       {this.state.errorInfo.componentStack}
                     </pre>
                   </details>
@@ -109,7 +108,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <div className="flex gap-3">
                 <Button
                   onClick={this.handleReset}
-                  className="flex-1 bg-[oklch(0.52_0.13_144)] hover:bg-[oklch(0.48_0.12_144)]"
+                  className="flex-1 bg-primary"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Reintentar
