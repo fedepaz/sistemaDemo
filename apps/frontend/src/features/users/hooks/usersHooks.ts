@@ -29,11 +29,18 @@ export const useUpdateUserProfile = () => {
       });
     },
     onSuccess: (data) => {
+      console.log(data);
       const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
       toast.success(toastMessage, {
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+
+      const authContext = queryClient.getQueryData(["userProfile"]);
+      if (authContext) {
+        queryClient.setQueryData(["userProfile"], data);
+      }
     },
   });
 };
