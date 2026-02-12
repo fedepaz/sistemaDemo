@@ -17,16 +17,17 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl">
-        <div className="flex flex-col md:flex-row w-full">
+      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl bg-background/80 backdrop-blur-md border border-gray-200/20 shadow-lg rounded-lg">
+        <div className="flex flex-col md:flex-row w-full font-sans">
           {/* Sidebar */}
-          <nav className="flex-shrink-0 w-full md:w-40 bg-background border-b md:border-b-0 md:border-r border-border p-2 md:p-4 space-x-2 md:space-x-0 space-y-0 md:space-y-2 overflow-x-auto">
+          <nav className="flex-shrink-0 w-full md:w-40 bg-background/60 border-b md:border-b-0 md:border-r border-border p-2 md:p-4 space-x-2 md:space-x-0 space-y-0 md:space-y-2 overflow-x-auto">
             <button
               onClick={() => setTab("info")}
-              className={`flex-shrink-0 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200
-                ${tab === "info"
-                  ? "bg-primary/10 text-primary font-semibold"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              className={`flex-shrink-0 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+                ${
+                  tab === "info"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }
               `}
             >
@@ -35,26 +36,27 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
 
             <button
               onClick={() => setTab("edit")}
-              className={`flex-shrink-0 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200
-                ${tab === "edit"
-                  ? "bg-primary/10 text-primary font-semibold"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              className={`flex-shrink-0 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+                ${
+                  tab === "edit"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }
               `}
             >
-              Editar Perfil
+              Actualizar Perfil
             </button>
           </nav>
 
           {/* Content */}
           <div className="flex-1 p-4 md:p-6 overflow-auto">
             <div className="flex gap-2 items-center mb-4">
-              <div className="bg-gradient-to-r from-primary to-primary/80 px-3 py-2 shrink-0">
+              <div className="bg-gradient-to-r from-primary to-primary/80 px-3 py-2 shrink-0 rounded-md">
                 <div className="h-6 w-6 rounded-full bg-primary-foreground/10 flex items-center justify-center">
                   <User className="h-5 w-5" />
                 </div>
               </div>
-              <DialogTitle className="text-lg font-semibold">
+              <DialogTitle className="text-xl font-semibold font-sans">
                 {tab === "info" ? "Perfil de Usuario" : "Editar Perfil"}
               </DialogTitle>
             </div>

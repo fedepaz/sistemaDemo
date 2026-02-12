@@ -8,7 +8,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UpdateUserProfileSchema } from "@vivero/shared";
+import { UpdateUserProfileDto, UpdateUserProfileSchema } from "@vivero/shared";
 import {
   Form,
   FormControl,
@@ -17,15 +17,12 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { z } from "zod";
-
-type UserProfileFormValues = z.infer<typeof UpdateUserProfileSchema>;
 
 export function UserProfileEdit() {
   const { userProfile } = useAuthContext();
   const { mutateAsync, isPending } = useUpdateUserProfile();
 
-  const form = useForm<UserProfileFormValues>({
+  const form = useForm<UpdateUserProfileDto>({
     resolver: zodResolver(UpdateUserProfileSchema),
     defaultValues: {
       firstName: userProfile?.firstName || "",
@@ -43,21 +40,26 @@ export function UserProfileEdit() {
     });
   }, [userProfile, form]);
 
-  async function onSubmit(values: UserProfileFormValues) {
-    await mutateAsync({
-      userUpdate: values,
-    });
+  async function onSubmit(values: UpdateUserProfileDto) {
+    try {
+      await mutateAsync({
+        userUpdate: values,
+      });
+    } catch {}
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 font-serif"
+      >
         <FormField
           control={form.control}
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nombre</FormLabel>
+              <FormLabel className="font-sans">Nombre</FormLabel>
               <FormControl>
                 <Input placeholder="Nombre" {...field} disabled={isPending} />
               </FormControl>
@@ -70,7 +72,7 @@ export function UserProfileEdit() {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Apellido</FormLabel>
+              <FormLabel className="font-sans">Apellido</FormLabel>
               <FormControl>
                 <Input placeholder="Apellido" {...field} disabled={isPending} />
               </FormControl>
@@ -83,7 +85,7 @@ export function UserProfileEdit() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="font-sans">Email</FormLabel>
               <FormControl>
                 <Input placeholder="Email" {...field} disabled={isPending} />
               </FormControl>
@@ -93,10 +95,10 @@ export function UserProfileEdit() {
         />
         <Button
           type="submit"
-          className="w-full bg-primary text-white rounded p-2"
+          className="w-full bg-primary text-white rounded p-2 cursor-pointer"
           disabled={isPending || !form.formState.isDirty}
         >
-          Guardar
+          Actualizar
         </Button>
       </form>
     </Form>
