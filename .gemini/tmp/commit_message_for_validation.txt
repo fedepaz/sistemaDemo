@@ -1,16 +1,24 @@
-feat(backend): improve database connection handling and resilience
+feat(users): implement base repository and user recovery functionality
 
-Enhances the `PrismaService` to include a retry mechanism for database connections,
-improving application resilience against transient database availability issues.
-The connection logic now attempts to connect up to 5 times with a 3-second delay
-between attempts, specifically addressing connection timeouts or refusals.
-Additionally, sensitive database credentials are no longer logged, even in development
-environments, aligning with security best practices.
+This commit introduces significant improvements to user data management:
+- **BaseRepository Adoption:** The `UsersRepository` now extends a new `BaseRepository`
+  class, centralizing common CRUD operations and enforcing tenant-aware filtering. This
+  reduces boilerplate, improves consistency, and aligns with best practices for data
+  access layer abstraction in NestJS with Prisma. The `findById`, `findAll`, and
+  `findAllAdmin` methods have been removed from `UsersRepository` as they are now
+  handled by the `BaseRepository`.
+- **User Recovery:** Implemented a `recoverById` method in `UsersRepository` and a
+  corresponding `PATCH /users/:userId/recover` endpoint in `UsersController`. This
+  allows for the re-activation of previously soft-deleted user accounts,
+  complementing the existing soft-delete mechanism.
+- **Endpoint Renaming:** The `softDeleteUserByUsername` method in `UsersService` was
+  renamed to `softRemoveUserByUsername`, and the corresponding controller call was
+  updated.
 
-The changes include:
-- Implemented a retry loop for database connection with a maximum of 5 attempts
-  and a 3-second delay.
-- Enhanced logging to provide clearer feedback on connection attempts, successes,
-  and failures, distinguishing between transient and persistent errors.
-- Removed the logging of sensitive database configuration details (host, port,
-  username, password, database name) to improve security.
+Documentation updates have been proposed to reflect these changes in
+`agricultural-backend-agent.md`, specifically for the `BaseRepository` pattern, the
+`recoverById` method, and the `@RequirePermission` decorator.
+
+Security findings have been noted in `apps/backend/src/modules/users/users.controller.ts`
+regarding redundant permission checks and an incorrect permission action. These will be
+addressed in a follow-up.

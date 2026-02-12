@@ -72,13 +72,98 @@ The generated DTOs are a starting point. Refine them based on the Prisma model a
 
 As per `tdd_cicd_guide.md`, write tests before or during implementation.
 
-1.  **Unit Tests:** In the `*.service.spec.ts` file, test the business logic, including tenant isolation.
-2.  **Integration Tests:** In the `*.controller.spec.ts` file, test the API endpoints, permissions, and validation.
+    1.  **Unit Tests:** In the `*.service.spec.ts` file, test the business logic, including tenant isolation.
+    2.  **Integration Tests:** In the `*.controller.spec.ts` file, test the API endpoints, permissions, and validation.
+
+---
+
+## Repository Patterns
+
+### BaseRepository Pattern
+
+The project utilizes a `BaseRepository` pattern to centralize common database operations, enforce multi-tenancy rules, and reduce boilerplate in individual repositories. New repositories should extend `BaseRepository<TEntity>`.
+
+**Purpose:**
+*   Abstracts common CRUD operations (`findById`, `findAll`, `create`, `update`, `softDelete`, etc.).
+*   Enforces tenant-aware filtering and soft-delete logic consistently across all entities.
+*   Reduces boilerplate code in entity-specific repositories.
+
+**Usage:**
+Repositories should extend `BaseRepository<TEntity>` and utilize `this.model` (which represents the specific Prisma model passed during instantiation) for all Prisma operations.
+
+**Example:**
+```typescript
+// src/shared/baseModule/base.repository.ts (Conceptual)
+import { PrismaService } from 'src/infra/prisma/prisma.service';
+import { Prisma } from '@prisma/client'; // Assuming Prisma is installed
+
+export abstract class BaseRepository<TEntity> {
+  protected model: any; // Using 'any' for flexibility, ideally TEntity is Prisma.ModelName
+
+  constructor(protected readonly prisma: PrismaService, model: any) { // Adjust 'any' to specific Prisma type
+    this.model = model;
+  }
+
+  findById(id: string): Promise<TEntity | null> {
+    return this.model.findFirst({
+      where: { id, deletedAt: null, isActive: true },
+    });
+  }
+
+  findAll(tenantId: string): Promise<TEntity[]> {
+    return this.model.findMany({
+      where: { tenantId, deletedAt: null, isActive: true },
+    });
+  }
+
+  // Other common CRUD methods would be here
+}
+```
+
+```typescript
+// app/modules/users/repositories/users.repository.ts (Example Extension)
+import { Injectable } from '@nestjs/common';
+import { User } from '../../../generated/prisma/client'; // Adjust path as needed
+import { PrismaService } from '../../../infra/prisma/prisma.service'; // Adjust path as needed
+import { BaseRepository } from 'src/shared/baseModule/base.repository'; // Adjust path as needed
+
+@Injectable()
+export class UsersRepository extends BaseRepository<User> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.user); // `prisma.user` is the specific Prisma model
+  }
+  // Custom methods or overridden base methods for User entity
+}
+```
+
+### `recoverById` Method for Soft-Deleted Entities
+
+The `recoverById` method is implemented within repositories (often via the `BaseRepository` or directly in entity-specific repositories) to complement soft-delete functionality.
+
+**Description:**
+This method is used to restore a previously soft-deleted entity by setting its `deletedAt` field to `null` and `isActive` field to `true`.
+
+**Usage:**
+It is essential for data recovery and managing the lifecycle of entities that undergo soft-deletion.
+
+**Example:**
+```typescript
+// Example from UsersRepository
+recoverById(id: string): Promise<User> {
+  return this.model.update({
+    where: { id },
+    data: {
+      deletedAt: null,
+      isActive: true,
+      updatedAt: new Date(),
+    },
+  });
+}
+```
 
 ---
 
 ### Core Technology Stack (Per tech_stack_guide.md)
-
 ```typescript
 Framework: NestJS (TypeScript-first)
 Database ORM: Prisma
@@ -319,6 +404,44 @@ Data Protection:
   - Secure file upload for plant images and documents
 ```
 
+#### Access Control with `@RequirePermission` Decorator
+
+The `@RequirePermission` decorator is a crucial component for implementing fine-grained, permission-based access control on controller endpoints. It ensures that only authorized users can access specific resources or perform certain actions, aligning with the "Permission-based access control" requirement.
+
+**Purpose:**
+The decorator attaches metadata to controller methods, which is then interpreted by an underlying Guard to enforce authorization rules before the method's execution. This centralizes access control logic and prevents redundant manual checks within the controller methods.
+
+**Usage:**
+The decorator accepts an object with the following parameters:
+*   `tableName`: The name of the database table or resource the permission applies to (e.g., `'users'`, `'plants'`).
+*   `action`: The type of action being performed (e.g., `'read'`, `'create'`, `'update'`, `'delete'`).
+*   `scope`: The scope of the permission, typically `'OWN'` (for operations on the user's own data) or `'ALL'` (for operations across all data of a given type). If omitted, a default scope might be applied by the system.
+
+**Best Practices:**
+*   **Exclusive Use:** Rely solely on the `@RequirePermission` decorator for access control on controller endpoints. Avoid mixing manual `permissionsService.canPerform` checks with the decorator, as this can lead to redundancy, inconsistencies, and errors in privilege enforcement.
+*   **Granularity:** Apply the decorator with the appropriate `tableName`, `action`, and `scope` to achieve the desired level of access control for each endpoint.
+
+**Example:**
+```typescript
+// Example from UsersController
+import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
+
+@Controller('users')
+export class UsersController {
+  // ...
+  @Get('all')
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  async getAllUsers() {
+    return this.service.getAllUsers();
+  }
+
+  @Patch(':userId/recover')
+  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
+  async recoverUserById(@Param('userId') userId: string) {
+    return this.service.recoverUserById(userId);
+  }
+}
+```
 ### Compliance Implementation
 
 ```typescript

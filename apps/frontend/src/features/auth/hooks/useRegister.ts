@@ -22,7 +22,6 @@ export const useRegister = () => {
       // Store refresh token
       localStorage.setItem("refreshToken", data.refreshToken);
       toast.success("Registro exitoso", {
-        position: "top-right",
         duration: 3000,
       });
 

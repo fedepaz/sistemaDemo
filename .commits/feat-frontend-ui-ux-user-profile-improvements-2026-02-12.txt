@@ -1,0 +1,26 @@
+feat(frontend): implement UI/UX improvements for user profile components
+
+This commit introduces a series of UI/UX enhancements to the user profile section,
+aligning with the new design system.
+
+- **Global Styles (`globals.css`):**
+  - Integrated Google Fonts: Poppins (headings) and Open Sans (body text).
+  - Updated CSS variables `--font-sans` and `--font-serif` to utilize the new fonts.
+
+- **User Menu (`user-menu.tsx`):**
+  - Applied Glassmorphism effect to the `DialogContent` (backdrop-blur, translucent
+  background, subtle border, shadow) for a modern, layered appearance.
+  - Updated `DialogTitle` to use `font-sans` and adjusted text size to `text-xl`.
+  - Ensured tab navigation buttons (`Información de Perfil`, `Editar Perfil`) use
+  `font-sans` and have `cursor-pointer` for improved interactivity.
+
+- **User Info (`user-info.tsx`):
+  - `CardTitle` elements (`Información General`, `Detalles de la Empresa`) now use
+  `font-sans`.
+  - Content within `CardContent` (labels and paragraph text) now uses `font-serif`
+  for consistent body text typography.
+
+- **User Edit (`user-edit.tsx`):**
+  - `FormLabel` elements now use `font-sans`.
+  - The main `form` element and `Input` fields now use `font-serif`.
+  - The "Guardar" (Save) button now includes `cursor-pointer` for enhanced interactivity.

@@ -25,7 +25,6 @@ export const useLogin = () => {
       localStorage.setItem("refreshToken", data.refreshToken);
       const toastMessage = `Inicio de sesión exitoso como ${data.user.username}`;
       toast.success(toastMessage, {
-        position: "top-right",
         duration: 3000,
       });
 

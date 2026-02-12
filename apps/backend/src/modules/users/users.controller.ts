@@ -1,14 +1,6 @@
 // app/modules/users/users.controller.ts
 
-import {
-  Body,
-  Controller,
-  Delete,
-  ForbiddenException,
-  Get,
-  Param,
-  Patch,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserProfileDto, UpdateUserProfileSchema } from '@vivero/shared';
 import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
@@ -31,7 +23,7 @@ export class UsersController {
   }
 
   @Patch('me')
-  @RequirePermission({ tableName: 'users', action: 'update', scope: 'OWN' })
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
   updateProfile(
     @CurrentUser() user: AuthUser,
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
@@ -51,7 +43,7 @@ export class UsersController {
     if (canReadAll) {
       return this.service.getAllUsers();
     } else {
-      return [await this.service.gerUserById(user.id)];
+      return [await this.service.getUserById(user.id)];
     }
   }
 
@@ -68,30 +60,14 @@ export class UsersController {
   }
 
   @Patch(':username')
-  @RequirePermission({ tableName: 'users', action: 'update' })
+  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
   async updateUserByUsername(
     @CurrentUser() user: AuthUser,
     @Param('username') username: string,
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
     body: UpdateUserProfileDto,
   ) {
-    const canUpdateAll = await this.permissionsService.canPerform(user.id, {
-      tableName: 'users',
-      action: 'update',
-      scope: 'ALL',
-    });
-
-    if (canUpdateAll) {
-      return this.service.updateProfile(username, body);
-    } else {
-      if (user.username === username) {
-        return this.service.updateProfile(username, body);
-      } else {
-        throw new ForbiddenException(
-          'No tiene permisos para actualizar el usuario',
-        );
-      }
-    }
+    return this.service.updateProfile(username, body);
   }
 
   @Delete(':username')
@@ -100,23 +76,18 @@ export class UsersController {
     @CurrentUser() user: AuthUser,
     @Param('username') username: string,
   ) {
-    return this.service.softDeleteUserByUsername(username, user.id);
+    return this.service.softRemoveUserByUsername(username, user.id);
+  }
+
+  @Patch(':userId/recover')
+  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
+  async recoverUserById(@Param('userId') userId: string) {
+    return this.service.recoverUserById(userId);
   }
 
   @Get('allAdmin')
   @RequirePermission({ tableName: 'users', action: 'delete', scope: 'ALL' })
-  async getAllUsersAdmin(@CurrentUser() user: AuthUser) {
-    const canReadAll = await this.permissionsService.canPerform(user.id, {
-      tableName: 'users',
-      action: 'delete',
-      scope: 'ALL',
-    });
-    if (canReadAll) {
-      return this.service.getAllUsersAdmin();
-    } else {
-      throw new ForbiddenException(
-        'No tiene permisos para ver esta información',
-      );
-    }
+  async getAllUsersAdmin() {
+    return this.service.getAllUsersAdmin();
   }
 }
