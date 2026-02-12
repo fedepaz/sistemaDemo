@@ -50,6 +50,15 @@ export function parseApiError(error: unknown): ParsedError {
         message: "El nombre de usuario o contraseña son incorrectos.",
       };
     }
+    if (error.message === "Network error: unable to reach server") {
+      return {
+        type: "NETWORK",
+        title: "Error",
+        message:
+          "No se puede conectar al servidor. Verifica tu conexión a internet.",
+        details: error.details,
+      };
+    }
     switch (error.status) {
       case 400:
         return {

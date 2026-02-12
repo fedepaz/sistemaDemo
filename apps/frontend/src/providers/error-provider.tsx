@@ -34,6 +34,7 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
     (error: unknown, options: ErrorHandlerOptions = {}) => {
       console.log("handleError called: ");
       console.log(error);
+
       const {
         context,
         silent = false,
@@ -59,11 +60,6 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
 
       if (parsed.type === "AUTH" && parsed.isFatal && shouldRedirect) {
         console.log("AUTH and isFatal and shouldRedirect");
-
-        toast.error(toastConfig.title, {
-          description: toastConfig.description,
-          duration: 3000,
-        });
 
         setTimeout(() => {
           localStorage.clear();

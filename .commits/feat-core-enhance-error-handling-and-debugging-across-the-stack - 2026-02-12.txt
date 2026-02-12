@@ -1,0 +1,12 @@
+feat(core): enhance error handling and debugging across the stack
+
+This commit introduces several improvements to error handling, debugging, and authentication logic.
+
+Frontend:
+- Implemented a specific error handler for network failures, providing clearer feedback to the user when the server is unreachable.
+- Added extensive console.log statements throughout the API client and error provider to improve traceability and simplify debugging of client-side errors.
+- Refactored the signOut process to more robustly clear and cancel client-side queries, preventing potential race conditions.
+
+Backend:
+- Removed the manual `updatedAt` timestamp update in the user repository, deferring to the ORM for more reliable and consistent timestamp management.
+- Added temporary logging to the user profile update endpoint for debugging purposes.

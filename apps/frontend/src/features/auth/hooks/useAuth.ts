@@ -25,9 +25,11 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   const signOut = useCallback(() => {
+    queryClient.cancelQueries();
+    queryClient.clear();
+
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
-    queryClient.clear();
     setAuthState({
       accessToken: null,
       user: null,
