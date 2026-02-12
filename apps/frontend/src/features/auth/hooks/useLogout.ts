@@ -25,7 +25,6 @@ export const useLogout = () => {
       // Clear refresh token
       localStorage.removeItem("refreshToken");
       toast.success("Sesión cerrada exitosamente", {
-        position: "top-right",
         duration: 3000,
       });
 

@@ -31,7 +31,6 @@ export const useUpdateUserProfile = () => {
     onSuccess: (data) => {
       const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
       toast.success(toastMessage, {
-        position: "top-right",
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -92,7 +91,6 @@ export const useUpdateUser = () => {
     onSuccess: (data) => {
       const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
       toast.success(toastMessage, {
-        position: "top-right",
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -112,7 +110,6 @@ export const useDeleteUser = () => {
     onSuccess: () => {
       const toastMessage = `Usuario eliminado exitosamente`;
       toast.success(toastMessage, {
-        position: "top-right",
         duration: 3000,
       });
       queryClient.invalidateQueries({ queryKey: ["users"] });
