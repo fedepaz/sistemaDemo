@@ -148,12 +148,14 @@ export async function clientFetch<T>(
         } finally {
           isRefreshing = false;
         }
-        throw new ApiError("Token refresh failed", 401);
       }
 
       const errorData = await res.json().catch(() => ({}));
       const errorInfo = errorData.error || errorData;
-
+      console.log("errorInfo: ");
+      console.log(errorInfo);
+      console.log("errorData: ");
+      console.log(errorData);
       throw new ApiError(
         errorInfo.message || res.statusText,
         res.status,

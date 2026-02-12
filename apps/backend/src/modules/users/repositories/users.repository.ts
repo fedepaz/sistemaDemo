@@ -18,7 +18,6 @@ export class UsersRepository extends BaseRepository<User> {
         id,
       },
       data,
-      updatedAt: new Date(),
     });
   }
 
