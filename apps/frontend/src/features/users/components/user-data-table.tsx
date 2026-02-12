@@ -53,9 +53,7 @@ export function UsersDataTable() {
           username: selectedUser.username,
           userUpdate: formData,
         });
-      } catch (error) {
-        throw error;
-      }
+      } catch {}
       setSlideOverOpen(false);
     }
   };

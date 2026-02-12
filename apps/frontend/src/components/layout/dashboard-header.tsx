@@ -17,12 +17,14 @@ import { useLogout } from "@/features/auth/hooks/useLogout";
 import { LoadingSpinner } from "../common/loading-spinner";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { UserMenu } from "../user-profile/user-menu";
 
 export function DashboardHeader() {
   const { isLoading, logoutAsync } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
+  const [openProfile, setOpenProfile] = useState(false);
 
   useEffect(() => {
     if (!userProfile) {
@@ -91,6 +93,10 @@ export function DashboardHeader() {
                   {userProfile?.firstName} {userProfile?.lastName}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setOpenProfile(true)}>
+                  Perfil
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <button className="w-full" onClick={handleLogout}>
                     Cerrar sesión
@@ -98,6 +104,7 @@ export function DashboardHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <UserMenu open={openProfile} onOpenChange={setOpenProfile} />
           </div>
         </div>
       </div>

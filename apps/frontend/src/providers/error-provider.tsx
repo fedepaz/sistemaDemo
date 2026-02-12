@@ -42,7 +42,7 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
       } = options;
 
       if (process.env.NODE_ENV === "development") {
-        console.error(`${context || ""}`, error);
+        console.error(`DEBUG: ${context || ""}`, error);
       }
 
       const parsed = parseApiError(error);

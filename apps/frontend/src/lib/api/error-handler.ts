@@ -55,8 +55,7 @@ export function parseApiError(error: unknown): ParsedError {
         return {
           type: "VALIDATION",
           title: "Datos inválidos",
-          message:
-            error.message || "Por favor, verifica la información ingresada",
+          message: "Por favor, verifica la información ingresada",
           details: error.details,
         };
       case 401:
@@ -66,32 +65,36 @@ export function parseApiError(error: unknown): ParsedError {
           message:
             "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
           isFatal: true,
+          details: error.details,
         };
       case 403:
         return {
           type: "FORBIDDEN",
           title: "Acceso denegado",
-          message:
-            error.message || "No tienes permisos para realizar esta acción.",
+          message: "No tienes permisos para realizar esta acción.",
+          details: error.details,
         };
       case 404:
         return {
           type: "NOT_FOUND",
           title: "No encontrado",
-          message: error.message || "El recurso solicitado no fue encontrado.",
+          message: "El recurso solicitado no fue encontrado.",
+          details: error.details,
         };
       case 408:
         return {
           type: "TIMEOUT",
           title: "Tiempo de espera agotado",
           message: "La solicitud tardó demasiado tiempo. Intenta nuevamente.",
+          details: error.details,
           shouldRetry: true,
         };
       case 409:
         return {
           type: "CONFLICT",
           title: "Conflicto",
-          message: error.message || "Ya existe un registro con estos datos.",
+          message: "Ya existe un registro con estos datos.",
+          details: error.details,
         };
       case 500:
         return {
@@ -99,6 +102,7 @@ export function parseApiError(error: unknown): ParsedError {
           title: "Error del servidor",
           message: "Error interno del servidor. Por favor, intenta nuevamente.",
           shouldRetry: true,
+          details: error.details,
         };
       case 503:
         return {
@@ -107,12 +111,14 @@ export function parseApiError(error: unknown): ParsedError {
           message:
             "El servicio está temporalmente no disponible. Intenta más tarde.",
           shouldRetry: true,
+          details: error.details,
         };
       default:
         return {
           type: "UNKNOWN",
           title: "Error",
           message: error.message || "Ha ocurrido un error inesperado",
+          details: error.details,
         };
     }
   }
@@ -121,14 +127,15 @@ export function parseApiError(error: unknown): ParsedError {
   if (error instanceof Error) {
     return {
       type: "UNKNOWN",
-      title: "Error",
+      title: "Error Genérico",
       message: error.message,
+      details: error,
     };
   }
 
   return {
     type: "UNKNOWN",
-    title: "Error desconocido",
+    title: "Error totalmente inesperado :(",
     message: "Ha ocurrido un error inesperado",
   };
 }

@@ -1,0 +1,24 @@
+feat(frontend): implement user profile management and toast improvements
+
+This commit introduces the initial implementation for user profile viewing
+and editing functionality, accessible from the dashboard header. It also
+includes minor improvements to toast notifications for a consistent user
+experience.
+
+- **feat(frontend)**:
+  - Add `UserMenu` component (`apps/frontend/src/components/user-profile/user-menu.tsx`)
+    providing a dialog-based interface for user profile viewing and editing.
+  - Implement `UserProfileInfo` (`apps/frontend/src/components/user-profile/user-info.tsx`)
+    to display authenticated user details.
+  - Implement `UserProfileEdit` (`apps/frontend/src/components/user-profile/user-edit.tsx`)
+    with a form for updating user's first name, last name, and email.
+  - Integrate `UserMenu` into `DashboardHeader`
+    (`apps/frontend/src/components/layout/dashboard-header.tsx`) via a new
+    "Perfil" dropdown menu item, controlling its visibility with local state.
+  - Introduce `useUpdateUserProfile` hook in
+    `apps/frontend/src/features/users/hooks/usersHooks.ts` for handling user
+    profile updates via TanStack Query mutations.
+
+- **refactor(frontend)**:
+  - Standardize toast notifications by removing `position: "top-right"` from
+    `toast.success` calls in `useLogin.ts`, `useLogout.ts`, and `useRegister.ts`.
