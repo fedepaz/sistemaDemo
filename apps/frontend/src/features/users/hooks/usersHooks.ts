@@ -22,7 +22,7 @@ export const useUpdateUserProfile = () => {
     Error,
     { userUpdate: UpdateUserProfileDto }
   >({
-    mutationFn: async (userUpdate) => {
+    mutationFn: async ({ userUpdate }) => {
       return clientFetch<UserProfileDto>(`users/me`, {
         method: "PATCH",
         body: JSON.stringify(userUpdate),
