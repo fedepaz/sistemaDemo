@@ -152,10 +152,9 @@ export async function clientFetch<T>(
 
       const errorData = await res.json().catch(() => ({}));
       const errorInfo = errorData.error || errorData;
-      console.log("errorInfo: ");
-      console.log(errorInfo);
-      console.log("errorData: ");
-      console.log(errorData);
+      console.log("message:", errorInfo.message);
+      console.log("status:", res.status);
+      console.log("errorInfo:", errorInfo);
       throw new ApiError(
         errorInfo.message || res.statusText,
         res.status,

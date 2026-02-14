@@ -28,9 +28,11 @@ export function LoginForm() {
   }, [isLoginComplete, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    await loginAsync({ username, password });
+      await loginAsync({ username, password });
+    } catch {}
   };
 
   return (
