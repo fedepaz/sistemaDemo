@@ -54,6 +54,10 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
         if (shouldThrow) throw error;
         return;
       }
+
+      if (parsed.title === "Sesión expirada") {
+        return;
+      }
       const toastConfig = getToastConfig(parsed);
       console.log("toastConfig: ");
       console.log(toastConfig);
