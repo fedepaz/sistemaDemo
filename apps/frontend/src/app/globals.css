@@ -181,10 +181,11 @@
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
+    padding-bottom: env(safe-area-inset-bottom, 1.5rem); /* Added padding */
   }
   html,
   body {
     height: 100%;
-    overflow: hidden; /* evita el scroll del navegador */
+    /* overflow: hidden; */ /* REMOVED */
   }
 }
