@@ -95,7 +95,7 @@ export function UserProfileEdit() {
         />
         <Button
           type="submit"
-          className="w-full bg-primary text-white rounded p-2 cursor-pointer"
+          className="w-full bg-primary rounded p-2 cursor-pointer"
           disabled={isPending || !form.formState.isDirty}
         >
           Actualizar
