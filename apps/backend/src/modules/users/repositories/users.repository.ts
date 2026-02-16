@@ -17,7 +17,10 @@ export class UsersRepository extends BaseRepository<User> {
       where: {
         id,
       },
-      data,
+      data: {
+        ...data,
+        updatedAt: new Date(),
+      },
     });
   }
 

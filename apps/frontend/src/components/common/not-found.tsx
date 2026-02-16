@@ -8,15 +8,15 @@ export function NotFoundPage() {
   return (
     <div className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
       <div className="text-center">
-        <FlagIcon className="w-20 h-20 mx-auto mt-4 text-gray-300 text-5xl font-semibold tracking-tight text-balance sm:text-7xl" />
-        <h1 className="mt-4 text-5xl font-semibold tracking-tight text-gray-300 text-balance sm:text-7xl">
+        <FlagIcon className="w-20 h-20 mx-auto mt-4 text-muted-foreground text-5xl font-semibold tracking-tight text-balance sm:text-7xl" />
+        <h1 className="mt-4 text-5xl font-semibold tracking-tight text-muted-foreground text-balance sm:text-7xl">
           Error 404
         </h1>
-        <p className="mt-3 text-xl font-bold text-pretty text-gray-200 sm:text-xl/8">
+        <p className="mt-3 text-xl font-bold text-pretty text-foreground sm:text-xl/8">
           Página no encontrada
         </p>
 
-        <p className="mt-6 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
+        <p className="mt-6 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
           Lo sentimos, no pudimos encontrar la página que estás buscando.
         </p>
 

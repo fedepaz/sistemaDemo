@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { User } from "lucide-react";
 import { UserProfileInfo } from "./user-info";
 import { UserProfileEdit } from "./user-edit";
+import { ChangePasswordForm } from "./user-password";
 
 interface UserMenuProps {
   open: boolean;
@@ -13,11 +14,11 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ open, onOpenChange }: UserMenuProps) {
-  const [tab, setTab] = useState<"info" | "edit">("info");
+  const [tab, setTab] = useState<"info" | "edit" | "password">("info");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl bg-background/80 backdrop-blur-md border border-gray-200/20 shadow-lg rounded-lg">
+      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-lg">
         <div className="flex flex-col md:flex-row w-full font-sans">
           {/* Sidebar */}
           <nav className="flex-shrink-0 w-full md:w-40 bg-background/60 border-b md:border-b-0 md:border-r border-border p-2 md:p-4 space-x-2 md:space-x-0 space-y-0 md:space-y-2 overflow-x-auto">
@@ -46,6 +47,18 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
             >
               Actualizar Perfil
             </button>
+            <button
+              onClick={() => setTab("password")}
+              className={`flex-shrink-0 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+                ${
+                  tab === "password"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }
+              `}
+            >
+              Cambiar Contraseña
+            </button>
           </nav>
 
           {/* Content */}
@@ -61,7 +74,9 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
               </DialogTitle>
             </div>
 
-            {tab === "info" ? <UserProfileInfo /> : <UserProfileEdit />}
+            {tab === "info" && <UserProfileInfo />}
+            {tab === "edit" && <UserProfileEdit />}
+            {tab === "password" && <ChangePasswordForm />}
           </div>
         </div>
       </DialogContent>

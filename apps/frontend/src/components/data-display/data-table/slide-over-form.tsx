@@ -12,6 +12,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { UseFormReturn } from "react-hook-form";
 
 interface SlideOverFormProps {
   open: boolean;
@@ -24,6 +25,8 @@ interface SlideOverFormProps {
   saveLabel?: string;
   isLoading?: boolean;
   formId: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturn<any>;
 }
 
 export function SlideOverForm({
@@ -36,6 +39,7 @@ export function SlideOverForm({
   onCancel,
   saveLabel,
   formId,
+  form,
 }: SlideOverFormProps) {
   const handleCancel = () => {
     if (onCancel) {
@@ -64,6 +68,11 @@ export function SlideOverForm({
               form={formId || undefined} // Only set if provided
               onClick={!formId ? () => onSave?.() : undefined}
               className="w-full"
+              disabled={
+                form
+                  ? !form.formState.isDirty || form.formState.isSubmitting
+                  : false
+              }
             >
               {saveLabel || "Guardar cambios"}
             </Button>

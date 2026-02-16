@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
   Logger,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -18,6 +19,8 @@ import {
   RefreshTokenSchema,
   RefreshTokenDto,
   TokensDto,
+  ChangePasswordDto,
+  ChangePasswordSchema,
 } from '@vivero/shared';
 import { AuthUser } from './types/auth-user.type';
 import { Public } from '../../shared/decorators/public.decorator';
@@ -82,5 +85,23 @@ export class AuthController {
   logout(@CurrentUser() user: AuthUser) {
     this.logger.log(`👋 Logout: ${user.username}`);
     return { message: 'Logged out successfully' };
+  }
+  /**
+   * PATCH /auth/password
+   * Protected endpoint - change password
+   */
+
+  @Patch('password')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
+  async changePassword(
+    @Body(new ZodValidationPipe(ChangePasswordSchema)) dto: ChangePasswordDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    await this.authService.changePassword(user.id, dto);
+    return {
+      success: true,
+      message: 'Contraseña actualizada correctamente',
+    };
   }
 }
