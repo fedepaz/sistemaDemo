@@ -6,6 +6,7 @@ import {
   NotFoundException,
   ConflictException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -165,7 +166,7 @@ export class AuthService {
       user.passwordHash,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new BadRequestException('Invalid credentials');
     }
 
     // Hash new password
@@ -173,6 +174,11 @@ export class AuthService {
       dto.newPassword,
       this.BCRYPT_ROUNDS,
     );
+
+    // Check if current password is different from new password
+    if (dto.currentPassword === dto.newPassword) {
+      throw new BadRequestException('New cannot be the same as the current');
+    }
 
     // Update password
     await this.userAuthRepo.updatePassword(userId, newPasswordHash);

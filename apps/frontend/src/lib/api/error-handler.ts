@@ -64,6 +64,16 @@ export function parseApiError(error: unknown): ParsedError {
         details: error.details,
       };
     }
+    if (error.message === "New cannot be the same as the current") {
+      return {
+        type: "VALIDATION",
+        title: "Contraseña incorrecta",
+        message:
+          "La contraseña actual no puede ser la misma que la nueva contraseña.",
+        details: error.details,
+      };
+    }
+
     switch (error.status) {
       case 400:
         return {

@@ -278,6 +278,17 @@ export const UpdateUserProfileSchema = z.object({
 });
 
 export type UpdateUserProfileDto = z.infer<typeof UpdateUserProfileSchema>;
+
+export const ChangePasswordSchema = z.object({
+  currentPassword: z.string().min(8, "Current password must be at least 8 characters long"),
+  newPassword: z.string().min(8, "New password must be at least 8 characters long"),
+  confirmPassword: z.string().min(8, "Confirm password must be at least 8 characters long"),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+export type ChangePasswordDto = z.infer<typeof ChangePasswordSchema>;
 ```
 
 ```typescript
