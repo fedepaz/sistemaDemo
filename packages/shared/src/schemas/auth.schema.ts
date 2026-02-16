@@ -67,3 +67,29 @@ export const AuthResponseSchema = z.object({
 });
 
 export type AuthResponseDto = z.infer<typeof AuthResponseSchema>;
+
+export const ChangePasswordSchema = z.object({
+  currentPassword: z.string().min(1, { message: "Contraseña es obligatoria" }),
+  newPassword: z
+    .string()
+    .min(6, { message: "La nueva contraseña debe tener al menos 6 caracteres" })
+    .max(20, { message: "La nueva contraseña debe tener máximo 20 caracteres" })
+    .regex(/[A-Z]/, {
+      message: "La nueva contraseña debe contener al menos una letra mayúscula",
+    })
+    .regex(/[a-z]/, {
+      message: "La nueva contraseña debe contener al menos una letra minúscula",
+    })
+    .regex(/[0-9]/, {
+      message: "La nueva contraseña debe contener al menos un número",
+    }),
+});
+
+export type ChangePasswordDto = z.infer<typeof ChangePasswordSchema>;
+
+export const ResetPasswordSchema = z.object({
+  token: z.string().min(1, { message: "Token es obligatorio" }),
+  newPassword: ChangePasswordSchema.shape.newPassword,
+});
+
+export type ResetPasswordDto = z.infer<typeof ResetPasswordSchema>;

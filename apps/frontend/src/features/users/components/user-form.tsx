@@ -1,7 +1,6 @@
 // src/features/users/components/user-form.tsx
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { UseFormReturn } from "react-hook-form";
 
 import {
   Form,
@@ -13,29 +12,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import {
-  UpdateUserProfileDto,
-  UpdateUserProfileSchema,
-  UserProfileDto,
-} from "@vivero/shared";
+import { UpdateUserProfileDto } from "@vivero/shared";
 
 interface UserFormProps {
-  initialData?: UserProfileDto;
   onSubmit: (data: UpdateUserProfileDto) => Promise<void>;
   onCancel: () => void;
   formId: string;
+  form: UseFormReturn<UpdateUserProfileDto>;
 }
 
-export function UserForm({ initialData, onSubmit, formId }: UserFormProps) {
-  const form = useForm<UpdateUserProfileDto>({
-    resolver: zodResolver(UpdateUserProfileSchema),
-    defaultValues: {
-      firstName: initialData?.firstName || "",
-      lastName: initialData?.lastName || "",
-      email: initialData?.email || "",
-    },
-  });
-
+export function UserForm({ onSubmit, formId, form }: UserFormProps) {
   return (
     <Form {...form}>
       <form
@@ -50,7 +36,7 @@ export function UserForm({ initialData, onSubmit, formId }: UserFormProps) {
             <FormItem>
               <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={initialData?.firstName || ""} />
+                <Input {...field} placeholder="Nombre" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -64,7 +50,7 @@ export function UserForm({ initialData, onSubmit, formId }: UserFormProps) {
             <FormItem>
               <FormLabel>Apellido</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={initialData?.lastName || ""} />
+                <Input {...field} placeholder="Apellido" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,7 +64,7 @@ export function UserForm({ initialData, onSubmit, formId }: UserFormProps) {
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={initialData?.email || ""} />
+                <Input {...field} placeholder="Correo electrónico" />
               </FormControl>
               <FormMessage />
             </FormItem>

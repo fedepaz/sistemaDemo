@@ -4,8 +4,6 @@
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUpdateUserProfile } from "@/features/users/hooks/usersHooks";
 import { useEffect } from "react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateUserProfileDto, UpdateUserProfileSchema } from "@vivero/shared";
@@ -17,6 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 export function UserProfileEdit() {
   const { userProfile } = useAuthContext();
@@ -95,7 +95,7 @@ export function UserProfileEdit() {
         />
         <Button
           type="submit"
-          className="w-full bg-primary text-white rounded p-2 cursor-pointer"
+          className="w-full bg-primary rounded p-2 cursor-pointer"
           disabled={isPending || !form.formState.isDirty}
         >
           Actualizar

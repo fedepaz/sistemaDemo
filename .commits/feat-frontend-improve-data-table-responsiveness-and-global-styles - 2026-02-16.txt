@@ -1,0 +1,11 @@
+feat(frontend): improve data-table responsiveness and global styles
+
+Refactored the `DataTable` component to be responsive, adjusting the
+number of visible columns based on screen breakpoints. This provides a
+better user experience on smaller devices.
+
+- Implemented `useBreakpoint` hook to detect screen size changes.
+- Added an `useEffect` to dynamically set column visibility.
+- Adjusted global CSS to improve layout on mobile devices, especially
+  for safe areas.
+- Removed `overflow: hidden` to allow scrolling on pages with long content.

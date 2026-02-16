@@ -1,7 +1,7 @@
 // src/components/data-display/data-table/data-table.tsx
 "use client";
 
-import { Fragment, ReactNode, useMemo, useState } from "react";
+import { Fragment, ReactNode, useEffect, useMemo, useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -14,7 +14,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Filter } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,6 +49,7 @@ import {
 import { ExportDropdown } from "@/components/data-display/data-table/export-dropdown";
 import { DeleteDialog } from "@/components/data-display/data-table/delete-dialog-button";
 import { usePermission } from "@/hooks/usePermission";
+import { useBreakpoint } from "@/hooks/useMediaQuery";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -90,6 +97,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const breakpoint = useBreakpoint();
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<TData | null>(null);
@@ -165,20 +173,40 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    const columnsId = table.getAllColumns().map((column) => column.id);
+
+    let visibleCount = columnsId.length;
+
+    if (breakpoint === "sm") visibleCount = 2;
+
+    const visibility: VisibilityState = {};
+
+    columnsId.forEach((id, index) => {
+      if (id === "actions") {
+        visibility[id] = true;
+      } else {
+        visibility[id] = index < visibleCount;
+      }
+    });
+
+    setColumnVisibility(visibility);
+  }, [breakpoint, table]);
+
   const handleDeleteSingle = (item: TData) => {
     setItemsToDelete(item);
     setDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
-    if (onDelete) {
-      if (itemsToDelete) {
+  const confirmDelete = async () => {
+    if (onDelete && itemsToDelete) {
+      try {
         onDelete(itemsToDelete);
-      }
-      setRowSelection({});
+        setRowSelection({});
+        setDeleteDialogOpen(false);
+        setItemsToDelete(null);
+      } catch {}
     }
-    setDeleteDialogOpen(false);
-    setItemsToDelete(null);
   };
 
   const handleExport = (format: "csv" | "excel" | "json" | "pdf") => {
@@ -262,7 +290,7 @@ export function DataTable<TData, TValue>({
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
-                        <TableHead key={header.id} className="font-semibold">
+                        <TableHead key={header.id}>
                           {header.isPlaceholder
                             ? null
                             : flexRender(
@@ -350,7 +378,7 @@ export function DataTable<TData, TValue>({
                   disabled={!table.getCanPreviousPage()}
                 >
                   <span className="sr-only">Ir a la página anterior</span>
-                  {"<"}
+                  <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"
@@ -359,7 +387,7 @@ export function DataTable<TData, TValue>({
                   disabled={!table.getCanNextPage()}
                 >
                   <span className="sr-only">Ir a la página siguiente</span>
-                  {">"}
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"

@@ -1,0 +1,11 @@
+feat(frontend): improve UX/UI by standardizing color usage
+
+Refactor frontend components to eliminate hardcoded color values and
+leverage the semantic color palette defined in the design system. This
+ensures consistency, improves maintainability, and enhances the overall
+user experience by adhering to established UX/UI guidelines.
+
+- Replaced `bg-amber-*` with `bg-destructive` in `DatabaseUnavailablePage`.
+- Replaced `text-gray-*` with `text-muted-foreground` and `text-foreground`
+  in `NotFoundPage`.
+- Replaced `border-gray-200/20` with `border-border` in `UserMenu`.
