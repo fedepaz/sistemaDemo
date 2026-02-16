@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { User } from "lucide-react";
 import { UserProfileInfo } from "./user-info";
 import { UserProfileEdit } from "./user-edit";
+import { ChangePasswordForm } from "./user-password";
 
 interface UserMenuProps {
   open: boolean;
@@ -13,7 +14,7 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ open, onOpenChange }: UserMenuProps) {
-  const [tab, setTab] = useState<"info" | "edit">("info");
+  const [tab, setTab] = useState<"info" | "edit" | "password">("info");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,6 +47,18 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
             >
               Actualizar Perfil
             </button>
+            <button
+              onClick={() => setTab("password")}
+              className={`flex-shrink-0 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+                ${
+                  tab === "password"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }
+              `}
+            >
+              Cambiar Contraseña
+            </button>
           </nav>
 
           {/* Content */}
@@ -61,7 +74,9 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
               </DialogTitle>
             </div>
 
-            {tab === "info" ? <UserProfileInfo /> : <UserProfileEdit />}
+            {tab === "info" && <UserProfileInfo />}
+            {tab === "edit" && <UserProfileEdit />}
+            {tab === "password" && <ChangePasswordForm />}
           </div>
         </div>
       </DialogContent>

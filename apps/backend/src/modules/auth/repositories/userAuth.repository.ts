@@ -80,4 +80,21 @@ export class UserAuthRepository {
       throw new InternalServerErrorException('Error creating user');
     }
   }
+
+  async updatePassword(userId: string, newPasswordHash: string): Promise<void> {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          passwordHash: newPasswordHash,
+          updatedAt: new Date(),
+        },
+      });
+    } catch (error) {
+      console.error('Error updating password:', error);
+      throw new InternalServerErrorException('Error updating password');
+    }
+  }
 }

@@ -59,16 +59,20 @@ export function RegisterForm() {
       <div className="max-w-md w-full space-y-6 md:space-y-8">
         {/* Logo */}
         <div className="flex justify-center">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Sprout className="w-7 h-7 text-primary" />
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
+              <span className="text-primary font-bold text-sm">DM</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-              AgriFlow
-            </h1>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                Demo
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                Sistema de gestión
+              </p>
+            </div>
           </div>
         </div>
-
         {/* Main Message */}
         <div className="space-y-2 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground">

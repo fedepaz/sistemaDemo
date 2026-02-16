@@ -15,6 +15,7 @@ import {
   AuthResponseDto,
   TokensDto,
   RegisterAuthDto,
+  ChangePasswordDto,
 } from '@vivero/shared';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -151,6 +152,30 @@ export class AuthService {
       this.logger.error('Error refreshing tokens:', error);
       throw new UnauthorizedException('Invalid credentials');
     }
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto): Promise<void> {
+    // Validate user
+    const user = await this.userAuthRepo.findById(userId);
+    if (!user) throw new NotFoundException('User not found');
+
+    // Validate password
+    const isPasswordValid = await bcrypt.compare(
+      dto.currentPassword,
+      user.passwordHash,
+    );
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Hash new password
+    const newPasswordHash = await bcrypt.hash(
+      dto.newPassword,
+      this.BCRYPT_ROUNDS,
+    );
+
+    // Update password
+    await this.userAuthRepo.updatePassword(userId, newPasswordHash);
   }
 
   // Helper to generate tokens using the injected JwtService
