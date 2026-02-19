@@ -28,6 +28,12 @@ import {
   Pencil,
   Plus,
   Trash2,
+  Building2,
+  Globe,
+  List,
+  MessageSquare,
+  Settings,
+  Users,
 } from "lucide-react";
 
 export type PermissionRow = {
@@ -41,6 +47,7 @@ const SCOPE_LABELS: Record<PermissionScope, { label: string; desc: string }> = {
 };
 
 const TABLE_META: Record<string, { label: string; icon: LucideIcon }> = {
+  // Agricultural Resources
   plants: { label: "Plantas", icon: Sprout },
   greenhouses: { label: "Invernaderos", icon: Warehouse },
   reports: { label: "Reportes", icon: FileBarChart },
@@ -48,9 +55,19 @@ const TABLE_META: Record<string, { label: string; icon: LucideIcon }> = {
   orders: { label: "Pedidos", icon: Package },
   pests: { label: "Plagas", icon: Bug },
   irrigation: { label: "Riego", icon: Droplets },
-  lighting: { label: "Iluminaci\u00f3n", icon: Sun },
+  lighting: { label: "Iluminación", icon: Sun },
   climate: { label: "Clima", icon: Thermometer },
   tasks: { label: "Tareas", icon: ClipboardList },
+
+  // System Resources
+  audit_logs: { label: "Logs de Auditoría", icon: Shield },
+  enums: { label: "Enumerados", icon: List },
+  messages: { label: "Mensajes", icon: MessageSquare },
+  tenants: { label: "Tenants", icon: Building2 },
+  users: { label: "Usuarios", icon: Users },
+  user_permissions: { label: "Permisos", icon: Shield },
+  user_preferences: { label: "Preferencias", icon: Settings },
+  locales: { label: "Locales", icon: Globe },
 };
 
 function getTableMeta(tableName: string) {
@@ -63,24 +80,24 @@ function getTableMeta(tableName: string) {
 }
 
 const CRUD_COLUMNS = [
-  { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-blue-500" },
+  { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-sky-600" },
   {
     key: "canCreate" as const,
     label: "Crear",
     icon: Plus,
-    color: "text-emerald-500",
+    color: "text-emerald-600",
   },
   {
     key: "canUpdate" as const,
     label: "Editar",
     icon: Pencil,
-    color: "text-amber-500",
+    color: "text-amber-600",
   },
   {
     key: "canDelete" as const,
     label: "Eliminar",
     icon: Trash2,
-    color: "text-red-500",
+    color: "text-rose-600",
   },
 ] as const;
 
@@ -121,73 +138,83 @@ export function PermissionRowItem({
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-4 rounded-lg border px-4 py-4 transition-all lg:flex-row lg:items-center",
+        "group relative flex flex-col gap-6 rounded-xl border p-5 transition-all lg:flex-row lg:items-center lg:gap-4",
         isDirty
-          ? "border-primary/30 bg-primary/[0.03]"
-          : "border-transparent bg-muted/30 hover:bg-muted/50",
+          ? "border-primary/40 bg-primary/[0.04] shadow-sm"
+          : "border-border/50 bg-muted/30 hover:bg-muted/50",
       )}
     >
       {/* Dirty indicator */}
       {isDirty && (
-        <div className="absolute left-0 top-3 bottom-3 w-0.5 rounded-full bg-primary" />
+        <div className="absolute left-0 top-4 bottom-4 w-1 rounded-r-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.4)]" />
       )}
 
       {/* Resource label */}
-      <div className="flex min-w-0 items-center gap-3 lg:w-48 lg:shrink-0">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-muted">
-          <Icon className="h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center gap-4 lg:w-52 lg:shrink-0">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-background shadow-sm border border-border/50">
+          <Icon className="h-5 w-5 text-primary" />
         </div>
-        <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-medium text-foreground">
+        <div className="flex flex-col gap-0.5 min-w-0">
+          <span className="text-sm font-semibold text-foreground truncate">
             {meta.label}
           </span>
-          <span className="text-xs text-muted-foreground">{row.tableName}</span>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70">
+            {row.tableName}
+          </span>
         </div>
       </div>
 
-      {/* CRUD switches */}
-      <div className="flex flex-1 items-center gap-6 pl-12 lg:gap-8 lg:pl-0">
+      {/* CRUD switches - Responsive Grid */}
+      <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 lg:flex lg:flex-1 lg:items-center lg:gap-8 lg:px-4">
         {CRUD_COLUMNS.map((col) => {
           const isActive = row[col.key];
           const wasChanged = row[col.key] !== originalRow[col.key];
           return (
             <Tooltip key={col.key}>
               <TooltipTrigger asChild>
-                <label className="flex cursor-pointer flex-col items-center gap-1.5">
-                  <div className="flex items-center gap-1.5">
+                <label className="flex cursor-pointer flex-col items-center gap-2 group/switch">
+                  <div className="flex items-center gap-2">
                     <col.icon
                       className={cn(
-                        "h-3.5 w-3.5 transition-colors",
-                        isActive ? col.color : "text-muted-foreground/40",
+                        "h-4 w-4 transition-all duration-300",
+                        isActive
+                          ? col.color
+                          : "text-muted-foreground/30 group-hover/switch:text-muted-foreground/50",
                       )}
                     />
                     <span
                       className={cn(
-                        "text-xs font-medium transition-colors",
+                        "text-[11px] font-medium uppercase tracking-tight transition-colors",
                         isActive
                           ? "text-foreground"
-                          : "text-muted-foreground/60",
+                          : "text-muted-foreground/50 group-hover/switch:text-muted-foreground/70",
                       )}
                     >
                       {col.label}
                     </span>
                   </div>
-                  <Switch
-                    checked={isActive}
-                    onCheckedChange={() => onToggleCrud(row.tableName, col.key)}
-                    className={cn(
-                      "h-5 w-9 data-[state=checked]:bg-primary",
-                      wasChanged &&
-                        "ring-2 ring-primary/20 ring-offset-1 ring-offset-background",
-                    )}
-                    aria-label={`${col.label} - ${meta.label}`}
-                  />
+                  <div className="flex h-11 items-center justify-center">
+                    {" "}
+                    {/* Minimum touch target height */}
+                    <Switch
+                      checked={isActive}
+                      onCheckedChange={() =>
+                        onToggleCrud(row.tableName, col.key)
+                      }
+                      className={cn(
+                        "h-6 w-11 data-[state=checked]:bg-primary",
+                        wasChanged &&
+                          "ring-4 ring-primary/10 ring-offset-0 ring-offset-background",
+                      )}
+                      aria-label={`${col.label} - ${meta.label}`}
+                    />
+                  </div>
                 </label>
               </TooltipTrigger>
-              <TooltipContent side="top">
-                <p className="text-xs">
+              <TooltipContent side="top" className="bg-popover border shadow-md">
+                <p className="text-xs font-medium">
                   {isActive ? "Desactivar" : "Activar"}{" "}
-                  {col.label.toLowerCase()} en {meta.label}
+                  {col.label.toLowerCase()}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -196,12 +223,15 @@ export function PermissionRowItem({
       </div>
 
       {/* Scope selector */}
-      <div className="flex items-center gap-3 pl-12 lg:pl-0">
-        <Separator orientation="vertical" className="hidden h-8 lg:block" />
-        <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-medium text-muted-foreground">
-            Alcance
-          </span>
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
+        <Separator orientation="vertical" className="hidden h-10 lg:block" />
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <Shield className="h-3.5 w-3.5 text-muted-foreground/70" />
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+              Alcance de datos
+            </span>
+          </div>
           <ToggleGroup
             type="single"
             value={row.scope}
@@ -209,8 +239,7 @@ export function PermissionRowItem({
               if (val) onScopeChange(row.tableName, val as PermissionScope);
             }}
             variant="outline"
-            size="sm"
-            className="gap-0 rounded-lg border bg-muted/50 p-0.5"
+            className="flex w-full overflow-hidden rounded-xl border bg-muted/40 p-1 lg:w-auto"
           >
             {(["NONE", "OWN", "ALL"] as const).map((scope) => (
               <Tooltip key={scope}>
@@ -218,25 +247,25 @@ export function PermissionRowItem({
                   <ToggleGroupItem
                     value={scope}
                     className={cn(
-                      "h-7 rounded-md border-0 px-3 text-xs font-medium transition-all",
-                      "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground",
+                      "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
+                      "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted",
                       row.scope === scope &&
                         scope === "ALL" &&
-                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground shadow-sm",
                       row.scope === scope &&
                         scope === "OWN" &&
-                        "data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground",
+                        "data-[state=on]:bg-emerald-600/10 data-[state=on]:text-emerald-700 data-[state=on]:border-emerald-200 shadow-sm dark:data-[state=on]:bg-emerald-500/20 dark:data-[state=on]:text-emerald-400",
                       row.scope === scope &&
                         scope === "NONE" &&
-                        "data-[state=on]:bg-muted data-[state=on]:text-foreground",
+                        "data-[state=on]:bg-muted-foreground/10 data-[state=on]:text-muted-foreground shadow-sm",
                     )}
                     aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${meta.label}`}
                   >
                     {SCOPE_LABELS[scope].label}
                   </ToggleGroupItem>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p className="text-xs">{SCOPE_LABELS[scope].desc}</p>
+                <TooltipContent side="bottom" className="bg-popover border shadow-md">
+                  <p className="text-xs font-medium">{SCOPE_LABELS[scope].desc}</p>
                 </TooltipContent>
               </Tooltip>
             ))}
@@ -245,17 +274,17 @@ export function PermissionRowItem({
       </div>
 
       {/* Active count badge */}
-      <div className="absolute right-4 top-4 lg:static lg:ml-auto lg:shrink-0">
+      <div className="absolute right-5 top-5 lg:static lg:ml-auto lg:shrink-0">
         <Badge
           variant={activeCrudCount > 0 ? "default" : "secondary"}
           className={cn(
-            "h-6 min-w-6 justify-center text-xs font-semibold tabular-nums",
+            "h-7 min-w-[2.5rem] justify-center text-[11px] font-bold tabular-nums rounded-full shadow-sm transition-all",
             activeCrudCount === 4 &&
-              "bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20",
+              "bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400",
             activeCrudCount > 0 &&
               activeCrudCount < 4 &&
-              "bg-amber-500/10 text-amber-600 border border-amber-500/20 hover:bg-amber-500/20",
-            activeCrudCount === 0 && "bg-muted text-muted-foreground",
+              "bg-amber-500/10 text-amber-700 border border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400",
+            activeCrudCount === 0 && "bg-muted text-muted-foreground/60 border-transparent",
           )}
         >
           {activeCrudCount}/4
