@@ -44,7 +44,15 @@ export class PermissionsRepository implements IPermissionRepository {
   ): Promise<void> {
     await this.prisma.userPermission.upsert({
       where: { userId_tableName: { userId, tableName } },
-      create: { userId, tableName, ...data },
+      create: {
+        userId,
+        tableName,
+        canCreate: data.canCreate ?? false,
+        canRead: data.canRead ?? false,
+        canUpdate: data.canUpdate ?? false,
+        canDelete: data.canDelete ?? false,
+        scope: data.scope ?? 'NONE',
+      },
       update: data,
     });
   }

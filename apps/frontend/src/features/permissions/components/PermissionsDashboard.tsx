@@ -1,7 +1,6 @@
 // src/features/permissions/components/permissions-manager.tsx
 "use client";
 
-import * as React from "react";
 import { useState, useMemo, useCallback } from "react";
 import {
   Shield,
@@ -13,17 +12,11 @@ import {
   Trash2,
   Users,
   Search,
-  Sprout,
-  Warehouse,
-  FileBarChart,
-  UserCheck,
-  Package,
-  Bug,
-  Droplets,
-  Sun,
-  Thermometer,
-  ClipboardList,
-  type LucideIcon,
+  Building2,
+  Globe,
+  List,
+  MessageSquare,
+  Settings,
 } from "lucide-react";
 import {
   Card,
@@ -41,7 +34,6 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,39 +49,38 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./empty-state";
 import { PermissionRow, PermissionRowItem } from "./permission-row-item";
-import { PermissionScope } from "@vivero/shared";
+import { PermissionScope, TablePermission } from "@vivero/shared";
 import { useUsers } from "@/features/users/hooks/usersHooks";
-import { usePermissions } from "@/features/auth/hooks/use-permissions";
 
-// ── Types ──
+import {
+  useSetUserPermissions,
+  useTables,
+  useUserPermissions,
+} from "../hooks/permsHooks";
 
 // ── Table name metadata ──
-
-const TABLE_META: Record<string, { label: string; icon: LucideIcon }> = {
-  plants: { label: "Plantas", icon: Sprout },
-  greenhouses: { label: "Invernaderos", icon: Warehouse },
-  reports: { label: "Reportes", icon: FileBarChart },
-  clients: { label: "Clientes", icon: UserCheck },
-  orders: { label: "Pedidos", icon: Package },
-  pests: { label: "Plagas", icon: Bug },
-  irrigation: { label: "Riego", icon: Droplets },
-  lighting: { label: "Iluminaci\u00f3n", icon: Sun },
-  climate: { label: "Clima", icon: Thermometer },
-  tasks: { label: "Tareas", icon: ClipboardList },
-};
+const TABLE_META = {
+  audit_logs: { label: "Logs de Auditoría", icon: Shield },
+  enums: { label: "Enumerados", icon: List },
+  messages: { label: "Mensajes", icon: MessageSquare },
+  tenants: { label: "Tenants", icon: Building2 },
+  users: { label: "Usuarios", icon: Users },
+  user_preferences: { label: "Preferencias", icon: Settings },
+  locales: { label: "Locales", icon: Globe },
+} as const;
 
 function getTableMeta(tableName: string) {
+  const meta = TABLE_META[tableName as keyof typeof TABLE_META];
   return (
-    TABLE_META[tableName] ?? {
-      label: tableName.charAt(0).toUpperCase() + tableName.slice(1),
+    meta || {
+      label: tableName
+        .split("_")
+        .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+        .join(" "),
       icon: Shield,
     }
   );
 }
-
-// ── Scope label helpers ──
-
-// ── CRUD column config ──
 
 const CRUD_COLUMNS = [
   { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-blue-500" },
@@ -113,44 +104,111 @@ const CRUD_COLUMNS = [
   },
 ] as const;
 
-// ── Permission row component ──
+interface PermissionsManagerProps {
+  userId: string;
+  userInitials: string;
+}
 
-// ── Empty state ──
-
-// ── Loading skeleton ──
-
-// ── Main component ──
-
-export function PermissionsDashboard() {
-  const { data: users, isLoading: isLoadingUsers } = useUsers();
-  const { data: permissions, isLoading: isLoadingPermissions } =
-    usePermissions();
-  const [localPermissions, setLocalPermissions] = useState<PermissionRow[]>([]);
-  const [originalPermissions, setOriginalPermissions] = useState<
-    PermissionRow[]
-  >([]);
+function PermissionsManager({ userId, userInitials }: PermissionsManagerProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  // Track ONLY what changed relative to original data
+  const [localChanges, setLocalChanges] = useState<Record<string, TablePermission>>({});
 
-  // Sync local state when permissions prop changes
-  React.useEffect(() => {
-    if (!permissions) return;
-    const permissionsArray: PermissionRow[] = Object.entries(permissions).map(
-      ([tableName, values]) => ({
+  const { data: tables = [] } = useTables();
+  const { data: userPermissions = {}, isLoading: isLoadingUserPerms } =
+    useUserPermissions(userId);
+  const { mutate: savePermissions, isPending: isSaving } =
+    useSetUserPermissions();
+
+  // The actual state is the merge of original + changes
+  const localPermissions = useMemo(() => {
+    return tables.map((tableName) => {
+      // If we have a local change, use it. Otherwise use original data or defaults.
+      if (localChanges[tableName]) {
+        return { tableName, ...localChanges[tableName] };
+      }
+      
+      const perms = userPermissions[tableName] || {
+        canCreate: false,
+        canRead: false,
+        canUpdate: false,
+        canDelete: false,
+        scope: "NONE" as const,
+      };
+      
+      return {
         tableName,
-        ...values,
-      }),
+        ...perms,
+      };
+    });
+  }, [userPermissions, tables, localChanges]);
+
+  // For checking if anything changed
+  const isDirty = useMemo(() => Object.keys(localChanges).length > 0, [localChanges]);
+  const changedCount = useMemo(() => Object.keys(localChanges).length, [localChanges]);
+
+  // Handlers
+  const handleToggleCrud = useCallback(
+    (
+      tableName: string,
+      key: keyof Pick<
+        TablePermission,
+        "canCreate" | "canRead" | "canUpdate" | "canDelete"
+      >,
+    ) => {
+      setLocalChanges((prev) => {
+        const current = prev[tableName] || userPermissions[tableName] || {
+          canCreate: false,
+          canRead: false,
+          canUpdate: false,
+          canDelete: false,
+          scope: "NONE" as const,
+        };
+        
+        const next = { ...current, [key]: !current[key] };
+        
+        // If next is identical to original, we could remove it from changes, 
+        // but for simplicity we just keep it.
+        return { ...prev, [tableName]: next };
+      });
+    },
+    [userPermissions],
+  );
+
+  const handleScopeChange = useCallback(
+    (tableName: string, scope: PermissionScope) => {
+      setLocalChanges((prev) => {
+        const current = prev[tableName] || userPermissions[tableName] || {
+          canCreate: false,
+          canRead: false,
+          canUpdate: false,
+          canDelete: false,
+          scope: "NONE" as const,
+        };
+        
+        return { ...prev, [tableName]: { ...current, scope } };
+      });
+    },
+    [userPermissions],
+  );
+
+  const handleDiscard = useCallback(() => {
+    setLocalChanges({});
+  }, []);
+
+  const handleSave = useCallback(() => {
+    if (!userId || !isDirty) return;
+    
+    // Convert current state to what the API expects
+    savePermissions(
+      { userId, permissions: localPermissions },
+      {
+        onSuccess: () => {
+          setLocalChanges({});
+        },
+      },
     );
-    setLocalPermissions(permissionsArray);
-    setOriginalPermissions(permissionsArray);
-  }, [permissions]);
-
-  // Find selected user
-
-  const selectedUser = useMemo(() => {
-    if (!users) return null;
-    return users.find((u) => u.id === selectedUserId);
-  }, [users, selectedUserId]);
+  }, [userId, localPermissions, isDirty, savePermissions]);
 
   // Filter rows by search
   const filteredRows = useMemo(() => {
@@ -165,76 +223,154 @@ export function PermissionsDashboard() {
     });
   }, [localPermissions, searchQuery]);
 
-  // Dirty state
-  const isDirty = useMemo(() => {
-    if (localPermissions.length !== originalPermissions.length) return true;
-    return localPermissions.some((row) => {
-      const orig = originalPermissions.find(
-        (o) => o.tableName === row.tableName,
-      );
-      if (!orig) return true;
-      return (
-        row.canCreate !== orig.canCreate ||
-        row.canRead !== orig.canRead ||
-        row.canUpdate !== orig.canUpdate ||
-        row.canDelete !== orig.canDelete ||
-        row.scope !== orig.scope
-      );
-    });
-  }, [localPermissions, originalPermissions]);
+  return (
+    <>
+      {/* Selected user summary header */}
+      <div className="flex items-center gap-4 px-6 pb-4">
+        {isDirty && (
+          <Badge
+            variant="outline"
+            className="shrink-0 border-primary/30 bg-primary/5 text-primary"
+          >
+            {changedCount} {changedCount === 1 ? "cambio" : "cambios"}{" "}
+            pendiente{changedCount !== 1 ? "s" : ""}
+          </Badge>
+        )}
+        <div className="ml-auto flex items-center gap-2">
+          <Avatar className="h-7 w-7 border border-border">
+            <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">
+              {userInitials}
+            </AvatarFallback>
+          </Avatar>
+          <span className="text-xs text-muted-foreground">
+            {localPermissions.length}{" "}
+            {localPermissions.length === 1 ? "recurso" : "recursos"}{" "}
+            configurados
+          </span>
+        </div>
+      </div>
 
-  const changedCount = useMemo(() => {
-    return localPermissions.filter((row) => {
-      const orig = originalPermissions.find(
-        (o) => o.tableName === row.tableName,
-      );
-      if (!orig) return true;
-      return (
-        row.canCreate !== orig.canCreate ||
-        row.canRead !== orig.canRead ||
-        row.canUpdate !== orig.canUpdate ||
-        row.canDelete !== orig.canDelete ||
-        row.scope !== orig.scope
-      );
-    }).length;
-  }, [localPermissions, originalPermissions]);
+      <Separator />
 
-  // Handlers
-  const handleToggleCrud = useCallback(
-    (
-      tableName: string,
-      key: keyof Pick<
-        PermissionRow,
-        "canCreate" | "canRead" | "canUpdate" | "canDelete"
-      >,
-    ) => {
-      setLocalPermissions((prev) =>
-        prev.map((row) =>
-          row.tableName === tableName ? { ...row, [key]: !row[key] } : row,
-        ),
-      );
-    },
-    [],
+      {/* ── Permissions board ── */}
+      <CardContent className="p-0">
+        {tables.length === 0 && !isLoadingUserPerms ? (
+          <EmptyState hasUser />
+        ) : (
+          <div className="flex flex-col">
+            {/* Search + column headers */}
+            <div className="flex items-center gap-4 border-b bg-muted/20 px-6 py-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Filtrar recursos..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-8 border-none bg-transparent pl-8 text-sm shadow-none focus-visible:ring-0"
+                />
+              </div>
+              <div className="hidden items-center gap-2 text-xs text-muted-foreground lg:flex">
+                {CRUD_COLUMNS.map((col) => (
+                  <Tooltip key={col.key}>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <col.icon className={cn("h-3 w-3", col.color)} />
+                        <span>{col.label}</span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">
+                        Permiso de {col.label.toLowerCase()}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
+            </div>
+
+            {/* Rows */}
+            <ScrollArea className="max-h-[480px]">
+              <div className="flex flex-col gap-2 p-4">
+                {filteredRows.length === 0 && !isLoadingUserPerms ? (
+                  <div className="flex items-center justify-center py-8">
+                    <p className="text-sm text-muted-foreground">
+                      No se encontraron recursos para &quot;{searchQuery}
+                      &quot;
+                    </p>
+                  </div>
+                ) : (
+                  filteredRows.map((row) => {
+                    const originalRow = userPermissions[row.tableName] || {
+                      canCreate: false,
+                      canRead: false,
+                      canUpdate: false,
+                      canDelete: false,
+                      scope: "NONE" as const,
+                    };
+                    return (
+                      <PermissionRowItem
+                        key={row.tableName}
+                        row={row}
+                        originalRow={{ tableName: row.tableName, ...originalRow }}
+                        onToggleCrud={handleToggleCrud}
+                        onScopeChange={handleScopeChange}
+                      />
+                    );
+                  })
+                )}
+              </div>
+            </ScrollArea>
+          </div>
+        )}
+      </CardContent>
+
+      {/* ── Footer ── */}
+      {tables.length > 0 && (
+        <>
+          <Separator />
+          <CardFooter className="flex items-center justify-between px-6 py-4">
+            <p className="text-xs text-muted-foreground">
+              {isDirty
+                ? `${changedCount} ${changedCount === 1 ? "recurso modificado" : "recursos modificados"}`
+                : "Sin cambios pendientes"}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleDiscard}
+                disabled={!isDirty}
+                className="gap-1.5"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Descartar
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleSave}
+                disabled={!isDirty || isSaving}
+                className="gap-1.5"
+              >
+                <Save className="h-3.5 w-3.5" />
+                Guardar permisos
+              </Button>
+            </div>
+          </CardFooter>
+        </>
+      )}
+    </>
   );
+}
 
-  const handleScopeChange = useCallback(
-    (tableName: string, scope: PermissionScope) => {
-      setLocalPermissions((prev) =>
-        prev.map((row) =>
-          row.tableName === tableName ? { ...row, scope } : row,
-        ),
-      );
-    },
-    [],
-  );
+export function PermissionsDashboard() {
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  const handleDiscard = useCallback(() => {
-    setLocalPermissions(originalPermissions.map((p) => ({ ...p })));
-  }, [originalPermissions]);
+  const { data: users = [], isLoading: isLoadingUsers } = useUsers();
 
-  const handleSave = useCallback(() => {
-    console.log(localPermissions);
-  }, [localPermissions]);
+  const selectedUser = useMemo(() => {
+    if (!users) return null;
+    return users.find((u) => u.id === selectedUserId);
+  }, [users, selectedUserId]);
 
   const handleUserChange = useCallback((userId: string) => {
     setSelectedUserId(userId);
@@ -267,15 +403,6 @@ export function PermissionsDashboard() {
                 </CardDescription>
               </div>
             </div>
-            {isDirty && (
-              <Badge
-                variant="outline"
-                className="shrink-0 border-primary/30 bg-primary/5 text-primary"
-              >
-                {changedCount} {changedCount === 1 ? "cambio" : "cambios"}{" "}
-                pendiente{changedCount !== 1 ? "s" : ""}
-              </Badge>
-            )}
           </div>
         </CardHeader>
 
@@ -337,133 +464,20 @@ export function PermissionsDashboard() {
                 })}
               </SelectContent>
             </Select>
-
-            {/* Selected user summary */}
-            {selectedUser &&
-              !isLoadingPermissions &&
-              localPermissions.length > 0 && (
-                <div className="ml-auto hidden items-center gap-2 sm:flex">
-                  <Avatar className="h-7 w-7 border border-border">
-                    <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">
-                      {userInitials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-xs text-muted-foreground">
-                    {localPermissions.length}{" "}
-                    {localPermissions.length === 1 ? "recurso" : "recursos"}{" "}
-                    configurados
-                  </span>
-                </div>
-              )}
           </div>
         </div>
 
-        <Separator />
-
-        {/* ── Permissions board ── */}
-        <CardContent className="p-0">
-          {!selectedUserId ? (
-            <EmptyState hasUser={false} />
-          ) : localPermissions.length === 0 ? (
-            <EmptyState hasUser />
-          ) : (
-            <div className="flex flex-col">
-              {/* Search + column headers */}
-              <div className="flex items-center gap-4 border-b bg-muted/20 px-6 py-3">
-                <div className="relative flex-1">
-                  <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    placeholder="Filtrar recursos..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-8 border-none bg-transparent pl-8 text-sm shadow-none focus-visible:ring-0"
-                  />
-                </div>
-                <div className="hidden items-center gap-2 text-xs text-muted-foreground lg:flex">
-                  {CRUD_COLUMNS.map((col) => (
-                    <Tooltip key={col.key}>
-                      <TooltipTrigger asChild>
-                        <div className="flex items-center gap-1">
-                          <col.icon className={cn("h-3 w-3", col.color)} />
-                          <span>{col.label}</span>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="text-xs">
-                          Permiso de {col.label.toLowerCase()}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ))}
-                </div>
-              </div>
-
-              {/* Rows */}
-              <ScrollArea className="max-h-[480px]">
-                <div className="flex flex-col gap-2 p-4">
-                  {filteredRows.length === 0 ? (
-                    <div className="flex items-center justify-center py-8">
-                      <p className="text-sm text-muted-foreground">
-                        No se encontraron recursos para &quot;{searchQuery}
-                        &quot;
-                      </p>
-                    </div>
-                  ) : (
-                    filteredRows.map((row) => {
-                      const orig =
-                        originalPermissions.find(
-                          (o) => o.tableName === row.tableName,
-                        ) ?? row;
-                      return (
-                        <PermissionRowItem
-                          key={row.tableName}
-                          row={row}
-                          originalRow={orig}
-                          onToggleCrud={handleToggleCrud}
-                          onScopeChange={handleScopeChange}
-                        />
-                      );
-                    })
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
-          )}
-        </CardContent>
-
-        {/* ── Footer ── */}
-        {selectedUserId && localPermissions.length > 0 && (
+        {!selectedUserId ? (
           <>
             <Separator />
-            <CardFooter className="flex items-center justify-between px-6 py-4">
-              <p className="text-xs text-muted-foreground">
-                {isDirty
-                  ? `${changedCount} ${changedCount === 1 ? "recurso modificado" : "recursos modificados"}`
-                  : "Sin cambios pendientes"}
-              </p>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleDiscard}
-                  disabled={!isDirty}
-                  className="gap-1.5"
-                >
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  Descartar
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={handleSave}
-                  disabled={!isDirty}
-                  className="gap-1.5"
-                >
-                  <Save className="h-3.5 w-3.5" />
-                  Guardar permisos
-                </Button>
-              </div>
-            </CardFooter>
+            <EmptyState hasUser={false} />
           </>
+        ) : (
+          <PermissionsManager
+            key={selectedUserId}
+            userId={selectedUserId}
+            userInitials={userInitials}
+          />
         )}
       </Card>
     </TooltipProvider>

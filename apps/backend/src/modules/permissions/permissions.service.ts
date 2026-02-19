@@ -1,7 +1,7 @@
 // src/permissions/permissions.service.ts
 
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { PermissionCheck, UserPermissions } from './types/permission.type';
+import { PermissionCheck, UserPermissions } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
 
 type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
@@ -13,9 +13,9 @@ export class PermissionsService {
   private readonly ALLOWED_TABLES = [
     'audit_logs',
     'enums',
-    'messages',
     'tenants',
     'users',
+    'user_permissions',
     // Add future entity tables here using their @@map name
   ] as const;
 
@@ -36,6 +36,13 @@ export class PermissionsService {
       this.logger.warn(`Invalid table name: ${tableName}`);
       throw new BadRequestException(`Invalid table name: ${tableName}`);
     }
+  }
+
+  /**
+   * Get all tables
+   */
+  getAllTables(): string[] {
+    return [...this.ALLOWED_TABLES];
   }
 
   /**
@@ -138,5 +145,57 @@ export class PermissionsService {
     this.validateTableName(tableName);
 
     await this.permissionsRepo.deleteByUserIdTableName(userId, tableName);
+  }
+
+  async setPermissionsForUser(
+    userId: string,
+    permissions: Array<{
+      tableName: string;
+      canCreate: boolean;
+      canRead: boolean;
+      canUpdate: boolean;
+      canDelete: boolean;
+      scope: 'NONE' | 'OWN' | 'ALL';
+    }>,
+  ): Promise<void> {
+    // Validate tables names
+    const invalidTables = permissions
+      .map((p) => p.tableName)
+      .filter((tableName) => !this.isAllowedTable(tableName));
+
+    if (invalidTables.length > 0) {
+      const invalidTablesNames = invalidTables.join(', ');
+      throw new BadRequestException(
+        `Invalid table name: ${invalidTablesNames}`,
+      );
+    }
+
+    // Gete existing permissions
+    const currentPerms = await this.permissionsRepo.findManyByUserId(userId);
+    const currentTableNames = currentPerms.map((p) => p.tableName);
+    const inputTableNames = permissions.map((p) => p.tableName);
+
+    // Delete permissions for tables that are not in the input
+    const tablesToDelete = currentTableNames.filter(
+      (tableName) => !inputTableNames.includes(tableName),
+    );
+    await Promise.all(
+      tablesToDelete.map((tableName) =>
+        this.permissionsRepo.deleteByUserIdTableName(userId, tableName),
+      ),
+    );
+
+    // Upsert permissions for tables that are in the input
+    await Promise.all(
+      permissions.map((p) =>
+        this.permissionsRepo.upsert(userId, p.tableName, {
+          canCreate: p.canCreate,
+          canRead: p.canRead,
+          canUpdate: p.canUpdate,
+          canDelete: p.canDelete,
+          scope: p.scope,
+        }),
+      ),
+    );
   }
 }
