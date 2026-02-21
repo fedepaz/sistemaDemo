@@ -209,21 +209,12 @@ export class AuthService {
       this.config.get<number>('config.jwt.refreshExpiresIn') || '7d';
 
     const nodeEnv = this.config.getOrThrow<string>('config.environment');
+    const isProd = nodeEnv === 'production';
 
-    if (nodeEnv === 'development') {
-      this.logger.debug('--- Generating Tokens ---');
+    if (!isProd) {
       this.logger.debug(
-        `Access Token Payload: ${JSON.stringify(accessTokenPayload)}`,
+        `🔑 ISSUING TOKENS | Sub: ${payload.sub} | Username: ${payload.username} | Tenant: ${payload.tenantId}`,
       );
-      this.logger.debug(`Access Token Secret: ${accessTokenSecret}`);
-      this.logger.debug(`Access Token Expires In: ${accessTokenExpiresIn}`);
-      this.logger.debug('-------------------------');
-      this.logger.debug(
-        `Refresh Token Payload: ${JSON.stringify(refreshTokenPayload)}`,
-      );
-      this.logger.debug(`Refresh Token Secret: ${refreshTokenSecret}`);
-      this.logger.debug(`Refresh Token Expires In: ${refreshTokenExpiresIn}`);
-      this.logger.debug('--- End Generating Tokens ---');
     }
 
     const [accessToken, refreshToken] = await Promise.all([
