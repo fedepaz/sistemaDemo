@@ -206,6 +206,7 @@ This document lists all the React components found in the `apps/frontend/src` di
 -   `PermissionsDashboard` [x]
 -   `PermissionsManager` [x]
 -   `PermissionRowItem` [x]
+-   `UserSelector` [x]
 -   `PermissionsSkeleton` [x]
 -   `EmptyState` [x]
 

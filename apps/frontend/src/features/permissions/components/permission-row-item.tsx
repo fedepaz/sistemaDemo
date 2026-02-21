@@ -9,99 +9,21 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-} from "@radix-ui/react-tooltip";
+} from "@/components/ui/tooltip";
 import { PermissionScope, TablePermission } from "@vivero/shared";
+import { Shield } from "lucide-react";
+import { memo } from "react";
 import {
-  LucideIcon,
-  Sprout,
-  Warehouse,
-  FileBarChart,
-  UserCheck,
-  Package,
-  Bug,
-  Droplets,
-  Sun,
-  Thermometer,
-  ClipboardList,
-  Shield,
-  Eye,
-  Pencil,
-  Plus,
-  Trash2,
-  Building2,
-  Globe,
-  List,
-  MessageSquare,
-  Settings,
-  Users,
-} from "lucide-react";
+  CRUD_COLUMNS,
+  getTableMeta,
+  SCOPE_LABELS,
+} from "../constants/table-meta";
 
 export type PermissionRow = {
   tableName: string;
 } & TablePermission;
 
-const SCOPE_LABELS: Record<PermissionScope, { label: string; desc: string }> = {
-  NONE: { label: "Ninguno", desc: "Sin acceso a registros" },
-  OWN: { label: "Propios", desc: "Solo registros creados por el usuario" },
-  ALL: { label: "Todos", desc: "Todos los registros de la tabla" },
-};
-
-const TABLE_META: Record<string, { label: string; icon: LucideIcon }> = {
-  // Enterprise Resources
-  entities: { label: "Entidades", icon: Package },
-  facilities: { label: "Instalaciones", icon: Building2 },
-  reports: { label: "Reportes", icon: FileBarChart },
-  clients: { label: "Clientes", icon: UserCheck },
-  orders: { label: "Pedidos", icon: Package },
-  incidents: { label: "Incidencias", icon: Bug },
-  resources: { label: "Recursos", icon: Droplets },
-  energy: { label: "Energía", icon: Sun },
-  environment: { label: "Ambiente", icon: Thermometer },
-  tasks: { label: "Tareas", icon: ClipboardList },
-
-  // System Resources
-  audit_logs: { label: "Logs de Auditoría", icon: Shield },
-  enums: { label: "Enumerados", icon: List },
-  messages: { label: "Mensajes", icon: MessageSquare },
-  tenants: { label: "Tenants", icon: Building2 },
-  users: { label: "Usuarios", icon: Users },
-  user_permissions: { label: "Permisos", icon: Shield },
-  user_preferences: { label: "Preferencias", icon: Settings },
-  locales: { label: "Locales", icon: Globe },
-};
-
-function getTableMeta(tableName: string) {
-  return (
-    TABLE_META[tableName] ?? {
-      label: tableName.charAt(0).toUpperCase() + tableName.slice(1),
-      icon: Shield,
-    }
-  );
-}
-
-const CRUD_COLUMNS = [
-  { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-primary" },
-  {
-    key: "canCreate" as const,
-    label: "Crear",
-    icon: Plus,
-    color: "text-primary",
-  },
-  {
-    key: "canUpdate" as const,
-    label: "Editar",
-    icon: Pencil,
-    color: "text-accent-foreground",
-  },
-  {
-    key: "canDelete" as const,
-    label: "Eliminar",
-    icon: Trash2,
-    color: "text-destructive",
-  },
-] as const;
-
-export function PermissionRowItem({
+export const PermissionRowItem = memo(function PermissionRowItem({
   row,
   originalRow,
   onToggleCrud,
@@ -145,9 +67,9 @@ export function PermissionRowItem({
       )}
     >
       {/* Dirty indicator */}
-      {isDirty && (
+      {isDirty ? (
         <div className="absolute left-0 top-4 bottom-4 w-1 rounded-r-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.4)]" />
-      )}
+      ) : null}
 
       {/* Resource label */}
       <div className="flex items-center gap-4 lg:w-52 lg:shrink-0">
@@ -203,8 +125,9 @@ export function PermissionRowItem({
                       }
                       className={cn(
                         "h-6 w-11 data-[state=checked]:bg-primary",
-                        wasChanged &&
-                          "ring-4 ring-primary/10 ring-offset-0 ring-offset-background",
+                        wasChanged
+                          ? "ring-4 ring-primary/10 ring-offset-0 ring-offset-background"
+                          : "",
                       )}
                       aria-label={`${col.label} - ${meta.label}`}
                     />
@@ -249,23 +172,28 @@ export function PermissionRowItem({
                     className={cn(
                       "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
                       "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted",
-                      row.scope === scope &&
-                        scope === "ALL" &&
-                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground shadow-sm",
-                      row.scope === scope &&
-                        scope === "OWN" &&
-                        "data-[state=on]:bg-primary/10 data-[state=on]:text-primary data-[state=on]:border-primary/20 shadow-sm dark:data-[state=on]:bg-primary/20 dark:data-[state=on]:text-primary-foreground",
-                      row.scope === scope &&
-                        scope === "NONE" &&
-                        "data-[state=on]:bg-muted-foreground/10 data-[state=on]:text-muted-foreground shadow-sm",
+                      row.scope === scope && scope === "ALL"
+                        ? "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground shadow-sm"
+                        : "",
+                      row.scope === scope && scope === "OWN"
+                        ? "data-[state=on]:bg-primary/10 data-[state=on]:text-primary data-[state=on]:border-primary/20 shadow-sm dark:data-[state=on]:bg-primary/20 dark:data-[state=on]:text-primary-foreground"
+                        : "",
+                      row.scope === scope && scope === "NONE"
+                        ? "data-[state=on]:bg-muted-foreground/10 data-[state=on]:text-muted-foreground shadow-sm"
+                        : "",
                     )}
                     aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${meta.label}`}
                   >
                     {SCOPE_LABELS[scope].label}
                   </ToggleGroupItem>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" className="bg-popover border shadow-md">
-                  <p className="text-xs font-medium">{SCOPE_LABELS[scope].desc}</p>
+                <TooltipContent
+                  side="bottom"
+                  className="bg-popover border shadow-md"
+                >
+                  <p className="text-xs font-medium">
+                    {SCOPE_LABELS[scope].desc}
+                  </p>
                 </TooltipContent>
               </Tooltip>
             ))}
@@ -279,12 +207,15 @@ export function PermissionRowItem({
           variant={activeCrudCount > 0 ? "default" : "secondary"}
           className={cn(
             "h-7 min-w-[2.5rem] justify-center text-[11px] font-bold tabular-nums rounded-full shadow-sm transition-all",
-            activeCrudCount === 4 &&
-              "bg-primary/10 text-primary border border-primary/20 dark:bg-primary/20 dark:text-primary-foreground",
-            activeCrudCount > 0 &&
-              activeCrudCount < 4 &&
-              "bg-accent/10 text-accent-foreground border border-accent/20 dark:bg-accent/20 dark:text-accent-foreground",
-            activeCrudCount === 0 && "bg-muted text-muted-foreground/60 border-transparent",
+            activeCrudCount === 4
+              ? "bg-primary/10 text-primary border border-primary/20 dark:bg-primary/20 dark:text-primary-foreground"
+              : "",
+            activeCrudCount > 0 && activeCrudCount < 4
+              ? "bg-accent/10 text-accent-foreground border border-accent/20 dark:bg-accent/20 dark:text-accent-foreground"
+              : "",
+            activeCrudCount === 0
+              ? "bg-muted text-muted-foreground/60 border-transparent"
+              : "",
           )}
         >
           {activeCrudCount}/4
@@ -292,4 +223,4 @@ export function PermissionRowItem({
       </div>
     </div>
   );
-}
+});
