@@ -58,7 +58,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
     row.canDelete,
   ].filter(Boolean).length;
 
-  const dataTablePermissions = usePermission("users-permissions");
+  const dataTablePermissions = usePermission("user_permissions");
 
   const canEdit = dataTablePermissions.canUpdate;
 
@@ -113,9 +113,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                   <span
                     className={cn(
                       "text-[10px] font-bold uppercase tracking-widest",
-                      isActive
-                        ? "text-foreground"
-                        : "text-muted-foreground/30",
+                      isActive ? "text-foreground" : "text-muted-foreground/30",
                     )}
                   >
                     {col.label}
