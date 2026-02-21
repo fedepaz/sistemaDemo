@@ -13,10 +13,12 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Search, RotateCcw, Save } from "lucide-react";
+import { Search, RotateCcw, Save, Shield } from "lucide-react";
 import { EmptyState } from "./empty-state";
 import { PermissionRowItem } from "./permission-row-item";
 import { getTableMeta } from "../constants/table-meta";
+import { usePermission } from "@/hooks/usePermission";
+import { Badge } from "@/components/ui/badge";
 
 interface PermissionsManagerProps {
   userId: string;
@@ -34,6 +36,9 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
     useUserPermissions(userId);
   const { mutate: savePermissions, isPending: isSaving } =
     useSetUserPermissions();
+
+  const dataTablePermissions = usePermission("users-permissions");
+  const canEdit = dataTablePermissions.canUpdate;
 
   // The actual state is the merge of original + changes
   const localPermissions = useMemo(() => {
@@ -171,6 +176,15 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
                   className="h-10 border-border/60 bg-muted/20 pl-10 text-sm shadow-none transition-all focus:bg-background focus:ring-primary/20 rounded-xl"
                 />
               </div>
+              {!canEdit ? (
+                <Badge
+                  variant="outline"
+                  className="h-9 px-4 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[10px] uppercase tracking-widest gap-2"
+                >
+                  <Shield className="h-3.5 w-3.5" />
+                  Modo de solo lectura
+                </Badge>
+              ) : null}
             </div>
 
             {/* Rows */}
@@ -219,7 +233,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
       </CardContent>
 
       {/* ── Footer ── */}
-      {tables.length > 0 ? (
+      {tables.length > 0 && canEdit ? (
         <>
           <Separator className="opacity-50" />
           <CardFooter className="flex flex-col gap-4 items-center justify-between px-6 py-6 bg-muted/5 sm:flex-row">
@@ -243,7 +257,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
                 variant="outline"
                 size="lg"
                 onClick={handleDiscard}
-                disabled={!isDirty}
+                disabled={!isDirty || !canEdit}
                 className="flex-1 gap-2 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-xs uppercase tracking-widest"
               >
                 <RotateCcw className="h-4 w-4" />
@@ -252,7 +266,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
               <Button
                 size="lg"
                 onClick={handleSave}
-                disabled={!isDirty || isSaving}
+                disabled={!isDirty || isSaving || !canEdit}
                 className="flex-1 gap-2 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-xs uppercase tracking-widest"
               >
                 {isSaving ? (
