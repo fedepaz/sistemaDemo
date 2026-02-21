@@ -48,7 +48,7 @@ The CI/CD agent should leverage this structured history to automate release and 
 - **Purpose**: Ensures code quality and correctness before merging.
 - **Trigger**: Runs on every `pull_request` to `main` and `dev` branches.
 - **Responsibilities**:
-  - Runs linting, type-checking, and unit tests for the changed application(s) using `turbo run lint --filter=//apps/backend`, `turbo run test --filter=//apps/backend`, etc., ensuring all modules within the backend are covered. The test suites executed in this workflow are defined and maintained by the `agricultural-qa-test-automation-engineer`.
+  - Runs linting, type-checking, and unit tests for the changed application(s) using `turbo run lint --filter=//apps/backend`, `turbo run test --filter=//apps/backend`, etc., ensuring all modules within the backend are covered. The test suites executed in this workflow are defined and maintained by the `qa-engineer`.
 
 #### 2. `deploy.yml` (Deployment Workflow)
 

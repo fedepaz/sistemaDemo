@@ -1,0 +1,7 @@
+docs: align agent documentation with theme-agnostic enterprise vision
+
+- Renamed agent profiles to remove "agricultural" and domain-specific guide suffixes.
+- Generalized terminology across all docs (e.g., "Plant" to "Entity", "Greenhouse" to "Facility").
+- Updated UX/UI agent to use global OKLCH theme tokens instead of hardcoded nature palette.
+- Refactored GEMINI.md core rules to reflect new agent names and roles.
+- Generalized technical implementation guides for permissions and data tables.
