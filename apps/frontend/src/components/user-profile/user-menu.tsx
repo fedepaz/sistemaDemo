@@ -1,12 +1,13 @@
 // src/components/layout/user-menu.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { User } from "lucide-react";
 import { UserProfileInfo } from "./user-info";
 import { UserProfileEdit } from "./user-edit";
 import { ChangePasswordForm } from "./user-password";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 
 interface UserMenuProps {
   open: boolean;
@@ -15,6 +16,13 @@ interface UserMenuProps {
 
 export function UserMenu({ open, onOpenChange }: UserMenuProps) {
   const [tab, setTab] = useState<"info" | "edit" | "password">("info");
+  const { userProfile, isLoading } = useAuthContext();
+
+  useEffect(() => {
+    if (open && !userProfile && !isLoading) {
+      onOpenChange(false);
+    }
+  }, [open, userProfile, isLoading, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -75,8 +83,22 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
             </div>
 
             {tab === "info" && <UserProfileInfo />}
-            {tab === "edit" && <UserProfileEdit />}
-            {tab === "password" && <ChangePasswordForm />}
+            {tab === "edit" && (
+              <UserProfileEdit
+                onClose={() => {
+                  setTab("info");
+                  onOpenChange(false);
+                }}
+              />
+            )}
+            {tab === "password" && (
+              <ChangePasswordForm
+                onClose={() => {
+                  setTab("info");
+                  onOpenChange(false);
+                }}
+              />
+            )}
           </div>
         </div>
       </DialogContent>

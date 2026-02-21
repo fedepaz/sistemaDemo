@@ -15,44 +15,36 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     const user = configService.get<string>('config.database.username');
     const password = configService.get<string>('config.database.password');
     const database = configService.get<string>('config.database.name');
-    /* Usando otro proveedor de MariaDB
+    const environment = configService.get<string>('config.environment');
 
-      const certFromEnv = process.env.DATABASE_SSL_CERT;
-
-      let serverCert: string;
-      try {
-            if (!certFromEnv) throw new Error('Cert not found in env');
-            serverCert = Buffer.from(certFromEnv, 'base64').toString('utf8');
-          } catch (error) {
-            console.error('Error reading cert file:', error);
-            throw new Error('Cert not found in file');
-          }
-    */
     const adapter = new PrismaMariaDb({
-      host,
-      port,
-      user,
-      password,
-      database,
+      host: environment === 'production' ? host : 'localhost',
+      port: environment === 'production' ? port : 3306,
+      user: environment === 'production' ? user : 'user',
+      password: environment === 'production' ? password : 'password',
+      database: environment === 'production' ? database : 'vivero_client_alpha',
     });
 
     super({ adapter, log: ['info', 'warn', 'error'] });
   }
 
   async onModuleInit() {
-    this.logger.log(' DATABASE CONNECTION STARTED ON >>>>>> ');
+    const environment = this.configService.get<string>('config.environment');
+    const isProd = environment === 'production';
+
+    this.logger.log('🔄 INITIALIZING DATABASE CONNECTION...');
+
+    if (!isProd) {
+      const host = this.configService.get<string>('config.database.host');
+      const database = this.configService.get<string>('config.database.name');
+      const user = this.configService.get<string>('config.database.username');
+      this.logger.debug(
+        `📍 Target: ${host} | DB: ${database} | User: ${user?.charAt(0)}****`,
+      );
+    }
+
     const maxRetries = 5;
     const retryDelay = 3000;
-
-    this.logger.warn(this.configService.get<string>('config.database.host'));
-    this.logger.warn(this.configService.get<string>('config.database.port'));
-    this.logger.warn(
-      this.configService.get<string>('config.database.username'),
-    );
-    this.logger.warn(
-      this.configService.get<string>('config.database.password'),
-    );
-    this.logger.warn(this.configService.get<string>('config.database.name'));
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
@@ -70,29 +62,31 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
         if (attempt === maxRetries) {
           this.logger.error('❌ DATABASE CONNECTION FAILED AFTER RETRIES');
-          this.logger.error(`   Error: ${errorMsg}`);
+          this.logger.error(`   Error Detail: ${errorMsg}`);
           throw error;
         }
 
         this.logger.warn(
-          `⚠️  Connection attempt ${attempt}/${maxRetries} failed (${isTimeOut ? 'transient error' : 'other error'}), retrying in ${retryDelay}ms...`,
+          `⚠️  Connection attempt ${attempt}/${maxRetries} failed (${isTimeOut ? 'transient' : 'persistent'} error), retrying in ${retryDelay}ms...`,
         );
-        this.logger.warn(`   Error: ${errorMsg}`);
+        if (!isProd) {
+          this.logger.debug(`   Technical Error: ${errorMsg}`);
+        }
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
         continue;
       }
     }
   }
+
   async onModuleDestroy() {
-    this.logger.log(' DATABASE CONNECTION FINISHING >>>>>> ');
+    this.logger.log('🔌 CLOSING DATABASE CONNECTION...');
     try {
       await this.$disconnect();
-      this.logger.log('✅ DATABASE CONNECTION FINISHED');
+      this.logger.log('✅ DATABASE DISCONNECTED');
     } catch (error) {
-      this.logger.error('❌ DATABASE CONNECTION FAILED');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      this.logger.error(`   Error: ${error.message}`);
-      this.logger.error(error);
+      this.logger.error('❌ DISCONNECT FAILED');
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`   Error: ${errorMsg}`);
     }
   }
 

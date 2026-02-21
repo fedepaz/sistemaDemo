@@ -17,19 +17,31 @@ import { Input } from "../ui/input";
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
 
-export function ChangePasswordForm() {
-  const { changePasswordAsync, isLoading } = useChangePassword();
+interface ChangePasswordFormProps {
+  onClose: () => void;
+}
+
+export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
+  const { changePasswordAsync, isLoading, reset } = useChangePassword();
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
 
   const form = useForm<ChangePasswordDto>({
     resolver: zodResolver(ChangePasswordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+    },
     mode: "onChange",
   });
 
   async function onSubmit(values: ChangePasswordDto) {
     try {
       await changePasswordAsync(values);
+      setTimeout(() => {
+        reset();
+        onClose();
+      }, 1000);
     } catch {}
   }
 

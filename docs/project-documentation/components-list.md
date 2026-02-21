@@ -202,6 +202,14 @@ This document lists all the React components found in the `apps/frontend/src` di
 -   `InvoicesDashboardSkeleton` [x]
 - `CellAmountComponent` [x] (re-used in multiple features)
 
+### Permissions
+-   `PermissionsDashboard` [x]
+-   `PermissionsManager` [x]
+-   `PermissionRowItem` [x]
+-   `UserSelector` [x]
+-   `PermissionsSkeleton` [x]
+-   `EmptyState` [x]
+
 ### Plants
 -   `PlantsDashboardSkeleton` [x]
 -   `PlantsDataTable` [x]

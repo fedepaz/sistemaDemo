@@ -49,9 +49,9 @@ function CellBadgeComponent({ row }: CellProps) {
   const status = row.getValue("status") as string;
   const statusText =
     status === "healthy"
-      ? "Saludable"
+      ? "Operativo"
       : status === "warning"
-        ? "Advertencia"
+        ? "Atención"
         : "Crítico";
   return (
     <StatusBadge
@@ -83,7 +83,7 @@ export const plantColumns: ColumnDef<Plant>[] = [
   {
     accessorKey: "species",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Especie" />;
+      return <HeaderComponent column={column} translationKey="Tipo" />;
     },
   },
   {
@@ -107,7 +107,7 @@ export const plantColumns: ColumnDef<Plant>[] = [
       return (
         <HeaderComponent
           column={column}
-          translationKey="Etapa de crecimiento"
+          translationKey="Fase"
         />
       );
     },
@@ -116,14 +116,14 @@ export const plantColumns: ColumnDef<Plant>[] = [
     accessorKey: "plantedDate",
     header: ({ column }) => {
       return (
-        <HeaderComponent column={column} translationKey="Fecha de siembra" />
+        <HeaderComponent column={column} translationKey="Fecha Registro" />
       );
     },
   },
   {
     accessorKey: "lastWatered",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Último riego" />;
+      return <HeaderComponent column={column} translationKey="Actualización" />;
     },
   },
 ];

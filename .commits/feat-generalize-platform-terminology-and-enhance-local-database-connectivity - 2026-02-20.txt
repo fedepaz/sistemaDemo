@@ -1,0 +1,7 @@
+feat: generalize platform terminology and enhance local database connectivity
+
+- Backend: implement environment-aware Prisma connection to ensure local Docker MariaDB usage.
+- Frontend: transition from agricultural to enterprise-agnostic terminology (Plants -> Entities).
+- Frontend: standardize UI colors using semantic CSS tokens for full theme reactivity.
+- Frontend: optimize Dashboard KPI responsiveness with mobile-first grid and filtered forecast.
+- Refactor: update navigation, routes, and mock data to reflect enterprise branding.

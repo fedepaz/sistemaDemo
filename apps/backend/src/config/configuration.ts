@@ -17,6 +17,9 @@ export type AppConfig = {
     username: string;
     password: string;
     database: string;
+    databaseSslCert: string;
+    databaseUrl: string;
+    databaseDockerUrl: string;
   };
   valkey: {
     host: string;
@@ -57,6 +60,13 @@ const configFactory = (): AppConfig => ({
     username: process.env.DATABASE_USERNAME || 'user',
     password: process.env.DATABASE_PASSWORD || 'password',
     database: process.env.DATABASE_NAME || 'vivero_client_alpha',
+    databaseSslCert: process.env.DATABASE_SSL_CERT || '',
+    databaseUrl:
+      process.env.DATABASE_URL ||
+      'mysql://user:password@localhost:3306/vivero_client_alpha',
+    databaseDockerUrl:
+      process.env.DATABASE_DOCKER_URL ||
+      'mysql://root:rootpassword@localhost:3306/vivero_client_alpha',
   },
   valkey: {
     host: process.env.VALKEY_HOST || 'localhost',
@@ -102,6 +112,9 @@ export const validationSchema = Joi.object({
   DATABASE_USERNAME: Joi.string().required(),
   DATABASE_PASSWORD: Joi.string().required(),
   DATABASE_NAME: Joi.string().required(),
+  DATABASE_SSL_CERT: Joi.string().optional().allow(''),
+  DATABASE_URL: Joi.string().uri().optional(),
+  DATABASE_DOCKER_URL: Joi.string().uri().optional(),
 
   VALKEY_HOST: Joi.string().hostname().default('localhost'),
   VALKEY_PORT: Joi.number().port().default(6379),

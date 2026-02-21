@@ -29,7 +29,6 @@ export const useUpdateUserProfile = () => {
       });
     },
     onSuccess: (data) => {
-      console.log(data);
       const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
       toast.success(toastMessage, {
         duration: 3000,

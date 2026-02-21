@@ -4,6 +4,7 @@
 import { useDashboardKPIs, useForecastKPIs } from "../hooks/hooks";
 import { Calendar, Droplets, Sun, Thermometer, Wind } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const climateIcons: Record<string, React.ReactNode> = {
   Temperatura: <Thermometer className="h-5 w-5" />,
@@ -66,14 +67,17 @@ function DashboardKPI() {
             </div>
           </div>
 
-          {/* Middle: Current conditions - inline */}
-          <div className="flex items-center gap-4 px-4 py-2 flex-1 overflow-x-auto">
+          {/* Middle: Current conditions - grid 2x2 on mobile, flex on desktop */}
+          <div className="grid grid-cols-2 sm:flex sm:items-center gap-3 px-4 py-3 flex-1">
             {data.map((kpi, index) => {
               const colors = kpiChartColors[index % kpiChartColors.length];
               return (
                 <div
                   key={kpi.label}
-                  className={`${colors.bg} rounded-lg px-3 py-2 flex items-center gap-2 shrink-0`}
+                  className={cn(
+                    colors.bg,
+                    "rounded-lg px-3 py-2 flex items-center gap-2 sm:shrink-0",
+                  )}
                 >
                   <div className={`${colors.icon} [&>svg]:h-4 [&>svg]:w-4`}>
                     {climateIcons[kpi.label]}
@@ -93,22 +97,26 @@ function DashboardKPI() {
             })}
           </div>
 
-          {/* Right: Forecast - compact horizontal */}
-          <div className="flex items-center gap-2 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0 overflow-x-auto">
+          {/* Right: Forecast - compact horizontal, 3 days on mobile */}
+          <div className="flex items-center justify-center gap-2 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0">
             {forecastData.map((day, index) => {
               const today = isToday(day.date);
               const past = isPast(day.date);
+              const todayIndex = forecastData.findIndex((d) => isToday(d.date));
+              const isRelevant = Math.abs(index - todayIndex) <= 1;
 
               return (
                 <div
                   key={index}
-                  className={`relative rounded-md px-4 py-1 text-center shrink-0 ${
+                  className={cn(
+                    "relative rounded-md px-4 py-1 text-center shrink-0",
+                    !isRelevant && "hidden md:block",
                     today
                       ? "bg-primary text-primary-foreground"
                       : past
                         ? "opacity-50"
-                        : "bg-muted/30"
-                  }`}
+                        : "bg-muted/30",
+                  )}
                 >
                   <p
                     className={`text-[9px] font-medium ${today ? "text-primary-foreground/80" : "text-muted-foreground"}`}

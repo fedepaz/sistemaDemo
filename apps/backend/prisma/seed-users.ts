@@ -7,14 +7,15 @@ import 'dotenv/config';
 
 //const certPath = path.join(process.cwd(), 'certs', 'globalsignrootca.pem');
 //const serverCert = fs.readFileSync(certPath, 'utf8');
-
+const env = process.env.NODE_ENV;
 // Create adapter with SSL
 const adapter = new PrismaMariaDb({
-  host: process.env.DATABASE_HOST!,
-  port: parseInt(process.env.DATABASE_PORT!),
-  user: process.env.DATABASE_USERNAME!,
-  password: process.env.DATABASE_PASSWORD!,
-  database: process.env.DATABASE_NAME!,
+  host: env === 'production' ? process.env.DATABASE_HOST! : 'localhost',
+  port: env === 'production' ? parseInt(process.env.DATABASE_PORT!) : 3306,
+  user: env === 'production' ? process.env.DATABASE_USER! : 'user',
+  password: env === 'production' ? process.env.DATABASE_PASSWORD! : 'password',
+  database:
+    env === 'production' ? process.env.DATABASE_NAME! : 'vivero_client_alpha',
 });
 
 const prisma = new PrismaClient({ adapter });

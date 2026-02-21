@@ -3,7 +3,7 @@
 
 import { KPICard } from "@/components/data-display/kpi-card";
 import { usePlants } from "../hooks/hooks";
-import { Sprout, Leaf, AlertTriangle, Droplets } from "lucide-react";
+import { Package, CheckCircle, AlertCircle, Calendar } from "lucide-react";
 
 function PlantKPIs() {
   const { data: mockPlants = [] } = usePlants();
@@ -19,17 +19,17 @@ function PlantKPIs() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
-        title="Total de Plantas"
+        title="Total de Entidades"
         value={totalPlants}
         description="activas en el sistema"
-        icon={Sprout}
+        icon={Package}
         trend={{ value: 12.5, label: "desde el mes pasado", isPositive: true }}
       />
       <KPICard
-        title="Plantas Saludables"
+        title="Entidades Operativas"
         value={healthyPlants}
         description={`${((healthyPlants / totalPlants) * 100).toFixed(0)}% del total`}
-        icon={Leaf}
+        icon={CheckCircle}
         trend={{
           value: 5.2,
           label: "desde la semana pasada",
@@ -37,16 +37,16 @@ function PlantKPIs() {
         }}
       />
       <KPICard
-        title="Plantas en Alerta"
+        title="Entidades en Alerta"
         value={criticalPlants}
         description="requieren atención inmediata"
-        icon={AlertTriangle}
+        icon={AlertCircle}
       />
       <KPICard
-        title="Listas para Cosecha"
+        title="Próximos a Vencer"
         value={readyForHarvest}
-        description="en etapa de madurez o fructificación"
-        icon={Droplets}
+        description="en etapa final o madurez"
+        icon={Calendar}
       />
     </div>
   );
