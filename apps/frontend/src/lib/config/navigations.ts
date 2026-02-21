@@ -13,6 +13,7 @@ import {
   MessageSquare,
   ShoppingCart,
   UserCircle,
+  Package,
 } from "lucide-react";
 
 export interface NavigationItem {
@@ -23,7 +24,7 @@ export interface NavigationItem {
   badge?: string;
   badgeVariant?: "default" | "secondary" | "destructive" | "outline";
   dashboard?: {
-    statsLabel: string; // e.g., "Plantas activas"
+    statsLabel: string; // e.g., "Entidades activas"
     // Note: Actual stats value will come from KPIs hook
   };
   requiredPermission?: {
@@ -50,6 +51,14 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         href: ROUTES.DASHBOARD,
         icon: Home,
         description: "Vista general y alertas",
+      },
+      {
+        title: "Entidades",
+        href: ROUTES.ENTITIES,
+        icon: Package,
+        description: "Gestión de activos y recursos",
+        dashboard: { statsLabel: "Entidades operativas" },
+        requiredPermission: { table: "entities", action: "read" },
       },
     ],
   },

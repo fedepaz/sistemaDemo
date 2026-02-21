@@ -31,7 +31,7 @@ export function PlantsDataTable() {
   const deletePlant = useDeletePlant();
 
   const {} = useDataTableActions<Plant>({
-    entityName: "Plants",
+    entityName: "Entities",
     onDelete: (id) => deletePlant.mutateAsync(id),
   });
 
@@ -55,14 +55,14 @@ export function PlantsDataTable() {
     setSlideOverOpen(true);
   };
   const handleDelete = (rows: Plant[]) => {
-    console.log("Delete Plants:", rows);
+    console.log("Delete Entities:", rows);
   };
 
   const handleExport = (
     format: "csv" | "excel" | "json" | "pdf",
     selectedRows: Plant[],
   ) => {
-    console.log("Export Plants:", selectedRows);
+    console.log("Export Entities:", selectedRows);
   };
 
   const handleSave = async () => {
@@ -79,29 +79,29 @@ export function PlantsDataTable() {
       <DataTable
         columns={plantColumns}
         data={plants}
-        title="Plantas"
-        description="Gestión de la información de las plantas"
-        tableName="plants"
+        title="Entidades"
+        description="Gestión de la información de las entidades"
+        tableName="entities"
         totalCount={plants.length}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onExport={handleExport}
-        onQuickEdit={(plant) => console.log(`Quick edit plant: ${plant.name}`)}
+        onQuickEdit={(plant) => console.log(`Quick edit entity: ${plant.name}`)}
       />
 
-      <FloatingActionButton onClick={handleAdd} label="Añadir nueva planta" />
+      <FloatingActionButton onClick={handleAdd} label="Añadir nueva entidad" />
       <SlideOverForm
         open={slideOverOpen}
         onOpenChange={setSlideOverOpen}
         title={
           selectedPlant
-            ? `Editar planta: ${selectedPlant.name}`
-            : "Crear nueva planta"
+            ? `Editar entidad: ${selectedPlant.name}`
+            : "Crear nueva entidad"
         }
         description={
           selectedPlant
-            ? `Edita los detalles de la planta ${selectedPlant.name}.`
-            : "Rellena los campos para crear una nueva planta."
+            ? `Edita los detalles de la entidad ${selectedPlant.name}.`
+            : "Rellena los campos para crear una nueva entidad."
         }
         onSave={handleSave}
         onCancel={() => setSlideOverOpen(false)}

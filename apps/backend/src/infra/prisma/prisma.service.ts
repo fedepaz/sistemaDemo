@@ -15,25 +15,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     const user = configService.get<string>('config.database.username');
     const password = configService.get<string>('config.database.password');
     const database = configService.get<string>('config.database.name');
-    /* Usando otro proveedor de MariaDB
+    const environment = configService.get<string>('config.environment');
 
-      const certFromEnv = process.env.DATABASE_SSL_CERT;
-
-      let serverCert: string;
-      try {
-            if (!certFromEnv) throw new Error('Cert not found in env');
-            serverCert = Buffer.from(certFromEnv, 'base64').toString('utf8');
-          } catch (error) {
-            console.error('Error reading cert file:', error);
-            throw new Error('Cert not found in file');
-          }
-    */
     const adapter = new PrismaMariaDb({
-      host,
-      port,
-      user,
-      password,
-      database,
+      host: environment === 'production' ? host : 'localhost',
+      port: environment === 'production' ? port : 3306,
+      user: environment === 'production' ? user : 'user',
+      password: environment === 'production' ? password : 'password',
+      database: environment === 'production' ? database : 'vivero_client_alpha',
     });
 
     super({ adapter, log: ['info', 'warn', 'error'] });

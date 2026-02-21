@@ -47,16 +47,16 @@ const SCOPE_LABELS: Record<PermissionScope, { label: string; desc: string }> = {
 };
 
 const TABLE_META: Record<string, { label: string; icon: LucideIcon }> = {
-  // Agricultural Resources
-  plants: { label: "Plantas", icon: Sprout },
-  greenhouses: { label: "Invernaderos", icon: Warehouse },
+  // Enterprise Resources
+  entities: { label: "Entidades", icon: Package },
+  facilities: { label: "Instalaciones", icon: Building2 },
   reports: { label: "Reportes", icon: FileBarChart },
   clients: { label: "Clientes", icon: UserCheck },
   orders: { label: "Pedidos", icon: Package },
-  pests: { label: "Plagas", icon: Bug },
-  irrigation: { label: "Riego", icon: Droplets },
-  lighting: { label: "Iluminación", icon: Sun },
-  climate: { label: "Clima", icon: Thermometer },
+  incidents: { label: "Incidencias", icon: Bug },
+  resources: { label: "Recursos", icon: Droplets },
+  energy: { label: "Energía", icon: Sun },
+  environment: { label: "Ambiente", icon: Thermometer },
   tasks: { label: "Tareas", icon: ClipboardList },
 
   // System Resources
@@ -80,24 +80,24 @@ function getTableMeta(tableName: string) {
 }
 
 const CRUD_COLUMNS = [
-  { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-sky-600" },
+  { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-primary" },
   {
     key: "canCreate" as const,
     label: "Crear",
     icon: Plus,
-    color: "text-emerald-600",
+    color: "text-primary",
   },
   {
     key: "canUpdate" as const,
     label: "Editar",
     icon: Pencil,
-    color: "text-amber-600",
+    color: "text-accent-foreground",
   },
   {
     key: "canDelete" as const,
     label: "Eliminar",
     icon: Trash2,
-    color: "text-rose-600",
+    color: "text-destructive",
   },
 ] as const;
 
@@ -254,7 +254,7 @@ export function PermissionRowItem({
                         "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground shadow-sm",
                       row.scope === scope &&
                         scope === "OWN" &&
-                        "data-[state=on]:bg-emerald-600/10 data-[state=on]:text-emerald-700 data-[state=on]:border-emerald-200 shadow-sm dark:data-[state=on]:bg-emerald-500/20 dark:data-[state=on]:text-emerald-400",
+                        "data-[state=on]:bg-primary/10 data-[state=on]:text-primary data-[state=on]:border-primary/20 shadow-sm dark:data-[state=on]:bg-primary/20 dark:data-[state=on]:text-primary-foreground",
                       row.scope === scope &&
                         scope === "NONE" &&
                         "data-[state=on]:bg-muted-foreground/10 data-[state=on]:text-muted-foreground shadow-sm",
@@ -280,10 +280,10 @@ export function PermissionRowItem({
           className={cn(
             "h-7 min-w-[2.5rem] justify-center text-[11px] font-bold tabular-nums rounded-full shadow-sm transition-all",
             activeCrudCount === 4 &&
-              "bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400",
+              "bg-primary/10 text-primary border border-primary/20 dark:bg-primary/20 dark:text-primary-foreground",
             activeCrudCount > 0 &&
               activeCrudCount < 4 &&
-              "bg-amber-500/10 text-amber-700 border border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400",
+              "bg-accent/10 text-accent-foreground border border-accent/20 dark:bg-accent/20 dark:text-accent-foreground",
             activeCrudCount === 0 && "bg-muted text-muted-foreground/60 border-transparent",
           )}
         >

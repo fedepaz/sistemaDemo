@@ -48,7 +48,7 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
             <FormItem>
               <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nombre de la planta" />
+                <Input {...field} placeholder="Nombre de la entidad" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -60,9 +60,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="species"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Especie</FormLabel>
+              <FormLabel>Tipo / Categoría</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Ej: Tomate, Rosa" />
+                <Input {...field} placeholder="Ej: Equipo, Proceso, Activo" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,7 +76,7 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
             <FormItem>
               <FormLabel>Ubicación</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Ej: Invernadero 1, Parcela B" />
+                <Input {...field} placeholder="Ej: Sede Central, Almacén A" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -90,7 +90,7 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
             <FormItem>
               <FormLabel>Estado</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Ej: Saludable, Crítico" />
+                <Input {...field} placeholder="Ej: Activo, En mantenimiento" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -102,11 +102,11 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="growthStage"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Etapa de crecimiento</FormLabel>
+              <FormLabel>Etapa / Fase</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="Ej: Semilla, Crecimiento, Floración"
+                  placeholder="Ej: Inicial, En curso, Finalizado"
                 />
               </FormControl>
               <FormMessage />
@@ -119,9 +119,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="plantedDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Fecha de siembra</FormLabel>
+              <FormLabel>Fecha de registro</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Fecha de siembra" />
+                <Input {...field} placeholder="Fecha de registro" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -133,9 +133,9 @@ export function PlantForm({ initialData, onSubmit }: PlantFormProps) {
           name="lastWatered"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Último riego</FormLabel>
+              <FormLabel>Última actualización</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Fecha del último riego" />
+                <Input {...field} placeholder="Fecha de la última actualización" />
               </FormControl>
               <FormMessage />
             </FormItem>

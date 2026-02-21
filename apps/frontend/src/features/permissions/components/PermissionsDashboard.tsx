@@ -70,16 +70,16 @@ import {
 
 // ── Table name metadata ──
 const TABLE_META = {
-  // Agricultural Resources
-  plants: { label: "Plantas", icon: Sprout },
-  greenhouses: { label: "Invernaderos", icon: Warehouse },
+  // Enterprise Resources
+  entities: { label: "Entidades", icon: Package },
+  facilities: { label: "Instalaciones", icon: Building2 },
   reports: { label: "Reportes", icon: FileBarChart },
   clients: { label: "Clientes", icon: UserCheck },
   orders: { label: "Pedidos", icon: Package },
-  pests: { label: "Plagas", icon: Bug },
-  irrigation: { label: "Riego", icon: Droplets },
-  lighting: { label: "Iluminación", icon: Sun },
-  climate: { label: "Clima", icon: Thermometer },
+  incidents: { label: "Incidencias", icon: Bug },
+  resources: { label: "Recursos", icon: Droplets },
+  energy: { label: "Energía", icon: Sun },
+  environment: { label: "Ambiente", icon: Thermometer },
   tasks: { label: "Tareas", icon: ClipboardList },
 
   // System Resources
@@ -107,24 +107,24 @@ function getTableMeta(tableName: string) {
 }
 
 const CRUD_COLUMNS = [
-  { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-sky-600" },
+  { key: "canRead" as const, label: "Leer", icon: Eye, color: "text-primary" },
   {
     key: "canCreate" as const,
     label: "Crear",
     icon: Plus,
-    color: "text-emerald-600",
+    color: "text-primary",
   },
   {
     key: "canUpdate" as const,
     label: "Editar",
     icon: Pencil,
-    color: "text-amber-600",
+    color: "text-accent-foreground",
   },
   {
     key: "canDelete" as const,
     label: "Eliminar",
     icon: Trash2,
-    color: "text-rose-600",
+    color: "text-destructive",
   },
 ] as const;
 
