@@ -2,24 +2,44 @@
 
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdateUserProfileDto, UpdateUserProfileSchema } from '@vivero/shared';
+import {
+  UpdateUserProfileDto,
+  UpdateUserProfileSchema,
+  UserProfileDto,
+} from '@vivero/shared';
 import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 import { PermissionsService } from '../permissions/permissions.service';
+import { TenantsService } from '../tenants/tenants.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly service: UsersService,
     private readonly permissionsService: PermissionsService,
+    private readonly tenantsService: TenantsService,
   ) {}
 
   @Get('me')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
-  getMe(@CurrentUser() user: AuthUser) {
-    return this.service.getProfile(user.id);
+  async getMe(@CurrentUser() user: AuthUser): Promise<UserProfileDto> {
+    const userProfile = await this.service.getProfile(user.id);
+    const tenant = await this.tenantsService.getTenantById(
+      userProfile.tenantId,
+    );
+    return {
+      id: userProfile.id,
+      username: userProfile.username,
+      email: userProfile.email,
+      firstName: userProfile.firstName,
+      lastName: userProfile.lastName,
+      isActive: userProfile.isActive,
+      tenantName: tenant.name,
+      createdAt: userProfile.createdAt,
+      updatedAt: userProfile.updatedAt,
+    };
   }
 
   @Patch('me')

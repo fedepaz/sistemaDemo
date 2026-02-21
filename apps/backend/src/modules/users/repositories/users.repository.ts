@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { UpdateUserProfileDto } from '@vivero/shared';
 import { User } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
-import { BaseRepository } from 'src/shared/baseModule/base.repository';
+import { BaseRepository } from '../../../shared/baseModule/base.repository';
 
 @Injectable()
 export class UsersRepository extends BaseRepository<User> {

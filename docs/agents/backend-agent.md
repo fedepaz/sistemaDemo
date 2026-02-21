@@ -48,7 +48,7 @@ mv src/<feature-name> src/modules/
 
 The CLI generates a generic entity file. **Ignore this file** and define the canonical data model in the Prisma schema. The schema is split into multiple files inside `apps/backend/prisma/schema`.
 
-1.  **Action:** Create a new file `apps/backend/prisma/schema/<model-name>.prisma` and define the new model (e.g., `Client`).
+1.  **Action:** Create a new file `apps/backend/prisma/schema/<model-name>.prisma` and define the new model (e.g., `Client`). Specifically for the Tenant model, ensure the `isActive` field (Boolean, default true) is included.
 2.  **Generate:** From the `apps/backend` directory, run the following command to update the Prisma client:
     ```bash
     pnpm exec prisma generate
@@ -164,6 +164,7 @@ Your implementations must understand these core enterprise entities and workflow
 - Operational monitoring (status, metrics, alerts)
 - Quality control checkpoints and compliance tracking
 - Batch tracking for regulatory compliance
+All entities managed by the `BaseRepository` must include an `isActive` field (Boolean, default true) to control their operational status within their lifecycle.
 
 **Supply Chain & Resource Operations:**
 

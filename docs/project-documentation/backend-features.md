@@ -33,6 +33,11 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **CRUD & Scope Check**: Logic for `canCreate`, `canRead`, etc., and `OWN` vs `ALL` scopes.
 - [x] **Admin Management**: `PATCH /user/:userId` to update permissions.
 
+### Tenant Module
+- [x] **Tenant Management**: `GET /tenants`, `GET /tenants/:id` (and potentially other CRUD operations).
+- [x] **Active Status**: Tenants include an `isActive` boolean field (default: `true`) to control their operational status.
+- [x] **Repository Pattern**: `TenantsRepository` extending `BaseRepository`.
+
 ### Audit Log Module
 - [x] **Automatic Logging**: Integrated into the exception filter for security events.
 - [x] **Audit Retrieval**: `GET /:tenantId` and `GET /user/:userId`.

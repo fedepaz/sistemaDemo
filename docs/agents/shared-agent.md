@@ -68,7 +68,9 @@ Each feature's `index.ts` acts as the **public API** for that feature.
 ## Core Responsibilities
 
 1. **Type Contract Extraction**: Extract TypeScript interfaces from backend entities and frontend components.
+This includes synchronizing the `UserProfileSchema` to properly include the `isActive` and `tenantName` fields.
 2. **Validation Schema Generation**: Create Zod schemas from TypeScript interfaces for runtime validation.
+Ensure the `UserProfileSchema` is updated to reflect the new `isActive` and `tenantName` properties.
 3. **API Contract Management**: Define request/response types, error codes, and API documentation contracts.
 4. **Cross-App Utility Synchronization**: Maintain utility functions used by both applications.
 5. **Enterprise Domain Types**: Maintain specialized types that capture business logic.
@@ -79,6 +81,7 @@ Each feature's `index.ts` acts as the **public API** for that feature.
 
 ```typescript
 Entity Lifecycle: Creation → Processing → Status Updates → Verification → Completion → Archiving
+The `Tenant` entity now includes an `isActive` property (Boolean, default true) that reflects its operational status.
 Supply Chain: Supplier → Procurement → Inventory → Distribution → Client
 Business: Orders, Contracts, Pricing, Quality control, Compliance tracking
 ```
@@ -141,6 +144,19 @@ export enum EntityStatus {
 ### 2. Validation Schemas (`packages/shared/src/schemas/`)
 
 All contracts **must** be defined using **Zod** schemas. The TypeScript type should be inferred from the schema to ensure they are always in sync.
+
+// Example: UserProfileSchema with isActive and tenantName
+export const UserProfileSchema = z.object({
+  id: z.string(),
+  username: z.string().min(1),
+  email: z.string().email().nullable(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  isActive: z.boolean(),
+  tenantName: z.string().min(1),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
 
 ### 3. API Contracts (`packages/shared/src/api/`)
 

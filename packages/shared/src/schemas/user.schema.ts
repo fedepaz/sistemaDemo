@@ -10,7 +10,7 @@ export const UserProfileSchema = z.object({
   lastName: z.string().nullable(),
   passwordHash: z.string().optional(),
   isActive: z.boolean(),
-  tenantId: z.string(),
+  tenantName: z.string().min(1),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

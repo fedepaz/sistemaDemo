@@ -42,6 +42,7 @@ Facility Manager (Desktop/Tablet):
 ├── Production planning: Resource schedules, completion forecasts
 ├── Team coordination: Task assignments, progress tracking
 └── Client reporting: Order status, delivery coordination
+└── Tenant status: Display of tenant's operational status (e.g., active/inactive) and name within the user profile.
 
 Operations Specialist (Mobile-First):
 ├── Record inspection: Status updates, condition logging
@@ -105,7 +106,9 @@ Tech Stack Configuration:
 ## Authentication & Authorization
 
 - **`AuthProfileProvider`**: Context for auth status.
+The `userProfile` context now includes `isActive` status and `tenantName` for the authenticated user.
 - **`useAuth` Hook**: Hook for `login`, `logout`, `user`.
+The `user` object retrieved by this hook will contain the `isActive` and `tenantName` properties from the `UserProfileSchema`.
 - **`DashboardProtectedLayout`**: Handles loading, database unavailable, pending permissions, and authorized states.
 
 ## JWT Refresh Token Mechanism
