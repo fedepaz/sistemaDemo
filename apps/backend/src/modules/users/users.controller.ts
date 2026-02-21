@@ -55,7 +55,7 @@ export class UsersController {
 
   @Get('tenant/:tenantId')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
-  getUserByTenantId(@Param('tenant') tenantId: string) {
+  getUserByTenantId(@Param('tenantId') tenantId: string) {
     return this.service.getUserByTenantId(tenantId);
   }
 

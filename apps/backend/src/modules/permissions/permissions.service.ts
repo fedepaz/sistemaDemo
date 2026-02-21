@@ -12,7 +12,6 @@ export class PermissionsService {
   private readonly logger = new Logger(PermissionsService.name);
   private readonly ALLOWED_TABLES = [
     'audit_logs',
-    'enums',
     'tenants',
     'users',
     'user_permissions',
