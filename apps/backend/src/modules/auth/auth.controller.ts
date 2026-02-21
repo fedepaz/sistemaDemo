@@ -44,7 +44,6 @@ export class AuthController {
   async register(
     @Body(new ZodValidationPipe(RegisterAuthSchema)) dto: RegisterAuthDto,
   ): Promise<AuthResponseDto> {
-    this.logger.log(`📝 Registration attempt: ${dto.email}`);
     return this.authService.register(dto);
   }
 
@@ -58,7 +57,6 @@ export class AuthController {
   async login(
     @Body(new ZodValidationPipe(LoginAuthSchema)) dto: LoginAuthDto,
   ): Promise<AuthResponseDto> {
-    this.logger.log(`🔑 Login attempt: ${dto.username}`);
     return this.authService.login(dto);
   }
 
