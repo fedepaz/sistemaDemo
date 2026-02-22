@@ -18,7 +18,11 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
-export function UserProfileEdit() {
+interface UserProfileEditProps {
+  onClose: () => void;
+}
+
+export function UserProfileEdit({ onClose }: UserProfileEditProps) {
   const { userProfile } = useAuthContext();
   const { mutateAsync, isPending } = useUpdateUserProfile();
 
@@ -45,6 +49,9 @@ export function UserProfileEdit() {
       await mutateAsync({
         userUpdate: values,
       });
+      setTimeout(() => {
+        onClose();
+      }, 1000);
     } catch {}
   }
 

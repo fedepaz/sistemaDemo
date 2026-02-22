@@ -20,6 +20,9 @@ import { PermissionsController } from './modules/permissions/permissions.control
 import { AuditLogController } from './modules/auditLog/auditLog.controller';
 import { AuditLogService } from './modules/auditLog/auditLog.service';
 import { AuditLogRepository } from './modules/auditLog/repositories/auditLog.repository';
+import { TenantsController } from './modules/tenants/tenants.controller';
+import { TenantsRepository } from './modules/tenants/repositories/tenants.repository';
+import { TenantsService } from './modules/tenants/tenants.service';
 
 @Module({
   imports: [
@@ -41,6 +44,7 @@ import { AuditLogRepository } from './modules/auditLog/repositories/auditLog.rep
     AuthController,
     PermissionsController,
     AuditLogController,
+    TenantsController,
   ],
   providers: [
     {
@@ -61,6 +65,8 @@ import { AuditLogRepository } from './modules/auditLog/repositories/auditLog.rep
     PermissionsRepository,
     AuditLogService,
     AuditLogRepository,
+    TenantsService,
+    TenantsRepository,
   ],
   exports: [UsersService],
 })

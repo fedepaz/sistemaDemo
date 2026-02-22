@@ -43,7 +43,7 @@ export class AuditLogRepository {
     action: AuditActionType;
     entityType: EntityType;
     entityId: string;
-    changes: string;
+    changes: Record<string, any>;
   }): Promise<AuditLog> {
     try {
       const auditLog = await this.prisma.auditLog.create({

@@ -74,7 +74,7 @@ const generateAlert = (): CurrencyRateInterface[] => {
 
 const generateRecentActivity = (count: number): RecentActivityInterface[] => {
   const actions = [
-    "Planta #123 está agotada",
+    "Entidad #123 actualizada",
     "Pedido #456 ha sido realizado",
     "Nuevo cliente registrado",
     "Nueva factura recibida",

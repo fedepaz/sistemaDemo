@@ -1,2 +1,2 @@
-export { PlantsDashboard } from "./components/PlantsDashboard";
-export { PlantsDashboardSkeleton } from "./components/plant-dashboad-skeleton";
+export { EntitiesDashboard } from "./components/PlantsDashboard";
+export { PlantsDashboardSkeleton as EntitiesDashboardSkeleton } from "./components/plant-dashboad-skeleton";

@@ -7,7 +7,7 @@ import { KPICardSkeleton } from "@/components/data-display/kpi-card";
 import { PlantsDataTable } from "./plants-data-table";
 import PlantKPIs from "./plants-kpi";
 
-export function PlantsDashboard() {
+export function EntitiesDashboard() {
   return (
     <>
       <Suspense

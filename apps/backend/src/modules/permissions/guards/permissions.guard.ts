@@ -12,11 +12,12 @@ import { PermissionsService } from '../permissions.service';
 import { AuthRequest } from '../../auth/interfaces/authRequest.interface';
 import { IS_PUBLIC_KEY } from '../../../shared/decorators/public.decorator';
 import { REQUIRE_PERMISSION_KEY } from '../decorators/require-permission.decorator';
+import { CrudAction, PermissionScope } from '@vivero/shared';
 
 export interface RequirePermissionMetadata {
   tableName: string;
-  action: 'create' | 'read' | 'update' | 'delete';
-  scope?: 'OWN' | 'ALL';
+  action: CrudAction;
+  scope?: PermissionScope;
 }
 
 @Injectable()
@@ -67,8 +68,9 @@ export class PermissionsGuard implements CanActivate {
     });
 
     if (!allowed) {
+      const user = request.user.username;
       throw new ForbiddenException(
-        `You do not have permission to ${required.action} on ${required.tableName}`,
+        `You do not have permission to ${required.action} on ${required.tableName} by ${user}`,
       );
     }
 

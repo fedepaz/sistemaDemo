@@ -11,7 +11,9 @@ export function UserProfileInfo() {
     <div className="grid gap-4">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-semibold font-sans">Información General</CardTitle>
+          <CardTitle className="text-lg font-semibold font-sans">
+            Información General
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-2 font-serif">
           <div>
@@ -31,12 +33,14 @@ export function UserProfileInfo() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-semibold font-sans">Detalles de la Empresa</CardTitle>
+          <CardTitle className="text-lg font-semibold font-sans">
+            Detalles de la Empresa
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-2 font-serif">
           <div>
             <Label className="text-muted-foreground">ID de Empresa</Label>
-            <p className="text-base font-medium">{userProfile.tenantId}</p>
+            <p className="text-base font-medium">{userProfile.tenantName}</p>
           </div>
         </CardContent>
       </Card>

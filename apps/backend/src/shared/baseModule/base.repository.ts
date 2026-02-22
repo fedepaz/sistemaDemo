@@ -3,11 +3,13 @@
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 
 export interface SoftDeletableModel {
+  id: string;
   deletedAt: Date | null;
   isActive: boolean;
   deletedByUserId: string | null;
 }
-interface PrismaModel<T> {
+
+interface PrismaModelDelegate<T> {
   findMany(args?: any): Promise<T[]>;
   findFirst(args: any): Promise<T | null>;
   update(args: any): Promise<T>;
@@ -16,20 +18,20 @@ interface PrismaModel<T> {
 export abstract class BaseRepository<T extends SoftDeletableModel> {
   constructor(
     protected readonly prisma: PrismaService,
-    protected readonly model: PrismaModel<T>,
+    protected readonly model: PrismaModelDelegate<T>,
   ) {}
 
-  findAll(): Promise<T[]> {
+  async findAll(): Promise<T[]> {
     return this.model.findMany({
       where: { deletedAt: null, isActive: true },
     });
   }
 
-  findAllAdmin(): Promise<T[]> {
+  async findAllAdmin(): Promise<T[]> {
     return this.model.findMany();
   }
 
-  findById(id: string): Promise<T | null> {
+  async findById(id: string): Promise<T | null> {
     return this.model.findFirst({
       where: {
         id,
@@ -39,7 +41,7 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
     });
   }
 
-  softDelete(id: string, deletedByUserId: string): Promise<T> {
+  async softDelete(id: string, deletedByUserId: string): Promise<T> {
     return this.model.update({
       where: { id },
       data: {
@@ -50,7 +52,7 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
     });
   }
 
-  recover(id: string): Promise<T> {
+  async recover(id: string): Promise<T> {
     return this.model.update({
       where: { id },
       data: {
