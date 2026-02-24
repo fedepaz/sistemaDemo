@@ -28,30 +28,37 @@ export type AuditLogMinAggregateOutputType = {
   id: string | null
   tenantId: string | null
   userId: string | null
+  isActive: boolean | null
   action: $Enums.AuditActionType | null
   entityType: $Enums.EntityType | null
   entityId: string | null
   timestamp: Date | null
   ipAddress: string | null
   userAgent: string | null
+  deletedAt: Date | null
+  deletedByUserId: string | null
 }
 
 export type AuditLogMaxAggregateOutputType = {
   id: string | null
   tenantId: string | null
   userId: string | null
+  isActive: boolean | null
   action: $Enums.AuditActionType | null
   entityType: $Enums.EntityType | null
   entityId: string | null
   timestamp: Date | null
   ipAddress: string | null
   userAgent: string | null
+  deletedAt: Date | null
+  deletedByUserId: string | null
 }
 
 export type AuditLogCountAggregateOutputType = {
   id: number
   tenantId: number
   userId: number
+  isActive: number
   action: number
   entityType: number
   entityId: number
@@ -59,6 +66,8 @@ export type AuditLogCountAggregateOutputType = {
   timestamp: number
   ipAddress: number
   userAgent: number
+  deletedAt: number
+  deletedByUserId: number
   _all: number
 }
 
@@ -67,30 +76,37 @@ export type AuditLogMinAggregateInputType = {
   id?: true
   tenantId?: true
   userId?: true
+  isActive?: true
   action?: true
   entityType?: true
   entityId?: true
   timestamp?: true
   ipAddress?: true
   userAgent?: true
+  deletedAt?: true
+  deletedByUserId?: true
 }
 
 export type AuditLogMaxAggregateInputType = {
   id?: true
   tenantId?: true
   userId?: true
+  isActive?: true
   action?: true
   entityType?: true
   entityId?: true
   timestamp?: true
   ipAddress?: true
   userAgent?: true
+  deletedAt?: true
+  deletedByUserId?: true
 }
 
 export type AuditLogCountAggregateInputType = {
   id?: true
   tenantId?: true
   userId?: true
+  isActive?: true
   action?: true
   entityType?: true
   entityId?: true
@@ -98,6 +114,8 @@ export type AuditLogCountAggregateInputType = {
   timestamp?: true
   ipAddress?: true
   userAgent?: true
+  deletedAt?: true
+  deletedByUserId?: true
   _all?: true
 }
 
@@ -177,6 +195,7 @@ export type AuditLogGroupByOutputType = {
   id: string
   tenantId: string
   userId: string
+  isActive: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -184,6 +203,8 @@ export type AuditLogGroupByOutputType = {
   timestamp: Date
   ipAddress: string | null
   userAgent: string | null
+  deletedAt: Date | null
+  deletedByUserId: string | null
   _count: AuditLogCountAggregateOutputType | null
   _min: AuditLogMinAggregateOutputType | null
   _max: AuditLogMaxAggregateOutputType | null
@@ -211,6 +232,7 @@ export type AuditLogWhereInput = {
   id?: Prisma.StringFilter<"AuditLog"> | string
   tenantId?: Prisma.StringFilter<"AuditLog"> | string
   userId?: Prisma.StringFilter<"AuditLog"> | string
+  isActive?: Prisma.BoolFilter<"AuditLog"> | boolean
   action?: Prisma.EnumAuditActionTypeFilter<"AuditLog"> | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFilter<"AuditLog"> | $Enums.EntityType
   entityId?: Prisma.StringFilter<"AuditLog"> | string
@@ -218,6 +240,8 @@ export type AuditLogWhereInput = {
   timestamp?: Prisma.DateTimeFilter<"AuditLog"> | Date | string
   ipAddress?: Prisma.StringNullableFilter<"AuditLog"> | string | null
   userAgent?: Prisma.StringNullableFilter<"AuditLog"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"AuditLog"> | Date | string | null
+  deletedByUserId?: Prisma.StringNullableFilter<"AuditLog"> | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -226,6 +250,7 @@ export type AuditLogOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
@@ -233,6 +258,8 @@ export type AuditLogOrderByWithRelationInput = {
   timestamp?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   _relevance?: Prisma.AuditLogOrderByRelevanceInput
@@ -245,6 +272,7 @@ export type AuditLogWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AuditLogWhereInput | Prisma.AuditLogWhereInput[]
   tenantId?: Prisma.StringFilter<"AuditLog"> | string
   userId?: Prisma.StringFilter<"AuditLog"> | string
+  isActive?: Prisma.BoolFilter<"AuditLog"> | boolean
   action?: Prisma.EnumAuditActionTypeFilter<"AuditLog"> | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFilter<"AuditLog"> | $Enums.EntityType
   entityId?: Prisma.StringFilter<"AuditLog"> | string
@@ -252,6 +280,8 @@ export type AuditLogWhereUniqueInput = Prisma.AtLeast<{
   timestamp?: Prisma.DateTimeFilter<"AuditLog"> | Date | string
   ipAddress?: Prisma.StringNullableFilter<"AuditLog"> | string | null
   userAgent?: Prisma.StringNullableFilter<"AuditLog"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"AuditLog"> | Date | string | null
+  deletedByUserId?: Prisma.StringNullableFilter<"AuditLog"> | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -260,6 +290,7 @@ export type AuditLogOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
@@ -267,6 +298,8 @@ export type AuditLogOrderByWithAggregationInput = {
   timestamp?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AuditLogCountOrderByAggregateInput
   _max?: Prisma.AuditLogMaxOrderByAggregateInput
   _min?: Prisma.AuditLogMinOrderByAggregateInput
@@ -279,6 +312,7 @@ export type AuditLogScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"AuditLog"> | string
   tenantId?: Prisma.StringWithAggregatesFilter<"AuditLog"> | string
   userId?: Prisma.StringWithAggregatesFilter<"AuditLog"> | string
+  isActive?: Prisma.BoolWithAggregatesFilter<"AuditLog"> | boolean
   action?: Prisma.EnumAuditActionTypeWithAggregatesFilter<"AuditLog"> | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeWithAggregatesFilter<"AuditLog"> | $Enums.EntityType
   entityId?: Prisma.StringWithAggregatesFilter<"AuditLog"> | string
@@ -286,10 +320,13 @@ export type AuditLogScalarWhereWithAggregatesInput = {
   timestamp?: Prisma.DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   ipAddress?: Prisma.StringNullableWithAggregatesFilter<"AuditLog"> | string | null
   userAgent?: Prisma.StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AuditLog"> | Date | string | null
+  deletedByUserId?: Prisma.StringNullableWithAggregatesFilter<"AuditLog"> | string | null
 }
 
 export type AuditLogCreateInput = {
   id?: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -297,6 +334,8 @@ export type AuditLogCreateInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutAuditLogsInput
   user: Prisma.UserCreateNestedOneWithoutAuditLogsInput
 }
@@ -305,6 +344,7 @@ export type AuditLogUncheckedCreateInput = {
   id?: string
   tenantId: string
   userId: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -312,10 +352,13 @@ export type AuditLogUncheckedCreateInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
 }
 
 export type AuditLogUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -323,6 +366,8 @@ export type AuditLogUpdateInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAuditLogsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutAuditLogsNestedInput
 }
@@ -331,6 +376,7 @@ export type AuditLogUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -338,12 +384,15 @@ export type AuditLogUncheckedUpdateInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AuditLogCreateManyInput = {
   id?: string
   tenantId: string
   userId: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -351,10 +400,13 @@ export type AuditLogCreateManyInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
 }
 
 export type AuditLogUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -362,12 +414,15 @@ export type AuditLogUpdateManyMutationInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AuditLogUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -375,6 +430,8 @@ export type AuditLogUncheckedUpdateManyInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AuditLogOrderByRelevanceInput = {
@@ -387,6 +444,7 @@ export type AuditLogCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
@@ -394,30 +452,38 @@ export type AuditLogCountOrderByAggregateInput = {
   timestamp?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrder
 }
 
 export type AuditLogMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrder
 }
 
 export type AuditLogMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedByUserId?: Prisma.SortOrder
 }
 
 export type AuditLogListRelationFilter = {
@@ -434,6 +500,10 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type EnumAuditActionTypeFieldUpdateOperationsInput = {
   set?: $Enums.AuditActionType
 }
@@ -448,6 +518,10 @@ export type DateTimeFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type AuditLogCreateNestedManyWithoutTenantInput = {
@@ -536,6 +610,7 @@ export type AuditLogUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type AuditLogCreateWithoutTenantInput = {
   id?: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -543,12 +618,15 @@ export type AuditLogCreateWithoutTenantInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
   user: Prisma.UserCreateNestedOneWithoutAuditLogsInput
 }
 
 export type AuditLogUncheckedCreateWithoutTenantInput = {
   id?: string
   userId: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -556,6 +634,8 @@ export type AuditLogUncheckedCreateWithoutTenantInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
 }
 
 export type AuditLogCreateOrConnectWithoutTenantInput = {
@@ -591,6 +671,7 @@ export type AuditLogScalarWhereInput = {
   id?: Prisma.StringFilter<"AuditLog"> | string
   tenantId?: Prisma.StringFilter<"AuditLog"> | string
   userId?: Prisma.StringFilter<"AuditLog"> | string
+  isActive?: Prisma.BoolFilter<"AuditLog"> | boolean
   action?: Prisma.EnumAuditActionTypeFilter<"AuditLog"> | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFilter<"AuditLog"> | $Enums.EntityType
   entityId?: Prisma.StringFilter<"AuditLog"> | string
@@ -598,10 +679,13 @@ export type AuditLogScalarWhereInput = {
   timestamp?: Prisma.DateTimeFilter<"AuditLog"> | Date | string
   ipAddress?: Prisma.StringNullableFilter<"AuditLog"> | string | null
   userAgent?: Prisma.StringNullableFilter<"AuditLog"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"AuditLog"> | Date | string | null
+  deletedByUserId?: Prisma.StringNullableFilter<"AuditLog"> | string | null
 }
 
 export type AuditLogCreateWithoutUserInput = {
   id?: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -609,12 +693,15 @@ export type AuditLogCreateWithoutUserInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutAuditLogsInput
 }
 
 export type AuditLogUncheckedCreateWithoutUserInput = {
   id?: string
   tenantId: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -622,6 +709,8 @@ export type AuditLogUncheckedCreateWithoutUserInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
 }
 
 export type AuditLogCreateOrConnectWithoutUserInput = {
@@ -653,6 +742,7 @@ export type AuditLogUpdateManyWithWhereWithoutUserInput = {
 export type AuditLogCreateManyTenantInput = {
   id?: string
   userId: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -660,10 +750,13 @@ export type AuditLogCreateManyTenantInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
 }
 
 export type AuditLogUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -671,12 +764,15 @@ export type AuditLogUpdateWithoutTenantInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutAuditLogsNestedInput
 }
 
 export type AuditLogUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -684,11 +780,14 @@ export type AuditLogUncheckedUpdateWithoutTenantInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AuditLogUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -696,11 +795,14 @@ export type AuditLogUncheckedUpdateManyWithoutTenantInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AuditLogCreateManyUserInput = {
   id?: string
   tenantId: string
+  isActive?: boolean
   action: $Enums.AuditActionType
   entityType: $Enums.EntityType
   entityId: string
@@ -708,10 +810,13 @@ export type AuditLogCreateManyUserInput = {
   timestamp?: Date | string
   ipAddress?: string | null
   userAgent?: string | null
+  deletedAt?: Date | string | null
+  deletedByUserId?: string | null
 }
 
 export type AuditLogUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -719,12 +824,15 @@ export type AuditLogUpdateWithoutUserInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutAuditLogsNestedInput
 }
 
 export type AuditLogUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -732,11 +840,14 @@ export type AuditLogUncheckedUpdateWithoutUserInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AuditLogUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   action?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
   entityType?: Prisma.EnumEntityTypeFieldUpdateOperationsInput | $Enums.EntityType
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -744,6 +855,8 @@ export type AuditLogUncheckedUpdateManyWithoutUserInput = {
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -752,6 +865,7 @@ export type AuditLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   tenantId?: boolean
   userId?: boolean
+  isActive?: boolean
   action?: boolean
   entityType?: boolean
   entityId?: boolean
@@ -759,6 +873,8 @@ export type AuditLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   timestamp?: boolean
   ipAddress?: boolean
   userAgent?: boolean
+  deletedAt?: boolean
+  deletedByUserId?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["auditLog"]>
@@ -769,6 +885,7 @@ export type AuditLogSelectScalar = {
   id?: boolean
   tenantId?: boolean
   userId?: boolean
+  isActive?: boolean
   action?: boolean
   entityType?: boolean
   entityId?: boolean
@@ -776,9 +893,11 @@ export type AuditLogSelectScalar = {
   timestamp?: boolean
   ipAddress?: boolean
   userAgent?: boolean
+  deletedAt?: boolean
+  deletedByUserId?: boolean
 }
 
-export type AuditLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "userId" | "action" | "entityType" | "entityId" | "changes" | "timestamp" | "ipAddress" | "userAgent", ExtArgs["result"]["auditLog"]>
+export type AuditLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "userId" | "isActive" | "action" | "entityType" | "entityId" | "changes" | "timestamp" | "ipAddress" | "userAgent" | "deletedAt" | "deletedByUserId", ExtArgs["result"]["auditLog"]>
 export type AuditLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -794,6 +913,7 @@ export type $AuditLogPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: string
     tenantId: string
     userId: string
+    isActive: boolean
     action: $Enums.AuditActionType
     entityType: $Enums.EntityType
     entityId: string
@@ -801,6 +921,8 @@ export type $AuditLogPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     timestamp: Date
     ipAddress: string | null
     userAgent: string | null
+    deletedAt: Date | null
+    deletedByUserId: string | null
   }, ExtArgs["result"]["auditLog"]>
   composites: {}
 }
@@ -1175,6 +1297,7 @@ export interface AuditLogFieldRefs {
   readonly id: Prisma.FieldRef<"AuditLog", 'String'>
   readonly tenantId: Prisma.FieldRef<"AuditLog", 'String'>
   readonly userId: Prisma.FieldRef<"AuditLog", 'String'>
+  readonly isActive: Prisma.FieldRef<"AuditLog", 'Boolean'>
   readonly action: Prisma.FieldRef<"AuditLog", 'AuditActionType'>
   readonly entityType: Prisma.FieldRef<"AuditLog", 'EntityType'>
   readonly entityId: Prisma.FieldRef<"AuditLog", 'String'>
@@ -1182,6 +1305,8 @@ export interface AuditLogFieldRefs {
   readonly timestamp: Prisma.FieldRef<"AuditLog", 'DateTime'>
   readonly ipAddress: Prisma.FieldRef<"AuditLog", 'String'>
   readonly userAgent: Prisma.FieldRef<"AuditLog", 'String'>
+  readonly deletedAt: Prisma.FieldRef<"AuditLog", 'DateTime'>
+  readonly deletedByUserId: Prisma.FieldRef<"AuditLog", 'String'>
 }
     
 

@@ -7,13 +7,23 @@ import { AuditLogRepository } from './repositories/auditLog.repository';
 export class AuditLogService {
   constructor(private auditLogRepository: AuditLogRepository) {}
 
-  async getAllByTenantId(
-    tenantId: string,
+  async getAllAuditLogs() {
+    const auditLogs = await this.auditLogRepository.findAll();
+    return auditLogs;
+  }
+
+  async getAllAuditLogsAdmin() {
+    const auditLogs = await this.auditLogRepository.findAllAdmin();
+    return auditLogs;
+  }
+
+  async getAllByTenantName(
+    tenantName: string,
     page: number = 1,
     limit: number = 50,
   ) {
     const skip = (page - 1) * limit;
-    return this.auditLogRepository.findAllByTenantId(tenantId, skip, limit);
+    return this.auditLogRepository.findAllByTenantName(tenantName, skip, limit);
   }
 
   async getAllByUserId(userId: string) {

@@ -19,7 +19,10 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Eye,
   Filter,
+  SquarePen,
+  Trash2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -57,7 +60,7 @@ interface DataTableProps<TData, TValue> {
   title: string;
   tableName: string;
   description?: string;
-
+  onView?: (row: TData) => void;
   onEdit?: (row: TData) => void;
   onDelete?: (row: TData) => void;
   onExport?: (
@@ -86,7 +89,7 @@ export function DataTable<TData, TValue>({
   title,
   description,
   tableName,
-
+  onView,
   onEdit,
   onDelete,
   onExport,
@@ -110,17 +113,29 @@ export function DataTable<TData, TValue>({
     header: ({}) => {
       const canEdit = dataTablePermissions.canUpdate;
       const canDelete = dataTablePermissions.canDelete;
+      const canView = !!onView;
 
-      if (!canEdit && !canDelete) return null;
+      if (!canEdit && !canDelete && !canView) return null;
       return <HeaderComponent titulo="Acciones" />;
     },
     cell: ({ row }) => {
       const canEdit = dataTablePermissions.canUpdate;
       const canDelete = dataTablePermissions.canDelete;
+      const canView = !!onView;
 
-      if (!canEdit && !canDelete) return null;
+      if (!canEdit && !canDelete && !canView) return null;
       return (
         <div className="flex items-center justify-center gap-2 min-h-[40px]">
+          {canView && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="min-h-[40px] text-muted-foreground"
+              onClick={() => onView?.(row.original)}
+            >
+              <Eye className="h-4 w-4" />
+            </Button>
+          )}
           {canEdit && (
             <Button
               variant="outline"
@@ -128,7 +143,7 @@ export function DataTable<TData, TValue>({
               className="min-h-[40px] text-primary"
               onClick={() => onEdit && onEdit(row.original)}
             >
-              Editar
+              <SquarePen className="h-4 w-4" />
             </Button>
           )}
           {canDelete && (
@@ -138,7 +153,7 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="sm"
             >
-              Eliminar
+              <Trash2 className="h-4 w-4" />
             </Button>
           )}
         </div>

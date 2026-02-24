@@ -714,13 +714,16 @@ export const AuditLogScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   userId: 'userId',
+  isActive: 'isActive',
   action: 'action',
   entityType: 'entityType',
   entityId: 'entityId',
   changes: 'changes',
   timestamp: 'timestamp',
   ipAddress: 'ipAddress',
-  userAgent: 'userAgent'
+  userAgent: 'userAgent',
+  deletedAt: 'deletedAt',
+  deletedByUserId: 'deletedByUserId'
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
@@ -822,7 +825,8 @@ export const AuditLogOrderByRelevanceFieldEnum = {
   userId: 'userId',
   entityId: 'entityId',
   ipAddress: 'ipAddress',
-  userAgent: 'userAgent'
+  userAgent: 'userAgent',
+  deletedByUserId: 'deletedByUserId'
 } as const
 
 export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
@@ -876,6 +880,13 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'AuditActionType'
  */
 export type EnumAuditActionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuditActionType'>
@@ -907,13 +918,6 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
