@@ -1,7 +1,12 @@
 // src/permissions/permissions.service.ts
 
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { PermissionCheck, UserPermissions } from '@vivero/shared';
+import {
+  PermissionCheck,
+  UserPermissions,
+  ALLOWED_TABLE_NAMES,
+  ManagedTableName,
+} from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
 
 type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
@@ -10,27 +15,16 @@ type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
 export class PermissionsService {
   // Allowed table names = SQL table names from @@map
   private readonly logger = new Logger(PermissionsService.name);
-  private readonly ALLOWED_TABLES = [
-    'audit_logs',
-    'tenants',
-    'users',
-    'user_permissions',
-    // Add future entity tables here using their @@map name
-  ] as const;
 
-  private isAllowedTable(
-    tableName: string,
-  ): tableName is (typeof this.ALLOWED_TABLES)[number] {
-    return (this.ALLOWED_TABLES as readonly string[]).includes(tableName);
+  private isAllowedTable(tableName: string): tableName is ManagedTableName {
+    return (ALLOWED_TABLE_NAMES as readonly string[]).includes(tableName);
   }
   constructor(private permissionsRepo: PermissionsRepository) {}
 
   /**
    * Validate table name
    */
-  validateTableName(
-    tableName: string,
-  ): asserts tableName is (typeof this.ALLOWED_TABLES)[number] {
+  validateTableName(tableName: string): asserts tableName is ManagedTableName {
     if (!this.isAllowedTable(tableName)) {
       this.logger.warn(`Invalid table name: ${tableName}`);
       throw new BadRequestException(`Invalid table name: ${tableName}`);
@@ -41,7 +35,7 @@ export class PermissionsService {
    * Get all tables
    */
   getAllTables(): string[] {
-    return [...this.ALLOWED_TABLES];
+    return [...ALLOWED_TABLE_NAMES];
   }
 
   /**

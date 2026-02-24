@@ -12,10 +12,10 @@ import { PermissionsService } from '../permissions.service';
 import { AuthRequest } from '../../auth/interfaces/authRequest.interface';
 import { IS_PUBLIC_KEY } from '../../../shared/decorators/public.decorator';
 import { REQUIRE_PERMISSION_KEY } from '../decorators/require-permission.decorator';
-import { CrudAction, PermissionScope } from '@vivero/shared';
+import { CrudAction, PermissionScope, ManagedTableName } from '@vivero/shared';
 
 export interface RequirePermissionMetadata {
-  tableName: string;
+  tableName: ManagedTableName;
   action: CrudAction;
   scope?: PermissionScope;
 }

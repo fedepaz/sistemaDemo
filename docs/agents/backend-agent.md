@@ -241,6 +241,7 @@ Trial System Features:
 Authentication & Authorization:
   - Multi-factor authentication support
   - Permission-based access control (Admin, Manager, Operator, Viewer)
+  - Managed Entity Registry: All manageable tables must be registered in `@vivero/shared`'s `MANAGED_ENTITIES` registry to be available for the permission system.
   - JWT tokens with short expiration (15 min access + refresh)
   - API key management for system integrations
 
