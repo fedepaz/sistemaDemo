@@ -1,7 +1,7 @@
-// src/app/(dashboard)/audit_logs/loading.tsx
+// src/app/(dashboard)/audit-logs/loading.tsx
 
-import { LoadingSpinner } from "@/components/common/loading-spinner";
+import { AuditLogDashboardSkeleton } from "@/features/auditLogs";
 
 export default function Loading() {
-  return <LoadingSpinner />;
+  return <AuditLogDashboardSkeleton />;
 }

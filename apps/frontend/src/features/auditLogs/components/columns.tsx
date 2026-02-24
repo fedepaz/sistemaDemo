@@ -64,11 +64,11 @@ const formatChanges = (changes: Record<string, any> | null): string => {
 const getActionIcon = (action: string) => {
   switch (action) {
     case "CREATE":
-      return <Plus className="h-4 w-4 text-green-500" />;
+      return <Plus className="h-4 w-4 text-primary" />;
     case "UPDATE":
-      return <Pencil className="h-4 w-4 text-blue-500" />;
+      return <Pencil className="h-4 w-4 text-secondary" />;
     case "DELETE":
-      return <Trash2 className="h-4 w-4 text-red-500" />;
+      return <Trash2 className="h-4 w-4 text-destructive" />;
     default:
       return <FileText className="h-4 w-4 text-muted-foreground" />;
   }

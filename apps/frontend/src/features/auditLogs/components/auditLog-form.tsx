@@ -94,7 +94,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
             Metadatos
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4">
+        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <span className="text-sm text-muted-foreground">Fecha y hora</span>
             <p className="font-medium">

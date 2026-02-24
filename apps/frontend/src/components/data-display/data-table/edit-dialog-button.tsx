@@ -31,15 +31,15 @@ export function EditDialog({
   itemCount = 1,
   isLoading = false,
 }: EditDialogProps) {
-  const dialogTitle = title || "¿Estás seguro que quieres editar?";
+  const dialogTitle = title || "Confirmar cambios";
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
-              <AlertTriangle className="h-6 w-6 text-destructive" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <AlertTriangle className="h-6 w-6 text-primary" />
             </div>
             <AlertDialogTitle className="text-xl">
               {dialogTitle}
@@ -60,9 +60,9 @@ export function EditDialog({
           <AlertDialogAction
             onClick={onConfirm}
             disabled={isLoading}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90 min-h-[48px] min-w-[100px]"
+            className="min-h-[48px] min-w-[100px]"
           >
-            {isLoading ? "Editando..." : "Editar"}
+            {isLoading ? "Guardando cambos..." : "Confirmar cambios"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

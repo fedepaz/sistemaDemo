@@ -166,6 +166,12 @@ This document lists all the React components found in the `apps/frontend/src` di
 
 ## Feature Components
 
+### Audit Logs
+-   `AuditLogDashboard` [x]
+-   `AuditLogDashboardSkeleton` [x]
+-   `AuditLogDataTable` [x]
+-   `AuditLogForm` [x]
+
 ### Auth
 -   `AuthSkeleton` [x]
 -   `LoginForm` [x]
