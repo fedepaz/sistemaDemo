@@ -142,8 +142,8 @@ export const PermissionRowItem = memo(function PermissionRowItem({
           return (
             <Tooltip key={col.key}>
               <TooltipTrigger asChild>
-                <label className="flex cursor-pointer flex-col items-center gap-2 group/switch">
-                  <div className="flex items-center gap-2">
+                <label className="flex cursor-pointer flex-col items-center gap-1 group/switch">
+                  <div className="flex items-center gap-3">
                     <col.icon
                       className={cn(
                         "h-4 w-4 transition-all duration-300",
@@ -152,16 +152,6 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                           : "text-muted-foreground/30 group-hover/switch:text-muted-foreground/50",
                       )}
                     />
-                    <span
-                      className={cn(
-                        "text-[11px] font-medium uppercase tracking-tight transition-colors",
-                        isActive
-                          ? "text-foreground"
-                          : "text-muted-foreground/50 group-hover/switch:text-muted-foreground/70",
-                      )}
-                    >
-                      {col.label}
-                    </span>
                   </div>
                   <div className="flex h-11 items-center justify-center">
                     {" "}
@@ -178,14 +168,15 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                           ? "ring-4 ring-primary/10 ring-offset-0 ring-offset-background"
                           : "",
                       )}
-                      aria-label={`${col.label} - ${meta.label}`}
+                      aria-label={col.label}
                     />
                   </div>
                 </label>
               </TooltipTrigger>
               <TooltipContent
                 side="top"
-                className="bg-popover border shadow-md"
+                className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md" // ✅ Padding + color explícito
+                sideOffset={5}
               >
                 <p className="text-xs font-medium">
                   {canEdit
@@ -267,7 +258,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                   </TooltipTrigger>
                   <TooltipContent
                     side="bottom"
-                    className="bg-popover border shadow-md"
+                    className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md" // ✅ Padding + color explícito
                   >
                     <p className="text-xs font-medium">
                       {SCOPE_LABELS[scope].desc}
