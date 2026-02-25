@@ -37,7 +37,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
   const { mutate: savePermissions, isPending: isSaving } =
     useSetUserPermissions();
 
-  const dataTablePermissions = usePermission("users-permissions");
+  const dataTablePermissions = usePermission("user_permissions");
   const canEdit = dataTablePermissions.canUpdate;
 
   // The actual state is the merge of original + changes
