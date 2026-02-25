@@ -53,6 +53,11 @@ import { ExportDropdown } from "@/components/data-display/data-table/export-drop
 import { DeleteDialog } from "@/components/data-display/data-table/delete-dialog-button";
 import { usePermission } from "@/hooks/usePermission";
 import { useBreakpoint } from "@/hooks/useMediaQuery";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -127,34 +132,67 @@ export function DataTable<TData, TValue>({
       return (
         <div className="flex items-center justify-center gap-2 min-h-[40px]">
           {canView && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="min-h-[40px] text-muted-foreground"
-              onClick={() => onView?.(row.original)}
-            >
-              <Eye className="h-4 w-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="min-h-[40px] text-muted-foreground"
+                  onClick={() => onView?.(row.original)}
+                  aria-label="Ver detalles"
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                className="border border-border shadow-md"
+              >
+                <p>Ver detalles</p>
+              </TooltipContent>
+            </Tooltip>
           )}
           {canEdit && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="min-h-[40px] text-primary"
-              onClick={() => onEdit && onEdit(row.original)}
-            >
-              <SquarePen className="h-4 w-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="min-h-[40px] text-primary"
+                  onClick={() => onEdit && onEdit(row.original)}
+                  aria-label="Editar"
+                >
+                  <SquarePen className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                className="border border-border shadow-md"
+              >
+                <p>Editar</p>
+              </TooltipContent>
+            </Tooltip>
           )}
           {canDelete && (
-            <Button
-              onClick={() => handleDeleteSingle(row.original)}
-              className="min-h-[40px] text-destructive"
-              variant="outline"
-              size="sm"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => handleDeleteSingle(row.original)}
+                  className="min-h-[40px] text-destructive"
+                  variant="outline"
+                  size="sm"
+                  aria-label="Eliminar"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                className="border border-border shadow-md"
+              >
+                <p>Eliminar</p>
+              </TooltipContent>
+            </Tooltip>
           )}
         </div>
       );
@@ -377,42 +415,85 @@ export function DataTable<TData, TValue>({
                 {`Página ${table.getState().pagination.pageIndex + 1} de ${table.getPageCount()}`}
               </div>
               <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  className="hidden h-8 w-8 p-0 lg:flex bg-transparent"
-                  onClick={() => table.setPageIndex(0)}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <span className="sr-only">Ir a la primera página</span>
-                  {"<<"}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-8 w-8 p-0 bg-transparent"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <span className="sr-only">Ir a la página anterior</span>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-8 w-8 p-0 bg-transparent"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <span className="sr-only">Ir a la página siguiente</span>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="hidden h-8 w-8 p-0 lg:flex bg-transparent"
-                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <span className="sr-only">Ir a la última página</span>
-                  {">>"}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="hidden h-8 w-8 p-0 lg:flex bg-transparent"
+                      onClick={() => table.setPageIndex(0)}
+                      disabled={!table.getCanPreviousPage()}
+                      aria-label="Ir a la primera página"
+                    >
+                      {"<<"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-border shadow-md"
+                  >
+                    <p>Primera página</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="h-8 w-8 p-0 bg-transparent"
+                      onClick={() => table.previousPage()}
+                      disabled={!table.getCanPreviousPage()}
+                      aria-label="Ir a la página anterior"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-border shadow-md"
+                  >
+                    <p>Página anterior</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="h-8 w-8 p-0 bg-transparent"
+                      onClick={() => table.nextPage()}
+                      disabled={!table.getCanNextPage()}
+                      aria-label="Ir a la página siguiente"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-border shadow-md"
+                  >
+                    <p>Siguiente página</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="hidden h-8 w-8 p-0 lg:flex bg-transparent"
+                      onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                      disabled={!table.getCanNextPage()}
+                      aria-label="Ir a la última página"
+                    >
+                      {">>"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-border shadow-md"
+                  >
+                    <p>Última página</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -436,14 +517,36 @@ export function SortableHeader({
   column: any;
   children: ReactNode;
 }) {
+  const isSorted = column.getIsSorted();
+
   return (
-    <Button
-      variant="ghost"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      className="h-auto p-0 font-semibold hover:bg-transparent"
-    >
-      {children}
-      <ArrowUpDown className="ml-2 h-4 w-4" />
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(isSorted === "asc")}
+          className="h-auto p-0 font-semibold hover:bg-transparent"
+          aria-label={
+            isSorted === "asc"
+              ? "Ordenar descendente"
+              : isSorted === "desc"
+                ? "Quitar orden"
+                : "Ordenar ascendente"
+          }
+        >
+          {children}
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="border border-border shadow-md">
+        <p>
+          {isSorted === "asc"
+            ? "Click para orden descendente"
+            : isSorted === "desc"
+              ? "Click para quitar orden"
+              : "Click para orden ascendente"}
+        </p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

@@ -78,6 +78,7 @@ export function MobileNavigation() {
           variant="ghost"
           size="icon"
           className="md:hidden agricultural-touch-target"
+          aria-label="Abrir menú de navegación"
         >
           <Menu className="h-5 w-5" />
         </Button>

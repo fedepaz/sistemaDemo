@@ -5,6 +5,7 @@ import { UseFormReturn } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -66,6 +67,9 @@ export function UserForm({ onSubmit, formId, form }: UserFormProps) {
               <FormControl>
                 <Input {...field} placeholder="Correo electrónico" />
               </FormControl>
+              <FormDescription>
+                Se utilizará para notificaciones del sistema y acceso.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

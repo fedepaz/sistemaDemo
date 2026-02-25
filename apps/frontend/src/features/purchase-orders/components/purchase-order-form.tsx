@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -62,6 +63,7 @@ export function PurchaseOrderForm({
               <FormControl>
                 <Input {...field} placeholder="Ej: PO-2023-001" />
               </FormControl>
+              <FormDescription>Formato oficial: PO-YYYY-XXX</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -139,6 +141,9 @@ export function PurchaseOrderForm({
                   <SelectItem value="cancelled">Cancelado</SelectItem>
                 </SelectContent>
               </Select>
+              <FormDescription>
+                Estado del flujo de aprobación.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

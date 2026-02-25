@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -73,6 +74,9 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
                   placeholder="Nombre de la persona de contacto"
                 />
               </FormControl>
+              <FormDescription>
+                Persona principal responsable de la cuenta.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -129,6 +133,9 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
                   <SelectItem value="prospect">Prospecto</SelectItem>
                 </SelectContent>
               </Select>
+              <FormDescription>
+                Define la relación comercial actual.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
