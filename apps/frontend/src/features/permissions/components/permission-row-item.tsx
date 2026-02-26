@@ -226,45 +226,49 @@ export const PermissionRowItem = memo(function PermissionRowItem({
             <ToggleGroup
               type="single"
               value={row.scope}
-              onValueChange={(val) => {
-                if (val) onScopeChange(row.tableName, val as PermissionScope);
-              }}
+              onValueChange={(val) =>
+                val && onScopeChange(row.tableName, val as PermissionScope)
+              }
               disabled={!canEdit}
               variant="outline"
               className="flex w-full overflow-hidden rounded-xl border bg-muted/40 p-1 lg:w-auto"
             >
               {(["NONE", "OWN", "ALL"] as const).map((scope) => (
-                <Tooltip key={scope}>
-                  <TooltipTrigger asChild>
-                    <ToggleGroupItem
-                      value={scope}
-                      className={cn(
-                        "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
-                        "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted",
-                        row.scope === scope && scope === "ALL"
-                          ? "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground shadow-sm"
-                          : "",
-                        row.scope === scope && scope === "OWN"
-                          ? "data-[state=on]:bg-primary/10 data-[state=on]:text-primary data-[state=on]:border-primary/20 shadow-sm dark:data-[state=on]:bg-primary/20 dark:data-[state=on]:text-primary-foreground"
-                          : "",
-                        row.scope === scope && scope === "NONE"
-                          ? "data-[state=on]:bg-muted-foreground/10 data-[state=on]:text-muted-foreground shadow-sm"
-                          : "",
-                      )}
-                      aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${meta.label}`}
+                <ToggleGroupItem
+                  key={scope}
+                  value={scope}
+                  className={cn(
+                    "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
+                    // Estados OFF
+                    "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted/50",
+                    // Estados ON (base)
+                    "data-[state=on]:shadow-sm data-[state=on]:font-bold",
+                    // Estados ON específicos por scope (¡sin row.scope === scope!)
+                    scope === "ALL" &&
+                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                    scope === "OWN" &&
+                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                    scope === "NONE" &&
+                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                  )}
+                  aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${meta.label}`}
+                >
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="w-full block text-center">
+                        {SCOPE_LABELS[scope].label}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md"
                     >
-                      {SCOPE_LABELS[scope].label}
-                    </ToggleGroupItem>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="bottom"
-                    className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md" // ✅ Padding + color explícito
-                  >
-                    <p className="text-xs font-medium">
-                      {SCOPE_LABELS[scope].desc}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+                      <p className="text-xs font-medium">
+                        {SCOPE_LABELS[scope].desc}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </ToggleGroupItem>
               ))}
             </ToggleGroup>
           )}
