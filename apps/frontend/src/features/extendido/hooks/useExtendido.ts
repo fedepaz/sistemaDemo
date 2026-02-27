@@ -5,8 +5,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { mockPlantService } from "../api/mockPlantService";
 import { Plant, UpdatePlantDto } from "../types";
+import { mockPlantService } from "../api/mockExtendidoService";
 
 export const PLANT_QUERY_KEYS = {
   all: "plants" as const,

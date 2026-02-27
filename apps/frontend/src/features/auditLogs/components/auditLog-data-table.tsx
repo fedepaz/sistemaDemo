@@ -1,11 +1,7 @@
 //src/features/users/components/user-data-table.tsx
 "use client";
 
-import {
-  DataTable,
-  DataTableSkeleton,
-  SlideOverForm,
-} from "@/components/data-display/data-table";
+import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { auditLogColumns } from "./columns";
 
 import { AuditLogDto } from "@vivero/shared";
@@ -14,7 +10,7 @@ import { useState } from "react";
 import { AuditLogForm } from "./auditLog-form";
 
 export function AuditLogDataTable() {
-  const { data: auditLogs, isLoading } = useAuditLogs();
+  const { data: auditLogs } = useAuditLogs();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedAuditLog, setSelectedAuditLog] = useState<AuditLogDto>();
@@ -30,9 +26,6 @@ export function AuditLogDataTable() {
   ) => {
     console.log("Export Users:", selectedRows);
   };
-
-  if (auditLogs === undefined || isLoading)
-    return <DataTableSkeleton columnCount={auditLogColumns.length} />;
 
   return (
     <>

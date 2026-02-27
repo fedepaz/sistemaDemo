@@ -1,7 +1,11 @@
 // src/features/permissions/hooks/permsHooks.ts
 
 import { clientFetch } from "@/lib/api/client-fetch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useSuspenseQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { UserPermissions } from "@vivero/shared";
 import { toast } from "sonner";
 
@@ -11,23 +15,23 @@ export const permissionsQueryKeys = {
 };
 
 export const useTables = () => {
-  return useQuery<string[]>({
+  return useSuspenseQuery<string[]>({
     queryKey: permissionsQueryKeys.tables(),
     queryFn: () =>
       clientFetch<string[]>("permissions/tables", { method: "GET" }),
-    enabled: true,
+
     retry: 1, // Retry once to account for transient network issues
   });
 };
 
 export const useUserPermissions = (userId: string) => {
-  return useQuery<UserPermissions>({
+  return useSuspenseQuery<UserPermissions>({
     queryKey: permissionsQueryKeys.byUserId(userId),
     queryFn: () =>
       clientFetch<UserPermissions>(`permissions/user/${userId}`, {
         method: "GET",
       }),
-    enabled: !!userId,
+
     retry: 1, // Retry once to account for transient network issues
   });
 };

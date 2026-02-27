@@ -1,13 +1,13 @@
 //src/features/plants/components/PlantsDashboard.tsx
 
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { plantColumns } from "./columns";
 import { KPICardSkeleton } from "@/components/data-display/kpi-card";
-import { PlantsDataTable } from "./plants-data-table";
-import PlantKPIs from "./plants-kpi";
+import PlantKPIs from "./extendido-kpi";
+import { ExtendidoDataTable } from "./extendido-data-table";
 
-export function EntitiesDashboard() {
+export function ExtendidoDashboard() {
   return (
     <>
       <Suspense
@@ -25,7 +25,7 @@ export function EntitiesDashboard() {
       <Suspense
         fallback={<DataTableSkeleton columnCount={plantColumns.length} />}
       >
-        <PlantsDataTable />
+        <ExtendidoDataTable />
       </Suspense>
     </>
   );

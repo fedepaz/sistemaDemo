@@ -4,11 +4,7 @@
 import { useDataTableActions } from "@/hooks/useDataTable";
 import { useDeleteUser, useUpdateUser, useUsers } from "../hooks/usersHooks";
 
-import {
-  DataTable,
-  DataTableSkeleton,
-  SlideOverForm,
-} from "@/components/data-display/data-table";
+import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { userColumns } from "./columns";
 import { UserForm } from "./user-form";
 import { useEffect, useState } from "react";
@@ -21,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export function UsersDataTable() {
-  const { data: users = [], isLoading } = useUsers();
+  const { data: users = [] } = useUsers();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfileDto>();
@@ -80,8 +76,6 @@ export function UsersDataTable() {
       if (!isUpdatingUser) setSlideOverOpen(false);
     }
   };
-
-  if (isLoading) return <DataTableSkeleton columnCount={userColumns.length} />;
 
   return (
     <>

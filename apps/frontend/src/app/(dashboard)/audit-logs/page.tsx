@@ -1,15 +1,7 @@
 // src/app/(dashboard)/audit_logs/page.tsx
 
-import {
-  AuditLogDashboard,
-  AuditLogDashboardSkeleton,
-} from "@/features/auditLogs";
-import { Suspense } from "react";
+import { AuditLogDashboard } from "@/features/auditLogs";
 
 export default function AuditLogsPage() {
-  return (
-    <Suspense fallback={<AuditLogDashboardSkeleton />}>
-      <AuditLogDashboard />
-    </Suspense>
-  );
+  return <AuditLogDashboard />;
 }

@@ -2,6 +2,8 @@
 
 This document outlines the specialized agents that assist in the development of the vivero-client-alpha application. Each agent has a specific role and expertise.
 
+**Rule:** All communication with the user must be in **English**.
+
 **Rule:** Before making any changes to the codebase, you **must** first consult the relevant agent profile in the `docs/agents/` directory. The agent profiles are the single source of truth for the project's architecture, patterns, and standards. Do not deviate from the guidelines documented in the agent profiles.
 
 ---

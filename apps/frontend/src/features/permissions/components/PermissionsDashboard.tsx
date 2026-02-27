@@ -13,8 +13,10 @@ import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "./empty-state";
 
 import { PermissionsManager } from "./permissions-manager";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { UserSelector } from "./user-selector";
+import { UserSelectorSkeleton } from "./user-selector-skeleton";
+import { PermissionsManagerSkeleton } from "./permission-manager-skeleton";
 
 export function PermissionsDashboard() {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -42,13 +44,17 @@ export function PermissionsDashboard() {
       </CardHeader>
 
       <Separator className="opacity-50" />
-      <UserSelector onSelectedUserId={setSelectedUserId} />
+      <Suspense fallback={<UserSelectorSkeleton />}>
+        <UserSelector onSelectedUserId={setSelectedUserId} />
+      </Suspense>
       {!selectedUserId ? (
         <div className="border-t border-dashed bg-muted/5">
           <EmptyState hasUser={false} />
         </div>
       ) : (
-        <PermissionsManager key={selectedUserId} userId={selectedUserId} />
+        <Suspense fallback={<PermissionsManagerSkeleton />}>
+          <PermissionsManager key={selectedUserId} userId={selectedUserId} />
+        </Suspense>
       )}
     </Card>
   );

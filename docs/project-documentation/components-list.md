@@ -117,6 +117,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `AuthSkeleton` | [x] | [x] | [x] |
 | `LoginForm` | [x] | [x] | [x] |
 | `RegisterForm` | [x] | [x] | [x] |
+| `LoginLoading` | [x] | [x] | [x] |
 
 ### Clients
 | Component | Responsive | Color Tokens | UX Helpers |
@@ -140,10 +141,10 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DashboardKPI` | [x] | [x] | [x] |
 | `FeatureNavigationSkeleton` | [x] | [x] | [x] |
 | `FeatureNavigation` | [x] | [x] | [x] |
-| `RecentActivitySkeleton" | [x] | [x] | [x] |
-| `RecentActivity" | [x] | [x] | [x] |
-| `RootDashboardSkeleton" | [x] | [x] | [x] |
-| `RootDashboard" | [x] | [x] | [x] |
+| `RecentActivitySkeleton` | [x] | [x] | [x] |
+| `RecentActivity` | [x] | [x] | [x] |
+| `RootDashboardSkeleton` | [x] | [x] | [x] |
+| `RootDashboard` | [x] | [x] | [x] |
 
 ### Invoices
 | Component | Responsive | Color Tokens | UX Helpers |
@@ -162,17 +163,19 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `PermissionsManager` | [x] | [x] | [x] |
 | `PermissionRowItem` | [x] | [x] | [x] |
 | `UserSelector` | [x] | [x] | [x] |
-| `PermissionsSkeleton` | [x] | [x] | [x] |
+| `PermissionsDashboardSkeleton` | [x] | [x] | [x] |
+| `PermissionManagerSkeleton` | [x] | [x] | [x] |
+| `UserSelectorSkeleton` | [x] | [x] | [x] |
 | `EmptyState` | [x] | [x] | [x] |
 
-### Plants
+### Extendidos
 | Component | Responsive | Color Tokens | UX Helpers |
 | :--- | :---: | :---: | :---: |
-| `PlantsDashboardSkeleton` | [x] | [x] | [x] |
-| `PlantsDataTable` | [x] | [x] | [x] |
-| `PlantForm" | [x] | [x] | [x] |
-| `PlantKPIs" | [x] | [x] | [x] |
-| `PlantsDashboard" | [x] | [x] | [x] |
+| `ExtendidoDashboardSkeleton` | [x] | [x] | [x] |
+| `ExtendidoDataTable` | [x] | [x] | [x] |
+| `ExtendidosForm` | [x] | [x] | [x] |
+| `ExtendidoKPIs` | [x] | [x] | [x] |
+| `ExtendidoDashboard` | [x] | [x] | [x] |
 
 ### Purchase Orders
 | Component | Responsive | Color Tokens | UX Helpers |

@@ -32,8 +32,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
   >({});
 
   const { data: tables = [] } = useTables();
-  const { data: userPermissions = {}, isLoading: isLoadingUserPerms } =
-    useUserPermissions(userId);
+  const { data: userPermissions = {} } = useUserPermissions(userId);
   const { mutate: savePermissions, isPending: isSaving } =
     useSetUserPermissions();
 
@@ -161,7 +160,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
 
       {/* ── Permissions board ── */}
       <CardContent className="p-0 bg-background">
-        {tables.length === 0 && !isLoadingUserPerms ? (
+        {tables.length === 0 ? (
           <EmptyState hasUser />
         ) : (
           <div className="flex flex-col">
@@ -190,7 +189,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
             {/* Rows */}
             <ScrollArea className="flex flex-col bg-muted/5">
               <div className="flex flex-col gap-3 p-6">
-                {filteredRows.length === 0 && !isLoadingUserPerms ? (
+                {filteredRows.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 text-center">
                     <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-3">
                       <Search className="h-6 w-6 text-muted-foreground/40" />
