@@ -94,7 +94,7 @@ This project is Spanish-only. All user-facing strings in the UI should be writte
 Tech Stack Configuration:
 ├── Framework: Next.js 14+ (App Router, Server Components)
 ├── Styling: Tailwind CSS + shadcn/ui
-├── State Management: TanStack Query + Zustand
+├── State Management: TanStack Query (Mandatory: useSuspenseQuery for all GET) + Zustand
 ├── Forms: React Hook Form + Zod
 ├── Tables: TanStack Table + AG Grid Enterprise (optional)
 ├── Charts: Recharts + Tremor
@@ -123,14 +123,27 @@ Implements automatic JWT refresh via `clientFetch` and `401` interception.
 ## Standard Development Workflow
 
 1. **Scaffold Feature**: `mkdir -p src/features/<name>/{api,components,hooks,stores,utils}`.
-2. **Create Page Route**: `app/<name>/page.tsx`.
-3. **Implement Logic**: Use shared contracts, colocate API calls and hooks.
+2. **Create Page Route**: `app/<name>/page.tsx` and always include `app/<name>/loading.tsx` for route-level skeleton.
+3. **Implement Logic**: Use shared contracts, colocate API calls and hooks. **Mandatory: Hooks for GET requests must use `useSuspenseQuery` from TanStack Query.**
 4. **Export Public API**: Curate `src/features/<name>/index.ts`.
+
+## Data Fetching & Loading Rules
+
+To ensure a seamless and high-performance user experience, the following patterns are **mandatory**:
+
+### 1. Mandatory use of `useSuspenseQuery`
+For all data retrieval (GET requests), use `useSuspenseQuery` instead of the traditional `useQuery`. This leverages React's Suspense for declarative loading states and error boundaries.
+
+### 2. Mandatory Route-Level Skeleton (`loading.tsx`)
+Every route segment must have a `loading.tsx` file that renders a skeleton mirroring the layout of the final page. This is the **Level 1** loading strategy.
+
+### 3. Mandatory In-Page `<Suspense>`
+Components that fetch data asynchronously must be wrapped in a `<Suspense>` boundary with a corresponding skeleton fallback. This is the **Level 2** loading strategy for granular streaming.
 
 ## Skeleton Loading Screen Pattern
 
-- **Level 1**: Instant Route Skeleton (`loading.tsx`).
-- **Level 2**: Granular Content Streaming (In-Page `<Suspense>`).
+- **Level 1**: Instant Route Skeleton (`loading.tsx`). **Required for every route.**
+- **Level 2**: Granular Content Streaming (In-Page `<Suspense>`). **Required for all data-fetching components.**
 
 ### Implementation Rules
 
