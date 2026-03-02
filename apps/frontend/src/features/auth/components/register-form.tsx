@@ -1,284 +1,199 @@
 // src/features/auth/components/register-form.tsx
 "use client";
 
-import { Sprout, Loader2, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterAuthSchema, RegisterAuthDto } from "@vivero/shared";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useRegister } from "../hooks/useRegister";
 import { useAuthContext } from "../providers/AuthProvider";
+import { useRouter } from "next/navigation";
+import { Loader2, User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export function RegisterForm() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [tenantId, setTenantId] = useState("");
   const router = useRouter();
-
   const { registerAsync, isLoading } = useRegister();
   const { userProfile } = useAuthContext();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!userProfile) return;
-    setTenantId(userProfile.tenantId);
-    setError(null);
+  const form = useForm<RegisterAuthDto>({
+    resolver: zodResolver(RegisterAuthSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+      tenantId: userProfile?.tenantId || "",
+    },
+  });
+
+  // Update tenantId when userProfile is available
+  useEffect(() => {
+    if (userProfile?.tenantId) {
+      form.setValue("tenantId", userProfile.tenantId);
+    }
+  }, [userProfile, form]);
+
+  const onSubmit = async (data: RegisterAuthDto) => {
     try {
-      await registerAsync({
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-        tenantId,
-      });
-      // Optionally redirect on success — or let useAuth handle it via context
-      router.push("/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al registrar");
-      console.error(err);
+      await registerAsync(data);
+      // Success toast is handled in the hook
+      router.push("/users");
+    } catch (error) {
+      console.error("Error en registro:", error);
+      // Error toast is handled in the hook or clientFetch
     }
   };
 
   return (
-    <div
-      className={cn(
-        "min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8",
-      )}
-    >
-      <div className="max-w-md w-full space-y-6 md:space-y-8">
-        {/* Logo */}
-        <div className="flex justify-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
-              <span className="text-primary font-bold text-sm">DM</span>
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                Demo
-              </h1>
-              <p className="text-xs text-muted-foreground">
-                Sistema de gestión
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* Main Message */}
-        <div className="space-y-2 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-            Crea una cuenta
-          </h2>
-          <p className="text-muted-foreground">Información de tu cuenta</p>
-        </div>
-
-        {/* Form Card */}
-        <div className="rounded-2xl border bg-card p-6 sm:p-8 shadow-sm space-y-6">
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-5">
-              {/* Error Message */}
-              {error && (
-                <div
-                  role="alert"
-                  className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-                >
-                  {error}
-                </div>
-              )}
-              {/* Username Field */}
-              <div className="grid gap-2">
-                <Label htmlFor="username" className="text-foreground">
-                  Nombre de usuario
-                </Label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="h-4 w-4 text-primary" />
-                  </div>
-                  <Input
-                    id="username"
-                    type="text"
-                    placeholder="juanperez"
-                    autoComplete="username"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    disabled={isLoading}
-                    className="pl-14 h-12 rounded-lg"
-                  />
-                </div>
-              </div>
-
-              {/* Password Field */}
-              <div className="grid gap-2">
-                <Label htmlFor="password" className="text-foreground">
-                  Contraseña
-                </Label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Lock className="h-4 w-4 text-primary" />
-                  </div>
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Crea una contraseña"
-                    autoComplete="new-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={isLoading}
-                    className="pl-14 pr-12 h-12 rounded-lg"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                    tabIndex={-1}
-                    aria-label={
-                      showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-                    }
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Confirm Password Field */}
-              <div className="grid gap-2">
-                <Label htmlFor="confirm-password" className="text-foreground">
-                  Confirmar contraseña
-                </Label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Lock className="h-4 w-4 text-primary" />
-                  </div>
-                  <Input
-                    id="confirm-password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirma tu contraseña"
-                    autoComplete="new-password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    disabled={isLoading}
-                    className={cn(
-                      "pl-14 pr-12 h-12 rounded-lg",
-                      confirmPassword,
-                    )}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                    tabIndex={-1}
-                    aria-label={
-                      showConfirmPassword
-                        ? "Ocultar contraseña"
-                        : "Mostrar contraseña"
-                    }
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {confirmPassword && (
-                  <p className="text-xs text-destructive">
-                    Las contraseñas no coinciden
-                  </p>
+    <Card className="max-w-2xl mx-auto shadow-md border-border/60">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl font-bold flex items-center gap-2">
+          <User className="w-6 h-6 text-primary" />
+          Registrar Nuevo Usuario
+        </CardTitle>
+        <CardDescription>
+          Complete los datos para crear un nuevo usuario en su organización.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Username */}
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nombre de Usuario</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input placeholder="juan.perez" className="pl-10" {...field} />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </div>
+              />
 
-              {/* Name Field */}
-              <div className="grid gap-2">
-                <Label htmlFor="name" className="text-foreground">
-                  Nombre completo
-                </Label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="h-4 w-4 text-primary" />
-                  </div>
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder="Juan"
-                    autoComplete="firstName"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    disabled={isLoading}
-                    className="pl-14 h-12 rounded-lg"
-                  />
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder="Pérez"
-                    autoComplete="lastName"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    disabled={isLoading}
-                    className="pl-14 h-12 rounded-lg"
-                  />
-                </div>
-              </div>
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Correo Electrónico</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input placeholder="juan@ejemplo.com" className="pl-10" {...field} />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              {/* Email Field */}
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="text-foreground">
-                  Correo electrónico
-                </Label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Mail className="h-4 w-4 text-primary" />
-                  </div>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="nombre@ejemplo.com"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isLoading}
-                    className="pl-14 h-12 rounded-lg"
-                  />
-                </div>
-              </div>
+              {/* First Name */}
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nombre</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Juan" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              {/* Submit Button */}
+              {/* Last Name */}
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Apellido</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Pérez" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Password */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contraseña</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          className="pl-10 pr-10"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                        >
+                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormDescription>Mínimo 4 caracteres.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex justify-end gap-4 pt-4 border-t border-border/40">
               <Button
-                type="submit"
-                className="w-full h-12 rounded-lg text-base font-medium"
+                type="button"
+                variant="outline"
+                onClick={() => router.back()}
                 disabled={isLoading}
               >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isLoading} className="min-w-[120px]">
                 {isLoading ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Creando cuenta...
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Registrando...
                   </>
                 ) : (
-                  "Crear cuenta"
+                  "Crear Usuario"
                 )}
               </Button>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

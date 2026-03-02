@@ -4,12 +4,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { clientFetch } from "@/lib/api/client-fetch";
 import { AuthResponseDto, RegisterAuthDto } from "@vivero/shared";
-import { useAuthContext } from "../providers/AuthProvider";
 import { toast } from "sonner";
 
+/**
+ * Hook for administrative user registration.
+ * Unlike public registration, this does NOT automatically sign in the newly created user.
+ */
 export const useRegister = () => {
-  const { signIn } = useAuthContext();
-
   const mutation = useMutation<AuthResponseDto, Error, RegisterAuthDto>({
     mutationFn: async (userData) => {
       const response = await clientFetch<AuthResponseDto>("auth/register", {
@@ -18,15 +19,13 @@ export const useRegister = () => {
       });
       return response;
     },
-    onSuccess: (data) => {
-      // Store refresh token
-      localStorage.setItem("refreshToken", data.refreshToken);
-      toast.success("Registro exitoso", {
+    onSuccess: () => {
+      toast.success("Usuario creado exitosamente", {
         duration: 3000,
       });
-
-      // Automatically sign in after registration
-      signIn(data.accessToken, data.user);
+    },
+    onError: (error) => {
+      toast.error(error.message || "Error al crear el usuario");
     },
   });
 
