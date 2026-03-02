@@ -2,10 +2,11 @@
 
 export const MANAGED_ENTITIES = {
   USER: { tableName: "users", label: "Usuarios" },
-  TENANT: { tableName: "tenants", label: "Tenantes" },
-  AUDIT_LOG: { tableName: "audit_logs", label: "Logs de Auditoría" },
+  REGISTER: { tableName: "auth", label: "Registros" },
   USER_PERMISSION: { tableName: "user_permissions", label: "Permisos" },
+  TENANT: { tableName: "tenants", label: "Empresas" },
   EXTENDIDO: { tableName: "extendidos", label: "Extendidos" },
+  AUDIT_LOG: { tableName: "audit_logs", label: "Logs de Auditoría" },
 } as const;
 
 export type ManagedEntityKey = keyof typeof MANAGED_ENTITIES;

@@ -117,6 +117,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `AuthSkeleton` | [x] | [x] | [x] |
 | `LoginForm` | [x] | [x] | [x] |
 | `RegisterForm` | [x] | [x] | [x] |
+| `RegisterLoading` | [x] | [x] | [x] |
 | `LoginLoading` | [x] | [x] | [x] |
 
 ### Clients

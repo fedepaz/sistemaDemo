@@ -105,14 +105,12 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         requiredPermission: { table: "users", action: "read" },
       },
       {
-        title: "Auditoría",
-        href: ROUTES.AUDIT_LOGS,
-        icon: BarChart3,
-        description: "Registro de actividades del sistema",
-        dashboard: { statsLabel: "Registros de auditoría" },
-        requiredPermission: { table: "audit_logs", action: "read" },
+        title: "Crear Usuario",
+        href: ROUTES.REGISTER,
+        icon: UserCircle,
+        description: "Crear nuevos usuarios",
+        requiredPermission: { table: "auth", action: "read" },
       },
-
       {
         title: "Permisos de Usuario",
         href: ROUTES.USER_PERMISSIONS,
@@ -120,6 +118,15 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         description: "Configuración de permisos por usuario",
         dashboard: { statsLabel: "Permisos configurados" },
         requiredPermission: { table: "user_permissions", action: "read" },
+      },
+
+      {
+        title: "Auditoría",
+        href: ROUTES.AUDIT_LOGS,
+        icon: BarChart3,
+        description: "Registro de actividades del sistema",
+        dashboard: { statsLabel: "Registros de auditoría" },
+        requiredPermission: { table: "audit_logs", action: "read" },
       },
     ],
   },

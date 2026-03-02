@@ -1,4 +1,4 @@
-// src/app/(auth)/register/page.tsx
+// src/app/(dashboard)/register/page.tsx
 
 import { AuthSkeleton } from "@/features/auth";
 import { RegisterForm } from "@/features/auth/components/register-form";

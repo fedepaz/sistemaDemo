@@ -15,7 +15,7 @@ This document lists all the modules, services, and core functionalities implemen
 
 ### Auth Module
 - [x] **JWT Passport Strategy**: `JwtStrategy` for bearer token validation.
-- [x] **User Registration**: `POST /auth/register` with tenant assignment.
+- [x] **Administrative User Registration**: `POST /auth/register` protected by `auth:read:ALL` permissions.
 - [x] **User Login**: `POST /auth/login` with username/password.
 - [x] **Token Refresh**: `POST /auth/refresh` for long-lived sessions.
 - [x] **Password Management**: `PATCH /auth/password` for authenticated users.
