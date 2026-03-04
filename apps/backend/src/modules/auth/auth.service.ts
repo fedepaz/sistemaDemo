@@ -127,7 +127,7 @@ export class AuthService {
     });
 
     const isDefaultPassword =
-      user.passwordHash === this.config.get('config.defaultPasswordHash');
+      dto.password === this.config.get('config.defaultPasswordHash');
 
     return {
       user: {

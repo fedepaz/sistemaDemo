@@ -18,18 +18,28 @@ export const useLogin = () => {
         body: JSON.stringify(credentials),
       });
 
+      console.log(response);
       return response;
     },
     onSuccess: (data) => {
-      // Store refresh token
-      localStorage.setItem("refreshToken", data.refreshToken);
-      const toastMessage = `Inicio de sesión exitoso como ${data.user.username}`;
-      toast.success(toastMessage, {
-        duration: 3000,
-      });
-
-      // Update auth state via useAuth
-      signIn(data.accessToken, data.user);
+      // Check if user is default password
+      if (data.isDefaultPassword) {
+        toast.success(
+          "Contraseña por defecto, se abrirá un formulario para cambiar la contraseña",
+          {
+            duration: 3000,
+          },
+        );
+      } else {
+        const toastMessage = `Inicio de sesión exitoso como ${data.user.username}`;
+        toast.success(toastMessage, {
+          duration: 3000,
+        });
+        // Store refresh token
+        localStorage.setItem("refreshToken", data.refreshToken);
+        // Update auth state via useAuth
+        signIn(data.accessToken, data.user);
+      }
     },
   });
 
@@ -37,9 +47,7 @@ export const useLogin = () => {
     login: mutation.mutate,
     loginAsync: mutation.mutateAsync,
     isLoading: mutation.isPending,
-
     isSuccess: mutation.isSuccess,
-
     reset: mutation.reset,
   };
 };

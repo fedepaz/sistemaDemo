@@ -200,6 +200,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `UserMenu` | [x] | [x] | [x] |
 | `FullNameCell` | [x] | [x] | [x] |
 | `StatusCell` | [x] | [x] | [x] |
+| `ChangePasswordForm` | [x] | [x] | [x] |
 
 ## Providers
 
