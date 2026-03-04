@@ -2,7 +2,6 @@
 
 export const MANAGED_ENTITIES = {
   USER: { tableName: "users", label: "Usuarios" },
-  REGISTER: { tableName: "auth", label: "Registros" },
   USER_PERMISSION: { tableName: "user_permissions", label: "Permisos" },
   TENANT: { tableName: "tenants", label: "Empresas" },
   EXTENDIDO: { tableName: "extendidos", label: "Extendidos" },

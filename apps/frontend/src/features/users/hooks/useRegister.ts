@@ -1,4 +1,4 @@
-// apps/frontend/src/features/auth/hooks/useRegister.ts
+// apps/frontend/src/features/users/hooks/useRegister.ts
 "use client";
 
 import { useMutation } from "@tanstack/react-query";

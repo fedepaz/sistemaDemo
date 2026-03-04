@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Eye,
   Filter,
+  Plus,
   SquarePen,
   Trash2,
 } from "lucide-react";
@@ -58,6 +59,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { FloatingActionButton } from "./floating-action-button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,6 +70,8 @@ interface DataTableProps<TData, TValue> {
   onView?: (row: TData) => void;
   onEdit?: (row: TData) => void;
   onDelete?: (row: TData) => void;
+  onCreate?: () => void;
+  createLabel?: string;
   onExport?: (
     format: "csv" | "excel" | "json" | "pdf",
     selectedRows: TData[],
@@ -97,6 +101,8 @@ export function DataTable<TData, TValue>({
   onView,
   onEdit,
   onDelete,
+  onCreate,
+  createLabel = "Nuevo",
   onExport,
   totalCount,
 }: DataTableProps<TData, TValue>) {
@@ -302,7 +308,8 @@ export function DataTable<TData, TValue>({
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="min-h-[40px]">
                   <Filter className="mr-2 h-4 w-4" />
-                  Columnas
+                  {breakpoint === "sm" ? "" : "Columnas"}
+
                   <ChevronDown className="mr-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -327,13 +334,35 @@ export function DataTable<TData, TValue>({
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {dataTablePermissions.canUpdate && (
+            {dataTablePermissions.canRead && (
               <ExportDropdown
                 onExport={handleExport}
                 selectedCount={selectedCount}
                 totalCount={data.length}
                 disabled={data.length === 0}
               />
+            )}
+            {dataTablePermissions.canCreate && onCreate && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="min-h-[40px] bg-transparent"
+                    onClick={onCreate}
+                    aria-label={createLabel}
+                  >
+                    <Plus className="h-4 w-4" />
+                    {breakpoint === "sm" ? "" : createLabel}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="border border-border shadow-md"
+                >
+                  <p>{createLabel}</p>
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
           <div className="overflow-x-auto rounded-md border">
@@ -480,7 +509,9 @@ export function DataTable<TData, TValue>({
                     <Button
                       variant="outline"
                       className="hidden h-8 w-8 p-0 lg:flex bg-transparent"
-                      onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                      onClick={() =>
+                        table.setPageIndex(table.getPageCount() - 1)
+                      }
                       disabled={!table.getCanNextPage()}
                       aria-label="Ir a la última página"
                     >

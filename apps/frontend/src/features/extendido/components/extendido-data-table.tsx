@@ -1,4 +1,4 @@
-//src/features/plants/components/plants-data-table.tsx
+// src/features/extendido/components/extendido-data-table.tsx
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
@@ -20,7 +20,7 @@ export function ExtendidoDataTable() {
     setSlideOverOpen(true);
   };
   const handleExport = () => {
-    console.log("Export Entities:", plants);
+    console.log("Export extendidos");
   };
 
   return (
@@ -28,10 +28,11 @@ export function ExtendidoDataTable() {
       <DataTable
         columns={plantColumns}
         data={plants}
-        title="Entidades"
-        description="Gestión de la información de las entidades"
-        tableName="entities"
+        title="Extendido"
+        description="Información de extendidos"
+        tableName="extendidos"
         totalCount={plants.length}
+        onEdit={() => {}}
         onExport={handleExport}
         onView={handleExtendidoView}
       />

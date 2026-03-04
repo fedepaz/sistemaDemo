@@ -51,6 +51,11 @@ export function UsersDataTable() {
     setSlideOverOpen(true);
   };
 
+  const handleCreate = () => {
+    setSelectedUser(undefined);
+    setSlideOverOpen(true);
+  };
+
   const handleDelete = async (row: UserProfileDto) => {
     if (row.username) {
       await deleteUser(row.username);
@@ -86,11 +91,13 @@ export function UsersDataTable() {
         description="Gestión de los usuarios del sistema"
         tableName="users"
         totalCount={users.length}
+        onCreate={handleCreate}
+        createLabel="Nuevo Usuario"
         onEdit={handleEdit}
         onDelete={handleDelete}
         onExport={handleExport}
       />
-      {selectedUser && (
+      {(selectedUser || slideOverOpen) && (
         <SlideOverForm
           formId={selectedUser ? `edit-${selectedUser.username}` : "create"}
           open={slideOverOpen}
