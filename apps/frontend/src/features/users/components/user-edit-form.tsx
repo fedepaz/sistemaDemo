@@ -15,14 +15,14 @@ import { Input } from "@/components/ui/input";
 
 import { UpdateUserProfileDto } from "@vivero/shared";
 
-interface UserFormProps {
+interface FormProps {
   onSubmit: (data: UpdateUserProfileDto) => Promise<void>;
   onCancel: () => void;
   formId: string;
   form: UseFormReturn<UpdateUserProfileDto>;
 }
 
-export function UserForm({ onSubmit, formId, form }: UserFormProps) {
+export function UserEditForm({ onSubmit, formId, form }: FormProps) {
   return (
     <Form {...form}>
       <form
@@ -68,7 +68,8 @@ export function UserForm({ onSubmit, formId, form }: UserFormProps) {
                 <Input {...field} placeholder="Correo electrónico" />
               </FormControl>
               <FormDescription>
-                Se utilizará para notificaciones del sistema y acceso.
+                No es necesario que se registre, sirve para notificaciones del
+                sistema.
               </FormDescription>
               <FormMessage />
             </FormItem>

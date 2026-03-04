@@ -11,7 +11,7 @@ import { toast } from "sonner";
  * Unlike public registration, this does NOT automatically sign in the newly created user.
  */
 export const useRegister = () => {
-  const mutation = useMutation<AuthResponseDto, Error, RegisterAuthDto>({
+  return useMutation<AuthResponseDto, Error, RegisterAuthDto>({
     mutationFn: async (userData) => {
       const response = await clientFetch<AuthResponseDto>("auth/register", {
         method: "POST",
@@ -24,16 +24,5 @@ export const useRegister = () => {
         duration: 3000,
       });
     },
-    onError: (error) => {
-      toast.error(error.message || "Error al crear el usuario");
-    },
   });
-
-  return {
-    register: mutation.mutate,
-    registerAsync: mutation.mutateAsync,
-    isLoading: mutation.isPending,
-    isSuccess: mutation.isSuccess,
-    reset: mutation.reset,
-  };
 };
