@@ -21,7 +21,7 @@ interface UserSelectorProps {
 export function UserSelector({ onSelectedUserId }: UserSelectorProps) {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  const { data: users = [], isLoading: isLoadingUsers } = useUsers();
+  const { data: users = [] } = useUsers();
 
   const handleUserChange = useCallback(
     (userId: string) => {
@@ -38,19 +38,9 @@ export function UserSelector({ onSelectedUserId }: UserSelectorProps) {
             <Users className="h-3.5 w-3.5" />
             Seleccionar Usuario
           </label>
-          <Select
-            value={selectedUserId ?? ""}
-            onValueChange={handleUserChange}
-            disabled={isLoadingUsers}
-          >
+          <Select value={selectedUserId ?? ""} onValueChange={handleUserChange}>
             <SelectTrigger className="w-full h-11 rounded-xl bg-muted/30 border-border/60 transition-all hover:bg-muted/50 focus:ring-primary/20 lg:max-w-md">
-              <SelectValue
-                placeholder={
-                  isLoadingUsers
-                    ? "Cargando usuarios..."
-                    : "Elige un usuario para empezar"
-                }
-              />
+              <SelectValue placeholder={"Elige un usuario para empezar"} />
             </SelectTrigger>
             <SelectContent className="rounded-xl shadow-xl">
               {users?.map((user) => {

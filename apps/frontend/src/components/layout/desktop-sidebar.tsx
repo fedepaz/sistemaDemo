@@ -12,6 +12,11 @@ import { usePathname } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface NavigationItem {
   title: string;
@@ -94,18 +99,26 @@ export function DesktopSidebar() {
               </div>
             </div>
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="h-8 w-8 "
-          >
-            {isCollapsed ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <ChevronLeft className="h-4 w-4" />
-            )}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="h-8 w-8 "
+                aria-label={isCollapsed ? "Expandir barra lateral" : "Contraer barra lateral"}
+              >
+                {isCollapsed ? (
+                  <ChevronRight className="h-4 w-4" />
+                ) : (
+                  <ChevronLeft className="h-4 w-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="border border-border shadow-md">
+              <p>{isCollapsed ? "Expandir" : "Contraer"}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
@@ -151,47 +164,68 @@ export function DesktopSidebar() {
 
                     return (
                       <Link key={item.href} href={item.href}>
-                        <div
-                          className={cn(
-                            "flex items-center space-x-3 p-2 rounded-lg transition-colors",
-                            isActive
-                              ? "bg-primary/10 text-primary border border-primary/20"
-                              : "hover:bg-muted text-muted-foreground hover:text-foreground",
-                            isCollapsed && "justify-center",
-                          )}
-                        >
-                          <div className="relative">
-                            <Icon className="h-5 w-5" />
-                            {item.badge && isCollapsed && (
-                              <Badge
-                                variant={item.badgeVariant || "secondary"}
-                                className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs"
-                              >
-                                {item.badge.length > 2 ? "99+" : item.badge}
-                              </Badge>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger asChild>
+                            <div
+                              className={cn(
+                                "flex items-center space-x-3 p-2 rounded-lg transition-colors",
+                                isActive
+                                  ? "bg-primary/10 text-primary border border-primary/20"
+                                  : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                                isCollapsed && "justify-center",
+                              )}
+                              aria-label={item.title}
+                            >
+                              <div className="relative">
+                                <Icon className="h-5 w-5" />
+                                {item.badge && isCollapsed && (
+                                  <Badge
+                                    variant={item.badgeVariant || "secondary"}
+                                    className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs"
+                                  >
+                                    {item.badge.length > 2 ? "99+" : item.badge}
+                                  </Badge>
+                                )}
+                              </div>
+                              {!isCollapsed && (
+                                <>
+                                  <div className="flex-1">
+                                    <p className="font-medium text-sm">
+                                      {item.title}
+                                    </p>
+                                    <p className="text-xs opacity-75">
+                                      {item.description}
+                                    </p>
+                                  </div>
+                                  {item.badge && (
+                                    <Badge
+                                      variant={item.badgeVariant || "secondary"}
+                                      className="text-xs"
+                                    >
+                                      {item.badge}
+                                    </Badge>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="right"
+                            className={cn(
+                              "border border-border shadow-md",
+                              !isCollapsed && "hidden",
                             )}
-                          </div>
-                          {!isCollapsed && (
-                            <>
-                              <div className="flex-1">
-                                <p className="font-medium text-sm">
-                                  {item.title}
-                                </p>
-                                <p className="text-xs opacity-75">
+                          >
+                            <div className="flex flex-col gap-1">
+                              <p className="font-semibold">{item.title}</p>
+                              {item.description && (
+                                <p className="text-[10px] opacity-80">
                                   {item.description}
                                 </p>
-                              </div>
-                              {item.badge && (
-                                <Badge
-                                  variant={item.badgeVariant || "secondary"}
-                                  className="text-xs"
-                                >
-                                  {item.badge}
-                                </Badge>
                               )}
-                            </>
-                          )}
-                        </div>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
                       </Link>
                     );
                   })}

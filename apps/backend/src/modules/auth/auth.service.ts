@@ -23,6 +23,7 @@ import {
   JwtPayload,
   JwtRefreshPayload,
 } from './interfaces/jwt-payload.interface';
+import { TenantsRepository } from '../tenants/repositories/tenants.repository';
 
 @Injectable()
 export class AuthService {
@@ -31,6 +32,7 @@ export class AuthService {
 
   constructor(
     private readonly userAuthRepo: UserAuthRepository,
+    private readonly tenantRepo: TenantsRepository,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
   ) {}
@@ -47,13 +49,16 @@ export class AuthService {
     }
 
     //validate tenantId
-    const tenant = await this.userAuthRepo.findTenantById(dto.tenantId);
+    const tenant = await this.tenantRepo.findDefault();
     if (!tenant) {
       throw new NotFoundException('Tenant not found');
     }
 
     // hash password
-    const passwordHash = await bcrypt.hash(dto.password, this.BCRYPT_ROUNDS);
+    const passwordHash = await bcrypt.hash(
+      this.config.get('config.defaultPasswordHash') || '123456',
+      this.BCRYPT_ROUNDS,
+    );
 
     // create user
     const user = await this.userAuthRepo.createUser({
@@ -62,7 +67,7 @@ export class AuthService {
       firstName: dto.firstName,
       lastName: dto.lastName,
       passwordHash,
-      tenantId: dto.tenantId,
+      tenantId: tenant.id,
     });
 
     if (!user) throw new InternalServerErrorException('Error creating user');
@@ -75,6 +80,8 @@ export class AuthService {
 
     // generate tokens
     const tokens = await this.generateTokens(userPayload);
+    const isDefaultPassword =
+      user.passwordHash === this.config.get('config.defaultPasswordHash');
 
     return {
       user: {
@@ -86,6 +93,7 @@ export class AuthService {
         tenantId: user.tenantId,
       },
       ...tokens,
+      isDefaultPassword,
     };
   }
 
@@ -118,6 +126,9 @@ export class AuthService {
       tenantId: user.tenantId,
     });
 
+    const isDefaultPassword =
+      dto.password === this.config.get('config.defaultPasswordHash');
+
     return {
       user: {
         id: user.id,
@@ -128,6 +139,7 @@ export class AuthService {
         tenantId: user.tenantId,
       },
       ...tokens,
+      isDefaultPassword,
     };
   }
 

@@ -1,5 +1,6 @@
 // shared/src/schemas/permissions.schema.ts
 import { z } from "zod";
+import { ALLOWED_TABLE_NAMES } from "../constants/managed-entities";
 
 export const PermissionScopeSchema = z.enum(["NONE", "OWN", "ALL"]);
 export type PermissionScope = z.infer<typeof PermissionScopeSchema>;
@@ -25,7 +26,7 @@ export const UserPermissionsSchema = z.record(
 export type UserPermissions = z.infer<typeof UserPermissionsSchema>;
 
 export const PermissionCheckSchema = z.object({
-  tableName: z.string(),
+  tableName: z.enum(ALLOWED_TABLE_NAMES),
   action: CrudActionSchema,
   scope: PermissionScopeSchema.optional(),
 });

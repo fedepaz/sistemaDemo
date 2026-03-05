@@ -1,4 +1,5 @@
 // src/components/common/export-dropdown.tsx
+"use client";
 
 import { Download, FileSpreadsheet, FileText, FileJson } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useBreakpoint } from "@/hooks/useMediaQuery";
 
 interface ExportDropdownProps {
   onExport: (format: "csv" | "excel" | "json" | "pdf") => void;
@@ -24,6 +26,8 @@ export function ExportDropdown({
   totalCount = 0,
   disabled = false,
 }: ExportDropdownProps) {
+  const breakpoint = useBreakpoint();
+
   const exportLabel =
     selectedCount > 0
       ? `Exportar ${selectedCount} seleccionado(s)`
@@ -39,7 +43,7 @@ export function ExportDropdown({
           className="min-h-[40px] bg-transparent"
         >
           <Download className="mr-2 h-4 w-4" />
-          Exportar
+          {breakpoint === "sm" ? "" : "Exportar"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

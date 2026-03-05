@@ -8,6 +8,7 @@ import { UserAuthRepository } from './repositories/userAuth.repository';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt-auth.strategy';
+import { TenantsRepository } from '../tenants/repositories/tenants.repository';
 
 @Module({
   imports: [
@@ -31,7 +32,13 @@ import { JwtStrategy } from './strategies/jwt-auth.strategy';
       },
     }),
   ],
-  providers: [GlobalAuthGuard, AuthService, UserAuthRepository, JwtStrategy],
+  providers: [
+    GlobalAuthGuard,
+    AuthService,
+    UserAuthRepository,
+    JwtStrategy,
+    TenantsRepository,
+  ],
 
   exports: [GlobalAuthGuard, AuthService, PassportModule],
 })

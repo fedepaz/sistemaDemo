@@ -28,7 +28,9 @@ const ErrorContext = createContext<ErrorContextValue | undefined>(undefined);
 export function ErrorProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
-  console.log("ErrorProvider initialized");
+  if (process.env.NODE_ENV === "development") {
+    console.log("ErrorProvider initialized");
+  }
 
   const handleError = useCallback(
     (error: unknown, options: ErrorHandlerOptions = {}) => {
@@ -47,8 +49,10 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
       }
 
       const parsed = parseApiError(error);
-      console.log("parsed: ");
-      console.log(parsed);
+      if (process.env.NODE_ENV === "development") {
+        console.log("parsed: ");
+        console.log(parsed);
+      }
 
       if (silent) {
         if (shouldThrow) throw error;
@@ -59,12 +63,8 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
         return;
       }
       const toastConfig = getToastConfig(parsed);
-      console.log("toastConfig: ");
-      console.log(toastConfig);
 
       if (parsed.type === "AUTH" && parsed.isFatal && shouldRedirect) {
-        console.log("AUTH and isFatal and shouldRedirect");
-
         setTimeout(() => {
           localStorage.clear();
           router.push("/login");
@@ -74,8 +74,6 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      console.log("Showing toast");
-      console.log(toastConfig);
       toast.error(toastConfig.title, {
         description: toastConfig.description,
         duration: toastConfig.duration,

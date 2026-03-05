@@ -3,16 +3,14 @@ export const ROUTES = {
   DASHBOARD: "/",
   LOGIN: "/login",
   REGISTER: "/register",
+  USERS: "/users",
+  USER_PERMISSIONS: "/user-permissions",
+  TENANTS: "/tenants",
+  AUDIT_LOGS: "/audit-logs",
+  EXTENDIDOS: "/extendidos",
   CLIENTS: "/clients",
-  ENTITIES: "/entities",
   INVOICES: "/invoices",
   PURCHASE_ORDERS: "/purchase-orders",
-  USERS: "/users",
-  AUDIT_LOGS: "/audit-logs",
-  ENUMS: "/enums",
-  MESSAGE: "/message",
-  TENANTS: "/tenants",
-  USER_PERMISSIONS: "/user-permissions",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

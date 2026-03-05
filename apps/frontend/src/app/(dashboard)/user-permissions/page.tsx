@@ -1,15 +1,7 @@
 // src/app/(dashboard)/permissions/page.tsx
 
-import {
-  PermissionsDashboard,
-  PermissionsSkeleton,
-} from "@/features/permissions";
-import { Suspense } from "react";
+import { PermissionsDashboard } from "@/features/permissions";
 
 export default function PermissionsPage() {
-  return (
-    <Suspense fallback={<PermissionsSkeleton />}>
-      <PermissionsDashboard />
-    </Suspense>
-  );
+  return <PermissionsDashboard />;
 }

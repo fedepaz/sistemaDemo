@@ -1,245 +1,214 @@
-# Frontend Components List
+# Frontend Components Registry & QA Review
 
-This document lists all the React components found in the `apps/frontend/src` directory.
+This document tracks all React components within the `apps/frontend/src` directory, ensuring they meet the project's enterprise standards for responsiveness, color token usage, and UX accessibility helpers.
+
+## Review Criteria
+
+| Criterion | Description |
+| :--- | :--- |
+| **Responsive** | Component follows a mobile-first approach and adapts correctly to Tablet and Desktop views using Tailwind breakpoints (`sm:`, `md:`, `lg:`, `xl:`). |
+| **Color Tokens** | Component strictly uses theme variables/tokens (e.g., `text-foreground`, `bg-primary/10`, `border-border/60`) and avoids hardcoded hex/RGB/HSL colors. |
+| **UX Helpers** | Component implements Tooltips for icon-only actions, `aria-label` for screen readers, and `FormDescription` for complex input guidance. |
+
+---
 
 ## Pages and Layouts
 
--   `AuthLayout` [x]
--   `LoginPage` [x]
--   `RegisterPage` [x]
--   `CatchAllPage` [x]
--   `DashboardLayout` [x]
--   `Loading` [x]
--   `NotFound` [x]
--   `DashboardPage` [x]
--   `UsersPage` [x]
--   `RootLayout` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `AuthLayout` | [x] | [x] | [x] |
+| `LoginPage` | [x] | [x] | [x] |
+| `RegisterPage` | [x] | [x] | [x] |
+| `CatchAllPage` | [x] | [x] | [x] |
+| `DashboardLayout` | [x] | [x] | [x] |
+| `Loading` | [x] | [x] | [x] |
+| `NotFound` | [x] | [x] | [x] |
+| `DashboardPage` | [x] | [x] | [x] |
+| `UsersPage" | [x] | [x] | [x] |
+| `RootLayout" | [x] | [x] | [x] |
 
 ## Common Components
 
--   `ComingSoonPage` [x]
--   `DashboardProtectedLayout` [x]
--   `DatabaseUnavailablePage` [x]
--   `LoadingSpinner` [x]
--   `NotFoundPage` [x]
--   `PendingPermissionsPage` [x]
--   `ThemeToggle` [x]
--   `DeleteDialog` [x]
--   `EditDialog` [x]
--   `ExportDropdown` [x]
--   `FloatingActionButton` [x]
--   `SlideOverForm` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `ComingSoonPage` | [x] | [x] | [x] |
+| `DashboardProtectedLayout` | [x] | [x] | [x] |
+| `DatabaseUnavailablePage` | [x] | [x] | [x] |
+| `LoadingSpinner` | [x] | [x] | [x] |
+| `NotFoundPage` | [x] | [x] | [x] |
+| `PendingPermissionsPage` | [x] | [x] | [x] |
+| `ThemeToggle` | [x] | [x] | [x] |
+| `DeleteDialog` | [x] | [x] | [x] |
+| `EditDialog` | [x] | [x] | [x] |
+| `ExportDropdown` | [x] | [x] | [x] |
+| `FloatingActionButton` | [x] | [x] | [x] |
+| `SlideOverForm` | [x] | [x] | [x] |
 
 ## Data Display Components
 
--   `DataTableFacetedFilter` [x]
--   `DataTableSkeleton` [x]
--   `DataTable` [x]
--   `SortableHeader` [x]
--   `StatusBadge` [x]
--   `InlineEditRow` [x]
--   `FeatureCardSkeleton` [x]
--   `FeatureCard` [x]
--   `KPICardSkeleton` [x]
--   `KPICard` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `DataTableFacetedFilter` | [x] | [x] | [ ] |
+| `DataTableSkeleton` | [x] | [x] | [x] |
+| `DataTable` | [x] | [x] | [x] |
+| `SortableHeader` | [x] | [x] | [x] |
+| `StatusBadge` | [x] | [x] | [x] |
+| `InlineEditRow` | [x] | [x] | [ ] |
+| `FeatureCardSkeleton` | [x] | [x] | [x] |
+| `FeatureCard` | [x] | [x] | [x] |
+| `KPICardSkeleton` | [x] | [x] | [x] |
+| `KPICard` | [x] | [x] | [x] |
 
 ## Error Handling Components
 
--   `ErrorBoundary` [x]
--   `FormErrorHandler` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `ErrorBoundary` | [x] | [x] | [x] |
+| `FormErrorHandler` | [x] | [x] | [x] |
 
 ## Layout Components
 
--   `DashboardHeader` [x]
--   `DesktopSidebar` [x]
--   `MobileNavigation` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `DashboardHeader` | [x] | [x] | [x] |
+| `DesktopSidebar` | [x] | [x] | [x] |
+| `MobileNavigation` | [x] | [x] | [x] |
 
-## UI Primitives (from shadcn/ui)
+## UI Primitives (shadcn/ui)
 
--   `AlertDialog` [x]
--   `AlertDialogTrigger` [x]
--   `AlertDialogPortal` [x]
--   `AlertDialogOverlay` [x]
--   `AlertDialogContent` [x]
--   `AlertDialogHeader` [x]
--   `AlertDialogFooter` [x]
--   `AlertDialogTitle` [x]
--   `AlertDialogDescription` [x]
--   `AlertDialogAction` [x]
--   `AlertDialogCancel` [x]
--   `Alert` [x]
--   `AlertTitle` [x]
--   `AlertDescription` [x]
--   `Avatar` [x]
--   `AvatarImage` [x]
--   `AvatarFallback` [x]
--   `Badge` [x]
--   `Button` [x]
--   `Card` [x]
--   `CardHeader` [x]
--   `CardTitle` [x]
--   `CardDescription` [x]
--   `CardContent` [x]
--   `CardFooter` [x]
--   `Checkbox` [x]
--   `Command` [x]
--   `CommandDialog` [x]
--   `CommandInput` [x]
--   `CommandList` [x]
--   `CommandEmpty` [x]
--   `CommandGroup` [x]
--   `CommandSeparator` [x]
--   `CommandItem` [x]
--   `CommandShortcut` [x]
--   `Dialog` [x]
--   `DialogTrigger` [x]
--   `DialogPortal` [x]
--   `DialogClose` [x]
--   `DialogOverlay` [x]
--   `DialogContent` [x]
--   `DialogHeader` [x]
--   `DialogFooter` [x]
--   `DialogTitle` [x]
--   `DialogDescription` [x]
--   `DropdownMenu` [x]
--   `DropdownMenuTrigger` [x]
--   `DropdownMenuGroup` [x]
--   `DropdownMenuPortal` [x]
--   `DropdownMenuSub` [x]
--   `DropdownMenuRadioGroup` [x]
--   `DropdownMenuSubTrigger` [x]
--   `DropdownMenuSubContent` [x]
--   `DropdownMenuContent` [x]
--   `DropdownMenuItem` [x]
--   `DropdownMenuCheckboxItem` [x]
--   `DropdownMenuRadioItem` [x]
--   `DropdownMenuLabel` [x]
--   `DropdownMenuSeparator` [x]
--   `DropdownMenuShortcut` [x]
--   `Form` [x]
--   `FormField` [x]
--   `FormItem` [x]
--   `FormLabel` [x]
--   `FormControl` [x]
--   `FormDescription` [x]
--   `FormMessage` [x]
--   `Input` [x]
--   `Label` [x]
--   `Popover` [x]
--   `PopoverTrigger` [x]
-- `PopoverAnchor` [x]
--   `PopoverContent` [x]
--   `Progress` [x]
--   `ScrollArea` [x]
--   `ScrollBar` [x]
--   `Select` [x]
--   `SelectGroup` [x]
--   `SelectValue` [x]
--   `SelectTrigger` [x]
--   `SelectScrollUpButton` [x]
--   `SelectScrollDownButton` [x]
--   `SelectContent` [x]
--   `SelectLabel` [x]
--   `SelectItem` [x]
--   `SelectSeparator` [x]
--   `Separator` [x]
--   `Sheet` [x]
--   `SheetTrigger` [x]
--   `SheetClose` [x]
--   `SheetPortal` [x]
--   `SheetOverlay` [x]
--   `SheetContent` [x]
--   `SheetHeader` [x]
--   `SheetFooter` [x]
--   `SheetTitle` [x]
--   `SheetDescription` [x]
--   `Skeleton` [x]
--   `Toaster` [x]
--   `Table` [x]
--   `TableHeader` [x]
--   `TableBody` [x]
--   `TableFooter` [x]
--   `TableRow` [x]
--   `TableHead` [x]
--   `TableCell` [x]
--   `TableCaption` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `AlertDialog` | [x] | [x] | [x] |
+| `Alert` | [x] | [x] | [x] |
+| `Avatar` | [x] | [x] | [x] |
+| `Badge` | [x] | [x] | [x] |
+| `Button` | [x] | [x] | [x] |
+| `Card` | [x] | [x] | [x] |
+| `Checkbox` | [x] | [x] | [x] |
+| `Command` | [x] | [x] | [x] |
+| `Dialog` | [x] | [x] | [x] |
+| `DropdownMenu` | [x] | [x] | [x] |
+| `Form` | [x] | [x] | [x] |
+| `Input` | [x] | [x] | [x] |
+| `Label` | [x] | [x] | [x] |
+| `Popover` | [x] | [x] | [x] |
+| `Progress` | [x] | [x] | [x] |
+| `ScrollArea` | [x] | [x] | [x] |
+| `Select` | [x] | [x] | [x] |
+| `Separator` | [x] | [x] | [x] |
+| `Sheet` | [x] | [x] | [x] |
+| `Skeleton` | [x] | [x] | [x] |
+| `Toaster` | [x] | [x] | [x] |
+| `Table` | [x] | [x] | [x] |
 
 ## Feature Components
 
+### Audit Logs
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `AuditLogDashboard` | [x] | [x] | [x] |
+| `AuditLogDashboardSkeleton` | [x] | [x] | [x] |
+| `AuditLogDataTable` | [x] | [x] | [x] |
+| `AuditLogForm` | [x] | [x] | [ ] |
+
 ### Auth
--   `AuthSkeleton` [x]
--   `LoginForm` [x]
--   `RegisterForm` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `AuthSkeleton` | [x] | [x] | [x] |
+| `AuthDashboard` | [x] | [x] | [x] |
+| `LoginForm` | [x] | [x] | [x] |
+| `RegisterForm` | [x] | [x] | [x] |
+| `RegisterLoading` | [x] | [x] | [x] |
+| `LoginLoading` | [x] | [x] | [x] |
 
 ### Clients
--   `ClientForm` [x]
--   `ClientsDashboardSkeleton` [x]
--   `ClientsDataTable` [x]
--   `ClientsKPI` [x]
--   `ClientsDashboard` [x]
--   `CellComponent` [x] (re-used in multiple features)
--   `HeaderComponent` [x] (re-used in multiple features)
--   `CellBadgeComponent` [x] (re-used in multiple features)
--   `RenderInlineEdit` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `ClientForm` | [x] | [x] | [x] |
+| `ClientsDashboardSkeleton` | [x] | [x] | [x] |
+| `ClientsDataTable` | [x] | [x] | [x] |
+| `ClientsKPI` | [x] | [x] | [x] |
+| `ClientsDashboard` | [x] | [x] | [x] |
+| `CellComponent` | [x] | [x] | [x] |
+| `HeaderComponent` | [x] | [x] | [x] |
+| `CellBadgeComponent` | [x] | [x] | [x] |
+| `RenderInlineEdit` | [x] | [x] | [ ] |
 
 ### Dashboard
--   `DashboardAlertsSkeleton` [x]
--   `DashboardAlerts` [x]
--   `DashboardKPISkeleton` [x]
--   `DashboardKPI` [x]
--   `FeatureNavigationSkeleton` [x]
--   `FeatureNavigation` [x]
--   `RecentActivitySkeleton` [x]
--   `RecentActivity` [x]
--   `RootDashboardSkeleton` [x]
--   `RootDashboard` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `DashboardAlertsSkeleton` | [x] | [x] | [x] |
+| `DashboardAlerts` | [x] | [x] | [x] |
+| `DashboardKPISkeleton` | [x] | [x] | [x] |
+| `DashboardKPI` | [x] | [x] | [x] |
+| `FeatureNavigationSkeleton` | [x] | [x] | [x] |
+| `FeatureNavigation` | [x] | [x] | [x] |
+| `RecentActivitySkeleton` | [x] | [x] | [x] |
+| `RecentActivity` | [x] | [x] | [x] |
+| `RootDashboardSkeleton` | [x] | [x] | [x] |
+| `RootDashboard` | [x] | [x] | [x] |
 
 ### Invoices
--   `InvoiceForm` [x]
--   `InvoicesDataTable` [x]
--   `InvoiceKPIs` [x]
--   `InvoicesDashboard` [x]
--   `InvoicesDashboardSkeleton` [x]
-- `CellAmountComponent` [x] (re-used in multiple features)
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `InvoiceForm` | [x] | [x] | [x] |
+| `InvoicesDataTable` | [x] | [x] | [x] |
+| `InvoiceKPIs` | [x] | [x] | [x] |
+| `InvoicesDashboard` | [x] | [x] | [x] |
+| `InvoicesDashboardSkeleton` | [x] | [x] | [x] |
+| `CellAmountComponent" | [x] | [x] | [x] |
 
 ### Permissions
--   `PermissionsDashboard` [x]
--   `PermissionsManager` [x]
--   `PermissionRowItem` [x]
--   `UserSelector` [x]
--   `PermissionsSkeleton` [x]
--   `EmptyState` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `PermissionsDashboard` | [x] | [x] | [x] |
+| `PermissionsManager` | [x] | [x] | [x] |
+| `PermissionRowItem` | [x] | [x] | [x] |
+| `UserSelector` | [x] | [x] | [x] |
+| `PermissionsDashboardSkeleton` | [x] | [x] | [x] |
+| `PermissionManagerSkeleton` | [x] | [x] | [x] |
+| `UserSelectorSkeleton` | [x] | [x] | [x] |
+| `EmptyState` | [x] | [x] | [x] |
 
-### Plants
--   `PlantsDashboardSkeleton` [x]
--   `PlantsDataTable` [x]
--   `PlantForm` [x]
--   `PlantKPIs` [x]
--   `PlantsDashboard` [x]
+### Extendidos
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `ExtendidoDashboardSkeleton` | [x] | [x] | [x] |
+| `ExtendidoDataTable` | [x] | [x] | [x] |
+| `ExtendidosForm` | [x] | [x] | [x] |
+| `ExtendidoKPIs` | [x] | [x] | [x] |
+| `ExtendidoDashboard` | [x] | [x] | [x] |
 
 ### Purchase Orders
--   `PurchaseOrdersDataTable` [x]
--   `PurchaseOrderForm` [x]
--   `PurchaseOrdersDashboardSkeleton` [x]
--   `PurchaseOrderKPIs` [x]
--   `PurchaseOrdersDashboard` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `PurchaseOrdersDataTable` | [x] | [x] | [x] |
+| `PurchaseOrderForm` | [x] | [x] | [x] |
+| `PurchaseOrdersDashboardSkeleton` | [x] | [x] | [x] |
+| `PurchaseOrderKPIs` | [x] | [x] | [x] |
+| `PurchaseOrdersDashboard` | [x] | [x] | [x] |
 
 ### Users
--   `UsersDashboardSkeleton` [x]
--   `UsersDataTable` [x]
--   `UserForm` [x]
--   `UserKPIs` [x]
--   `UsersDashboard` [x]
--   `UserProfileEdit` [x]
--   `UserProfileInfo` [x]
--   `UserMenu` [x]
--   `FullNameCell` [x]
--   `StatusCell` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `UsersDashboardSkeleton` | [x] | [x] | [x] |
+| `UsersDataTable` | [x] | [x] | [x] |
+| `UserForm` | [x] | [x] | [x] |
+| `UserKPIs` | [x] | [x] | [x] |
+| `UsersDashboard` | [x] | [x] | [x] |
+| `UserProfileEdit` | [x] | [x] | [x] |
+| `UserProfileInfo` | [x] | [x] | [x] |
+| `UserMenu` | [x] | [x] | [x] |
+| `FullNameCell` | [x] | [x] | [x] |
+| `StatusCell` | [x] | [x] | [x] |
+| `ChangePasswordForm` | [x] | [x] | [x] |
 
 ## Providers
 
--   `AppProviders` [x]
--   `ReactClientProvider` [x]
--   `ThemeProvider` [x]
--   `AuthProvider` [x]
--   `ErrorProvider` [x]
+| Component | Responsive | Color Tokens | UX Helpers |
+| :--- | :---: | :---: | :---: |
+| `AppProviders` | [x] | [x] | [x] |
+| `ReactClientProvider` | [x] | [x] | [x] |
+| `ThemeProvider` | [x] | [x] | [x] |
+| `AuthProvider` | [x] | [x] | [x] |
+| `ErrorProvider` | [x] | [x] | [x] |

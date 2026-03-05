@@ -77,13 +77,16 @@ export const AuditLogScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   userId: 'userId',
+  isActive: 'isActive',
   action: 'action',
   entityType: 'entityType',
   entityId: 'entityId',
   changes: 'changes',
   timestamp: 'timestamp',
   ipAddress: 'ipAddress',
-  userAgent: 'userAgent'
+  userAgent: 'userAgent',
+  deletedAt: 'deletedAt',
+  deletedByUserId: 'deletedByUserId'
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
@@ -185,7 +188,8 @@ export const AuditLogOrderByRelevanceFieldEnum = {
   userId: 'userId',
   entityId: 'entityId',
   ipAddress: 'ipAddress',
-  userAgent: 'userAgent'
+  userAgent: 'userAgent',
+  deletedByUserId: 'deletedByUserId'
 } as const
 
 export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]

@@ -43,6 +43,7 @@ export type AppConfig = {
     apiKey: string;
   };
   defaultTenantId: string;
+  defaultPasswordHash: string;
 };
 
 // Create a typed factory function
@@ -93,6 +94,7 @@ const configFactory = (): AppConfig => ({
     apiKey: process.env.SENDGRID_API_KEY || '',
   },
   defaultTenantId: process.env.DEFAULT_TENANT_ID || '',
+  defaultPasswordHash: process.env.DEFAULT_PASSWORD_HASH || '',
 });
 
 // Export the final configuration
@@ -133,4 +135,5 @@ export const validationSchema = Joi.object({
   SENDGRID_API_KEY: Joi.string().optional().allow(''),
 
   DEFAULT_TENANT_ID: Joi.string().optional().allow(''),
+  DEFAULT_PASSWORD_HASH: Joi.string().optional().allow(''),
 });

@@ -17,17 +17,25 @@ export const useLogin = () => {
         method: "POST",
         body: JSON.stringify(credentials),
       });
-
       return response;
     },
     onSuccess: (data) => {
+      // Check if user is default password
+      if (data.isDefaultPassword) {
+        toast.info(
+          "Contraseña por defecto, se abrirá un formulario para cambiar la contraseña",
+          {
+            duration: 3000,
+          },
+        );
+      } else {
+        const toastMessage = `Inicio de sesión exitoso como ${data.user.username}`;
+        toast.success(toastMessage, {
+          duration: 3000,
+        });
+      }
       // Store refresh token
       localStorage.setItem("refreshToken", data.refreshToken);
-      const toastMessage = `Inicio de sesión exitoso como ${data.user.username}`;
-      toast.success(toastMessage, {
-        duration: 3000,
-      });
-
       // Update auth state via useAuth
       signIn(data.accessToken, data.user);
     },
@@ -37,9 +45,7 @@ export const useLogin = () => {
     login: mutation.mutate,
     loginAsync: mutation.mutateAsync,
     isLoading: mutation.isPending,
-
     isSuccess: mutation.isSuccess,
-
     reset: mutation.reset,
   };
 };

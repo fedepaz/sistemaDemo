@@ -7,19 +7,24 @@ import {
   EntityType,
 } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
+import { BaseRepository } from '../../../shared/baseModule/base.repository';
 
 @Injectable()
-export class AuditLogRepository {
-  constructor(private prisma: PrismaService) {}
+export class AuditLogRepository extends BaseRepository<AuditLog> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.auditLog);
+  }
 
-  findAllByTenantId(
-    tenantId: string,
+  findAllByTenantName(
+    tenantName: string,
     skip: number = 0,
     take: number = 50,
   ): Promise<AuditLog[]> {
     return this.prisma.auditLog.findMany({
       where: {
-        tenantId,
+        tenant: {
+          name: tenantName,
+        },
       },
       skip,
       take,

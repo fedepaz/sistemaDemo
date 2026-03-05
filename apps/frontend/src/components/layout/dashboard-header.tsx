@@ -19,6 +19,11 @@ import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useEffect, useState } from "react";
 import { UserMenu } from "../user-profile/user-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function DashboardHeader() {
   const { isLoading, logoutAsync } = useLogout();
@@ -35,9 +40,7 @@ export function DashboardHeader() {
   const handleLogout = async () => {
     try {
       await logoutAsync();
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
+    } catch {}
   };
 
   if (isLoading) {
@@ -79,15 +82,26 @@ export function DashboardHeader() {
 
             {/* User Menu */}
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="agricultural-touch-target"
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="agricultural-touch-target"
+                      aria-label="Perfil de usuario"
+                    >
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  className="border border-border shadow-md"
                 >
-                  <User className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
+                  <p>Perfil de usuario</p>
+                </TooltipContent>
+              </Tooltip>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   {userProfile?.firstName} {userProfile?.lastName}

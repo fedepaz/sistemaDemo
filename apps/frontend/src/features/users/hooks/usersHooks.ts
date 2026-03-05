@@ -1,7 +1,11 @@
 // src/features/users/hooks/useUsers.ts
 
 import { clientFetch } from "@/lib/api/client-fetch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
 import { toast } from "sonner";
 
@@ -12,6 +16,15 @@ export const userProfileQueryKeys = {
   byTenantId: (tenantId: string) =>
     [...userProfileQueryKeys.all(), "byTenantId", tenantId] as const,
   admin: () => ["users", "allAdmin"] as const,
+};
+
+export const useUsers = () => {
+  return useSuspenseQuery<UserProfileDto[]>({
+    queryKey: userProfileQueryKeys.all(),
+    queryFn: () =>
+      clientFetch<UserProfileDto[]>("users/all", { method: "GET" }),
+    retry: 1, // Retry once to account for transient network issues
+  });
 };
 
 export const useUpdateUserProfile = () => {
@@ -44,38 +57,28 @@ export const useUpdateUserProfile = () => {
   });
 };
 
-export const useUsers = () => {
-  return useQuery<UserProfileDto[]>({
-    queryKey: userProfileQueryKeys.all(),
-    queryFn: () =>
-      clientFetch<UserProfileDto[]>("users/all", { method: "GET" }),
-    enabled: true,
-    retry: 1, // Retry once to account for transient network issues
-  });
-};
-
 export const useUsersByUserName = (username: string) => {
-  return useQuery<UserProfileDto | null>({
+  return useSuspenseQuery<UserProfileDto | null>({
     queryKey: userProfileQueryKeys.byUserName(username),
     queryFn: () => {
       return clientFetch<UserProfileDto | null>(`users/username/${username}`, {
         method: "GET",
       });
     },
-    enabled: !!username,
+
     retry: 1, // Retry once to account for transient network issues
   });
 };
 
 export const useUsersByTenantId = (tenantId: string) => {
-  return useQuery<UserProfileDto[]>({
+  return useSuspenseQuery<UserProfileDto[]>({
     queryKey: userProfileQueryKeys.byTenantId(tenantId),
     queryFn: () => {
       return clientFetch<UserProfileDto[]>(`users/tenant/${tenantId}`, {
         method: "GET",
       });
     },
-    enabled: !!tenantId,
+
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -124,11 +127,10 @@ export const useDeleteUser = () => {
 };
 
 export const useGetAllUsersAdmin = () => {
-  return useQuery<UserProfileDto[]>({
+  return useSuspenseQuery<UserProfileDto[]>({
     queryKey: userProfileQueryKeys.admin(),
     queryFn: () =>
       clientFetch<UserProfileDto[]>("users/allAdmin", { method: "GET" }),
-    enabled: true,
     retry: 1, // Retry once to account for transient network issues
   });
 };
