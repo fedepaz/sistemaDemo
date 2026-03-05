@@ -4,10 +4,8 @@ import { Loader2, Lock, Eye, EyeOff, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
-import { useAuthContext } from "../providers/AuthProvider";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { LoginAuthDto, LoginAuthSchema } from "@vivero/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
