@@ -2,10 +2,10 @@
 "use client";
 
 import { KPICard } from "@/components/data-display/kpi-card";
-import { usePlants } from "../hooks/hooks";
+import { usePlants } from "../hooks/useExtendido";
 import { Package, CheckCircle, AlertCircle, Calendar } from "lucide-react";
 
-function PlantKPIs() {
+function ExtendidoKPIs() {
   const { data: mockPlants = [] } = usePlants();
   const totalPlants = mockPlants.length;
   const healthyPlants = mockPlants.filter((p) => p.status === "healthy").length;
@@ -52,4 +52,4 @@ function PlantKPIs() {
   );
 }
 
-export default PlantKPIs;
+export default ExtendidoKPIs;

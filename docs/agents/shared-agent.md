@@ -69,7 +69,8 @@ Each feature's `index.ts` acts as the **public API** for that feature.
 
 1. **Type Contract Extraction**: Extract TypeScript interfaces from backend entities and frontend components.
 This includes synchronizing the `UserProfileSchema` to properly include the `isActive` and `tenantName` fields.
-2. **Validation Schema Generation**: Create Zod schemas from TypeScript interfaces for runtime validation.
+2. **Managed Entity Registry**: Maintain the `MANAGED_ENTITIES` constant in `src/constants/managed-entities.ts`. This registry is the single source of truth for all tables that can be managed via the permission system.
+3. **Validation Schema Generation**: Create Zod schemas from TypeScript interfaces for runtime validation.
 Ensure the `UserProfileSchema` is updated to reflect the new `isActive` and `tenantName` properties.
 3. **API Contract Management**: Define request/response types, error codes, and API documentation contracts.
 4. **Cross-App Utility Synchronization**: Maintain utility functions used by both applications.

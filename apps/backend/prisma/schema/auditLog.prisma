@@ -6,6 +6,7 @@ model AuditLog {
   tenant     Tenant          @relation(fields: [tenantId], references: [id], onDelete: NoAction)
   userId     String
   user       User            @relation(fields: [userId], references: [id], onDelete: NoAction)
+  isActive   Boolean         @default(true)
   action     AuditActionType
   entityType EntityType
   entityId   String
@@ -13,6 +14,9 @@ model AuditLog {
   timestamp  DateTime        @default(now( ))
   ipAddress  String?
   userAgent  String?
+
+  deletedAt DateTime? @db.Timestamp(0)
+  deletedByUserId String?
 
   @@index([action])
   @@index([tenantId, timestamp])

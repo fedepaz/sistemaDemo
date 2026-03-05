@@ -12,14 +12,10 @@ export const useLogout = () => {
   const mutation = useMutation<void, Error, void>({
     mutationFn: async () => {
       // Call backend logout endpoint
-      try {
-        await clientFetch("auth/logout", {
-          method: "POST",
-        });
-      } catch (error) {
-        // Even if backend call fails, still logout locally
-        console.error("Backend logout failed:", error);
-      }
+
+      await clientFetch("auth/logout", {
+        method: "POST",
+      });
     },
     onSuccess: () => {
       // Clear refresh token

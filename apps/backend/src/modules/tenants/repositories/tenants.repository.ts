@@ -10,4 +10,10 @@ export class TenantsRepository extends BaseRepository<Tenant> {
   constructor(prisma: PrismaService) {
     super(prisma, prisma.tenant);
   }
+
+  async findDefault() {
+    return await this.prisma.tenant.findFirst({
+      where: { name: 'Default Organization' },
+    });
+  }
 }

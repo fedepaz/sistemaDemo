@@ -5,7 +5,7 @@ import { plantColumns } from "./columns";
 
 import { KPICardSkeleton } from "@/components/data-display/kpi-card";
 
-export function PlantsDashboardSkeleton() {
+export function ExtendidoDashboardSkeleton() {
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

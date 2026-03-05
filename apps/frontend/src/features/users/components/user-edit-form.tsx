@@ -5,6 +5,7 @@ import { UseFormReturn } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,14 +15,14 @@ import { Input } from "@/components/ui/input";
 
 import { UpdateUserProfileDto } from "@vivero/shared";
 
-interface UserFormProps {
+interface FormProps {
   onSubmit: (data: UpdateUserProfileDto) => Promise<void>;
   onCancel: () => void;
   formId: string;
   form: UseFormReturn<UpdateUserProfileDto>;
 }
 
-export function UserForm({ onSubmit, formId, form }: UserFormProps) {
+export function UserEditForm({ onSubmit, formId, form }: FormProps) {
   return (
     <Form {...form}>
       <form
@@ -66,6 +67,10 @@ export function UserForm({ onSubmit, formId, form }: UserFormProps) {
               <FormControl>
                 <Input {...field} placeholder="Correo electrónico" />
               </FormControl>
+              <FormDescription>
+                No es necesario que se registre, sirve para notificaciones del
+                sistema.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

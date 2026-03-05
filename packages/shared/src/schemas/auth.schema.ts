@@ -3,10 +3,6 @@
 import { z } from "zod";
 export const RegisterAuthSchema = z.object({
   username: z.string().min(1, { message: "Nombre de usuario es obligatorio" }),
-  password: z
-    .string()
-    .min(4, { message: "Contraseña es obligatoria, mínimo 4 caracteres" })
-    .max(12, { message: "Contraseña es obligatoria, máximo 12 caracteres" }),
   firstName: z
     .string()
     .min(1)
@@ -18,7 +14,6 @@ export const RegisterAuthSchema = z.object({
     .max(50, { message: "Apellido máximo 50 caracteres" })
     .optional(),
   email: z.string().email({ message: "Email no válido" }).optional(),
-  tenantId: z.string().uuid(),
 });
 
 export type RegisterAuthDto = z.infer<typeof RegisterAuthSchema>;
@@ -64,6 +59,7 @@ export const AuthResponseSchema = z.object({
   }),
   accessToken: z.string(),
   refreshToken: z.string(),
+  isDefaultPassword: z.boolean(),
 });
 
 export type AuthResponseDto = z.infer<typeof AuthResponseSchema>;

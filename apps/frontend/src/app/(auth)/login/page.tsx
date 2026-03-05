@@ -1,13 +1,7 @@
 // src/app/(auth)/login/page.tsx
 
-import { AuthSkeleton } from "@/features/auth";
-import { LoginForm } from "@/features/auth/components/login-form";
-import { Suspense } from "react";
+import { AuthDashboard } from "@/features/auth";
 
 export default function LoginPage() {
-  return (
-    <Suspense fallback={<AuthSkeleton />}>
-      <LoginForm />
-    </Suspense>
-  );
+  return <AuthDashboard />;
 }

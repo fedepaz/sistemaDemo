@@ -2,6 +2,8 @@
 
 This document outlines the specialized agents that assist in the development of the vivero-client-alpha application. Each agent has a specific role and expertise.
 
+**Rule:** All communication with the user must be in **English**.
+
 **Rule:** Before making any changes to the codebase, you **must** first consult the relevant agent profile in the `docs/agents/` directory. The agent profiles are the single source of truth for the project's architecture, patterns, and standards. Do not deviate from the guidelines documented in the agent profiles.
 
 ---
@@ -33,6 +35,23 @@ When the user asks me to check and summarize changes in the codebase, I will fol
 3.  **Generate and Internally Validate Commit Message**: Must comply with `commitlint` rules.
 4.  **Propose a Comprehensive Plan**.
 5.  **Execute Commit and Push** after final approval.
+
+---
+
+### Rule: Workflow for UX/UI Feature Review
+
+When asked to review a new feature's UI/UX, follow this procedure:
+
+1.  **Activate Specialized Skill**: Use `activate_skill` with `ui-ux-pro-max`.
+2.  **Analyze Against Guidelines**: Evaluate the feature's components against `docs/agents/ux-ui-agent.md` and the `ui-ux-pro-max` intelligence.
+3.  **Check Core Areas**:
+    - **Color Tokens**: Verify use of OKLCH variables (no hardcoded hex/colors).
+    - **Responsiveness**: Ensure mobile-first and adaptive layouts.
+    - **Skeleton Strategy**: Verify Level 1 (`loading.tsx`) and Level 2 (`Suspense`) implementations.
+    - **Component Patterns**: Check for `SlideOverForm`, `DataTable`, etc.
+4.  **Propose Improvements**: Suggest specific code changes to align with standards.
+5.  **Update Documentation**: Append new components to `docs/project-documentation/components-list.md`.
+6.  **Seek Approval**: Present the analysis and documentation updates to the user.
 
 ---
 

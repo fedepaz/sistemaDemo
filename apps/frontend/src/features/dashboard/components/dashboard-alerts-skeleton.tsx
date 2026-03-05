@@ -1,47 +1,54 @@
 // src/features/dashboard/components/dashboard-alerts-skeleton.tsx
 
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertTriangle } from "lucide-react";
 
 export function DashboardAlertsSkeleton() {
-  function content(id: string) {
-    return (
-      <div className="space-y-3" key={id}>
-        <div className="flex items-start gap-3 rounded-lg border p-3">
-          <Badge variant="secondary" className="mt-0.5">
-            <Skeleton className="h-4 w-12 rounded-md" />
-          </Badge>
-          <div className="flex-1">
-            <div className="text-sm font-medium">
-              <Skeleton className="h-4 w-12 rounded-md" />
+  return (
+    <Card className="overflow-hidden flex flex-col">
+      {/* Header Skeleton */}
+      <div className="bg-primary/20 px-3 py-2 shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-6 w-6 rounded-full" />
+            <div className="space-y-1">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-2 w-8" />
             </div>
           </div>
+          <Skeleton className="h-3 w-12" />
         </div>
       </div>
-    );
-  }
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <AlertTriangle className="size-5" />
-          <Skeleton className="h-4 w-12 rounded-md" />
-          <Skeleton className="h-4 w-8 rounded-md" />
-        </CardTitle>
-        <CardDescription>
-          <Skeleton className="h-4 w-32 rounded-md" />
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {Array.from({ length: 3 }).map((_, i) => content(i.toString()))}
+
+      <CardContent className="p-2 flex-1 overflow-auto">
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-muted/30 rounded-lg p-2 flex-1 flex flex-col justify-center"
+            >
+              {/* Currency Header Skeleton */}
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-1.5">
+                  <Skeleton className="h-5 w-5 rounded" />
+                  <Skeleton className="h-3 w-16" />
+                </div>
+              </div>
+
+              {/* Buy/Sell Rates Skeleton */}
+              <div className="flex gap-1.5">
+                <div className="bg-background/50 rounded px-2 py-1 flex-1 space-y-1">
+                  <Skeleton className="h-2 w-8 mx-auto" />
+                  <Skeleton className="h-4 w-12 mx-auto" />
+                </div>
+                <div className="bg-background/50 rounded px-2 py-1 flex-1 space-y-1">
+                  <Skeleton className="h-2 w-8 mx-auto" />
+                  <Skeleton className="h-4 w-12 mx-auto" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

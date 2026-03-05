@@ -1,13 +1,14 @@
 // shared/src/schemas/auditLog.schema.ts
 import { z } from "zod";
 import { AuditActionTypeSchema, EntityTypeSchema } from "./enums.schema";
+import { UserProfileSchema } from "./user.schema";
 
 export const AuditLogSchema = z.object({
   id: z.string(),
   tenantId: z.string(),
   tenant: z.object({}),
   userId: z.string(),
-  user: z.object({}),
+  user: UserProfileSchema,
   action: AuditActionTypeSchema,
   entityId: z.string(),
   entityType: EntityTypeSchema,
