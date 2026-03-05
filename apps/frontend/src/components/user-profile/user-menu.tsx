@@ -26,7 +26,7 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-lg">
+      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-lg [&>button]:hidden">
         <div className="flex flex-col md:flex-row w-full font-sans">
           {/* Sidebar */}
           <nav className="flex-shrink-0 w-full md:w-40 bg-background/60 border-b md:border-b-0 md:border-r border-border p-2 md:p-4 space-x-2 md:space-x-0 space-y-0 md:space-y-2 overflow-x-auto">
@@ -78,7 +78,9 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
                 </div>
               </div>
               <DialogTitle className="text-xl font-semibold font-sans">
-                {tab === "info" ? "Perfil de Usuario" : "Editar Perfil"}
+                {tab === "info" && "Perfil de Usuario"}
+                {tab === "edit" && "Editar Perfil"}
+                {tab === "password" && "Cambiar Contraseña"}
               </DialogTitle>
             </div>
 

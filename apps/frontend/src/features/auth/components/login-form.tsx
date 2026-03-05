@@ -25,10 +25,10 @@ export function LoginForm() {
   const { isLoginComplete } = useAuthContext();
 
   useEffect(() => {
-    if (isLoginComplete) {
+    if (isLoginComplete && !isChangePasswordOpen) {
       router.push("/");
     }
-  }, [isLoginComplete, router]);
+  }, [isLoginComplete, router, isChangePasswordOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {

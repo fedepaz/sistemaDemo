@@ -17,14 +17,12 @@ export const useLogin = () => {
         method: "POST",
         body: JSON.stringify(credentials),
       });
-
-      console.log(response);
       return response;
     },
     onSuccess: (data) => {
       // Check if user is default password
       if (data.isDefaultPassword) {
-        toast.success(
+        toast.info(
           "Contraseña por defecto, se abrirá un formulario para cambiar la contraseña",
           {
             duration: 3000,
@@ -35,11 +33,11 @@ export const useLogin = () => {
         toast.success(toastMessage, {
           duration: 3000,
         });
-        // Store refresh token
-        localStorage.setItem("refreshToken", data.refreshToken);
-        // Update auth state via useAuth
-        signIn(data.accessToken, data.user);
       }
+      // Store refresh token
+      localStorage.setItem("refreshToken", data.refreshToken);
+      // Update auth state via useAuth
+      signIn(data.accessToken, data.user);
     },
   });
 

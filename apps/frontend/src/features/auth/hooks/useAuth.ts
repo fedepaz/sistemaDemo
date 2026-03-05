@@ -48,8 +48,7 @@ export function useAuth() {
         user: parsedUser,
         isSignedIn: !!token,
       });
-    } catch (error) {
-      console.error("Error loading auth state:", error);
+    } catch {
       signOut();
     } finally {
       setLoading(false);

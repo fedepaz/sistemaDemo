@@ -40,9 +40,7 @@ export function DashboardHeader() {
   const handleLogout = async () => {
     try {
       await logoutAsync();
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
+    } catch {}
   };
 
   if (isLoading) {
