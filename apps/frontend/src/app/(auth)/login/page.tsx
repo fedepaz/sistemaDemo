@@ -1,7 +1,7 @@
 // src/app/(auth)/login/page.tsx
 
-import { LoginForm } from "@/features/auth";
+import { AuthDashboard } from "@/features/auth";
 
 export default function LoginPage() {
-  return <LoginForm />;
+  return <AuthDashboard />;
 }

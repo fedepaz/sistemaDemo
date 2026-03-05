@@ -2,161 +2,136 @@
 "use client";
 import { Loader2, Lock, Eye, EyeOff, User } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { useAuthContext } from "../providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import { ChangePasswordForm } from "@/components/user-profile/user-password";
+import { useForm } from "react-hook-form";
+import { LoginAuthDto, LoginAuthSchema } from "@vivero/shared";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 
-export function LoginForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+interface LoginFormProps {
+  onDefaultPassword: () => void;
+}
+
+export function LoginForm({ onDefaultPassword }: LoginFormProps) {
+  const { loginAsync, isLoading } = useLogin();
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const form = useForm<LoginAuthDto>({
+    resolver: zodResolver(LoginAuthSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
 
-  const router = useRouter();
-
-  const { loginAsync, isLoading } = useLogin();
-  const { isLoginComplete } = useAuthContext();
-
-  useEffect(() => {
-    if (isLoginComplete && !isChangePasswordOpen) {
-      router.push("/");
-    }
-  }, [isLoginComplete, router, isChangePasswordOpen]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function onSubmit(values: LoginAuthDto) {
     try {
-      e.preventDefault();
-
-      const response = await loginAsync({ username, password });
+      const response = await loginAsync(values);
       if (response.isDefaultPassword) {
-        setIsChangePasswordOpen(true);
+        onDefaultPassword();
       }
     } catch {}
-  };
+  }
 
   return (
-    <div
-      className={cn(
-        "min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8",
-      )}
-    >
-      <div className="max-w-md w-full space-y-6 md:space-y-8">
-        {/* Logo */}
-        <div className="flex justify-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
-              <span className="text-primary font-bold text-sm">DM</span>
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                Demo
-              </h1>
-              <p className="text-xs text-muted-foreground">
-                Sistema de gestión
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Form Card */}
-        <div className="rounded-2xl border bg-card p-6 sm:p-8 shadow-sm space-y-6">
-          {!isChangePasswordOpen ? (
-            <form onSubmit={handleSubmit}>
-              <div className="flex flex-col gap-5">
-                {/* Username Field */}
-                <div className="grid gap-2">
-                  <Label htmlFor="username" className="text-foreground">
-                    Nombre de usuario
-                  </Label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <User className="h-4 w-4 text-primary" />
-                    </div>
-                    <Input
-                      id="username"
-                      type="text"
-                      placeholder="juanperez"
-                      autoComplete="username"
-                      required
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      disabled={isLoading}
-                      className="pl-14 h-12 rounded-lg"
-                    />
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 font-serif"
+      >
+        {/* Username Field */}
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-sans">Nombre de usuario</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <User className="h-4 w-4 text-primary" />
                   </div>
+                  <Input
+                    {...field}
+                    placeholder="juanperez007"
+                    disabled={isLoading}
+                    className="pl-14 h-12"
+                  />
                 </div>
-
-                {/* Password Field */}
-                <div className="grid gap-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password" className="text-foreground">
-                      Contraseña
-                    </Label>
-                  </div>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Lock className="h-4 w-4 text-primary" />
-                    </div>
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Ingresa tu contraseña"
-                      autoComplete="current-password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      disabled={isLoading}
-                      className="pl-14 pr-12 h-12 rounded-lg"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                      tabIndex={-1}
-                      aria-label={
-                        showPassword
-                          ? "Ocultar contraseña"
-                          : "Mostrar contraseña"
-                      }
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  className="w-full h-12 rounded-lg text-base font-medium"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Iniciando sesión...
-                    </>
-                  ) : (
-                    "Iniciar sesión"
-                  )}
-                </Button>
-              </div>
-            </form>
-          ) : (
-            <ChangePasswordForm onClose={() => router.push("/")} />
+              </FormControl>
+            </FormItem>
           )}
-        </div>
-      </div>
-    </div>
+        />
+
+        {/* Password Field */}
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-sans">Contraseña</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Lock className="h-4 w-4 text-primary" />
+                  </div>
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Ingresa tu contraseña"
+                    disabled={isLoading}
+                    className="pl-14 h-12"
+                    {...field}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    tabIndex={-1}
+                    aria-label={
+                      showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          className="w-full h-12 bg-primary rounded p-2 cursor-pointer"
+          disabled={isLoading || !form.formState.isDirty}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+            </>
+          ) : (
+            "Iniciar sesión"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }

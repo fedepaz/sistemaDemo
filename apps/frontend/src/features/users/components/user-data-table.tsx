@@ -38,6 +38,12 @@ export function UsersDataTable() {
 
   const formCreateUser = useForm<RegisterAuthDto>({
     resolver: zodResolver(RegisterAuthSchema),
+    defaultValues: {
+      username: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+    },
   });
 
   useEffect(() => {

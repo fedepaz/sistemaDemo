@@ -115,6 +115,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | Component | Responsive | Color Tokens | UX Helpers |
 | :--- | :---: | :---: | :---: |
 | `AuthSkeleton` | [x] | [x] | [x] |
+| `AuthDashboard` | [x] | [x] | [x] |
 | `LoginForm` | [x] | [x] | [x] |
 | `RegisterForm` | [x] | [x] | [x] |
 | `RegisterLoading` | [x] | [x] | [x] |
