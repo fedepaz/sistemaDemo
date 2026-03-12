@@ -15,22 +15,20 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     const user = configService.get<string>('config.database.username');
     const password = configService.get<string>('config.database.password');
     const database = configService.get<string>('config.database.name');
-    const environment = configService.get<string>('config.environment');
 
     const adapter = new PrismaMariaDb({
-      host: environment === 'production' ? host : 'localhost',
-      port: environment === 'production' ? port : 3306,
-      user: environment === 'production' ? user : 'user',
-      password: environment === 'production' ? password : 'password',
-      database: environment === 'production' ? database : 'vivero_client_alpha',
+      host,
+      port,
+      user,
+      password,
+      database,
     });
 
     super({ adapter, log: ['info', 'warn', 'error'] });
   }
 
   async onModuleInit() {
-    const environment = this.configService.get<string>('config.environment');
-    const isProd = environment === 'production';
+    const isProd = false;
 
     this.logger.log('🔄 INITIALIZING DATABASE CONNECTION...');
 

@@ -59,6 +59,24 @@ pnpm dev
 
 La app estará disponible en `http://localhost:3000` (o el puerto indicado en consola).
 
+## Desarrollo con Docker
+
+### 1. Iniciar el stack completo
+
+Para levantar el frontend, backend, MariaDB y Valkey:
+
+```bash
+docker-compose up --build
+```
+
+### 2. Comandos útiles de Docker
+
+```bash
+docker-compose down          # Detener y remover contenedores
+docker-compose logs -f       # Ver logs en tiempo real
+docker-compose exec backend sh # Entrar al contenedor del backend
+```
+
 ---
 
 ## Actualizar el proyecto
