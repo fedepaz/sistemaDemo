@@ -7,11 +7,23 @@ import 'dotenv/config';
 
 //const certPath = path.join(process.cwd(), 'certs', 'globalsignrootca.pem');
 //const serverCert = fs.readFileSync(certPath, 'utf8');
-const host = 'localhost';
-const port = parseInt(process.env.DATABASE_PORT!);
-const user = process.env.DATABASE_USERNAME!;
-const password = process.env.DATABASE_PASSWORD!;
-const database = process.env.DATABASE_NAME!;
+const env = process.env.BACKEND_NODE_ENV;
+const isProd = env === 'production';
+const host = isProd
+  ? process.env.DATABASE_PROD_HOST!
+  : process.env.DATABASE_DEV_HOST!;
+const port = isProd
+  ? parseInt(process.env.DATABASE_PROD_PORT!)
+  : parseInt(process.env.DATABASE_DEV_PORT!);
+const user = isProd
+  ? process.env.DATABASE_PROD_USERNAME!
+  : process.env.DATABASE_DEV_USERNAME!;
+const password = isProd
+  ? process.env.DATABASE_PROD_PASSWORD!
+  : process.env.DATABASE_DEV_PASSWORD!;
+const database = isProd
+  ? process.env.DATABASE_PROD_NAME!
+  : process.env.DATABASE_DEV_NAME!;
 // Create adapter with SSL
 const adapter = new PrismaMariaDb({
   host,

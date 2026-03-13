@@ -10,21 +10,21 @@ export type AppConfig = {
   cors: {
     origins: string;
   };
-  database: {
+  database_prod: {
     name: string;
     host: string;
     port: number;
     username: string;
     password: string;
-    database: string;
-    databaseSslCert: string;
     databaseUrl: string;
-    databaseDockerUrl: string;
   };
-  valkey: {
+  database_dev: {
+    name: string;
     host: string;
     port: number;
-    password?: string;
+    username: string;
+    password: string;
+    databaseUrl: string;
   };
   jwt: {
     secret: string;
@@ -32,18 +32,8 @@ export type AppConfig = {
     refreshSecret: string;
     refreshExpiresIn: string;
   };
-
-  awsS3: {
-    accessKeyId: string;
-    secretAccessKey: string;
-    region: string;
-    bucket: string;
-  };
-  sendgrid: {
-    apiKey: string;
-  };
   defaultTenantId: string;
-  defaultPasswordHash: string;
+  defaultPassword: string;
 };
 
 // Create a typed factory function
@@ -54,25 +44,21 @@ const configFactory = (): AppConfig => ({
   cors: {
     origins: process.env.CORS_ORIGINS || '',
   },
-  database: {
-    name: process.env.DATABASE_NAME || 'vivero_client_alpha',
-    host: process.env.DATABASE_HOST || 'localhost',
-    port: parseInt(process.env.DATABASE_PORT || '3306', 10),
-    username: process.env.DATABASE_USERNAME || 'user',
-    password: process.env.DATABASE_PASSWORD || 'password',
-    database: process.env.DATABASE_NAME || 'vivero_client_alpha',
-    databaseSslCert: process.env.DATABASE_SSL_CERT || '',
-    databaseUrl:
-      process.env.DATABASE_URL ||
-      'mysql://user:password@localhost:3306/vivero_client_alpha',
-    databaseDockerUrl:
-      process.env.DATABASE_DOCKER_URL ||
-      'mysql://root:rootpassword@localhost:3306/vivero_client_alpha',
+  database_prod: {
+    name: process.env.DATABASE_PROD_NAME || '',
+    host: process.env.DATABASE_PROD_HOST || '',
+    port: parseInt(process.env.DATABASE_PROD_PORT || '', 10),
+    username: process.env.DATABASE_PROD_USERNAME || '',
+    password: process.env.DATABASE_PROD_PASSWORD || '',
+    databaseUrl: process.env.DATABASE_PROD_URL || '',
   },
-  valkey: {
-    host: process.env.VALKEY_HOST || 'localhost',
-    port: parseInt(process.env.VALKEY_PORT || '6379', 10),
-    password: process.env.VALKEY_PASSWORD,
+  database_dev: {
+    name: process.env.DATABASE_DEV_NAME || '',
+    host: process.env.DATABASE_DEV_HOST || '',
+    port: parseInt(process.env.DATABASE_DEV_PORT || '', 10),
+    username: process.env.DATABASE_DEV_USERNAME || '',
+    password: process.env.DATABASE_DEV_PASSWORD || '',
+    databaseUrl: process.env.DATABASE_DEV_URL || '',
   },
   jwt: {
     secret:
@@ -83,18 +69,8 @@ const configFactory = (): AppConfig => ({
       'your-super-secret-refresh-jwt-key-change-in-prod',
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   },
-
-  awsS3: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-    region: process.env.AWS_REGION || 'us-east-1',
-    bucket: process.env.AWS_S3_BUCKET || 'plant-mgmt-files',
-  },
-  sendgrid: {
-    apiKey: process.env.SENDGRID_API_KEY || '',
-  },
   defaultTenantId: process.env.DEFAULT_TENANT_ID || '',
-  defaultPasswordHash: process.env.DEFAULT_PASSWORD_HASH || '',
+  defaultPassword: process.env.DEFAULT_PASSWORD || '',
 });
 
 // Export the final configuration
@@ -109,31 +85,25 @@ export const validationSchema = Joi.object({
   URL: Joi.string().uri().optional(),
   CORS_ORIGINS: Joi.string().optional(),
 
-  DATABASE_HOST: Joi.string().hostname().optional(),
-  DATABASE_PORT: Joi.number().port().optional(),
-  DATABASE_USERNAME: Joi.string().required(),
-  DATABASE_PASSWORD: Joi.string().required(),
-  DATABASE_NAME: Joi.string().required(),
-  DATABASE_SSL_CERT: Joi.string().optional().allow(''),
-  DATABASE_URL: Joi.string().uri().optional(),
-  DATABASE_DOCKER_URL: Joi.string().uri().optional(),
+  DATABASE_PROD_NAME: Joi.string().required(),
+  DATABASE_PROD_HOST: Joi.string().hostname().required(),
+  DATABASE_PROD_PORT: Joi.number().port().required(),
+  DATABASE_PROD_USERNAME: Joi.string().required(),
+  DATABASE_PROD_PASSWORD: Joi.string().required(),
+  DATABASE_PROD_URL: Joi.string().uri().required(),
 
-  VALKEY_HOST: Joi.string().hostname().default('localhost'),
-  VALKEY_PORT: Joi.number().port().default(6379),
-  VALKEY_PASSWORD: Joi.string().optional().allow(''),
+  DATABASE_DEV_NAME: Joi.string().required(),
+  DATABASE_DEV_HOST: Joi.string().hostname().required(),
+  DATABASE_DEV_PORT: Joi.number().port().required(),
+  DATABASE_DEV_USERNAME: Joi.string().required(),
+  DATABASE_DEV_PASSWORD: Joi.string().required(),
+  DATABASE_DEV_URL: Joi.string().uri().required(),
 
   JWT_SECRET: Joi.string().min(32).required(),
   JWT_EXPIRES_IN: Joi.string().default('15m'),
   JWT_REFRESH_SECRET: Joi.string().min(32).required(),
   JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
 
-  AWS_ACCESS_KEY_ID: Joi.string().optional().allow(''),
-  AWS_SECRET_ACCESS_KEY: Joi.string().optional().allow(''),
-  AWS_REGION: Joi.string().optional().allow(''),
-  AWS_S3_BUCKET: Joi.string().optional().allow(''),
-
-  SENDGRID_API_KEY: Joi.string().optional().allow(''),
-
   DEFAULT_TENANT_ID: Joi.string().optional().allow(''),
-  DEFAULT_PASSWORD_HASH: Joi.string().optional().allow(''),
+  DEFAULT_PASSWORD: Joi.string().optional().allow(''),
 });
