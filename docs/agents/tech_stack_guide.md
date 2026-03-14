@@ -145,7 +145,7 @@ Valkey: 8+
 ✅ Audit logging for all data changes
 ✅ Encryption at rest (database + file storage)
 ✅ TLS 1.3 for all connections
-✅ Regular dependency updates (Dependabot)
+✅ Regular dependency updates (Dependabot + pnpm audit in CI/CD)
 ✅ Multi-stage Docker builds with security hardening
 ```
 
