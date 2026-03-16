@@ -1,4 +1,10 @@
-import { Global, Module, OnApplicationShutdown, Inject, Logger } from '@nestjs/common';
+import {
+  Global,
+  Module,
+  OnApplicationShutdown,
+  Inject,
+  Logger,
+} from '@nestjs/common';
 import { Pool } from 'mysql2/promise';
 import { LEGACY_DB_TOKEN, LegacyDbProvider } from './legacy-mysql.provider';
 import { LegacyMysqlService } from './legacy-mysql.service';

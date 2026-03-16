@@ -19,7 +19,9 @@ export const LegacyDbProvider: Provider = {
       'config.database_legacy.database',
     );
 
-    logger.log(`Initializing legacy database pool at ${host}:${port} as ${user}`);
+    logger.log(
+      `Initializing legacy database pool at ${host}:${port} as ${user}`,
+    );
 
     const pool = mysql.createPool({
       host,
@@ -49,7 +51,10 @@ export const LegacyDbProvider: Provider = {
 
     // Capture pool errors to prevent process crash
     pool.on('error', (err) => {
-      logger.error('Unexpected error on idle legacy database connection: ', err);
+      logger.error(
+        'Unexpected error on idle legacy database connection: ',
+        err,
+      );
     });
 
     return pool;

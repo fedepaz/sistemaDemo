@@ -6,9 +6,7 @@ import { LegacyAgent, LegacyOperation } from './legacy-mysql.types';
 @Injectable()
 export class LegacyMysqlService {
   private readonly logger = new Logger('LegacyMysqlService');
-  constructor(
-    @Inject(LEGACY_DB_TOKEN) private readonly pool: Pool,
-  ) {}
+  constructor(@Inject(LEGACY_DB_TOKEN) private readonly pool: Pool) {}
 
   /**
    * Generic query helper using parameterized statements.
