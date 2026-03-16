@@ -24,6 +24,7 @@ import { TenantsController } from './modules/tenants/tenants.controller';
 import { TenantsRepository } from './modules/tenants/repositories/tenants.repository';
 import { TenantsService } from './modules/tenants/tenants.service';
 import * as path from 'path';
+import { LegacyMysqlModule } from './infra/legacy-mysql/legacy-mysql.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import * as path from 'path';
       ],
     }),
     PrismaModule,
+    LegacyMysqlModule,
     AuthModule,
   ],
   controllers: [

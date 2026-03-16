@@ -26,6 +26,13 @@ export type AppConfig = {
     password: string;
     databaseUrl: string;
   };
+  database_legacy: {
+    host: string;
+    port: number;
+    user: string;
+    password: string;
+    database: string;
+  };
   jwt: {
     secret: string;
     expiresIn: string;
@@ -59,6 +66,13 @@ const configFactory = (): AppConfig => ({
     username: process.env.DATABASE_DEV_USERNAME || '',
     password: process.env.DATABASE_DEV_PASSWORD || '',
     databaseUrl: process.env.DATABASE_DEV_URL || '',
+  },
+  database_legacy: {
+    host: process.env.DATABASE_LEGACY_HOST || '',
+    port: parseInt(process.env.DATABASE_LEGACY_PORT || '', 10),
+    user: process.env.DATABASE_LEGACY_USER || '',
+    password: process.env.DATABASE_LEGACY_PASSWORD || '',
+    database: process.env.DATABASE_LEGACY_DATABASE || '',
   },
   jwt: {
     secret:
@@ -98,6 +112,12 @@ export const validationSchema = Joi.object({
   DATABASE_DEV_USERNAME: Joi.string().required(),
   DATABASE_DEV_PASSWORD: Joi.string().required(),
   DATABASE_DEV_URL: Joi.string().uri().required(),
+
+  DATABASE_LEGACY_HOST: Joi.string().hostname().required(),
+  DATABASE_LEGACY_PORT: Joi.number().port().required(),
+  DATABASE_LEGACY_USER: Joi.string().required(),
+  DATABASE_LEGACY_PASSWORD: Joi.string().required(),
+  DATABASE_LEGACY_DATABASE: Joi.string().required(),
 
   JWT_SECRET: Joi.string().min(32).required(),
   JWT_EXPIRES_IN: Joi.string().default('15m'),

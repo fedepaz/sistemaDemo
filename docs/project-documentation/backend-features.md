@@ -9,6 +9,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Typed Configuration**: `AppConfig` with Joi validation schema.
 - [x] **Prisma Service**: Robust connection handling with retries and health checks.
 - [x] **Environment-Aware Connectivity**: Dynamic switching between `PROD_` and `DEV_` database URLs based on `BACKEND_NODE_ENV`.
+- [x] **Legacy Database Connectivity**: `LegacyMysqlModule` providing a global `LegacyMysqlService` with connection pooling (`mysql2/promise`) and typed query helpers for raw SQL access to legacy databases.
 - [x] **Request ID Middleware**: `RequestIdMiddleware` for traceability.
 - [x] **Zod Validation Pipe**: `ZodValidationPipe` for type-safe request validation.
 
