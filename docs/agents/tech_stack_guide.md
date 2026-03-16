@@ -28,9 +28,9 @@ Framework: Next.js 14+ (App Router)
 ```typescript
 Framework: NestJS (TypeScript-first)
 ├── Database ORM: Prisma
-├── Database: MariaDB 10.9+
+├── Database: MariaDB 11+
 ├── Authentication: Manages users, permissions, and session tokens
-├── Caching: Valkey (Redis 7+ compatible fork)
+├── Caching: Valkey (Redis 8+ compatible fork)
 ├── Queue System: BullMQ (Valkey/Redis-based)
 ├── File Storage: AWS S3 compatible
 ├── Email: SendGrid / AWS SES
@@ -42,8 +42,8 @@ Framework: NestJS (TypeScript-first)
 
 ```yaml
 Package Manager: pnpm 8+
-Container Runtime: Docker + Docker Compose
-Orchestration: Kubernetes + Helm
+Container Runtime: Docker + Docker Compose (Unified Dev/Prod Strategy)
+Orchestration: Kubernetes + Helm (for scale-out)
 Infrastructure as Code: Terraform
 CI/CD: GitHub Actions
 Monitoring: DataDog / New Relic
@@ -85,6 +85,18 @@ Rationale:
 ✅ Worth it for enterprise clients paying €50k+
 ```
 
+### Deployment Strategy
+
+```typescript
+Pattern: Container-first (Docker / Docker Compose)
+
+Rationale:
+✅ Identical environments for Dev, Staging, and Prod.
+✅ Consistent dependency management.
+✅ Automated migrations inside containers.
+✅ Service health synchronization.
+```
+
 ### Authentication Strategy
 
 ```typescript
@@ -97,7 +109,7 @@ The platform uses a traditional username/password authentication model managed b
 ```typescript
 Multi-Level Caching:
 L1: React Query (browser cache) - 5 minutes
-L2: Valkey (server cache) - 1 hour
+L2: Valkey 8 (server cache) - 1 hour
 L3: Database query optimization - indexes
 L4: CDN (static assets) - 30 days
 ```
@@ -112,9 +124,9 @@ L4: CDN (static assets) - 30 days
 # Required software versions
 Node.js: 18.18.0+
 pnpm: 8.15.0+
-Docker: 24.0+
-MariaDB: 10.9+
-Valkey: 7.2+
+Docker: 24.0+ (and Docker Compose)
+MariaDB: 11+
+Valkey: 8+
 ```
 
 ---
@@ -133,7 +145,8 @@ Valkey: 7.2+
 ✅ Audit logging for all data changes
 ✅ Encryption at rest (database + file storage)
 ✅ TLS 1.3 for all connections
-✅ Regular dependency updates (Dependabot)
+✅ Regular dependency updates (Dependabot + pnpm audit in CI/CD)
+✅ Multi-stage Docker builds with security hardening
 ```
 
 ---
