@@ -1,0 +1,29 @@
+services:
+  mariadb-dev:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: vivero_dev
+      MARIADB_USER: user
+      MARIADB_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_dev_data:/var/lib/mysql
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --innodb_buffer_pool_size=256M
+      --max_connections=50
+
+  valkey-dev:
+    image: valkey/valkey:8-alpine
+    command: valkey-server --save 60 1 --loglevel warning
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey_dev_data:/data
+
+volumes:
+  mariadb_dev_data:
+  valkey_dev_data:

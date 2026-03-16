@@ -23,6 +23,7 @@ import { AuditLogRepository } from './modules/auditLog/repositories/auditLog.rep
 import { TenantsController } from './modules/tenants/tenants.controller';
 import { TenantsRepository } from './modules/tenants/repositories/tenants.repository';
 import { TenantsService } from './modules/tenants/tenants.service';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -32,8 +33,15 @@ import { TenantsService } from './modules/tenants/tenants.service';
       validationSchema,
       validationOptions: {
         allowUnknown: true,
-        abortEarly: true,
+        abortEarly: false,
       },
+      envFilePath: [
+        path.join(
+          __dirname,
+          `../../.env.${process.env.NODE_ENV || 'development'}`,
+        ),
+        path.join(__dirname, `../../.env`),
+      ],
     }),
     PrismaModule,
     AuthModule,

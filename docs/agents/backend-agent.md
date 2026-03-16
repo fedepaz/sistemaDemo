@@ -131,15 +131,25 @@ This method is used to restore a previously soft-deleted entity by setting its `
 ```typescript
 Framework: NestJS (TypeScript-first)
 Database ORM: Prisma
-Database: MariaDB 10.9+
+Database: MariaDB 11+
 Authentication: Username/Password with JWT
-Caching: Valkey (Redis 7+ compatible fork)
+Caching: Valkey 8+ (Redis 8+ compatible fork)
 Queue System: BullMQ (Valkey/Redis-based)
 File Storage: AWS S3 compatible
 Email: SendGrid / AWS SES
 Validation: Zod schemas
 Testing: Jest + Supertest + Vitest
+Container Runtime: Docker (Container-first workflow)
 ```
+
+### Database Connection & Migration Workflow
+
+The backend follows a **container-first database strategy** to ensure identical behavior across development and production environments.
+
+1.  **Environment Configuration**: Database connection parameters (Host, Port, User, Password, DB Name) must be provided via environment variables.
+2.  **Prisma Service**: The `PrismaService` utilizes these variables directly. It does **not** use hardcoded `localhost` or default password fallbacks, allowing the same code to run inside Docker (using service names like `mariadb`) or externally (using IP/Domain).
+3.  **Migrations**: Database migrations are handled automatically inside the container. The `prisma` package is a **production dependency** to enable the `prisma migrate deploy` command during the container's entrypoint execution.
+4.  **Local Development**: When developing locally without Docker, ensure your local environment variables point to `localhost`.
 
 ### Recommended Future Modules
 
@@ -195,7 +205,7 @@ Rationale:
 Implementation Requirements:
   - Automated tenant provisioning via API
   - Tenant-aware middleware for all requests
-  - Database migration coordination across tenants
+  - Database migration coordination across tenants (containerized)
   - Per-tenant performance monitoring
 ```
 

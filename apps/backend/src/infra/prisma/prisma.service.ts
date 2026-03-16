@@ -10,38 +10,56 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(PrismaService.name);
 
   constructor(private readonly configService: ConfigService) {
-    const host = configService.get<string>('config.database.host');
-    const port = configService.get<number>('config.database.port');
-    const user = configService.get<string>('config.database.username');
-    const password = configService.get<string>('config.database.password');
-    const database = configService.get<string>('config.database.name');
-    const environment = configService.get<string>('config.environment');
+    const env = configService.get<string>('config.environment');
+    const isProd = env === 'production';
+    const host = isProd
+      ? configService.get<string>('config.database_prod.host')
+      : configService.get<string>('config.database_dev.host');
+    const port = isProd
+      ? configService.get<number>('config.database_prod.port')
+      : configService.get<number>('config.database_dev.port');
+    const user = isProd
+      ? configService.get<string>('config.database_prod.username')
+      : configService.get<string>('config.database_dev.username');
+    const password = isProd
+      ? configService.get<string>('config.database_prod.password')
+      : configService.get<string>('config.database_dev.password');
+    const database = isProd
+      ? configService.get<string>('config.database_prod.name')
+      : configService.get<string>('config.database_dev.name');
 
     const adapter = new PrismaMariaDb({
-      host: environment === 'production' ? host : 'localhost',
-      port: environment === 'production' ? port : 3306,
-      user: environment === 'production' ? user : 'user',
-      password: environment === 'production' ? password : 'password',
-      database: environment === 'production' ? database : 'vivero_client_alpha',
+      host,
+      port,
+      user,
+      password,
+      database,
     });
 
     super({ adapter, log: ['info', 'warn', 'error'] });
   }
 
   async onModuleInit() {
-    const environment = this.configService.get<string>('config.environment');
-    const isProd = environment === 'production';
+    const isProd =
+      this.configService.get<string>('config.environment') === 'production';
 
     this.logger.log('🔄 INITIALIZING DATABASE CONNECTION...');
 
-    if (!isProd) {
-      const host = this.configService.get<string>('config.database.host');
-      const database = this.configService.get<string>('config.database.name');
-      const user = this.configService.get<string>('config.database.username');
-      this.logger.debug(
-        `📍 Target: ${host} | DB: ${database} | User: ${user?.charAt(0)}****`,
-      );
-    }
+    const host = isProd
+      ? this.configService.get<string>('config.database_prod.host')
+      : this.configService.get<string>('config.database_dev.host');
+
+    const database = isProd
+      ? this.configService.get<string>('config.database_prod.name')
+      : this.configService.get<string>('config.database_dev.name');
+
+    const user = isProd
+      ? this.configService.get<string>('config.database_prod.username')
+      : this.configService.get<string>('config.database_dev.username');
+
+    this.logger.debug(
+      `📍 Target: ${host} | DB: ${database} | User: ${user?.charAt(0)}****`,
+    );
 
     const maxRetries = 5;
     const retryDelay = 3000;

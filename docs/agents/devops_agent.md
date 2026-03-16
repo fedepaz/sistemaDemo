@@ -18,8 +18,8 @@ Deploy and scale the bulletproof vivero-client-alpha that converts 30-day trials
 
 ```typescript
 Frontend: Next.js 14 (App Router) + Tailwind + shadcn/ui + TanStack Query
-Backend: NestJS + Prisma + MariaDB 10.9+ + Valkey 7.2+ + BullMQ
-Infrastructure: Docker + Kubernetes + Terraform + GitHub Actions
+Backend: NestJS + Prisma + MariaDB 11+ + Valkey 8+ + BullMQ
+Infrastructure: Docker + Docker Compose (Dev/Prod) + Kubernetes (Orchestration)
 Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 ```
 
@@ -30,20 +30,25 @@ Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 - **Trial Strategy**: 30-day full-featured trials.
 - **Enterprise SLA**: 99.9% uptime, automated disaster recovery.
 
-## Deployment Modes
+## Deployment & Development Modes
+
+### Container-First Strategy
+
+The platform utilizes a unified Docker-based architecture for both local development and production environments to ensure environment parity and reliable deployments.
+
+- **Orchestration**: `docker-compose.yml` serves as the blueprint for full-stack orchestration (Frontend, Backend, MariaDB, Valkey).
+- **Service Versions**: MariaDB 11 and Valkey 8 are the standard across all environments.
+- **Migrations**: Database migrations are executed within the backend container during startup (via `entrypoint.sh`).
+- **Networking**: Services communicate via a dedicated Docker network with health-check synchronization (e.g., Backend waits for MariaDB to be healthy).
 
 ### Local Development Mode
-
-- `docker-compose.yml` with hot reload.
-- MariaDB container with seed data.
-- Valkey container for caching and BullMQ.
+- Hot-reloading enabled for both Frontend and Backend within containers.
+- Environment variables configured via `.env` files mapped to containers.
 
 ### Production Deployment Mode
-
-- Terraform infrastructure.
-- Kubernetes manifests with auto-scaling.
-- CI/CD pipelines with compliance testing.
-- Automated tenant provisioning.
+- Docker images built and pushed to a registry.
+- Environment-specific `.env.production` files managed via CI/CD.
+- Optimized multi-stage builds for minimal image size and maximum security.
 
 ## Enterprise-Specific DevOps Requirements
 

@@ -1,10 +1,9 @@
 // backend/prisma.config.ts
 
 import { defineConfig } from 'prisma/config';
-
-const env = process.env.NODE_ENV;
-const databaseProduction = process.env.DATABASE_URL;
-const databaseDocker = process.env.DATABASE_DOCKER_URL;
+const env = process.env.BACKEND_NODE_ENV;
+const databaseProd = process.env.DATABASE_PROD_URL;
+const databaseDev = process.env.DATABASE_DEV_URL;
 
 export default defineConfig({
   schema: 'prisma/',
@@ -12,6 +11,6 @@ export default defineConfig({
     path: 'prisma/migrations',
   },
   datasource: {
-    url: env === 'production' ? databaseProduction : databaseDocker,
+    url: env === 'production' ? databaseProd : databaseDev,
   },
 });
