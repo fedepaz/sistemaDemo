@@ -1,6 +1,7 @@
 // src/infra/legacy-mysql/legacy-mysql.service.ts
 
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Pool, PoolConnection, RowDataPacket } from 'mysql2/promise';
 import { LEGACY_DB_TOKEN, LegacyDbConnection } from './legacy-mysql.provider';
 import { LegacyAgent, LegacyOperation } from './legacy-mysql.types';
@@ -9,11 +10,16 @@ import { LegacyAgent, LegacyOperation } from './legacy-mysql.types';
 export class LegacyMysqlService {
   private readonly logger = new Logger('LegacyMysqlService');
   private readonly pool: Pool;
+  private readonly isProd: boolean;
+
   constructor(
     @Inject(LEGACY_DB_TOKEN)
     private readonly legacyDb: LegacyDbConnection,
+    private readonly configService: ConfigService,
   ) {
     this.pool = legacyDb.getPool();
+    this.isProd =
+      this.configService.get<string>('config.environment') === 'production';
   }
 
   /**
@@ -24,13 +30,22 @@ export class LegacyMysqlService {
     sql: string,
     params?: any[],
   ): Promise<T> {
-    this.logger.warn(
-      `Potentially unsafe query detected: ${sql.substring(0, 100)} ...`,
-    );
+    // Perform basic SQL injection checks in non-production environments
+    if (!this.isProd && this.hasUnsafePattern(sql)) {
+      this.logger.warn(
+        `🛑 POTENTIALLY UNSAFE QUERY DETECTED in non-prod environment: ${sql.trim()}`,
+      );
+    }
 
     this.logger.debug(`Executing query: `, { sql: sql.trim(), params });
-    const [rows] = await this.pool.query<T>(sql, params);
-    return rows;
+
+    try {
+      const [rows] = await this.pool.query<T>(sql, params);
+      return rows;
+    } catch (error) {
+      this.logger.error(`❌ Legacy query failed: ${sql}`, error);
+      throw error;
+    }
   }
   /**
    * Helper: Detect basic SQL injection patterns (dev-only guard)

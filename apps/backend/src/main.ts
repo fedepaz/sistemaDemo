@@ -32,6 +32,10 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   });
+
+  // Enable shutdown hooks for graceful database connection closing
+  app.enableShutdownHooks();
+
   try {
     await app.listen(port, '0.0.0.0');
     console.log('🚀 Backend started', {
