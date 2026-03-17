@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import { RowDataPacket } from 'mysql2/promise';
 
 export interface LegacyAgent extends RowDataPacket {
   codigo: number;

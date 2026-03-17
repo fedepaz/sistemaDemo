@@ -1,8 +1,29 @@
-import { Logger, Provider } from '@nestjs/common';
+// src/infra/legacy-mysql/legacy-mysql.provider.ts
+
+import { Logger, OnApplicationShutdown, Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import mysql from 'mysql2/promise';
 
 export const LEGACY_DB_TOKEN = 'LEGACY_DB_CONNECTION';
+
+export class LegacyDbConnection implements OnApplicationShutdown {
+  constructor(private readonly pool: mysql.Pool) {}
+
+  getPool(): mysql.Pool {
+    return this.pool;
+  }
+
+  async onApplicationShutdown(signal?: string) {
+    const logger = new Logger('LegacyDbConnection');
+    logger.log(`🔌 Shutting down legacy DB pool (signal: ${signal})...`);
+    try {
+      await this.pool.end();
+      logger.log('✅ Legacy DB pool closed gracefully');
+    } catch (error) {
+      logger.error('❌ Error closing legacy DB pool', error);
+    }
+  }
+}
 
 export const LegacyDbProvider: Provider = {
   provide: LEGACY_DB_TOKEN,
@@ -35,6 +56,8 @@ export const LegacyDbProvider: Provider = {
       connectionLimit: 10,
       waitForConnections: true,
       queueLimit: 0,
+      enableKeepAlive: true, // Keeps the connection alive
+      keepAliveInitialDelay: 0, // Delay before first keepalive
     });
 
     // Health check - verify we can acquire a connection
@@ -49,15 +72,7 @@ export const LegacyDbProvider: Provider = {
       throw error;
     }
 
-    // Capture pool errors to prevent process crash
-    pool.on('error', (err) => {
-      logger.error(
-        'Unexpected error on idle legacy database connection: ',
-        err,
-      );
-    });
-
-    return pool;
+    return new LegacyDbConnection(pool);
   },
   inject: [ConfigService],
 };
