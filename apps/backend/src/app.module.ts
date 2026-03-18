@@ -17,7 +17,7 @@ import { UsersModule } from './modules/users/users.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { AuditLogModule } from './modules/auditLog/auditLog.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
-import { HealthController } from './modules/health/health.controller';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
@@ -39,6 +39,7 @@ import { HealthController } from './modules/health/health.controller';
     }),
     PrismaModule,
     LegacyMysqlModule,
+    HealthModule,
     LegacyAgentesModule,
     LegacyConfigModule,
     AuthModule,
@@ -47,7 +48,6 @@ import { HealthController } from './modules/health/health.controller';
     AuditLogModule,
     TenantsModule,
   ],
-  controllers: [HealthController],
   providers: [
     {
       provide: APP_FILTER,
