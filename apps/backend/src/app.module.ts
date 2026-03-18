@@ -4,28 +4,20 @@ import { Module } from '@nestjs/common';
 import { configuration, validationSchema } from './config/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './infra/prisma/prisma.module';
-import { HealthController } from './modules/health/health.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GlobalExceptionFilter } from './shared/exceptions/security-exception.filter';
 import { GlobalAuthGuard } from './modules/auth/guards/global-auth.guard';
-import { UsersController } from './modules/users/users.controller';
-import { UsersService } from './modules/users/users.service';
-import { UsersRepository } from './modules/users/repositories/users.repository';
-import { AuthController } from './modules/auth/auth.controller';
 import { PermissionsGuard } from './modules/permissions/guards/permissions.guard';
-import { PermissionsService } from './modules/permissions/permissions.service';
-import { PermissionsRepository } from './modules/permissions/repositories/permissions.repository';
-import { PermissionsController } from './modules/permissions/permissions.controller';
-import { AuditLogController } from './modules/auditLog/auditLog.controller';
-import { AuditLogService } from './modules/auditLog/auditLog.service';
-import { AuditLogRepository } from './modules/auditLog/repositories/auditLog.repository';
-import { TenantsController } from './modules/tenants/tenants.controller';
-import { TenantsRepository } from './modules/tenants/repositories/tenants.repository';
-import { TenantsService } from './modules/tenants/tenants.service';
 import * as path from 'path';
 import { LegacyMysqlModule } from './infra/legacy-mysql/legacy-mysql.module';
 import { LegacyAgentesModule } from './modules/legacy/agentes/agentes.module';
+import { LegacyConfigModule } from './modules/legacy/config/config.module';
+import { UsersModule } from './modules/users/users.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
+import { AuditLogModule } from './modules/auditLog/auditLog.module';
+import { TenantsModule } from './modules/tenants/tenants.module';
+import { HealthController } from './modules/health/health.controller';
 
 @Module({
   imports: [
@@ -48,16 +40,14 @@ import { LegacyAgentesModule } from './modules/legacy/agentes/agentes.module';
     PrismaModule,
     LegacyMysqlModule,
     LegacyAgentesModule,
+    LegacyConfigModule,
     AuthModule,
+    UsersModule,
+    PermissionsModule,
+    AuditLogModule,
+    TenantsModule,
   ],
-  controllers: [
-    HealthController,
-    UsersController,
-    AuthController,
-    PermissionsController,
-    AuditLogController,
-    TenantsController,
-  ],
+  controllers: [HealthController],
   providers: [
     {
       provide: APP_FILTER,
@@ -71,15 +61,6 @@ import { LegacyAgentesModule } from './modules/legacy/agentes/agentes.module';
       provide: APP_GUARD,
       useClass: PermissionsGuard,
     },
-    UsersService,
-    UsersRepository,
-    PermissionsService,
-    PermissionsRepository,
-    AuditLogService,
-    AuditLogRepository,
-    TenantsService,
-    TenantsRepository,
   ],
-  exports: [UsersService],
 })
 export class AppModule {}
