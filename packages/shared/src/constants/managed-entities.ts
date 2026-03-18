@@ -6,6 +6,7 @@ export const MANAGED_ENTITIES = {
   TENANT: { tableName: "tenants", label: "Empresas" },
   EXTENDIDO: { tableName: "extendidos", label: "Extendidos" },
   AUDIT_LOG: { tableName: "audit_logs", label: "Logs de Auditoría" },
+  AGENTES: { tableName: "agentes", label: "Agentes de Venta" },
 } as const;
 
 export type ManagedEntityKey = keyof typeof MANAGED_ENTITIES;

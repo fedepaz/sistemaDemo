@@ -32,13 +32,11 @@ export const LegacyDbProvider: Provider = {
 
     const host = configService.get<string>('config.database_legacy.host');
     const port = configService.get<number>('config.database_legacy.port');
-    const user = configService.get<string>('config.database_legacy.user');
+    const user = configService.get<string>('config.database_legacy.username');
     const password = configService.get<string>(
       'config.database_legacy.password',
     );
-    const database = configService.get<string>(
-      'config.database_legacy.database',
-    );
+    const database = configService.get<string>('config.database_legacy.name');
 
     logger.log(
       `Initializing legacy database pool at ${host}:${port} as ${user}`,

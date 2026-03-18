@@ -13,18 +13,24 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const port = Number(process.env.PORT);
-  console.log('RESOLVED PORT =', port);
 
   const isProd =
     configService.get<string>('config.environment') === 'production';
-  console.log('isProd =', isProd);
 
   const corsOrigins = configService
     .get<string>('config.cors.origins', '')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
-  console.log('corsOrigins =', corsOrigins);
+  const DATABASE_PROD_URL = configService.get<string>(
+    'config.database_prod.databaseUrl',
+  );
+  const DATABASE_DEV_URL = configService.get<string>(
+    'config.database_dev.databaseUrl',
+  );
+  const DATABASE_LEGACY_URL = configService.get<string>(
+    'config.database_legacy.databaseUrl',
+  );
 
   app.enableCors({
     origin: isProd ? corsOrigins : true,
@@ -43,6 +49,15 @@ async function bootstrap() {
       environment: isProd ? 'production' : 'development',
       corsOrigins,
     });
+    if (!isProd) {
+      console.log('🔥 Backend started in development mode');
+      console.log(`📍 Target: ${DATABASE_DEV_URL}`);
+      console.log(`📍 Legacy: ${DATABASE_LEGACY_URL}`);
+    } else {
+      console.log('🔥 Backend started in production mode');
+      console.log(`📍 Target: ${DATABASE_PROD_URL}`);
+      console.log(`📍 Legacy: ${DATABASE_LEGACY_URL}`);
+    }
   } catch (error) {
     console.error('❌ BACKEND STARTUP FAILED');
     console.error(`   Error: ${error}`);

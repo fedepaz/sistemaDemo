@@ -50,6 +50,11 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Database Health**: `GET /health` with adaptive caching.
 - [x] **Detailed Status**: `GET /health/detailed` for environment and memory info.
 
+### Legacy Agentes Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `agentes` table.
+- [x] **Repository Pattern**: `AgentesRepository` using the `LegacyMysqlService`.
+- [x] **Modular Design**: Encapsulated in `LegacyAgentesModule`.
+
 ## Shared Utilities
 
 - [x] **Base Repository**: `BaseRepository<T>` for common CRUD operations.

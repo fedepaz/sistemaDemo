@@ -4,7 +4,6 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Pool, PoolConnection, RowDataPacket } from 'mysql2/promise';
 import { LEGACY_DB_TOKEN, LegacyDbConnection } from './legacy-mysql.provider';
-import { LegacyAgent, LegacyOperation } from './legacy-mysql.types';
 
 @Injectable()
 export class LegacyMysqlService {
@@ -79,48 +78,5 @@ export class LegacyMysqlService {
     } finally {
       connection.release();
     }
-  }
-
-  // Example: specific table methods (add as needed)
-  async getAgentes(): Promise<LegacyAgent[]> {
-    return this.query<LegacyAgent[]>('SELECT codigo, nombre FROM agentes');
-  }
-
-  async getOperacionByCodigo(codigo: string): Promise<LegacyOperation | null> {
-    const [rows] = await this.pool.query<LegacyOperation[]>(
-      'SELECT * FROM st_operacion WHERE codigo = ?',
-      [codigo],
-    );
-    return rows[0] ?? null;
-  }
-
-  /**
-   * Pagination helper for large datasets (200k+ entries)
-   */
-  async getOperacionesPaginated(
-    page: number,
-    limit: number,
-    filters?: Partial<{ fecha_desde: string; fecha_hasta: string }>,
-  ) {
-    const offset = (page - 1) * limit;
-    let sql = 'SELECT * FROM st_operacion';
-    const params: any[] = [];
-
-    if (filters?.fecha_desde || filters?.fecha_hasta) {
-      sql += ' WHERE 1=1';
-      if (filters.fecha_desde) {
-        sql += ' AND fecha >= ?';
-        params.push(filters.fecha_desde);
-      }
-      if (filters.fecha_hasta) {
-        sql += ' AND fecha <= ?';
-        params.push(filters.fecha_hasta);
-      }
-    }
-
-    sql += ' LIMIT ? OFFSET ?';
-    params.push(limit, offset);
-
-    return this.query(sql, params);
   }
 }
