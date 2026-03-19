@@ -151,6 +151,17 @@ The backend follows a **container-first database strategy** to ensure identical 
 3.  **Migrations**: Database migrations are handled automatically inside the container. The `prisma` package is a **production dependency** to enable the `prisma migrate deploy` command during the container's entrypoint execution.
 4.  **Local Development**: When developing locally without Docker, ensure your local environment variables point to `localhost`.
 
+### Diagnostic Modules
+
+For non-entity related features (like health monitoring), follow the same modular architecture but skip the `BaseRepository` extension if no persistent entity is involved.
+
+**Example: Health Module**
+- **Repository**: `HealthRepository` (Injects `PrismaService` or `LegacyMysqlService`).
+- **Service**: `HealthService` (Implements business logic like **Adaptive Caching**).
+- **Controller**: `HealthController` (Exposes `@Public()` diagnostic endpoints).
+
+---
+
 ### Recommended Future Modules
 
 - **Security & Performance:** `@nestjs/throttler`, `helmet`, `compression`.

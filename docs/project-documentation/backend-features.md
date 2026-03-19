@@ -47,8 +47,12 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **JSON Changes**: Storage of action metadata in JSON format.
 
 ### Health Module
-- [x] **Database Health**: `GET /health` with adaptive caching.
-- [x] **Detailed Status**: `GET /health/detailed` for environment and memory info.
+- [x] **Modular Architecture**: Refactored into a full NestJS module with dedicated `Module`, `Service`, and `Repository`.
+- [x] **Multi-Database Health**: `GET /health` checks both primary (Prisma) and Legacy databases.
+- [x] **Adaptive Caching**: Independent caching per database (30s when healthy, 10s when degraded).
+- [x] **Reliability Logic**: Consecutive failure tracking (max 3) per service before marking as disconnected.
+- [x] **Detailed Diagnostics**: Includes memory and environment metrics.
+- [x] **Repository Pattern**: `HealthRepository` abstracts health check logic for both DB connections.
 
 ### Legacy Agentes Module
 - [x] **Legacy Data Access**: Read-only integration with the legacy `agentes` table.
