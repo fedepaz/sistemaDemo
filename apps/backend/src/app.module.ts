@@ -18,6 +18,7 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { AuditLogModule } from './modules/auditLog/auditLog.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { HealthModule } from './modules/health/health.module';
+import { LegacyEspecieModule } from './modules/legacy/especie/especie.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { HealthModule } from './modules/health/health.module';
     HealthModule,
     LegacyAgentesModule,
     LegacyConfigModule,
+    LegacyEspecieModule,
     AuthModule,
     UsersModule,
     PermissionsModule,

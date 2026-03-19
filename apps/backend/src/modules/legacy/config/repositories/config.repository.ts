@@ -1,7 +1,7 @@
 // src/modules/legacy/config/repositories/config.repository.ts
 
 import { Inject, Injectable } from '@nestjs/common';
-import { LegacyMysqlService } from 'src/infra/legacy-mysql/legacy-mysql.service';
+import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
 import { LegacyConfig } from '../interfaces/config.interface';
 
 @Injectable()

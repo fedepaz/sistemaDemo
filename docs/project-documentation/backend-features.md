@@ -59,6 +59,11 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Repository Pattern**: `AgentesRepository` using the `LegacyMysqlService`.
 - [x] **Modular Design**: Encapsulated in `LegacyAgentesModule`.
 
+### Legacy Especie Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `especie` table.
+- [x] **Repository Pattern**: `EspecieRepository` using the `LegacyMysqlService`.
+- [x] **Modular Design**: Encapsulated in `LegacyEspecieModule`.
+
 ## Shared Utilities
 
 - [x] **Base Repository**: `BaseRepository<T>` for common CRUD operations.

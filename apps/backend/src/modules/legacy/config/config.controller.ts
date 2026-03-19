@@ -3,7 +3,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { LegacyConfigService } from './config.service';
 
-import { Public } from 'src/shared/decorators/public.decorator';
+import { Public } from '../../../shared/decorators/public.decorator';
 
 @Controller('l-config')
 export class LegacyConfigController {
