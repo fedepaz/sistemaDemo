@@ -64,6 +64,12 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Repository Pattern**: `EspecieRepository` using the `LegacyMysqlService`.
 - [x] **Modular Design**: Encapsulated in `LegacyEspecieModule`.
 
+### Legacy Base Module
+- [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables.
+- [x] **Repository Pattern**: `LegacyBaseRepository` with support for pagination, sorting, and filtering.
+- [x] **Data Sanitization**: Automatic trimming of legacy `char()` padding in `LegacyBaseService`.
+- [x] **Security Guard**: Strict whitelist validation for table names and safe JSON filter parsing.
+
 ## Shared Utilities
 
 - [x] **Base Repository**: `BaseRepository<T>` for common CRUD operations.
