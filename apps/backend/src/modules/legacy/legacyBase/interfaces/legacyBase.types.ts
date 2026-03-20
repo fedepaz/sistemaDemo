@@ -1,4 +1,7 @@
 // src/modules/legacy/legacyBase/interfaces/legacyBase.interface.ts
+
+import { RowDataPacket } from 'mysql2/promise';
+
 // Whitelist: ONLY these tables can be queried dynamically
 export const LEGACY_TABLE_WHITELIST = [
   'agentes',
@@ -25,4 +28,8 @@ export interface LegacyQueryOptions {
 }
 
 // Generic row type for dynamic queries
-export type LegacyRow = Record<string, any>;
+export type LegacyRow = Record<string, any> & RowDataPacket;
+
+export interface CountResult extends RowDataPacket {
+  total: number;
+}

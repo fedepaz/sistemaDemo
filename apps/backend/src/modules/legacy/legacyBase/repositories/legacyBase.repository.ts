@@ -5,12 +5,12 @@ import {
   LEGACY_DB_TOKEN,
   LegacyDbConnection,
 } from '../../../../infra/legacy-mysql/legacy-mysql.provider';
-import { RowDataPacket } from 'mysql2/promise';
 import { Inject } from '@nestjs/common';
 import {
+  CountResult,
   LegacyQueryOptions,
   LegacyRow,
-} from '../interfaces/legacyBase.interface';
+} from '../interfaces/legacyBase.types';
 
 @Injectable()
 export class LegacyBaseRepository {
@@ -23,7 +23,7 @@ export class LegacyBaseRepository {
     return this.legacyDb.getPool();
   }
 
-  async queryTable<T extends RowDataPacket = LegacyRow>(
+  async queryTable<T = LegacyRow>(
     tableName: string,
     queryOptions: LegacyQueryOptions = {},
   ): Promise<T[]> {
@@ -60,8 +60,8 @@ export class LegacyBaseRepository {
     params.push(Math.min(limit, 1000), offset);
 
     // Execute query
-    const [rows] = await this.pool.query<T[]>(sql, params);
-    return rows;
+    const [rows] = await this.pool.query(sql, params);
+    return rows as T[];
   }
 
   async queryTableCount(
@@ -80,7 +80,7 @@ export class LegacyBaseRepository {
     }
 
     // Execute query
-    const [rows] = await this.pool.query<{ total: number }[]>(sql, params);
-    return rows[0].total;
+    const [rows] = await this.pool.query<CountResult[]>(sql, params);
+    return rows[0]?.total ?? 0;
   }
 }

@@ -7,7 +7,7 @@ import {
   LegacyQueryOptions,
   LegacyRow,
   LegacyTableName,
-} from './interfaces/legacyBase.interface';
+} from './interfaces/legacyBase.types';
 
 @Injectable()
 export class LegacyBaseService {
@@ -28,13 +28,13 @@ export class LegacyBaseService {
    * Sanitize string fields from legacy char() padding
    */
   private sanitizeRow(row: LegacyRow): LegacyRow {
-    const sanitized: LegacyRow = {};
+    const sanitized: Record<string, any> = {};
     for (const [key, value] of Object.entries(row)) {
       // Trim strings, handle null/undefined
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       sanitized[key] = typeof value === 'string' ? value.trim() : value;
     }
-    return sanitized;
+    return sanitized as LegacyRow;
   }
 
   async findAll(

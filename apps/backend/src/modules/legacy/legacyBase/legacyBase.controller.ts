@@ -13,17 +13,19 @@ import { LegacyBaseService } from './legacyBase.service';
 import {
   LEGACY_TABLE_WHITELIST,
   LegacyTableName,
-} from './interfaces/legacyBase.interface';
+} from './interfaces/legacyBase.types';
+import { Public } from '../../../shared/decorators/public.decorator';
 
-@Controller('legacyBase')
+@Controller('legacy')
 export class LegacyBaseController {
   constructor(private readonly service: LegacyBaseService) {}
 
   @Get(':tablename')
+  @Public()
   async findAll(
     @Param('tablename') tableName: string,
-    @Query('page', ParseIntPipe) page = 1,
-    @Query('limit', ParseIntPipe) limit = 100,
+    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit = 100,
     @Query('orderBy') orderBy?: string,
     @Query('filter') filter?: string,
   ) {
@@ -63,6 +65,7 @@ export class LegacyBaseController {
   }
 
   @Get(':tablename/:id')
+  @Public()
   async findOne(
     @Param('tablename') tableName: string,
     @Param('id') id: string,

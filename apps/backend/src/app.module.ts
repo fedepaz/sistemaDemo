@@ -19,6 +19,7 @@ import { AuditLogModule } from './modules/auditLog/auditLog.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { HealthModule } from './modules/health/health.module';
 import { LegacyEspecieModule } from './modules/legacy/especie/especie.module';
+import { LegacyBaseModule } from './modules/legacy/legacyBase/legacyBase.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { LegacyEspecieModule } from './modules/legacy/especie/especie.module';
     PrismaModule,
     LegacyMysqlModule,
     HealthModule,
+    LegacyBaseModule,
     LegacyAgentesModule,
     LegacyConfigModule,
     LegacyEspecieModule,
