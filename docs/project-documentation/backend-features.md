@@ -9,6 +9,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Typed Configuration**: `AppConfig` with Joi validation schema.
 - [x] **Prisma Service**: Robust connection handling with retries and health checks.
 - [x] **Environment-Aware Connectivity**: Dynamic switching between `PROD_` and `DEV_` database URLs based on `BACKEND_NODE_ENV`.
+- [x] **Legacy Database Connectivity**: `LegacyMysqlModule` providing a global `LegacyMysqlService` with enhanced connection pooling (keep-alive enabled), graceful lifecycle management, and security guards for raw SQL execution.
 - [x] **Request ID Middleware**: `RequestIdMiddleware` for traceability.
 - [x] **Zod Validation Pipe**: `ZodValidationPipe` for type-safe request validation.
 
@@ -46,8 +47,28 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **JSON Changes**: Storage of action metadata in JSON format.
 
 ### Health Module
-- [x] **Database Health**: `GET /health` with adaptive caching.
-- [x] **Detailed Status**: `GET /health/detailed` for environment and memory info.
+- [x] **Modular Architecture**: Refactored into a full NestJS module with dedicated `Module`, `Service`, and `Repository`.
+- [x] **Multi-Database Health**: `GET /health` checks both primary (Prisma) and Legacy databases.
+- [x] **Adaptive Caching**: Independent caching per database (30s when healthy, 10s when degraded).
+- [x] **Reliability Logic**: Consecutive failure tracking (max 3) per service before marking as disconnected.
+- [x] **Detailed Diagnostics**: Includes memory and environment metrics.
+- [x] **Repository Pattern**: `HealthRepository` abstracts health check logic for both DB connections.
+
+### Legacy Agentes Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `agentes` table.
+- [x] **Repository Pattern**: `AgentesRepository` using the `LegacyMysqlService`.
+- [x] **Modular Design**: Encapsulated in `LegacyAgentesModule`.
+
+### Legacy Especie Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `especie` table.
+- [x] **Repository Pattern**: `EspecieRepository` using the `LegacyMysqlService`.
+- [x] **Modular Design**: Encapsulated in `LegacyEspecieModule`.
+
+### Legacy Base Module
+- [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables.
+- [x] **Repository Pattern**: `LegacyBaseRepository` with support for pagination, sorting, and filtering.
+- [x] **Data Sanitization**: Automatic trimming of legacy `char()` padding in `LegacyBaseService`.
+- [x] **Security Guard**: Strict whitelist validation for table names and safe JSON filter parsing.
 
 ## Shared Utilities
 

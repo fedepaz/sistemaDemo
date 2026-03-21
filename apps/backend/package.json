@@ -38,7 +38,6 @@
     "@nestjs/platform-express": "^11.1.11",
     "@prisma/adapter-mariadb": "^7.2.0",
     "@prisma/client": "^7.2.0",
-    "prisma": "^7.2.0",
     "@vivero/shared": "workspace:*",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -46,8 +45,10 @@
     "dotenv": "^17.2.3",
     "joi": "^18.0.2",
     "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.20.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "prisma": "^7.2.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "zod": "^3.22.3"

@@ -1,0 +1,127 @@
+// src/modules/legacy/legacyBase/interfaces/legacyBase.interface.ts
+
+import { RowDataPacket } from 'mysql2/promise';
+
+// Whitelist: ONLY these tables can be queried dynamically
+export const LEGACY_TABLE_WHITELIST = [
+  'agentes',
+  'ajustes',
+  'ajustes_stock',
+  'articulo',
+  'articulos',
+  'articulos_marcas',
+  'articulos_receta',
+  'articulo_base',
+  'articulo_formulas',
+  'articulo_hai',
+  'articulo_marcas',
+  'articulo_preparados',
+  'articulo_receta',
+  'articulo_registros',
+  'articulo_registros_partidas',
+  'articulo_tecnico',
+  'articulo_tecnico_marcas',
+  'articulo_toxicidad',
+  'camion',
+  'cg_asie',
+  'cg_asie1',
+  'cg_centr',
+  'cg_ejer',
+  'cg_plan',
+  'cheques',
+  'chofer',
+  'cierre',
+  'clientes',
+  'clientes1',
+  'clientes_texto',
+  'cli_calificacion',
+  'cli_categorias',
+  'cli_factura',
+  'cli_precios',
+  'cobro',
+  'compras',
+  'config',
+  'contenedor',
+  'contenedor_concepto',
+  'contenedor_recepcion',
+  'ctacte',
+  'ctacte3',
+  'ctacte_asociado',
+  'depositos',
+  'especie',
+  'favoritos',
+  'fondo',
+  'formas_pago',
+  'grupos_pr',
+  'ivac',
+  'ivac1',
+  'ivac3',
+  'moneda',
+  'orden_c',
+  'orden_carga',
+  'orden_carga_a',
+  'orden_carga_c',
+  'orden_carga_otros',
+  'orden_cl',
+  'orden_cl_aromaticas',
+  'orden_compra',
+  'orden_compra_c',
+  'orden_retiro',
+  'ordpag',
+  'pagos',
+  'pagos1',
+  'partidas',
+  'partidas1',
+  'partidas2',
+  'partidas3',
+  'partidas4',
+  'partidas_recorrido',
+  'pedidos',
+  'permisos',
+  'programas',
+  'provee',
+  'provincia',
+  'puntos',
+  'px_confeccion',
+  'px_flete',
+  'recibos',
+  'recibos1',
+  'recibos2',
+  'regimen',
+  'remitos',
+  'remitos1',
+  'remito_entrada',
+  'rubro',
+  'semanas',
+  'sistema',
+  'st_operacion',
+  'st_propiedad',
+  'st_sem',
+  'st_sem_item',
+  'st_sem_movim',
+  'st_sem_observ',
+  'st_tipomov',
+  'st_tratamien',
+  'tbl_temp',
+  'tiempos',
+  'tiempos_injertos',
+  'usuarios',
+  'zonas',
+] as const;
+
+export type LegacyTableName = (typeof LEGACY_TABLE_WHITELIST)[number];
+
+export interface LegacyQueryOptions {
+  select?: string[]; // Columns to return (default: ['*'])
+  where?: Record<string, any>; // Filters (parameterized)
+  orderBy?: string; // e.g., 'nombre ASC'
+  limit?: number; // Max rows (default: 100, max: 1000)
+  offset?: number; // For pagination
+}
+
+// Generic row type for dynamic queries
+export type LegacyRow = Record<string, any> & RowDataPacket;
+
+export interface CountResult extends RowDataPacket {
+  total: number;
+}
