@@ -20,6 +20,7 @@ import { TenantsModule } from './modules/tenants/tenants.module';
 import { HealthModule } from './modules/health/health.module';
 import { LegacyEspecieModule } from './modules/legacy/especie/especie.module';
 import { LegacyBaseModule } from './modules/legacy/legacyBase/legacyBase.module';
+import { LegacyProgramasModule } from './modules/legacy/programas/programas.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { LegacyBaseModule } from './modules/legacy/legacyBase/legacyBase.module'
     LegacyAgentesModule,
     LegacyConfigModule,
     LegacyEspecieModule,
+    LegacyProgramasModule,
     AuthModule,
     UsersModule,
     PermissionsModule,
