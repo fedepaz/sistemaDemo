@@ -769,6 +769,7 @@ export const UserPermissionScalarFieldEnum = {
   canUpdate: 'canUpdate',
   canDelete: 'canDelete',
   scope: 'scope',
+  permissionType: 'permissionType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedByUserId: 'deletedByUserId',
@@ -924,6 +925,13 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'PermissionScope'
  */
 export type EnumPermissionScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PermissionScope'>
+    
+
+
+/**
+ * Reference to a field of type 'PermissionType'
+ */
+export type EnumPermissionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PermissionType'>
     
 
 

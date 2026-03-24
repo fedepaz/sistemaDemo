@@ -25,6 +25,7 @@ export class PermissionsRepository implements IPermissionRepository {
         canUpdate: true,
         canDelete: true,
         scope: true,
+        permissionType: true,
       },
     });
 
@@ -40,6 +41,7 @@ export class PermissionsRepository implements IPermissionRepository {
       canUpdate: boolean;
       canDelete: boolean;
       scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void> {
     await this.prisma.userPermission.upsert({
@@ -52,6 +54,7 @@ export class PermissionsRepository implements IPermissionRepository {
         canUpdate: data.canUpdate ?? false,
         canDelete: data.canDelete ?? false,
         scope: data.scope ?? 'NONE',
+        permissionType: data.permissionType ?? 'CRUD',
       },
       update: data,
     });

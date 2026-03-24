@@ -5,6 +5,9 @@ import { ALLOWED_TABLE_NAMES } from "../constants/managed-entities";
 export const PermissionScopeSchema = z.enum(["NONE", "OWN", "ALL"]);
 export type PermissionScope = z.infer<typeof PermissionScopeSchema>;
 
+export const PermissionTypeSchema = z.enum(["CRUD", "PROCESS", "READ_ONLY"]);
+export type PermissionType = z.infer<typeof PermissionTypeSchema>;
+
 export const CrudActionSchema = z.enum(["create", "read", "update", "delete"]);
 export type CrudAction = z.infer<typeof CrudActionSchema>;
 
@@ -14,6 +17,7 @@ export const TablePermissionSchema = z.object({
   canUpdate: z.boolean(),
   canDelete: z.boolean(),
   scope: PermissionScopeSchema,
+  permissionType: PermissionTypeSchema,
 });
 
 export type TablePermission = z.infer<typeof TablePermissionSchema>;

@@ -1,7 +1,11 @@
 // prisma/seed-users.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
+import {
+  PermissionScope,
+  PermissionType,
+  PrismaClient,
+} from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -85,8 +89,13 @@ async function main() {
           tableName: 'users',
           canRead: true,
           scope: 'OWN',
+          permissionType: PermissionType.CRUD,
         },
-        update: { canRead: true, scope: 'OWN' },
+        update: {
+          canRead: true,
+          scope: 'OWN',
+          permissionType: PermissionType.CRUD,
+        },
       });
     } else {
       for (const perm of user01permissions) {
@@ -105,6 +114,7 @@ async function main() {
             canUpdate: perm.crud.update,
             canDelete: perm.crud.delete,
             scope: perm.scope,
+            permissionType: PermissionType.CRUD,
           },
           update: {
             canCreate: perm.crud.create,
@@ -112,6 +122,7 @@ async function main() {
             canUpdate: perm.crud.update,
             canDelete: perm.crud.delete,
             scope: perm.scope,
+            permissionType: PermissionType.CRUD,
           },
         });
       }

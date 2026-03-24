@@ -11,6 +11,7 @@ export interface IPermissionRepository {
       canUpdate: boolean;
       canDelete: boolean;
       scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void>;
   deleteByUserIdTableName(userId: string, tableName: string): Promise<void>;
@@ -24,4 +25,5 @@ export interface UserPermissionRecord {
   canUpdate: boolean;
   canDelete: boolean;
   scope: 'NONE' | 'OWN' | 'ALL';
+  permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
 }

@@ -6,6 +6,7 @@ import {
   UserPermissions,
   ALLOWED_TABLE_NAMES,
   ManagedTableName,
+  PermissionType,
 } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
 
@@ -53,6 +54,7 @@ export class PermissionsService {
         canUpdate: r.canUpdate,
         canDelete: r.canDelete,
         scope: r.scope,
+        permissionType: r.permissionType,
       };
     }
     return map;
@@ -68,6 +70,18 @@ export class PermissionsService {
     const tablePerm = perms[check.tableName];
 
     if (!tablePerm) return false;
+
+    // Enforcement based on PermissionType
+    if (tablePerm.permissionType === 'READ_ONLY' && check.action !== 'read') {
+      return false;
+    }
+
+    if (tablePerm.permissionType === 'PROCESS' && check.action !== 'create') {
+      // Assuming 'create' maps to 'execute/generate' for processes
+      // and 'read' might be allowed if there is a log or result to see.
+      if (check.action !== 'read') return false;
+    }
+
     const actionKey =
       `can${check.action.charAt(0).toUpperCase() + check.action.slice(1)}` as const;
 
@@ -121,6 +135,7 @@ export class PermissionsService {
       canUpdate?: boolean;
       canDelete?: boolean;
       scope?: 'NONE' | 'OWN' | 'ALL';
+      permissionType?: PermissionType;
     },
   ): Promise<void> {
     this.validateTableName(tableName);
@@ -149,6 +164,7 @@ export class PermissionsService {
       canUpdate: boolean;
       canDelete: boolean;
       scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void> {
     // Validate tables names
@@ -187,6 +203,7 @@ export class PermissionsService {
           canUpdate: p.canUpdate,
           canDelete: p.canDelete,
           scope: p.scope,
+          permissionType: p.permissionType,
         }),
       ),
     );

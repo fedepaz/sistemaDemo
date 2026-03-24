@@ -273,6 +273,19 @@ Data Protection:
   - Secure file upload
 ```
 
+#### Permission Types & Enforcement
+
+The permission system supports distinct **Permission Types** defined in `MANAGED_ENTITIES` to enforce business logic constraints:
+
+- **CRUD**: Standard Create, Read, Update, Delete access.
+- **READ_ONLY**: Strictly limits access to `read` actions only. Useful for reference data (e.g., `agentes`, `tenants`).
+- **PROCESS**: Specialized for executable actions. Maps `create` permission to process execution.
+
+**Enforcement Logic:**
+The `PermissionsService` validates the requested action against the entity's `permissionType`:
+- If `permissionType` is `READ_ONLY`, only `read` actions are allowed.
+- If `permissionType` is `PROCESS`, logic typically restricts to `create` (execution) or `read` (logs).
+
 #### Access Control with `@RequirePermission` Decorator
 
 Use the `@RequirePermission` decorator for fine-grained access control on controller endpoints.

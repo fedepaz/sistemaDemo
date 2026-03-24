@@ -10,7 +10,11 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { PermissionScope, TablePermission } from "@vivero/shared";
+import {
+  PermissionScope,
+  PermissionType,
+  TablePermission,
+} from "@vivero/shared";
 import { Shield } from "lucide-react";
 import { memo } from "react";
 import {
@@ -51,21 +55,35 @@ export const PermissionRowItem = memo(function PermissionRowItem({
     row.canDelete !== originalRow.canDelete ||
     row.scope !== originalRow.scope;
 
-  const activeCrudCount = [
-    row.canRead,
-    row.canCreate,
-    row.canUpdate,
-    row.canDelete,
-  ].filter(Boolean).length;
+  const allowedActions: Record<
+    PermissionType,
+    Array<"canCreate" | "canRead" | "canUpdate" | "canDelete">
+  > = {
+    CRUD: ["canCreate", "canRead", "canUpdate", "canDelete"],
+    PROCESS: ["canRead", "canCreate"], // create = execute
+    READ_ONLY: ["canRead"],
+  };
 
   const dataTablePermissions = usePermission("user_permissions");
 
   const canEdit = dataTablePermissions.canUpdate;
 
+  const visibleColumns = CRUD_COLUMNS.filter((col) =>
+    allowedActions[row.permissionType].includes(col.key),
+  );
+
+  const activeCrudCount = visibleColumns.filter((col) => row[col.key]).length;
+  const totalCrudCount = visibleColumns.length;
+  const typeStyles = {
+    READ_ONLY: "border-l-4 border-l-sky-400/40",
+    PROCESS: "border-l-4 border-l-amber-400/40",
+    CRUD: "border-l-4 border-l-emerald-400/40",
+  };
   return (
     <div
       className={cn(
         "group relative flex flex-col gap-6 rounded-xl border p-5 transition-all lg:flex-row lg:items-center lg:gap-4",
+        typeStyles[row.permissionType],
         isDirty
           ? "border-primary/40 bg-primary/[0.04] shadow-sm"
           : "border-border/50 bg-muted/30 hover:bg-muted/50",
@@ -93,7 +111,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
 
       {/* CRUD switches or Status View */}
       <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 lg:flex lg:flex-1 lg:items-center lg:gap-8 lg:px-4">
-        {CRUD_COLUMNS.map((col) => {
+        {visibleColumns.map((col) => {
           const isActive = row[col.key];
           const wasChanged = row[col.key] !== originalRow[col.key];
 
@@ -292,7 +310,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
               : "",
           )}
         >
-          {activeCrudCount}/4
+          {activeCrudCount}/{totalCrudCount}
         </Badge>
       </div>
     </div>

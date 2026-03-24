@@ -1,7 +1,11 @@
 // prisma/seed-admin.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
+import {
+  PermissionScope,
+  PermissionType,
+  PrismaClient,
+} from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -86,8 +90,9 @@ async function main() {
     },
     {
       table: 'audit_logs',
-      crud: { create: true, read: true, update: true, delete: true },
+      crud: { create: false, read: true, update: false, delete: false },
       scope: PermissionScope.ALL,
+      type: PermissionType.READ_ONLY,
     },
     {
       table: 'messages',
@@ -143,6 +148,7 @@ async function main() {
         canUpdate: perm.crud.update,
         canDelete: perm.crud.delete,
         scope: perm.scope,
+        permissionType: (perm as any).type ?? PermissionType.CRUD,
       },
       update: {
         canCreate: perm.crud.create,
@@ -150,6 +156,7 @@ async function main() {
         canUpdate: perm.crud.update,
         canDelete: perm.crud.delete,
         scope: perm.scope,
+        permissionType: (perm as any).type ?? PermissionType.CRUD,
       },
     });
     console.log(`Granted permissions for ${perm.table} (${perm.scope})`);

@@ -14,6 +14,9 @@ model UserPermission {
   // Row-level scope
   scope      PermissionScope @default(NONE)
   
+  // Permission type (CRUD, PROCESS, READ_ONLY)
+  permissionType PermissionType @default(CRUD)
+  
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -32,4 +35,10 @@ enum PermissionScope {
   NONE // No access
   OWN  // Only records created by this user
   ALL  // All records in the table
+}
+
+enum PermissionType {
+  CRUD
+  PROCESS
+  READ_ONLY
 }

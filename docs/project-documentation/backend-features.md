@@ -32,7 +32,8 @@ This document lists all the modules, services, and core functionalities implemen
 
 ### Permissions Module
 - [x] **Permissions Guard**: `PermissionsGuard` + `@RequirePermission()` decorator.
-- [x] **Resource-Level Security**: Validation against `ALLOWED_TABLES`.
+- [x] **Permission Types**: Support for `CRUD`, `READ_ONLY`, and `PROCESS` types to constrain allowable actions.
+- [x] **Resource-Level Security**: Validation against `ALLOWED_TABLES` in `MANAGED_ENTITIES`.
 - [x] **CRUD & Scope Check**: Logic for `canCreate`, `canRead`, etc., and `OWN` vs `ALL` scopes.
 - [x] **Admin Management**: `PATCH /user/:userId` to update permissions.
 

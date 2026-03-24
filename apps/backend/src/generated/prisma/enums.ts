@@ -40,3 +40,12 @@ export const PermissionScope = {
 } as const
 
 export type PermissionScope = (typeof PermissionScope)[keyof typeof PermissionScope]
+
+
+export const PermissionType = {
+  CRUD: 'CRUD',
+  PROCESS: 'PROCESS',
+  READ_ONLY: 'READ_ONLY'
+} as const
+
+export type PermissionType = (typeof PermissionType)[keyof typeof PermissionType]

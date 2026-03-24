@@ -35,6 +35,8 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
   const { data: userPermissions = {} } = useUserPermissions(userId);
   const { mutate: savePermissions, isPending: isSaving } =
     useSetUserPermissions();
+  console.log(userPermissions);
+  console.log(tables);
 
   const dataTablePermissions = usePermission("user_permissions");
   const canEdit = dataTablePermissions.canUpdate;
@@ -53,6 +55,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
         canUpdate: false,
         canDelete: false,
         scope: "NONE" as const,
+        permissionType: "CRUD" as const,
       };
 
       return {
@@ -91,6 +94,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
             canUpdate: false,
             canDelete: false,
             scope: "NONE" as const,
+            permissionType: "CRUD" as const,
           } as TablePermission);
 
         const next = { ...current, [key]: !current[key] };
@@ -115,6 +119,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
             canUpdate: false,
             canDelete: false,
             scope: "NONE" as const,
+            permissionType: "CRUD" as const,
           } as TablePermission);
 
         return { ...prev, [tableName]: { ...current, scope } };
@@ -143,15 +148,23 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
 
   // Filter rows by search
   const filteredRows = useMemo(() => {
+    const TYPE_ORDER: Record<string, number> = {
+      READ_ONLY: 0,
+      PROCESS: 1,
+      CRUD: 2,
+    };
     if (!searchQuery.trim()) return localPermissions;
     const q = searchQuery.toLowerCase();
-    return localPermissions.filter((row) => {
+    const rows = localPermissions.filter((row) => {
       const meta = getTableMeta(row.tableName);
       return (
         meta.label.toLowerCase().includes(q) ||
         row.tableName.toLowerCase().includes(q)
       );
     });
+    return rows.sort(
+      (a, b) => TYPE_ORDER[a.permissionType] - TYPE_ORDER[b.permissionType],
+    );
   }, [localPermissions, searchQuery]);
 
   return (
@@ -210,6 +223,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
                       canUpdate: false,
                       canDelete: false,
                       scope: "NONE" as const,
+                      permissionType: "CRUD" as const,
                     };
                     return (
                       <PermissionRowItem

@@ -132,6 +132,7 @@ export const UserPermissionScalarFieldEnum = {
   canUpdate: 'canUpdate',
   canDelete: 'canDelete',
   scope: 'scope',
+  permissionType: 'permissionType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedByUserId: 'deletedByUserId',

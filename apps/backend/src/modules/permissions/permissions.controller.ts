@@ -52,6 +52,7 @@ export class PermissionsController {
       canUpdate: boolean;
       canDelete: boolean;
       scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<{ success: boolean }> {
     await this.permissionsService.setPermissionsForUser(userId, permissions);

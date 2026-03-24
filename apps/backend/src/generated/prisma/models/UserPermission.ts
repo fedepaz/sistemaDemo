@@ -32,6 +32,7 @@ export type UserPermissionMinAggregateOutputType = {
   canUpdate: boolean | null
   canDelete: boolean | null
   scope: $Enums.PermissionScope | null
+  permissionType: $Enums.PermissionType | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedByUserId: string | null
@@ -47,6 +48,7 @@ export type UserPermissionMaxAggregateOutputType = {
   canUpdate: boolean | null
   canDelete: boolean | null
   scope: $Enums.PermissionScope | null
+  permissionType: $Enums.PermissionType | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedByUserId: string | null
@@ -62,6 +64,7 @@ export type UserPermissionCountAggregateOutputType = {
   canUpdate: number
   canDelete: number
   scope: number
+  permissionType: number
   createdAt: number
   updatedAt: number
   deletedByUserId: number
@@ -79,6 +82,7 @@ export type UserPermissionMinAggregateInputType = {
   canUpdate?: true
   canDelete?: true
   scope?: true
+  permissionType?: true
   createdAt?: true
   updatedAt?: true
   deletedByUserId?: true
@@ -94,6 +98,7 @@ export type UserPermissionMaxAggregateInputType = {
   canUpdate?: true
   canDelete?: true
   scope?: true
+  permissionType?: true
   createdAt?: true
   updatedAt?: true
   deletedByUserId?: true
@@ -109,6 +114,7 @@ export type UserPermissionCountAggregateInputType = {
   canUpdate?: true
   canDelete?: true
   scope?: true
+  permissionType?: true
   createdAt?: true
   updatedAt?: true
   deletedByUserId?: true
@@ -197,6 +203,7 @@ export type UserPermissionGroupByOutputType = {
   canUpdate: boolean
   canDelete: boolean
   scope: $Enums.PermissionScope
+  permissionType: $Enums.PermissionType
   createdAt: Date
   updatedAt: Date
   deletedByUserId: string | null
@@ -233,6 +240,7 @@ export type UserPermissionWhereInput = {
   canUpdate?: Prisma.BoolFilter<"UserPermission"> | boolean
   canDelete?: Prisma.BoolFilter<"UserPermission"> | boolean
   scope?: Prisma.EnumPermissionScopeFilter<"UserPermission"> | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFilter<"UserPermission"> | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   deletedByUserId?: Prisma.StringNullableFilter<"UserPermission"> | string | null
@@ -249,6 +257,7 @@ export type UserPermissionOrderByWithRelationInput = {
   canUpdate?: Prisma.SortOrder
   canDelete?: Prisma.SortOrder
   scope?: Prisma.SortOrder
+  permissionType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -270,6 +279,7 @@ export type UserPermissionWhereUniqueInput = Prisma.AtLeast<{
   canUpdate?: Prisma.BoolFilter<"UserPermission"> | boolean
   canDelete?: Prisma.BoolFilter<"UserPermission"> | boolean
   scope?: Prisma.EnumPermissionScopeFilter<"UserPermission"> | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFilter<"UserPermission"> | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   deletedByUserId?: Prisma.StringNullableFilter<"UserPermission"> | string | null
@@ -286,6 +296,7 @@ export type UserPermissionOrderByWithAggregationInput = {
   canUpdate?: Prisma.SortOrder
   canDelete?: Prisma.SortOrder
   scope?: Prisma.SortOrder
+  permissionType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -307,6 +318,7 @@ export type UserPermissionScalarWhereWithAggregatesInput = {
   canUpdate?: Prisma.BoolWithAggregatesFilter<"UserPermission"> | boolean
   canDelete?: Prisma.BoolWithAggregatesFilter<"UserPermission"> | boolean
   scope?: Prisma.EnumPermissionScopeWithAggregatesFilter<"UserPermission"> | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeWithAggregatesFilter<"UserPermission"> | $Enums.PermissionType
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserPermission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserPermission"> | Date | string
   deletedByUserId?: Prisma.StringNullableWithAggregatesFilter<"UserPermission"> | string | null
@@ -322,6 +334,7 @@ export type UserPermissionCreateInput = {
   canUpdate?: boolean
   canDelete?: boolean
   scope?: $Enums.PermissionScope
+  permissionType?: $Enums.PermissionType
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -337,6 +350,7 @@ export type UserPermissionUncheckedCreateInput = {
   canUpdate?: boolean
   canDelete?: boolean
   scope?: $Enums.PermissionScope
+  permissionType?: $Enums.PermissionType
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedByUserId?: string | null
@@ -352,6 +366,7 @@ export type UserPermissionUpdateInput = {
   canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -367,6 +382,7 @@ export type UserPermissionUncheckedUpdateInput = {
   canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -382,6 +398,7 @@ export type UserPermissionCreateManyInput = {
   canUpdate?: boolean
   canDelete?: boolean
   scope?: $Enums.PermissionScope
+  permissionType?: $Enums.PermissionType
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedByUserId?: string | null
@@ -397,6 +414,7 @@ export type UserPermissionUpdateManyMutationInput = {
   canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -411,6 +429,7 @@ export type UserPermissionUncheckedUpdateManyInput = {
   canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -447,6 +466,7 @@ export type UserPermissionCountOrderByAggregateInput = {
   canUpdate?: Prisma.SortOrder
   canDelete?: Prisma.SortOrder
   scope?: Prisma.SortOrder
+  permissionType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedByUserId?: Prisma.SortOrder
@@ -462,6 +482,7 @@ export type UserPermissionMaxOrderByAggregateInput = {
   canUpdate?: Prisma.SortOrder
   canDelete?: Prisma.SortOrder
   scope?: Prisma.SortOrder
+  permissionType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedByUserId?: Prisma.SortOrder
@@ -477,6 +498,7 @@ export type UserPermissionMinOrderByAggregateInput = {
   canUpdate?: Prisma.SortOrder
   canDelete?: Prisma.SortOrder
   scope?: Prisma.SortOrder
+  permissionType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedByUserId?: Prisma.SortOrder
@@ -529,6 +551,10 @@ export type EnumPermissionScopeFieldUpdateOperationsInput = {
   set?: $Enums.PermissionScope
 }
 
+export type EnumPermissionTypeFieldUpdateOperationsInput = {
+  set?: $Enums.PermissionType
+}
+
 export type UserPermissionCreateWithoutDeletedByUserInput = {
   id?: string
   userId: string
@@ -538,6 +564,7 @@ export type UserPermissionCreateWithoutDeletedByUserInput = {
   canUpdate?: boolean
   canDelete?: boolean
   scope?: $Enums.PermissionScope
+  permissionType?: $Enums.PermissionType
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -552,6 +579,7 @@ export type UserPermissionUncheckedCreateWithoutDeletedByUserInput = {
   canUpdate?: boolean
   canDelete?: boolean
   scope?: $Enums.PermissionScope
+  permissionType?: $Enums.PermissionType
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -595,6 +623,7 @@ export type UserPermissionScalarWhereInput = {
   canUpdate?: Prisma.BoolFilter<"UserPermission"> | boolean
   canDelete?: Prisma.BoolFilter<"UserPermission"> | boolean
   scope?: Prisma.EnumPermissionScopeFilter<"UserPermission"> | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFilter<"UserPermission"> | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UserPermission"> | Date | string
   deletedByUserId?: Prisma.StringNullableFilter<"UserPermission"> | string | null
@@ -610,6 +639,7 @@ export type UserPermissionCreateManyDeletedByUserInput = {
   canUpdate?: boolean
   canDelete?: boolean
   scope?: $Enums.PermissionScope
+  permissionType?: $Enums.PermissionType
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -624,6 +654,7 @@ export type UserPermissionUpdateWithoutDeletedByUserInput = {
   canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -638,6 +669,7 @@ export type UserPermissionUncheckedUpdateWithoutDeletedByUserInput = {
   canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -652,6 +684,7 @@ export type UserPermissionUncheckedUpdateManyWithoutDeletedByUserInput = {
   canUpdate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   canDelete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scope?: Prisma.EnumPermissionScopeFieldUpdateOperationsInput | $Enums.PermissionScope
+  permissionType?: Prisma.EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -668,6 +701,7 @@ export type UserPermissionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   canUpdate?: boolean
   canDelete?: boolean
   scope?: boolean
+  permissionType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedByUserId?: boolean
@@ -686,13 +720,14 @@ export type UserPermissionSelectScalar = {
   canUpdate?: boolean
   canDelete?: boolean
   scope?: boolean
+  permissionType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedByUserId?: boolean
   deletedAt?: boolean
 }
 
-export type UserPermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "tableName" | "canCreate" | "canRead" | "canUpdate" | "canDelete" | "scope" | "createdAt" | "updatedAt" | "deletedByUserId" | "deletedAt", ExtArgs["result"]["userPermission"]>
+export type UserPermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "tableName" | "canCreate" | "canRead" | "canUpdate" | "canDelete" | "scope" | "permissionType" | "createdAt" | "updatedAt" | "deletedByUserId" | "deletedAt", ExtArgs["result"]["userPermission"]>
 export type UserPermissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   deletedByUser?: boolean | Prisma.UserPermission$deletedByUserArgs<ExtArgs>
 }
@@ -711,6 +746,7 @@ export type $UserPermissionPayload<ExtArgs extends runtime.Types.Extensions.Inte
     canUpdate: boolean
     canDelete: boolean
     scope: $Enums.PermissionScope
+    permissionType: $Enums.PermissionType
     createdAt: Date
     updatedAt: Date
     deletedByUserId: string | null
@@ -1093,6 +1129,7 @@ export interface UserPermissionFieldRefs {
   readonly canUpdate: Prisma.FieldRef<"UserPermission", 'Boolean'>
   readonly canDelete: Prisma.FieldRef<"UserPermission", 'Boolean'>
   readonly scope: Prisma.FieldRef<"UserPermission", 'PermissionScope'>
+  readonly permissionType: Prisma.FieldRef<"UserPermission", 'PermissionType'>
   readonly createdAt: Prisma.FieldRef<"UserPermission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserPermission", 'DateTime'>
   readonly deletedByUserId: Prisma.FieldRef<"UserPermission", 'String'>
