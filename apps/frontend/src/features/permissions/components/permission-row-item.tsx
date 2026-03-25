@@ -26,6 +26,7 @@ import { usePermission } from "@/hooks/usePermission";
 
 export type PermissionRow = {
   tableName: string;
+  label: string;
 } & TablePermission;
 
 export const PermissionRowItem = memo(function PermissionRowItem({
@@ -45,8 +46,10 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   ) => void;
   onScopeChange: (tableName: string, scope: PermissionScope) => void;
 }) {
-  const meta = getTableMeta(row.tableName);
-  const Icon = meta.icon;
+  console.log("row", row);
+  console.log("originalRow", originalRow);
+
+  const Icon = getTableMeta(row.tableName).icon;
 
   const isDirty =
     row.canCreate !== originalRow.canCreate ||
@@ -74,19 +77,19 @@ export const PermissionRowItem = memo(function PermissionRowItem({
 
   const activeCrudCount = visibleColumns.filter((col) => row[col.key]).length;
   const totalCrudCount = visibleColumns.length;
-  const typeStyles = {
-    READ_ONLY: "border-l-4 border-l-sky-400/40",
-    PROCESS: "border-l-4 border-l-amber-400/40",
-    CRUD: "border-l-4 border-l-emerald-400/40",
-  };
+
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-6 rounded-xl border p-5 transition-all lg:flex-row lg:items-center lg:gap-4",
-        typeStyles[row.permissionType],
+        "group relative flex flex-col gap-6 rounded-xl border-l-4 p-5 transition-all lg:flex-row lg:items-center lg:gap-4",
         isDirty
           ? "border-primary/40 bg-primary/[0.04] shadow-sm"
           : "border-border/50 bg-muted/30 hover:bg-muted/50",
+        !isDirty && {
+          READ_ONLY: "border-l-sky-400/60",
+          PROCESS: "border-l-amber-400/60",
+          CRUD: "border-l-emerald-400/60",
+        }[row.permissionType],
       )}
     >
       {/* Dirty indicator */}
@@ -101,7 +104,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
         </div>
         <div className="flex flex-col gap-0.5 min-w-0">
           <span className="text-sm font-semibold text-foreground truncate">
-            {meta.label}
+            {row.label}
           </span>
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70">
             {row.tableName}
@@ -269,7 +272,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                     scope === "NONE" &&
                       "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
                   )}
-                  aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${meta.label}`}
+                  aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${row.label}`}
                 >
                   <Tooltip>
                     <TooltipTrigger asChild>

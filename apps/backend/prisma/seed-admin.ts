@@ -1,11 +1,7 @@
 // prisma/seed-admin.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import {
-  PermissionScope,
-  PermissionType,
-  PrismaClient,
-} from '../src/generated/prisma/client';
+import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -60,6 +56,8 @@ async function main() {
     console.log('✅ Default tenant created');
   }
 
+  const existingEntities = await prisma.entity.findMany();
+
   // Create admin user + full permissions
   const admin = await prisma.user.upsert({
     where: { username: 'admin' },
@@ -76,90 +74,43 @@ async function main() {
   });
 
   // Define permissions for the admin user
-  const adminPermissions = [
-    // Core admin tables - full access
-    {
-      table: 'tenants',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'users',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'audit_logs',
-      crud: { create: false, read: true, update: false, delete: false },
-      scope: PermissionScope.ALL,
-      type: PermissionType.READ_ONLY,
-    },
-    {
-      table: 'messages',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'enums',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'clients',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'invoices',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'plants',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'purchase_orders',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'user_permissions',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-  ];
+  const adminPermissions = existingEntities.map((e) => ({
+    entityId: e.id,
+    label: e.label,
+    permissionType: e.permissionType,
+  }));
 
   // Upsert permissions for the admin user
   for (const perm of adminPermissions) {
     await prisma.userPermission.upsert({
       where: {
-        userId_tableName: {
+        userId_entityId: {
           userId: admin.id,
-          tableName: perm.table,
+          entityId: perm.entityId,
         },
       },
       create: {
         userId: admin.id,
-        tableName: perm.table,
-        canCreate: perm.crud.create,
-        canRead: perm.crud.read,
-        canUpdate: perm.crud.update,
-        canDelete: perm.crud.delete,
-        scope: perm.scope,
-        permissionType: (perm as any).type ?? PermissionType.CRUD,
+        entityId: perm.entityId,
+        canCreate: true,
+        canRead: true,
+        canUpdate: true,
+        canDelete: true,
+        scope: PermissionScope.ALL,
+        permissionType: perm.permissionType,
       },
       update: {
-        canCreate: perm.crud.create,
-        canRead: perm.crud.read,
-        canUpdate: perm.crud.update,
-        canDelete: perm.crud.delete,
-        scope: perm.scope,
-        permissionType: (perm as any).type ?? PermissionType.CRUD,
+        canCreate: true,
+        canRead: true,
+        canUpdate: true,
+        canDelete: true,
+        scope: PermissionScope.ALL,
+        permissionType: perm.permissionType,
       },
     });
-    console.log(`Granted permissions for ${perm.table} (${perm.scope})`);
+    console.log(
+      `Granted permissions for ${perm.label} (${perm.permissionType})`,
+    );
   }
 
   console.log('✅ Admin permissions granted');

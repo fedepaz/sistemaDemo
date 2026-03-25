@@ -19,12 +19,15 @@ model User {
   
   deletedByUserId String? 
   deletedByUser User? @relation("deleted_users", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
   deletedPermissions UserPermission[] @relation("deleted_user_permissions")
-
+  deletedEntities Entity[] @relation("deleted_entities")
   deletedUsers User[] @relation("deleted_users")
+  
   deletedAt DateTime? @db.Timestamp(0)
 
   @@index([tenantId, deletedAt])
   @@index([username])
+  @@index([deletedByUserId])
   @@map("users")
 }

@@ -19,7 +19,12 @@ export class PermissionsRepository implements IPermissionRepository {
       },
       select: {
         userId: true,
-        tableName: true,
+        entityId: true,
+        entity: {
+          select: {
+            name: true,
+          },
+        },
         canCreate: true,
         canRead: true,
         canUpdate: true,
@@ -29,12 +34,15 @@ export class PermissionsRepository implements IPermissionRepository {
       },
     });
 
-    return records as UserPermissionRecord[];
+    return records.map((r) => ({
+      ...r,
+      entityName: r.entity.name,
+    }));
   }
 
   async upsert(
     userId: string,
-    tableName: string,
+    entityId: string,
     data: Partial<{
       canCreate: boolean;
       canRead: boolean;
@@ -45,10 +53,10 @@ export class PermissionsRepository implements IPermissionRepository {
     }>,
   ): Promise<void> {
     await this.prisma.userPermission.upsert({
-      where: { userId_tableName: { userId, tableName } },
+      where: { userId_entityId: { userId, entityId } },
       create: {
         userId,
-        tableName,
+        entityId,
         canCreate: data.canCreate ?? false,
         canRead: data.canRead ?? false,
         canUpdate: data.canUpdate ?? false,
@@ -62,10 +70,10 @@ export class PermissionsRepository implements IPermissionRepository {
 
   async deleteByUserIdTableName(
     userId: string,
-    tableName: string,
+    entityId: string,
   ): Promise<void> {
     await this.prisma.userPermission.delete({
-      where: { userId_tableName: { userId, tableName } },
+      where: { userId_entityId: { userId, entityId } },
     });
   }
 }

@@ -4,7 +4,7 @@ export interface IPermissionRepository {
   findManyByUserId(userId: string): Promise<UserPermissionRecord[]>;
   upsert(
     userId: string,
-    tableName: string,
+    entityId: string,
     data: Partial<{
       canCreate: boolean;
       canRead: boolean;
@@ -19,7 +19,8 @@ export interface IPermissionRepository {
 
 export interface UserPermissionRecord {
   userId: string;
-  tableName: string;
+  entityId: string;
+  entityName: string;
   canCreate: boolean;
   canRead: boolean;
   canUpdate: boolean;

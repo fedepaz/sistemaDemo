@@ -41,7 +41,11 @@ export class PermissionsController {
 
   /* PATCH grant permission to a user */
   @Patch('user/:userId')
-  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
+  @RequirePermission({
+    tableName: 'user_permissions',
+    action: 'update',
+    scope: 'ALL',
+  })
   async setUserPermissions(
     @Param('userId') userId: string,
     @Body('permissions')

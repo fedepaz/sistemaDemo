@@ -1,14 +1,18 @@
 // src/permissions/permissions.service.ts
 
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import {
   PermissionCheck,
   UserPermissions,
-  ALLOWED_TABLE_NAMES,
-  ManagedTableName,
   PermissionType,
+  Entity,
 } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
+import { EntitiesRepository } from './repositories/entities.repository';
 
 type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
 
@@ -17,26 +21,24 @@ export class PermissionsService {
   // Allowed table names = SQL table names from @@map
   private readonly logger = new Logger(PermissionsService.name);
 
-  private isAllowedTable(tableName: string): tableName is ManagedTableName {
-    return (ALLOWED_TABLE_NAMES as readonly string[]).includes(tableName);
-  }
-  constructor(private permissionsRepo: PermissionsRepository) {}
-
-  /**
-   * Validate table name
-   */
-  validateTableName(tableName: string): asserts tableName is ManagedTableName {
-    if (!this.isAllowedTable(tableName)) {
-      this.logger.warn(`Invalid table name: ${tableName}`);
-      throw new BadRequestException(`Invalid table name: ${tableName}`);
-    }
-  }
+  constructor(
+    private permissionsRepo: PermissionsRepository,
+    private entitiesRepo: EntitiesRepository,
+  ) {}
 
   /**
    * Get all tables
    */
-  getAllTables(): string[] {
-    return [...ALLOWED_TABLE_NAMES];
+  async getAllTables(): Promise<Entity[]> {
+    const entities = await this.entitiesRepo.findAllAdmin();
+    if (!entities) {
+      throw new InternalServerErrorException('Error getting tables');
+    }
+    return entities.map((e) => ({
+      name: e.name,
+      label: e.label,
+      permissionType: e.permissionType,
+    }));
   }
 
   /**
@@ -48,7 +50,7 @@ export class PermissionsService {
 
     const map: UserPermissions = {};
     for (const r of records) {
-      map[r.tableName] = {
+      map[r.entityName] = {
         canCreate: r.canCreate,
         canRead: r.canRead,
         canUpdate: r.canUpdate,
@@ -64,8 +66,6 @@ export class PermissionsService {
    * Check if user can perform action on table
    */
   async canPerform(userId: string, check: PermissionCheck): Promise<boolean> {
-    this.validateTableName(check.tableName);
-
     const perms = await this.getUserPermissions(userId);
     const tablePerm = perms[check.tableName];
 
@@ -104,18 +104,18 @@ export class PermissionsService {
    */
   async canAccessRecord(
     userId: string,
-    tableName: string,
+    entityId: string,
     action: 'read' | 'update' | 'delete',
     recordOwnerId: string,
   ): Promise<boolean> {
-    this.validateTableName(tableName);
-
     const perms = await this.getUserPermissions(userId);
-    const tablePerm = perms[tableName];
+    const tablePerm = perms[entityId];
 
     if (!tablePerm) return false;
-    if (!tablePerm[`can${action.charAt(0).toUpperCase() + action.slice(1)}`])
-      return false;
+    const actionKey =
+      `can${action.charAt(0).toUpperCase() + action.slice(1)}` as ActionKey;
+
+    if (!tablePerm[actionKey]) return false;
 
     if (tablePerm.scope === 'ALL') return true; // Can access all records
     if (tablePerm.scope === 'OWN') return recordOwnerId === userId; // Can only access own records
@@ -128,7 +128,7 @@ export class PermissionsService {
    */
   async grantPermission(
     userId: string,
-    tableName: string,
+    entityId: string,
     data: {
       canCreate?: boolean;
       canRead?: boolean;
@@ -138,9 +138,7 @@ export class PermissionsService {
       permissionType?: PermissionType;
     },
   ): Promise<void> {
-    this.validateTableName(tableName);
-
-    await this.permissionsRepo.upsert(userId, tableName, data);
+    await this.permissionsRepo.upsert(userId, entityId, data);
   }
 
   /**
@@ -148,11 +146,9 @@ export class PermissionsService {
    */
   async revokeTablePermissions(
     userId: string,
-    tableName: string,
+    entityId: string,
   ): Promise<void> {
-    this.validateTableName(tableName);
-
-    await this.permissionsRepo.deleteByUserIdTableName(userId, tableName);
+    await this.permissionsRepo.deleteByUserIdTableName(userId, entityId);
   }
 
   async setPermissionsForUser(
@@ -167,37 +163,31 @@ export class PermissionsService {
       permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void> {
-    // Validate tables names
-    const invalidTables = permissions
-      .map((p) => p.tableName)
-      .filter((tableName) => !this.isAllowedTable(tableName));
-
-    if (invalidTables.length > 0) {
-      const invalidTablesNames = invalidTables.join(', ');
-      throw new BadRequestException(
-        `Invalid table name: ${invalidTablesNames}`,
-      );
-    }
-
+    const resolvedPermissions = await Promise.all(
+      permissions.map(async (p) => {
+        const entity = await this.entitiesRepo.findByName(p.tableName);
+        return { ...p, entityId: entity.id };
+      }),
+    );
     // Gete existing permissions
     const currentPerms = await this.permissionsRepo.findManyByUserId(userId);
-    const currentTableNames = currentPerms.map((p) => p.tableName);
-    const inputTableNames = permissions.map((p) => p.tableName);
+    const currentEntityIds = currentPerms.map((p) => p.entityId);
+    const inputEntityIds = resolvedPermissions.map((p) => p.entityId);
 
     // Delete permissions for tables that are not in the input
-    const tablesToDelete = currentTableNames.filter(
-      (tableName) => !inputTableNames.includes(tableName),
+    const toDelete = currentEntityIds.filter(
+      (entityId) => !inputEntityIds.includes(entityId),
     );
     await Promise.all(
-      tablesToDelete.map((tableName) =>
-        this.permissionsRepo.deleteByUserIdTableName(userId, tableName),
+      toDelete.map((entityId) =>
+        this.permissionsRepo.deleteByUserIdTableName(userId, entityId),
       ),
     );
 
     // Upsert permissions for tables that are in the input
     await Promise.all(
-      permissions.map((p) =>
-        this.permissionsRepo.upsert(userId, p.tableName, {
+      resolvedPermissions.map((p) =>
+        this.permissionsRepo.upsert(userId, p.entityId, {
           canCreate: p.canCreate,
           canRead: p.canRead,
           canUpdate: p.canUpdate,

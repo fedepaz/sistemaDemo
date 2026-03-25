@@ -1,7 +1,11 @@
 // src/auth/user/userAuth.repository.ts
 
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { User, Tenant } from '../../../generated/prisma/client';
+import {
+  User,
+  Tenant,
+  PermissionScope,
+} from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
 
 @Injectable()
@@ -58,20 +62,27 @@ export class UserAuthRepository {
           },
         });
 
+        const userEntity = await tx.entity.findFirst({
+          where: { name: 'users' },
+        });
+        if (!userEntity) {
+          throw new Error('User entity not found');
+        }
+
         await tx.userPermission.upsert({
           where: {
-            userId_tableName: {
+            userId_entityId: {
               userId: user.id,
-              tableName: 'users',
+              entityId: userEntity.id,
             },
           },
           create: {
             userId: user.id,
-            tableName: 'users',
+            entityId: userEntity.id,
             canRead: true,
-            scope: 'OWN',
+            scope: PermissionScope.ALL,
           },
-          update: { canRead: true, scope: 'OWN' },
+          update: { canRead: true, scope: PermissionScope.ALL },
         });
         return user;
       });
