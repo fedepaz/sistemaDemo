@@ -55,7 +55,12 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
             <FormItem>
               <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nombre del cliente" />
+                <Input
+                  {...field}
+                  placeholder="Nombre del cliente"
+                  autoFocus
+                  tabIndex={0}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,6 +77,7 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
                 <Input
                   {...field}
                   placeholder="Nombre de la persona de contacto"
+                  tabIndex={0}
                 />
               </FormControl>
               <FormDescription>
@@ -92,6 +98,7 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
                 <Input
                   {...field}
                   placeholder="Correo electrónico del cliente"
+                  tabIndex={0}
                 />
               </FormControl>
               <FormMessage />
@@ -109,6 +116,7 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
                 <Input
                   {...field}
                   placeholder="Número de teléfono del cliente"
+                  tabIndex={0}
                 />
               </FormControl>
               <FormMessage />
@@ -123,7 +131,7 @@ export function ClientForm({ initialData, onSubmit }: ClientFormProps) {
               <FormLabel>Estado</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger tabIndex={0}>
                     <SelectValue placeholder="Selecciona un estado" />
                   </SelectTrigger>
                 </FormControl>

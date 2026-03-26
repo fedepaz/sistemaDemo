@@ -141,8 +141,8 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DashboardAlerts` | [x] | [x] | [x] |
 | `DashboardKPISkeleton` | [x] | [x] | [x] |
 | `DashboardKPI` | [x] | [x] | [x] |
-| `FeatureNavigationSkeleton` | [x] | [x] | [x] |
-| `FeatureNavigation` | [x] | [x] | [x] |
+| `CompanyInfoCardSkeleton` | [x] | [x] | [x] |
+| `CompanyInfoCard` | [x] | [x] | [x] |
 | `RecentActivitySkeleton` | [x] | [x] | [x] |
 | `RecentActivity` | [x] | [x] | [x] |
 | `RootDashboardSkeleton` | [x] | [x] | [x] |

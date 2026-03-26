@@ -47,7 +47,12 @@ export function InvoiceForm({ initialData, onSubmit }: InvoiceFormProps) {
             <FormItem>
               <FormLabel>Número de Factura</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Ej: INV-2023-001" />
+                <Input
+                  {...field}
+                  placeholder="Ej: INV-2023-001"
+                  autoFocus
+                  tabIndex={0}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,7 +66,11 @@ export function InvoiceForm({ initialData, onSubmit }: InvoiceFormProps) {
             <FormItem>
               <FormLabel>Cliente</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nombre del cliente" />
+                <Input
+                  {...field}
+                  placeholder="Nombre del cliente"
+                  tabIndex={0}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,6 +89,7 @@ export function InvoiceForm({ initialData, onSubmit }: InvoiceFormProps) {
                   type="number"
                   step="0.01"
                   onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                  tabIndex={0}
                 />
               </FormControl>
               <FormMessage />

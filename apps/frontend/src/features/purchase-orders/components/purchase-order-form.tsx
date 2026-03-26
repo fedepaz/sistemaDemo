@@ -61,7 +61,12 @@ export function PurchaseOrderForm({
             <FormItem>
               <FormLabel>Número de Pedido</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Ej: PO-2023-001" />
+                <Input
+                  {...field}
+                  placeholder="Ej: PO-2023-001"
+                  autoFocus
+                  tabIndex={0}
+                />
               </FormControl>
               <FormDescription>Formato oficial: PO-YYYY-XXX</FormDescription>
               <FormMessage />
@@ -76,7 +81,11 @@ export function PurchaseOrderForm({
             <FormItem>
               <FormLabel>Proveedor</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nombre del proveedor" />
+                <Input
+                  {...field}
+                  placeholder="Nombre del proveedor"
+                  tabIndex={0}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,6 +104,7 @@ export function PurchaseOrderForm({
                   type="number"
                   onChange={(e) => field.onChange(parseInt(e.target.value))}
                   placeholder="Número de artículos"
+                  tabIndex={0}
                 />
               </FormControl>
               <FormMessage />
@@ -115,6 +125,7 @@ export function PurchaseOrderForm({
                   step="0.01"
                   onChange={(e) => field.onChange(parseFloat(e.target.value))}
                   placeholder="Importe total del pedido"
+                  tabIndex={0}
                 />
               </FormControl>
               <FormMessage />
@@ -130,7 +141,7 @@ export function PurchaseOrderForm({
               <FormLabel>Estado</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger tabIndex={0}>
                     <SelectValue placeholder="Selecciona un estado" />
                   </SelectTrigger>
                 </FormControl>
@@ -156,7 +167,7 @@ export function PurchaseOrderForm({
             <FormItem>
               <FormLabel>Fecha de Pedido</FormLabel>
               <FormControl>
-                <Input {...field} type="date" />
+                <Input {...field} type="date" tabIndex={0} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -170,7 +181,7 @@ export function PurchaseOrderForm({
             <FormItem>
               <FormLabel>Fecha de Entrega</FormLabel>
               <FormControl>
-                <Input {...field} type="date" />
+                <Input {...field} type="date" tabIndex={0} />
               </FormControl>
               <FormMessage />
             </FormItem>

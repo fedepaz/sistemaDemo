@@ -37,7 +37,7 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nombre" />
+                <Input {...field} placeholder="Nombre" autoFocus tabIndex={0} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -51,7 +51,7 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Apellido</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Apellido" />
+                <Input {...field} placeholder="Apellido" tabIndex={0} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -65,7 +65,7 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Correo electrónico" />
+                <Input {...field} placeholder="Correo electrónico" tabIndex={0} />
               </FormControl>
               <FormDescription>
                 No es necesario que se registre, sirve para notificaciones del
