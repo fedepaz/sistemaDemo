@@ -1,7 +1,11 @@
 // src/components/common/coming-soon.tsx
 "use client";
 
+import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
+
 export default function ComingSoonPage() {
+  const { name, initials } = useCompanyData();
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8">
       <div className="max-w-2xl w-full text-center space-y-6 md:space-y-8">
@@ -9,10 +13,10 @@ export default function ComingSoonPage() {
         <div className="flex justify-center">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-bold">DM</span>
+              <span className="text-primary font-bold">{initials}</span>
             </div>
             <div>
-              <h1 className="font-bold">Demo</h1>
+              <h1 className="font-bold">{name}</h1>
               <h2 className=" text-muted-foreground">Sistema de gestión</h2>
             </div>
           </div>
