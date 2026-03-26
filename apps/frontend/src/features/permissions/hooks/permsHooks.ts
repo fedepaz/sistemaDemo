@@ -11,6 +11,8 @@ import { toast } from "sonner";
 
 export const permissionsQueryKeys = {
   tables: () => ["permissions", "tables"] as const,
+  table: (tableName: string) =>
+    [...permissionsQueryKeys.tables(), tableName] as const,
   byUserId: (userId: string) => ["permissions", "user", userId] as const,
 };
 
@@ -19,6 +21,18 @@ export const useTables = () => {
     queryKey: permissionsQueryKeys.tables(),
     queryFn: () =>
       clientFetch<Entity[]>("permissions/tables", { method: "GET" }),
+
+    retry: 1, // Retry once to account for transient network issues
+  });
+};
+
+export const useTableByName = (tableName: string) => {
+  return useSuspenseQuery<Entity>({
+    queryKey: permissionsQueryKeys.table(tableName),
+    queryFn: () =>
+      clientFetch<Entity>(`permissions/table/${tableName}`, {
+        method: "GET",
+      }),
 
     retry: 1, // Retry once to account for transient network issues
   });

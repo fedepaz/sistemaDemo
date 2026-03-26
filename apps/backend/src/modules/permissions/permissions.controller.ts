@@ -29,6 +29,14 @@ export class PermissionsController {
     return tables;
   }
 
+  /* GET table by name */
+  @Get('table/:tableName')
+  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  getTableByName(@Param('tableName') tableName: string) {
+    const entity = this.permissionsService.getTableByName(tableName);
+    return entity;
+  }
+
   /* GET all permissions for a user */
   @Get('user/:userId')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })

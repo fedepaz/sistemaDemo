@@ -4,6 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   PermissionCheck,
@@ -39,6 +40,18 @@ export class PermissionsService {
       label: e.label,
       permissionType: e.permissionType,
     }));
+  }
+
+  async getTableByName(tableName: string): Promise<Entity> {
+    const entity = await this.entitiesRepo.findByName(tableName);
+    if (!entity) {
+      throw new NotFoundException(`Entity ${tableName} not found`);
+    }
+    return {
+      name: entity.name,
+      label: entity.label,
+      permissionType: entity.permissionType,
+    };
   }
 
   /**
