@@ -14,7 +14,7 @@ import {
   FileText,
   HashIcon,
 } from "lucide-react";
-import { COMPANY_DATA } from "@/lib/config/company";
+import { useConfig } from "../hooks/useConfig";
 
 interface InfoRowProps {
   icon: React.ReactNode;
@@ -52,8 +52,17 @@ function InfoRow({ icon, label, value, href }: InfoRowProps) {
 }
 
 export function CompanyInfoCard() {
+  const { data: config = [] } = useConfig();
+  const companyData = Object.fromEntries(
+    config.map((c) => [c.codigo, c.nombre]),
+  );
+
   return (
-    <Card className="h-full border-0 shadow-sm bg-card overflow-hidden" role="region" aria-label="Información de la empresa">
+    <Card
+      className="h-full border-0 shadow-sm bg-card overflow-hidden"
+      role="region"
+      aria-label="Información de la empresa"
+    >
       <CardContent className="p-0">
         {/* Header with Logo Area */}
         <div className="relative bg-gradient-to-br from-primary/5 via-primary/3 to-transparent p-8 pb-6">
@@ -63,7 +72,10 @@ export function CompanyInfoCard() {
               <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-primary/10 border-2 border-primary/20 flex items-center justify-center shadow-inner">
                 <Building2 className="w-10 h-10 sm:w-12 sm:h-12 text-primary/60" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm" title="Verificado">
+              <div
+                className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm"
+                title="Verificado"
+              >
                 <BadgeCheck className="w-4 h-4 text-white" />
               </div>
             </div>
@@ -71,21 +83,19 @@ export function CompanyInfoCard() {
             {/* Company Name & Status */}
             <div className="flex-1 text-center sm:text-left">
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight text-balance">
-                {COMPANY_DATA.nombre}
+                {companyData["Nombre"]}
               </h1>
-              <p className="text-sm text-muted-foreground mt-1 font-medium">
-                {COMPANY_DATA.tipo}
-              </p>
+
               <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
                 <Badge variant="secondary" className="text-xs font-semibold">
                   <Globe className="w-3 h-3 mr-1" />
-                  {COMPANY_DATA.pais}
+                  {companyData["Pais"]}
                 </Badge>
                 <Badge
                   variant="outline"
                   className="text-xs bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:text-emerald-400 font-bold"
                 >
-                  {COMPANY_DATA.situacion}
+                  {companyData["Situacion"]}
                 </Badge>
               </div>
             </div>
@@ -105,17 +115,17 @@ export function CompanyInfoCard() {
               <InfoRow
                 icon={<MapPin className="w-4 h-4" />}
                 label="Dirección"
-                value={COMPANY_DATA.direccion}
+                value={companyData["Direccion"]}
               />
               <InfoRow
                 icon={<Building2 className="w-4 h-4" />}
                 label="Localidad"
-                value={`${COMPANY_DATA.localidad}, ${COMPANY_DATA.provincia}`}
+                value={`${companyData["Localidad"]}, ${companyData["Provincia"]}`}
               />
               <InfoRow
                 icon={<HashIcon className="w-4 h-4" />}
                 label="Código Postal"
-                value={COMPANY_DATA.codPos}
+                value={companyData["CodPos"]}
               />
             </div>
 
@@ -127,19 +137,19 @@ export function CompanyInfoCard() {
               <InfoRow
                 icon={<Phone className="w-4 h-4" />}
                 label="Teléfono"
-                value={COMPANY_DATA.telefono}
-                href={`tel:${COMPANY_DATA.telefono.replace(/[^\d+]/g, '')}`}
+                value={companyData["Telefono"]}
+                href={`tel:${companyData["Telefono"].replace(/[^\d+]/g, "")}`}
               />
               <InfoRow
                 icon={<Mail className="w-4 h-4" />}
                 label="Email"
-                value={COMPANY_DATA.mail}
-                href={`mailto:${COMPANY_DATA.mail}`}
+                value={companyData["Mail"]}
+                href={`mailto:${companyData["Mail"]}`}
               />
               <InfoRow
                 icon={<FileText className="w-4 h-4" />}
                 label="CUIT"
-                value={COMPANY_DATA.cuit}
+                value={companyData["Cuit"]}
               />
             </div>
           </div>
@@ -148,12 +158,20 @@ export function CompanyInfoCard() {
           <Separator className="my-6 opacity-50" />
           <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-medium text-muted-foreground/80">
             <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-[10px] text-muted-foreground/60">Ing. Brutos:</span>
-              <span className="text-foreground">{COMPANY_DATA.ingBrutos}</span>
+              <span className="uppercase tracking-wider text-[10px] text-muted-foreground/60">
+                Ing. Brutos:
+              </span>
+              <span className="text-foreground">
+                {companyData["IngBrutos"]}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-[10px] text-muted-foreground/60">Situación IVA:</span>
-              <span className="text-foreground">{COMPANY_DATA.situacion}</span>
+              <span className="uppercase tracking-wider text-[10px] text-muted-foreground/60">
+                Situación IVA:
+              </span>
+              <span className="text-foreground">
+                {companyData["Situacion"]}
+              </span>
             </div>
           </div>
         </div>
