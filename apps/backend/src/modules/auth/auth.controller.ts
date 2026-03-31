@@ -80,7 +80,11 @@ export class AuthController {
    */
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   logout(@CurrentUser() user: AuthUser) {
     this.logger.log(`👋 Logout: ${user.username}`);
     return { message: 'Logged out successfully' };
@@ -92,7 +96,11 @@ export class AuthController {
 
   @Patch('password')
   @HttpCode(HttpStatus.OK)
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   async changePassword(
     @Body(new ZodValidationPipe(ChangePasswordSchema)) dto: ChangePasswordDto,
     @CurrentUser() user: AuthUser,

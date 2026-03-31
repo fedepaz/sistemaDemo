@@ -23,7 +23,10 @@ export class UsersController {
   ) {}
 
   @Get('me')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+  })
   async getMe(@CurrentUser() user: AuthUser): Promise<UserProfileDto> {
     const userProfile = await this.service.getProfile(user.id);
     const tenant = await this.tenantsService.getTenantById(

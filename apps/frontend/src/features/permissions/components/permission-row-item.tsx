@@ -49,7 +49,8 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   console.log("row", row);
   console.log("originalRow", originalRow);
 
-  const Icon = getTableMeta(row.tableName).icon;
+  const tableInfo = getTableMeta(row.tableName);
+  const Icon = tableInfo.icon;
 
   const isDirty =
     row.canCreate !== originalRow.canCreate ||
@@ -85,11 +86,12 @@ export const PermissionRowItem = memo(function PermissionRowItem({
         isDirty
           ? "border-primary/40 bg-primary/[0.04] shadow-sm"
           : "border-border/50 bg-muted/30 hover:bg-muted/50",
-        !isDirty && {
-          READ_ONLY: "border-l-sky-400/60",
-          PROCESS: "border-l-amber-400/60",
-          CRUD: "border-l-emerald-400/60",
-        }[row.permissionType],
+        !isDirty &&
+          {
+            READ_ONLY: "border-l-sky-400/60",
+            PROCESS: "border-l-amber-400/60",
+            CRUD: "border-l-emerald-400/60",
+          }[row.permissionType],
       )}
     >
       {/* Dirty indicator */}

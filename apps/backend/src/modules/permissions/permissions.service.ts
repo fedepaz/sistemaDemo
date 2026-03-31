@@ -13,7 +13,7 @@ import {
   Entity,
 } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
-import { EntitiesRepository } from './repositories/entities.repository';
+import { EntitiesRepository } from '../entities/repositories/entities.repository';
 
 type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
 

@@ -13,6 +13,7 @@ interface PrismaModelDelegate<T> {
   findMany(args?: any): Promise<T[]>;
   findFirst(args: any): Promise<T | null>;
   update(args: any): Promise<T>;
+  create(args: any): Promise<T>;
 }
 
 export abstract class BaseRepository<T extends SoftDeletableModel> {
@@ -58,6 +59,16 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
       data: {
         deletedAt: null,
         isActive: true,
+        updatedAt: new Date(),
+      },
+    });
+  }
+
+  async create(data: Partial<T>): Promise<T> {
+    return this.model.create({
+      data: {
+        ...data,
+        createdAt: new Date(),
         updatedAt: new Date(),
       },
     });

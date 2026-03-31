@@ -5,7 +5,7 @@ import { PermissionsService } from './permissions.service';
 import { PermissionsRepository } from './repositories/permissions.repository';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { PermissionsController } from './permissions.controller';
-import { EntitiesRepository } from './repositories/entities.repository';
+import { EntitiesRepository } from '../entities/repositories/entities.repository';
 
 @Module({
   providers: [

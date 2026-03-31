@@ -16,6 +16,10 @@ export class PermissionsRepository implements IPermissionRepository {
       where: {
         userId,
         deletedAt: null,
+        entity: {
+          deletedAt: null,
+          isActive: true,
+        },
       },
       select: {
         userId: true,
@@ -34,10 +38,12 @@ export class PermissionsRepository implements IPermissionRepository {
       },
     });
 
-    return records.map((r) => ({
-      ...r,
-      entityName: r.entity.name,
-    }));
+    return records
+      .filter((r) => r.entity !== null)
+      .map((r) => ({
+        ...r,
+        entityName: r.entity.name,
+      }));
   }
 
   async upsert(

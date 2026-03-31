@@ -105,13 +105,6 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         requiredPermission: { table: "users", action: "read" },
       },
       {
-        title: "Crear Usuario",
-        href: ROUTES.REGISTER,
-        icon: UserCircle,
-        description: "Crear nuevos usuarios",
-        requiredPermission: { table: "auth", action: "read" },
-      },
-      {
         title: "Permisos de Usuario",
         href: ROUTES.USER_PERMISSIONS,
         icon: Key,
@@ -127,6 +120,14 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         description: "Registro de actividades del sistema",
         dashboard: { statsLabel: "Registros de auditoría" },
         requiredPermission: { table: "audit_logs", action: "read" },
+      },
+      {
+        title: "Entidades",
+        href: ROUTES.ENTITIES,
+        icon: Package,
+        description: "Gestión de entidades del sistema",
+        dashboard: { statsLabel: "Entidades activas" },
+        requiredPermission: { table: "entities", action: "read" },
       },
     ],
   },

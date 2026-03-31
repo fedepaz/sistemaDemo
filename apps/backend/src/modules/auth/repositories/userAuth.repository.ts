@@ -5,6 +5,7 @@ import {
   User,
   Tenant,
   PermissionScope,
+  PermissionType,
 } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
 
@@ -55,6 +56,15 @@ export class UserAuthRepository {
   }): Promise<User> {
     try {
       return this.prisma.$transaction(async (tx) => {
+        const profileEntity = await tx.entity.upsert({
+          where: { name: 'user_profile' },
+          create: {
+            name: 'user_profile',
+            label: 'Perfil de usuario',
+            permissionType: PermissionType.READ_ONLY,
+          },
+          update: {},
+        });
         const user = await tx.user.create({
           data: {
             ...data,
@@ -62,27 +72,21 @@ export class UserAuthRepository {
           },
         });
 
-        const userEntity = await tx.entity.findFirst({
-          where: { name: 'users' },
-        });
-        if (!userEntity) {
-          throw new Error('User entity not found');
-        }
-
         await tx.userPermission.upsert({
           where: {
             userId_entityId: {
               userId: user.id,
-              entityId: userEntity.id,
+              entityId: profileEntity.id,
             },
           },
           create: {
             userId: user.id,
-            entityId: userEntity.id,
+            entityId: profileEntity.id,
             canRead: true,
             scope: PermissionScope.ALL,
+            permissionType: PermissionType.READ_ONLY,
           },
-          update: { canRead: true, scope: PermissionScope.ALL },
+          update: { canRead: true },
         });
         return user;
       });

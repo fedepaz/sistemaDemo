@@ -13,7 +13,11 @@ export class PermissionsController {
 
   /* GET user autheticated permissions */
   @Get('me')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   async getMyPermissions(
     @CurrentUser() user: AuthUser,
   ): Promise<UserPermissions> {
@@ -23,7 +27,11 @@ export class PermissionsController {
 
   /* GET all tables */
   @Get('tables')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  @RequirePermission({
+    tableName: 'user_permissions',
+    action: 'read',
+    scope: 'ALL',
+  })
   getAllTables() {
     const tables = this.permissionsService.getAllTables();
     return tables;
@@ -31,7 +39,11 @@ export class PermissionsController {
 
   /* GET table by name */
   @Get('table/:tableName')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'ALL',
+  })
   getTableByName(@Param('tableName') tableName: string) {
     const entity = this.permissionsService.getTableByName(tableName);
     return entity;
@@ -39,7 +51,7 @@ export class PermissionsController {
 
   /* GET all permissions for a user */
   @Get('user/:userId')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'user_permissions', action: 'read' })
   async getUserPermissions(
     @Param('userId') userId: string,
   ): Promise<UserPermissions> {

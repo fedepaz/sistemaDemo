@@ -5,12 +5,9 @@ export const ROUTES = {
   REGISTER: "/register",
   USERS: "/users",
   USER_PERMISSIONS: "/user-permissions",
-  TENANTS: "/tenants",
   AUDIT_LOGS: "/audit-logs",
+  ENTITIES: "/entities",
   EXTENDIDOS: "/extendidos",
-  CLIENTS: "/clients",
-  INVOICES: "/invoices",
-  PURCHASE_ORDERS: "/purchase-orders",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

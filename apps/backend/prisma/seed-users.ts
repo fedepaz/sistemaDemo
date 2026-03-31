@@ -1,7 +1,11 @@
 // prisma/seed-users.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
+import {
+  PermissionScope,
+  PermissionType,
+  PrismaClient,
+} from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -57,24 +61,31 @@ async function main() {
       update: {},
     });
 
-    const userEntity = await prisma.entity.findFirst({
-      where: { name: 'users' },
+    const profileEntity = await prisma.entity.upsert({
+      where: { name: 'user_profile' },
+      create: {
+        name: 'user_profile',
+        label: 'Perfil de usuario',
+        permissionType: PermissionType.READ_ONLY,
+      },
+      update: {},
     });
-    if (!userEntity) throw new Error('User entity not found');
 
     await prisma.userPermission.upsert({
-      where: { userId_entityId: { userId: user.id, entityId: userEntity.id } }, // ← fix
+      where: {
+        userId_entityId: { userId: user.id, entityId: profileEntity.id },
+      }, // ← fix
       create: {
         userId: user.id,
-        entityId: userEntity.id,
+        entityId: profileEntity.id,
         canRead: true,
         scope: PermissionScope.ALL,
-        permissionType: userEntity.permissionType,
+        permissionType: profileEntity.permissionType,
       },
       update: {
         canRead: true,
         scope: PermissionScope.ALL,
-        permissionType: userEntity.permissionType,
+        permissionType: profileEntity.permissionType,
       },
     });
 

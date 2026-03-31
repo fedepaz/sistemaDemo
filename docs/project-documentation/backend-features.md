@@ -30,10 +30,15 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Soft Delete**: `DELETE /:username` with recovery option.
 - [x] **Repository Pattern**: `UsersRepository` extending `BaseRepository`.
 
+### Entities Module
+- [x] **Entity Management**: CRUD for system entities (tables) which are now the source of truth for the permission system.
+- [x] **Permission Type Support**: Entities include `permissionType` (`CRUD`, `READ_ONLY`, `PROCESS`) to define allowable actions.
+- [x] **Repository Pattern**: `EntitiesRepository` extending `BaseRepository`.
+
 ### Permissions Module
 - [x] **Permissions Guard**: `PermissionsGuard` + `@RequirePermission()` decorator.
+- [x] **Dynamic Entity Validation**: Validation against the `Entity` table in the database instead of a static whitelist.
 - [x] **Permission Types**: Support for `CRUD`, `READ_ONLY`, and `PROCESS` types to constrain allowable actions.
-- [x] **Resource-Level Security**: Validation against `ALLOWED_TABLES` in `MANAGED_ENTITIES`.
 - [x] **CRUD & Scope Check**: Logic for `canCreate`, `canRead`, etc., and `OWN` vs `ALL` scopes.
 - [x] **Admin Management**: `PATCH /user/:userId` to update permissions.
 

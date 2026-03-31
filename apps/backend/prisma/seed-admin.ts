@@ -1,7 +1,11 @@
 // prisma/seed-admin.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
+import {
+  PermissionScope,
+  PermissionType,
+  PrismaClient,
+} from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -56,8 +60,110 @@ async function main() {
     console.log('✅ Default tenant created');
   }
 
-  const existingEntities = await prisma.entity.findMany();
+  let userProfileEntityId: string;
 
+  const existingUserProfileEntity = await prisma.entity.findFirst({
+    where: { name: 'user_profile' },
+  });
+
+  if (existingUserProfileEntity) {
+    userProfileEntityId = existingUserProfileEntity.id;
+    console.log('✅ User profile entity found');
+  } else {
+    const newUserProfileEntity = await prisma.entity.create({
+      data: {
+        name: 'user_profile',
+        label: 'Perfil de usuario',
+        permissionType: PermissionType.READ_ONLY,
+      },
+    });
+    userProfileEntityId = newUserProfileEntity.id;
+    console.log('✅ User profile entity created');
+  }
+
+  let userPermissionEntityId: string;
+
+  const existingUserPermissionEntity = await prisma.entity.findFirst({
+    where: { name: 'user_permissions' },
+  });
+
+  if (existingUserPermissionEntity) {
+    userPermissionEntityId = existingUserPermissionEntity.id;
+    console.log('✅ User permission entity found');
+  } else {
+    const newUserPermissionEntity = await prisma.entity.create({
+      data: {
+        name: 'user_permissions',
+        label: 'Permisos de usuario',
+        permissionType: PermissionType.CRUD,
+      },
+    });
+    userPermissionEntityId = newUserPermissionEntity.id;
+    console.log('✅ User permission entity created');
+  }
+
+  let usersEntityId: string;
+
+  const existingUsersEntity = await prisma.entity.findFirst({
+    where: { name: 'users' },
+  });
+
+  if (existingUsersEntity) {
+    usersEntityId = existingUsersEntity.id;
+    console.log('✅ Users entity found');
+  } else {
+    const newUsersEntity = await prisma.entity.create({
+      data: {
+        name: 'users',
+        label: 'Usuarios',
+        permissionType: PermissionType.CRUD,
+      },
+    });
+    usersEntityId = newUsersEntity.id;
+    console.log('✅ Users entity created');
+  }
+
+  let entitiesId: string;
+
+  const existingEntitiesEntity = await prisma.entity.findFirst({
+    where: { name: 'entities' },
+  });
+
+  if (existingEntitiesEntity) {
+    entitiesId = existingEntitiesEntity.id;
+    console.log('✅ Entities entity found');
+  } else {
+    const newEntitiesEntity = await prisma.entity.create({
+      data: {
+        name: 'entities',
+        label: 'Entidades',
+        permissionType: PermissionType.READ_ONLY,
+      },
+    });
+    entitiesId = newEntitiesEntity.id;
+    console.log('✅ Entities entity created');
+  }
+
+  let auditLogsId: string;
+
+  const existingAuditLogsEntity = await prisma.entity.findFirst({
+    where: { name: 'audit_logs' },
+  });
+
+  if (existingAuditLogsEntity) {
+    auditLogsId = existingAuditLogsEntity.id;
+    console.log('✅ Audit logs entity found');
+  } else {
+    const newAuditLogsEntity = await prisma.entity.create({
+      data: {
+        name: 'audit_logs',
+        label: 'Auditoría',
+        permissionType: PermissionType.READ_ONLY,
+      },
+    });
+    auditLogsId = newAuditLogsEntity.id;
+    console.log('✅ Audit logs entity created');
+  }
   // Create admin user + full permissions
   const admin = await prisma.user.upsert({
     where: { username: 'admin' },
@@ -73,45 +179,106 @@ async function main() {
     update: {},
   });
 
-  // Define permissions for the admin user
-  const adminPermissions = existingEntities.map((e) => ({
-    entityId: e.id,
-    label: e.label,
-    permissionType: e.permissionType,
-  }));
+  // Upsert permission for the admin user
 
-  // Upsert permissions for the admin user
-  for (const perm of adminPermissions) {
-    await prisma.userPermission.upsert({
-      where: {
-        userId_entityId: {
-          userId: admin.id,
-          entityId: perm.entityId,
-        },
-      },
-      create: {
+  await prisma.userPermission.upsert({
+    where: {
+      userId_entityId: {
         userId: admin.id,
-        entityId: perm.entityId,
-        canCreate: true,
-        canRead: true,
-        canUpdate: true,
-        canDelete: true,
-        scope: PermissionScope.ALL,
-        permissionType: perm.permissionType,
+        entityId: userProfileEntityId,
       },
-      update: {
-        canCreate: true,
-        canRead: true,
-        canUpdate: true,
-        canDelete: true,
-        scope: PermissionScope.ALL,
-        permissionType: perm.permissionType,
+    },
+    create: {
+      userId: admin.id,
+      entityId: userProfileEntityId,
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: true,
+      scope: PermissionScope.ALL,
+      permissionType: PermissionType.READ_ONLY,
+    },
+    update: {},
+  });
+
+  await prisma.userPermission.upsert({
+    where: {
+      userId_entityId: {
+        userId: admin.id,
+        entityId: userPermissionEntityId,
       },
-    });
-    console.log(
-      `Granted permissions for ${perm.label} (${perm.permissionType})`,
-    );
-  }
+    },
+    create: {
+      userId: admin.id,
+      entityId: userPermissionEntityId,
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: true,
+      scope: PermissionScope.ALL,
+      permissionType: PermissionType.CRUD,
+    },
+    update: {},
+  });
+
+  await prisma.userPermission.upsert({
+    where: {
+      userId_entityId: {
+        userId: admin.id,
+        entityId: usersEntityId,
+      },
+    },
+    create: {
+      userId: admin.id,
+      entityId: usersEntityId,
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: true,
+      scope: PermissionScope.ALL,
+      permissionType: PermissionType.CRUD,
+    },
+    update: {},
+  });
+
+  await prisma.userPermission.upsert({
+    where: {
+      userId_entityId: {
+        userId: admin.id,
+        entityId: entitiesId,
+      },
+    },
+    create: {
+      userId: admin.id,
+      entityId: entitiesId,
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: true,
+      scope: PermissionScope.ALL,
+      permissionType: PermissionType.READ_ONLY,
+    },
+    update: {},
+  });
+  await prisma.userPermission.upsert({
+    where: {
+      userId_entityId: {
+        userId: admin.id,
+        entityId: auditLogsId,
+      },
+    },
+    create: {
+      userId: admin.id,
+      entityId: auditLogsId,
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: true,
+      scope: PermissionScope.ALL,
+      permissionType: PermissionType.READ_ONLY,
+    },
+    update: {},
+  });
 
   console.log('✅ Admin permissions granted');
 }

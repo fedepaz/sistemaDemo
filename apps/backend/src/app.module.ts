@@ -21,6 +21,7 @@ import { HealthModule } from './modules/health/health.module';
 import { LegacyEspecieModule } from './modules/legacy/especie/especie.module';
 import { LegacyBaseModule } from './modules/legacy/legacyBase/legacyBase.module';
 import { LegacyProgramasModule } from './modules/legacy/programas/programas.module';
+import { EntitiesModule } from './modules/entities/entities.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { LegacyProgramasModule } from './modules/legacy/programas/programas.modu
     AuthModule,
     UsersModule,
     PermissionsModule,
+    EntitiesModule,
     AuditLogModule,
     TenantsModule,
   ],
