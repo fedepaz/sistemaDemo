@@ -12,7 +12,7 @@ export class EntitiesController {
   /* GET all tables */
   @Get('tables')
   @RequirePermission({
-    tableName: 'super_admin',
+    tableName: 'entities',
     action: 'read',
     scope: 'ALL',
   })
@@ -24,7 +24,7 @@ export class EntitiesController {
   /* GET table by name */
   @Get('table/:tableName')
   @RequirePermission({
-    tableName: 'super_admin',
+    tableName: 'entities',
     action: 'read',
     scope: 'ALL',
   })
@@ -36,7 +36,7 @@ export class EntitiesController {
   /* POST create entity */
   @Post('entity')
   @RequirePermission({
-    tableName: 'super_admin',
+    tableName: 'entities',
     action: 'create',
     scope: 'ALL',
   })

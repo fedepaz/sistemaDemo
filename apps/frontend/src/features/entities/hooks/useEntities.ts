@@ -23,7 +23,7 @@ export const useEntities = () => {
 export const useCreateEntity = () => {
   return useMutation<Entity, Error, CreateEntityDto>({
     mutationFn: async (entityData) => {
-      const response = await clientFetch<Entity>(``, {
+      const response = await clientFetch<Entity>(`entities/entity`, {
         method: "POST",
         body: JSON.stringify(entityData),
       });

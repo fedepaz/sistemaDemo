@@ -124,11 +124,11 @@ This document tracks all React components within the `apps/frontend/src` directo
 ### Entities
 | Component | Responsive | Color Tokens | UX Helpers |
 | :--- | :---: | :---: | :---: |
-| `EntityForm` | [x] | [x] | [x] |
-| `EntitiesDashboardSkeleton` | [x] | [x] | [x] |
-| `EntitiesDataTable` | [x] | [x] | [x] |
-| `EntitiesKPI` | [x] | [x] | [x] |
-| `EntitiesDashboard` | [x] | [x] | [x] |
+| `EntityCreateForm` | [x] | [x] | [x] |
+| `EntityDashboardSkeleton` | [x] | [x] | [x] |
+| `EntityDataTable` | [x] | [x] | [x] |
+| `EntitiesKPIs` | [x] | [x] | [x] |
+| `EntityDashboard` | [x] | [x] | [x] |
 
 ### Dashboard
 | Component | Responsive | Color Tokens | UX Helpers |

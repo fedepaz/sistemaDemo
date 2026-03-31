@@ -10,14 +10,14 @@ export class AuditLogController {
   constructor(private auditLogService: AuditLogService) {}
 
   @Get()
-  @RequirePermission({ tableName: 'super_admin', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'audit_logs', action: 'read', scope: 'ALL' })
   async getAllAuditLogs() {
     return this.auditLogService.getAllAuditLogs();
   }
 
   @Get('admin')
   @RequirePermission({
-    tableName: 'super_admin',
+    tableName: 'audit_logs',
     action: 'delete',
     scope: 'ALL',
   })
@@ -26,7 +26,7 @@ export class AuditLogController {
   }
 
   @Get(':tenantName')
-  @RequirePermission({ tableName: 'super_admin', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'audit_logs', action: 'read', scope: 'ALL' })
   async getAllByTenantName(
     @Param('tenantName') tenantName: string,
     @Query('page ') page: number = 1,
@@ -42,7 +42,7 @@ export class AuditLogController {
   }
 
   @Get('user/:userId')
-  @RequirePermission({ tableName: 'super_admin', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'audit_logs', action: 'read', scope: 'ALL' })
   async getAllByUserId(@Param('userId') userId: string) {
     return this.auditLogService.getAllByUserId(userId);
   }

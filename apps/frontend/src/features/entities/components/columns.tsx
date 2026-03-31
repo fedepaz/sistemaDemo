@@ -3,6 +3,10 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef, Row, Table } from "@tanstack/react-table";
 import { Entity } from "@vivero/shared";
+import {
+  SortableHeader,
+  StatusBadge,
+} from "@/components/data-display/data-table";
 
 interface CellProps {
   row?: Row<Entity>;
@@ -45,17 +49,38 @@ export const entityColumns: ColumnDef<Entity>[] = [
   },
   {
     accessorKey: "name",
-    header: "Nombre",
-    cell: ({ row }) => row.getValue("name"),
+    header: ({ column }) => (
+      <SortableHeader column={column}>Nombre</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="font-medium">{row.getValue("name")}</span>
+    ),
   },
   {
     accessorKey: "label",
-    header: "Etiqueta",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Etiqueta</SortableHeader>
+    ),
     cell: ({ row }) => row.getValue("label"),
   },
   {
     accessorKey: "permissionType",
-    header: "Tipo de permiso",
-    cell: ({ row }) => row.getValue("permissionType"),
+    header: ({ column }) => (
+      <SortableHeader column={column}>Tipo de permiso</SortableHeader>
+    ),
+    cell: ({ row }) => {
+      const type = row.getValue("permissionType") as string;
+      const statusMap = {
+        CRUD: "healthy",
+        PROCESS: "info",
+        READ_ONLY: "warning",
+      } as const;
+
+      return (
+        <StatusBadge status={statusMap[type as keyof typeof statusMap]}>
+          {type}
+        </StatusBadge>
+      );
+    },
   },
 ];

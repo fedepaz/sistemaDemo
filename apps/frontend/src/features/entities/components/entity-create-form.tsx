@@ -10,6 +10,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CreateEntityDto } from "@vivero/shared";
 import { UseFormReturn } from "react-hook-form";
 
@@ -79,14 +86,18 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Tipo de permiso</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="Tipo de permiso"
-                  required
-                  tabIndex={0}
-                />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger tabIndex={0}>
+                    <SelectValue placeholder="Selecciona un tipo de permiso" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="CRUD">CRUD (Estándar)</SelectItem>
+                  <SelectItem value="READ_ONLY">Solo Lectura</SelectItem>
+                  <SelectItem value="PROCESS">Proceso (Ejecución)</SelectItem>
+                </SelectContent>
+              </Select>
               <FormDescription>
                 El tipo de permiso determina qué acciones se pueden realizar
                 sobre la entidad.

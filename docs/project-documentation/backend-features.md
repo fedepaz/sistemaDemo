@@ -31,7 +31,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Repository Pattern**: `UsersRepository` extending `BaseRepository`.
 
 ### Entities Module
-- [x] **Entity Management**: CRUD for system entities (tables) which are now the source of truth for the permission system.
+- [x] **Entity Management**: CRUD for system entities (tables) which are now the source of truth for the permission system. Protected by `entities` table permissions.
 - [x] **Permission Type Support**: Entities include `permissionType` (`CRUD`, `READ_ONLY`, `PROCESS`) to define allowable actions.
 - [x] **Repository Pattern**: `EntitiesRepository` extending `BaseRepository`.
 
@@ -49,7 +49,7 @@ This document lists all the modules, services, and core functionalities implemen
 
 ### Audit Log Module
 - [x] **Automatic Logging**: Integrated into the exception filter for security events.
-- [x] **Audit Retrieval**: `GET /:tenantId` and `GET /user/:userId`.
+- [x] **Audit Retrieval**: `GET /:tenantId` and `GET /user/:userId`. Protected by `audit_logs` table permissions.
 - [x] **JSON Changes**: Storage of action metadata in JSON format.
 
 ### Health Module
