@@ -27,4 +27,5 @@ export interface UserPermissionRecord {
   canDelete: boolean;
   scope: 'NONE' | 'OWN' | 'ALL';
   permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
+  createdAt: Date;
 }

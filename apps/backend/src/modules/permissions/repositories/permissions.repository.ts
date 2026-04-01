@@ -35,6 +35,7 @@ export class PermissionsRepository implements IPermissionRepository {
         canDelete: true,
         scope: true,
         permissionType: true,
+        createdAt: true,
       },
     });
 
@@ -43,6 +44,7 @@ export class PermissionsRepository implements IPermissionRepository {
       .map((r) => ({
         ...r,
         entityName: r.entity.name,
+        createdAt: r.createdAt,
       }));
   }
 

@@ -1,6 +1,7 @@
 // src/permissions/permissions.service.ts
 
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -15,6 +16,7 @@ import {
 import { PermissionsRepository } from './repositories/permissions.repository';
 import { EntitiesRepository } from '../entities/repositories/entities.repository';
 import { UserPermissionRecord } from './interfaces/permission.interface';
+import { UsersRepository } from '../users/repositories/users.repository';
 
 type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
 
@@ -26,6 +28,7 @@ export class PermissionsService {
   constructor(
     private permissionsRepo: PermissionsRepository,
     private entitiesRepo: EntitiesRepository,
+    private usersRepo: UsersRepository,
   ) {}
 
   /**
@@ -187,8 +190,37 @@ export class PermissionsService {
       permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void> {
-    // 1. Get requester's permissions to check what they are allowed to manage
-    const requesterPerms = await this.getUserPermissions(requesterId);
+    // RULE 1 - User seniority check
+    const requesterUser = await this.usersRepo.findById(requesterId);
+    const targetUser = await this.usersRepo.findById(targetUserId);
+
+    if (!requesterUser || !targetUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (targetUser.createdAt <= requesterUser.createdAt) {
+      throw new ForbiddenException(
+        'You cannot manage permissions for a user with equal or greater seniority.',
+      );
+    }
+
+    // 1. Get requester's permissions (raw records to get createdAt)
+    const requesterRecords =
+      await this.permissionsRepo.findManyByUserId(requesterId);
+    const requesterPermsMapByEntityId = new Map<string, UserPermissionRecord>();
+    const requesterPerms: UserPermissions = {};
+
+    for (const r of requesterRecords) {
+      requesterPermsMapByEntityId.set(r.entityId, r);
+      requesterPerms[r.entityName] = {
+        canCreate: r.canCreate,
+        canRead: r.canRead,
+        canUpdate: r.canUpdate,
+        canDelete: r.canDelete,
+        scope: r.scope,
+        permissionType: r.permissionType,
+      };
+    }
 
     // 2. Resolve input permissions and filter them by requester access
     const inputManagedByRequester: Array<{
@@ -201,11 +233,35 @@ export class PermissionsService {
       permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }> = [];
 
+    // 3. Get existing permissions of target user
+    const currentTargetPerms =
+      await this.permissionsRepo.findManyByUserId(targetUserId);
+    const currentTargetPermsMapByEntityId = new Map<
+      string,
+      UserPermissionRecord
+    >();
+    for (const r of currentTargetPerms) {
+      currentTargetPermsMapByEntityId.set(r.entityId, r);
+    }
+
     for (const p of permissions) {
       const rP = requesterPerms[p.tableName];
       if (!rP) continue; // Skip if requester doesn't even have this entity in their list
 
       const entity = await this.entitiesRepo.findByName(p.tableName);
+
+      // RULE 2 - Permission seniority check
+      const existingTargetPerm = currentTargetPermsMapByEntityId.get(entity.id);
+      const requesterPermRecord = requesterPermsMapByEntityId.get(entity.id);
+
+      if (
+        existingTargetPerm &&
+        requesterPermRecord &&
+        existingTargetPerm.createdAt < requesterPermRecord.createdAt
+      ) {
+        // Skip modification: Target had this permission before the requester
+        continue;
+      }
 
       // IMPORTANT: Granting logic. We ensure the manager doesn't grant more than they have.
       // If a manager has "OWN" scope, they CANNOT grant "ALL".
@@ -224,33 +280,12 @@ export class PermissionsService {
       });
     }
 
-    // 3. Get existing permissions of target user
-    const currentTargetPerms =
-      await this.permissionsRepo.findManyByUserId(targetUserId);
-
-    // 4. PRESERVE current permissions for entities the requester CANNOT see/manage
-    const preservedPerms: Array<UserPermissionRecord> = [];
-    for (const cur of currentTargetPerms) {
-      const rP = requesterPerms[cur.entityName];
-      if (!rP) {
-        // Requester cannot manage this entity, keep it as is
-        preservedPerms.push({
-          userId: cur.userId,
-          entityId: cur.entityId,
-          entityName: cur.entityName,
-          canCreate: cur.canCreate,
-          canRead: cur.canRead,
-          canUpdate: cur.canUpdate,
-          canDelete: cur.canDelete,
-          scope: cur.scope,
-          permissionType: cur.permissionType,
-        });
-      }
-    }
-
-    // 5. Merge Preserved + Input
+    // 4. PRESERVE current permissions for entities the requester CANNOT see/manage OR seniority rule applied
+    // (A permission is preserved if its entityId is NOT in inputManagedByRequester)
+    const inputEntityIds = new Set(
+      inputManagedByRequester.map((i) => i.entityId),
+    );
     const finalizedToUpsert = [
-      ...preservedPerms,
       ...inputManagedByRequester.map((p) => ({
         entityId: p.entityId,
         canCreate: p.canCreate,
@@ -261,6 +296,21 @@ export class PermissionsService {
         permissionType: p.permissionType,
       })),
     ];
+
+    for (const cur of currentTargetPerms) {
+      if (!inputEntityIds.has(cur.entityId)) {
+        // This includes entities the requester can't see, AND those skipped by Rule 2
+        finalizedToUpsert.push({
+          entityId: cur.entityId,
+          canCreate: cur.canCreate,
+          canRead: cur.canRead,
+          canUpdate: cur.canUpdate,
+          canDelete: cur.canDelete,
+          scope: cur.scope,
+          permissionType: cur.permissionType,
+        });
+      }
+    }
 
     // 6. Execution: Clean and Update
     await this.permissionsRepo.deleteAllForUser(targetUserId);
