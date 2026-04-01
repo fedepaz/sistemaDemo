@@ -73,6 +73,18 @@ export function parseApiError(error: unknown): ParsedError {
         details: error.details,
       };
     }
+    if (
+      error.message ===
+      "You cannot manage permissions for a user with equal or greater seniority."
+    ) {
+      return {
+        type: "FORBIDDEN",
+        title: "Restricción de jerarquía",
+        message:
+          "No puedes gestionar los permisos de un usuario con antigüedad igual o superior a la tuya.",
+        details: error.details,
+      };
+    }
 
     switch (error.status) {
       case 400:
