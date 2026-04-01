@@ -14,6 +14,7 @@ import {
 } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
 import { EntitiesRepository } from '../entities/repositories/entities.repository';
+import { UserPermissionRecord } from './interfaces/permission.interface';
 
 type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
 
@@ -28,18 +29,27 @@ export class PermissionsService {
   ) {}
 
   /**
-   * Get all tables
+   * Get all tables filtered by what the requester can actually see
    */
-  async getAllTables(): Promise<Entity[]> {
-    const entities = await this.entitiesRepo.findAllAdmin();
-    if (!entities) {
+  async getAllTables(requesterId: string): Promise<Entity[]> {
+    const allEntities = await this.entitiesRepo.findAllAdmin();
+    if (!allEntities) {
       throw new InternalServerErrorException('Error getting tables');
     }
-    return entities.map((e) => ({
-      name: e.name,
-      label: e.label,
-      permissionType: e.permissionType,
-    }));
+
+    const requesterPerms = await this.getUserPermissions(requesterId);
+
+    // Filter: Only show entities where the requester has at least one true permission
+    return allEntities
+      .filter((e) => {
+        const p = requesterPerms[e.name];
+        return p && (p.canRead || p.canCreate || p.canUpdate || p.canDelete);
+      })
+      .map((e) => ({
+        name: e.name,
+        label: e.label,
+        permissionType: e.permissionType,
+      }));
   }
 
   async getTableByName(tableName: string): Promise<Entity> {
@@ -165,7 +175,8 @@ export class PermissionsService {
   }
 
   async setPermissionsForUser(
-    userId: string,
+    requesterId: string,
+    targetUserId: string,
     permissions: Array<{
       tableName: string;
       canCreate: boolean;
@@ -176,38 +187,88 @@ export class PermissionsService {
       permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void> {
-    const resolvedPermissions = await Promise.all(
-      permissions.map(async (p) => {
-        const entity = await this.entitiesRepo.findByName(p.tableName);
-        return { ...p, entityId: entity.id };
-      }),
-    );
-    // Gete existing permissions
-    const currentPerms = await this.permissionsRepo.findManyByUserId(userId);
-    const currentEntityIds = currentPerms.map((p) => p.entityId);
-    const inputEntityIds = resolvedPermissions.map((p) => p.entityId);
+    // 1. Get requester's permissions to check what they are allowed to manage
+    const requesterPerms = await this.getUserPermissions(requesterId);
 
-    // Delete permissions for tables that are not in the input
-    const toDelete = currentEntityIds.filter(
-      (entityId) => !inputEntityIds.includes(entityId),
-    );
-    await Promise.all(
-      toDelete.map((entityId) =>
-        this.permissionsRepo.deleteByUserIdTableName(userId, entityId),
-      ),
-    );
+    // 2. Resolve input permissions and filter them by requester access
+    const inputManagedByRequester: Array<{
+      entityId: string;
+      canCreate: boolean;
+      canRead: boolean;
+      canUpdate: boolean;
+      canDelete: boolean;
+      scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
+    }> = [];
 
-    // Upsert permissions for tables that are in the input
+    for (const p of permissions) {
+      const rP = requesterPerms[p.tableName];
+      if (!rP) continue; // Skip if requester doesn't even have this entity in their list
+
+      const entity = await this.entitiesRepo.findByName(p.tableName);
+
+      // IMPORTANT: Granting logic. We ensure the manager doesn't grant more than they have.
+      // If a manager has "OWN" scope, they CANNOT grant "ALL".
+      const validScope =
+        p.scope === 'ALL' && rP.scope !== 'ALL' ? rP.scope : p.scope;
+
+      inputManagedByRequester.push({
+        entityId: entity.id,
+        // Also clamp CRUD actions to requester's own permissions for safety
+        canCreate: p.canCreate && rP.canCreate,
+        canRead: p.canRead && rP.canRead,
+        canUpdate: p.canUpdate && rP.canUpdate,
+        canDelete: p.canDelete && rP.canDelete,
+        scope: validScope,
+        permissionType: p.permissionType,
+      });
+    }
+
+    // 3. Get existing permissions of target user
+    const currentTargetPerms =
+      await this.permissionsRepo.findManyByUserId(targetUserId);
+
+    // 4. PRESERVE current permissions for entities the requester CANNOT see/manage
+    const preservedPerms: Array<UserPermissionRecord> = [];
+    for (const cur of currentTargetPerms) {
+      const rP = requesterPerms[cur.entityName];
+      if (!rP) {
+        // Requester cannot manage this entity, keep it as is
+        preservedPerms.push({
+          userId: cur.userId,
+          entityId: cur.entityId,
+          entityName: cur.entityName,
+          canCreate: cur.canCreate,
+          canRead: cur.canRead,
+          canUpdate: cur.canUpdate,
+          canDelete: cur.canDelete,
+          scope: cur.scope,
+          permissionType: cur.permissionType,
+        });
+      }
+    }
+
+    // 5. Merge Preserved + Input
+    const finalizedToUpsert = [
+      ...preservedPerms,
+      ...inputManagedByRequester.map((p) => ({
+        entityId: p.entityId,
+        canCreate: p.canCreate,
+        canRead: p.canRead,
+        canUpdate: p.canUpdate,
+        canDelete: p.canDelete,
+        scope: p.scope,
+        permissionType: p.permissionType,
+      })),
+    ];
+
+    // 6. Execution: Clean and Update
+    await this.permissionsRepo.deleteAllForUser(targetUserId);
+
+    // Batch upsert the new finalized list
     await Promise.all(
-      resolvedPermissions.map((p) =>
-        this.permissionsRepo.upsert(userId, p.entityId, {
-          canCreate: p.canCreate,
-          canRead: p.canRead,
-          canUpdate: p.canUpdate,
-          canDelete: p.canDelete,
-          scope: p.scope,
-          permissionType: p.permissionType,
-        }),
+      finalizedToUpsert.map((p) =>
+        this.permissionsRepo.upsert(targetUserId, p.entityId, p),
       ),
     );
   }

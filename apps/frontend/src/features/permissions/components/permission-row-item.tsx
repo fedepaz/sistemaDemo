@@ -69,6 +69,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   };
 
   const dataTablePermissions = usePermission("user_permissions");
+  const requesterPermsForThisEntity = usePermission(row.tableName);
 
   const canEdit = dataTablePermissions.canUpdate;
 
@@ -119,6 +120,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
         {visibleColumns.map((col) => {
           const isActive = row[col.key];
           const wasChanged = row[col.key] !== originalRow[col.key];
+          const requesterHasThisAction = requesterPermsForThisEntity[col.key];
 
           if (!canEdit) {
             return (
@@ -165,7 +167,14 @@ export const PermissionRowItem = memo(function PermissionRowItem({
           return (
             <Tooltip key={col.key}>
               <TooltipTrigger asChild>
-                <label className="flex cursor-pointer flex-col items-center gap-1 group/switch">
+                <label
+                  className={cn(
+                    "flex flex-col items-center gap-1 group/switch",
+                    !requesterHasThisAction
+                      ? "cursor-not-allowed opacity-40"
+                      : "cursor-pointer",
+                  )}
+                >
                   <div className="flex items-center gap-3">
                     <col.icon
                       className={cn(
@@ -184,7 +193,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                       onCheckedChange={() =>
                         onToggleCrud(row.tableName, col.key)
                       }
-                      disabled={!canEdit}
+                      disabled={!canEdit || !requesterHasThisAction}
                       className={cn(
                         "h-6 w-11 data-[state=checked]:bg-primary",
                         wasChanged
@@ -202,13 +211,15 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                 sideOffset={5}
               >
                 <p className="text-xs font-medium">
-                  {canEdit
-                    ? isActive
-                      ? "Desactivar"
-                      : "Activar"
-                    : isActive
-                      ? "Activado"
-                      : "Desactivado"}{" "}
+                  {!requesterHasThisAction
+                    ? `No tienes permiso para conceder "${col.label.toLowerCase()}"`
+                    : canEdit
+                      ? isActive
+                        ? "Desactivar"
+                        : "Activar"
+                      : isActive
+                        ? "Activado"
+                        : "Desactivado"}{" "}
                   {col.label.toLowerCase()}
                 </p>
               </TooltipContent>
@@ -256,43 +267,52 @@ export const PermissionRowItem = memo(function PermissionRowItem({
               variant="outline"
               className="flex w-full overflow-hidden rounded-xl border bg-muted/40 p-1 lg:w-auto"
             >
-              {(["NONE", "OWN", "ALL"] as const).map((scope) => (
-                <ToggleGroupItem
-                  key={scope}
-                  value={scope}
-                  className={cn(
-                    "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
-                    // Estados OFF
-                    "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted/50",
-                    // Estados ON (base)
-                    "data-[state=on]:shadow-sm data-[state=on]:font-bold",
-                    // Estados ON específicos por scope (¡sin row.scope === scope!)
-                    scope === "ALL" &&
-                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                    scope === "OWN" &&
-                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                    scope === "NONE" &&
-                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                  )}
-                  aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${row.label}`}
-                >
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="w-full block text-center">
-                        {SCOPE_LABELS[scope].label}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="bottom"
-                      className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md"
-                    >
-                      <p className="text-xs font-medium">
-                        {SCOPE_LABELS[scope].desc}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </ToggleGroupItem>
-              ))}
+              {(["NONE", "OWN", "ALL"] as const).map((scope) => {
+                const isRestrictedByManager =
+                  scope === "ALL" && requesterPermsForThisEntity.scope !== "ALL";
+
+                return (
+                  <ToggleGroupItem
+                    key={scope}
+                    value={scope}
+                    disabled={isRestrictedByManager}
+                    className={cn(
+                      "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
+                      // Estados OFF
+                      "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted/50",
+                      // Estados ON (base)
+                      "data-[state=on]:shadow-sm data-[state=on]:font-bold",
+                      // Estados ON específicos por scope (¡sin row.scope === scope!)
+                      scope === "ALL" &&
+                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                      scope === "OWN" &&
+                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                      scope === "NONE" &&
+                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                      isRestrictedByManager && "opacity-40 cursor-not-allowed",
+                    )}
+                    aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${row.label}`}
+                  >
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="w-full block text-center">
+                          {SCOPE_LABELS[scope].label}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        side="bottom"
+                        className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md"
+                      >
+                        <p className="text-xs font-medium">
+                          {isRestrictedByManager
+                            ? "No tienes permiso para conceder acceso a TODOS los registros"
+                            : SCOPE_LABELS[scope].desc}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </ToggleGroupItem>
+                );
+              })}
             </ToggleGroup>
           )}
         </div>

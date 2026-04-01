@@ -32,8 +32,8 @@ export class PermissionsController {
     action: 'read',
     scope: 'ALL',
   })
-  getAllTables() {
-    const tables = this.permissionsService.getAllTables();
+  getAllTables(@CurrentUser() user: AuthUser) {
+    const tables = this.permissionsService.getAllTables(user.id);
     return tables;
   }
 
@@ -67,6 +67,7 @@ export class PermissionsController {
     scope: 'ALL',
   })
   async setUserPermissions(
+    @CurrentUser() user: AuthUser,
     @Param('userId') userId: string,
     @Body('permissions')
     permissions: Array<{
@@ -79,7 +80,11 @@ export class PermissionsController {
       permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<{ success: boolean }> {
-    await this.permissionsService.setPermissionsForUser(userId, permissions);
+    await this.permissionsService.setPermissionsForUser(
+      user.id,
+      userId,
+      permissions,
+    );
     return { success: true };
   }
 }

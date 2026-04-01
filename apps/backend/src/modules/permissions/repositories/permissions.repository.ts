@@ -82,4 +82,10 @@ export class PermissionsRepository implements IPermissionRepository {
       where: { userId_entityId: { userId, entityId } },
     });
   }
+
+  async deleteAllForUser(userId: string): Promise<void> {
+    await this.prisma.userPermission.deleteMany({
+      where: { userId },
+    });
+  }
 }
