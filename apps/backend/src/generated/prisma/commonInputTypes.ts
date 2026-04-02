@@ -232,6 +232,23 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumPermissionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionType | Prisma.EnumPermissionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionType[]
+  notIn?: $Enums.PermissionType[]
+  not?: Prisma.NestedEnumPermissionTypeFilter<$PrismaModel> | $Enums.PermissionType
+}
+
+export type EnumPermissionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionType | Prisma.EnumPermissionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionType[]
+  notIn?: $Enums.PermissionType[]
+  not?: Prisma.NestedEnumPermissionTypeWithAggregatesFilter<$PrismaModel> | $Enums.PermissionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPermissionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPermissionTypeFilter<$PrismaModel>
+}
+
 export type EnumPermissionScopeFilter<$PrismaModel = never> = {
   equals?: $Enums.PermissionScope | Prisma.EnumPermissionScopeFieldRefInput<$PrismaModel>
   in?: $Enums.PermissionScope[]
@@ -456,6 +473,23 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumPermissionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionType | Prisma.EnumPermissionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionType[]
+  notIn?: $Enums.PermissionType[]
+  not?: Prisma.NestedEnumPermissionTypeFilter<$PrismaModel> | $Enums.PermissionType
+}
+
+export type NestedEnumPermissionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionType | Prisma.EnumPermissionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionType[]
+  notIn?: $Enums.PermissionType[]
+  not?: Prisma.NestedEnumPermissionTypeWithAggregatesFilter<$PrismaModel> | $Enums.PermissionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPermissionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPermissionTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumPermissionScopeFilter<$PrismaModel = never> = {

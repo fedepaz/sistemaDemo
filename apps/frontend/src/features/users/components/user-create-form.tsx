@@ -36,7 +36,12 @@ export function UserCreateForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Nombre de Usuario</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="ej: juanperez007" />
+                <Input
+                  {...field}
+                  placeholder="ej: juanperez007"
+                  autoFocus
+                  tabIndex={0}
+                />
               </FormControl>
               <FormDescription>
                 El nombre de usuario con el que va a ingresar al sistema.
@@ -58,7 +63,7 @@ export function UserCreateForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Nombre" />
+                <Input {...field} placeholder="Nombre" tabIndex={0} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,7 +77,7 @@ export function UserCreateForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Apellido</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Apellido" />
+                <Input {...field} placeholder="Apellido" tabIndex={0} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -86,7 +91,7 @@ export function UserCreateForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Correo electrónico" />
+                <Input {...field} placeholder="Correo electrónico" tabIndex={0} />
               </FormControl>
               <FormDescription>
                 No es necesario que se registre, sirve para notificaciones del

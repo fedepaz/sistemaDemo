@@ -1,7 +1,11 @@
 // prisma/seed-users.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
+import {
+  PermissionScope,
+  PermissionType,
+  PrismaClient,
+} from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -57,65 +61,33 @@ async function main() {
       update: {},
     });
 
-    const user01permissions = [
-      // Can see all user but not update or delete
-      {
-        table: 'users',
-        crud: { create: true, read: true, update: false, delete: false },
-        scope: PermissionScope.ALL,
+    const profileEntity = await prisma.entity.upsert({
+      where: { name: 'user_profile' },
+      create: {
+        name: 'user_profile',
+        label: 'Perfil de usuario',
+        permissionType: PermissionType.READ_ONLY,
       },
-      // Can see and update plants but not delete
-      {
-        table: 'plants',
-        crud: { create: true, read: true, update: true, delete: false },
+      update: {},
+    });
+
+    await prisma.userPermission.upsert({
+      where: {
+        userId_entityId: { userId: user.id, entityId: profileEntity.id },
+      }, // ← fix
+      create: {
+        userId: user.id,
+        entityId: profileEntity.id,
+        canRead: true,
         scope: PermissionScope.ALL,
+        permissionType: profileEntity.permissionType,
       },
-      // Can see, update and delete clients
-      {
-        table: 'clients',
-        crud: { create: true, read: true, update: true, delete: true },
+      update: {
+        canRead: true,
         scope: PermissionScope.ALL,
+        permissionType: profileEntity.permissionType,
       },
-    ];
-    if (i !== 1) {
-      await prisma.userPermission.upsert({
-        where: { userId_tableName: { userId: user.id, tableName: 'users' } },
-        create: {
-          userId: user.id,
-          tableName: 'users',
-          canRead: true,
-          scope: 'OWN',
-        },
-        update: { canRead: true, scope: 'OWN' },
-      });
-    } else {
-      for (const perm of user01permissions) {
-        await prisma.userPermission.upsert({
-          where: {
-            userId_tableName: {
-              userId: user.id,
-              tableName: perm.table,
-            },
-          },
-          create: {
-            userId: user.id,
-            tableName: perm.table,
-            canCreate: perm.crud.create,
-            canRead: perm.crud.read,
-            canUpdate: perm.crud.update,
-            canDelete: perm.crud.delete,
-            scope: perm.scope,
-          },
-          update: {
-            canCreate: perm.crud.create,
-            canRead: perm.crud.read,
-            canUpdate: perm.crud.update,
-            canDelete: perm.crud.delete,
-            scope: perm.scope,
-          },
-        });
-      }
-    }
+    });
 
     console.log(`✅ Created user:`, user);
   }

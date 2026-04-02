@@ -51,6 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   AuditLog: 'AuditLog',
+  DevAccount: 'DevAccount',
+  Entity: 'Entity',
   Tenant: 'Tenant',
   User: 'User',
   UserPermission: 'UserPermission'
@@ -91,6 +93,30 @@ export const AuditLogScalarFieldEnum = {
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
+export const DevAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type DevAccountScalarFieldEnum = (typeof DevAccountScalarFieldEnum)[keyof typeof DevAccountScalarFieldEnum]
+
+
+export const EntityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  label: 'label',
+  permissionType: 'permissionType',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedByUserId: 'deletedByUserId',
+  deletedAt: 'deletedAt',
+  isActive: 'isActive'
+} as const
+
+export type EntityScalarFieldEnum = (typeof EntityScalarFieldEnum)[keyof typeof EntityScalarFieldEnum]
+
+
 export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -126,12 +152,13 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const UserPermissionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  tableName: 'tableName',
+  entityId: 'entityId',
   canCreate: 'canCreate',
   canRead: 'canRead',
   canUpdate: 'canUpdate',
   canDelete: 'canDelete',
   scope: 'scope',
+  permissionType: 'permissionType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedByUserId: 'deletedByUserId',
@@ -194,6 +221,24 @@ export const AuditLogOrderByRelevanceFieldEnum = {
 export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
 
 
+export const DevAccountOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+} as const
+
+export type DevAccountOrderByRelevanceFieldEnum = (typeof DevAccountOrderByRelevanceFieldEnum)[keyof typeof DevAccountOrderByRelevanceFieldEnum]
+
+
+export const EntityOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  label: 'label',
+  deletedByUserId: 'deletedByUserId'
+} as const
+
+export type EntityOrderByRelevanceFieldEnum = (typeof EntityOrderByRelevanceFieldEnum)[keyof typeof EntityOrderByRelevanceFieldEnum]
+
+
 export const TenantOrderByRelevanceFieldEnum = {
   id: 'id',
   name: 'name',
@@ -221,7 +266,7 @@ export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnu
 export const UserPermissionOrderByRelevanceFieldEnum = {
   id: 'id',
   userId: 'userId',
-  tableName: 'tableName',
+  entityId: 'entityId',
   deletedByUserId: 'deletedByUserId'
 } as const
 

@@ -10,7 +10,11 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { PermissionScope, TablePermission } from "@vivero/shared";
+import {
+  PermissionScope,
+  PermissionType,
+  TablePermission,
+} from "@vivero/shared";
 import { Shield } from "lucide-react";
 import { memo } from "react";
 import {
@@ -22,6 +26,7 @@ import { usePermission } from "@/hooks/usePermission";
 
 export type PermissionRow = {
   tableName: string;
+  label: string;
 } & TablePermission;
 
 export const PermissionRowItem = memo(function PermissionRowItem({
@@ -41,8 +46,11 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   ) => void;
   onScopeChange: (tableName: string, scope: PermissionScope) => void;
 }) {
-  const meta = getTableMeta(row.tableName);
-  const Icon = meta.icon;
+  console.log("row", row);
+  console.log("originalRow", originalRow);
+
+  const tableInfo = getTableMeta(row.tableName);
+  const Icon = tableInfo.icon;
 
   const isDirty =
     row.canCreate !== originalRow.canCreate ||
@@ -51,24 +59,40 @@ export const PermissionRowItem = memo(function PermissionRowItem({
     row.canDelete !== originalRow.canDelete ||
     row.scope !== originalRow.scope;
 
-  const activeCrudCount = [
-    row.canRead,
-    row.canCreate,
-    row.canUpdate,
-    row.canDelete,
-  ].filter(Boolean).length;
+  const allowedActions: Record<
+    PermissionType,
+    Array<"canCreate" | "canRead" | "canUpdate" | "canDelete">
+  > = {
+    CRUD: ["canCreate", "canRead", "canUpdate", "canDelete"],
+    PROCESS: ["canRead", "canCreate"], // create = execute
+    READ_ONLY: ["canRead"],
+  };
 
   const dataTablePermissions = usePermission("user_permissions");
+  const requesterPermsForThisEntity = usePermission(row.tableName);
 
   const canEdit = dataTablePermissions.canUpdate;
+
+  const visibleColumns = CRUD_COLUMNS.filter((col) =>
+    allowedActions[row.permissionType].includes(col.key),
+  );
+
+  const activeCrudCount = visibleColumns.filter((col) => row[col.key]).length;
+  const totalCrudCount = visibleColumns.length;
 
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-6 rounded-xl border p-5 transition-all lg:flex-row lg:items-center lg:gap-4",
+        "group relative flex flex-col gap-6 rounded-xl border-l-4 p-5 transition-all lg:flex-row lg:items-center lg:gap-4",
         isDirty
           ? "border-primary/40 bg-primary/[0.04] shadow-sm"
           : "border-border/50 bg-muted/30 hover:bg-muted/50",
+        !isDirty &&
+          {
+            READ_ONLY: "border-l-sky-400/60",
+            PROCESS: "border-l-amber-400/60",
+            CRUD: "border-l-emerald-400/60",
+          }[row.permissionType],
       )}
     >
       {/* Dirty indicator */}
@@ -83,7 +107,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
         </div>
         <div className="flex flex-col gap-0.5 min-w-0">
           <span className="text-sm font-semibold text-foreground truncate">
-            {meta.label}
+            {row.label}
           </span>
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70">
             {row.tableName}
@@ -93,9 +117,10 @@ export const PermissionRowItem = memo(function PermissionRowItem({
 
       {/* CRUD switches or Status View */}
       <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 lg:flex lg:flex-1 lg:items-center lg:gap-8 lg:px-4">
-        {CRUD_COLUMNS.map((col) => {
+        {visibleColumns.map((col) => {
           const isActive = row[col.key];
           const wasChanged = row[col.key] !== originalRow[col.key];
+          const requesterHasThisAction = requesterPermsForThisEntity[col.key];
 
           if (!canEdit) {
             return (
@@ -142,7 +167,14 @@ export const PermissionRowItem = memo(function PermissionRowItem({
           return (
             <Tooltip key={col.key}>
               <TooltipTrigger asChild>
-                <label className="flex cursor-pointer flex-col items-center gap-1 group/switch">
+                <label
+                  className={cn(
+                    "flex flex-col items-center gap-1 group/switch",
+                    !requesterHasThisAction
+                      ? "cursor-not-allowed opacity-40"
+                      : "cursor-pointer",
+                  )}
+                >
                   <div className="flex items-center gap-3">
                     <col.icon
                       className={cn(
@@ -161,7 +193,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                       onCheckedChange={() =>
                         onToggleCrud(row.tableName, col.key)
                       }
-                      disabled={!canEdit}
+                      disabled={!canEdit || !requesterHasThisAction}
                       className={cn(
                         "h-6 w-11 data-[state=checked]:bg-primary",
                         wasChanged
@@ -179,13 +211,15 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                 sideOffset={5}
               >
                 <p className="text-xs font-medium">
-                  {canEdit
-                    ? isActive
-                      ? "Desactivar"
-                      : "Activar"
-                    : isActive
-                      ? "Activado"
-                      : "Desactivado"}{" "}
+                  {!requesterHasThisAction
+                    ? `No tienes permiso para conceder "${col.label.toLowerCase()}"`
+                    : canEdit
+                      ? isActive
+                        ? "Desactivar"
+                        : "Activar"
+                      : isActive
+                        ? "Activado"
+                        : "Desactivado"}{" "}
                   {col.label.toLowerCase()}
                 </p>
               </TooltipContent>
@@ -233,43 +267,52 @@ export const PermissionRowItem = memo(function PermissionRowItem({
               variant="outline"
               className="flex w-full overflow-hidden rounded-xl border bg-muted/40 p-1 lg:w-auto"
             >
-              {(["NONE", "OWN", "ALL"] as const).map((scope) => (
-                <ToggleGroupItem
-                  key={scope}
-                  value={scope}
-                  className={cn(
-                    "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
-                    // Estados OFF
-                    "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted/50",
-                    // Estados ON (base)
-                    "data-[state=on]:shadow-sm data-[state=on]:font-bold",
-                    // Estados ON específicos por scope (¡sin row.scope === scope!)
-                    scope === "ALL" &&
-                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                    scope === "OWN" &&
-                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                    scope === "NONE" &&
-                      "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                  )}
-                  aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${meta.label}`}
-                >
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="w-full block text-center">
-                        {SCOPE_LABELS[scope].label}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="bottom"
-                      className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md"
-                    >
-                      <p className="text-xs font-medium">
-                        {SCOPE_LABELS[scope].desc}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </ToggleGroupItem>
-              ))}
+              {(["NONE", "OWN", "ALL"] as const).map((scope) => {
+                const isRestrictedByManager =
+                  scope === "ALL" && requesterPermsForThisEntity.scope !== "ALL";
+
+                return (
+                  <ToggleGroupItem
+                    key={scope}
+                    value={scope}
+                    disabled={isRestrictedByManager}
+                    className={cn(
+                      "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
+                      // Estados OFF
+                      "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted/50",
+                      // Estados ON (base)
+                      "data-[state=on]:shadow-sm data-[state=on]:font-bold",
+                      // Estados ON específicos por scope (¡sin row.scope === scope!)
+                      scope === "ALL" &&
+                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                      scope === "OWN" &&
+                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                      scope === "NONE" &&
+                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+                      isRestrictedByManager && "opacity-40 cursor-not-allowed",
+                    )}
+                    aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${row.label}`}
+                  >
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="w-full block text-center">
+                          {SCOPE_LABELS[scope].label}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        side="bottom"
+                        className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md"
+                      >
+                        <p className="text-xs font-medium">
+                          {isRestrictedByManager
+                            ? "No tienes permiso para conceder acceso a TODOS los registros"
+                            : SCOPE_LABELS[scope].desc}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </ToggleGroupItem>
+                );
+              })}
             </ToggleGroup>
           )}
         </div>
@@ -292,7 +335,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
               : "",
           )}
         >
-          {activeCrudCount}/4
+          {activeCrudCount}/{totalCrudCount}
         </Badge>
       </div>
     </div>

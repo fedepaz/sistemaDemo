@@ -16,42 +16,61 @@ export class PermissionsRepository implements IPermissionRepository {
       where: {
         userId,
         deletedAt: null,
+        entity: {
+          deletedAt: null,
+          isActive: true,
+        },
       },
       select: {
         userId: true,
-        tableName: true,
+        entityId: true,
+        entity: {
+          select: {
+            name: true,
+          },
+        },
         canCreate: true,
         canRead: true,
         canUpdate: true,
         canDelete: true,
         scope: true,
+        permissionType: true,
+        createdAt: true,
       },
     });
 
-    return records as UserPermissionRecord[];
+    return records
+      .filter((r) => r.entity !== null)
+      .map((r) => ({
+        ...r,
+        entityName: r.entity.name,
+        createdAt: r.createdAt,
+      }));
   }
 
   async upsert(
     userId: string,
-    tableName: string,
+    entityId: string,
     data: Partial<{
       canCreate: boolean;
       canRead: boolean;
       canUpdate: boolean;
       canDelete: boolean;
       scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void> {
     await this.prisma.userPermission.upsert({
-      where: { userId_tableName: { userId, tableName } },
+      where: { userId_entityId: { userId, entityId } },
       create: {
         userId,
-        tableName,
+        entityId,
         canCreate: data.canCreate ?? false,
         canRead: data.canRead ?? false,
         canUpdate: data.canUpdate ?? false,
         canDelete: data.canDelete ?? false,
         scope: data.scope ?? 'NONE',
+        permissionType: data.permissionType ?? 'CRUD',
       },
       update: data,
     });
@@ -59,10 +78,16 @@ export class PermissionsRepository implements IPermissionRepository {
 
   async deleteByUserIdTableName(
     userId: string,
-    tableName: string,
+    entityId: string,
   ): Promise<void> {
     await this.prisma.userPermission.delete({
-      where: { userId_tableName: { userId, tableName } },
+      where: { userId_entityId: { userId, entityId } },
+    });
+  }
+
+  async deleteAllForUser(userId: string): Promise<void> {
+    await this.prisma.userPermission.deleteMany({
+      where: { userId },
     });
   }
 }

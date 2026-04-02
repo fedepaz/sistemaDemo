@@ -12,23 +12,19 @@ import { UpdateUserProfileDto } from '@vivero/shared';
 export class UsersService {
   constructor(private readonly repo: UsersRepository) {}
 
-  async getAllUsers() {
-    const users = await this.repo.findAll();
-    return users;
-  }
-  async getAllUsersAdmin() {
-    const users = await this.repo.findAllAdmin();
+  async getAllUsers(requesterId: string) {
+    const users = await this.repo.findAll(requesterId);
     return users;
   }
 
-  async getUserById(userId: string) {
-    const user = await this.repo.findById(userId);
+  async getUserById(userId: string, requesterId: string) {
+    const user = await this.repo.findById(userId, requesterId);
     if (!user) throw new NotFoundException('User not found');
     return user;
   }
 
-  async getProfile(userId: string) {
-    return this.getUserById(userId);
+  async getProfile(userId: string, requesterId: string) {
+    return this.getUserById(userId, requesterId);
   }
 
   async softRemoveById(userId: string, deletedByUserId: string) {
@@ -59,9 +55,9 @@ export class UsersService {
     return this.repo.softDeleteByUsername(username, deletedByUserId);
   }
 
-  async recoverUserById(id: string) {
+  async recoverUserById(id: string, requesterId: string) {
     try {
-      return this.repo.recoverById(id);
+      return this.repo.recover(id, requesterId);
     } catch (error) {
       console.error('Error recovering user:', error);
       throw new InternalServerErrorException('Error recovering user');

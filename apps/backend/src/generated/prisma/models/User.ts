@@ -241,6 +241,7 @@ export type UserWhereInput = {
   auditLogs?: Prisma.AuditLogListRelationFilter
   deletedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   deletedPermissions?: Prisma.UserPermissionListRelationFilter
+  deletedEntities?: Prisma.EntityListRelationFilter
   deletedUsers?: Prisma.UserListRelationFilter
 }
 
@@ -261,6 +262,7 @@ export type UserOrderByWithRelationInput = {
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   deletedByUser?: Prisma.UserOrderByWithRelationInput
   deletedPermissions?: Prisma.UserPermissionOrderByRelationAggregateInput
+  deletedEntities?: Prisma.EntityOrderByRelationAggregateInput
   deletedUsers?: Prisma.UserOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
@@ -285,6 +287,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   auditLogs?: Prisma.AuditLogListRelationFilter
   deletedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   deletedPermissions?: Prisma.UserPermissionListRelationFilter
+  deletedEntities?: Prisma.EntityListRelationFilter
   deletedUsers?: Prisma.UserListRelationFilter
 }, "id" | "username" | "email">
 
@@ -339,6 +342,7 @@ export type UserCreateInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   deletedByUser?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedPermissions?: Prisma.UserPermissionCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -357,6 +361,7 @@ export type UserUncheckedCreateInput = {
   deletedAt?: Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   deletedPermissions?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityUncheckedCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -375,6 +380,7 @@ export type UserUpdateInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   deletedByUser?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedPermissions?: Prisma.UserPermissionUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -393,6 +399,7 @@ export type UserUncheckedUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   deletedPermissions?: Prisma.UserPermissionUncheckedUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUncheckedUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -444,6 +451,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type UserListRelationFilter = {
   every?: Prisma.UserWhereInput
   some?: Prisma.UserWhereInput
@@ -452,11 +464,6 @@ export type UserListRelationFilter = {
 
 export type UserOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserOrderByRelevanceInput = {
@@ -522,6 +529,22 @@ export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutAuditLogsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type UserCreateNestedOneWithoutDeletedEntitiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedEntitiesInput, Prisma.UserUncheckedCreateWithoutDeletedEntitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedEntitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutDeletedEntitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedEntitiesInput, Prisma.UserUncheckedCreateWithoutDeletedEntitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedEntitiesInput
+  upsert?: Prisma.UserUpsertWithoutDeletedEntitiesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedEntitiesInput, Prisma.UserUpdateWithoutDeletedEntitiesInput>, Prisma.UserUncheckedUpdateWithoutDeletedEntitiesInput>
 }
 
 export type UserCreateNestedManyWithoutTenantInput = {
@@ -654,6 +677,7 @@ export type UserCreateWithoutAuditLogsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   deletedByUser?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedPermissions?: Prisma.UserPermissionCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -671,6 +695,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   deletedByUserId?: string | null
   deletedAt?: Date | string | null
   deletedPermissions?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityUncheckedCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -704,6 +729,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   deletedByUser?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedPermissions?: Prisma.UserPermissionUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -720,6 +746,95 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedPermissions?: Prisma.UserPermissionUncheckedUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUncheckedUpdateManyWithoutDeletedByUserNestedInput
+  deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByUserNestedInput
+}
+
+export type UserCreateWithoutDeletedEntitiesInput = {
+  id?: string
+  username: string
+  email?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  passwordHash: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  deletedByUser?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
+  deletedPermissions?: Prisma.UserPermissionCreateNestedManyWithoutDeletedByUserInput
+  deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByUserInput
+}
+
+export type UserUncheckedCreateWithoutDeletedEntitiesInput = {
+  id?: string
+  username: string
+  email?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  passwordHash: string
+  isActive?: boolean
+  tenantId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedByUserId?: string | null
+  deletedAt?: Date | string | null
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  deletedPermissions?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutDeletedByUserInput
+  deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByUserInput
+}
+
+export type UserCreateOrConnectWithoutDeletedEntitiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedEntitiesInput, Prisma.UserUncheckedCreateWithoutDeletedEntitiesInput>
+}
+
+export type UserUpsertWithoutDeletedEntitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeletedEntitiesInput, Prisma.UserUncheckedUpdateWithoutDeletedEntitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedEntitiesInput, Prisma.UserUncheckedCreateWithoutDeletedEntitiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeletedEntitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeletedEntitiesInput, Prisma.UserUncheckedUpdateWithoutDeletedEntitiesInput>
+}
+
+export type UserUpdateWithoutDeletedEntitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  deletedByUser?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
+  deletedPermissions?: Prisma.UserPermissionUpdateManyWithoutDeletedByUserNestedInput
+  deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeletedEntitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   deletedPermissions?: Prisma.UserPermissionUncheckedUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
@@ -738,6 +853,7 @@ export type UserCreateWithoutTenantInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   deletedByUser?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedPermissions?: Prisma.UserPermissionCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -755,6 +871,7 @@ export type UserUncheckedCreateWithoutTenantInput = {
   deletedAt?: Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   deletedPermissions?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityUncheckedCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -817,6 +934,7 @@ export type UserCreateWithoutDeletedUsersInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   deletedByUser?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedPermissions?: Prisma.UserPermissionCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserUncheckedCreateWithoutDeletedUsersInput = {
@@ -834,6 +952,7 @@ export type UserUncheckedCreateWithoutDeletedUsersInput = {
   deletedAt?: Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   deletedPermissions?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
 export type UserCreateOrConnectWithoutDeletedUsersInput = {
@@ -855,6 +974,7 @@ export type UserCreateWithoutDeletedByUserInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   deletedPermissions?: Prisma.UserPermissionCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -872,6 +992,7 @@ export type UserUncheckedCreateWithoutDeletedByUserInput = {
   deletedAt?: Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   deletedPermissions?: Prisma.UserPermissionUncheckedCreateNestedManyWithoutDeletedByUserInput
+  deletedEntities?: Prisma.EntityUncheckedCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -911,6 +1032,7 @@ export type UserUpdateWithoutDeletedUsersInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   deletedByUser?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedPermissions?: Prisma.UserPermissionUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedUsersInput = {
@@ -928,6 +1050,7 @@ export type UserUncheckedUpdateWithoutDeletedUsersInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   deletedPermissions?: Prisma.UserPermissionUncheckedUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutDeletedByUserInput = {
@@ -960,6 +1083,7 @@ export type UserCreateWithoutDeletedPermissionsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   deletedByUser?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
+  deletedEntities?: Prisma.EntityCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -977,6 +1101,7 @@ export type UserUncheckedCreateWithoutDeletedPermissionsInput = {
   deletedByUserId?: string | null
   deletedAt?: Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  deletedEntities?: Prisma.EntityUncheckedCreateNestedManyWithoutDeletedByUserInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByUserInput
 }
 
@@ -1010,6 +1135,7 @@ export type UserUpdateWithoutDeletedPermissionsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   deletedByUser?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
+  deletedEntities?: Prisma.EntityUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -1027,6 +1153,7 @@ export type UserUncheckedUpdateWithoutDeletedPermissionsInput = {
   deletedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  deletedEntities?: Prisma.EntityUncheckedUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -1058,6 +1185,7 @@ export type UserUpdateWithoutTenantInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   deletedByUser?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedPermissions?: Prisma.UserPermissionUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -1075,6 +1203,7 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   deletedPermissions?: Prisma.UserPermissionUncheckedUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUncheckedUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -1120,6 +1249,7 @@ export type UserUpdateWithoutDeletedByUserInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   deletedPermissions?: Prisma.UserPermissionUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -1137,6 +1267,7 @@ export type UserUncheckedUpdateWithoutDeletedByUserInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   deletedPermissions?: Prisma.UserPermissionUncheckedUpdateManyWithoutDeletedByUserNestedInput
+  deletedEntities?: Prisma.EntityUncheckedUpdateManyWithoutDeletedByUserNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByUserNestedInput
 }
 
@@ -1162,12 +1293,14 @@ export type UserUncheckedUpdateManyWithoutDeletedByUserInput = {
 export type UserCountOutputType = {
   auditLogs: number
   deletedPermissions: number
+  deletedEntities: number
   deletedUsers: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   deletedPermissions?: boolean | UserCountOutputTypeCountDeletedPermissionsArgs
+  deletedEntities?: boolean | UserCountOutputTypeCountDeletedEntitiesArgs
   deletedUsers?: boolean | UserCountOutputTypeCountDeletedUsersArgs
 }
 
@@ -1198,6 +1331,13 @@ export type UserCountOutputTypeCountDeletedPermissionsArgs<ExtArgs extends runti
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountDeletedEntitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EntityWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountDeletedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserWhereInput
 }
@@ -1220,6 +1360,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   deletedByUser?: boolean | Prisma.User$deletedByUserArgs<ExtArgs>
   deletedPermissions?: boolean | Prisma.User$deletedPermissionsArgs<ExtArgs>
+  deletedEntities?: boolean | Prisma.User$deletedEntitiesArgs<ExtArgs>
   deletedUsers?: boolean | Prisma.User$deletedUsersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1247,6 +1388,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   deletedByUser?: boolean | Prisma.User$deletedByUserArgs<ExtArgs>
   deletedPermissions?: boolean | Prisma.User$deletedPermissionsArgs<ExtArgs>
+  deletedEntities?: boolean | Prisma.User$deletedEntitiesArgs<ExtArgs>
   deletedUsers?: boolean | Prisma.User$deletedUsersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1258,6 +1400,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     deletedByUser: Prisma.$UserPayload<ExtArgs> | null
     deletedPermissions: Prisma.$UserPermissionPayload<ExtArgs>[]
+    deletedEntities: Prisma.$EntityPayload<ExtArgs>[]
     deletedUsers: Prisma.$UserPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1617,6 +1760,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deletedByUser<T extends Prisma.User$deletedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   deletedPermissions<T extends Prisma.User$deletedPermissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedPermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deletedEntities<T extends Prisma.User$deletedEntitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedEntitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EntityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deletedUsers<T extends Prisma.User$deletedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2066,6 +2210,30 @@ export type User$deletedPermissionsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.UserPermissionScalarFieldEnum | Prisma.UserPermissionScalarFieldEnum[]
+}
+
+/**
+ * User.deletedEntities
+ */
+export type User$deletedEntitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Entity
+   */
+  select?: Prisma.EntitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Entity
+   */
+  omit?: Prisma.EntityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EntityInclude<ExtArgs> | null
+  where?: Prisma.EntityWhereInput
+  orderBy?: Prisma.EntityOrderByWithRelationInput | Prisma.EntityOrderByWithRelationInput[]
+  cursor?: Prisma.EntityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EntityScalarFieldEnum | Prisma.EntityScalarFieldEnum[]
 }
 
 /**

@@ -20,3 +20,9 @@ enum EntityType {
   MESSAGE
   USER_PREFERENCE
 }
+
+enum PermissionType {
+  CRUD
+  PROCESS
+  READ_ONLY
+}

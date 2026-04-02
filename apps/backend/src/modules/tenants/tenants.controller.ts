@@ -12,20 +12,17 @@ export class TenantsController {
 
   @Get('all')
   @RequirePermission({ tableName: 'tenants', action: 'read' })
-  async getAllTenants() {
-    return this.tenantsService.getAllTenants();
-  }
-
-  @Get('allAdmin')
-  @RequirePermission({ tableName: 'tenants', action: 'delete' })
-  async getAllTenantsAdmin() {
-    return this.tenantsService.getAllTenantsAdmin();
+  async getAllTenants(@CurrentUser() user: AuthUser) {
+    return this.tenantsService.getAllTenants(user.id);
   }
 
   @Get('tenant/:tenantId')
   @RequirePermission({ tableName: 'tenants', action: 'read', scope: 'ALL' })
-  async getTenantById(@Param('tenantId') tenantId: string) {
-    return this.tenantsService.getTenantById(tenantId);
+  async getTenantById(
+    @Param('tenantId') tenantId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.tenantsService.getTenantById(tenantId, user.id);
   }
 
   @Delete(':tenantId')
@@ -39,7 +36,10 @@ export class TenantsController {
 
   @Patch(':tenantId/recover')
   @RequirePermission({ tableName: 'tenants', action: 'update', scope: 'ALL' })
-  async recoverById(@Param('tenantId') tenantId: string) {
-    return this.tenantsService.recoverById(tenantId);
+  async recoverById(
+    @Param('tenantId') tenantId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.tenantsService.recoverById(tenantId, user.id);
   }
 }

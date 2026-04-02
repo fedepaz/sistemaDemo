@@ -17,6 +17,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
 
 interface NavigationItem {
   title: string;
@@ -39,6 +40,7 @@ interface NavigationGroup {
 export function DesktopSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
+  const { name, initials } = useCompanyData();
 
   const { userProfile, permissions } = useAuthContext();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
@@ -89,10 +91,12 @@ export function DesktopSidebar() {
           {!isCollapsed && (
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center ">
-                <span className="text-primary font-bold text-sm">DM</span>
+                <span className="text-primary font-bold text-sm">
+                  {initials}
+                </span>
               </div>
               <div>
-                <h2 className="font-bold">Demo</h2>
+                <h2 className="font-bold">{name}</h2>
                 <p className="text-xs text-muted-foreground">
                   Sistema de gestión
                 </p>

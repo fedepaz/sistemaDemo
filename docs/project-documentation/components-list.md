@@ -121,18 +121,14 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `RegisterLoading` | [x] | [x] | [x] |
 | `LoginLoading` | [x] | [x] | [x] |
 
-### Clients
+### Entities
 | Component | Responsive | Color Tokens | UX Helpers |
 | :--- | :---: | :---: | :---: |
-| `ClientForm` | [x] | [x] | [x] |
-| `ClientsDashboardSkeleton` | [x] | [x] | [x] |
-| `ClientsDataTable` | [x] | [x] | [x] |
-| `ClientsKPI` | [x] | [x] | [x] |
-| `ClientsDashboard` | [x] | [x] | [x] |
-| `CellComponent` | [x] | [x] | [x] |
-| `HeaderComponent` | [x] | [x] | [x] |
-| `CellBadgeComponent` | [x] | [x] | [x] |
-| `RenderInlineEdit` | [x] | [x] | [ ] |
+| `EntityCreateForm` | [x] | [x] | [x] |
+| `EntityDashboardSkeleton` | [x] | [x] | [x] |
+| `EntityDataTable` | [x] | [x] | [x] |
+| `EntitiesKPIs` | [x] | [x] | [x] |
+| `EntityDashboard` | [x] | [x] | [x] |
 
 ### Dashboard
 | Component | Responsive | Color Tokens | UX Helpers |
@@ -141,22 +137,12 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DashboardAlerts` | [x] | [x] | [x] |
 | `DashboardKPISkeleton` | [x] | [x] | [x] |
 | `DashboardKPI` | [x] | [x] | [x] |
-| `FeatureNavigationSkeleton` | [x] | [x] | [x] |
-| `FeatureNavigation` | [x] | [x] | [x] |
+| `CompanyInfoCardSkeleton` | [x] | [x] | [x] |
+| `CompanyInfoCard` | [x] | [x] | [x] |
 | `RecentActivitySkeleton` | [x] | [x] | [x] |
 | `RecentActivity` | [x] | [x] | [x] |
 | `RootDashboardSkeleton` | [x] | [x] | [x] |
 | `RootDashboard` | [x] | [x] | [x] |
-
-### Invoices
-| Component | Responsive | Color Tokens | UX Helpers |
-| :--- | :---: | :---: | :---: |
-| `InvoiceForm` | [x] | [x] | [x] |
-| `InvoicesDataTable` | [x] | [x] | [x] |
-| `InvoiceKPIs` | [x] | [x] | [x] |
-| `InvoicesDashboard` | [x] | [x] | [x] |
-| `InvoicesDashboardSkeleton` | [x] | [x] | [x] |
-| `CellAmountComponent" | [x] | [x] | [x] |
 
 ### Permissions
 | Component | Responsive | Color Tokens | UX Helpers |
@@ -178,15 +164,6 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ExtendidosForm` | [x] | [x] | [x] |
 | `ExtendidoKPIs` | [x] | [x] | [x] |
 | `ExtendidoDashboard` | [x] | [x] | [x] |
-
-### Purchase Orders
-| Component | Responsive | Color Tokens | UX Helpers |
-| :--- | :---: | :---: | :---: |
-| `PurchaseOrdersDataTable` | [x] | [x] | [x] |
-| `PurchaseOrderForm` | [x] | [x] | [x] |
-| `PurchaseOrdersDashboardSkeleton` | [x] | [x] | [x] |
-| `PurchaseOrderKPIs` | [x] | [x] | [x] |
-| `PurchaseOrdersDashboard` | [x] | [x] | [x] |
 
 ### Users
 | Component | Responsive | Color Tokens | UX Helpers |

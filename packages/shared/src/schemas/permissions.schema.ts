@@ -1,9 +1,11 @@
 // shared/src/schemas/permissions.schema.ts
 import { z } from "zod";
-import { ALLOWED_TABLE_NAMES } from "../constants/managed-entities";
 
 export const PermissionScopeSchema = z.enum(["NONE", "OWN", "ALL"]);
 export type PermissionScope = z.infer<typeof PermissionScopeSchema>;
+
+export const PermissionTypeSchema = z.enum(["CRUD", "PROCESS", "READ_ONLY"]);
+export type PermissionType = z.infer<typeof PermissionTypeSchema>;
 
 export const CrudActionSchema = z.enum(["create", "read", "update", "delete"]);
 export type CrudAction = z.infer<typeof CrudActionSchema>;
@@ -14,6 +16,7 @@ export const TablePermissionSchema = z.object({
   canUpdate: z.boolean(),
   canDelete: z.boolean(),
   scope: PermissionScopeSchema,
+  permissionType: PermissionTypeSchema,
 });
 
 export type TablePermission = z.infer<typeof TablePermissionSchema>;
@@ -26,8 +29,29 @@ export const UserPermissionsSchema = z.record(
 export type UserPermissions = z.infer<typeof UserPermissionsSchema>;
 
 export const PermissionCheckSchema = z.object({
-  tableName: z.enum(ALLOWED_TABLE_NAMES),
+  tableName: z.string(),
   action: CrudActionSchema,
   scope: PermissionScopeSchema.optional(),
 });
 export type PermissionCheck = z.infer<typeof PermissionCheckSchema>;
+
+export const EntitySchema = z.object({
+  name: z.string(),
+  label: z.string(),
+  permissionType: PermissionTypeSchema,
+});
+
+export type Entity = z.infer<typeof EntitySchema>;
+
+export const CreateEntitySchema = z.object({
+  name: z
+    .string()
+    .min(1)
+    .max(50)
+    .regex(/^[a-zA-Z0-9_]+$/)
+    .transform((v) => v.toLowerCase()),
+  label: z.string().min(1).max(50),
+  permissionType: PermissionTypeSchema,
+});
+
+export type CreateEntityDto = z.infer<typeof CreateEntitySchema>;

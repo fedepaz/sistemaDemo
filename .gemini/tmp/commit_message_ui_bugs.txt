@@ -1,0 +1,11 @@
+feat(ui): improve skeleton responsiveness and fix granular permission guards
+
+This commit addresses responsiveness issues in loading skeletons and fixes critical bugs in the
+permission system:
+- Enhanced 'DataTableSkeleton' with mobile-optimized header and column visibility.
+- Refined 'DashboardKPISkeleton' to prevent overflow on small screens.
+- Refactored all permissions skeletons to use the standard 'Skeleton' component and improve layout.
+- Fixed 'auditLog' and 'entities' controllers to use granular permission guards instead of
+  'super_admin'.
+- Corrected API endpoint path in 'useCreateEntity' hook.
+- Updated backend features documentation to reflect resource-specific permission protection.

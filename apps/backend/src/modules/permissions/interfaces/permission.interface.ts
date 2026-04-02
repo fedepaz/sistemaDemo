@@ -4,13 +4,14 @@ export interface IPermissionRepository {
   findManyByUserId(userId: string): Promise<UserPermissionRecord[]>;
   upsert(
     userId: string,
-    tableName: string,
+    entityId: string,
     data: Partial<{
       canCreate: boolean;
       canRead: boolean;
       canUpdate: boolean;
       canDelete: boolean;
       scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<void>;
   deleteByUserIdTableName(userId: string, tableName: string): Promise<void>;
@@ -18,10 +19,13 @@ export interface IPermissionRepository {
 
 export interface UserPermissionRecord {
   userId: string;
-  tableName: string;
+  entityId: string;
+  entityName: string;
   canCreate: boolean;
   canRead: boolean;
   canUpdate: boolean;
   canDelete: boolean;
   scope: 'NONE' | 'OWN' | 'ALL';
+  permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
+  createdAt: Date;
 }

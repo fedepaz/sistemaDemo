@@ -3,7 +3,8 @@
 model UserPermission {
   id         String   @id @default(cuid())
   userId     String
-  tableName  String   // e.g., "plants", "greenhouses", "reports"
+  entityId String
+  entity    Entity @relation(fields: [entityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   
   // CRUD flags
   canCreate  Boolean  @default(false)
@@ -12,7 +13,11 @@ model UserPermission {
   canDelete  Boolean  @default(false)
   
   // Row-level scope
-  scope      PermissionScope @default(NONE)
+  scope      PermissionScope @default(ALL)
+  
+  // Permission type (CRUD, PROCESS, READ_ONLY)
+  permissionType PermissionType @default(CRUD)
+  
   
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -22,9 +27,10 @@ model UserPermission {
 
   deletedAt  DateTime? @db.Timestamp(0)
 
-  @@unique([userId, tableName])
+  @@unique([userId, entityId])
   @@index([userId, deletedAt])
-  @@index([tableName])
+  @@index([entityId])
+  @@index([deletedByUserId])
   @@map("user_permissions")
 }
 

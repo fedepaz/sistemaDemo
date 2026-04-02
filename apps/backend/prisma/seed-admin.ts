@@ -1,7 +1,11 @@
 // prisma/seed-admin.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PermissionScope, PrismaClient } from '../src/generated/prisma/client';
+import {
+  PermissionScope,
+  PermissionType,
+  PrismaClient,
+} from '../src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
@@ -56,106 +60,202 @@ async function main() {
     console.log('✅ Default tenant created');
   }
 
+  let userProfileEntityId: string;
+
+  const existingUserProfileEntity = await prisma.entity.findFirst({
+    where: { name: 'user_profile' },
+  });
+
+  if (existingUserProfileEntity) {
+    userProfileEntityId = existingUserProfileEntity.id;
+    console.log('✅ User profile entity found');
+  } else {
+    const newUserProfileEntity = await prisma.entity.create({
+      data: {
+        name: 'user_profile',
+        label: 'Perfil de usuario',
+        permissionType: PermissionType.READ_ONLY,
+      },
+    });
+    userProfileEntityId = newUserProfileEntity.id;
+    console.log('✅ User profile entity created');
+  }
+
+  let userPermissionEntityId: string;
+
+  const existingUserPermissionEntity = await prisma.entity.findFirst({
+    where: { name: 'user_permissions' },
+  });
+
+  if (existingUserPermissionEntity) {
+    userPermissionEntityId = existingUserPermissionEntity.id;
+    console.log('✅ User permission entity found');
+  } else {
+    const newUserPermissionEntity = await prisma.entity.create({
+      data: {
+        name: 'user_permissions',
+        label: 'Permisos de usuario',
+        permissionType: PermissionType.CRUD,
+      },
+    });
+    userPermissionEntityId = newUserPermissionEntity.id;
+    console.log('✅ User permission entity created');
+  }
+
+  let usersEntityId: string;
+
+  const existingUsersEntity = await prisma.entity.findFirst({
+    where: { name: 'users' },
+  });
+
+  if (existingUsersEntity) {
+    usersEntityId = existingUsersEntity.id;
+    console.log('✅ Users entity found');
+  } else {
+    const newUsersEntity = await prisma.entity.create({
+      data: {
+        name: 'users',
+        label: 'Usuarios',
+        permissionType: PermissionType.CRUD,
+      },
+    });
+    usersEntityId = newUsersEntity.id;
+    console.log('✅ Users entity created');
+  }
+
+  let entitiesId: string;
+
+  const existingEntitiesEntity = await prisma.entity.findFirst({
+    where: { name: 'entities' },
+  });
+
+  if (existingEntitiesEntity) {
+    entitiesId = existingEntitiesEntity.id;
+    console.log('✅ Entities entity found');
+  } else {
+    const newEntitiesEntity = await prisma.entity.create({
+      data: {
+        name: 'entities',
+        label: 'Entidades',
+        permissionType: PermissionType.CRUD,
+      },
+    });
+    entitiesId = newEntitiesEntity.id;
+    console.log('✅ Entities entity created');
+  }
+
+  let auditLogsId: string;
+
+  const existingAuditLogsEntity = await prisma.entity.findFirst({
+    where: { name: 'audit_logs' },
+  });
+
+  if (existingAuditLogsEntity) {
+    auditLogsId = existingAuditLogsEntity.id;
+    console.log('✅ Audit logs entity found');
+  } else {
+    const newAuditLogsEntity = await prisma.entity.create({
+      data: {
+        name: 'audit_logs',
+        label: 'Auditoría',
+        permissionType: PermissionType.READ_ONLY,
+      },
+    });
+    auditLogsId = newAuditLogsEntity.id;
+    console.log('✅ Audit logs entity created');
+  }
+
+  let devAccountId: string;
+
+  const existingDevAccountEntity = await prisma.entity.findFirst({
+    where: { name: 'dev_account' },
+  });
+
+  if (existingDevAccountEntity) {
+    devAccountId = existingDevAccountEntity.id;
+    console.log('✅ Dev account entity found');
+  } else {
+    const newDevAccountEntity = await prisma.entity.create({
+      data: {
+        name: 'dev_account',
+        label: 'Cuenta de desarrollador',
+        permissionType: PermissionType.CRUD,
+      },
+    });
+    devAccountId = newDevAccountEntity.id;
+    console.log('✅ Dev account entity created');
+  }
+
+  const permissionsArray = [
+    userProfileEntityId,
+    userPermissionEntityId,
+    usersEntityId,
+    entitiesId,
+    auditLogsId,
+    devAccountId,
+  ];
   // Create admin user + full permissions
-  const admin = await prisma.user.upsert({
-    where: { username: 'admin' },
+  const adminMartin = await prisma.user.upsert({
+    where: { username: 'adminMartin' },
     create: {
-      username: 'admin',
-      email: 'admin@viveroalpha.dev',
+      username: 'adminMartin',
+      email: 'adminMartin@viveroalpha.dev',
       passwordHash: await bcrypt.hash('admin123', 12),
       firstName: 'Admin',
-      lastName: 'User',
+      lastName: 'Martin',
       tenantId,
       isActive: true,
     },
     update: {},
   });
 
-  // Define permissions for the admin user
-  const adminPermissions = [
-    // Core admin tables - full access
-    {
-      table: 'tenants',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
+  const adminFede = await prisma.user.upsert({
+    where: { username: 'adminFede' },
+    create: {
+      username: 'adminFede',
+      email: 'adminFede@viveroalpha.dev',
+      passwordHash: await bcrypt.hash('admin123', 12),
+      firstName: 'Admin',
+      lastName: 'Fede',
+      tenantId,
+      isActive: true,
     },
-    {
-      table: 'users',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'audit_logs',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'messages',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'enums',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'clients',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'invoices',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'plants',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'purchase_orders',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-    {
-      table: 'user_permissions',
-      crud: { create: true, read: true, update: true, delete: true },
-      scope: PermissionScope.ALL,
-    },
-  ];
+    update: {},
+  });
 
-  // Upsert permissions for the admin user
-  for (const perm of adminPermissions) {
-    await prisma.userPermission.upsert({
-      where: {
-        userId_tableName: {
-          userId: admin.id,
-          tableName: perm.table,
+  for (const permission of permissionsArray) {
+    for (const user of [adminMartin, adminFede]) {
+      // Add id to dev account table
+      await prisma.devAccount.upsert({
+        where: { userId: user.id },
+        create: {
+          userId: user.id,
         },
-      },
-      create: {
-        userId: admin.id,
-        tableName: perm.table,
-        canCreate: perm.crud.create,
-        canRead: perm.crud.read,
-        canUpdate: perm.crud.update,
-        canDelete: perm.crud.delete,
-        scope: perm.scope,
-      },
-      update: {
-        canCreate: perm.crud.create,
-        canRead: perm.crud.read,
-        canUpdate: perm.crud.update,
-        canDelete: perm.crud.delete,
-        scope: perm.scope,
-      },
-    });
-    console.log(`Granted permissions for ${perm.table} (${perm.scope})`);
+        update: {},
+      });
+      // Upsert permission for the admin user
+      await prisma.userPermission.upsert({
+        where: {
+          userId_entityId: {
+            userId: user.id,
+            entityId: permission,
+          },
+        },
+        create: {
+          userId: user.id,
+          entityId: permission,
+          canCreate: true,
+          canRead: true,
+          canUpdate: true,
+          canDelete: true,
+          scope: PermissionScope.ALL,
+          permissionType: PermissionType.READ_ONLY,
+        },
+        update: {},
+      });
+      console.log(`Permission ${permission} granted to ${user.username}`);
+    }
   }
-
-  console.log('✅ Admin permissions granted');
 }
 
 main()

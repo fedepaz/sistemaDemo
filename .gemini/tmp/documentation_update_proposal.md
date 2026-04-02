@@ -1,113 +1,41 @@
-## Documentation Update Proposal for `agricultural-backend-agent.md`
+# Documentation Update Proposal
 
-### 1. Introduce `BaseRepository` Pattern
+## 1. Update `docs/agents/backend-agent.md`
 
-**Reasoning:** The project has introduced a `BaseRepository` pattern (e.g., `src/shared/baseModule/base.repository.ts`) to centralize common database operations and ensure multi-tenancy rules are consistently applied. This pattern significantly reduces boilerplate in individual repositories and enhances maintainability.
+**Goal:** Document the new `PermissionType` logic in the Security Implementation Requirements section.
 
-**Proposed Addition:** Add a new section, possibly under "Standard Development Workflow," or as a standalone "Repository Patterns" section, detailing the `BaseRepository`.
+**Proposed Change:**
+Add the following subsection under **Security Implementation Requirements**:
 
-**Content:**
-*   **Purpose:** Explain that `BaseRepository` abstracts common CRUD operations and enforces tenant-aware filtering.
-*   **Usage:** Provide guidance on how new repositories should extend `BaseRepository<TEntity>` and how to utilize `this.model` for Prisma operations.
-*   **Benefits:** Highlight reduced boilerplate, improved consistency, and easier enforcement of architectural patterns like multi-tenancy and soft-deletes.
+```markdown
+### Permission Types & Enforcement
 
-**Example Snippet (to be included in documentation):**
-```typescript
-// src/shared/baseModule/base.repository.ts (Conceptual)
-export abstract class BaseRepository<TEntity> {
-  protected model: Prisma.ModelName; // Actual type would be more specific
+The permission system now supports distinct **Permission Types** defined in `MANAGED_ENTITIES` to enforce business logic constraints:
 
-  constructor(protected readonly prisma: PrismaService, model: Prisma.ModelName) {
-    this.model = model;
-  }
+- **CRUD**: Standard Create, Read, Update, Delete access.
+- **READ_ONLY**: Strictly limits access to `read` actions only. Useful for reference data (e.g., `agentes`, `tenants`).
+- **PROCESS**: Specialized for executable actions. Maps `create` permission to process execution.
 
-  // Common methods like findById, findAll, softDelete, etc.
-  // These would include tenantId and isActive/deletedAt filtering by default.
-  findById(id: string): Promise<TEntity | null> {
-    return this.model.findFirst({
-      where: { id, deletedAt: null, isActive: true },
-    });
-  }
-
-  findAll(tenantId: string): Promise<TEntity[]> {
-    return this.model.findMany({
-      where: { tenantId, deletedAt: null, isActive: true },
-    });
-  }
-}
+**Enforcement Logic:**
+The `PermissionsService` validates the requested action against the entity's `permissionType`:
+- If `permissionType` is `READ_ONLY`, only `read` actions are allowed.
+- If `permissionType` is `PROCESS`, logic typically restricts to `create` (execution) or `read` (logs).
 ```
 
-```typescript
-// app/modules/users/repositories/users.repository.ts (Example Extension)
-import { BaseRepository } from 'src/shared/baseModule/base.repository';
+## 2. Update `docs/project-documentation/backend-features.md`
 
-@Injectable()
-export class UsersRepository extends BaseRepository<User> {
-  constructor(prisma: PrismaService) {
-    super(prisma, prisma.user);
-  }
-  // Custom methods or overridden base methods
-}
+**Goal:** Reflect the implementation of Permission Types and the updated Audit Log scope.
+
+**Proposed Change:**
+Update the **Permissions Module** section:
+
+```markdown
+### Permissions Module
+- [x] **Permissions Guard**: `PermissionsGuard` + `@RequirePermission()` decorator.
+- [x] **Permission Types**: Support for `CRUD`, `READ_ONLY`, and `PROCESS` types to constrain allowable actions.
+- [x] **Resource-Level Security**: Validation against `ALLOWED_TABLES` in `MANAGED_ENTITIES`.
+- [x] **CRUD & Scope Check**: Logic for `canCreate`, `canRead`, etc., and `OWN` vs `ALL` scopes.
+- [x] **Admin Management**: `PATCH /user/:userId` to update permissions.
 ```
 
-### 2. Document `recoverById` Method for Soft-Delete
-
-**Reasoning:** The introduction of a `recoverById` method complements the soft-delete functionality, allowing for the re-activation of previously soft-deleted entities. This is an important part of the data management lifecycle.
-
-**Proposed Addition:** Add a description of the `recoverById` method, ideally within the "Repository Patterns" section or where soft-delete mechanisms are discussed.
-
-**Content:**
-*   **Description:** Explain that `recoverById` is used to restore a soft-deleted entity by setting `deletedAt` to null and `isActive` to true.
-*   **Usage:** Emphasize its role in data recovery and lifecycle management.
-
-**Example Snippet (to be included in documentation):**
-```typescript
-// Example from UsersRepository
-recoverById(id: string): Promise<User> {
-  return this.model.update({
-    where: { id },
-    data: {
-      deletedAt: null,
-      isActive: true,
-      updatedAt: new Date(),
-    },
-  });
-}
-```
-
-### 3. Explicitly Mention `RequirePermission` Decorator
-
-**Reasoning:** The `@RequirePermission` decorator is a critical component for implementing role-based or permission-based access control, as outlined in the "Enterprise Security & Compliance" section. Its explicit documentation will ensure consistent and correct usage.
-
-**Proposed Addition:** Add a sub-section under "Enterprise Security & Compliance" -> "Security Implementation Requirements" or create a new dedicated section for "Access Control with `@RequirePermission`".
-
-**Content:**
-*   **Purpose:** Describe the decorator's role in enforcing fine-grained access control on controller endpoints.
-*   **Usage:** Explain its parameters (`tableName`, `action`, `scope`) and how they map to the project's permission system.
-*   **Best Practices:** Emphasize that all access control should primarily be managed via this decorator, avoiding redundant manual checks.
-
-**Example Snippet (to be included in documentation):**
-```typescript
-// Example from UsersController
-import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
-
-@Controller('users')
-export class UsersController {
-  // ...
-  @Get('all')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
-  async getAllUsers() {
-    return this.service.getAllUsers();
-  }
-
-  @Patch(':userId/recover')
-  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
-  async recoverUserById(@Param('userId') userId: string) {
-    return this.service.recoverUserById(userId);
-  }
-}
-```
-
-### Action Required:
-
-Please confirm if these documentation updates align with the intended architectural and security standards.
+And update the **Legacy Agentes Module** (or Audit Log) if necessary to reflect the `agentes` resource usage, though I will keep that minimal unless you prefer otherwise.

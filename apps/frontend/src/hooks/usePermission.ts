@@ -12,5 +12,6 @@ export const usePermission = (tableName: string) => {
     canUpdate: tablePermissions?.canUpdate || false,
     canDelete: tablePermissions?.canDelete || false,
     scope: tablePermissions?.scope || "NONE",
+    permissionType: tablePermissions?.permissionType || "READ_ONLY",
   };
 };

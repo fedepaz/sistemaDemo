@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export function DashboardKPISkeleton() {
   return (
@@ -12,7 +13,7 @@ export function DashboardKPISkeleton() {
           <div className="bg-secondary/50 px-2 py-2 lg:rounded-l-lg shrink-0 w-full lg:w-[220px]">
             <div className="flex items-center gap-2">
               <Skeleton className="h-7 w-7 rounded-full" />
-              <Skeleton className="h-5 w-[140px]" />
+              <Skeleton className="h-5 w-full max-w-[140px]" />
             </div>
           </div>
 
@@ -29,12 +30,15 @@ export function DashboardKPISkeleton() {
             ))}
           </div>
 
-          {/* Right: Forecast skeleton */}
+          {/* Right: Forecast skeleton - 3 items on mobile, 5 on desktop */}
           <div className="flex items-center justify-center gap-2 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0">
             {Array.from({ length: 5 }).map((_, i) => (
               <div
                 key={i}
-                className="relative rounded-md px-4 py-1 text-center bg-muted/30"
+                className={cn(
+                  "relative rounded-md px-4 py-1 text-center bg-muted/30 shrink-0",
+                  i >= 3 && "hidden md:block",
+                )}
               >
                 <Skeleton className="h-3 w-8 mb-1 mx-auto" />
                 <Skeleton className="h-4 w-6 mb-1 mx-auto" />

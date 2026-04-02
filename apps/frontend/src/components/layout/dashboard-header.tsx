@@ -24,12 +24,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
 
 export function DashboardHeader() {
   const { isLoading, logoutAsync } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
   const [openProfile, setOpenProfile] = useState(false);
+  const { initials } = useCompanyData();
 
   useEffect(() => {
     if (!userProfile) {
@@ -56,7 +58,9 @@ export function DashboardHeader() {
             <MobileNavigation />
             <div className="flex items-center space-x-2 md:hidden">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-secondary font-bold text-sm">DM</span>
+                <span className="text-secondary font-bold text-sm">
+                  {initials}
+                </span>
               </div>
             </div>
           </div>

@@ -34,7 +34,7 @@ export function AuditLogDataTable() {
         data={auditLogs}
         title="Auditoría"
         description="Log de auditoría del sistema"
-        tableName="auditLog"
+        tableName="audit_logs"
         totalCount={auditLogs.length}
         onExport={handleExport}
         onView={handleViewAuditLog}

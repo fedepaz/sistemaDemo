@@ -262,7 +262,7 @@ Trial System Features:
 Authentication & Authorization:
   - Multi-factor authentication support
   - Permission-based access control (Admin, Manager, Operator, Viewer)
-  - Managed Entity Registry: All manageable tables must be registered in `@vivero/shared`'s `MANAGED_ENTITIES` registry to be available for the permission system.
+  - Managed Entity Registry: All manageable tables must be registered in the `Entity` table in the database to be available for the permission system. The `EntitiesModule` provides CRUD operations for these definitions.
   - JWT tokens with short expiration (15 min access + refresh)
   - API key management for system integrations
 
@@ -273,9 +273,22 @@ Data Protection:
   - Secure file upload
 ```
 
+#### Permission Types & Enforcement
+
+The permission system supports distinct **Permission Types** defined in the `Entity` table to enforce business logic constraints:
+
+- **CRUD**: Standard Create, Read, Update, Delete access.
+- **READ_ONLY**: Strictly limits access to `read` actions only. Useful for reference data (e.g., `agentes`, `tenants`).
+- **PROCESS**: Specialized for executable actions. Maps `create` permission to process execution.
+
+**Enforcement Logic:**
+The `PermissionsService` validates the requested action against the entity's `permissionType`:
+- If `permissionType` is `READ_ONLY`, only `read` actions are allowed.
+- If `permissionType` is `PROCESS`, logic typically restricts to `create` (execution) or `read` (logs).
+
 #### Access Control with `@RequirePermission` Decorator
 
-Use the `@RequirePermission` decorator for fine-grained access control on controller endpoints.
+Use the `@RequirePermission` decorator for fine-grained access control on controller endpoints. The `tableName` must match a valid entry in the `Entity` table.
 
 **Example:**
 ```typescript

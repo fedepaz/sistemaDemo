@@ -19,6 +19,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
+import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
 
 interface NavigationItem {
   title: string;
@@ -40,6 +41,7 @@ export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { userProfile, permissions } = useAuthContext();
+  const { name, initials } = useCompanyData();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["operations"]),
   );
@@ -92,10 +94,12 @@ export function MobileNavigation() {
           <div className="p-6 border-b">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center ">
-                <span className="text-primary font-bold text-sm">DM</span>
+                <span className="text-primary font-bold text-sm">
+                  {initials}
+                </span>
               </div>
               <div>
-                <h2 className="font-bold">Demo</h2>
+                <h2 className="font-bold">{name}</h2>
                 <p className="text-xs text-muted-foreground">
                   Sistema de gestión
                 </p>

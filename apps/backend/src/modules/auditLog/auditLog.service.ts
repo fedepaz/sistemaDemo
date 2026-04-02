@@ -7,13 +7,8 @@ import { AuditLogRepository } from './repositories/auditLog.repository';
 export class AuditLogService {
   constructor(private auditLogRepository: AuditLogRepository) {}
 
-  async getAllAuditLogs() {
-    const auditLogs = await this.auditLogRepository.findAll();
-    return auditLogs;
-  }
-
-  async getAllAuditLogsAdmin() {
-    const auditLogs = await this.auditLogRepository.findAllAdmin();
+  async getAllAuditLogs(requesterId: string) {
+    const auditLogs = await this.auditLogRepository.findAll(requesterId);
     return auditLogs;
   }
 

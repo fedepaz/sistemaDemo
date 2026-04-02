@@ -56,7 +56,7 @@ export class AuthService {
 
     // hash password
     const passwordHash = await bcrypt.hash(
-      this.config.get('config.defaultPasswordHash') || '123456',
+      this.config.get('config.defaultPassword') || '123456',
       this.BCRYPT_ROUNDS,
     );
 
@@ -81,7 +81,7 @@ export class AuthService {
     // generate tokens
     const tokens = await this.generateTokens(userPayload);
     const isDefaultPassword =
-      user.passwordHash === this.config.get('config.defaultPasswordHash');
+      user.passwordHash === this.config.get('config.defaultPassword');
 
     return {
       user: {
@@ -127,7 +127,7 @@ export class AuthService {
     });
 
     const isDefaultPassword =
-      dto.password === this.config.get('config.defaultPasswordHash');
+      dto.password === this.config.get('config.defaultPassword');
 
     return {
       user: {

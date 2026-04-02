@@ -7,18 +7,13 @@ import { TenantsRepository } from './repositories/tenants.repository';
 export class TenantsService {
   constructor(private readonly repo: TenantsRepository) {}
 
-  async getAllTenants() {
-    const tenants = await this.repo.findAll();
+  async getAllTenants(requesterId: string) {
+    const tenants = await this.repo.findAll(requesterId);
     return tenants;
   }
 
-  async getAllTenantsAdmin() {
-    const tenants = await this.repo.findAllAdmin();
-    return tenants;
-  }
-
-  async getTenantById(tenantId: string) {
-    const tenant = await this.repo.findById(tenantId);
+  async getTenantById(tenantId: string, requesterId: string) {
+    const tenant = await this.repo.findById(tenantId, requesterId);
     if (!tenant) throw new Error('Tenant not found');
     return tenant;
   }
@@ -27,7 +22,7 @@ export class TenantsService {
     return this.repo.softDelete(tenantId, deletedByUserId);
   }
 
-  async recoverById(id: string) {
-    return this.repo.recover(id);
+  async recoverById(id: string, requesterId: string) {
+    return this.repo.recover(id, requesterId);
   }
 }
