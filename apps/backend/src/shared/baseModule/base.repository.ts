@@ -1,6 +1,7 @@
 // src/shared/baseModule/base.repository.ts
 
-import { PrismaService } from 'src/infra/prisma/prisma.service';
+import { ForbiddenException } from '@nestjs/common';
+import { PrismaService } from '../../infra/prisma/prisma.service';
 
 export interface SoftDeletableModel {
   id: string;
@@ -22,20 +23,50 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
     protected readonly model: PrismaModelDelegate<T>,
   ) {}
 
-  async findAll(): Promise<T[]> {
+  private devAccounts: string[] | null = null;
+  private async getDevAccounts(): Promise<string[]> {
+    if (this.devAccounts) return this.devAccounts;
+    const records = await this.prisma.devAccount.findMany({
+      select: {
+        userId: true,
+      },
+    });
+    this.devAccounts = records.map((record) => record.userId);
+    return this.devAccounts;
+  }
+
+  async findAll(requesterId: string): Promise<T[]> {
+    const devIds = await this.getDevAccounts();
+
+    if (devIds.includes(requesterId)) {
+      return this.model.findMany();
+    }
     return this.model.findMany({
-      where: { deletedAt: null, isActive: true },
+      where: {
+        deletedAt: null,
+        isActive: true,
+        id: {
+          notIn: devIds,
+        },
+      },
     });
   }
 
-  async findAllAdmin(): Promise<T[]> {
-    return this.model.findMany();
-  }
+  async findById(id: string, requesterId: string): Promise<T | null> {
+    const devIds = await this.getDevAccounts();
 
-  async findById(id: string): Promise<T | null> {
+    if (devIds.includes(requesterId)) {
+      return this.model.findFirst({
+        where: {
+          id,
+        },
+      });
+    }
     return this.model.findFirst({
       where: {
-        id,
+        id: {
+          notIn: devIds,
+        },
         deletedAt: null,
         isActive: true,
       },
@@ -53,7 +84,12 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
     });
   }
 
-  async recover(id: string): Promise<T> {
+  async recover(id: string, requesterId: string): Promise<T> {
+    const devIds = await this.getDevAccounts();
+
+    if (!devIds.includes(requesterId)) {
+      throw new ForbiddenException('Only dev accounts can recover records');
+    }
     return this.model.update({
       where: { id },
       data: {

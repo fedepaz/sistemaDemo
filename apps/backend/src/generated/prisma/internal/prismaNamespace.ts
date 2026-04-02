@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   AuditLog: 'AuditLog',
+  DevAccount: 'DevAccount',
   Entity: 'Entity',
   Tenant: 'Tenant',
   User: 'User',
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "auditLog" | "entity" | "tenant" | "user" | "userPermission"
+    modelProps: "auditLog" | "devAccount" | "entity" | "tenant" | "user" | "userPermission"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -470,6 +471,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AuditLogCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AuditLogCountAggregateOutputType> | number
+        }
+      }
+    }
+    DevAccount: {
+      payload: Prisma.$DevAccountPayload<ExtArgs>
+      fields: Prisma.DevAccountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DevAccountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DevAccountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload>
+        }
+        findFirst: {
+          args: Prisma.DevAccountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DevAccountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload>
+        }
+        findMany: {
+          args: Prisma.DevAccountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload>[]
+        }
+        create: {
+          args: Prisma.DevAccountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload>
+        }
+        createMany: {
+          args: Prisma.DevAccountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.DevAccountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload>
+        }
+        update: {
+          args: Prisma.DevAccountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload>
+        }
+        deleteMany: {
+          args: Prisma.DevAccountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DevAccountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.DevAccountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevAccountPayload>
+        }
+        aggregate: {
+          args: Prisma.DevAccountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDevAccount>
+        }
+        groupBy: {
+          args: Prisma.DevAccountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DevAccountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DevAccountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DevAccountCountAggregateOutputType> | number
         }
       }
     }
@@ -795,6 +862,15 @@ export const AuditLogScalarFieldEnum = {
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
+export const DevAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type DevAccountScalarFieldEnum = (typeof DevAccountScalarFieldEnum)[keyof typeof DevAccountScalarFieldEnum]
+
+
 export const EntityScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -912,6 +988,14 @@ export const AuditLogOrderByRelevanceFieldEnum = {
 } as const
 
 export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
+
+
+export const DevAccountOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+} as const
+
+export type DevAccountOrderByRelevanceFieldEnum = (typeof DevAccountOrderByRelevanceFieldEnum)[keyof typeof DevAccountOrderByRelevanceFieldEnum]
 
 
 export const EntityOrderByRelevanceFieldEnum = {
@@ -1129,6 +1213,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   auditLog?: Prisma.AuditLogOmit
+  devAccount?: Prisma.DevAccountOmit
   entity?: Prisma.EntityOmit
   tenant?: Prisma.TenantOmit
   user?: Prisma.UserOmit

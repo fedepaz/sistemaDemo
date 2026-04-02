@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   AuditLog: 'AuditLog',
+  DevAccount: 'DevAccount',
   Entity: 'Entity',
   Tenant: 'Tenant',
   User: 'User',
@@ -90,6 +91,15 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const DevAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type DevAccountScalarFieldEnum = (typeof DevAccountScalarFieldEnum)[keyof typeof DevAccountScalarFieldEnum]
 
 
 export const EntityScalarFieldEnum = {
@@ -209,6 +219,14 @@ export const AuditLogOrderByRelevanceFieldEnum = {
 } as const
 
 export type AuditLogOrderByRelevanceFieldEnum = (typeof AuditLogOrderByRelevanceFieldEnum)[keyof typeof AuditLogOrderByRelevanceFieldEnum]
+
+
+export const DevAccountOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+} as const
+
+export type DevAccountOrderByRelevanceFieldEnum = (typeof DevAccountOrderByRelevanceFieldEnum)[keyof typeof DevAccountOrderByRelevanceFieldEnum]
 
 
 export const EntityOrderByRelevanceFieldEnum = {

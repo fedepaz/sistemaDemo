@@ -4,6 +4,8 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { EntitiesService } from './entities.service';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 import { CreateEntityDto } from '@vivero/shared';
+import { CurrentUser } from '../auth/decorators/current-user.decorators';
+import { AuthUser } from '../auth/types/auth-user.type';
 
 @Controller('entities')
 export class EntitiesController {
@@ -16,8 +18,8 @@ export class EntitiesController {
     action: 'read',
     scope: 'ALL',
   })
-  getAllTables() {
-    const tables = this.entitiesService.getAllTables();
+  getAllTables(@CurrentUser() user: AuthUser) {
+    const tables = this.entitiesService.getAllTables(user.id);
     return tables;
   }
 

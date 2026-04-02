@@ -29,6 +29,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Admin User Management**: `GET /all`, `GET /username/:username`.
 - [x] **Soft Delete**: `DELETE /:username` with recovery option.
 - [x] **Repository Pattern**: `UsersRepository` extending `BaseRepository`.
+- [x] **Developer Account Isolation**: Introduced `DevAccount` entity to distinguish system developers from standard administrators.
 
 ### Entities Module
 - [x] **Entity Management**: CRUD for system entities (tables) which are now the source of truth for the permission system. Protected by `entities` table permissions.
@@ -78,6 +79,7 @@ This document lists all the modules, services, and core functionalities implemen
 
 ## Shared Utilities
 
-- [x] **Base Repository**: `BaseRepository<T>` for common CRUD operations.
+- [x] **Base Repository**: `BaseRepository<T>` for common CRUD operations. Now implements hierarchical visibility: developers see all records, while standard users have developer accounts and inactive/deleted records filtered out.
+- [x] **Restricted Data Recovery**: The `recover` method is now strictly reserved for accounts registered in the `DevAccount` table.
 - [x] **Current User Decorator**: `@CurrentUser()` for injection in controllers.
 - [x] **Custom Decorators**: `@Public()`, `@RequirePermission()`.

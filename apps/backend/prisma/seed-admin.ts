@@ -137,7 +137,7 @@ async function main() {
       data: {
         name: 'entities',
         label: 'Entidades',
-        permissionType: PermissionType.READ_ONLY,
+        permissionType: PermissionType.CRUD,
       },
     });
     entitiesId = newEntitiesEntity.id;
@@ -164,123 +164,98 @@ async function main() {
     auditLogsId = newAuditLogsEntity.id;
     console.log('✅ Audit logs entity created');
   }
+
+  let devAccountId: string;
+
+  const existingDevAccountEntity = await prisma.entity.findFirst({
+    where: { name: 'dev_account' },
+  });
+
+  if (existingDevAccountEntity) {
+    devAccountId = existingDevAccountEntity.id;
+    console.log('✅ Dev account entity found');
+  } else {
+    const newDevAccountEntity = await prisma.entity.create({
+      data: {
+        name: 'dev_account',
+        label: 'Cuenta de desarrollador',
+        permissionType: PermissionType.CRUD,
+      },
+    });
+    devAccountId = newDevAccountEntity.id;
+    console.log('✅ Dev account entity created');
+  }
+
+  const permissionsArray = [
+    userProfileEntityId,
+    userPermissionEntityId,
+    usersEntityId,
+    entitiesId,
+    auditLogsId,
+    devAccountId,
+  ];
   // Create admin user + full permissions
-  const admin = await prisma.user.upsert({
-    where: { username: 'admin' },
+  const adminMartin = await prisma.user.upsert({
+    where: { username: 'adminMartin' },
     create: {
-      username: 'admin',
-      email: 'admin@viveroalpha.dev',
+      username: 'adminMartin',
+      email: 'adminMartin@viveroalpha.dev',
       passwordHash: await bcrypt.hash('admin123', 12),
       firstName: 'Admin',
-      lastName: 'User',
+      lastName: 'Martin',
       tenantId,
       isActive: true,
     },
     update: {},
   });
 
-  // Upsert permission for the admin user
-
-  await prisma.userPermission.upsert({
-    where: {
-      userId_entityId: {
-        userId: admin.id,
-        entityId: userProfileEntityId,
-      },
-    },
+  const adminFede = await prisma.user.upsert({
+    where: { username: 'adminFede' },
     create: {
-      userId: admin.id,
-      entityId: userProfileEntityId,
-      canCreate: true,
-      canRead: true,
-      canUpdate: true,
-      canDelete: true,
-      scope: PermissionScope.ALL,
-      permissionType: PermissionType.READ_ONLY,
+      username: 'adminFede',
+      email: 'adminFede@viveroalpha.dev',
+      passwordHash: await bcrypt.hash('admin123', 12),
+      firstName: 'Admin',
+      lastName: 'Fede',
+      tenantId,
+      isActive: true,
     },
     update: {},
   });
 
-  await prisma.userPermission.upsert({
-    where: {
-      userId_entityId: {
-        userId: admin.id,
-        entityId: userPermissionEntityId,
-      },
-    },
-    create: {
-      userId: admin.id,
-      entityId: userPermissionEntityId,
-      canCreate: true,
-      canRead: true,
-      canUpdate: true,
-      canDelete: true,
-      scope: PermissionScope.ALL,
-      permissionType: PermissionType.CRUD,
-    },
-    update: {},
-  });
-
-  await prisma.userPermission.upsert({
-    where: {
-      userId_entityId: {
-        userId: admin.id,
-        entityId: usersEntityId,
-      },
-    },
-    create: {
-      userId: admin.id,
-      entityId: usersEntityId,
-      canCreate: true,
-      canRead: true,
-      canUpdate: true,
-      canDelete: true,
-      scope: PermissionScope.ALL,
-      permissionType: PermissionType.CRUD,
-    },
-    update: {},
-  });
-
-  await prisma.userPermission.upsert({
-    where: {
-      userId_entityId: {
-        userId: admin.id,
-        entityId: entitiesId,
-      },
-    },
-    create: {
-      userId: admin.id,
-      entityId: entitiesId,
-      canCreate: true,
-      canRead: true,
-      canUpdate: true,
-      canDelete: true,
-      scope: PermissionScope.ALL,
-      permissionType: PermissionType.READ_ONLY,
-    },
-    update: {},
-  });
-  await prisma.userPermission.upsert({
-    where: {
-      userId_entityId: {
-        userId: admin.id,
-        entityId: auditLogsId,
-      },
-    },
-    create: {
-      userId: admin.id,
-      entityId: auditLogsId,
-      canCreate: true,
-      canRead: true,
-      canUpdate: true,
-      canDelete: true,
-      scope: PermissionScope.ALL,
-      permissionType: PermissionType.READ_ONLY,
-    },
-    update: {},
-  });
-
-  console.log('✅ Admin permissions granted');
+  for (const permission of permissionsArray) {
+    for (const user of [adminMartin, adminFede]) {
+      // Add id to dev account table
+      await prisma.devAccount.upsert({
+        where: { userId: user.id },
+        create: {
+          userId: user.id,
+        },
+        update: {},
+      });
+      // Upsert permission for the admin user
+      await prisma.userPermission.upsert({
+        where: {
+          userId_entityId: {
+            userId: user.id,
+            entityId: permission,
+          },
+        },
+        create: {
+          userId: user.id,
+          entityId: permission,
+          canCreate: true,
+          canRead: true,
+          canUpdate: true,
+          canDelete: true,
+          scope: PermissionScope.ALL,
+          permissionType: PermissionType.READ_ONLY,
+        },
+        update: {},
+      });
+      console.log(`Permission ${permission} granted to ${user.username}`);
+    }
+  }
 }
 
 main()

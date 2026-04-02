@@ -35,7 +35,7 @@ export class PermissionsService {
    * Get all tables filtered by what the requester can actually see
    */
   async getAllTables(requesterId: string): Promise<Entity[]> {
-    const allEntities = await this.entitiesRepo.findAllAdmin();
+    const allEntities = await this.entitiesRepo.findAll(requesterId);
     if (!allEntities) {
       throw new InternalServerErrorException('Error getting tables');
     }
@@ -191,8 +191,11 @@ export class PermissionsService {
     }>,
   ): Promise<void> {
     // RULE 1 - User seniority check
-    const requesterUser = await this.usersRepo.findById(requesterId);
-    const targetUser = await this.usersRepo.findById(targetUserId);
+    const requesterUser = await this.usersRepo.findById(
+      requesterId,
+      requesterId,
+    );
+    const targetUser = await this.usersRepo.findById(targetUserId, requesterId);
 
     if (!requesterUser || !targetUser) {
       throw new NotFoundException('User not found');

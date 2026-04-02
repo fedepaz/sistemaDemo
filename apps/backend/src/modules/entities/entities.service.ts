@@ -16,8 +16,8 @@ export class EntitiesService {
   /**
    * Get all tables
    */
-  async getAllTables(): Promise<Entity[]> {
-    const entities = await this.entitiesRepo.findAllAdmin();
+  async getAllTables(requesterId: string): Promise<Entity[]> {
+    const entities = await this.entitiesRepo.findAll(requesterId);
     if (!entities) {
       throw new InternalServerErrorException('Error getting tables');
     }
