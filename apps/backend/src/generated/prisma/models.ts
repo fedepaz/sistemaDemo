@@ -8,6 +8,8 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/AuditLog'
+export type * from './models/DevAccount'
+export type * from './models/Entity'
 export type * from './models/Tenant'
 export type * from './models/User'
 export type * from './models/UserPermission'

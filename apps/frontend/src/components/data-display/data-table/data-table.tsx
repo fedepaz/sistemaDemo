@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Eye,
   Filter,
+  Play,
   Plus,
   SquarePen,
   Trash2,
@@ -59,6 +60,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTableByName } from "@/features/permissions/hooks/permsHooks";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -115,28 +117,55 @@ export function DataTable<TData, TValue>({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<TData | null>(null);
   const dataTablePermissions = usePermission(tableName);
+  const { data: entity } = useTableByName(tableName);
+
+  console.log("entity", entity);
+  console.log("dataTablePermissions", dataTablePermissions);
+  const allowedActions = {
+    CRUD: {
+      canView: !!onView && dataTablePermissions.canRead,
+      canEdit: dataTablePermissions.canUpdate,
+      canDelete: dataTablePermissions.canDelete,
+      canExecute: false,
+    },
+    PROCESS: {
+      canView: !!onView && dataTablePermissions.canRead,
+      canEdit: dataTablePermissions.canUpdate,
+      canDelete: dataTablePermissions.canDelete,
+      canExecute: dataTablePermissions.canCreate, // create = execute
+    },
+    READ_ONLY: {
+      canView: !!onView && dataTablePermissions.canRead,
+      canEdit: false,
+      canDelete: false,
+      canExecute: false,
+    },
+  }[entity?.permissionType || "READ_ONLY"];
 
   const actionColumn: ColumnDef<TData, TValue> = {
     id: "actions",
     enableHiding: false,
     accessorKey: "actions",
     header: ({}) => {
-      const canEdit = dataTablePermissions.canUpdate;
-      const canDelete = dataTablePermissions.canDelete;
-      const canView = !!onView;
-
-      if (!canEdit && !canDelete && !canView) return null;
+      if (
+        !allowedActions.canView &&
+        !allowedActions.canEdit &&
+        !allowedActions.canDelete
+      )
+        return null;
       return <HeaderComponent titulo="Acciones" />;
     },
     cell: ({ row }) => {
-      const canEdit = dataTablePermissions.canUpdate;
-      const canDelete = dataTablePermissions.canDelete;
-      const canView = !!onView;
+      if (
+        !allowedActions.canEdit &&
+        !allowedActions.canDelete &&
+        !allowedActions.canView
+      )
+        return null;
 
-      if (!canEdit && !canDelete && !canView) return null;
       return (
         <div className="flex items-center justify-center gap-2 min-h-[40px]">
-          {canView && (
+          {allowedActions.canView && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -157,7 +186,7 @@ export function DataTable<TData, TValue>({
               </TooltipContent>
             </Tooltip>
           )}
-          {canEdit && (
+          {allowedActions.canEdit && !allowedActions.canExecute && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -178,7 +207,7 @@ export function DataTable<TData, TValue>({
               </TooltipContent>
             </Tooltip>
           )}
-          {canDelete && (
+          {allowedActions.canDelete && !allowedActions.canExecute && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -196,6 +225,27 @@ export function DataTable<TData, TValue>({
                 className="border border-border shadow-md"
               >
                 <p>Eliminar</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+          {allowedActions.canExecute && onEdit && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="min-h-[40px] text-amber-500"
+                  onClick={() => onEdit(row.original)}
+                  aria-label="Ejecutar"
+                >
+                  <Play className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                className="border border-border shadow-md"
+              >
+                <p>Ejecutar</p>
               </TooltipContent>
             </Tooltip>
           )}

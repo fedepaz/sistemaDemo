@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 export function DataTableSkeleton({
   columnCount,
@@ -19,15 +20,15 @@ export function DataTableSkeleton({
   return (
     <Card className="w-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-2">
-            <Skeleton className="h-8 w-[200px]" />
-            <Skeleton className="h-4 w-[300px]" />
+            <Skeleton className="h-8 w-[150px] sm:w-[200px]" />
+            <Skeleton className="h-4 w-full max-w-[300px]" />
           </div>
           <div className="flex items-center space-x-2">
-            <Skeleton className="h-6 w-[80px]" />
-            <Skeleton className="h-8 w-[90px]" />
-            <Skeleton className="h-8 w-[90px]" />
+            <Skeleton className="h-6 w-[60px] sm:w-[80px]" />
+            <Skeleton className="h-8 w-[80px] sm:w-[90px]" />
+            <Skeleton className="h-8 w-[80px] sm:w-[90px]" />
           </div>
         </div>
       </CardHeader>
@@ -37,16 +38,22 @@ export function DataTableSkeleton({
           <div className="relative flex-1 max-w-sm">
             <Skeleton className="h-9 w-full" />
           </div>
-          <Skeleton className="h-9 w-[100px]" />
+          <Skeleton className="h-9 w-[80px] sm:w-[100px]" />
         </div>
 
         {/* Table */}
-        <div className="rounded-md border">
+        <div className="rounded-md border overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
                 {Array.from({ length: columnCount }).map((_, index) => (
-                  <TableHead key={index} className="font-semibold">
+                  <TableHead
+                    key={index}
+                    className={cn(
+                      "font-semibold",
+                      index >= 2 && "hidden sm:table-cell",
+                    )}
+                  >
                     <Skeleton className="h-4 w-[80px]" />
                   </TableHead>
                 ))}
@@ -60,7 +67,10 @@ export function DataTableSkeleton({
               {Array.from({ length: rowCount }).map((_, rowIndex) => (
                 <TableRow key={rowIndex}>
                   {Array.from({ length: columnCount }).map((_, cellIndex) => (
-                    <TableCell key={cellIndex}>
+                    <TableCell
+                      key={cellIndex}
+                      className={cn(cellIndex >= 2 && "hidden sm:table-cell")}
+                    >
                       <Skeleton className="h-4 w-full max-w-[120px]" />
                     </TableCell>
                   ))}
@@ -75,11 +85,11 @@ export function DataTableSkeleton({
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <div className="flex-1">
-            <Skeleton className="h-4 w-[200px]" />
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-4">
+          <div className="flex-1 text-center md:text-left">
+            <Skeleton className="h-4 w-[150px] sm:w-[200px] mx-auto md:mx-0" />
           </div>
-          <div className="flex items-center space-x-6 lg:space-x-8">
+          <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 lg:space-x-8">
             <div className="flex items-center space-x-2">
               <Skeleton className="h-4 w-[80px]" />
               <Skeleton className="h-8 w-[70px]" />

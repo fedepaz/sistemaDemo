@@ -9,6 +9,7 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt-auth.strategy';
 import { TenantsRepository } from '../tenants/repositories/tenants.repository';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { TenantsRepository } from '../tenants/repositories/tenants.repository';
     JwtStrategy,
     TenantsRepository,
   ],
+  controllers: [AuthController],
 
   exports: [GlobalAuthGuard, AuthService, PassportModule],
 })

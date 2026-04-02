@@ -76,8 +76,10 @@ export function SlideOverForm({
           <SheetTitle className="text-2xl">{title}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
-        <ScrollArea className="h-[calc(100vh-180px)] pr-4 mt-6">
-          <div className="space-y-6">{children}</div>
+        <ScrollArea className="h-[calc(100vh-180px)] pr-4 mt-6" tabIndex={-1}>
+          <div className="space-y-6" tabIndex={-1}>
+            {children}
+          </div>
         </ScrollArea>
         <SheetFooter>
           {isViewMode ? (

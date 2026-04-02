@@ -3,9 +3,11 @@
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
+import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
 
 export function UserProfileInfo() {
   const { userProfile } = useAuthContext();
+  const { name } = useCompanyData();
   if (!userProfile) return null;
   return (
     <div className="grid gap-4">
@@ -38,6 +40,10 @@ export function UserProfileInfo() {
           </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-2 font-serif">
+          <div>
+            <Label className="text-muted-foreground">Empresa</Label>
+            <p className="text-base font-medium">{name}</p>
+          </div>
           <div>
             <Label className="text-muted-foreground">ID de Empresa</Label>
             <p className="text-base font-medium">{userProfile.tenantName}</p>

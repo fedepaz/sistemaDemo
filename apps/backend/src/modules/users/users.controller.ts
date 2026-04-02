@@ -23,11 +23,15 @@ export class UsersController {
   ) {}
 
   @Get('me')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+  })
   async getMe(@CurrentUser() user: AuthUser): Promise<UserProfileDto> {
-    const userProfile = await this.service.getProfile(user.id);
+    const userProfile = await this.service.getProfile(user.id, user.id);
     const tenant = await this.tenantsService.getTenantById(
       userProfile.tenantId,
+      user.id,
     );
     return {
       id: userProfile.id,
@@ -61,9 +65,9 @@ export class UsersController {
       scope: 'ALL',
     });
     if (canReadAll) {
-      return this.service.getAllUsers();
+      return this.service.getAllUsers(user.id);
     } else {
-      return [await this.service.getUserById(user.id)];
+      return [await this.service.getUserById(user.id, user.id)];
     }
   }
 
@@ -101,13 +105,10 @@ export class UsersController {
 
   @Patch(':userId/recover')
   @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
-  async recoverUserById(@Param('userId') userId: string) {
-    return this.service.recoverUserById(userId);
-  }
-
-  @Get('allAdmin')
-  @RequirePermission({ tableName: 'users', action: 'delete', scope: 'ALL' })
-  async getAllUsersAdmin() {
-    return this.service.getAllUsersAdmin();
+  async recoverUserById(
+    @Param('userId') userId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.service.recoverUserById(userId, user.id);
   }
 }

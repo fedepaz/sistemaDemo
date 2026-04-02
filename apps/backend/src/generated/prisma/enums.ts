@@ -33,6 +33,15 @@ export const EntityType = {
 export type EntityType = (typeof EntityType)[keyof typeof EntityType]
 
 
+export const PermissionType = {
+  CRUD: 'CRUD',
+  PROCESS: 'PROCESS',
+  READ_ONLY: 'READ_ONLY'
+} as const
+
+export type PermissionType = (typeof PermissionType)[keyof typeof PermissionType]
+
+
 export const PermissionScope = {
   NONE: 'NONE',
   OWN: 'OWN',

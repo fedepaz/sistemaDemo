@@ -29,10 +29,17 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Admin User Management**: `GET /all`, `GET /username/:username`.
 - [x] **Soft Delete**: `DELETE /:username` with recovery option.
 - [x] **Repository Pattern**: `UsersRepository` extending `BaseRepository`.
+- [x] **Developer Account Isolation**: Introduced `DevAccount` entity to distinguish system developers from standard administrators.
+
+### Entities Module
+- [x] **Entity Management**: CRUD for system entities (tables) which are now the source of truth for the permission system. Protected by `entities` table permissions.
+- [x] **Permission Type Support**: Entities include `permissionType` (`CRUD`, `READ_ONLY`, `PROCESS`) to define allowable actions.
+- [x] **Repository Pattern**: `EntitiesRepository` extending `BaseRepository`.
 
 ### Permissions Module
 - [x] **Permissions Guard**: `PermissionsGuard` + `@RequirePermission()` decorator.
-- [x] **Resource-Level Security**: Validation against `ALLOWED_TABLES`.
+- [x] **Dynamic Entity Validation**: Validation against the `Entity` table in the database instead of a static whitelist.
+- [x] **Permission Types**: Support for `CRUD`, `READ_ONLY`, and `PROCESS` types to constrain allowable actions.
 - [x] **CRUD & Scope Check**: Logic for `canCreate`, `canRead`, etc., and `OWN` vs `ALL` scopes.
 - [x] **Admin Management**: `PATCH /user/:userId` to update permissions.
 
@@ -43,7 +50,7 @@ This document lists all the modules, services, and core functionalities implemen
 
 ### Audit Log Module
 - [x] **Automatic Logging**: Integrated into the exception filter for security events.
-- [x] **Audit Retrieval**: `GET /:tenantId` and `GET /user/:userId`.
+- [x] **Audit Retrieval**: `GET /:tenantId` and `GET /user/:userId`. Protected by `audit_logs` table permissions.
 - [x] **JSON Changes**: Storage of action metadata in JSON format.
 
 ### Health Module
@@ -72,6 +79,7 @@ This document lists all the modules, services, and core functionalities implemen
 
 ## Shared Utilities
 
-- [x] **Base Repository**: `BaseRepository<T>` for common CRUD operations.
+- [x] **Base Repository**: `BaseRepository<T>` for common CRUD operations. Now implements hierarchical visibility: developers see all records, while standard users have developer accounts and inactive/deleted records filtered out.
+- [x] **Restricted Data Recovery**: The `recover` method is now strictly reserved for accounts registered in the `DevAccount` table.
 - [x] **Current User Decorator**: `@CurrentUser()` for injection in controllers.
 - [x] **Custom Decorators**: `@Public()`, `@RequirePermission()`.

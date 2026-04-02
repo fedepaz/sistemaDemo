@@ -4,6 +4,8 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AuditLogService } from './auditLog.service';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorators';
+import { AuthUser } from '../auth/types/auth-user.type';
 
 @Controller('auditLog')
 export class AuditLogController {
@@ -11,18 +13,8 @@ export class AuditLogController {
 
   @Get()
   @RequirePermission({ tableName: 'audit_logs', action: 'read', scope: 'ALL' })
-  async getAllAuditLogs() {
-    return this.auditLogService.getAllAuditLogs();
-  }
-
-  @Get('admin')
-  @RequirePermission({
-    tableName: 'audit_logs',
-    action: 'delete',
-    scope: 'ALL',
-  })
-  async getAllAuditLogsAdmin() {
-    return this.auditLogService.getAllAuditLogsAdmin();
+  async getAllAuditLogs(@CurrentUser() user: AuthUser) {
+    return this.auditLogService.getAllAuditLogs(user.id);
   }
 
   @Get(':tenantName')

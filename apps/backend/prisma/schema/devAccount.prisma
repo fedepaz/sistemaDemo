@@ -1,0 +1,8 @@
+// prisma/schema/devAccount.prisma
+model DevAccount {
+    id String @id @default(cuid())
+    userId String @unique
+    createdAt DateTime @default(now())
+
+    @@map("dev_account")
+}

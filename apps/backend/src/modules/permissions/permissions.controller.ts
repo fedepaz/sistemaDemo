@@ -13,7 +13,11 @@ export class PermissionsController {
 
   /* GET user autheticated permissions */
   @Get('me')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'OWN' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   async getMyPermissions(
     @CurrentUser() user: AuthUser,
   ): Promise<UserPermissions> {
@@ -23,15 +27,31 @@ export class PermissionsController {
 
   /* GET all tables */
   @Get('tables')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
-  getAllTables() {
-    const tables = this.permissionsService.getAllTables();
+  @RequirePermission({
+    tableName: 'user_permissions',
+    action: 'read',
+    scope: 'ALL',
+  })
+  getAllTables(@CurrentUser() user: AuthUser) {
+    const tables = this.permissionsService.getAllTables(user.id);
     return tables;
+  }
+
+  /* GET table by name */
+  @Get('table/:tableName')
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'ALL',
+  })
+  getTableByName(@Param('tableName') tableName: string) {
+    const entity = this.permissionsService.getTableByName(tableName);
+    return entity;
   }
 
   /* GET all permissions for a user */
   @Get('user/:userId')
-  @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'user_permissions', action: 'read' })
   async getUserPermissions(
     @Param('userId') userId: string,
   ): Promise<UserPermissions> {
@@ -41,8 +61,13 @@ export class PermissionsController {
 
   /* PATCH grant permission to a user */
   @Patch('user/:userId')
-  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
+  @RequirePermission({
+    tableName: 'user_permissions',
+    action: 'update',
+    scope: 'ALL',
+  })
   async setUserPermissions(
+    @CurrentUser() user: AuthUser,
     @Param('userId') userId: string,
     @Body('permissions')
     permissions: Array<{
@@ -52,9 +77,14 @@ export class PermissionsController {
       canUpdate: boolean;
       canDelete: boolean;
       scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
     }>,
   ): Promise<{ success: boolean }> {
-    await this.permissionsService.setPermissionsForUser(userId, permissions);
+    await this.permissionsService.setPermissionsForUser(
+      user.id,
+      userId,
+      permissions,
+    );
     return { success: true };
   }
 }

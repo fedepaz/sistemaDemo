@@ -1,7 +1,12 @@
 // src/auth/user/userAuth.repository.ts
 
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { User, Tenant } from '../../../generated/prisma/client';
+import {
+  User,
+  Tenant,
+  PermissionScope,
+  PermissionType,
+} from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
 
 @Injectable()
@@ -51,6 +56,15 @@ export class UserAuthRepository {
   }): Promise<User> {
     try {
       return this.prisma.$transaction(async (tx) => {
+        const profileEntity = await tx.entity.upsert({
+          where: { name: 'user_profile' },
+          create: {
+            name: 'user_profile',
+            label: 'Perfil de usuario',
+            permissionType: PermissionType.READ_ONLY,
+          },
+          update: {},
+        });
         const user = await tx.user.create({
           data: {
             ...data,
@@ -60,18 +74,19 @@ export class UserAuthRepository {
 
         await tx.userPermission.upsert({
           where: {
-            userId_tableName: {
+            userId_entityId: {
               userId: user.id,
-              tableName: 'users',
+              entityId: profileEntity.id,
             },
           },
           create: {
             userId: user.id,
-            tableName: 'users',
+            entityId: profileEntity.id,
             canRead: true,
-            scope: 'OWN',
+            scope: PermissionScope.ALL,
+            permissionType: PermissionType.READ_ONLY,
           },
-          update: { canRead: true, scope: 'OWN' },
+          update: { canRead: true },
         });
         return user;
       });

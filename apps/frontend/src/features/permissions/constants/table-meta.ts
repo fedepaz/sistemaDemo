@@ -24,40 +24,43 @@ import {
 } from "lucide-react";
 import { PermissionScope } from "@vivero/shared";
 
-export const TABLE_META: Record<string, { label: string; icon: LucideIcon }> = {
+export const TABLE_META: Record<string, { icon: LucideIcon }> = {
   // Enterprise Resources
-  entities: { label: "Entidades", icon: Package },
-  facilities: { label: "Instalaciones", icon: Building2 },
-  reports: { label: "Reportes", icon: FileBarChart },
-  clients: { label: "Clientes", icon: UserCheck },
-  orders: { label: "Pedidos", icon: Package },
-  incidents: { label: "Incidencias", icon: Bug },
-  resources: { label: "Recursos", icon: Droplets },
-  energy: { label: "Energía", icon: Sun },
-  environment: { label: "Ambiente", icon: Thermometer },
-  tasks: { label: "Tareas", icon: ClipboardList },
+  entities: { icon: Package },
+  facilities: { icon: Building2 },
+  reports: { icon: FileBarChart },
+  clients: { icon: UserCheck },
+  orders: { icon: Package },
+  incidents: { icon: Bug },
+  resources: { icon: Droplets },
+  energy: { icon: Sun },
+  environment: { icon: Thermometer },
+  tasks: { icon: ClipboardList },
+  extendidos: { icon: Package },
+  agentes: { icon: UserCheck },
 
   // System Resources
-  audit_logs: { label: "Logs de Auditoría", icon: Shield },
-  enums: { label: "Enumerados", icon: List },
-  messages: { label: "Mensajes", icon: MessageSquare },
-  tenants: { label: "Tenants", icon: Building2 },
-  users: { label: "Usuarios", icon: Users },
-  user_permissions: { label: "Permisos", icon: Shield },
-  user_preferences: { label: "Preferencias", icon: Settings },
-  locales: { label: "Locales", icon: Globe },
+  audit_logs: { icon: Shield },
+  enums: { icon: List },
+  messages: { icon: MessageSquare },
+  tenants: { icon: Building2 },
+  users: { icon: Users },
+  user_permissions: { icon: Shield },
+  user_preferences: { icon: Settings },
+  locales: { icon: Globe },
 };
 
-export function getTableMeta(tableName: string) {
-  return (
-    TABLE_META[tableName] ?? {
-      label: tableName
-        .split("_")
+export function getTableMeta(tableName: string, labelFromDb?: string) {
+  const meta = TABLE_META[tableName];
+  return {
+    label:
+      labelFromDb ||
+      tableName
+        .split("-")
         .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
         .join(" "),
-      icon: Shield,
-    }
-  );
+    icon: meta?.icon ?? Bug,
+  };
 }
 
 export const SCOPE_LABELS: Record<

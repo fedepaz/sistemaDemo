@@ -67,6 +67,8 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
                     placeholder="juanperez007"
                     disabled={isLoading}
                     className="pl-14 h-12"
+                    autoFocus
+                    tabIndex={0}
                   />
                 </div>
               </FormControl>
@@ -93,6 +95,7 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
                     disabled={isLoading}
                     className="pl-14 h-12"
                     {...field}
+                    tabIndex={0}
                   />
                   <button
                     type="button"
@@ -120,6 +123,7 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
           type="submit"
           className="w-full h-12 bg-primary rounded p-2 cursor-pointer"
           disabled={isLoading || !form.formState.isDirty}
+          tabIndex={0}
         >
           {isLoading ? (
             <>

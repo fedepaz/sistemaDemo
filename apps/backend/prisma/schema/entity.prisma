@@ -1,0 +1,23 @@
+// prisma/schema/entity.prisma
+
+model Entity {
+    id String @id @default(cuid())
+    name String  @unique @db.VarChar(50) // e.g., "users", "tenants", "agents"
+    label String @db.VarChar(50) // e.g., "Usuarios", "Tenants", "Agentes de Venta"
+    permissionType PermissionType @default(CRUD)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userPermissions UserPermission[]
+
+    deletedByUserId String?
+    deletedByUser User? @relation("deleted_entities", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+    deletedAt DateTime? @db.Timestamp(0)
+    isActive  Boolean    @default(true)
+
+    @@index([deletedAt])
+    @@index([deletedByUserId])
+    @@map("entities")
+}

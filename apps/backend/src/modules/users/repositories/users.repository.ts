@@ -59,15 +59,4 @@ export class UsersRepository extends BaseRepository<User> {
       },
     });
   }
-
-  recoverById(id: string): Promise<User> {
-    return this.model.update({
-      where: { id },
-      data: {
-        deletedAt: null,
-        isActive: true,
-        updatedAt: new Date(),
-      },
-    });
-  }
 }

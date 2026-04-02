@@ -28,7 +28,8 @@ src/features/
 │ ├── utils/              # formatEntityName.ts
 │ ├── index.ts            # Public API: Export components, types, hooks
 │ └── types.ts            # Local feature types
-├── client-management/
+├── entities/               # System entities management
+├── permissions/            # User permissions management
 │ └── ...
 ```
 
@@ -109,6 +110,7 @@ Tech Stack Configuration:
 The `userProfile` context now includes `isActive` status and `tenantName` for the authenticated user.
 - **`useAuth` Hook**: Hook for `login`, `logout`, `user`.
 The `user` object retrieved by this hook will contain the `isActive` and `tenantName` properties from the `UserProfileSchema`.
+- **Permissions Management**: Permissions are dynamically validated against the `Entity` definitions provided by the backend.
 - **`DashboardProtectedLayout`**: Handles loading, database unavailable, pending permissions, and authorized states.
 
 ## JWT Refresh Token Mechanism

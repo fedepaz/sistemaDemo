@@ -1,6 +1,10 @@
 //src/features/permissions/components/permissions-manager.tsx
 
-import { PermissionScope, TablePermission } from "@vivero/shared";
+import {
+  PermissionScope,
+  PermissionType,
+  TablePermission,
+} from "@vivero/shared";
 import { useCallback, useMemo, useState } from "react";
 import {
   useSetUserPermissions,
@@ -16,7 +20,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, RotateCcw, Save, Shield } from "lucide-react";
 import { EmptyState } from "./empty-state";
 import { PermissionRowItem } from "./permission-row-item";
-import { getTableMeta } from "../constants/table-meta";
 import { usePermission } from "@/hooks/usePermission";
 import { Badge } from "@/components/ui/badge";
 
@@ -35,29 +38,36 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
   const { data: userPermissions = {} } = useUserPermissions(userId);
   const { mutate: savePermissions, isPending: isSaving } =
     useSetUserPermissions();
+  console.log("userPermissions", userPermissions);
+  console.log("tables", tables);
 
   const dataTablePermissions = usePermission("user_permissions");
   const canEdit = dataTablePermissions.canUpdate;
 
   // The actual state is the merge of original + changes
   const localPermissions = useMemo(() => {
-    return tables.map((tableName) => {
-      // If we have a local change, use it. Otherwise use original data or defaults.
-      if (localChanges[tableName]) {
-        return { tableName, ...localChanges[tableName] };
-      }
-
-      const perms = userPermissions[tableName] || {
-        canCreate: false,
-        canRead: false,
-        canUpdate: false,
-        canDelete: false,
-        scope: "NONE" as const,
-      };
+    return tables.map((table) => {
+      // ← era tableName
+      const key = table.name; // ← usar name como key
+      const perms = localChanges[key] ||
+        userPermissions[key] || {
+          canCreate: false,
+          canRead: false,
+          canUpdate: false,
+          canDelete: false,
+          scope: "NONE" as const,
+          permissionType: table.permissionType, // ← viene de la entity, no hardcodeado
+        };
 
       return {
-        tableName,
-        ...perms,
+        tableName: key,
+        label: table.label,
+        permissionType: table.permissionType,
+        canCreate: perms.canCreate,
+        canRead: perms.canRead,
+        canUpdate: perms.canUpdate,
+        canDelete: perms.canDelete,
+        scope: perms.scope,
       };
     });
   }, [userPermissions, tables, localChanges]);
@@ -91,6 +101,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
             canUpdate: false,
             canDelete: false,
             scope: "NONE" as const,
+            permissionType: "CRUD" as const,
           } as TablePermission);
 
         const next = { ...current, [key]: !current[key] };
@@ -115,6 +126,7 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
             canUpdate: false,
             canDelete: false,
             scope: "NONE" as const,
+            permissionType: "CRUD" as const,
           } as TablePermission);
 
         return { ...prev, [tableName]: { ...current, scope } };
@@ -140,19 +152,54 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
       },
     );
   }, [userId, localPermissions, isDirty, savePermissions]);
+  const groupedPermissions = useMemo(() => {
+    const groups = {
+      CRUD: [] as typeof localPermissions,
+      PROCESS: [] as typeof localPermissions,
+      READ_ONLY: [] as typeof localPermissions,
+    };
 
-  // Filter rows by search
-  const filteredRows = useMemo(() => {
-    if (!searchQuery.trim()) return localPermissions;
-    const q = searchQuery.toLowerCase();
-    return localPermissions.filter((row) => {
-      const meta = getTableMeta(row.tableName);
+    // Filtrar y agrupar según búsqueda
+    const filtered = localPermissions.filter((row) => {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
       return (
-        meta.label.toLowerCase().includes(q) ||
+        row.label.toLowerCase().includes(q) ||
         row.tableName.toLowerCase().includes(q)
       );
     });
+
+    // Agrupar por tipo
+    filtered.forEach((row) => {
+      groups[row.permissionType].push(row);
+    });
+
+    // Ordenar cada grupo alfabéticamente por label
+    Object.keys(groups).forEach((key) => {
+      groups[key as keyof typeof groups].sort((a, b) =>
+        a.label.localeCompare(b.label),
+      );
+    });
+
+    return groups;
   }, [localPermissions, searchQuery]);
+
+  const GROUP_ORDER: PermissionType[] = ["CRUD", "PROCESS", "READ_ONLY"];
+  const GROUP_LABELS: Record<PermissionType, string> = {
+    CRUD: "Acceso Completo",
+    PROCESS: "Procesos",
+    READ_ONLY: "Solo Lectura",
+  };
+  const GROUP_COLORS: Record<PermissionType, string> = {
+    CRUD: "bg-emerald-400/20 text-emerald-600 dark:text-emerald-400",
+    PROCESS: "bg-amber-400/20 text-amber-600 dark:text-amber-400",
+    READ_ONLY: "bg-sky-400/20 text-sky-600 dark:text-sky-400",
+  };
+
+  const totalResults = Object.values(groupedPermissions).reduce(
+    (sum, group) => sum + group.length,
+    0,
+  );
 
   return (
     <>
@@ -188,8 +235,9 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
 
             {/* Rows */}
             <ScrollArea className="flex flex-col bg-muted/5">
-              <div className="flex flex-col gap-3 p-6">
-                {filteredRows.length === 0 ? (
+              <div className="flex flex-col gap-6 p-6">
+                {totalResults === 0 ? (
+                  // ✅ Empty state mejorado
                   <div className="flex flex-col items-center justify-center py-12 text-center">
                     <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-3">
                       <Search className="h-6 w-6 text-muted-foreground/40" />
@@ -201,27 +249,84 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
                       No encontramos ningún recurso que coincida con &quot;
                       {searchQuery}&quot;
                     </p>
+                    {searchQuery.trim() && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-4"
+                        onClick={() => setSearchQuery("")}
+                      >
+                        <RotateCcw className="h-3 w-3 mr-1.5" />
+                        Limpiar búsqueda
+                      </Button>
+                    )}
                   </div>
                 ) : (
-                  filteredRows.map((row) => {
-                    const originalRow = userPermissions[row.tableName] || {
-                      canCreate: false,
-                      canRead: false,
-                      canUpdate: false,
-                      canDelete: false,
-                      scope: "NONE" as const,
-                    };
+                  // ✅ Renderizado agrupado
+                  GROUP_ORDER.map((type) => {
+                    const rows = groupedPermissions[type];
+                    if (rows.length === 0) return null;
+
                     return (
-                      <PermissionRowItem
-                        key={row.tableName}
-                        row={row}
-                        originalRow={{
-                          tableName: row.tableName,
-                          ...originalRow,
-                        }}
-                        onToggleCrud={handleToggleCrud}
-                        onScopeChange={handleScopeChange}
-                      />
+                      <div key={type} className="space-y-3">
+                        {/* Header del grupo */}
+                        <div className="flex items-center gap-3 px-1 py-2">
+                          <div
+                            className={cn(
+                              "h-6 w-1.5 rounded-full",
+                              type === "CRUD" && "bg-emerald-500",
+                              type === "PROCESS" && "bg-amber-500",
+                              type === "READ_ONLY" && "bg-sky-500",
+                            )}
+                          />
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-bold text-foreground">
+                              {GROUP_LABELS[type]}
+                            </span>
+                            <Badge
+                              variant="secondary"
+                              className={cn(
+                                "text-xs font-bold px-2 py-0.5 rounded-md",
+                                GROUP_COLORS[type],
+                              )}
+                            >
+                              {rows.length}
+                            </Badge>
+                          </div>
+                        </div>
+
+                        {/* Divider sutil */}
+                        <div className="h-px bg-border/30 mx-1" />
+
+                        {/* Filas del grupo */}
+                        <div className="space-y-3">
+                          {rows.map((row) => {
+                            const originalRow = userPermissions[
+                              row.tableName
+                            ] || {
+                              canCreate: false,
+                              canRead: false,
+                              canUpdate: false,
+                              canDelete: false,
+                              scope: "NONE" as const,
+                              permissionType: row.permissionType,
+                            };
+                            return (
+                              <PermissionRowItem
+                                key={row.tableName}
+                                row={row}
+                                originalRow={{
+                                  tableName: row.tableName,
+                                  label: row.label,
+                                  ...originalRow,
+                                }}
+                                onToggleCrud={handleToggleCrud}
+                                onScopeChange={handleScopeChange}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
                     );
                   })
                 )}
