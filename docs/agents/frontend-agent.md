@@ -123,6 +123,12 @@ Implements automatic JWT refresh via `clientFetch` and `401` interception.
 - **Single Source of Truth**: `@plant-mgmt/shared` package.
 - **Mandatory Usage**: All data contracts imported from shared package.
 
+## Segment Config Standards
+
+To prevent build-time timeouts and ensure data freshness:
+- **Mandatory `force-dynamic`**: All pages within `(dashboard)` and `(auth)` must export `const dynamic = "force-dynamic"`.
+- **Reasoning**: Prevents the build process from attempting to pre-render pages that depend on runtime-only data (Auth, Cookies, Private APIs), avoiding 60s timeout errors on Vercel/CI.
+
 ## Standard Development Workflow
 
 1. **Scaffold Feature**: `mkdir -p src/features/<name>/{api,components,hooks,stores,utils}`.
