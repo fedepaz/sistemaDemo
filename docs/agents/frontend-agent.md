@@ -102,6 +102,7 @@ Tech Stack Configuration:
 ├── Icons: Lucide React
 ├── Authentication: Custom username/password
 └── Testing: Vitest + Playwright
+└── Development: next.config.ts requires allowedDevOrigins for custom domains/IPs
 ```
 
 ## Authentication & Authorization

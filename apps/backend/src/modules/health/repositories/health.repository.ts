@@ -5,7 +5,7 @@ import { PrismaService } from '../../../infra/prisma/prisma.service';
 import {
   LEGACY_DB_TOKEN,
   LegacyDbConnection,
-} from 'src/infra/legacy-mysql/legacy-mysql.provider';
+} from '../../../infra/legacy-mysql/legacy-mysql.provider';
 
 @Injectable()
 export class HealthRepository {
