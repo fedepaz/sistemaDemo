@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { ChangePasswordForm } from "@/components/user-profile/user-password";
 import { LoginForm } from "./login-form";
 import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
+import { Logo } from "@/components/common/logo";
 
 export function AuthDashboard() {
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
@@ -32,19 +33,7 @@ export function AuthDashboard() {
       <div className="max-w-md w-full space-y-6 md:space-y-8">
         {/* Logo */}
         <div className="flex justify-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
-              <span className="text-primary font-bold text-sm">{initials}</span>
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                {name}
-              </h1>
-              <p className="text-xs text-muted-foreground">
-                Sistema de gestión
-              </p>
-            </div>
-          </div>
+          <Logo variant="full" className="h-24 sm:h-32" />
         </div>
 
         {/* Form Card */}

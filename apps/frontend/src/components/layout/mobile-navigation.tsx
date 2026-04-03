@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
 import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
+import { Logo } from "@/components/common/logo";
 
 interface NavigationItem {
   title: string;
@@ -92,19 +93,7 @@ export function MobileNavigation() {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="p-6 border-b">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center ">
-                <span className="text-primary font-bold text-sm">
-                  {initials}
-                </span>
-              </div>
-              <div>
-                <h2 className="font-bold">{name}</h2>
-                <p className="text-xs text-muted-foreground">
-                  Sistema de gestión
-                </p>
-              </div>
-            </div>
+            <Logo variant="sidebar" className="h-8 w-auto" />
           </div>
 
           {/* Navigation Items */}
