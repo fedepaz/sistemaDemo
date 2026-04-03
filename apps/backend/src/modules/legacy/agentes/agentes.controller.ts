@@ -3,7 +3,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { LegacyAgentesService } from './agentes.service';
 
-import { Public } from 'src/shared/decorators/public.decorator';
+import { Public } from '../../../shared/decorators/public.decorator';
 
 @Controller('l-agentes')
 export class LegacyAgentesController {

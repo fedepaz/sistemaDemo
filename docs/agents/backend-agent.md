@@ -140,7 +140,15 @@ Email: SendGrid / AWS SES
 Validation: Zod schemas
 Testing: Jest + Supertest + Vitest
 Container Runtime: Docker (Container-first workflow)
+TypeScript Config: module: "node16", moduleResolution: "node16" (Required for ESM compatibility)
 ```
+
+### Import Conventions
+
+To ensure compatibility with `node16` module resolution and avoid ambiguity during compilation:
+- **Mandatory Relative Imports**: Always use relative paths (e.g., `../`, `./`) for imports within the backend application.
+- **Avoid Absolute `src/` Imports**: Do not use imports starting with `src/` (e.g., `import { ... } from 'src/infra/...'`), as these can fail under `node16` resolution without explicit `baseUrl` or `paths` configurations.
+- **Exceptions**: External packages and `@prisma/client` (handled via `paths`) are exempt.
 
 ### Database Connection & Migration Workflow
 

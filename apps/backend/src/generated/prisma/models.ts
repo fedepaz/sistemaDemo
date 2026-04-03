@@ -7,10 +7,10 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/AuditLog'
-export type * from './models/DevAccount'
-export type * from './models/Entity'
-export type * from './models/Tenant'
-export type * from './models/User'
-export type * from './models/UserPermission'
-export type * from './commonInputTypes'
+export type * from './models/AuditLog.js'
+export type * from './models/DevAccount.js'
+export type * from './models/Entity.js'
+export type * from './models/Tenant.js'
+export type * from './models/User.js'
+export type * from './models/UserPermission.js'
+export type * from './commonInputTypes.js'

@@ -6,9 +6,10 @@ import { Suspense } from "react";
 import { DesktopSidebar } from "@/components/layout/desktop-sidebar";
 import { DashboardHeader } from "@/components/layout/dashboard-header";
 
-import ComingSoonPage from "@/components/common/coming-soon";
 import { DashboardProtectedLayout } from "@/components/common/dashboard-protected-layout";
 import { RootDashboardSkeleton } from "@/features/dashboard";
+
+export const dynamic = "force-dynamic";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -20,10 +21,6 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
-  if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true") {
-    return <ComingSoonPage />;
-  }
-
   return (
     <Suspense fallback={<RootDashboardSkeleton />}>
       <DashboardProtectedLayout>
