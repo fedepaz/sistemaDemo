@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { HealthController } from './health.controller';
 import { HealthRepository } from './repositories/health.repository';
 import { HealthService } from './health.service';
-import { LegacyMysqlModule } from 'src/infra/legacy-mysql/legacy-mysql.module';
+import { LegacyMysqlModule } from '../../infra/legacy-mysql/legacy-mysql.module';
 
 @Module({
   imports: [LegacyMysqlModule],

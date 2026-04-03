@@ -3,7 +3,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Entity } from '../../../generated/prisma/client';
 import { BaseRepository } from '../../../shared/baseModule/base.repository';
-import { PrismaService } from 'src/infra/prisma/prisma.service';
+import { PrismaService } from '../../../infra/prisma/prisma.service';
 
 @Injectable()
 export class EntitiesRepository extends BaseRepository<Entity> {

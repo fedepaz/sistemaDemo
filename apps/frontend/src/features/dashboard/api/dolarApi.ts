@@ -21,25 +21,33 @@ interface DolarAPIResponse {
 }
 
 async function fetchDolarOficial(): Promise<DolarAPIResponse> {
-  const response = await fetch(`${DOLAR_API_URL}${DOLAR_OFICIAL}`);
+  const response = await fetch(`${DOLAR_API_URL}${DOLAR_OFICIAL}`, {
+    next: { revalidate: 3600 },
+  });
   const data = await response.json();
   return data;
 }
 
 async function fetchDolarBlue(): Promise<DolarAPIResponse> {
-  const response = await fetch(`${DOLAR_API_URL}${DOLAR_BLUE}`);
+  const response = await fetch(`${DOLAR_API_URL}${DOLAR_BLUE}`, {
+    next: { revalidate: 3600 },
+  });
   const data = await response.json();
   return data;
 }
 
 async function fetchEuro(): Promise<DolarAPIResponse> {
-  const response = await fetch(`${DOLAR_API_URL}${EURO}`);
+  const response = await fetch(`${DOLAR_API_URL}${EURO}`, {
+    next: { revalidate: 3600 },
+  });
   const data = await response.json();
   return data;
 }
 
 async function fetchEstado(): Promise<EstadoAPIResponse> {
-  const response = await fetch(`${DOLAR_API_URL}${ESTADOS}`);
+  const response = await fetch(`${DOLAR_API_URL}${ESTADOS}`, {
+    next: { revalidate: 3600 },
+  });
   const data = await response.json();
   return data;
 }
