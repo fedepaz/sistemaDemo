@@ -42,7 +42,6 @@ export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { userProfile, permissions } = useAuthContext();
-  const { name, initials } = useCompanyData();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["operations"]),
   );

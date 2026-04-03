@@ -16,7 +16,6 @@ export function AuthDashboard() {
   const router = useRouter();
 
   const { isLoginComplete } = useAuthContext();
-  const { name, initials } = useCompanyData();
 
   useEffect(() => {
     if (isLoginComplete && !isChangePasswordOpen) {
