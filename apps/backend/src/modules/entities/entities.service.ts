@@ -25,6 +25,7 @@ export class EntitiesService {
       id: e.id,
       name: e.name,
       label: e.label,
+      isActive: e.isActive,
       permissionType: e.permissionType,
     }));
   }
@@ -38,6 +39,7 @@ export class EntitiesService {
       id: entity.id,
       name: entity.name,
       label: entity.label,
+      isActive: entity.isActive,
       permissionType: entity.permissionType,
     };
   }
@@ -48,6 +50,7 @@ export class EntitiesService {
       id: entity.id,
       name: entity.name,
       label: entity.label,
+      isActive: entity.isActive,
       permissionType: entity.permissionType,
     };
   }

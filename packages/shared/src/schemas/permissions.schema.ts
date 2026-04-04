@@ -39,6 +39,7 @@ export const EntitySchema = z.object({
   id: z.string().optional(),
   name: z.string(),
   label: z.string(),
+  isActive: z.boolean().optional(),
   permissionType: PermissionTypeSchema,
 });
 
