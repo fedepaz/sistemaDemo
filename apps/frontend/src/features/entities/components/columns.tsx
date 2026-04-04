@@ -64,6 +64,20 @@ export const entityColumns: ColumnDef<Entity>[] = [
     cell: ({ row }) => row.getValue("label"),
   },
   {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Estado</SortableHeader>
+    ),
+    cell: ({ row }) => {
+      const isActive = row.original.isActive;
+      return (
+        <StatusBadge status={isActive ? "healthy" : "inactive"}>
+          {isActive ? "Activo" : "Inactivo"}
+        </StatusBadge>
+      );
+    },
+  },
+  {
     accessorKey: "permissionType",
     header: ({ column }) => (
       <SortableHeader column={column}>Tipo de permiso</SortableHeader>

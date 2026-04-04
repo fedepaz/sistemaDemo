@@ -1,7 +1,7 @@
 // src/features/entities/hooks/useEntities.ts
 
 import { clientFetch } from "@/lib/api/client-fetch";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { CreateEntityDto, Entity } from "@vivero/shared";
 import { toast } from "sonner";
 
@@ -34,6 +34,25 @@ export const useCreateEntity = () => {
       toast.success(toastMessage, {
         duration: 3000,
       });
+    },
+  });
+};
+
+export const useDeleteEntity = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, string>({
+    mutationFn: async (id) => {
+      await clientFetch(`entities/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      const toastMessage = `Entidad eliminada exitosamente`;
+      toast.success(toastMessage, {
+        duration: 3000,
+      });
+      queryClient.invalidateQueries({ queryKey: entityQueryKeys.all() });
     },
   });
 };
