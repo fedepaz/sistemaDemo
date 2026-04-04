@@ -7,7 +7,6 @@ import { useAuthContext } from "../providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { ChangePasswordForm } from "@/components/user-profile/user-password";
 import { LoginForm } from "./login-form";
-import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
 import { Logo } from "@/components/common/logo";
 
 export function AuthDashboard() {

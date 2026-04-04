@@ -6,7 +6,7 @@ import {
   useSuspenseQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { Entity, UserPermissions } from "@vivero/shared";
+import { Entity, UserEntityPermission, UserPermissions } from "@vivero/shared";
 import { toast } from "sonner";
 
 export const permissionsQueryKeys = {
@@ -14,6 +14,8 @@ export const permissionsQueryKeys = {
   table: (tableName: string) =>
     [...permissionsQueryKeys.tables(), tableName] as const,
   byUserId: (userId: string) => ["permissions", "user", userId] as const,
+  byEntityId: (entityId: string) =>
+    ["permissions", "entity", entityId] as const,
 };
 
 export const useTables = () => {
@@ -43,6 +45,18 @@ export const useUserPermissions = (userId: string) => {
     queryKey: permissionsQueryKeys.byUserId(userId),
     queryFn: () =>
       clientFetch<UserPermissions>(`permissions/user/${userId}`, {
+        method: "GET",
+      }),
+
+    retry: 1, // Retry once to account for transient network issues
+  });
+};
+
+export const useEntityPermissions = (entityId: string) => {
+  return useSuspenseQuery<UserEntityPermission[]>({
+    queryKey: permissionsQueryKeys.byEntityId(entityId),
+    queryFn: () =>
+      clientFetch<UserEntityPermission[]>(`permissions/entity/${entityId}`, {
         method: "GET",
       }),
 

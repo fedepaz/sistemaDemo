@@ -42,6 +42,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Permission Types**: Support for `CRUD`, `READ_ONLY`, and `PROCESS` types to constrain allowable actions.
 - [x] **CRUD & Scope Check**: Logic for `canCreate`, `canRead`, etc., and `OWN` vs `ALL` scopes.
 - [x] **Admin Management**: `PATCH /user/:userId` to update permissions.
+- [x] **Entity-Centric Oversight**: `GET /entity/:entityId` to retrieve all users with access to a specific resource. Implements security filtering to hide developer accounts from standard managers.
 
 ### Tenant Module
 - [x] **Tenant Management**: `GET /tenants`, `GET /tenants/:id` (and potentially other CRUD operations).

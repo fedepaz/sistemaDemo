@@ -27,7 +27,7 @@ interface PermissionsManagerProps {
   userId: string;
 }
 
-export function PermissionsManager({ userId }: PermissionsManagerProps) {
+export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   // Track ONLY what changed relative to original data
   const [localChanges, setLocalChanges] = useState<
@@ -38,8 +38,6 @@ export function PermissionsManager({ userId }: PermissionsManagerProps) {
   const { data: userPermissions = {} } = useUserPermissions(userId);
   const { mutate: savePermissions, isPending: isSaving } =
     useSetUserPermissions();
-  console.log("userPermissions", userPermissions);
-  console.log("tables", tables);
 
   const dataTablePermissions = usePermission("user_permissions");
   const canEdit = dataTablePermissions.canUpdate;

@@ -1,4 +1,4 @@
-// src/permissions/permissions.service.ts
+// src/modules/permissions/permissions.service.ts
 
 import {
   ForbiddenException,
@@ -12,6 +12,7 @@ import {
   UserPermissions,
   PermissionType,
   Entity,
+  UserEntityPermission,
 } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
 import { EntitiesRepository } from '../entities/repositories/entities.repository';
@@ -40,7 +41,10 @@ export class PermissionsService {
       throw new InternalServerErrorException('Error getting tables');
     }
 
-    const requesterPerms = await this.getUserPermissions(requesterId);
+    const requesterPerms = await this.getUserPermissions(
+      requesterId,
+      requesterId,
+    );
 
     // Filter: Only show entities where the requester has at least one true permission
     return allEntities
@@ -49,8 +53,10 @@ export class PermissionsService {
         return p && (p.canRead || p.canCreate || p.canUpdate || p.canDelete);
       })
       .map((e) => ({
+        id: e.id,
         name: e.name,
         label: e.label,
+        isActive: e.isActive,
         permissionType: e.permissionType,
       }));
   }
@@ -61,6 +67,7 @@ export class PermissionsService {
       throw new NotFoundException(`Entity ${tableName} not found`);
     }
     return {
+      id: entity.id,
       name: entity.name,
       label: entity.label,
       permissionType: entity.permissionType,
@@ -70,9 +77,15 @@ export class PermissionsService {
   /**
    * Get all permissions for a user (with caching)
    */
-  async getUserPermissions(userId: string): Promise<UserPermissions> {
+  async getUserPermissions(
+    userId: string,
+    requesterId: string,
+  ): Promise<UserPermissions> {
     // TODO: Implement caching
-    const records = await this.permissionsRepo.findManyByUserId(userId);
+    const records = await this.permissionsRepo.findManyByUserId(
+      userId,
+      requesterId,
+    );
 
     const map: UserPermissions = {};
     for (const r of records) {
@@ -88,11 +101,37 @@ export class PermissionsService {
     return map;
   }
 
+  async getPermissionsByEntity(
+    entityId: string,
+    requesterId: string,
+  ): Promise<UserEntityPermission[]> {
+    const records = await this.permissionsRepo.findManyByEntityId(
+      entityId,
+      requesterId,
+    );
+
+    return records.map((r) => ({
+      userId: r.userId,
+      username: r.userMetadata?.username || 'Unknown',
+      firstName: r.userMetadata?.firstName,
+      lastName: r.userMetadata?.lastName,
+      permissions: {
+        canCreate: r.canCreate,
+        canRead: r.canRead,
+        canUpdate: r.canUpdate,
+        canDelete: r.canDelete,
+        scope: r.scope,
+        permissionType: r.permissionType,
+      },
+      createdAt: r.createdAt,
+    }));
+  }
+
   /**
    * Check if user can perform action on table
    */
   async canPerform(userId: string, check: PermissionCheck): Promise<boolean> {
-    const perms = await this.getUserPermissions(userId);
+    const perms = await this.getUserPermissions(userId, userId);
     const tablePerm = perms[check.tableName];
 
     if (!tablePerm) return false;
@@ -134,7 +173,7 @@ export class PermissionsService {
     action: 'read' | 'update' | 'delete',
     recordOwnerId: string,
   ): Promise<boolean> {
-    const perms = await this.getUserPermissions(userId);
+    const perms = await this.getUserPermissions(userId, userId);
     const tablePerm = perms[entityId];
 
     if (!tablePerm) return false;
@@ -208,8 +247,10 @@ export class PermissionsService {
     }
 
     // 1. Get requester's permissions (raw records to get createdAt)
-    const requesterRecords =
-      await this.permissionsRepo.findManyByUserId(requesterId);
+    const requesterRecords = await this.permissionsRepo.findManyByUserId(
+      requesterId,
+      requesterId,
+    );
     const requesterPermsMapByEntityId = new Map<string, UserPermissionRecord>();
     const requesterPerms: UserPermissions = {};
 
@@ -237,8 +278,10 @@ export class PermissionsService {
     }> = [];
 
     // 3. Get existing permissions of target user
-    const currentTargetPerms =
-      await this.permissionsRepo.findManyByUserId(targetUserId);
+    const currentTargetPerms = await this.permissionsRepo.findManyByUserId(
+      targetUserId,
+      requesterId,
+    );
     const currentTargetPermsMapByEntityId = new Map<
       string,
       UserPermissionRecord

@@ -11,11 +11,65 @@ import { PrismaService } from '../../../infra/prisma/prisma.service';
 export class PermissionsRepository implements IPermissionRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findManyByUserId(userId: string): Promise<UserPermissionRecord[]> {
+  private devAccounts: string[] | null = null;
+  private async getDevAccounts(): Promise<string[]> {
+    if (this.devAccounts) return this.devAccounts;
+    const records = await this.prisma.devAccount.findMany({
+      select: {
+        userId: true,
+      },
+    });
+    this.devAccounts = records.map((record) => record.userId);
+    return this.devAccounts;
+  }
+
+  async findManyByUserId(
+    userId: string,
+    requesterId: string,
+  ): Promise<UserPermissionRecord[]> {
+    const devIds = await this.getDevAccounts();
+
+    if (devIds.includes(requesterId)) {
+      const recordsDev = await this.prisma.userPermission.findMany({
+        where: {
+          userId,
+        },
+        select: {
+          userId: true,
+          entityId: true,
+          entity: {
+            select: {
+              name: true,
+            },
+          },
+          canCreate: true,
+          canRead: true,
+          canUpdate: true,
+          canDelete: true,
+          scope: true,
+          permissionType: true,
+          createdAt: true,
+        },
+      });
+      return recordsDev
+        .filter((r) => r.entity !== null)
+        .map((r) => ({
+          ...r,
+          entityName: r.entity.name,
+          createdAt: r.createdAt,
+        }));
+    }
+
     const records = await this.prisma.userPermission.findMany({
       where: {
-        userId,
         deletedAt: null,
+        userId: {
+          notIn: devIds,
+        },
+        user: {
+          deletedAt: null,
+          isActive: true,
+        },
         entity: {
           deletedAt: null,
           isActive: true,
@@ -46,6 +100,102 @@ export class PermissionsRepository implements IPermissionRepository {
         entityName: r.entity.name,
         createdAt: r.createdAt,
       }));
+  }
+
+  async findManyByEntityId(
+    entityId: string,
+    requesterId: string,
+  ): Promise<UserPermissionRecord[]> {
+    const devIds = await this.getDevAccounts();
+
+    if (devIds.includes(requesterId)) {
+      const recordsDev = await this.prisma.userPermission.findMany({
+        where: {
+          entityId,
+        },
+        select: {
+          userId: true,
+          entityId: true,
+          entity: {
+            select: {
+              name: true,
+            },
+          },
+          user: {
+            select: {
+              username: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          canCreate: true,
+          canRead: true,
+          canUpdate: true,
+          canDelete: true,
+          scope: true,
+          permissionType: true,
+          createdAt: true,
+        },
+      });
+
+      return recordsDev.map((r) => ({
+        ...r,
+        entityName: r.entity.name,
+        userMetadata: {
+          username: r.user.username,
+          firstName: r.user.firstName,
+          lastName: r.user.lastName,
+        },
+        createdAt: r.createdAt,
+      }));
+    }
+    const records = await this.prisma.userPermission.findMany({
+      where: {
+        entityId,
+        deletedAt: null,
+        userId: {
+          notIn: devIds,
+        },
+        user: {
+          deletedAt: null,
+          isActive: true,
+        },
+      },
+      select: {
+        userId: true,
+        entityId: true,
+        entity: {
+          select: {
+            name: true,
+          },
+        },
+        user: {
+          select: {
+            username: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        canCreate: true,
+        canRead: true,
+        canUpdate: true,
+        canDelete: true,
+        scope: true,
+        permissionType: true,
+        createdAt: true,
+      },
+    });
+
+    return records.map((r) => ({
+      ...r,
+      entityName: r.entity.name,
+      userMetadata: {
+        username: r.user.username,
+        firstName: r.user.firstName,
+        lastName: r.user.lastName,
+      },
+      createdAt: r.createdAt,
+    }));
   }
 
   async upsert(

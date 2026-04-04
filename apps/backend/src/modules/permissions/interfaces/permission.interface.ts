@@ -1,7 +1,14 @@
 // src/modules/permissions/interfaces/permission.interface.ts
 
 export interface IPermissionRepository {
-  findManyByUserId(userId: string): Promise<UserPermissionRecord[]>;
+  findManyByUserId(
+    userId: string,
+    requesterId: string,
+  ): Promise<UserPermissionRecord[]>;
+  findManyByEntityId(
+    entityId: string,
+    requesterId: string,
+  ): Promise<UserPermissionRecord[]>;
   upsert(
     userId: string,
     entityId: string,
@@ -28,4 +35,9 @@ export interface UserPermissionRecord {
   scope: 'NONE' | 'OWN' | 'ALL';
   permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
   createdAt: Date;
+  userMetadata?: {
+    username: string;
+    firstName: string | null;
+    lastName: string | null;
+  };
 }
