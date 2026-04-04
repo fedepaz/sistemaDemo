@@ -17,7 +17,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
+import { Logo } from "@/components/common/logo";
 
 interface NavigationItem {
   title: string;
@@ -40,7 +40,6 @@ interface NavigationGroup {
 export function DesktopSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
-  const { name, initials } = useCompanyData();
 
   const { userProfile, permissions } = useAuthContext();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
@@ -86,21 +85,16 @@ export function DesktopSidebar() {
       */}
       <div className="p-3 border-b">
         <div
-          className={`flex items-center ${isCollapsed ? "justify-center py-1" : "justify-between"}`}
+          className={cn(
+            "flex items-center",
+            isCollapsed ? "justify-center" : "justify-between",
+          )}
         >
-          {!isCollapsed && (
+          {isCollapsed ? (
+            <Logo variant="icon" className="h-8 w-auto" />
+          ) : (
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center ">
-                <span className="text-primary font-bold text-sm">
-                  {initials}
-                </span>
-              </div>
-              <div>
-                <h2 className="font-bold">{name}</h2>
-                <p className="text-xs text-muted-foreground">
-                  Sistema de gestión
-                </p>
-              </div>
+              <Logo variant="sidebar" className="h-8 w-auto" />
             </div>
           )}
           <Tooltip>
@@ -110,7 +104,11 @@ export function DesktopSidebar() {
                 size="icon"
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 className="h-8 w-8 "
-                aria-label={isCollapsed ? "Expandir barra lateral" : "Contraer barra lateral"}
+                aria-label={
+                  isCollapsed
+                    ? "Expandir barra lateral"
+                    : "Contraer barra lateral"
+                }
               >
                 {isCollapsed ? (
                   <ChevronRight className="h-4 w-4" />
@@ -119,7 +117,10 @@ export function DesktopSidebar() {
                 )}
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right" className="border border-border shadow-md">
+            <TooltipContent
+              side="right"
+              className="border border-border shadow-md"
+            >
               <p>{isCollapsed ? "Expandir" : "Contraer"}</p>
             </TooltipContent>
           </Tooltip>

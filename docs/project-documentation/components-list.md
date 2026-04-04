@@ -38,6 +38,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `NotFoundPage` | [x] | [x] | [x] |
 | `PendingPermissionsPage` | [x] | [x] | [x] |
 | `ThemeToggle` | [x] | [x] | [x] |
+| `Logo` | [x] | [x] | [x] |
 | `DeleteDialog` | [x] | [x] | [x] |
 | `EditDialog` | [x] | [x] | [x] |
 | `ExportDropdown` | [x] | [x] | [x] |
@@ -133,6 +134,8 @@ This document tracks all React components within the `apps/frontend/src` directo
 ### Dashboard
 | Component | Responsive | Color Tokens | UX Helpers |
 | :--- | :---: | :---: | :---: |
+| `CompanyWelcome` | [x] | [x] | [x] |
+| `CompanyWelcomeSkeleton` | [x] | [x] | [x] |
 | `DashboardAlertsSkeleton` | [x] | [x] | [x] |
 | `DashboardAlerts` | [x] | [x] | [x] |
 | `DashboardKPISkeleton` | [x] | [x] | [x] |

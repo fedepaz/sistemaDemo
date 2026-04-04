@@ -187,13 +187,14 @@ async function main() {
   }
 
   const permissionsArray = [
-    userProfileEntityId,
-    userPermissionEntityId,
-    usersEntityId,
-    entitiesId,
-    auditLogsId,
-    devAccountId,
+    { id: userProfileEntityId, type: PermissionType.READ_ONLY },
+    { id: userPermissionEntityId, type: PermissionType.CRUD },
+    { id: usersEntityId, type: PermissionType.CRUD },
+    { id: entitiesId, type: PermissionType.CRUD },
+    { id: auditLogsId, type: PermissionType.READ_ONLY },
+    { id: devAccountId, type: PermissionType.CRUD },
   ];
+
   // Create admin user + full permissions
   const adminMartin = await prisma.user.upsert({
     where: { username: 'adminMartin' },
@@ -238,22 +239,29 @@ async function main() {
         where: {
           userId_entityId: {
             userId: user.id,
-            entityId: permission,
+            entityId: permission.id,
           },
         },
         create: {
           userId: user.id,
-          entityId: permission,
+          entityId: permission.id,
           canCreate: true,
           canRead: true,
           canUpdate: true,
           canDelete: true,
           scope: PermissionScope.ALL,
-          permissionType: PermissionType.READ_ONLY,
+          permissionType: permission.type,
         },
-        update: {},
+        update: {
+          canCreate: true,
+          canRead: true,
+          canUpdate: true,
+          canDelete: true,
+          scope: PermissionScope.ALL,
+          permissionType: permission.type,
+        },
       });
-      console.log(`Permission ${permission} granted to ${user.username}`);
+      console.log(`Permission ${permission.id} granted to ${user.username}`);
     }
   }
 }

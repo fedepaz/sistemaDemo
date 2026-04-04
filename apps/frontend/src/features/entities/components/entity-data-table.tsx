@@ -2,8 +2,12 @@
 "use client";
 
 import { useState } from "react";
-import { useCreateEntity, useEntities } from "../hooks/useEntities";
-import { CreateEntityDto, CreateEntitySchema } from "@vivero/shared";
+import {
+  useCreateEntity,
+  useDeleteEntity,
+  useEntities,
+} from "../hooks/useEntities";
+import { CreateEntityDto, CreateEntitySchema, Entity } from "@vivero/shared";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
@@ -17,6 +21,8 @@ export function EntityDataTable() {
 
   const { mutateAsync: createEntity, isPending: isCreatingEntity } =
     useCreateEntity();
+
+  const { mutateAsync: deleteEntity } = useDeleteEntity();
 
   const formCreateEntity = useForm<CreateEntityDto>({
     resolver: zodResolver(CreateEntitySchema),
@@ -39,6 +45,12 @@ export function EntityDataTable() {
     if (!isCreatingEntity) setSlideOverOpen(false);
   };
 
+  const handleDelete = async (row: Entity) => {
+    if (row.name) {
+      await deleteEntity(row.name);
+    }
+  };
+
   return (
     <>
       <DataTable
@@ -50,6 +62,7 @@ export function EntityDataTable() {
         totalCount={entities.length}
         onCreate={handleNewEntity}
         createLabel="Nueva Entidad"
+        onDelete={handleDelete}
       />
       {slideOverOpen && (
         <SlideOverForm
