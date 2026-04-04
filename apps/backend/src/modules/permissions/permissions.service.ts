@@ -12,6 +12,7 @@ import {
   UserPermissions,
   PermissionType,
   Entity,
+  UserEntityPermission,
 } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
 import { EntitiesRepository } from '../entities/repositories/entities.repository';
@@ -40,7 +41,7 @@ export class PermissionsService {
       throw new InternalServerErrorException('Error getting tables');
     }
 
-    const requesterPerms = await this.getUserPermissions(requesterId);
+    const requesterPerms = await this.getUserPermissionsByUserId(requesterId);
 
     // Filter: Only show entities where the requester has at least one true permission
     return allEntities
@@ -72,7 +73,7 @@ export class PermissionsService {
   /**
    * Get all permissions for a user (with caching)
    */
-  async getUserPermissions(userId: string): Promise<UserPermissions> {
+  async getUserPermissionsByUserId(userId: string): Promise<UserPermissions> {
     // TODO: Implement caching
     const records = await this.permissionsRepo.findManyByUserId(userId);
 
@@ -91,10 +92,40 @@ export class PermissionsService {
   }
 
   /**
+   * Get all permissions for by entityId
+   */
+  async getUserPermissionsByEntityId(
+    entityId: string,
+    requesterId: string,
+  ): Promise<UserEntityPermission[]> {
+    // TODO: Implement caching
+    const records = await this.permissionsRepo.findManyByEntityId(
+      entityId,
+      requesterId,
+    );
+
+    return records.map((r) => ({
+      userId: r.userId,
+      username: r.userMetadata?.username || 'Unknown',
+      firstName: r.userMetadata?.firstName,
+      lastName: r.userMetadata?.lastName,
+      permissions: {
+        canCreate: r.canCreate,
+        canRead: r.canRead,
+        canUpdate: r.canUpdate,
+        canDelete: r.canDelete,
+        scope: r.scope,
+        permissionType: r.permissionType,
+      },
+      createdAt: r.createdAt,
+    }));
+  }
+
+  /**
    * Check if user can perform action on table
    */
   async canPerform(userId: string, check: PermissionCheck): Promise<boolean> {
-    const perms = await this.getUserPermissions(userId);
+    const perms = await this.getUserPermissionsByUserId(userId);
     const tablePerm = perms[check.tableName];
 
     if (!tablePerm) return false;
@@ -136,7 +167,7 @@ export class PermissionsService {
     action: 'read' | 'update' | 'delete',
     recordOwnerId: string,
   ): Promise<boolean> {
-    const perms = await this.getUserPermissions(userId);
+    const perms = await this.getUserPermissionsByUserId(userId);
     const tablePerm = perms[entityId];
 
     if (!tablePerm) return false;

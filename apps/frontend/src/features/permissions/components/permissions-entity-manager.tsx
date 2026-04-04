@@ -11,7 +11,7 @@ import { Search, Shield, User } from "lucide-react";
 import { useState, useMemo } from "react";
 import { CRUD_COLUMNS, SCOPE_LABELS } from "../constants/table-meta";
 import { cn } from "@/lib/utils";
-import { usePermission } from "@/hooks/usePermission";
+import { TablePermission } from "@vivero/shared";
 
 interface PermissionsEntityManagerProps {
   entityId: string;
@@ -22,9 +22,6 @@ export function PermissionsEntityManager({
 }: PermissionsEntityManagerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: userPermissions = [] } = useEntityPermissions(entityId);
-
-  const dataTablePermissions = usePermission("user_permissions");
-  const canEdit = dataTablePermissions.canUpdate;
 
   const filteredUsers = useMemo(() => {
     if (!searchQuery.trim()) return userPermissions;
@@ -38,7 +35,10 @@ export function PermissionsEntityManager({
   }, [userPermissions, searchQuery]);
 
   const getInitials = (firstName?: string | null, lastName?: string | null) => {
-    return [firstName?.[0], lastName?.[0]].filter(Boolean).join("").toUpperCase() || "U";
+    return (
+      [firstName?.[0], lastName?.[0]].filter(Boolean).join("").toUpperCase() ||
+      "U"
+    );
   };
 
   return (
@@ -77,7 +77,7 @@ export function PermissionsEntityManager({
                     No hay usuarios encontrados
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {searchQuery.trim() 
+                    {searchQuery.trim()
                       ? "Ningún usuario coincide con tu búsqueda."
                       : "Esta tabla no tiene permisos asignados específicamente."}
                   </p>
@@ -97,8 +97,8 @@ export function PermissionsEntityManager({
                       </Avatar>
                       <div className="flex flex-col gap-0.5 min-w-0">
                         <span className="text-sm font-bold text-foreground truncate">
-                          {up.firstName && up.lastName 
-                            ? `${up.firstName} ${up.lastName}` 
+                          {up.firstName && up.lastName
+                            ? `${up.firstName} ${up.lastName}`
                             : up.username}
                         </span>
                         <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70">
@@ -110,37 +110,46 @@ export function PermissionsEntityManager({
                     {/* Permissions Grid */}
                     <div className="flex flex-1 items-center justify-around gap-2 px-4">
                       {CRUD_COLUMNS.map((col) => {
-                        const hasPerm = (up.permissions as TablePermission)[col.key];
+                        const hasPerm = (up.permissions as TablePermission)[
+                          col.key
+                        ];
                         return (
-                          <div key={col.key} className="flex flex-col items-center gap-2">
-                             <col.icon
-                                className={cn(
-                                  "h-4 w-4",
-                                  hasPerm ? col.color : "text-muted-foreground/20",
-                                )}
-                              />
-                              <span
-                                className={cn(
-                                  "text-[10px] font-bold uppercase tracking-widest",
-                                  hasPerm ? "text-foreground" : "text-muted-foreground/30",
-                                )}
-                              >
-                                {col.label}
-                              </span>
-                              <div
-                                className={cn(
-                                  "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all",
-                                  hasPerm
-                                    ? "border-primary/20 bg-primary/5 text-primary"
-                                    : "border-muted-foreground/10 bg-muted/30 text-muted-foreground/20",
-                                )}
-                              >
-                                {hasPerm ? (
-                                  <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                                ) : (
-                                  <div className="h-0.5 w-1.5 rounded-full bg-current" />
-                                )}
-                              </div>
+                          <div
+                            key={col.key}
+                            className="flex flex-col items-center gap-2"
+                          >
+                            <col.icon
+                              className={cn(
+                                "h-4 w-4",
+                                hasPerm
+                                  ? col.color
+                                  : "text-muted-foreground/20",
+                              )}
+                            />
+                            <span
+                              className={cn(
+                                "text-[10px] font-bold uppercase tracking-widest",
+                                hasPerm
+                                  ? "text-foreground"
+                                  : "text-muted-foreground/30",
+                              )}
+                            >
+                              {col.label}
+                            </span>
+                            <div
+                              className={cn(
+                                "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all",
+                                hasPerm
+                                  ? "border-primary/20 bg-primary/5 text-primary"
+                                  : "border-muted-foreground/10 bg-muted/30 text-muted-foreground/20",
+                              )}
+                            >
+                              {hasPerm ? (
+                                <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                              ) : (
+                                <div className="h-0.5 w-1.5 rounded-full bg-current" />
+                              )}
+                            </div>
                           </div>
                         );
                       })}
@@ -155,9 +164,12 @@ export function PermissionsEntityManager({
                         variant="outline"
                         className={cn(
                           "h-8 rounded-lg px-4 text-[11px] font-bold uppercase tracking-widest border-2",
-                          up.permissions.scope === "ALL" && "border-primary/20 bg-primary/5 text-primary",
-                          up.permissions.scope === "OWN" && "border-primary/20 bg-primary/5 text-primary",
-                          up.permissions.scope === "NONE" && "border-muted-foreground/10 bg-muted/20 text-muted-foreground/60",
+                          up.permissions.scope === "ALL" &&
+                            "border-primary/20 bg-primary/5 text-primary",
+                          up.permissions.scope === "OWN" &&
+                            "border-primary/20 bg-primary/5 text-primary",
+                          up.permissions.scope === "NONE" &&
+                            "border-muted-foreground/10 bg-muted/20 text-muted-foreground/60",
                         )}
                       >
                         {SCOPE_LABELS[up.permissions.scope].label}
