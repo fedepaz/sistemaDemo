@@ -36,6 +36,7 @@ export const PermissionCheckSchema = z.object({
 export type PermissionCheck = z.infer<typeof PermissionCheckSchema>;
 
 export const EntitySchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
   label: z.string(),
   permissionType: PermissionTypeSchema,

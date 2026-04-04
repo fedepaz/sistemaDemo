@@ -22,6 +22,7 @@ export class EntitiesService {
       throw new InternalServerErrorException('Error getting tables');
     }
     return entities.map((e) => ({
+      id: e.id,
       name: e.name,
       label: e.label,
       permissionType: e.permissionType,
@@ -34,6 +35,7 @@ export class EntitiesService {
       throw new NotFoundException(`Entity ${tableName} not found`);
     }
     return {
+      id: entity.id,
       name: entity.name,
       label: entity.label,
       permissionType: entity.permissionType,
@@ -43,9 +45,25 @@ export class EntitiesService {
   async createEntity(data: CreateEntityDto): Promise<Entity> {
     const entity = await this.entitiesRepo.create(data);
     return {
+      id: entity.id,
       name: entity.name,
       label: entity.label,
       permissionType: entity.permissionType,
     };
+  }
+
+  async softRemove(nameOrId: string, deletedByUserId: string) {
+    // Try to find by name first to get the actual UUID id
+    let entityId = nameOrId;
+    try {
+      const entity = await this.entitiesRepo.findByName(nameOrId);
+      if (entity) {
+        entityId = entity.id;
+      }
+    } catch {
+      // If findByName fails, assume nameOrId is already an ID or doesn't exist
+    }
+
+    return this.entitiesRepo.softDelete(entityId, deletedByUserId);
   }
 }

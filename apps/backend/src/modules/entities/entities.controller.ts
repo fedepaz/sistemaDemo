@@ -1,6 +1,6 @@
 // src/modules/entities/entities.controller.ts
 
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { EntitiesService } from './entities.service';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 import { CreateEntityDto } from '@vivero/shared';
@@ -44,6 +44,18 @@ export class EntitiesController {
   })
   async createEntity(@Body() data: CreateEntityDto) {
     const entity = await this.entitiesService.createEntity(data);
+    return entity;
+  }
+
+  /* DELETE entity */
+  @Delete(':id')
+  @RequirePermission({
+    tableName: 'entities',
+    action: 'delete',
+    scope: 'ALL',
+  })
+  async softDelete(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    const entity = await this.entitiesService.softRemove(id, user.id);
     return entity;
   }
 }
