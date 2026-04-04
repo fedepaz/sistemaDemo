@@ -119,6 +119,13 @@ export class PermissionsRepository implements IPermissionRepository {
           deletedAt: null,
           isActive: true,
         },
+        // NEW: Only show users who have at least ONE active permission
+        OR: [
+          { canCreate: true },
+          { canRead: true },
+          { canUpdate: true },
+          { canDelete: true },
+        ],
       },
       select: {
         userId: true,

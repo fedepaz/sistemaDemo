@@ -54,6 +54,7 @@ export class PermissionsService {
         name: e.name,
         label: e.label,
         permissionType: e.permissionType,
+        isActive: e.isActive,
       }));
   }
 

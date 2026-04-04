@@ -18,16 +18,22 @@ export class EntitiesService {
    */
   async getAllTables(requesterId: string): Promise<Entity[]> {
     const entities = await this.entitiesRepo.findAll(requesterId);
+
     if (!entities) {
       throw new InternalServerErrorException('Error getting tables');
     }
-    return entities.map((e) => ({
+
+    const devEntities = ['user_profile', 'dev_account'];
+
+    const records = entities.map((e) => ({
       id: e.id,
       name: e.name,
       label: e.label,
       isActive: e.isActive,
       permissionType: e.permissionType,
     }));
+
+    return records.filter((e) => !devEntities.includes(e.name));
   }
 
   async getTableByName(tableName: string): Promise<Entity> {
