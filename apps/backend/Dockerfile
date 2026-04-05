@@ -12,7 +12,10 @@ COPY apps/backend/package.json ./apps/backend/
 COPY packages/shared/package.json ./packages/shared/
 
 ENV PRISMA_SKIP_POSTINSTALL_GENERATE=1
-RUN pnpm install --frozen-lockfile
+RUN pnpm config set fetch-retries 10 && \
+    pnpm config set fetch-retry-maxtimeout 300000 && \
+    pnpm config set network-concurrency 1 && \
+    pnpm install --frozen-lockfile
 
 # ---------- build ----------
 FROM deps AS builder
