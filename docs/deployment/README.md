@@ -22,6 +22,56 @@ For specific instructions, please refer to the following documents:
 
 ---
 
+## 🌐 Deployment for Non-Programmers (Step-by-Step)
+
+If you're not a developer, follow these steps to set up the system on your server:
+
+### 1. Prerequisites
+- **Docker Installed**: Ensure your server has Docker and Docker Compose installed.
+- **Project Files**: You need a copy of this project on your server. You can get it by downloading it or cloning it with `git`:
+  ```bash
+  git clone <your-repository-url>
+  cd vivero-client-alpha
+  ```
+
+### 2. Prepare Configuration Files (.env)
+The system requires specific settings to run. You must create configuration files based on the examples provided:
+
+1.  **Backend Settings**:
+    - **Action**: Create the production file from the example.
+      ```bash
+      cp apps/backend/.env.example apps/backend/.env.production
+      ```
+    - **Edit**: Open the file with an editor (like `nano apps/backend/.env.production`).
+    - **Key Variables to Check**:
+        - `DATABASE_PROD_URL`: Points to the internal database (`mysql://root:rootpassword@mariadb:3306/vivero_client_alpha`).
+        - `DATABASE_LEGACY_URL`: **(New)** Use this if you need to connect to an existing database from a previous system.
+        - `JWT_SECRET`: Change this to a long, secure, and unique string.
+
+2.  **Frontend Settings**:
+    - **Action**: Create the production file.
+      ```bash
+      cp apps/frontend/.env.example apps/frontend/.env.production
+      ```
+    - **Key Variable**:
+        - `NEXT_PUBLIC_BACKEND_URL`: Set this to `/api` for standard routing.
+
+### 3. Build & Launch
+In the main folder of the project, run:
+```bash
+docker compose up -d --build
+```
+This command will:
+1.  **Download & Build**: Prepare all the necessary components automatically.
+2.  **Database Seeding**: **(Important)** On the first launch, the system will automatically create the initial administrator user so you can log in immediately.
+3.  **Resilience**: Recent improvements ensure a more stable installation even with slower internet connections.
+
+### 4. Verification
+- **Web App**: Accessible on your server's IP at port **3000**.
+- **API Status**: Check `http://your-server-ip:3001/api/health` to confirm the database connection is active.
+
+---
+
 ## 🛡️ Nginx Routing Logic
 
 Nginx acts as the entry point for all traffic:
@@ -31,20 +81,20 @@ Nginx acts as the entry point for all traffic:
 
 ---
 
-## 🚀 Quick Start (Production)
+## 🚀 Quick Start (Technical)
 
-1. **Prepare Environment**: 
+1. **Copy Examples**: 
    ```bash
-   cp .env.example .env
-   # Edit .env with production values
+   cp apps/backend/.env.example apps/backend/.env.production
+   cp apps/frontend/.env.example apps/frontend/.env.production
    ```
-2. **Build & Launch**:
+2. **Build**:
    ```bash
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
-3. **Verify Health**:
+3. **Health Check**:
    ```bash
-   curl http://localhost/api/health
+   curl http://localhost:3001/api/health
    ```
 
 ---
