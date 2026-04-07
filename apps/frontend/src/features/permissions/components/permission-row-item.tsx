@@ -1,10 +1,8 @@
 // src/features/permissions/components/permission-row-item.tsx
 
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipTrigger,
@@ -15,13 +13,8 @@ import {
   PermissionType,
   TablePermission,
 } from "@vivero/shared";
-import { Shield } from "lucide-react";
 import { memo } from "react";
-import {
-  CRUD_COLUMNS,
-  getTableMeta,
-  SCOPE_LABELS,
-} from "../constants/table-meta";
+import { CRUD_COLUMNS, getTableMeta } from "../constants/table-meta";
 import { usePermission } from "@/hooks/usePermission";
 
 export type PermissionRow = {
