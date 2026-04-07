@@ -15,7 +15,7 @@ export const TablePermissionSchema = z.object({
   canRead: z.boolean(),
   canUpdate: z.boolean(),
   canDelete: z.boolean(),
-  scope: PermissionScopeSchema,
+  scope: PermissionScopeSchema.default("ALL"),
   permissionType: PermissionTypeSchema,
 });
 

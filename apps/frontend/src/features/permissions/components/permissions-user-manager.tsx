@@ -53,7 +53,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
           canRead: false,
           canUpdate: false,
           canDelete: false,
-          scope: "NONE" as const,
+          scope: "ALL" as const,
           permissionType: table.permissionType, // ← viene de la entity, no hardcodeado
         };
 
@@ -98,7 +98,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
             canRead: false,
             canUpdate: false,
             canDelete: false,
-            scope: "NONE" as const,
+            scope: "ALL" as const,
             permissionType: "CRUD" as const,
           } as TablePermission);
 
@@ -123,7 +123,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
             canRead: false,
             canUpdate: false,
             canDelete: false,
-            scope: "NONE" as const,
+            scope: "ALL" as const,
             permissionType: "CRUD" as const,
           } as TablePermission);
 
@@ -306,7 +306,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                               canRead: false,
                               canUpdate: false,
                               canDelete: false,
-                              scope: "NONE" as const,
+                              scope: "ALL" as const,
                               permissionType: row.permissionType,
                             };
                             return (
