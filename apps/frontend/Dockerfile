@@ -22,6 +22,7 @@ FROM deps AS builder
 COPY apps/frontend ./apps/frontend
 COPY packages/shared ./packages/shared
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm install --frozen-lockfile
 RUN pnpm --filter frontend build
 
 # ---------- runtime ----------
