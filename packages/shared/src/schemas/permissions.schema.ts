@@ -15,7 +15,7 @@ export const TablePermissionSchema = z.object({
   canRead: z.boolean(),
   canUpdate: z.boolean(),
   canDelete: z.boolean(),
-  scope: PermissionScopeSchema,
+  scope: PermissionScopeSchema.default("ALL"),
   permissionType: PermissionTypeSchema,
 });
 
@@ -36,7 +36,7 @@ export const PermissionCheckSchema = z.object({
 export type PermissionCheck = z.infer<typeof PermissionCheckSchema>;
 
 export const EntitySchema = z.object({
-  id: z.string().optional(),
+  id: z.string(),
   name: z.string(),
   label: z.string(),
   isActive: z.boolean().optional(),
@@ -44,6 +44,17 @@ export const EntitySchema = z.object({
 });
 
 export type Entity = z.infer<typeof EntitySchema>;
+
+export const UserEntityPermissionSchema = z.object({
+  userId: z.string(),
+  username: z.string(),
+  firstName: z.string().optional().nullable(),
+  lastName: z.string().optional().nullable(),
+  permissions: TablePermissionSchema,
+  createdAt: z.date(),
+});
+
+export type UserEntityPermission = z.infer<typeof UserEntityPermissionSchema>;
 
 export const CreateEntitySchema = z.object({
   name: z

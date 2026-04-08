@@ -5,7 +5,7 @@ import { PermissionsService } from './permissions.service';
 import { RequirePermission } from './decorators/require-permission.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
-import { UserPermissions } from '@vivero/shared';
+import { UserEntityPermission, UserPermissions } from '@vivero/shared';
 
 @Controller('permissions')
 export class PermissionsController {
@@ -21,7 +21,9 @@ export class PermissionsController {
   async getMyPermissions(
     @CurrentUser() user: AuthUser,
   ): Promise<UserPermissions> {
-    const perms = await this.permissionsService.getUserPermissions(user.id);
+    const perms = await this.permissionsService.getUserPermissionsByUserId(
+      user.id,
+    );
     return perms;
   }
 
@@ -55,7 +57,22 @@ export class PermissionsController {
   async getUserPermissions(
     @Param('userId') userId: string,
   ): Promise<UserPermissions> {
-    const perms = await this.permissionsService.getUserPermissions(userId);
+    const perms =
+      await this.permissionsService.getUserPermissionsByUserId(userId);
+    return perms;
+  }
+
+  /* GET all permissions for a entity */
+  @Get('entity/:entityId')
+  @RequirePermission({ tableName: 'user_permissions', action: 'read' })
+  async getEntityPermissions(
+    @CurrentUser() user: AuthUser,
+    @Param('entityId') entityId: string,
+  ): Promise<UserEntityPermission[]> {
+    const perms = await this.permissionsService.getUserPermissionsByEntityId(
+      entityId,
+      user.id,
+    );
     return perms;
   }
 

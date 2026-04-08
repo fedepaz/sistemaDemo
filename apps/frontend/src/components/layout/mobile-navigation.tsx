@@ -19,7 +19,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
-import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
 import { Logo } from "@/components/common/logo";
 
 interface NavigationItem {

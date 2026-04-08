@@ -3,13 +3,9 @@
 import { ROUTES } from "@/constants/routes";
 import {
   Home,
-  FileText,
   Settings,
-  Users,
   BarChart3,
-  Building,
   Key,
-  ShoppingCart,
   UserCircle,
   Package,
 } from "lucide-react";
@@ -60,37 +56,7 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
       },
     ],
   },
-  {
-    id: "management",
-    title: "Gestión",
-    icon: Building,
-    items: [
-      {
-        title: "Clientes",
-        href: ROUTES.CLIENTS,
-        icon: Users,
-        description: "Gestión de clientes",
-        dashboard: { statsLabel: "Clientes activos" },
-        requiredPermission: { table: "clients", action: "read" },
-      },
-      {
-        title: "Facturas",
-        href: ROUTES.INVOICES,
-        icon: FileText,
-        description: "Facturación y pagos",
-        dashboard: { statsLabel: "Facturas pendientes" },
-        requiredPermission: { table: "invoices", action: "read" },
-      },
-      {
-        title: "Órdenes de compra",
-        href: ROUTES.PURCHASE_ORDERS,
-        icon: ShoppingCart,
-        description: "Pedidos y proveedores",
-        dashboard: { statsLabel: "Pedidos pendientes" },
-        requiredPermission: { table: "purchase_orders", action: "read" },
-      },
-    ],
-  },
+
   {
     id: "admin",
     title: "Administración",

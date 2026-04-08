@@ -35,6 +35,7 @@
   },
   "pnpm": {
     "overrides": {
+      "defu": ">=6.1.5",
       "glob": "11.1.0",
       "validator": "13.15.22",
       "jws": "3.2.3",
