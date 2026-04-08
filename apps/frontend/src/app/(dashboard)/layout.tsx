@@ -13,9 +13,6 @@ export const dynamic = "force-dynamic";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  params: Promise<{
-    locale: string;
-  }>;
 }
 
 export default async function DashboardLayout({

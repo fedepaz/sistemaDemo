@@ -56,3 +56,12 @@ Using GitHub Actions to deploy on `push` to `main`:
 docker-compose up -d --build
 ```
 ✅ App live, DB migrated, Cache ready, Nginx routing secured.
+
+## For future
+CI/CD
+↓
+build docker images
+↓
+push a registry
+↓
+server only does docker pull

@@ -151,12 +151,15 @@ This document tracks all React components within the `apps/frontend/src` directo
 | Component | Responsive | Color Tokens | UX Helpers |
 | :--- | :---: | :---: | :---: |
 | `PermissionsDashboard` | [x] | [x] | [x] |
-| `PermissionsManager` | [x] | [x] | [x] |
+| `PermissionsUserManager` | [x] | [x] | [x] |
+| `PermissionsEntityManager` | [x] | [x] | [x] |
 | `PermissionRowItem` | [x] | [x] | [x] |
 | `UserSelector` | [x] | [x] | [x] |
+| `PermissionSelector` | [x] | [x] | [x] |
 | `PermissionsDashboardSkeleton` | [x] | [x] | [x] |
 | `PermissionManagerSkeleton` | [x] | [x] | [x] |
 | `UserSelectorSkeleton` | [x] | [x] | [x] |
+| `PermissionSelectorSkeleton` | [x] | [x] | [x] |
 | `EmptyState` | [x] | [x] | [x] |
 
 ### Extendidos

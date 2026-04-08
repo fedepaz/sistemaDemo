@@ -50,24 +50,18 @@ const generateAlert = (): CurrencyRateInterface[] => {
       code: "USD",
       buyRate: 1055.0,
       sellRate: 1095.0,
-      variation: 5.0,
-      variationPercent: 0.46,
     },
     {
       name: "Dólar Blue",
       code: "BLUE",
       buyRate: 1205.0,
       sellRate: 1225.0,
-      variation: -10.0,
-      variationPercent: -0.81,
     },
     {
       name: "Euro",
       code: "EUR",
       buyRate: 1145.0,
       sellRate: 1185.0,
-      variation: 8.0,
-      variationPercent: 0.68,
     },
   ];
 };

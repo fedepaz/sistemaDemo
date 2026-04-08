@@ -1,10 +1,8 @@
 // src/features/permissions/components/permission-row-item.tsx
 
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipTrigger,
@@ -15,13 +13,8 @@ import {
   PermissionType,
   TablePermission,
 } from "@vivero/shared";
-import { Shield } from "lucide-react";
 import { memo } from "react";
-import {
-  CRUD_COLUMNS,
-  getTableMeta,
-  SCOPE_LABELS,
-} from "../constants/table-meta";
+import { CRUD_COLUMNS, getTableMeta } from "../constants/table-meta";
 import { usePermission } from "@/hooks/usePermission";
 
 export type PermissionRow = {
@@ -226,96 +219,6 @@ export const PermissionRowItem = memo(function PermissionRowItem({
             </Tooltip>
           );
         })}
-      </div>
-
-      {/* Scope selector or Status Badge */}
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
-        <Separator orientation="vertical" className="hidden h-10 lg:block" />
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Shield className="h-3.5 w-3.5 text-muted-foreground/70" />
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-              Alcance de datos
-            </span>
-          </div>
-
-          {!canEdit ? (
-            <div className="flex h-9 items-center">
-              <Badge
-                variant="outline"
-                className={cn(
-                  "h-8 rounded-lg px-4 text-[11px] font-bold uppercase tracking-widest border-2",
-                  row.scope === "ALL" &&
-                    "border-primary/20 bg-primary/5 text-primary shadow-sm",
-                  row.scope === "OWN" &&
-                    "border-primary/20 bg-primary/5 text-primary shadow-sm",
-                  row.scope === "NONE" &&
-                    "border-muted-foreground/10 bg-muted/20 text-muted-foreground/60",
-                )}
-              >
-                {SCOPE_LABELS[row.scope].label}
-              </Badge>
-            </div>
-          ) : (
-            <ToggleGroup
-              type="single"
-              value={row.scope}
-              onValueChange={(val) =>
-                val && onScopeChange(row.tableName, val as PermissionScope)
-              }
-              disabled={!canEdit}
-              variant="outline"
-              className="flex w-full overflow-hidden rounded-xl border bg-muted/40 p-1 lg:w-auto"
-            >
-              {(["NONE", "OWN", "ALL"] as const).map((scope) => {
-                const isRestrictedByManager =
-                  scope === "ALL" && requesterPermsForThisEntity.scope !== "ALL";
-
-                return (
-                  <ToggleGroupItem
-                    key={scope}
-                    value={scope}
-                    disabled={isRestrictedByManager}
-                    className={cn(
-                      "flex-1 h-9 rounded-lg border-0 px-4 text-xs font-semibold transition-all duration-200 lg:flex-none",
-                      // Estados OFF
-                      "data-[state=off]:bg-transparent data-[state=off]:text-muted-foreground hover:bg-muted/50",
-                      // Estados ON (base)
-                      "data-[state=on]:shadow-sm data-[state=on]:font-bold",
-                      // Estados ON específicos por scope (¡sin row.scope === scope!)
-                      scope === "ALL" &&
-                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                      scope === "OWN" &&
-                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                      scope === "NONE" &&
-                        "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-                      isRestrictedByManager && "opacity-40 cursor-not-allowed",
-                    )}
-                    aria-label={`Alcance ${SCOPE_LABELS[scope].label} - ${row.label}`}
-                  >
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="w-full block text-center">
-                          {SCOPE_LABELS[scope].label}
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="bottom"
-                        className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md"
-                      >
-                        <p className="text-xs font-medium">
-                          {isRestrictedByManager
-                            ? "No tienes permiso para conceder acceso a TODOS los registros"
-                            : SCOPE_LABELS[scope].desc}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </ToggleGroupItem>
-                );
-              })}
-            </ToggleGroup>
-          )}
-        </div>
       </div>
 
       {/* Active count badge */}

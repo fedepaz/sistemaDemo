@@ -64,9 +64,7 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
     }
     return this.model.findFirst({
       where: {
-        id: {
-          notIn: devIds,
-        },
+        id,
         deletedAt: null,
         isActive: true,
       },

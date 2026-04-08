@@ -3,6 +3,7 @@
 model UserPermission {
   id         String   @id @default(cuid())
   userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   entityId String
   entity    Entity @relation(fields: [entityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   

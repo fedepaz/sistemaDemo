@@ -11,8 +11,9 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY apps/frontend/package.json ./apps/frontend/
 COPY packages/shared/package.json ./packages/shared/
 
-RUN pnpm config set fetch-retries 5 && \
-    pnpm config set fetch-retry-maxtimeout 100000 && \
+RUN pnpm config set fetch-retries 10 && \
+    pnpm config set fetch-retry-maxtimeout 300000 && \
+    pnpm config set network-concurrency 1 && \
     pnpm install --frozen-lockfile 
 
 # ---------- build ----------

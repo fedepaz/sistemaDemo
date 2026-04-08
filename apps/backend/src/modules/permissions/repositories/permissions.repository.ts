@@ -10,6 +10,17 @@ import { PrismaService } from '../../../infra/prisma/prisma.service';
 @Injectable()
 export class PermissionsRepository implements IPermissionRepository {
   constructor(private prisma: PrismaService) {}
+  private devAccounts: string[] | null = null;
+  private async getDevAccounts(): Promise<string[]> {
+    if (this.devAccounts) return this.devAccounts;
+    const records = await this.prisma.devAccount.findMany({
+      select: {
+        userId: true,
+      },
+    });
+    this.devAccounts = records.map((record) => record.userId);
+    return this.devAccounts;
+  }
 
   async findManyByUserId(userId: string): Promise<UserPermissionRecord[]> {
     const records = await this.prisma.userPermission.findMany({
@@ -45,6 +56,113 @@ export class PermissionsRepository implements IPermissionRepository {
         ...r,
         entityName: r.entity.name,
         createdAt: r.createdAt,
+      }));
+  }
+  async findManyByEntityId(
+    entityId: string,
+    requesterId: string,
+  ): Promise<UserPermissionRecord[]> {
+    const devIds = await this.getDevAccounts();
+
+    if (devIds.includes(requesterId)) {
+      const recordsDev = await this.prisma.userPermission.findMany({
+        where: {
+          entityId,
+        },
+        select: {
+          userId: true,
+          entityId: true,
+          entity: {
+            select: {
+              name: true,
+            },
+          },
+          user: {
+            select: {
+              username: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          canCreate: true,
+          canRead: true,
+          canUpdate: true,
+          canDelete: true,
+          scope: true,
+          permissionType: true,
+          createdAt: true,
+        },
+      });
+
+      return recordsDev
+        .filter((r) => r.entity !== null)
+        .map((r) => ({
+          ...r,
+          entityName: r.entity.name,
+          createdAt: r.createdAt,
+          userMetadata: {
+            username: r.user.username,
+            firstName: r.user.firstName,
+            lastName: r.user.lastName,
+          },
+        }));
+    }
+
+    const records = await this.prisma.userPermission.findMany({
+      where: {
+        userId: {
+          notIn: devIds,
+        },
+        entityId,
+        deletedAt: null,
+        entity: {
+          deletedAt: null,
+          isActive: true,
+        },
+        // NEW: Only show users who have at least ONE active permission
+        OR: [
+          { canCreate: true },
+          { canRead: true },
+          { canUpdate: true },
+          { canDelete: true },
+        ],
+      },
+      select: {
+        userId: true,
+        entityId: true,
+        entity: {
+          select: {
+            name: true,
+          },
+        },
+        user: {
+          select: {
+            username: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        canCreate: true,
+        canRead: true,
+        canUpdate: true,
+        canDelete: true,
+        scope: true,
+        permissionType: true,
+        createdAt: true,
+      },
+    });
+
+    return records
+      .filter((r) => r.entity !== null)
+      .map((r) => ({
+        ...r,
+        entityName: r.entity.name,
+        createdAt: r.createdAt,
+        userMetadata: {
+          username: r.user.username,
+          firstName: r.user.firstName,
+          lastName: r.user.lastName,
+        },
       }));
   }
 

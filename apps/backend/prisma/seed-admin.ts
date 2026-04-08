@@ -1,13 +1,14 @@
 // prisma/seed-admin.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+
+import * as bcrypt from 'bcrypt';
+import 'dotenv/config';
 import {
   PermissionScope,
   PermissionType,
   PrismaClient,
 } from '../src/generated/prisma/client';
-import * as bcrypt from 'bcrypt';
-import 'dotenv/config';
 
 //const certPath = path.join(process.cwd(), 'certs', 'globalsignrootca.pem');
 //const serverCert = fs.readFileSync(certPath, 'utf8');

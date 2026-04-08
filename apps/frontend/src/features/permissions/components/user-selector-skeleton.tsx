@@ -1,3 +1,5 @@
+// src/features/permissions/components/user-selector-skeleton.tsx
+
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function UserSelectorSkeleton() {
