@@ -42,8 +42,11 @@ export class EntitiesController {
     action: 'create',
     scope: 'ALL',
   })
-  async createEntity(@Body() data: CreateEntityDto) {
-    const entity = await this.entitiesService.createEntity(data);
+  async createEntity(
+    @Body() data: CreateEntityDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const entity = await this.entitiesService.createEntity(data, user.id);
     return entity;
   }
 

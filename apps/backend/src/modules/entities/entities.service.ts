@@ -8,11 +8,15 @@ import {
 } from '@nestjs/common';
 import { EntitiesRepository } from './repositories/entities.repository';
 import { CreateEntityDto, Entity } from '@vivero/shared';
+import { PermissionsService } from '../permissions/permissions.service';
 
 @Injectable()
 export class EntitiesService {
   private readonly logger = new Logger(EntitiesService.name);
-  constructor(private readonly entitiesRepo: EntitiesRepository) {}
+  constructor(
+    private readonly entitiesRepo: EntitiesRepository,
+    private readonly permissionsService: PermissionsService,
+  ) {}
   /**
    * Get all tables
    */
@@ -50,8 +54,22 @@ export class EntitiesService {
     };
   }
 
-  async createEntity(data: CreateEntityDto): Promise<Entity> {
+  async createEntity(
+    data: CreateEntityDto,
+    creatorId: string,
+  ): Promise<Entity> {
     const entity = await this.entitiesRepo.create(data);
+
+    // GRANT ALL permissions to the creator for this new entity
+    await this.permissionsService.grantPermission(creatorId, entity.id, {
+      canCreate: true,
+      canRead: true,
+      canUpdate: true,
+      canDelete: true,
+      scope: 'ALL',
+      permissionType: data.permissionType,
+    });
+
     return {
       id: entity.id,
       name: entity.name,
