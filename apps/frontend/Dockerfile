@@ -34,11 +34,12 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
+RUN mkdir -p /app/apps/frontend/.next/cache && chown -R nodejs:nodejs /app
 USER nodejs
 
-COPY --from=builder /app/apps/frontend/.next/standalone ./
-COPY --from=builder /app/apps/frontend/.next/static ./apps/frontend/.next/static
-COPY --from=builder /app/apps/frontend/public ./apps/frontend/public
+COPY --from=builder --chown=nodejs:nodejs /app/apps/frontend/.next/standalone ./
+COPY --from=builder --chown=nodejs:nodejs /app/apps/frontend/.next/static ./apps/frontend/.next/static
+COPY --from=builder --chown=nodejs:nodejs /app/apps/frontend/public ./apps/frontend/public
 
 EXPOSE 3000
 
