@@ -96,11 +96,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
     const safeMessage = this.sanitizeMessage(message);
 
-    this.logToconsole(exception, status, request, safeMessage);
+    this.logToPino(exception, status, request, safeMessage);
 
     if (this.shouldAudit(status)) {
       this.saveAuditLog(status, request, safeMessage, exception).catch(
-        (error) => this.logger.error('Error saving audit log:', error),
+        (error) => this.logger.error({ err: error }, 'Error saving audit log'),
       );
     }
 
@@ -148,7 +148,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     return sanitized;
   }
 
-  private logToconsole(
+  private logToPino(
     exception: unknown,
     status: number,
     request: SocketRequest,
@@ -159,19 +159,24 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const method = request.method;
     const userId = (request as any)?.user?.userId || 'Baddy User';
 
-    const logMessage = `${method} ${path} | ${status} | IP: ${ip} | User: ${userId} | ${message}`;
+    const logData = {
+      status,
+      method,
+      path,
+      ip,
+      userId,
+      message,
+      ...(exception instanceof Error ? { stack: exception.stack } : {}),
+    };
 
     if (status === 401 || status === 403) {
-      this.logger.warn(`SECURITY EXCEPTION | ${logMessage}`);
+      this.logger.warn(logData, 'SECURITY EXCEPTION');
     } else if (status >= 500) {
-      this.logger.error(
-        `INTERNAL SERVER ERROR | ${logMessage}`,
-        (exception as Error).stack,
-      );
+      this.logger.error(logData, 'INTERNAL SERVER ERROR');
     } else if (status >= 400) {
-      this.logger.warn(`WARNING | ${logMessage}`);
+      this.logger.warn(logData, 'WARNING');
     } else {
-      this.logger.log(`INFO | ${logMessage}`);
+      this.logger.log(logData, 'INFO');
     }
   }
 

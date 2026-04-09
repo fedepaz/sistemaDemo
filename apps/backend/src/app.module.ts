@@ -22,6 +22,8 @@ import { LegacyEspecieModule } from './modules/legacy/especie/especie.module';
 import { LegacyBaseModule } from './modules/legacy/legacyBase/legacyBase.module';
 import { LegacyProgramasModule } from './modules/legacy/programas/programas.module';
 import { EntitiesModule } from './modules/entities/entities.module';
+import { LoggerModule } from 'nestjs-pino';
+import { IncomingMessage } from 'http';
 
 @Module({
   imports: [
@@ -40,6 +42,38 @@ import { EntitiesModule } from './modules/entities/entities.module';
         ),
         path.join(__dirname, `../../.env`),
       ],
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? {
+                target: 'pino-pretty',
+                options: {
+                  colorize: true,
+                  singleLine: true,
+                  levelFirst: true,
+                  translateTime: 'SYS:standard',
+                },
+              }
+            : undefined,
+        redact: [
+          'req.headers.authorization',
+          'req.body.password',
+          'req.body.token',
+        ],
+        customProps: (req: IncomingMessage) => ({
+          correlationId: req.headers?.['x-correlation-id'],
+        }),
+        serializers: {
+          req: (req: IncomingMessage) => ({
+            method: req.method,
+            url: req.url,
+            ip: req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress,
+          }),
+        },
+      },
     }),
     PrismaModule,
     LegacyMysqlModule,

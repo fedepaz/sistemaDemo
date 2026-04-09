@@ -26,7 +26,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   row,
   originalRow,
   onToggleCrud,
-  onScopeChange,
+  //onScopeChange,
 }: {
   row: PermissionRow;
   originalRow: PermissionRow;
