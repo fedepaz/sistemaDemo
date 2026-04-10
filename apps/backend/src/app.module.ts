@@ -47,11 +47,12 @@ import { IncomingMessage } from 'http';
       pinoHttp: {
         level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
         transport:
-          process.env.NODE_ENV === 'production'
+          process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development'
             ? {
                 target: 'pino-pretty',
                 options: {
                   colorize: true,
+                  colorizeObjects: true,
                   singleLine: true,
                   levelFirst: true,
                   translateTime: 'SYS:standard',
