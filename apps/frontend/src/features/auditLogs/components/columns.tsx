@@ -1,5 +1,4 @@
-import { Row, Table, type ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
+import { type ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
 import { AuditLogDto } from "@vivero/shared";
 import {
@@ -12,33 +11,6 @@ import {
   Smartphone,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-interface CellProps {
-  row?: Row<AuditLogDto>;
-  table?: Table<AuditLogDto>;
-}
-
-function CellComponent({ row, table }: CellProps) {
-  if (row) {
-    return (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Seleccionar fila"
-      />
-    );
-  }
-  if (table) {
-    return (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Seleccionar todo"
-      />
-    );
-  }
-  if (!row || !table) return null;
-}
 
 // Helper para formatear cambios
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,17 +62,6 @@ const getEntityDisplay = (entityType: string, entityId: string) => {
 };
 
 export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
-  {
-    id: "select",
-    header: ({ table }) => {
-      return <CellComponent table={table} />;
-    },
-    cell: ({ row }) => {
-      return <CellComponent row={row} />;
-    },
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "action",
     header: ({ column }) => {

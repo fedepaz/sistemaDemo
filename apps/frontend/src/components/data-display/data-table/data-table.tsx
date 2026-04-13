@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -79,6 +80,7 @@ interface DataTableProps<TData, TValue> {
   ) => void;
   loading?: boolean;
   totalCount?: number;
+  enableSelection?: boolean;
   renderInlineEdit?: (
     row: TData,
     onSave: () => void,
@@ -106,6 +108,7 @@ export function DataTable<TData, TValue>({
   createLabel = "Nuevo",
   onExport,
   totalCount,
+  enableSelection,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -119,8 +122,6 @@ export function DataTable<TData, TValue>({
   const dataTablePermissions = usePermission(tableName);
   const { data: entity } = useTableByName(tableName);
 
-  console.log("entity", entity);
-  console.log("dataTablePermissions", dataTablePermissions);
   const allowedActions = {
     CRUD: {
       canView: !!onView && dataTablePermissions.canRead,
@@ -141,6 +142,29 @@ export function DataTable<TData, TValue>({
       canExecute: false,
     },
   }[entity?.permissionType || "READ_ONLY"];
+
+  const selectColumn: ColumnDef<TData, TValue> = {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Seleccionar todo"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Seleccionar fila"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  };
 
   const actionColumn: ColumnDef<TData, TValue> = {
     id: "actions",
@@ -255,9 +279,21 @@ export function DataTable<TData, TValue>({
   };
 
   const enhancedColumns = useMemo(() => {
-    return [...columns, actionColumn];
+    // Smart logic: show it if explicitly enabled OR if it's not a READ_ONLY entity
+    const showSelection =
+      enableSelection !== undefined
+        ? (enableSelection ?? entity?.permissionType !== "READ_ONLY")
+        : entity?.permissionType !== "READ_ONLY";
+
+    let result = [...columns];
+
+    if (showSelection) {
+      result = [selectColumn, ...result];
+    }
+
+    return [...result, actionColumn];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns]);
+  }, [columns, entity?.permissionType, enableSelection]);
 
   const table = useReactTable({
     data,

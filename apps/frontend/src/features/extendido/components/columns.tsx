@@ -1,7 +1,6 @@
 // src/features/plants/components/columns.tsx
 
 import { Row, Table, type ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   SortableHeader,
   StatusBadge,
@@ -11,28 +10,6 @@ import { Plant } from "../types";
 interface CellProps {
   row?: Row<Plant>;
   table?: Table<Plant>;
-}
-
-function CellComponent({ row, table }: CellProps) {
-  if (row) {
-    return (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Seleccionar fila"
-      />
-    );
-  }
-  if (table) {
-    return (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Seleccionar todo"
-      />
-    );
-  }
-  if (!row || !table) return null;
 }
 
 interface HeaderProps {
@@ -64,17 +41,6 @@ function CellBadgeComponent({ row }: CellProps) {
 
 export const plantColumns: ColumnDef<Plant>[] = [
   {
-    id: "select",
-    header: ({ table }) => {
-      return <CellComponent table={table} />;
-    },
-    cell: ({ row }) => {
-      return <CellComponent row={row} />;
-    },
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "name",
     header: ({ column }) => {
       return <HeaderComponent column={column} translationKey="Nombre" />;
@@ -104,12 +70,7 @@ export const plantColumns: ColumnDef<Plant>[] = [
   {
     accessorKey: "growthStage",
     header: ({ column }) => {
-      return (
-        <HeaderComponent
-          column={column}
-          translationKey="Fase"
-        />
-      );
+      return <HeaderComponent column={column} translationKey="Fase" />;
     },
   },
   {
