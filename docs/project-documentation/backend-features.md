@@ -89,6 +89,12 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Repository Pattern**: `DepositosRepository` using the `LegacyMysqlService`.
 - [x] **Modular Design**: Encapsulated in `LegacyDepositosModule`.
 
+### Legacy Partidas Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `partidas` table.
+- [x] **Repository Pattern**: `PartidasRepository` using the `LegacyMysqlService`.
+- [x] **Advanced Retrieval**: Supports filtering by date, date ranges, and years.
+- [x] **Modular Design**: Encapsulated in `LegacyPartidasModule`.
+
 ### Legacy Base Module
 - [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables.
 - [x] **Repository Pattern**: `LegacyBaseRepository` with support for pagination, sorting, and filtering.

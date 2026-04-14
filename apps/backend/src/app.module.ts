@@ -25,6 +25,7 @@ import { EntitiesModule } from './modules/entities/entities.module';
 import { LoggerModule } from 'nestjs-pino';
 import { IncomingMessage } from 'http';
 import { LegacyDepositosModule } from './modules/legacy/depositos/depositos.module';
+import { LegacyPartidasModule } from './modules/legacy/partidas/partidas.module';
 
 @Module({
   imports: [
@@ -87,6 +88,7 @@ import { LegacyDepositosModule } from './modules/legacy/depositos/depositos.modu
     LegacyEspecieModule,
     LegacyProgramasModule,
     LegacyDepositosModule,
+    LegacyPartidasModule,
     AuthModule,
     UsersModule,
     PermissionsModule,
