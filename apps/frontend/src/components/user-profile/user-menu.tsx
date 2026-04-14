@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
 import { User } from "lucide-react";
 import { UserProfileInfo } from "./user-info";
 import { UserProfileEdit } from "./user-edit";
@@ -26,7 +26,7 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-lg [&>button]:hidden">
+      <DialogContent className="p-0 sm:max-w-xl md:max-w-2xl bg-background/80 backdrop-blur-md border border-border shadow-lg rounded-lg [&>button]:hidden max-h-[90dvh] overflow-auto">
         <div className="flex flex-col md:flex-row w-full font-sans">
           {/* Sidebar */}
           <nav className="flex-shrink-0 w-full md:w-40 bg-background/60 border-b md:border-b-0 md:border-r border-border p-2 md:p-4 space-x-2 md:space-x-0 space-y-0 md:space-y-2 overflow-x-auto">
@@ -82,6 +82,9 @@ export function UserMenu({ open, onOpenChange }: UserMenuProps) {
                 {tab === "edit" && "Editar Perfil"}
                 {tab === "password" && "Cambiar Contraseña"}
               </DialogTitle>
+              <DialogDescription className="sr-only">
+                Gestión de información de perfil, edición y cambio de contraseña
+              </DialogDescription>
             </div>
 
             {tab === "info" && <UserProfileInfo />}

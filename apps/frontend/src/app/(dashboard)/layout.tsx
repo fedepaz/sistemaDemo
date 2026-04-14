@@ -21,11 +21,11 @@ export default async function DashboardLayout({
   return (
     <Suspense fallback={<RootDashboardSkeleton />}>
       <DashboardProtectedLayout>
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex h-dvh overflow-hidden">
           <DesktopSidebar />
           <div className="flex flex-1 flex-col overflow-hidden">
             <DashboardHeader />
-            <main className="flex-1 overflow-auto pb-2 md:pb-0">
+            <main className="flex-1 overflow-auto pb-safe-area-inset-bottom md:pb-0">
               <div className="mx-auto w-full max-w-[1600px] px-2 py-2 space-y-8">
                 {children}
               </div>

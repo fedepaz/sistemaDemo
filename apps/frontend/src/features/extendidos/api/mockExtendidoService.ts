@@ -53,25 +53,14 @@ const plantsData = generatePlants(200000);
 
 export const mockPlantService = {
   async fetchPlants(): Promise<Plant[]> {
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000)); // Replace API response with plants
-    // Simulate receiving plants from the API
     return plantsData;
   },
 
   async fetchPlantById(id: string): Promise<Plant | null> {
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // Replace API response with plant
-    // Simulate receiving plant from the API
     return plantsData.find((plant) => plant.id === id) || null;
   },
 
   async createPlant(plantCreate: CreatePlantDto): Promise<Plant> {
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // Replace API response with plant
-    // Simulate creating plant in the database
     const newPlant = {
       ...plantCreate,
       id: `plant-${Date.now()}`,
@@ -81,10 +70,6 @@ export const mockPlantService = {
   },
 
   async updatePlant(id: string, plantUpdate: UpdatePlantDto): Promise<Plant> {
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // Replace API response with plant
-    // Simulate updating plant in the database
     const existingPlant = plantsData.find((plant) => plant.id === id);
     if (!existingPlant) throw new Error("Plant not found");
     const updatedPlant = { ...existingPlant, ...plantUpdate };
@@ -93,10 +78,6 @@ export const mockPlantService = {
   },
 
   async deletePlant(id: string): Promise<void> {
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // Replace API response with plant
-    // Simulate deleting plant from the database
     const existingPlant = plantsData.find((plant) => plant.id === id);
     if (!existingPlant) throw new Error("Plant not found");
     plantsData.splice(plantsData.indexOf(existingPlant), 1);
