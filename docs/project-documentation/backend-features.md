@@ -65,12 +65,29 @@ This document lists all the modules, services, and core functionalities implemen
 ### Legacy Agentes Module
 - [x] **Legacy Data Access**: Read-only integration with the legacy `agentes` table.
 - [x] **Repository Pattern**: `AgentesRepository` using the `LegacyMysqlService`.
+- [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
 - [x] **Modular Design**: Encapsulated in `LegacyAgentesModule`.
 
 ### Legacy Especie Module
 - [x] **Legacy Data Access**: Read-only integration with the legacy `especie` table.
 - [x] **Repository Pattern**: `EspecieRepository` using the `LegacyMysqlService`.
+- [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
 - [x] **Modular Design**: Encapsulated in `LegacyEspecieModule`.
+
+### Legacy Config Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `config` table.
+- [x] **Repository Pattern**: `ConfigRepository` using the `LegacyMysqlService`.
+- [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
+- [x] **Modular Design**: Encapsulated in `LegacyConfigModule`.
+
+### Legacy Programas Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `programas` table.
+- [x] **Modular Design**: Encapsulated in `LegacyProgramasModule`.
+
+### Legacy Depositos Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `depositos` table for warehouses and cold storage (cámaras).
+- [x] **Repository Pattern**: `DepositosRepository` using the `LegacyMysqlService`.
+- [x] **Modular Design**: Encapsulated in `LegacyDepositosModule`.
 
 ### Legacy Base Module
 - [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables.

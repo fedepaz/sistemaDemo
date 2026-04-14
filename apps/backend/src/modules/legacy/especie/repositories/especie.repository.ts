@@ -18,11 +18,12 @@ export class EspecieRepository {
     return rows.map((row) => ({ ...row, nombre: row.nombre.trim() }));
   }
 
-  async findOne(codigo: string): Promise<LegacyEspecie> {
+  async findOne(codigo: string): Promise<LegacyEspecie | null> {
     const row = await this.legacyDb.query<LegacyEspecie[]>(
       'SELECT * FROM especie WHERE codigo = ?',
       [codigo],
     );
+    if (!row.length) return null;
     const rows = row[0];
     return { ...rows, nombre: rows.nombre.trim() };
   }
