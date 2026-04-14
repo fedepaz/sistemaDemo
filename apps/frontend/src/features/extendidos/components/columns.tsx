@@ -1,90 +1,58 @@
-// src/features/plants/components/columns.tsx
+// src/features/extendidos/components/columns.tsx
 
 import { Row, Table, type ColumnDef } from "@tanstack/react-table";
 import {
   SortableHeader,
   StatusBadge,
 } from "@/components/data-display/data-table";
-import { Plant } from "../types";
+import { PartidaExample } from "../types";
 
 interface CellProps {
-  row?: Row<Plant>;
-  table?: Table<Plant>;
+  row?: Row<PartidaExample>;
+  table?: Table<PartidaExample>;
 }
 
-interface HeaderProps {
-  column: ColumnDef<Plant>;
-  translationKey: string;
-}
-
-function HeaderComponent({ column, translationKey }: HeaderProps) {
-  return <SortableHeader column={column}>{translationKey}</SortableHeader>;
-}
-
-function CellBadgeComponent({ row }: CellProps) {
-  if (!row) return null;
-  const status = row.getValue("status") as string;
-  const statusText =
-    status === "healthy"
-      ? "Operativo"
-      : status === "warning"
-        ? "Atención"
-        : "Crítico";
-  return (
-    <StatusBadge
-      status={row.getValue("status") as "healthy" | "warning" | "critical"}
-    >
-      {statusText}
-    </StatusBadge>
-  );
-}
-
-export const plantColumns: ColumnDef<Plant>[] = [
+export const partidaExampleColumns: ColumnDef<PartidaExample>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "partida",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Nombre" />;
+      return <SortableHeader column={column}>Partida</SortableHeader>;
     },
   },
   {
-    accessorKey: "species",
+    accessorKey: "ano",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Tipo" />;
+      return <SortableHeader column={column}>Año</SortableHeader>;
     },
   },
   {
-    accessorKey: "location",
+    accessorKey: "indice",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Ubicación" />;
+      return <SortableHeader column={column}>Índice</SortableHeader>;
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "fecha",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Estado" />;
-    },
-    cell: ({ row }) => {
-      return <CellBadgeComponent row={row} />;
+      return <SortableHeader column={column}>Fecha</SortableHeader>;
     },
   },
   {
-    accessorKey: "growthStage",
+    accessorKey: "contenedor",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Fase" />;
+      return <SortableHeader column={column}>Contenedor</SortableHeader>;
     },
   },
   {
-    accessorKey: "plantedDate",
+    accessorKey: "hai",
     header: ({ column }) => {
-      return (
-        <HeaderComponent column={column} translationKey="Fecha Registro" />
-      );
+      return <SortableHeader column={column}>H.A.I.</SortableHeader>;
     },
   },
   {
-    accessorKey: "lastWatered",
+    accessorKey: "injerto",
     header: ({ column }) => {
-      return <HeaderComponent column={column} translationKey="Actualización" />;
+      return <SortableHeader column={column}>Injerto</SortableHeader>;
     },
   },
 ];

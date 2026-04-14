@@ -2,7 +2,7 @@
 "use client";
 
 import { KPICard } from "@/components/data-display/kpi-card";
-import { usePlants } from "../hooks/useExtendido";
+import { usePlants } from "../hooks/usePartidas";
 import { Package, CheckCircle, AlertCircle, Calendar } from "lucide-react";
 
 function ExtendidoKPIs() {

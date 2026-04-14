@@ -6,8 +6,8 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
 import { toast } from "sonner";
+import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
 
 export const userProfileQueryKeys = {
   all: () => ["users"] as const,

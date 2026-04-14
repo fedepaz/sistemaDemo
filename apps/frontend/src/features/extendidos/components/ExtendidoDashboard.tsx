@@ -2,14 +2,16 @@
 
 import { Suspense } from "react";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
-import { plantColumns } from "./columns";
 import { ExtendidoDataTable } from "./extendido-data-table";
+import { partidaExampleColumns } from "./columns";
 
 export function ExtendidoDashboard() {
   return (
     <>
       <Suspense
-        fallback={<DataTableSkeleton columnCount={plantColumns.length} />}
+        fallback={
+          <DataTableSkeleton columnCount={partidaExampleColumns.length} />
+        }
       >
         <ExtendidoDataTable />
       </Suspense>

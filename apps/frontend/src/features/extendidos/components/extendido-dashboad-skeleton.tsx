@@ -1,9 +1,9 @@
 //src/features/plants/components/plant-dashboard-skeleton.tsx
 
 import { DataTableSkeleton } from "@/components/data-display/data-table";
-import { plantColumns } from "./columns";
 
 import { KPICardSkeleton } from "@/components/data-display/kpi-card";
+import { partidaExampleColumns } from "./columns";
 
 export function ExtendidoDashboardSkeleton() {
   return (
@@ -14,7 +14,7 @@ export function ExtendidoDashboardSkeleton() {
         ))}
       </div>
 
-      <DataTableSkeleton columnCount={plantColumns.length} />
+      <DataTableSkeleton columnCount={partidaExampleColumns.length} />
     </>
   );
 }

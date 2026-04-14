@@ -2,21 +2,21 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { plantColumns } from "./columns";
-import { usePlants } from "../hooks/useExtendido";
-import { Plant } from "../types";
 
 import { useState } from "react";
 import { ExtendidosForm } from "./extendido-form";
+import { usePartidas } from "../hooks/usePartidas";
+import { PartidaExample } from "../types";
+import { partidaExampleColumns } from "./columns";
 
 export function ExtendidoDataTable() {
-  const { data: plants } = usePlants();
+  const { data: partidas } = usePartidas();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
-  const [selectedPlant, setSelectedPlant] = useState<Plant>();
+  const [selectedPartida, setSelectedPartida] = useState<PartidaExample>();
 
-  const handleExtendidoView = (row: Plant) => {
-    setSelectedPlant(row);
+  const handleExtendidoView = (row: PartidaExample) => {
+    setSelectedPartida(row);
     setSlideOverOpen(true);
   };
   const handleExport = () => {
@@ -26,17 +26,17 @@ export function ExtendidoDataTable() {
   return (
     <>
       <DataTable
-        columns={plantColumns}
-        data={plants}
+        columns={partidaExampleColumns}
+        data={partidas}
         title="Extendido"
         description="Información de extendidos"
         tableName="extendidos"
-        totalCount={plants.length}
+        totalCount={partidas.length}
         onEdit={() => {}}
         onExport={handleExport}
         onView={handleExtendidoView}
       />
-      {selectedPlant && (
+      {selectedPartida && (
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={setSlideOverOpen}
@@ -46,7 +46,7 @@ export function ExtendidoDataTable() {
           mode="view"
         >
           <div className="space-y-2">
-            <ExtendidosForm selectedExtendido={selectedPlant} />
+            <ExtendidosForm selectedExtendido={selectedPartida} />
           </div>
         </SlideOverForm>
       )}
