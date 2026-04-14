@@ -14,12 +14,6 @@ export class PartidasController {
     return this.service.getAllPartidas();
   }
 
-  @Get('/:partida')
-  @Public()
-  async getPartidaByPartida(@Param('partida') partida: number) {
-    return this.service.getPartidaByPartida(partida);
-  }
-
   @Get('/fecha/:fecha')
   @Public()
   async getPartidasByFecha(@Param('fecha') fecha: string) {
@@ -39,5 +33,17 @@ export class PartidasController {
   @Public()
   async getPartidasByAno(@Param('ano') ano: number) {
     return this.service.getPartidasByAno(ano);
+  }
+
+  @Get('/camara/:camara')
+  @Public()
+  async getPartidasByCamara(@Param('camara') camara: number) {
+    return this.service.getPartidasByCamara(camara);
+  }
+
+  @Get('/:partida')
+  @Public()
+  async getPartidaByPartida(@Param('partida') partida: number) {
+    return this.service.getPartidaByPartida(partida);
   }
 }

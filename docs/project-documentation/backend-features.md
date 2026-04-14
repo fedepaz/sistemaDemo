@@ -92,7 +92,7 @@ This document lists all the modules, services, and core functionalities implemen
 ### Legacy Partidas Module
 - [x] **Legacy Data Access**: Read-only integration with the legacy `partidas` table.
 - [x] **Repository Pattern**: `PartidasRepository` using the `LegacyMysqlService`.
-- [x] **Advanced Retrieval**: Supports filtering by date, date ranges, and years.
+- [x] **Advanced Retrieval**: Supports filtering by date, date ranges, years, and chamber codes (cámaras).
 - [x] **Modular Design**: Encapsulated in `LegacyPartidasModule`.
 
 ### Legacy Base Module

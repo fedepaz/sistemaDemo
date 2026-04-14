@@ -45,11 +45,18 @@ export class PartidasRepository {
     return rows;
   }
 
-  // Si necesitas búsqueda por año/mes
   async findByAno(ano: number): Promise<LegacyPartidas[]> {
     const rows = await this.legacyDb.query<LegacyPartidas[]>(
       'SELECT * FROM partidas WHERE ano = ?',
       [ano],
+    );
+    return rows;
+  }
+
+  async findByCamara(camara: number): Promise<LegacyPartidas[]> {
+    const rows = await this.legacyDb.query<LegacyPartidas[]>(
+      'SELECT * FROM partidas WHERE cg = ?',
+      [camara],
     );
     return rows;
   }

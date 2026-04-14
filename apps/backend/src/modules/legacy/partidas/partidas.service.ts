@@ -38,4 +38,10 @@ export class PartidasService {
     if (!partidas.length) throw new NotFoundException('Partida not found');
     return partidas;
   }
+
+  async getPartidasByCamara(camara: number) {
+    const partidas = await this.partidasRepository.findByCamara(camara);
+    if (!partidas.length) throw new NotFoundException('Partida not found');
+    return partidas;
+  }
 }
