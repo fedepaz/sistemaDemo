@@ -1,18 +1,10 @@
 // src/features/extendidos/components/columns.tsx
 
-import { Row, Table, type ColumnDef } from "@tanstack/react-table";
-import {
-  SortableHeader,
-  StatusBadge,
-} from "@/components/data-display/data-table";
-import { PartidaExample } from "../types";
+import { type ColumnDef } from "@tanstack/react-table";
+import { SortableHeader } from "@/components/data-display/data-table";
+import { PartidaDto } from "@vivero/shared";
 
-interface CellProps {
-  row?: Row<PartidaExample>;
-  table?: Table<PartidaExample>;
-}
-
-export const partidaExampleColumns: ColumnDef<PartidaExample>[] = [
+export const partidaColumns: ColumnDef<PartidaDto>[] = [
   {
     accessorKey: "partida",
     header: ({ column }) => {

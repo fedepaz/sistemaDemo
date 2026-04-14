@@ -75,6 +75,10 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DashboardHeader` | [x] | [x] | [x] | [x] |
 | `DesktopSidebar` | [x] | [x] | [x] | [x] |
 | `MobileNavigation` | [x] | [x] | [x] | [x] |
+| `ExtendidoDashboard` | [x] | [x] | [x] | [x] |
+| `ExtendidoDataTable` | [x] | [x] | [x] | [x] |
+| `ExtendidosForm` | [x] | [x] | [x] | [x] |
+| `ExtendidoDashboardSkeleton` | [x] | [x] | [x] | [x] |
 
 ## UI Primitives (shadcn/ui)
 

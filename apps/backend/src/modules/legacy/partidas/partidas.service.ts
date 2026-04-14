@@ -2,29 +2,33 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PartidasRepository } from './repositories/partidas.repository';
+import { PartidaDto } from '@vivero/shared';
 
 @Injectable()
 export class PartidasService {
   constructor(private readonly partidasRepository: PartidasRepository) {}
 
-  async getAllPartidas() {
+  async getAllPartidas(): Promise<PartidaDto[]> {
     const partidas = await this.partidasRepository.findAll();
     return partidas;
   }
 
-  async getPartidaByPartida(partidaNumber: number) {
+  async getPartidaByPartida(partidaNumber: number): Promise<PartidaDto> {
     const partida = await this.partidasRepository.findOne(partidaNumber);
     if (!partida) throw new NotFoundException('Partida not found');
     return partida;
   }
 
-  async getPartidasByFecha(fecha: string) {
+  async getPartidasByFecha(fecha: string): Promise<PartidaDto[]> {
     const partidas = await this.partidasRepository.findByFecha(fecha);
     if (!partidas.length) throw new NotFoundException('Partida not found');
     return partidas;
   }
 
-  async getPartidasByFechaRange(fechaInicio: string, fechaFin: string) {
+  async getPartidasByFechaRange(
+    fechaInicio: string,
+    fechaFin: string,
+  ): Promise<PartidaDto[]> {
     const partidas = await this.partidasRepository.findByFechaRange(
       fechaInicio,
       fechaFin,
@@ -33,13 +37,13 @@ export class PartidasService {
     return partidas;
   }
 
-  async getPartidasByAno(ano: number) {
+  async getPartidasByAno(ano: number): Promise<PartidaDto[]> {
     const partidas = await this.partidasRepository.findByAno(ano);
     if (!partidas.length) throw new NotFoundException('Partida not found');
     return partidas;
   }
 
-  async getPartidasByCamara(camara: number) {
+  async getPartidasByCamara(camara: number): Promise<PartidaDto[]> {
     const partidas = await this.partidasRepository.findByCamara(camara);
     if (!partidas.length) throw new NotFoundException('Partida not found');
     return partidas;

@@ -1,13 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/features/extendidos/hooks/usePartidas.ts
 
-import { clientFetch } from "@/lib/api/client-fetch";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { partidaService } from "../api/partidaService";
+import { PartidaDto } from "@vivero/shared";
 
 export const partidasQueryKeys = {
   all: () => ["partidas"] as const,
@@ -28,35 +23,26 @@ export const partidasQueryKeys = {
 };
 
 export const usePartidas = () => {
-  return useSuspenseQuery<any[]>({
+  return useSuspenseQuery<PartidaDto[]>({
     queryKey: partidasQueryKeys.all(),
-    queryFn: () => clientFetch<any[]>("l-partidas", { method: "GET" }),
-    retry: 1, // Retry once to account for transient network issues
+    queryFn: () => partidaService.fetchAll(),
+    retry: 1,
   });
 };
 
 export const usePartidaByPartida = (partida: number) => {
-  return useSuspenseQuery<any | null>({
+  return useSuspenseQuery<PartidaDto | null>({
     queryKey: partidasQueryKeys.byPartida(partida),
-    queryFn: () => {
-      return clientFetch<any | null>(`l-partidas/${partida}`, {
-        method: "GET",
-      });
-    },
-
-    retry: 1, // Retry once to account for transient network issues
+    queryFn: () => partidaService.fetchByPartida(partida),
+    retry: 1,
   });
 };
 
 export const usePartidasByFecha = (fecha: string) => {
-  return useSuspenseQuery<any[]>({
+  return useSuspenseQuery<PartidaDto[]>({
     queryKey: partidasQueryKeys.byFecha(fecha),
-    queryFn: () => {
-      return clientFetch<any[]>(`l-partidas/fecha/${fecha}`, {
-        method: "GET",
-      });
-    },
-    retry: 1, // Retry once to account for transient network issues
+    queryFn: () => partidaService.fetchByFecha(fecha),
+    retry: 1,
   });
 };
 
@@ -64,37 +50,25 @@ export const usePartidasByFechaRange = (
   fechaInicio: string,
   fechaFin: string,
 ) => {
-  return useSuspenseQuery<any[]>({
+  return useSuspenseQuery<PartidaDto[]>({
     queryKey: partidasQueryKeys.byFechaRange(fechaInicio, fechaFin),
-    queryFn: () => {
-      return clientFetch<any[]>(`l-partidas/fecha/${fechaInicio}/${fechaFin}`, {
-        method: "GET",
-      });
-    },
-    retry: 1, // Retry once to account for transient network issues
+    queryFn: () => partidaService.fetchByFechaRange(fechaInicio, fechaFin),
+    retry: 1,
   });
 };
 
 export const usePartidasByAno = (ano: number) => {
-  return useSuspenseQuery<any[]>({
+  return useSuspenseQuery<PartidaDto[]>({
     queryKey: partidasQueryKeys.byAno(ano),
-    queryFn: () => {
-      return clientFetch<any[]>(`l-partidas/ano/${ano}`, {
-        method: "GET",
-      });
-    },
-    retry: 1, // Retry once to account for transient network issues
+    queryFn: () => partidaService.fetchByAno(ano),
+    retry: 1,
   });
 };
 
 export const usePartidasByCamara = (camara: number) => {
-  return useSuspenseQuery<any[]>({
+  return useSuspenseQuery<PartidaDto[]>({
     queryKey: partidasQueryKeys.byCamara(camara),
-    queryFn: () => {
-      return clientFetch<any[]>(`l-partidas/camara/${camara}`, {
-        method: "GET",
-      });
-    },
-    retry: 1, // Retry once to account for transient network issues
+    queryFn: () => partidaService.fetchByCamara(camara),
+    retry: 1,
   });
 };
