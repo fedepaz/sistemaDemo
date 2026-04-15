@@ -2,23 +2,16 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-
-import { clientFetch } from "@/lib/api/client-fetch";
 import { LoginAuthDto, AuthResponseDto } from "@vivero/shared";
 import { useAuthContext } from "../providers/AuthProvider";
 import { toast } from "sonner";
+import { authService } from "../api/authService";
 
 export const useLogin = () => {
   const { signIn } = useAuthContext();
 
   const mutation = useMutation<AuthResponseDto, Error, LoginAuthDto>({
-    mutationFn: async (credentials) => {
-      const response = await clientFetch<AuthResponseDto>("auth/login", {
-        method: "POST",
-        body: JSON.stringify(credentials),
-      });
-      return response;
-    },
+    mutationFn: authService.login,
     onSuccess: (data) => {
       // Check if user is default password
       if (data.isDefaultPassword) {

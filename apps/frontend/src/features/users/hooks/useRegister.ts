@@ -2,9 +2,9 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { clientFetch } from "@/lib/api/client-fetch";
 import { AuthResponseDto, RegisterAuthDto } from "@vivero/shared";
 import { toast } from "sonner";
+import { userService } from "../api/userService";
 
 /**
  * Hook for administrative user registration.
@@ -12,13 +12,7 @@ import { toast } from "sonner";
  */
 export const useRegister = () => {
   return useMutation<AuthResponseDto, Error, RegisterAuthDto>({
-    mutationFn: async (userData) => {
-      const response = await clientFetch<AuthResponseDto>("auth/register", {
-        method: "POST",
-        body: JSON.stringify(userData),
-      });
-      return response;
-    },
+    mutationFn: userService.register,
     onSuccess: () => {
       toast.success("Usuario creado exitosamente", {
         duration: 3000,

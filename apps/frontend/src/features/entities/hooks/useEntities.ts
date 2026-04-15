@@ -1,9 +1,9 @@
 // src/features/entities/hooks/useEntities.ts
 
-import { clientFetch } from "@/lib/api/client-fetch";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { CreateEntityDto, Entity } from "@vivero/shared";
 import { toast } from "sonner";
+import { entityService } from "../api/entityService";
 
 export const entityQueryKeys = {
   all: () => ["entities"] as const,
@@ -15,20 +15,14 @@ export const entityQueryKeys = {
 export const useEntities = () => {
   return useSuspenseQuery<Entity[]>({
     queryKey: entityQueryKeys.all(),
-    queryFn: () => clientFetch<Entity[]>("entities/tables", { method: "GET" }),
+    queryFn: entityService.fetchAll,
     retry: 1, // Retry once to account for transient network issues
   });
 };
 
 export const useCreateEntity = () => {
   return useMutation<Entity, Error, CreateEntityDto>({
-    mutationFn: async (entityData) => {
-      const response = await clientFetch<Entity>(`entities/entity`, {
-        method: "POST",
-        body: JSON.stringify(entityData),
-      });
-      return response;
-    },
+    mutationFn: entityService.create,
     onSuccess: (data) => {
       const toastMessage = `Entidad ${data.name} creada exitosamente`;
       toast.success(toastMessage, {
@@ -42,11 +36,7 @@ export const useDeleteEntity = () => {
   const queryClient = useQueryClient();
 
   return useMutation<void, Error, string>({
-    mutationFn: async (id) => {
-      await clientFetch(`entities/${id}`, {
-        method: "DELETE",
-      });
-    },
+    mutationFn: entityService.delete,
     onSuccess: () => {
       const toastMessage = `Entidad eliminada exitosamente`;
       toast.success(toastMessage, {

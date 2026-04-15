@@ -1,8 +1,8 @@
-// src/features/users/hooks/useUsers.ts
+// src/features/auditLogs/hooks/auditLogHooks.ts
 
-import { clientFetch } from "@/lib/api/client-fetch";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { AuditLogDto } from "@vivero/shared";
+import { auditLogService } from "../api/auditLogService";
 
 export const auditLogQueryKeys = {
   all: () => ["auditLog"],
@@ -13,12 +13,7 @@ export const auditLogQueryKeys = {
 export const useAuditLogs = () => {
   return useSuspenseQuery<AuditLogDto[]>({
     queryKey: auditLogQueryKeys.all(),
-    queryFn: () => {
-      return clientFetch<AuditLogDto[]>("auditLog", {
-        method: "GET",
-      });
-    },
-
+    queryFn: auditLogService.fetchAll,
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -26,12 +21,7 @@ export const useAuditLogs = () => {
 export const useAuditLogsByTenantName = (tenantName?: string) => {
   return useSuspenseQuery<AuditLogDto[]>({
     queryKey: auditLogQueryKeys.bytenantName(tenantName || ""),
-    queryFn: () => {
-      return clientFetch<AuditLogDto[]>(`auditLog/${tenantName}`, {
-        method: "GET",
-      });
-    },
-
+    queryFn: () => auditLogService.fetchByTenantName(tenantName || ""),
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -39,11 +29,7 @@ export const useAuditLogsByTenantName = (tenantName?: string) => {
 export const useAuditLogsByUserId = (userId: string) => {
   return useSuspenseQuery<AuditLogDto[]>({
     queryKey: auditLogQueryKeys.byUserId(userId),
-    queryFn: () => {
-      return clientFetch<AuditLogDto[]>(`auditLog/user/${userId}`, {
-        method: "GET",
-      });
-    },
+    queryFn: () => auditLogService.fetchByUserId(userId),
     retry: 1, // Retry once to account for transient network issues
   });
 };

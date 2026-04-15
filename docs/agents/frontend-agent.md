@@ -33,6 +33,31 @@ src/features/
 │ └── ...
 ```
 
+### API Service Pattern (Mandatory)
+
+To ensure a clean separation between data-fetching logic and React hooks, every feature must implement an `api/` directory with a stateless service object.
+
+- **Stateless Service**: A constant object exported from `api/[feature]Service.ts`.
+- **Encapsulation**: All `clientFetch` calls must reside within these services.
+- **Hook Consumption**: Hooks (TanStack Query) must invoke service methods instead of calling `clientFetch` directly.
+- **Naming**: Methods should be descriptive of the action (`fetchAll`, `getById`, `update`, `delete`).
+
+**Example Service Pattern:**
+```typescript
+// features/users/api/userService.ts
+export const userService = {
+  fetchAll: () => clientFetch<UserDto[]>("users", { method: "GET" }),
+  update: (id: string, data: UpdateUserDto) => 
+    clientFetch<UserDto>(`users/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+};
+
+// features/users/hooks/useUsers.ts
+export const useUsers = () => useSuspenseQuery({
+  queryKey: ["users"],
+  queryFn: userService.fetchAll
+});
+```
+
 ## Enterprise Context Understanding
 
 ### Primary User Scenarios
