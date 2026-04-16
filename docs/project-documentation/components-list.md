@@ -175,6 +175,9 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ExtendidosForm` | [x] | [x] | [x] | [x] |
 | `ExtendidoKPIs` | [x] | [x] | [x] | [x] |
 | `ExtendidoDashboard` | [x] | [x] | [x] | [x] |
+| `ExtendidoView` | [x] | [x] | [x] | [x] |
+| `PartidasSelector` | [x] | [x] | [x] | [x] |
+| `EmptyState` | [x] | [x] | [x] | [x] |
 
 ### Users
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |

@@ -5,8 +5,9 @@ import { DepositoDto, depositosService } from "../api/depositosService";
 
 export const depositosQueryKeys = {
   all: () => ["depositos"] as const,
-  byCamara: (camara: number) =>
-    [...depositosQueryKeys.all(), "byCamara", camara] as const,
+  byCamara: () => [...depositosQueryKeys.all(), "byCamara"] as const,
+  byCodigo: (codigo: number) =>
+    [...depositosQueryKeys.all(), "byCodigo", codigo] as const,
 };
 
 export const useDepositos = () => {
@@ -17,9 +18,9 @@ export const useDepositos = () => {
   });
 };
 
-export const useDepositosByCamara = (camara: number) => {
+export const useCamaras = () => {
   return useSuspenseQuery<DepositoDto[]>({
-    queryKey: depositosQueryKeys.byCamara(camara),
+    queryKey: depositosQueryKeys.byCamara(),
     queryFn: () => depositosService.fetchCamaras(),
     retry: 1,
   });
@@ -27,7 +28,7 @@ export const useDepositosByCamara = (camara: number) => {
 
 export const useDepositoByCodigo = (codigo: number) => {
   return useSuspenseQuery<DepositoDto | null>({
-    queryKey: depositosQueryKeys.byCamara(codigo),
+    queryKey: depositosQueryKeys.byCodigo(codigo),
     queryFn: () => depositosService.fetchByCodigo(codigo),
     retry: 1,
   });
