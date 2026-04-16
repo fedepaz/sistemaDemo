@@ -6,45 +6,65 @@ import { PartidaDto } from "@vivero/shared";
 
 export const partidaColumns: ColumnDef<PartidaDto>[] = [
   {
-    accessorKey: "partida",
+    accessorKey: "id",
     header: ({ column }) => {
       return <SortableHeader column={column}>Partida</SortableHeader>;
     },
   },
   {
-    accessorKey: "ano",
+    accessorKey: "productCode",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Año</SortableHeader>;
+      return <SortableHeader column={column}>Especie</SortableHeader>;
     },
   },
   {
-    accessorKey: "indice",
+    accessorKey: "productName",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Índice</SortableHeader>;
+      return <SortableHeader column={column}>Producto</SortableHeader>;
     },
   },
   {
-    accessorKey: "fecha",
+    accessorKey: "suggestedSowingDate",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha</SortableHeader>;
+      return (
+        <SortableHeader column={column}>Fecha siembra sugerida</SortableHeader>
+      );
     },
   },
   {
-    accessorKey: "contenedor",
+    accessorKey: "actualSowingDate",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Contenedor</SortableHeader>;
+      return (
+        <SortableHeader column={column}>Fecha real de siembra</SortableHeader>
+      );
     },
   },
   {
-    accessorKey: "hai",
+    accessorKey: "daysInChamber",
     header: ({ column }) => {
-      return <SortableHeader column={column}>H.A.I.</SortableHeader>;
+      return <SortableHeader column={column}>Días de cámara</SortableHeader>;
     },
   },
   {
-    accessorKey: "injerto",
+    accessorKey: "traysSown",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Injerto</SortableHeader>;
+      return (
+        <SortableHeader column={column}>Bandejas sembradas</SortableHeader>
+      );
+    },
+  },
+  {
+    accessorKey: "greenhouseCode",
+    header: ({ column }) => {
+      return <SortableHeader column={column}>Códgo Invernadero</SortableHeader>;
+    },
+  },
+  {
+    accessorKey: "traysExtended",
+    header: ({ column }) => {
+      return (
+        <SortableHeader column={column}>Bandejas extendidas</SortableHeader>
+      );
     },
   },
 ];
