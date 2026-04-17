@@ -3,7 +3,7 @@
 import { Logo } from "@/components/common/logo";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Leaf, Sun, Droplets, ArrowRight } from "lucide-react";
+import { Leaf, Sun, Droplets } from "lucide-react";
 
 export default function CompanyWelcome() {
   return (
@@ -13,7 +13,7 @@ export default function CompanyWelcome() {
         <div className="relative flex flex-col items-center justify-center py-16 px-8 min-h-[400px]">
           {/* Decorative Background Elements */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-chart-2/5 transition-opacity group-hover:opacity-80" />
-          
+
           <div className="absolute top-4 right-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
             <Leaf className="w-32 h-32 text-chart-2 rotate-12" />
           </div>
@@ -35,7 +35,7 @@ export default function CompanyWelcome() {
 
             {/* Tagline or Action Hint */}
             <div className="flex flex-col items-center gap-2">
-               <p className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
                 Gestionar Operaciones
               </p>
               <div className="h-0.5 w-8 bg-primary/20 group-hover:w-24 transition-all duration-500" />
