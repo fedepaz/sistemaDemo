@@ -23,6 +23,8 @@ FROM deps AS builder
 COPY apps/backend ./apps/backend
 COPY packages/shared ./packages/shared
 
+RUN pnpm --filter @viveros/shared build
+
 RUN pnpm --filter backend build
 RUN pnpm deploy --filter backend --prod /deploy
 
