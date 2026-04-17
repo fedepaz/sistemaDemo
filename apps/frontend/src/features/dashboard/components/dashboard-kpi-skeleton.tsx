@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
 
 export function DashboardKPISkeleton() {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden border-0 shadow-sm">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row lg:items-center px-1">
           {/* Left: Date header skeleton */}
-          <div className="bg-secondary/50 px-2 py-2 lg:rounded-l-lg shrink-0 w-full lg:w-[220px]">
+          <div className="bg-secondary/30 px-4 py-3 lg:rounded-l-lg shrink-0 w-full lg:w-[220px]">
             <div className="flex items-center gap-2">
-              <Skeleton className="h-7 w-7 rounded-full" />
-              <Skeleton className="h-5 w-full max-w-[140px]" />
+              <Skeleton className="h-8 w-8 rounded-full" />
+              <Skeleton className="h-5 w-32" />
             </div>
           </div>
 
@@ -22,27 +22,30 @@ export function DashboardKPISkeleton() {
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-muted/50 rounded-lg px-3 py-2 flex items-center gap-2 sm:shrink-0 w-full sm:w-[100px]"
+                className="bg-muted/50 rounded-xl px-4 py-2.5 flex items-center gap-3 sm:shrink-0 w-full sm:w-[120px]"
               >
-                <Skeleton className="h-4 w-4" />
-                <Skeleton className="h-6 w-12" />
+                <Skeleton className="h-5 w-5 rounded" />
+                <div className="space-y-1 flex-1">
+                  <Skeleton className="h-2 w-8" />
+                  <Skeleton className="h-5 w-12" />
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Right: Forecast skeleton - 3 items on mobile, 5 on desktop */}
-          <div className="flex items-center justify-center gap-2 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0">
+          {/* Right: Forecast skeleton */}
+          <div className="flex items-center justify-center gap-3 px-6 py-3 border-t lg:border-t-0 lg:border-l border-border/50 shrink-0 bg-muted/5">
             {Array.from({ length: 5 }).map((_, i) => (
               <div
                 key={i}
                 className={cn(
-                  "relative rounded-md px-4 py-1 text-center bg-muted/30 shrink-0",
+                  "relative rounded-lg px-4 py-2 text-center bg-background border border-border/50 shrink-0",
                   i >= 3 && "hidden md:block",
                 )}
               >
-                <Skeleton className="h-3 w-8 mb-1 mx-auto" />
+                <Skeleton className="h-2 w-8 mb-2 mx-auto" />
                 <Skeleton className="h-4 w-6 mb-1 mx-auto" />
-                <Skeleton className="h-3 w-6 mx-auto" />
+                <Skeleton className="h-2 w-6 mx-auto" />
               </div>
             ))}
           </div>

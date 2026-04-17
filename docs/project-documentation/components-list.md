@@ -147,8 +147,6 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DashboardKPI` | [x] | [x] | [x] | [x] |
 | `CompanyInfoCardSkeleton` | [x] | [x] | [x] | [x] |
 | `CompanyInfoCard` | [x] | [x] | [x] | [x] |
-| `RecentActivitySkeleton` | [x] | [x] | [x] | [x] |
-| `RecentActivity` | [x] | [x] | [x] | [x] |
 | `RootDashboardSkeleton` | [x] | [x] | [x] | [x] |
 | `RootDashboard` | [x] | [x] | [x] | [x] |
 

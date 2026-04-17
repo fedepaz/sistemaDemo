@@ -2,14 +2,20 @@
 "use client";
 
 import { useDashboardKPIs, useForecastKPIs } from "../hooks/hooks";
-import { Calendar, Droplets, Sun, Thermometer, Wind } from "lucide-react";
+import {
+  Calendar,
+  Droplets,
+  CloudRain,
+  Thermometer,
+  Wind,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 const climateIcons: Record<string, React.ReactNode> = {
   Temperatura: <Thermometer className="h-5 w-5" />,
   Humedad: <Droplets className="h-5 w-5" />,
-  Amanecer: <Sun className="h-5 w-5" />,
+  Lluvia: <CloudRain className="h-5 w-5" />,
   Viento: <Wind className="h-5 w-5" />,
 };
 
@@ -50,25 +56,28 @@ function DashboardKPI() {
   });
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden border-border/40 shadow-sm bg-card">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row lg:items-center px-1">
           {/* Left: Date header */}
-          <div className="bg-secondary px-2 py-2 lg:rounded-l-lg shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="h-7 w-7 rounded-full bg-black/10 dark:bg-white/10 flex items-center justify-center">
-                <Calendar className="h-3.5 w-3.5 text-secondary-foreground" />
+          <div className="bg-muted/30 px-6 py-4 lg:rounded-l-lg shrink-0 border-r border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shadow-inner">
+                <Calendar className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-secondary-foreground capitalize">
+                <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">
+                  Mendoza
+                </p>
+                <p className="text-sm font-bold text-foreground capitalize">
                   {formattedDate}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Middle: Current conditions - grid 2x2 on mobile, flex on desktop */}
-          <div className="grid grid-cols-2 sm:flex sm:items-center gap-3 px-4 py-3 flex-1">
+          {/* Middle: Current conditions */}
+          <div className="grid grid-cols-2 sm:flex sm:items-center gap-4 px-6 py-4 flex-1">
             {data.map((kpi, index) => {
               const colors = kpiChartColors[index % kpiChartColors.length];
               return (
@@ -76,29 +85,34 @@ function DashboardKPI() {
                   key={kpi.label}
                   className={cn(
                     colors.bg,
-                    "rounded-lg px-3 py-2 flex items-center gap-2 sm:shrink-0",
+                    "rounded-2xl px-5 py-3 flex items-center gap-4 sm:shrink-0 transition-all hover:scale-[1.05] cursor-pointer border border-transparent hover:border-border hover:shadow-lg",
                   )}
                 >
-                  <div className={`${colors.icon} [&>svg]:h-4 [&>svg]:w-4`}>
+                  <div className={`${colors.icon} [&>svg]:h-6 [&>svg]:w-6 drop-shadow-sm`}>
                     {climateIcons[kpi.label]}
                   </div>
-                  <div className="flex items-baseline gap-0.5">
-                    <span className={`text-lg font-bold ${colors.text}`}>
-                      {kpi.value}
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] opacity-50">
+                      {kpi.label}
                     </span>
-                    <span
-                      className={`text-[10px] font-medium ${colors.text} opacity-70`}
-                    >
-                      {kpi.unit}
-                    </span>
+                    <div className="flex items-baseline gap-1">
+                      <span className={`text-2xl font-black tracking-tighter ${colors.text}`}>
+                        {kpi.value}
+                      </span>
+                      <span
+                        className={`text-xs font-bold ${colors.text} opacity-60`}
+                      >
+                        {kpi.unit}
+                      </span>
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Right: Forecast - compact horizontal, 3 days on mobile */}
-          <div className="flex items-center justify-center gap-2 px-4 py-2 border-t lg:border-t-0 lg:border-l border-border shrink-0">
+          {/* Right: Forecast */}
+          <div className="flex items-center justify-center gap-4 px-8 py-4 border-t lg:border-t-0 lg:border-l border-border/50 shrink-0 bg-muted/5">
             {forecastData.map((day, index) => {
               const today = isToday(day.date);
               const past = isPast(day.date);
@@ -109,30 +123,44 @@ function DashboardKPI() {
                 <div
                   key={index}
                   className={cn(
-                    "relative rounded-md px-4 py-1 text-center shrink-0",
+                    "relative rounded-xl px-5 py-3 text-center shrink-0 transition-all cursor-pointer hover:shadow-md",
                     !isRelevant && "hidden md:block",
                     today
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-primary text-primary-foreground shadow-lg scale-110 z-10"
                       : past
-                        ? "opacity-50"
-                        : "bg-muted/30",
+                        ? "opacity-30 grayscale blur-[0.5px]"
+                        : "bg-background border border-border/60 hover:border-primary/50",
                   )}
                 >
                   <p
-                    className={`text-[9px] font-medium ${today ? "text-primary-foreground/80" : "text-muted-foreground"}`}
+                    className={cn(
+                      "text-[10px] font-black uppercase tracking-widest mb-2",
+                      today ? "text-primary-foreground/90" : "text-muted-foreground",
+                    )}
                   >
                     {day.date.toLocaleDateString("es-AR", { weekday: "short" })}
                   </p>
-                  <p
-                    className={`text-xs font-bold ${today ? "text-primary-foreground" : "text-foreground"}`}
-                  >
-                    {Math.round(day.maxTemp)}°
-                  </p>
-                  <p
-                    className={`text-[9px] ${today ? "text-primary-foreground/80" : "text-muted-foreground"}`}
-                  >
-                    {Math.round(day.minTemp)}°
-                  </p>
+                  <div className="flex flex-col gap-0.5">
+                    <p
+                      className={cn(
+                        "text-base font-black tracking-tighter",
+                        today ? "text-white" : "text-foreground",
+                      )}
+                    >
+                      {Math.round(day.maxTemp)}°
+                    </p>
+                    <p
+                      className={cn(
+                        "text-[11px] font-bold",
+                        today ? "text-primary-foreground/70" : "text-muted-foreground/60",
+                      )}
+                    >
+                      {Math.round(day.minTemp)}°
+                    </p>
+                  </div>
+                  {today && (
+                    <div className="absolute -top-1 -right-1 h-3 w-3 bg-background rounded-full border-2 border-primary animate-pulse" />
+                  )}
                 </div>
               );
             })}

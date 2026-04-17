@@ -54,75 +54,75 @@ function DashboardAlerts() {
   });
 
   return (
-    <Card className="overflow-hidden flex flex-col">
-      {/* Header - compact */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 px-3 py-2 shrink-0">
+    <Card className="overflow-hidden flex flex-col border-border/40 shadow-sm h-full">
+      {/* Header - professional gradient using theme tokens */}
+      <div className="bg-gradient-to-r from-primary/90 to-primary px-4 py-3 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-primary-foreground/10 flex items-center justify-center">
-              <DollarSign className="h-3.5 w-3.5 text-primary-foreground" />
+            <div className="h-7 w-7 rounded-full bg-primary-foreground/20 flex items-center justify-center backdrop-blur-sm">
+              <DollarSign className="h-4 w-4 text-primary-foreground" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-primary-foreground">
+              <h2 className="text-sm font-bold text-primary-foreground tracking-tight">
                 Cotizaciones
               </h2>
-              <p className="text-[10px] text-primary-foreground/80">ARS</p>
+              <p className="text-[10px] text-primary-foreground/70 font-medium">ARS • En Vivo</p>
             </div>
           </div>
-          <div className="flex items-center gap-1 text-primary-foreground/80 text-[10px]">
-            <RefreshCw className="h-2.5 w-2.5" />
+          <div className="flex items-center gap-1.5 text-primary-foreground/60 text-[10px] font-bold">
+            <RefreshCw className="h-2.5 w-2.5 animate-spin-slow" />
             <span>{currentTime}</span>
           </div>
         </div>
       </div>
 
-      <CardContent className="p-2 flex-1 overflow-auto">
-        <div className="flex flex-col gap-2 ">
+      <CardContent className="p-3 flex-1 overflow-auto bg-card">
+        <div className="flex flex-col gap-3">
           {currencyRates.map((currency, index) => {
             const colors = chartColors[index % chartColors.length];
 
             return (
               <div
                 key={currency.code}
-                className={`${colors.bg} rounded-lg p-2 transition-all hover:scale-[1.01] flex-1 flex flex-col justify-center`}
+                className={`${colors.bg} rounded-xl p-3 transition-all hover:scale-[1.02] cursor-pointer group flex flex-col justify-center border border-transparent hover:border-border`}
               >
-                {/* Currency Header - inline */}
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex items-center gap-1.5">
+                {/* Currency Header */}
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
                     <div
-                      className={`h-5 w-5 rounded ${colors.accent} flex items-center justify-center`}
+                      className={`h-6 w-6 rounded-lg ${colors.accent} flex items-center justify-center shadow-sm`}
                     >
-                      <span className="text-white text-[8px] font-bold">
+                      <span className="text-primary-foreground text-[10px] font-black">
                         {currency.code === "BLUE"
                           ? "B"
                           : currency.code.charAt(0)}
                       </span>
                     </div>
-                    <p className={`text-xs font-semibold ${colors.text}`}>
+                    <p className={`text-xs font-bold ${colors.text} uppercase tracking-tight`}>
                       {currency.name}
                     </p>
                   </div>
                 </div>
 
-                {/* Buy/Sell Rates - compact inline */}
-                <div className="flex gap-1.5">
-                  <div className="bg-white/60 rounded px-2 py-1 text-center flex-1">
+                {/* Buy/Sell Rates */}
+                <div className="flex gap-2">
+                  <div className="bg-background/80 dark:bg-background/40 rounded-lg px-3 py-2 text-center flex-1 border border-border/50">
                     <p
-                      className={`text-[8px] font-medium ${colors.text} opacity-70 uppercase`}
+                      className={`text-[9px] font-bold ${colors.text} opacity-60 uppercase tracking-widest mb-0.5`}
                     >
                       Compra
                     </p>
-                    <p className={`text-sm font-bold ${colors.text}`}>
+                    <p className={`text-base font-black ${colors.text}`}>
                       ${formatNumber(currency.buyRate)}
                     </p>
                   </div>
-                  <div className="bg-white/60 rounded px-2 py-1 text-center flex-1">
+                  <div className="bg-background/80 dark:bg-background/40 rounded-lg px-3 py-2 text-center flex-1 border border-border/50">
                     <p
-                      className={`text-[8px] font-medium ${colors.text} opacity-70 uppercase`}
+                      className={`text-[9px] font-bold ${colors.text} opacity-60 uppercase tracking-widest mb-0.5`}
                     >
                       Venta
                     </p>
-                    <p className={`text-sm font-bold ${colors.text}`}>
+                    <p className={`text-base font-black ${colors.text}`}>
                       ${formatNumber(currency.sellRate)}
                     </p>
                   </div>
