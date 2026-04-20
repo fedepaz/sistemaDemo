@@ -8,57 +8,62 @@ import { Badge } from "@/components/ui/badge";
 
 export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "partidaId",
     header: ({ column }) => {
       return <SortableHeader column={column}>Partida</SortableHeader>;
     },
     size: 70,
   },
   {
-    accessorKey: "productName",
+    accessorKey: "nombreEspecie",
     header: ({ column }) => {
       return <SortableHeader column={column}>Producto</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="flex flex-col py-0.5 max-w-[160px]">
+      <div className="flex flex-col py-0.5 max-w-[180px]">
         <span
           className="font-bold text-sm truncate leading-tight"
-          title={row.original.productName}
+          title={row.original.nombreEspecie}
         >
-          {row.original.productName}
+          {row.original.nombreEspecie}
         </span>
-        <span className="text-[10px] font-mono text-muted-foreground leading-none mt-0.5 uppercase tracking-tighter">
-          Cod: {row.original.productCode}
-        </span>
+        <div className="flex items-center gap-1.5 mt-0.5">
+          <span className="text-[10px] font-mono text-muted-foreground leading-none uppercase tracking-tighter">
+            {row.original.codigoEspecie}
+          </span>
+          {row.original.injerto && row.original.injerto !== "N" && (
+            <Badge variant="outline" className="h-3.5 px-1 text-[8px] font-bold border-orange-200 text-orange-600 bg-orange-50/50">
+              INJERTO: {row.original.injerto}
+            </Badge>
+          )}
+        </div>
       </div>
     ),
   },
   {
-    accessorKey: "actualSowingDate",
+    accessorKey: "fechaSiembraReal",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Cronología</SortableHeader>;
+      return <SortableHeader column={column}>Fechas</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex flex-col py-0.5">
         <span className="text-xs font-bold leading-tight">
-          R: {row.original.actualSowingDate}
+          S: {row.original.fechaSiembraReal}
         </span>
         <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 italic">
-          S: {row.original.suggestedSowingDate}
+          E: {row.original.fechaEgresoCamara}
         </span>
       </div>
     ),
     size: 110,
   },
   {
-    accessorKey: "daysInChamber",
+    accessorKey: "diasEnCamara",
     header: ({ column }) => {
       return <SortableHeader column={column}>Cámara</SortableHeader>;
     },
     cell: ({ row }) => {
-      const days = row.original.daysInChamber;
-      if (days === null)
-        return <span className="text-muted-foreground/30 ml-2">-</span>;
+      const days = row.original.diasEnCamara;
       return (
         <Badge
           variant="outline"
@@ -68,52 +73,40 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
         </Badge>
       );
     },
-    size: 70,
-  },
-  {
-    accessorKey: "traysSown",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Bandejas</SortableHeader>;
-    },
-    cell: ({ row }) => (
-      <div className="flex flex-col text-center">
-        <span className="text-xs font-black">{row.original.traysSown}</span>
-        <span className="text-[8px] uppercase font-bold text-muted-foreground tracking-tighter">
-          Sembr.
-        </span>
-      </div>
-    ),
     size: 80,
   },
   {
-    accessorKey: "traysExtended",
+    accessorKey: "stockInicial",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Ext.</SortableHeader>;
+      return <SortableHeader column={column}>Stock</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex flex-col text-center">
         <span className="text-sm font-black text-primary leading-none">
-          {row.original.traysExtended}
+          {row.original.stockInicial || 0}
         </span>
         <span className="text-[8px] uppercase font-bold text-primary/60 tracking-tighter mt-0.5">
-          Extend.
+          Inicial
         </span>
       </div>
     ),
     size: 80,
   },
   {
-    accessorKey: "greenhouseCode",
+    accessorKey: "nombreUbicacion",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Ubic.</SortableHeader>;
+      return <SortableHeader column={column}>Ubicación</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="flex justify-center">
-        <code className="bg-muted px-2 py-0.5 rounded-md text-[10px] font-black border border-border/40 shadow-sm">
-          {row.original.greenhouseCode}
-        </code>
+      <div className="flex flex-col py-0.5">
+        <span className="text-xs font-bold leading-tight truncate max-w-[130px]" title={row.original.nombreUbicacion || '-'}>
+          {row.original.nombreUbicacion || row.original.codigoUbicacion || '-'}
+        </span>
+        <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 uppercase font-medium">
+          Cont: {row.original.contenedor}
+        </span>
       </div>
     ),
-    size: 90,
+    size: 140,
   },
 ];

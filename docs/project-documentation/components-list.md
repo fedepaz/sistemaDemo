@@ -174,7 +174,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ExtendidoKPIs` | [x] | [x] | [x] | [x] |
 | `ExtendidoDashboard` | [x] | [x] | [x] | [x] |
 | `ExtendidoView` | [x] | [x] | [x] | [x] |
-| `PartidasSelector` | [x] | [x] | [x] | [x] |
+| `ExtendidosSelector` | [x] | [x] | [x] | [x] |
 | `EmptyState` | [x] | [x] | [x] | [x] |
 
 ### Users
