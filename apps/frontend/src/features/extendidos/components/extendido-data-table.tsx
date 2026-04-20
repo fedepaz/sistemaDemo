@@ -5,21 +5,23 @@ import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { useState } from "react";
 import { ExtendidosForm } from "./extendido-form";
 import { partidaColumns } from "./columns";
-import { PartidaDto } from "@vivero/shared";
+import { ExtendidoDto } from "@vivero/shared";
 
 interface ExtendidoDataTableProps {
-  partidas: PartidaDto[];
+  partidas: ExtendidoDto[];
 }
 
 export function ExtendidoDataTable({ partidas }: ExtendidoDataTableProps) {
   const [slideOverOpen, setSlideOverOpen] = useState(false);
-  const [selectedPartida, setSelectedPartida] = useState<PartidaDto | null>(null);
+  const [selectedPartida, setSelectedPartida] = useState<ExtendidoDto | null>(
+    null,
+  );
 
-  const handleExtendidoView = (row: PartidaDto) => {
+  const handleExtendidoView = (row: ExtendidoDto) => {
     setSelectedPartida(row);
     setSlideOverOpen(true);
   };
-  
+
   const handleExport = () => {
     console.log("Exporting...");
   };
@@ -36,7 +38,7 @@ export function ExtendidoDataTable({ partidas }: ExtendidoDataTableProps) {
         onExport={handleExport}
         onView={handleExtendidoView}
       />
-      
+
       {selectedPartida && (
         <SlideOverForm
           open={slideOverOpen}

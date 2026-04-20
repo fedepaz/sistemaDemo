@@ -32,24 +32,23 @@ When developing or reviewing a feature, ensure it complies with the following:
 
 ## 📖 Pattern Reference: API Service Pattern
 
-**Stateless Service Example (`api/partidaService.ts`):**
+**Stateless Service Example (`api/extendidoService.ts`):**
 ```typescript
 import { clientFetch } from "@/lib/api/client-fetch";
-import { PartidaDto } from "@vivero/shared";
+import { ExtendidoDto } from "@vivero/shared";
 
-export const partidaService = {
-  fetchAll: () => clientFetch<PartidaDto[]>("l-partidas", { method: "GET" }),
-  // ...
+export const extendidoService = {
+  fetchByFecha: (fecha: string) => clientFetch<ExtendidoDto[]>(`l-extendidos/fecha/${fecha}`, { method: "GET" }),
 };
 ```
 
-**Clean Hook Example (`hooks/usePartidas.ts`):**
+**Clean Hook Example (`hooks/useExtendidos.ts`):**
 ```typescript
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { partidaService } from "../api/partidaService";
+import { extendidoService } from "../api/extendidoService";
 
-export const usePartidas = () => useSuspenseQuery({
-  queryKey: ["partidas"],
-  queryFn: partidaService.fetchAll
+export const useExtendidosByFecha = (fecha: string) => useSuspenseQuery({
+  queryKey: ["extendidos", "byFecha", fecha],
+  queryFn: () => extendidoService.fetchByFecha(fecha)
 });
 ```

@@ -92,9 +92,15 @@ This document lists all the modules, services, and core functionalities implemen
 ### Legacy Partidas Module
 - [x] **Legacy Data Access**: Read-only integration with the legacy `partidas` table.
 - [x] **Repository Pattern**: `PartidasRepository` using the `LegacyMysqlService`.
-- [x] **Advanced Retrieval**: Supports filtering by date, date ranges, years, and chamber codes (cámaras).
-- [x] **Data Mapping & Transformation**: Implements `PartidaDto` with descriptive field names, automatic species lookup (`productName`), and `daysInChamber` calculation.
+- [x] **Basic Retrieval**: Provides access to the raw `partidas` data.
 - [x] **Modular Design**: Encapsulated in `LegacyPartidasModule`.
+
+### Legacy Extendidos Module
+- [x] **Legacy Data Access**: Read-only integration with detailed `extendidos` query logic.
+- [x] **Repository Pattern**: `ExtendidosRepository` using the `LegacyMysqlService`.
+- [x] **Specialized Retrieval**: Supports querying by date with complex joins to species and location data.
+- [x] **Data Mapping & Transformation**: Implements `ExtendidoDto` with descriptive field names, species name lookup, and calculated dates.
+- [x] **Modular Design**: Encapsulated in `LegacyExtendidosModule`.
 
 ### Legacy Base Module
 - [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables.

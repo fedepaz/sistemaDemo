@@ -1,12 +1,12 @@
 // src/features/extendidos/components/extendido-form.tsx
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { PartidaDto } from "@vivero/shared";
+import { ExtendidoDto } from "@vivero/shared";
 import { Package, Calendar, Warehouse, Tag, BarChart3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface ExtendidosFormProps {
-  selectedExtendido: PartidaDto;
+  selectedExtendido: ExtendidoDto;
 }
 
 export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
@@ -31,10 +31,15 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                   ID & Producto
                 </span>
                 <p className="text-sm font-bold">#{selectedExtendido.id}</p>
-                <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 font-bold uppercase text-[10px]">
-                   {selectedExtendido.productName}
+                <Badge
+                  variant="secondary"
+                  className="bg-primary/5 text-primary border-primary/10 font-bold uppercase text-[10px]"
+                >
+                  {selectedExtendido.productName}
                 </Badge>
-                <p className="text-xs text-muted-foreground font-mono">Código: {selectedExtendido.productCode}</p>
+                <p className="text-xs text-muted-foreground font-mono">
+                  Código: {selectedExtendido.productCode}
+                </p>
               </div>
             </div>
 
@@ -46,10 +51,17 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">
                   Cronología de Siembra
                 </span>
-                <p className="text-sm font-medium">Real: {selectedExtendido.actualSowingDate}</p>
-                <p className="text-xs text-muted-foreground">Sugerida: {selectedExtendido.suggestedSowingDate}</p>
+                <p className="text-sm font-medium">
+                  Real: {selectedExtendido.actualSowingDate}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Sugerida: {selectedExtendido.suggestedSowingDate}
+                </p>
                 {selectedExtendido.daysInChamber !== null && (
-                  <Badge variant="outline" className="mt-1 border-primary/20 text-primary bg-primary/5">
+                  <Badge
+                    variant="outline"
+                    className="mt-1 border-primary/20 text-primary bg-primary/5"
+                  >
                     {selectedExtendido.daysInChamber} días en cámara
                   </Badge>
                 )}
@@ -67,8 +79,12 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">
                   Ubicación
                 </span>
-                <p className="text-sm font-bold">{selectedExtendido.greenhouseCode}</p>
-                <p className="text-xs text-muted-foreground uppercase font-medium">Invernadero / Contenedor</p>
+                <p className="text-sm font-bold">
+                  {selectedExtendido.greenhouseCode}
+                </p>
+                <p className="text-xs text-muted-foreground uppercase font-medium">
+                  Invernadero / Contenedor
+                </p>
               </div>
             </div>
 
@@ -81,14 +97,22 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                   Métricas de Bandejas
                 </span>
                 <div className="grid grid-cols-2 gap-4 pt-1">
-                   <div>
-                      <p className="text-lg font-black text-primary">{selectedExtendido.traysSown}</p>
-                      <p className="text-[9px] uppercase font-bold text-muted-foreground tracking-tighter">Sembradas</p>
-                   </div>
-                   <div>
-                      <p className="text-lg font-black text-primary">{selectedExtendido.traysExtended}</p>
-                      <p className="text-[9px] uppercase font-bold text-muted-foreground tracking-tighter">Extendidas</p>
-                   </div>
+                  <div>
+                    <p className="text-lg font-black text-primary">
+                      {selectedExtendido.traysSown}
+                    </p>
+                    <p className="text-[9px] uppercase font-bold text-muted-foreground tracking-tighter">
+                      Sembradas
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-black text-primary">
+                      {selectedExtendido.traysExtended}
+                    </p>
+                    <p className="text-[9px] uppercase font-bold text-muted-foreground tracking-tighter">
+                      Extendidas
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

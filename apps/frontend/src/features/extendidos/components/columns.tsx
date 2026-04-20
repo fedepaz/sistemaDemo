@@ -3,10 +3,10 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
-import { PartidaDto } from "@vivero/shared";
+import { ExtendidoDto } from "@vivero/shared";
 import { Badge } from "@/components/ui/badge";
 
-export const partidaColumns: ColumnDef<PartidaDto>[] = [
+export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
