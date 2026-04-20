@@ -136,29 +136,67 @@ Now you can simply run: `ssh my-remote`.
 
 ---
 
-Step‑by‑step (what you executed)
-On the server:
+## 🔐 Guide: Secure SSH Key Configuration & Hardening
 
-Installed cloudflared.
+This guide details how to set up passwordless access using modern SSH keys and how to secure the server by disabling password-based authentication.
 
-Ran cloudflared tunnel login to authenticate with Cloudflare (saved cert.pem).
+### 1. Client-Side Setup (Laptop/PC)
 
-Created a new tunnel named ssh-tunnel (generated a credentials JSON file).
+#### A. Generate SSH Keys
+Create a modern, secure key pair. Using ED25519 is recommended for its security and performance.
+```bash
+# Default key (Press Enter for all prompts)
+ssh-keygen -t ed25519 -C "your-identifier"
 
-Wrote a config-ssh.yml with an ingress rule: ssh.cabecitanegra.dpdns.org → ssh://localhost:22.
+# Named key (to separate work from personal)
+ssh-keygen -t ed25519 -f ~/.ssh/work-server-key
+```
+- **Private Key**: `~/.ssh/id_ed25519` (Keep this secret and never share it!)
+- **Public Key**: `~/.ssh/id_ed25519.pub` (This is safe to share)
 
-Created a systemd service (cloudflared-ssh.service) to run the tunnel automatically.
+#### B. Configure SSH Alias
+Edit your `~/.ssh/config` file to add a persistent alias for the server:
+```text
+Host server-ssh
+    HostName ssh.your-domain.com
+    User your-username
+    ProxyCommand cloudflared access ssh --hostname %h
+```
 
-Added a DNS CNAME record via cloudflared tunnel route dns so that ssh.cabecitanegra.dpdns.org points to the tunnel.
+#### C. Deploy the Public Key
+Upload your public key to the server. You will be asked for your password one last time.
+```bash
+ssh-copy-id server-ssh
+```
 
-On your laptop:
+### 2. Server-Side Hardening
 
-Installed cloudflared.
+**Important:** Confirm you can log in via `ssh server-ssh` without a password before proceeding.
 
-Fixed DNS resolution (replaced /etc/resolv.conf with nameserver 1.1.1.1 because the system stub resolver was broken).
+#### A. Edit SSH Configuration
+Modify the system's SSH daemon rules:
+```bash
+sudo nano /etc/ssh/sshd_config
+```
 
-Used ssh -o ProxyCommand="cloudflared access ssh --hostname %h" fedepaz@ssh.cabecitanegra.dpdns.org to connect.
+#### B. Enforce Security Rules
+Ensure the following lines are set correctly (remove any leading `#`):
+- `PubkeyAuthentication yes`: Enables key-based access.
+- `PasswordAuthentication no`: Disables insecure password logins.
+- `ChallengeResponseAuthentication no`: Disables interactive login methods.
 
-Added an SSH alias (~/.ssh/config) for convenience.
+#### C. Restart the Service
+Apply the changes to the system:
+```bash
+sudo systemctl restart ssh
+```
 
-Set up SSH keys (ssh-keygen + ssh-copy-id) for passwordless login.
+---
+
+### 📋 Technical Summary
+
+| Context | Location | Description |
+| :--- | :--- | :--- |
+| **Local Machine** | `~/.ssh/` | Your digital identity. **Never share keys without the `.pub` extension**. |
+| **Server (User)** | `~/.ssh/authorized_keys` | Registry of public keys authorized to access your user account. |
+| **Server (System)** | `/etc/ssh/sshd_config` | Master configuration for global SSH security policies. |
