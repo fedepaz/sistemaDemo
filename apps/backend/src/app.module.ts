@@ -27,6 +27,7 @@ import { IncomingMessage } from 'http';
 import { LegacyDepositosModule } from './modules/legacy/depositos/depositos.module';
 import { LegacyPartidasModule } from './modules/legacy/partidas/partidas.module';
 import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.module';
+import { pinoStream } from './config/logger';
 
 @Module({
   imports: [
@@ -48,21 +49,8 @@ import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.m
     }),
     LoggerModule.forRoot({
       pinoHttp: {
-        level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
-        transport:
-          process.env.NODE_ENV === 'production' ||
-          process.env.NODE_ENV === 'development'
-            ? {
-                target: 'pino-pretty',
-                options: {
-                  colorize: true,
-                  colorizeObjects: true,
-                  singleLine: true,
-                  levelFirst: true,
-                  translateTime: 'SYS:standard',
-                },
-              }
-            : undefined,
+        level: 'debug',
+        stream: pinoStream,
         redact: [
           'req.headers.authorization',
           'req.body.password',

@@ -3,6 +3,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { UsersRepository } from './repositories/users.repository';
@@ -10,6 +11,8 @@ import { UpdateUserProfileDto } from '@vivero/shared';
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(private readonly repo: UsersRepository) {}
 
   async getAllUsers(requesterId: string) {
@@ -59,7 +62,7 @@ export class UsersService {
     try {
       return this.repo.recover(id, requesterId);
     } catch (error) {
-      console.error('Error recovering user:', error);
+      this.logger.error('Error recovering user:', error);
       throw new InternalServerErrorException('Error recovering user');
     }
   }
