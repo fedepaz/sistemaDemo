@@ -1,7 +1,7 @@
 # Extendidos Page Overrides
 
 > **PROJECT:** vivero-client-alpha
-> **Generated:** 2026-04-16 19:03:52
+> **Generated:** 2026-04-20 20:48:12
 > **Page Type:** Dashboard / Data View
 
 > ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`design-system/MASTER.md`).
@@ -13,13 +13,13 @@
 
 ### Layout Overrides
 
-- **Max Width:** 1200px (standard)
-- **Layout:** Full-width sections, centered content
+- **Max Width:** 1400px or full-width
+- **Grid:** 12-column grid for data flexibility
 - **Sections:** 1. Hero (Video/Mission), 2. Solutions by Industry, 3. Solutions by Role, 4. Client Logos, 5. Contact Sales
 
 ### Spacing Overrides
 
-- No overrides — use Master spacing
+- **Content Density:** High — optimize for information display
 
 ### Typography Overrides
 
@@ -31,7 +31,9 @@
 
 ### Component Overrides
 
-- Avoid: Use arbitrary large z-index values
+- Avoid: No feedback after submit
+- Avoid: Placeholder-only inputs
+- Avoid: Single row actions only
 
 ---
 
@@ -43,6 +45,8 @@
 
 ## Recommendations
 
-- Effects: Deal movement animations, metric updates, leaderboard ranking changes, gauge needle movements, status change highlights
-- Layout: Define z-index scale system (10 20 30 50)
+- Effects: Hover tooltips, chart zoom on click, row highlighting on hover, smooth filter animations, data loading spinners
+- Forms: Show loading then success/error state
+- Accessibility: Use label with for attribute or wrap input
+- Data Entry: Allow multi-select and bulk edit
 - CTA Placement: Contact Sales (Primary) + Login (Secondary)
