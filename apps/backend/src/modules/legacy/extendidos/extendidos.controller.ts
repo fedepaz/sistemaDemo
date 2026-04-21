@@ -9,6 +9,18 @@ import { Public } from '../../../shared/decorators/public.decorator';
 export class ExtendidosController {
   constructor(private readonly extendidosService: ExtendidosService) {}
 
+  @Get()
+  @Public()
+  async getAllExtendidos(): Promise<ExtendidoDto[]> {
+    return this.extendidosService.getAllExtendidos();
+  }
+
+  @Get('fechas')
+  @Public()
+  async getAvailableExtendidoDates(): Promise<string[]> {
+    return this.extendidosService.getAvailableExtendidoDates();
+  }
+
   @Get(':fecha')
   @Public()
   async getExtendidosByFecha(

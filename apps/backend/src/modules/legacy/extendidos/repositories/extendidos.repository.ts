@@ -2,7 +2,10 @@
 
 import { Inject, Injectable } from '@nestjs/common';
 import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
-import { LegacyExtendido } from '../interfaces/extendidos.interface';
+import {
+  LegacyExtendido,
+  LegacyExtendidosFecha,
+} from '../interfaces/extendidos.interface';
 
 @Injectable()
 export class ExtendidosRepository {
@@ -32,5 +35,45 @@ export class ExtendidosRepository {
         AND DATE_ADD(p.f_siembra, INTERVAL p1.camara DAY) = ?
     `;
     return this.legacyDb.query<LegacyExtendido[]>(sql, [fechaEgreso]);
+  }
+
+  async findAllExtendidos(): Promise<LegacyExtendido[]> {
+    const sql = `
+    SELECT 
+      p.partida, p.ano, p.indice, p.hai, p.con,
+      p.espvar, e.nombre AS especieNombre,
+      p.injerto, p.contenedor, p.cg, p.f_siembra,
+      p1.camara AS diasCamara,
+      DATE_ADD(p.f_siembra, INTERVAL p1.camara DAY) AS fechaEgresoCamara,
+      p.extendido,
+      p2.ubicacion, d.nombre AS nomubicacion, p2.stock_ini, p2.detalle, p2.baja
+    FROM partidas p
+    LEFT JOIN partidas1 p1 
+      ON p.ano = p1.ano AND p.partida = p1.partida AND p.indice = p1.indice
+    LEFT JOIN partidas2 p2 
+      ON p.ano = p2.ano AND p.partida = p2.partida AND p.indice = p2.indice
+    LEFT JOIN especie e ON e.codigo = p.espvar
+    LEFT JOIN depositos d ON d.codigo = p2.ubicacion
+    WHERE p.f_siembra <> '0000-00-00'
+      AND p1.camara IS NOT NULL
+    ORDER BY fechaEgresoCamara DESC, p.partida
+  `;
+    return this.legacyDb.query<LegacyExtendido[]>(sql);
+  }
+
+  async findAvailableExtendidoDates(): Promise<LegacyExtendidosFecha[]> {
+    const sql = `
+    SELECT DISTINCT 
+      DATE_ADD(p.f_siembra, INTERVAL p1.camara DAY) AS fechaEgreso
+    FROM partidas p
+    LEFT JOIN partidas1 p1 
+      ON p.ano = p1.ano AND p.partida = p1.partida AND p.indice = p1.indice
+    WHERE p.f_siembra <> '0000-00-00'
+      AND p1.camara IS NOT NULL
+      AND DATE_ADD(p.f_siembra, INTERVAL p1.camara DAY) IS NOT NULL
+    ORDER BY fechaEgreso ASC
+  `;
+    const rows = await this.legacyDb.query<LegacyExtendidosFecha[]>(sql);
+    return rows;
   }
 }

@@ -3,15 +3,13 @@
 import { Injectable } from '@nestjs/common';
 import { ExtendidosRepository } from './repositories/extendidos.repository';
 import { ExtendidoDto } from '@vivero/shared';
+import { LegacyExtendido } from './interfaces/extendidos.interface';
 
 @Injectable()
 export class ExtendidosService {
   constructor(private readonly extendidosRepository: ExtendidosRepository) {}
-
-  async getExtendidosByFecha(fecha: string): Promise<ExtendidoDto[]> {
-    const rows = await this.extendidosRepository.findExtendidosByFecha(fecha);
-
-    return rows.map((row) => ({
+  private mapToDto(row: LegacyExtendido): ExtendidoDto {
+    return {
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
@@ -31,6 +29,24 @@ export class ExtendidosService {
       stockInicial: row.stock_ini,
       detalle: row.detalle,
       baja: row.baja,
-    }));
+    };
+  }
+
+  async getExtendidosByFecha(fecha: string): Promise<ExtendidoDto[]> {
+    const rows = await this.extendidosRepository.findExtendidosByFecha(fecha);
+
+    return rows.map((row) => this.mapToDto(row));
+  }
+
+  async getAllExtendidos(): Promise<ExtendidoDto[]> {
+    const rows = await this.extendidosRepository.findAllExtendidos();
+
+    return rows.map((row) => this.mapToDto(row));
+  }
+
+  async getAvailableExtendidoDates(): Promise<string[]> {
+    const rows = await this.extendidosRepository.findAvailableExtendidoDates();
+
+    return rows.map((row) => row.fechaEgreso);
   }
 }

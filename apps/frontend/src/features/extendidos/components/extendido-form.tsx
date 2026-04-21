@@ -130,6 +130,7 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
           <TabsTrigger
             value="produccion"
             className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
                        data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50 data-[state=inactive]:hover:text-foreground"
           >
@@ -139,6 +140,7 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
           <TabsTrigger
             value="logistica"
             className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
                        data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50 data-[state=inactive]:hover:text-foreground"
           >
@@ -148,6 +150,7 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
           <TabsTrigger
             value="notas"
             className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
                        data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50 data-[state=inactive]:hover:text-foreground"
           >

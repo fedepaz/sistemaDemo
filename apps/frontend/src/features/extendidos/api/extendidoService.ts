@@ -9,4 +9,16 @@ export const extendidoService = {
       method: "GET",
     });
   },
+
+  async fetchAllExtendidos(): Promise<ExtendidoDto[]> {
+    return clientFetch<ExtendidoDto[]>("l-extendidos", {
+      method: "GET",
+    });
+  },
+
+  async fetchAvailableExtendidoDates(): Promise<string[]> {
+    return clientFetch<string[]>("l-extendidos/fechas", {
+      method: "GET",
+    });
+  },
 };

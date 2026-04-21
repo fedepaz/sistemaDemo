@@ -23,3 +23,7 @@ export interface LegacyExtendido extends RowDataPacket {
   detalle: string | null;
   baja: string | null;
 }
+
+export interface LegacyExtendidosFecha extends RowDataPacket {
+  fechaEgreso: string;
+}
