@@ -34,6 +34,7 @@ This document lists all the modules, services, and core functionalities implemen
 ### Entities Module
 - [x] **Entity Management**: CRUD for system entities (tables) which are now the source of truth for the permission system. Protected by `entities` table permissions.
 - [x] **Permission Type Support**: Entities include `permissionType` (`CRUD`, `READ_ONLY`, `PROCESS`) to define allowable actions.
+- [x] **System Entity Filtering**: Centralized `SYSTEM_ENTITIES` constant ensures internal tables (like `dev_account` or `audit_logs`) are filtered out of standard management views.
 - [x] **Repository Pattern**: `EntitiesRepository` extending `BaseRepository`.
 
 ### Permissions Module

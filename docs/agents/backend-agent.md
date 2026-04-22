@@ -289,10 +289,11 @@ The permission system supports distinct **Permission Types** defined in the `Ent
 - **READ_ONLY**: Strictly limits access to `read` actions only. Useful for reference data (e.g., `agentes`, `tenants`).
 - **PROCESS**: Specialized for executable actions. Maps `create` permission to process execution.
 
-**Enforcement Logic:**
+**Enforcement & Visibility Logic:**
 The `PermissionsService` validates the requested action against the entity's `permissionType`:
 - If `permissionType` is `READ_ONLY`, only `read` actions are allowed.
 - If `permissionType` is `PROCESS`, logic typically restricts to `create` (execution) or `read` (logs).
+- **System Filtering**: Both `EntitiesService` and `PermissionsService` utilize the centralized `SYSTEM_ENTITIES` constant from `@vivero/shared` to automatically filter out internal system tables from management interfaces, preventing accidental modification of core infrastructure.
 
 #### Access Control with `@RequirePermission` Decorator
 
