@@ -43,8 +43,6 @@ export function ExtendidoDataTable({ partidas }: ExtendidoDataTableProps) {
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={setSlideOverOpen}
-          title={`Partida #${selectedPartida.id}`}
-          description={`Detalles técnicos del producto: ${selectedPartida.productName}`}
           formId="extendido-form"
           mode="view"
         >

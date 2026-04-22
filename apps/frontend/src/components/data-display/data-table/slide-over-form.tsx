@@ -20,7 +20,7 @@ type SlideOverMode = "create" | "edit" | "view";
 interface SlideOverFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  title: string;
+  title?: string;
   description?: string;
   children: React.ReactNode;
   onSave?: () => void;

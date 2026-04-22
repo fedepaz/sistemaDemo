@@ -72,27 +72,29 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
             </div>
             <div>
               <h2 className="text-lg md:text-xl font-black tracking-tight leading-none text-foreground">
-                {selectedExtendido.nombreEspecie}
+                {selectedExtendido.codigoEspecie}
               </h2>
               <div className="flex items-center gap-2 mt-1.5">
                 <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest bg-muted px-1.5 py-0.5 rounded border border-border/40">
-                  {selectedExtendido.codigoEspecie}
+                  Partida #{selectedExtendido.partidaId}
                 </span>
                 <span className="h-1 w-1 rounded-full bg-border" />
                 <span className="text-[10px] font-bold text-primary uppercase">
-                  Partida #{selectedExtendido.partidaId}
+                  {selectedExtendido.nombreEspecie}
                 </span>
               </div>
             </div>
           </div>
-          <div className="text-right hidden sm:block">
-            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-1">
-              Stock Inicial
-            </p>
-            <p className="text-2xl font-black text-primary leading-none">
-              {selectedExtendido.stockInicial ?? 0}
-            </p>
-          </div>
+          {selectedExtendido.stockInicial ? (
+            <div className="text-right hidden sm:block pr-2">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-1">
+                Stock Inicial
+              </p>
+              <p className="text-2xl font-black text-primary leading-none">
+                {selectedExtendido.stockInicial}
+              </p>
+            </div>
+          ) : null}
         </div>
 
         {/* BASIC SPECS GRID */}
@@ -217,19 +219,6 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                   label="Tipo de Envase"
                   value={selectedExtendido.contenedor}
                 />
-                <div className="mt-8 flex items-center gap-5 bg-muted/40 p-5 rounded-2xl border border-border/40">
-                  <div className="p-3 bg-background rounded-xl border border-border/60 shadow-sm">
-                    <Activity className="h-6 w-6 text-primary/60" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                      Estado Operativo
-                    </p>
-                    <p className="text-sm font-bold text-foreground">
-                      Partida verificada y disponible para seguimiento
-                    </p>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -240,26 +229,31 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
           >
             <Card className="border-border/60 shadow-sm rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-6 space-y-8">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary/70">
-                    <FileText className="h-4 w-4" /> Nota de Extendido
+                <div className="mb-8 flex items-center gap-5 bg-muted/40 p-5 rounded-2xl border border-border/40">
+                  <div className="p-3 bg-background rounded-xl border border-border/60 shadow-sm">
+                    <Activity className="h-6 w-6 text-primary/60" />
                   </div>
-                  <div className="p-5 rounded-2xl bg-muted/30 border border-border/40 italic text-sm leading-relaxed text-foreground/80 min-h-[120px] shadow-inner">
-                    {selectedExtendido.extendido ||
-                      "No existen observaciones registradas."}
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary/70">
-                    <ClipboardList className="h-4 w-4" /> Detalle Técnico
-                    Operativo
-                  </div>
-                  <div className="p-5 rounded-2xl bg-muted/30 border border-border/40 text-sm leading-relaxed text-foreground/70 min-h-[80px]">
-                    {selectedExtendido.detalle ||
-                      "No se especifican detalles adicionales para esta operación."}
+                  <div>
+                    <p className="text-sm font-bold text-foreground">
+                      Nota de Extendido
+                    </p>
+                    <p className="text-sm font-black uppercase tracking-widest text-muted-foreground">
+                      {selectedExtendido.extendido ||
+                        "No existen observaciones registradas."}
+                    </p>
                   </div>
                 </div>
+                {selectedExtendido.detalle ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary/70">
+                      <ClipboardList className="h-4 w-4" /> Detalle Técnico
+                      Operativo
+                    </div>
+                    <div className="p-5 rounded-2xl bg-muted/30 border border-border/40 text-sm leading-relaxed text-foreground/70 min-h-[80px]">
+                      {selectedExtendido.detalle}
+                    </div>
+                  </div>
+                ) : null}
 
                 {selectedExtendido.baja ? (
                   <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-2xl flex items-center gap-4 animate-in pulse duration-1000 infinite">
