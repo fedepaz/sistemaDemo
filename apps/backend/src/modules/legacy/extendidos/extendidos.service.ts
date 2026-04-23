@@ -32,14 +32,12 @@ export class ExtendidosService {
     };
   }
 
-  async getExtendidosByFecha(fecha: string): Promise<ExtendidoDto[]> {
-    const rows = await this.extendidosRepository.findExtendidosByFecha(fecha);
-
-    return rows.map((row) => this.mapToDto(row));
-  }
-
   async getAllExtendidos(): Promise<ExtendidoDto[]> {
     const rows = await this.extendidosRepository.findAllExtendidos();
+    return rows.map((row) => this.mapToDto(row));
+  }
+  async getExtendidosByFecha(fecha: string): Promise<ExtendidoDto[]> {
+    const rows = await this.extendidosRepository.findExtendidosByFecha(fecha);
 
     return rows.map((row) => this.mapToDto(row));
   }
@@ -48,5 +46,11 @@ export class ExtendidosService {
     const rows = await this.extendidosRepository.findAvailableExtendidoDates();
 
     return rows.map((row) => row.fechaEgreso);
+  }
+
+  async getExtendidosEnCamara(fecha: string): Promise<ExtendidoDto[]> {
+    const rows = await this.extendidosRepository.findExtendidosEnCamara(fecha);
+
+    return rows.map((row) => this.mapToDto(row));
   }
 }

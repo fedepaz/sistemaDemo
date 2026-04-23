@@ -28,4 +28,12 @@ export class ExtendidosController {
   ): Promise<ExtendidoDto[]> {
     return this.extendidosService.getExtendidosByFecha(fecha);
   }
+
+  @Get('camara/:fecha')
+  @Public()
+  async getExtendidosEnCamara(
+    @Param('fecha') fecha: string,
+  ): Promise<ExtendidoDto[]> {
+    return this.extendidosService.getExtendidosEnCamara(fecha);
+  }
 }

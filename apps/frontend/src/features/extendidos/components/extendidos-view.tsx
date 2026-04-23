@@ -4,14 +4,24 @@
 import { useState, Suspense } from "react";
 import { ExtendidoDataTable } from "./extendido-data-table";
 import { ExtendidosSelector } from "./extendidos-selector";
-import { useAllExtendidos, useExtendidosByFecha } from "../hooks/useExtendidos";
+import {
+  useExtendidosByFecha,
+  useExtendidosEnCamaraByFecha,
+} from "../hooks/useExtendidos";
 import { EmptyState } from "./empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { partidaColumns } from "./columns";
 
 function ExtendidoList({ selectedDate }: { selectedDate: string | null }) {
   // Use useAllExtendidos if no date is selected, otherwise use useExtendidosByFecha
-  const allExtendidosQuery = useAllExtendidos();
+  const today = new Date(2025, 6, 3);
+  const year = today.getFullYear();
+  const month =
+    today.getMonth() > 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;
+  const day = today.getDate() > 9 ? today.getDate() : `0${today.getDate()}`;
+  const allExtendidosQuery = useExtendidosEnCamaraByFecha(
+    `${year}-${month}-${day}`,
+  );
   const byFechaQuery = useExtendidosByFecha(selectedDate || "");
 
   // Determine which query to use based on selectedDate

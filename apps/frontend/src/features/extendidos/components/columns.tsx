@@ -48,20 +48,47 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     header: ({ column }) => {
       return <SortableHeader column={column}>Fechas</SortableHeader>;
     },
-    cell: ({ row }) => (
-      <div className="flex flex-col py-0.5">
-        <span className="text-xs font-bold leading-tight">Extendido:</span>
-        <span className="text-xs font-bold leading-tight">
-          {row.original.fechaEgresoCamara}
-        </span>
-        <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 italic">
-          Siembra
-        </span>
-        <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 italic">
-          {row.original.fechaSiembraReal}
-        </span>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const today = new Date(2025, 6, 3);
+      const year = today.getFullYear();
+      const month =
+        today.getMonth() > 9
+          ? today.getMonth() + 1
+          : `0${today.getMonth() + 1}`;
+      const day = today.getDate() > 9 ? today.getDate() : `0${today.getDate()}`;
+      const isToday =
+        row.original.fechaEgresoCamara === `${year}-${month}-${day}`;
+
+      return (
+        <div className="flex flex-col py-0.5">
+          {isToday ? (
+            <>
+              <span className="text-xs font-bold border-orange-200 text-orange-600 bg-orange-50/50">
+                Extendido:
+              </span>
+              <span className="text-xs font-bold border-orange-200 text-orange-600 bg-orange-50/50">
+                {row.original.fechaEgresoCamara}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="text-xs font-bold leading-tight">
+                Extendido:
+              </span>
+              <span className="text-xs font-bold leading-tight">
+                {row.original.fechaEgresoCamara}
+              </span>
+            </>
+          )}
+          <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 italic">
+            Siembra
+          </span>
+          <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 italic">
+            {row.original.fechaSiembraReal}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "diasEnCamara",

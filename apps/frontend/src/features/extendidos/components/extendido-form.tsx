@@ -8,7 +8,6 @@ import {
   Calendar,
   Warehouse,
   Info,
-  FileText,
   AlertCircle,
   Hash,
   Thermometer,
@@ -18,6 +17,7 @@ import {
   History,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface ExtendidosFormProps {
   selectedExtendido: ExtendidoDto;
@@ -61,6 +61,14 @@ const InfoRow = ({
 );
 
 export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
+  const today = new Date(2025, 6, 3);
+  const year = today.getFullYear();
+  const month =
+    today.getMonth() > 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;
+  const day = today.getDate() > 9 ? today.getDate() : `0${today.getDate()}`;
+  const isToday =
+    selectedExtendido.fechaEgresoCamara === `${year}-${month}-${day}`;
+
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500 h-full max-h-[calc(100vh-140px)] overflow-hidden">
       {/* 🚀 FIXED TOP SECTION: PRODUCTO (Always Visible) */}
@@ -174,11 +182,20 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                   label="Fecha de Siembra"
                   value={selectedExtendido.fechaSiembraReal}
                 />
-                <InfoRow
-                  icon={ChevronRight}
-                  label="Egreso de Cámara"
-                  value={selectedExtendido.fechaEgresoCamara}
-                />
+                {isToday ? (
+                  <InfoRow
+                    icon={ChevronRight}
+                    label="Egreso de Cámara"
+                    value={selectedExtendido.fechaEgresoCamara}
+                    badge={<Badge variant="destructive">Hoy</Badge>}
+                  />
+                ) : (
+                  <InfoRow
+                    icon={ChevronRight}
+                    label="Egreso de Cámara"
+                    value={selectedExtendido.fechaEgresoCamara}
+                  />
+                )}
                 <div className="mt-8 p-6 bg-primary/5 border border-primary/10 rounded-2xl flex items-center justify-between group">
                   <div className="space-y-1">
                     <span className="text-[10px] font-black uppercase tracking-widest text-primary/70 block leading-none">

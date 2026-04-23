@@ -21,4 +21,10 @@ export const extendidoService = {
       method: "GET",
     });
   },
+
+  async fetchExtendidosEnCamara(fecha: string): Promise<ExtendidoDto[]> {
+    return clientFetch<ExtendidoDto[]>(`l-extendidos/camara/${fecha}`, {
+      method: "GET",
+    });
+  },
 };
