@@ -57,13 +57,31 @@ function ExtendidoList({ selectedDate }: { selectedDate: string | null }) {
 }
 
 export function ExtendidoView() {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [filters, setFilters] = useState<{
+    type: FilterType;
+    value?: string | number;
+    value2?: string | number;
+    camaraId?: string;
+  }>({ type: "none" });
 
   return (
     <div className="space-y-6">
       <ExtendidosSelector
-        onFechaSelected={(fecha) => setSelectedDate(fecha)}
-        onClearFilters={() => setSelectedDate(null)}
+        onPartidaSelected={(id) =>
+          setFilters({ type: "partida", value: Number(id) })
+        }
+        onFechaSelected={(fecha, camaraId) =>
+          setFilters({ type: "fecha", value: fecha, camaraId })
+        }
+        onFechaRangeSelected={(inicio, fin, camaraId) =>
+          setFilters({
+            type: "fechaRange",
+            value: inicio,
+            value2: fin,
+            camaraId,
+          })
+        }
+        onClearFilters={() => setFilters({ type: "none" })}
       />
 
       <Suspense
