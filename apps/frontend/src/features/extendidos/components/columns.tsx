@@ -5,6 +5,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
 import { ExtendidoDto } from "@vivero/shared";
 import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
@@ -20,27 +26,35 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Producto</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="flex flex-col py-0.5 max-w-[180px]">
-        <span
-          className="font-bold text-sm truncate leading-tight"
-          title={row.original.codigoEspecie}
-        >
-          {row.original.codigoEspecie}
-        </span>
-        <div className="flex items-center gap-1.5 mt-0.5">
-          <span className="text-[10px] font-mono text-muted-foreground leading-none uppercase tracking-tighter">
-            {row.original.nombreEspecie}
-          </span>
-          {row.original.injerto && row.original.injerto !== "N" && (
-            <Badge
-              variant="outline"
-              className="h-3.5 px-1 text-[8px] font-bold border-orange-200 text-orange-600 bg-orange-50/50"
-            >
-              INJERTO: {row.original.injerto}
-            </Badge>
-          )}
+      <TooltipProvider>
+        <div className="flex flex-col py-0.5 max-w-[180px]">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="font-bold text-sm truncate leading-tight cursor-help">
+                {row.original.codigoEspecie}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs font-semibold">
+                Código: {row.original.codigoEspecie}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="text-[10px] font-mono text-muted-foreground leading-none uppercase tracking-tighter truncate">
+              {row.original.nombreEspecie}
+            </span>
+            {row.original.injerto && row.original.injerto !== "N" && (
+              <Badge
+                variant="outline"
+                className="h-3.5 px-1 text-[8px] font-bold border-primary/20 text-primary bg-primary/5"
+              >
+                INJERTO: {row.original.injerto}
+              </Badge>
+            )}
+          </div>
         </div>
-      </div>
+      </TooltipProvider>
     ),
   },
   {
@@ -61,31 +75,45 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
 
       return (
         <div className="flex flex-col py-0.5">
-          {isToday ? (
-            <>
-              <span className="text-xs font-bold border-orange-200 text-orange-600 bg-orange-50/50">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1">
+              <span
+                className={
+                  isToday
+                    ? "text-[10px] font-bold uppercase tracking-tight text-primary"
+                    : "text-[10px] font-bold uppercase leading-tight text-foreground"
+                }
+              >
                 Extendido:
               </span>
-              <span className="text-xs font-bold border-orange-200 text-orange-600 bg-orange-50/50">
-                {row.original.fechaEgresoCamara}
-              </span>
-            </>
-          ) : (
-            <>
-              <span className="text-xs font-bold leading-tight">
-                Extendido:
-              </span>
-              <span className="text-xs font-bold leading-tight">
-                {row.original.fechaEgresoCamara}
-              </span>
-            </>
-          )}
-          <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 italic">
-            Siembra
-          </span>
-          <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 italic">
-            {row.original.fechaSiembraReal}
-          </span>
+
+              {isToday ? (
+                <Badge
+                  variant="destructive"
+                  className="h-3.5 px-1 text-[8px] font-bold border-primary/20 text-primary bg-primary/5"
+                >
+                  Hoy
+                </Badge>
+              ) : null}
+            </div>
+            <span
+              className={
+                isToday
+                  ? "text-xs font-black text-primary"
+                  : "text-xs font-bold leading-tight text-foreground"
+              }
+            >
+              {row.original.fechaEgresoCamara}
+            </span>
+          </div>
+          <div className="flex flex-col mt-1 pt-1 border-t border-border/40">
+            <span className="text-[9px] text-muted-foreground/80 leading-none uppercase font-medium">
+              Siembra:
+            </span>
+            <span className="text-[10px] text-muted-foreground font-mono">
+              {row.original.fechaSiembraReal}
+            </span>
+          </div>
         </div>
       );
     },
