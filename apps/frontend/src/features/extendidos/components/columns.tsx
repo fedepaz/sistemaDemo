@@ -63,7 +63,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Fechas</SortableHeader>;
     },
     cell: ({ row }) => {
-      const today = new Date(2025, 6, 3);
+      const today = new Date();
       const year = today.getFullYear();
       const month =
         today.getMonth() > 9
