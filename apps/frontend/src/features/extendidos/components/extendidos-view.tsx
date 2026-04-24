@@ -1,44 +1,33 @@
-// src/features/extendidos/components/extendidos-view.tsx
 "use client";
 
 import { useState, Suspense } from "react";
 import { ExtendidoDataTable } from "./extendido-data-table";
 import { ExtendidosSelector } from "./extendidos-selector";
 import {
-  useExtendidosByFecha,
-  useExtendidosEnCamaraByFecha,
-} from "../hooks/useExtendidos";
+  FilterType,
+  useExtendidosWithFilters,
+} from "../hooks/useExtendidosWithFilters";
 import { EmptyState } from "./empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { partidaColumns } from "./columns";
 
-function ExtendidoList({ selectedDate }: { selectedDate: string | null }) {
-  // Use useAllExtendidos if no date is selected, otherwise use useExtendidosByFecha
-  const today = new Date(2025, 6, 3);
-  const year = today.getFullYear();
-  const month =
-    today.getMonth() > 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;
-  const day = today.getDate() > 9 ? today.getDate() : `0${today.getDate()}`;
-  const allExtendidosQuery = useExtendidosEnCamaraByFecha(
-    `${year}-${month}-${day}`,
-  );
-  const byFechaQuery = useExtendidosByFecha(selectedDate || "");
-
-  // Determine which query to use based on selectedDate
-  const query = selectedDate ? byFechaQuery : allExtendidosQuery;
-  const extendidos = query.data;
-  const isFetching = query.isFetching;
+function ExtendidoList({
+  filters,
+}: {
+  filters: { type: FilterType; value?: string; camaraId?: string };
+}) {
+  const { data: extendidos, isFetching, filteredCount, rawCount } = useExtendidosWithFilters(filters);
 
   const hasData = extendidos && extendidos.length > 0;
 
   if (!hasData && !isFetching) {
     return (
       <EmptyState
-        title={selectedDate ? "Sin resultados" : "No hay datos"}
+        title="Sin resultados"
         description={
-          selectedDate
-            ? `No se encontraron extendidos para la fecha ${selectedDate}.`
-            : "No hay registros de extendidos disponibles."
+          rawCount > 0 
+            ? "No hay registros en la cámara seleccionada para este conjunto de datos."
+            : "No se encontraron registros para los filtros seleccionados."
         }
       />
     );
@@ -46,9 +35,17 @@ function ExtendidoList({ selectedDate }: { selectedDate: string | null }) {
 
   return (
     <>
+      <div className="flex items-center justify-between mb-2 px-1">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          Mostrando <span className="text-primary">{filteredCount}</span> de {rawCount} registros
+        </p>
+      </div>
       <ExtendidoDataTable partidas={extendidos || []} />
+      
+      {/* Visual indicator for background fetching (UX improvement) */}
       {isFetching && (
-        <div className="fixed bottom-8 right-8 bg-primary/90 text-primary-foreground px-4 py-2 rounded-full text-xs font-bold shadow-lg animate-pulse z-50">
+        <div className="fixed bottom-8 right-8 bg-primary/90 text-primary-foreground px-4 py-2 rounded-full text-xs font-bold shadow-lg animate-pulse z-50 flex items-center gap-2">
+          <div className="h-2 w-2 bg-white rounded-full animate-bounce" />
           Sincronizando...
         </div>
       )}
@@ -59,35 +56,26 @@ function ExtendidoList({ selectedDate }: { selectedDate: string | null }) {
 export function ExtendidoView() {
   const [filters, setFilters] = useState<{
     type: FilterType;
-    value?: string | number;
-    value2?: string | number;
+    value?: string;
     camaraId?: string;
-  }>({ type: "none" });
+  }>({ type: "none", camaraId: "all" });
 
   return (
     <div className="space-y-6">
       <ExtendidosSelector
-        onPartidaSelected={(id) =>
-          setFilters({ type: "partida", value: Number(id) })
+        onSourceChange={(source) => 
+          setFilters(prev => ({ ...prev, ...source }))
         }
-        onFechaSelected={(fecha, camaraId) =>
-          setFilters({ type: "fecha", value: fecha, camaraId })
+        onCamaraChange={(camaraId) => 
+          setFilters(prev => ({ ...prev, camaraId }))
         }
-        onFechaRangeSelected={(inicio, fin, camaraId) =>
-          setFilters({
-            type: "fechaRange",
-            value: inicio,
-            value2: fin,
-            camaraId,
-          })
-        }
-        onClearFilters={() => setFilters({ type: "none" })}
+        onClearFilters={() => setFilters({ type: "none", camaraId: "all" })}
       />
 
       <Suspense
         fallback={<DataTableSkeleton columnCount={partidaColumns.length} />}
       >
-        <ExtendidoList selectedDate={selectedDate} />
+        <ExtendidoList filters={filters} />
       </Suspense>
     </div>
   );

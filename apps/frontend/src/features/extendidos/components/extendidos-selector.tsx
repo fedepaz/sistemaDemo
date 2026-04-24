@@ -1,13 +1,12 @@
-// src/features/extendidos/components/extendidos-selector.tsx
 "use client";
 import {
   Search,
   Calendar,
-  X,
   Filter,
-  Hash,
   ChevronRight,
   Check,
+  Building2,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,17 +18,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useCamaras } from "../hooks/useDepositos";
 import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
+
 interface ExtendidosSelectorProps {
-  onPartidaSelected?: (partidaId: string) => void;
-  onFechaSelected?: (fecha: string, camaraId?: string) => void;
-  onFechaRangeSelected?: (
-    fechaInicio: string,
-    fechaFin: string,
-    camaraId?: string,
-  ) => void;
+  onSourceChange?: (filters: {
+    type: "enCamara" | "historico" | "all";
+    value?: string;
+  }) => void;
+  onCamaraChange?: (camaraId: string) => void;
   onClearFilters?: () => void;
 }
 
@@ -37,283 +41,219 @@ const ActionButton = ({
   onClick,
   label,
   disabled,
-  isFiltered,
+  isSourceApplied,
 }: {
   onClick: () => void;
   label: string;
   disabled?: boolean;
-  isFiltered: boolean;
+  isSourceApplied: boolean;
 }) => {
-  if (isFiltered) {
-    return (
-      <div className="h-12 md:h-14 flex items-center px-6 md:px-8 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-primary bg-primary/5 rounded-xl md:rounded-2xl border border-primary/20 animate-in fade-in zoom-in duration-300 shadow-inner">
-        <Check className="mr-2 h-3.5 w-3.5 md:h-4 md:w-4 stroke-[3px]" />
-        Filtro Aplicado
-      </div>
-    );
-  }
-
   return (
     <Button
       onClick={onClick}
-      disabled={disabled}
-      className="h-12 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl font-bold uppercase text-[10px] md:text-[12px] tracking-widest bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 group transition-all"
+      disabled={disabled || isSourceApplied}
+      className={cn(
+        "h-12 lg:h-10 px-6 rounded-xl lg:rounded-full font-bold uppercase text-[10px] tracking-widest transition-all group shrink-0",
+        isSourceApplied 
+          ? "bg-primary/10 text-primary shadow-none cursor-default border-primary/20"
+          : "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
+      )}
     >
-      {label}
-      <ChevronRight className="ml-2 h-3.5 w-3.5 md:h-4 md:w-4 group-hover:translate-x-1 transition-transform" />
+      {isSourceApplied ? (
+        <Check className="h-4 w-4 stroke-[3px]" />
+      ) : (
+        <>
+          <span className="hidden xl:inline mr-2">{label}</span>
+          <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+        </>
+      )}
     </Button>
   );
 };
 
 export function ExtendidosSelector({
-  onPartidaSelected,
-  onFechaSelected,
-  onFechaRangeSelected,
+  onSourceChange,
+  onCamaraChange,
   onClearFilters,
 }: ExtendidosSelectorProps) {
   const { data: camaras = [] } = useCamaras();
 
-  const [partidaId, setPartidaId] = useState("");
   const [fecha, setFecha] = useState("");
-  const [fechaInicio, setFechaInicio] = useState("");
-  const [fechaFin, setFechaFin] = useState("");
   const [camaraId, setCamaraId] = useState<string>("all");
+  const [isSourceApplied, setIsSourceApplied] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("enCamara");
 
-  const [isFiltered, setIsFiltered] = useState(false);
+  const handleCamaraChange = (value: string) => {
+    setCamaraId(value);
+    onCamaraChange?.(value);
+  };
 
   const handleClear = useCallback(() => {
-    setPartidaId("");
     setFecha("");
-    setFechaInicio("");
-    setFechaFin("");
     setCamaraId("all");
-    setIsFiltered(false);
+    setIsSourceApplied(false);
     onClearFilters?.();
   }, [onClearFilters]);
 
-  const handlePartidaSearch = () => {
-    if (partidaId) {
-      onPartidaSelected?.(partidaId);
-      setIsFiltered(true);
-    }
+  const handleSearch = (type: "enCamara" | "historico" | "all") => {
+    onSourceChange?.({ type, value: fecha || undefined });
+    setIsSourceApplied(true);
   };
 
-  const handleFechaSearch = () => {
-    if (fecha) {
-      onFechaSelected?.(fecha, camaraId === "all" ? undefined : camaraId);
-      setIsFiltered(true);
-    }
+  // Event handlers to reset applied state when inputs change
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setIsSourceApplied(false);
   };
 
-  const handleRangeSearch = () => {
-    if (fechaInicio && fechaFin) {
-      onFechaRangeSelected?.(
-        fechaInicio,
-        fechaFin,
-        camaraId === "all" ? undefined : camaraId,
-      );
-      setIsFiltered(true);
-    }
+  const handleFechaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFecha(e.target.value);
+    setIsSourceApplied(false);
   };
+
+  const hasActiveFilters = isSourceApplied || camaraId !== "all" || fecha;
 
   return (
-    <div className="w-full p-1 bg-muted/30 border border-border/40 rounded-[1.5rem] md:rounded-[2rem] mb-6 shadow-sm transition-all overflow-hidden">
-      <Tabs defaultValue="fecha" className="w-full">
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between p-2 md:p-3 gap-3 md:gap-4">
-          <div className="overflow-x-auto no-scrollbar scroll-smooth">
-            <TabsList className="bg-background/50 border border-border/40 p-1 h-11 md:h-12 rounded-xl md:rounded-2xl flex-nowrap shrink-0 min-w-max">
-              <TabsTrigger
-                value="fecha"
-                className="rounded-lg md:rounded-xl px-3 md:px-5 py-1.5 md:py-2 text-[9px] md:text-[11px] font-bold uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
-              >
-                <Calendar className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1.5 md:mr-2" />
-                Fecha
-              </TabsTrigger>
-              <TabsTrigger
-                value="rango"
-                className="rounded-lg md:rounded-xl px-3 md:px-5 py-1.5 md:py-2 text-[9px] md:text-[11px] font-bold uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
-              >
-                <Filter className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1.5 md:mr-2" />
-                Rango
-              </TabsTrigger>
-              <TabsTrigger
-                value="partida"
-                className="rounded-lg md:rounded-xl px-3 md:px-5 py-1.5 md:py-2 text-[9px] md:text-[11px] font-bold uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
-              >
-                <Hash className="h-3.5 w-3.5 mr-1.5 md:mr-2" />
-                Partida
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <div
-            className={cn(
-              "transition-all duration-500 transform self-end lg:self-auto",
-              isFiltered
-                ? "opacity-100 scale-100 translate-x-0"
-                : "opacity-0 scale-95 translate-x-4 pointer-events-none absolute lg:relative",
-            )}
-          >
-            <Button
-              variant="outline"
-              onClick={handleClear}
-              className="h-10 md:h-11 rounded-lg md:rounded-2xl px-4 md:px-6 border-destructive text-destructive hover:bg-destructive hover:text-white font-bold uppercase text-[9px] md:text-[11px] tracking-widest shadow-md shadow-destructive/10 transition-all group"
-            >
-              <X className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1.5 md:mr-2 group-hover:rotate-90 transition-transform duration-200" />
-              Limpiar
-            </Button>
-          </div>
-        </div>
-
-        <div className="p-4 md:p-6 pt-1 md:pt-2">
-          {/* MODO: FECHA ÚNICA */}
-          <TabsContent value="fecha" className="mt-0">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 md:gap-4">
-              <div className="flex-1 space-y-1.5 md:space-y-2">
-                <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Fecha
-                </label>
-                <Input
-                  type="date"
-                  value={fecha}
-                  disabled={isFiltered}
-                  aria-label="Seleccionar fecha única"
-                  onChange={(e) => setFecha(e.target.value)}
-                  className="h-12 md:h-14 rounded-xl md:rounded-2xl bg-background border-border/60 focus:ring-primary/20 pl-4 disabled:opacity-50 text-sm md:text-base"
-                />
-              </div>
-              <div className="flex-1 space-y-1.5 md:space-y-2">
-                <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Cámara
-                </label>
-                <Select
-                  value={camaraId}
-                  onValueChange={setCamaraId}
-                  disabled={isFiltered}
+    <TooltipProvider delayDuration={200}>
+      <div className="w-full bg-muted/30 border border-border/40 rounded-[1.5rem] lg:rounded-full p-2 lg:p-1.5 shadow-sm transition-all">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-2">
+            
+            {/* BLOQUE 1: MODOS (TABS) */}
+            <div className="flex items-center justify-between lg:justify-start gap-2 px-1 lg:px-0">
+              <TabsList className="bg-background/50 border border-border/40 p-1 h-11 lg:h-9 rounded-xl lg:rounded-full shrink-0">
+                <TabsTrigger
+                  value="enCamara"
+                  className="rounded-lg lg:rounded-full px-3 lg:px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
                 >
-                  <SelectTrigger
-                    className="h-12 md:h-14 rounded-xl md:rounded-2xl bg-background border-border/60 focus:ring-primary/20 text-left disabled:opacity-50 text-sm md:text-base"
-                    aria-label="Seleccionar cámara"
-                  >
-                    <SelectValue placeholder="Todas" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl md:rounded-2xl border-border/60">
-                    <SelectItem value="all">Todas las cámaras</SelectItem>
-                    {camaras.map((c) => (
-                      <SelectItem key={c.codigo} value={c.codigo.toString()}>
-                        {c.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <ActionButton
-                onClick={handleFechaSearch}
-                label="Filtrar"
-                disabled={!fecha}
-                isFiltered={isFiltered}
-              />
-            </div>
-          </TabsContent>
-
-          {/* MODO: RANGO */}
-          <TabsContent value="rango" className="mt-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-end gap-3 md:gap-4">
-              <div className="space-y-1.5 md:space-y-2 lg:flex-1">
-                <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Desde
-                </label>
-                <Input
-                  type="date"
-                  value={fechaInicio}
-                  disabled={isFiltered}
-                  aria-label="Fecha inicio rango"
-                  onChange={(e) => setFechaInicio(e.target.value)}
-                  className="h-12 md:h-14 rounded-xl md:rounded-2xl bg-background border-border/60 focus:ring-primary/20 disabled:opacity-50 text-sm md:text-base"
-                />
-              </div>
-              <div className="space-y-1.5 md:space-y-2 lg:flex-1">
-                <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Hasta
-                </label>
-                <Input
-                  type="date"
-                  value={fechaFin}
-                  disabled={isFiltered}
-                  aria-label="Fecha fin rango"
-                  onChange={(e) => setFechaFin(e.target.value)}
-                  className="h-12 md:h-14 rounded-xl md:rounded-2xl bg-background border-border/60 focus:ring-primary/20 disabled:opacity-50 text-sm md:text-base"
-                />
-              </div>
-              <div className="sm:col-span-2 lg:flex-1 space-y-1.5 md:space-y-2">
-                <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Cámara
-                </label>
-                <Select
-                  value={camaraId}
-                  onValueChange={setCamaraId}
-                  disabled={isFiltered}
+                  <Calendar className="h-3.5 w-3.5 lg:mr-1.5" />
+                  <span className="hidden sm:inline">En Cámara</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="historico"
+                  className="rounded-lg lg:rounded-full px-3 lg:px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
                 >
-                  <SelectTrigger
-                    className="h-12 md:h-14 rounded-xl md:rounded-2xl bg-background border-border/60 focus:ring-primary/20 text-left disabled:opacity-50 text-sm md:text-base"
-                    aria-label="Seleccionar cámara para rango"
-                  >
-                    <SelectValue placeholder="Todas" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl md:rounded-2xl border-border/60">
-                    <SelectItem value="all">Todas las cámaras</SelectItem>
-                    {camaras.map((c) => (
-                      <SelectItem key={c.codigo} value={c.codigo.toString()}>
-                        {c.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="sm:col-span-2 lg:flex-none">
-                <ActionButton
-                  onClick={handleRangeSearch}
-                  label="Rango"
-                  disabled={!fechaInicio || !fechaFin}
-                  isFiltered={isFiltered}
-                />
+                  <Filter className="h-3.5 w-3.5 lg:mr-1.5" />
+                  <span className="hidden sm:inline">Historial</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="all"
+                  className="rounded-lg lg:rounded-full px-3 lg:px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+                >
+                  <Search className="h-3.5 w-3.5 lg:mr-1.5" />
+                  <span className="hidden sm:inline">Todos</span>
+                </TabsTrigger>
+              </TabsList>
+
+              {/* BOTÓN LIMPIAR (MOBILE - TINTED RED) */}
+              <div className="lg:hidden">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={handleClear}
+                      className={cn(
+                        "h-11 w-11 rounded-xl border-destructive/20 bg-destructive/5 text-destructive transition-all active:scale-95",
+                        hasActiveFilters ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
+                      )}
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Limpiar filtros</TooltipContent>
+                </Tooltip>
               </div>
             </div>
-          </TabsContent>
 
-          {/* MODO: Nº PARTIDA */}
-          <TabsContent value="partida" className="mt-0">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 md:gap-4 max-w-2xl">
-              <div className="flex-1 space-y-1.5 md:space-y-2">
-                <label className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Nº de Partida
-                </label>
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground/60" />
-                  <Input
-                    type="number"
-                    value={partidaId}
-                    disabled={isFiltered}
-                    aria-label="Ingresar número de partida"
-                    placeholder="Ej: 45210"
-                    onChange={(e) => setPartidaId(e.target.value)}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" && !isFiltered && handlePartidaSearch()
-                    }
-                    className="h-12 md:h-14 pl-10 md:pl-12 rounded-xl md:rounded-2xl bg-background border-border/60 focus:ring-primary/20 text-sm md:text-base disabled:opacity-50"
-                  />
+            <div className="hidden lg:block w-px h-6 bg-border/60 mx-1" />
+
+            {/* BLOQUE 2: INPUTS DE CONSULTA (DATA SOURCE) */}
+            <div className="flex-1 px-1 lg:px-0">
+              <TabsContent value="enCamara" className="mt-0">
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 relative group">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <Input
+                      type="date"
+                      value={fecha}
+                      onChange={handleFechaChange}
+                      className="h-12 lg:h-9 pl-9 rounded-xl lg:rounded-full bg-background/50 border-border/40 focus:ring-primary/20 text-xs font-medium"
+                    />
+                  </div>
+                  <ActionButton onClick={() => handleSearch("enCamara")} label="Consultar" isSourceApplied={isSourceApplied} />
                 </div>
-              </div>
-              <ActionButton
-                onClick={handlePartidaSearch}
-                label="Buscar"
-                disabled={!partidaId}
-                isFiltered={isFiltered}
-              />
+              </TabsContent>
+
+              <TabsContent value="historico" className="mt-0">
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 relative group">
+                    <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    <Input
+                      type="date"
+                      value={fecha}
+                      onChange={handleFechaChange}
+                      className="h-12 lg:h-9 pl-9 rounded-xl lg:rounded-full bg-background/50 border-border/40 focus:ring-primary/20 text-xs font-medium"
+                    />
+                  </div>
+                  <ActionButton onClick={() => handleSearch("historico")} label="Filtrar" isSourceApplied={isSourceApplied} />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="all" className="mt-0">
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-12 lg:h-9 flex items-center px-4 bg-background/30 rounded-xl lg:rounded-full border border-dashed border-border/40">
+                    <span className="text-[10px] text-muted-foreground font-medium truncate">Registros históricos completos</span>
+                  </div>
+                  <ActionButton onClick={() => handleSearch("all")} label="Cargar" isSourceApplied={isSourceApplied} />
+                </div>
+              </TabsContent>
             </div>
-          </TabsContent>
-        </div>
-      </Tabs>
-    </div>
+
+            <div className="hidden lg:block w-px h-6 bg-border/60 mx-1" />
+
+            {/* BLOQUE 3: FILTRO DE VISTA (FACET) */}
+            <div className="flex items-center gap-2 lg:min-w-[180px] xl:min-w-[240px]">
+              <div className="relative flex-1 group">
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
+                <Select value={camaraId} onValueChange={handleCamaraChange}>
+                  <SelectTrigger className="h-12 lg:h-9 pl-9 rounded-xl lg:rounded-full bg-background/50 border-border/40 focus:ring-primary/20 text-xs font-bold uppercase tracking-tight">
+                    <SelectValue placeholder="Cámara" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-2xl border-border/60 shadow-2xl">
+                    <SelectItem value="all" className="font-bold text-primary italic">Todas las cámaras</SelectItem>
+                    {camaras.map((c) => (
+                      <SelectItem key={c.codigo} value={c.codigo.toString()} className="font-medium">
+                        {c.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* BOTÓN LIMPIAR (DESKTOP) */}
+              <div className="hidden lg:block">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleClear}
+                      className={cn(
+                        "h-9 w-9 rounded-full hover:bg-destructive/10 hover:text-destructive transition-all",
+                        hasActiveFilters ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
+                      )}
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">Resetear filtros y vista</TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+          </div>
+        </Tabs>
+      </div>
+    </TooltipProvider>
   );
 }

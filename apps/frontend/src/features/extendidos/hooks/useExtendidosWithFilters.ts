@@ -1,54 +1,61 @@
-// src/features/extendidos/hooks/usePartidasByfilter.ts
+"use client";
 
+import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExtendidoDto } from "@vivero/shared";
 import { extendidoService } from "../api/extendidoService";
-import { partidaService } from "../api/partidaService";
 
-export type FilterType = "none" | "fecha" | "camara" | "all";
+export type FilterType = "none" | "enCamara" | "historico" | "all";
 
 interface Filters {
   type: FilterType;
-  value?: string | number;
-  camaraId?: string; // Nuevo: para filtrar por cámara en fecha o rango
+  value?: string;
+  camaraId?: string;
 }
 
+/**
+ * Hook to manage extendidos data with decoupled fetching and local filtering.
+ * 
+ * Logic:
+ * 1. fetchParams (type, value) trigger a server-side request via TanStack Query.
+ * 2. camaraId triggers a client-side memoized filter for instant reactivity.
+ */
 export function useExtendidosWithFilters(filters: Filters) {
-  const today = new Date(2025, 6, 3);
-  const year = today.getFullYear();
-  const month =
-    today.getMonth() > 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;
-  const day = today.getDate() > 9 ? today.getDate() : `0${today.getDate()}`;
+  const today = "2025-07-03"; // Hardcoded "Today" for demo requirements
 
-  return useSuspenseQuery<ExtendidoDto[]>({
-    queryKey: ["partidas", filters.type, filters.value, filters.camaraId],
+  const query = useSuspenseQuery<ExtendidoDto[]>({
+    queryKey: ["extendidos", filters.type, filters.value],
     queryFn: async () => {
-      let data: ExtendidoDto[] = [];
-
       switch (filters.type) {
-        case "fecha":
-          data = await extendidoService.fetchByFecha(filters.value as string);
-          break;
-        case "all":
-          data = await extendidoService.fetchAllExtendidos();
-          break;
-        case "camara":
-          data = await partidaService.fetchByCamara(Number(filters.camaraId));
-          break;
-        default:
-          data = await extendidoService.fetchExtendidosEnCamara(
-            `${year}-${month}-${day}`,
+        case "enCamara":
+          return await extendidoService.fetchExtendidosEnCamara(
+            filters.value || today,
           );
+        case "historico":
+          return await extendidoService.fetchByFecha(filters.value || today);
+        case "all":
+          return await extendidoService.fetchAllExtendidos();
+        default:
+          return await extendidoService.fetchExtendidosEnCamara(today);
       }
-
-      // Cliente-side filtering for Camara if provided as an extra filter
-      if (filters.camaraId && filters.type !== "camara") {
-        return data.filter((p) => p.greenhouseCode === filters.camaraId);
-      }
-
-      return data;
     },
-    // Cache management for enterprise performance
-    staleTime: 5 * 60 * 1000,
   });
+
+  // Local filtering by Chamber for instant reactivity
+  const filteredData = useMemo(() => {
+    const data = query.data || [];
+    if (!filters.camaraId || filters.camaraId === "all") {
+      return data;
+    }
+    
+    const camaraIdNum = Number(filters.camaraId);
+    return data.filter((p) => Number(p.codigoCamaraGerminacion) === camaraIdNum);
+  }, [query.data, filters.camaraId]);
+
+  return {
+    ...query,
+    data: filteredData,
+    rawCount: query.data?.length || 0,
+    filteredCount: filteredData.length,
+  };
 }
