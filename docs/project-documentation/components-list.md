@@ -79,6 +79,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ExtendidoDataTable` | [x] | [x] | [x] | [x] |
 | `ExtendidosForm` | [x] | [x] | [x] | [x] |
 | `ExtendidoDashboardSkeleton` | [x] | [x] | [x] | [x] |
+| `ExtendidosSelectorSkeleton` | [x] | [x] | [x] | [x] |
 | `ExtendidosSelector` | [x] | [x] | [x] | [x] |
 | `ExtendidoView` | [x] | [x] | [x] | [x] |
 
