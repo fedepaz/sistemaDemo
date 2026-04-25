@@ -61,7 +61,7 @@ const InfoRow = ({
 );
 
 export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
-  const today = new Date();
+  const today = new Date(2025, 6, 3);
   const year = today.getFullYear();
   const month =
     today.getMonth() > 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;

@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Calendar, LogOut, Layers, Microscope } from "lucide-react";
 
 export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
@@ -18,6 +19,11 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     header: ({ column }) => {
       return <SortableHeader column={column}>Partida</SortableHeader>;
     },
+    cell: ({ row }) => (
+      <div className="font-black text-sm text-primary/80 tracking-tight">
+        #{row.original.partidaId}
+      </div>
+    ),
     size: 70,
   },
   {
@@ -27,93 +33,98 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     },
     cell: ({ row }) => (
       <TooltipProvider>
-        <div className="flex flex-col py-0.5 max-w-[180px]">
+        <div className="flex flex-col py-1 max-w-[200px]">
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="font-bold text-sm truncate leading-tight cursor-help">
-                {row.original.codigoEspecie}
-              </span>
+              <div className="flex items-center gap-2 group cursor-help">
+                <span className="font-bold text-sm truncate leading-tight group-hover:text-primary transition-colors">
+                  {row.original.codigoEspecie}
+                </span>
+                {row.original.injerto && row.original.injerto !== "N" && (
+                  <Badge
+                    variant="outline"
+                    className="h-4 px-1.5 text-[8px] font-black border-chart-2/30 text-chart-2 bg-chart-2/5 uppercase"
+                  >
+                    Injerto: {row.original.injerto}
+                  </Badge>
+                )}
+              </div>
             </TooltipTrigger>
-            <TooltipContent>
-              <p className="text-xs font-semibold">
-                Código: {row.original.codigoEspecie}
-              </p>
+            <TooltipContent side="right" className="bg-popover border-border shadow-xl">
+              <div className="space-y-1">
+                <p className="text-xs font-bold text-primary">Detalle del Producto</p>
+                <p className="text-[10px] text-muted-foreground leading-tight">
+                  Código: <span className="text-foreground font-mono">{row.original.codigoEspecie}</span>
+                </p>
+                <p className="text-[10px] text-muted-foreground leading-tight">
+                  Especie: <span className="text-foreground font-semibold">{row.original.nombreEspecie}</span>
+                </p>
+              </div>
             </TooltipContent>
           </Tooltip>
-          <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-[10px] font-mono text-muted-foreground leading-none uppercase tracking-tighter truncate">
-              {row.original.nombreEspecie}
-            </span>
-            {row.original.injerto && row.original.injerto !== "N" && (
-              <Badge
-                variant="outline"
-                className="h-3.5 px-1 text-[8px] font-bold border-primary/20 text-primary bg-primary/5"
-              >
-                INJERTO: {row.original.injerto}
-              </Badge>
-            )}
-          </div>
+          <span className="text-[10px] font-medium text-muted-foreground/70 leading-none uppercase tracking-wider truncate mt-1">
+            {row.original.nombreEspecie}
+          </span>
         </div>
       </TooltipProvider>
     ),
   },
   {
+    accessorKey: "codigoCamaraGerminacion",
+    header: ({ column }) => {
+      return <SortableHeader column={column}>CG</SortableHeader>;
+    },
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        <Badge 
+          variant="secondary" 
+          className="h-6 w-8 flex items-center justify-center font-black text-xs bg-chart-1/10 text-chart-1 border-chart-1/20"
+          title="Cámara de Germinación"
+        >
+          {row.original.codigoCamaraGerminacion}
+        </Badge>
+      </div>
+    ),
+    size: 60,
+  },
+  {
     accessorKey: "fechaSiembraReal",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Fechas</SortableHeader>;
+      return <SortableHeader column={column}>Siembra</SortableHeader>;
+    },
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-muted-foreground group">
+        <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
+        <span className="text-xs font-bold font-mono tracking-tighter">
+          {row.original.fechaSiembraReal}
+        </span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "fechaEgresoCamara",
+    header: ({ column }) => {
+      return <SortableHeader column={column}>Egreso</SortableHeader>;
     },
     cell: ({ row }) => {
       const today = new Date();
-      const year = today.getFullYear();
-      const month =
-        today.getMonth() > 9
-          ? today.getMonth() + 1
-          : `0${today.getMonth() + 1}`;
-      const day = today.getDate() > 9 ? today.getDate() : `0${today.getDate()}`;
-      const isToday =
-        row.original.fechaEgresoCamara === `${year}-${month}-${day}`;
+      const dateStr = today.toISOString().split('T')[0];
+      const isToday = row.original.fechaEgresoCamara === dateStr;
 
       return (
-        <div className="flex flex-col py-0.5">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1">
-              <span
-                className={
-                  isToday
-                    ? "text-[10px] font-bold uppercase tracking-tight text-primary"
-                    : "text-[10px] font-bold uppercase leading-tight text-foreground"
-                }
-              >
-                Extendido:
-              </span>
-
-              {isToday ? (
-                <Badge
-                  variant="destructive"
-                  className="h-3.5 px-1 text-[8px] font-bold border-primary/20 text-primary bg-primary/5"
-                >
-                  Hoy
-                </Badge>
-              ) : null}
-            </div>
-            <span
-              className={
-                isToday
-                  ? "text-xs font-black text-primary"
-                  : "text-xs font-bold leading-tight text-foreground"
-              }
-            >
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-foreground group">
+            <LogOut className={`h-3.5 w-3.5 ${isToday ? "text-primary" : "opacity-40 group-hover:opacity-100"} transition-opacity`} />
+            <span className={`text-xs font-black font-mono tracking-tighter ${isToday ? "text-primary" : ""}`}>
               {row.original.fechaEgresoCamara}
             </span>
           </div>
-          <div className="flex flex-col mt-1 pt-1 border-t border-border/40">
-            <span className="text-[9px] text-muted-foreground/80 leading-none uppercase font-medium">
-              Siembra:
-            </span>
-            <span className="text-[10px] text-muted-foreground font-mono">
-              {row.original.fechaSiembraReal}
-            </span>
-          </div>
+          {isToday && (
+            <div className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </div>
+          )}
         </div>
       );
     },
@@ -124,66 +135,35 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Días</SortableHeader>;
     },
     cell: ({ row }) => {
-      const days = row.original.diasEnCamara;
       return (
-        <Badge
-          variant="outline"
-          className="h-5 px-1.5 font-black border-primary/20 text-primary bg-primary/5 text-[10px]"
-        >
-          {days}
-        </Badge>
+        <div className="flex justify-center">
+          <Badge
+            variant="outline"
+            className="h-6 px-2 font-black border-border bg-background text-foreground/70 text-[10px] shadow-sm flex gap-1.5 items-center"
+          >
+            <Microscope className="h-3 w-3 opacity-50" />
+            {row.original.diasEnCamara}
+          </Badge>
+        </div>
       );
     },
+    size: 80,
   },
   {
-    accessorKey: "stockInicial",
+    accessorKey: "con",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Stock</SortableHeader>;
+      return <SortableHeader column={column}>Bandejas</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="flex flex-col text-center">
-        <span className="text-sm font-black text-primary leading-none">
-          {row.original.stockInicial || 0}
-        </span>
-        <span className="text-[8px] uppercase font-bold text-primary/60 tracking-tighter mt-0.5">
-          Inicial
-        </span>
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center">
+          <Badge className="h-7 px-3 bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 transition-colors shadow-inner font-black text-sm">
+            <Layers className="h-3.5 w-3.5 mr-1.5 opacity-70" />
+            {row.original.con}
+          </Badge>
+        </div>
       </div>
     ),
-  },
-  {
-    accessorKey: "nombreUbicacion",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Ubicación</SortableHeader>;
-    },
-    cell: ({ row }) => (
-      <div className="flex flex-col py-0.5">
-        <span
-          className="text-xs font-bold leading-tight truncate max-w-[130px]"
-          title={row.original.nombreUbicacion || "-"}
-        >
-          {row.original.nombreUbicacion || row.original.codigoUbicacion || "-"}
-        </span>
-        <span className="text-[9px] text-muted-foreground/80 leading-none mt-0.5 uppercase font-medium">
-          Bandeja: {row.original.contenedor}
-        </span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "codigoCamaraGerminacion",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Cámara</SortableHeader>;
-    },
-    cell: ({ row }) => (
-      <div className="flex flex-col text-center">
-        <span
-          className="text-xs font-bold truncate max-w-[130px]"
-          title="Cámara Germinación"
-        >
-          {row.original.codigoCamaraGerminacion || "-"}
-        </span>
-      </div>
-    ),
+    size: 100,
   },
 ];

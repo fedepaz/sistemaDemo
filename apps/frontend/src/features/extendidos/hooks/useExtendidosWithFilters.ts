@@ -21,7 +21,7 @@ interface Filters {
  * 2. camaraId triggers a client-side memoized filter for instant reactivity.
  */
 export function useExtendidosWithFilters(filters: Filters) {
-  const today = new Date();
+  const today = new Date(2025, 6, 3);
   const year = today.getFullYear();
   const month =
     today.getMonth() > 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;
