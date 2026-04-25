@@ -17,7 +17,7 @@ export const dashboardService = {
       },
       {
         label: "Humedad",
-        value: weather.current.relative_humidity_2m.toString(),
+        value: weather.current.relative_humidity_2m.toFixed(1),
         unit: "%",
         trend: "stable",
       },
