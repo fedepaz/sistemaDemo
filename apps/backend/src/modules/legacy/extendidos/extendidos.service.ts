@@ -48,8 +48,8 @@ export class ExtendidosService {
     return rows.map((row) => row.fechaEgreso);
   }
 
-  async getExtendidosEnCamara(fecha: string): Promise<ExtendidoDto[]> {
-    const rows = await this.extendidosRepository.findExtendidosEnCamara(fecha);
+  async getExtendidosEnCamara(): Promise<ExtendidoDto[]> {
+    const rows = await this.extendidosRepository.findExtendidosEnCamara();
 
     return rows.map((row) => this.mapToDto(row));
   }

@@ -50,14 +50,25 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
                 )}
               </div>
             </TooltipTrigger>
-            <TooltipContent side="right" className="bg-popover border-border shadow-xl">
+            <TooltipContent
+              side="right"
+              className="bg-popover border-border shadow-xl"
+            >
               <div className="space-y-1">
-                <p className="text-xs font-bold text-primary">Detalle del Producto</p>
-                <p className="text-[10px] text-muted-foreground leading-tight">
-                  Código: <span className="text-foreground font-mono">{row.original.codigoEspecie}</span>
+                <p className="text-xs font-bold text-primary">
+                  Detalle del Producto
                 </p>
                 <p className="text-[10px] text-muted-foreground leading-tight">
-                  Especie: <span className="text-foreground font-semibold">{row.original.nombreEspecie}</span>
+                  Código:{" "}
+                  <span className="text-foreground font-mono">
+                    {row.original.codigoEspecie}
+                  </span>
+                </p>
+                <p className="text-[10px] text-muted-foreground leading-tight">
+                  Especie:{" "}
+                  <span className="text-foreground font-semibold">
+                    {row.original.nombreEspecie}
+                  </span>
                 </p>
               </div>
             </TooltipContent>
@@ -76,8 +87,8 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     },
     cell: ({ row }) => (
       <div className="flex justify-center">
-        <Badge 
-          variant="secondary" 
+        <Badge
+          variant="secondary"
           className="h-6 w-8 flex items-center justify-center font-black text-xs bg-chart-1/10 text-chart-1 border-chart-1/20"
           title="Cámara de Germinación"
         >
@@ -107,15 +118,19 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Egreso</SortableHeader>;
     },
     cell: ({ row }) => {
-      const today = new Date();
-      const dateStr = today.toISOString().split('T')[0];
+      const today = new Date(2025, 6, 3);
+      const dateStr = today.toISOString().split("T")[0];
       const isToday = row.original.fechaEgresoCamara === dateStr;
 
       return (
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 text-foreground group">
-            <LogOut className={`h-3.5 w-3.5 ${isToday ? "text-primary" : "opacity-40 group-hover:opacity-100"} transition-opacity`} />
-            <span className={`text-xs font-black font-mono tracking-tighter ${isToday ? "text-primary" : ""}`}>
+            <LogOut
+              className={`h-3.5 w-3.5 ${isToday ? "text-primary" : "opacity-40 group-hover:opacity-100"} transition-opacity`}
+            />
+            <span
+              className={`text-xs font-black font-mono tracking-tighter ${isToday ? "text-primary" : ""}`}
+            >
               {row.original.fechaEgresoCamara}
             </span>
           </div>

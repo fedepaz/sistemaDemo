@@ -32,9 +32,7 @@ export function useExtendidosWithFilters(filters: Filters) {
     queryFn: async () => {
       switch (filters.type) {
         case "enCamara":
-          return await extendidoService.fetchExtendidosEnCamara(
-            filters.value || `${year}-${month}-${day}`,
-          );
+          return await extendidoService.fetchExtendidosEnCamara();
         case "historico":
           return await extendidoService.fetchByFecha(
             filters.value || `${year}-${month}-${day}`,
@@ -42,9 +40,7 @@ export function useExtendidosWithFilters(filters: Filters) {
         case "all":
           return await extendidoService.fetchAllExtendidos();
         default:
-          return await extendidoService.fetchExtendidosEnCamara(
-            `${year}-${month}-${day}`,
-          );
+          return await extendidoService.fetchExtendidosEnCamara();
       }
     },
   });

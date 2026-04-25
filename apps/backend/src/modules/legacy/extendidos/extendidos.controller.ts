@@ -21,19 +21,16 @@ export class ExtendidosController {
     return this.extendidosService.getAvailableExtendidoDates();
   }
 
+  @Get('camara/')
+  @Public()
+  async getExtendidosEnCamara(): Promise<ExtendidoDto[]> {
+    return this.extendidosService.getExtendidosEnCamara();
+  }
   @Get(':fecha')
   @Public()
   async getExtendidosByFecha(
     @Param('fecha') fecha: string,
   ): Promise<ExtendidoDto[]> {
     return this.extendidosService.getExtendidosByFecha(fecha);
-  }
-
-  @Get('camara/:fecha')
-  @Public()
-  async getExtendidosEnCamara(
-    @Param('fecha') fecha: string,
-  ): Promise<ExtendidoDto[]> {
-    return this.extendidosService.getExtendidosEnCamara(fecha);
   }
 }

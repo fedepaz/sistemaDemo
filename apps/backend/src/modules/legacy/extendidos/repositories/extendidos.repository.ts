@@ -76,7 +76,7 @@ export class ExtendidosRepository {
     const rows = await this.legacyDb.query<LegacyExtendidosFecha[]>(sql);
     return rows;
   }
-  async findExtendidosEnCamara(fecha: string): Promise<LegacyExtendido[]> {
+  async findExtendidosEnCamara(): Promise<LegacyExtendido[]> {
     const sql = `
     SELECT 
       p.partida, p.ano, p.indice, p.hai, p.con,
@@ -95,9 +95,9 @@ export class ExtendidosRepository {
     LEFT JOIN depositos d ON d.codigo = p2.ubicacion
     WHERE p.f_siembra <> '0000-00-00'
       AND p1.camara IS NOT NULL
-      AND DATE_ADD(p.f_siembra, INTERVAL p1.camara DAY) >= ?
+      AND p2.ubicacion IS NULL
     ORDER BY fechaEgresoCamara ASC, p.partida
   `;
-    return this.legacyDb.query<LegacyExtendido[]>(sql, [fecha]);
+    return this.legacyDb.query<LegacyExtendido[]>(sql);
   }
 }
