@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Enterprise Management System",
   generator: "v0.app",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/proIcon.png",
   },
 };
 
