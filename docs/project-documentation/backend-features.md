@@ -34,6 +34,7 @@ This document lists all the modules, services, and core functionalities implemen
 ### Entities Module
 - [x] **Entity Management**: CRUD for system entities (tables) which are now the source of truth for the permission system. Protected by `entities` table permissions.
 - [x] **Permission Type Support**: Entities include `permissionType` (`CRUD`, `READ_ONLY`, `PROCESS`) to define allowable actions.
+- [x] **System Entity Filtering**: Centralized `SYSTEM_ENTITIES` constant ensures internal tables (like `dev_account` or `audit_logs`) are filtered out of standard management views.
 - [x] **Repository Pattern**: `EntitiesRepository` extending `BaseRepository`.
 
 ### Permissions Module
@@ -65,12 +66,44 @@ This document lists all the modules, services, and core functionalities implemen
 ### Legacy Agentes Module
 - [x] **Legacy Data Access**: Read-only integration with the legacy `agentes` table.
 - [x] **Repository Pattern**: `AgentesRepository` using the `LegacyMysqlService`.
+- [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
 - [x] **Modular Design**: Encapsulated in `LegacyAgentesModule`.
 
 ### Legacy Especie Module
 - [x] **Legacy Data Access**: Read-only integration with the legacy `especie` table.
 - [x] **Repository Pattern**: `EspecieRepository` using the `LegacyMysqlService`.
+- [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
 - [x] **Modular Design**: Encapsulated in `LegacyEspecieModule`.
+
+### Legacy Config Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `config` table.
+- [x] **Repository Pattern**: `ConfigRepository` using the `LegacyMysqlService`.
+- [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
+- [x] **Modular Design**: Encapsulated in `LegacyConfigModule`.
+
+### Legacy Programas Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `programas` table.
+- [x] **Modular Design**: Encapsulated in `LegacyProgramasModule`.
+
+### Legacy Depositos Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `depositos` table for warehouses and cold storage (cámaras).
+- [x] **Repository Pattern**: `DepositosRepository` using the `LegacyMysqlService`.
+- [x] **Modular Design**: Encapsulated in `LegacyDepositosModule`.
+
+### Legacy Partidas Module
+- [x] **Legacy Data Access**: Read-only integration with the legacy `partidas` table.
+- [x] **Repository Pattern**: `PartidasRepository` using the `LegacyMysqlService`.
+- [x] **Basic Retrieval**: Provides access to the raw `partidas` data.
+- [x] **Modular Design**: Encapsulated in `LegacyPartidasModule`.
+
+### Legacy Extendidos Module
+- [x] **Legacy Data Access**: Read-only integration with detailed `extendidos` query logic.
+- [x] **Repository Pattern**: `ExtendidosRepository` using the `LegacyMysqlService`.
+- [x] **Specialized Retrieval**: Supports querying by date with complex joins to species and location data.
+- [x] **Full Retrieval**: `GET /l-extendidos` retrieves all production batches with optimized joins.
+- [x] **Date Discovery**: `GET /l-extendidos/fechas` retrieves distinct production dates for filtering.
+- [x] **Data Mapping & Transformation**: Implements `ExtendidoDto` with descriptive field names, species name lookup, and calculated dates.
+- [x] **Modular Design**: Encapsulated in `LegacyExtendidosModule`.
 
 ### Legacy Base Module
 - [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables.

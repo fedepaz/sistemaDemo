@@ -1,6 +1,10 @@
 // src/modules/auditLog/repositories/auditLog.repository.ts
 
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import {
   AuditActionType,
   AuditLog,
@@ -11,6 +15,8 @@ import { BaseRepository } from '../../../shared/baseModule/base.repository';
 
 @Injectable()
 export class AuditLogRepository extends BaseRepository<AuditLog> {
+  private readonly logger = new Logger(AuditLogRepository.name);
+
   constructor(prisma: PrismaService) {
     super(prisma, prisma.auditLog);
   }
@@ -57,7 +63,7 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
 
       return auditLog;
     } catch (error) {
-      console.error('Error creating audit log:', error);
+      this.logger.error('Error creating audit log:', error);
       throw new InternalServerErrorException('Error creating audit log');
     }
   }

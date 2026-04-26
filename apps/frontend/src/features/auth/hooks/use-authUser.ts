@@ -4,7 +4,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { UserProfileDto } from "@vivero/shared";
 import { useAuth } from "./useAuth";
-import { ApiError, clientFetch } from "@/lib/api/client-fetch";
+import { ApiError } from "@/lib/api/client-fetch";
+import { authService } from "../api/authService";
 
 // This is the key for the query cache
 export const userProfileQueryKeys = {
@@ -17,7 +18,7 @@ export const useAuthUserProfile = () => {
 
   const query = useQuery<UserProfileDto>({
     queryKey: userProfileQueryKeys.me(),
-    queryFn: () => clientFetch<UserProfileDto>("users/me", { method: "GET" }),
+    queryFn: authService.getProfileMe,
     enabled: isSignedIn,
     retry: 1, // Retry once to account for transient network issues
     throwOnError: false,

@@ -1,5 +1,10 @@
 // packages/shared/src/constants/managed-entities.ts
 
+export const SYSTEM_ENTITIES = [
+  "user_profile",
+  "dev_account",
+  "audit_logs",
+] as const;
 export const MANAGED_ENTITIES = {
   USER: {
     tableName: "users",
@@ -32,8 +37,6 @@ export const MANAGED_ENTITY_ARRAY = Object.values(MANAGED_ENTITIES);
 export type ManagedEntityKey = keyof typeof MANAGED_ENTITIES;
 export type ManagedTableName =
   (typeof MANAGED_ENTITIES)[ManagedEntityKey]["tableName"];
-export type PermissionType =
-  (typeof MANAGED_ENTITIES)[ManagedEntityKey]["permissionType"];
 
 export const ALLOWED_TABLE_NAMES = MANAGED_ENTITY_ARRAY.map(
   (e) => e.tableName,

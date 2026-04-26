@@ -2,21 +2,15 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { clientFetch } from "@/lib/api/client-fetch";
 import { useAuthContext } from "../providers/AuthProvider";
 import { toast } from "sonner";
+import { authService } from "../api/authService";
 
 export const useLogout = () => {
   const { signOut } = useAuthContext();
 
   const mutation = useMutation<void, Error, void>({
-    mutationFn: async () => {
-      // Call backend logout endpoint
-
-      await clientFetch("auth/logout", {
-        method: "POST",
-      });
-    },
+    mutationFn: authService.logout,
     onSuccess: () => {
       // Clear refresh token
       localStorage.removeItem("refreshToken");

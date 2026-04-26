@@ -45,6 +45,20 @@ The platform utilizes a unified Docker-based architecture for both local develop
 - Hot-reloading enabled for both Frontend and Backend within containers.
 - Environment variables configured via `.env` files mapped to containers.
 
+### Container Security & Permissions
+To ensure secure and reliable execution in production environments:
+- **Non-privileged Users**: Always run containers as a non-root user (e.g., `USER nodejs`).
+- **Directory Setup**: Perform all `mkdir` and `chown` operations as the `root` user *before* switching to the non-privileged user in the `Dockerfile`.
+- **Ownership Persistence**: Use the `--chown=<user>:<group>` flag in `COPY` commands to ensure that files from multi-stage builds maintain correct permissions.
+- **Next.js Cache**: Explicitly create and set permissions for `.next/cache` to prevent `EACCES` errors during image optimization and page caching.
+
+### Logging & Observability
+Standardized logging for enterprise-grade tracing and debugging:
+- **Structured Logging**: All services must output logs in JSON format using `nestjs-pino` (Backend) or Nginx JSON log format.
+- **Request Tracing**: Nginx generates a unique `$request_id` for every incoming request.
+- **Correlation ID Propagation**: This ID is passed to all upstreams via the `X-Correlation-ID` header and automatically captured by the backend logger.
+- **Log Redaction**: Sensitive fields such as `authorization`, `password`, and `token` are automatically redacted from all production logs.
+
 ### Production Deployment Mode
 - Docker images built and pushed to a registry.
 - Environment-specific `.env.production` files managed via CI/CD.

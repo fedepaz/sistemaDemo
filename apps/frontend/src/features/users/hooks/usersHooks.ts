@@ -1,13 +1,13 @@
 // src/features/users/hooks/useUsers.ts
 
-import { clientFetch } from "@/lib/api/client-fetch";
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
 import { toast } from "sonner";
+import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
+import { userService } from "../api/userService";
 
 export const userProfileQueryKeys = {
   all: () => ["users"] as const,
@@ -21,8 +21,7 @@ export const userProfileQueryKeys = {
 export const useUsers = () => {
   return useSuspenseQuery<UserProfileDto[]>({
     queryKey: userProfileQueryKeys.all(),
-    queryFn: () =>
-      clientFetch<UserProfileDto[]>("users/all", { method: "GET" }),
+    queryFn: userService.fetchAll,
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -35,12 +34,7 @@ export const useUpdateUserProfile = () => {
     Error,
     { userUpdate: UpdateUserProfileDto }
   >({
-    mutationFn: async ({ userUpdate }) => {
-      return clientFetch<UserProfileDto>(`users/me`, {
-        method: "PATCH",
-        body: JSON.stringify(userUpdate),
-      });
-    },
+    mutationFn: async ({ userUpdate }) => userService.updateMe(userUpdate),
     onSuccess: (data) => {
       const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
       toast.success(toastMessage, {
@@ -60,12 +54,7 @@ export const useUpdateUserProfile = () => {
 export const useUsersByUserName = (username: string) => {
   return useSuspenseQuery<UserProfileDto | null>({
     queryKey: userProfileQueryKeys.byUserName(username),
-    queryFn: () => {
-      return clientFetch<UserProfileDto | null>(`users/username/${username}`, {
-        method: "GET",
-      });
-    },
-
+    queryFn: () => userService.fetchByUserName(username),
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -73,12 +62,7 @@ export const useUsersByUserName = (username: string) => {
 export const useUsersByTenantId = (tenantId: string) => {
   return useSuspenseQuery<UserProfileDto[]>({
     queryKey: userProfileQueryKeys.byTenantId(tenantId),
-    queryFn: () => {
-      return clientFetch<UserProfileDto[]>(`users/tenant/${tenantId}`, {
-        method: "GET",
-      });
-    },
-
+    queryFn: () => userService.fetchByTenantId(tenantId),
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -91,12 +75,7 @@ export const useUpdateUser = () => {
     Error,
     { username: string; userUpdate: UpdateUserProfileDto }
   >({
-    mutationFn: async ({ username, userUpdate }) => {
-      return clientFetch<UserProfileDto>(`users/${username}`, {
-        method: "PATCH",
-        body: JSON.stringify(userUpdate),
-      });
-    },
+    mutationFn: async ({ username, userUpdate }) => userService.updateUser(username, userUpdate),
     onSuccess: (data) => {
       const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
       toast.success(toastMessage, {
@@ -111,11 +90,7 @@ export const useDeleteUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation<void, Error, string>({
-    mutationFn: async (username) => {
-      await clientFetch(`users/${username}`, {
-        method: "DELETE",
-      });
-    },
+    mutationFn: userService.delete,
     onSuccess: () => {
       const toastMessage = `Usuario eliminado exitosamente`;
       toast.success(toastMessage, {
@@ -129,8 +104,7 @@ export const useDeleteUser = () => {
 export const useGetAllUsersAdmin = () => {
   return useSuspenseQuery<UserProfileDto[]>({
     queryKey: userProfileQueryKeys.admin(),
-    queryFn: () =>
-      clientFetch<UserProfileDto[]>("users/allAdmin", { method: "GET" }),
+    queryFn: userService.fetchAllAdmin,
     retry: 1, // Retry once to account for transient network issues
   });
 };

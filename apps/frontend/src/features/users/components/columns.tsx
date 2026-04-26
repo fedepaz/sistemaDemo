@@ -1,7 +1,6 @@
 // src/features/users/components/columns.tsx
 
 import { Row, Table, type ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   SortableHeader,
   StatusBadge,
@@ -11,28 +10,6 @@ import { UserProfileDto } from "@vivero/shared";
 interface CellProps {
   row?: Row<UserProfileDto>;
   table?: Table<UserProfileDto>;
-}
-
-function CellComponent({ row, table }: CellProps) {
-  if (row) {
-    return (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Seleccionar fila"
-      />
-    );
-  }
-  if (table) {
-    return (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Seleccionar todo"
-      />
-    );
-  }
-  if (!row || !table) return null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,23 +30,6 @@ function StatusCell({ row }: CellProps) {
 }
 
 export const userColumns: ColumnDef<UserProfileDto>[] = [
-  {
-    id: "select",
-    header: ({ table }) => {
-      return <CellComponent table={table} />;
-    },
-    cell: ({ row }) => {
-      return <CellComponent row={row} />;
-    },
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "username",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Usuario</SortableHeader>;
-    },
-  },
   {
     id: "fullName",
     header: ({ column }) => (

@@ -143,7 +143,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
           setTimeout(() => reject(new Error('Health Timeout')), timeout),
         ),
       ]);
-      this.logger.log('Database health check result:', result);
+      this.logger.debug(`Database health check result: ${result}`);
       return true;
     } catch (error) {
       this.logger.error('Database health check failed', error);

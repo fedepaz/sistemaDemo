@@ -14,6 +14,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -84,9 +85,12 @@ export function MobileNavigation() {
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-80 p-0">
+      <SheetContent side="left" className="w-80 p-0 h-dvh">
         <SheetHeader>
           <SheetTitle className="sr-only">Navegación móvil</SheetTitle>
+          <SheetDescription className="sr-only">
+            Menú de navegación lateral para dispositivos móviles
+          </SheetDescription>
         </SheetHeader>
         <div className="flex flex-col h-full">
           {/* Header */}

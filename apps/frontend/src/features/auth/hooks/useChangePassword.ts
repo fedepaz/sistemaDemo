@@ -3,18 +3,12 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { ChangePasswordDto } from "@vivero/shared";
-import { clientFetch } from "@/lib/api/client-fetch";
 import { toast } from "sonner";
+import { authService } from "../api/authService";
 
 export const useChangePassword = () => {
   const mutation = useMutation<void, Error, ChangePasswordDto>({
-    mutationFn: async (data) => {
-      const response = await clientFetch<void>(`auth/password`, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
+    mutationFn: authService.changePassword,
     onSuccess: () => {
       toast.success("Contraseña actualizada correctamente", {
         duration: 3000,

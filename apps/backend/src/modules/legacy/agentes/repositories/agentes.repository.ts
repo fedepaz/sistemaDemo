@@ -19,11 +19,12 @@ export class AgentesRepository {
     return rows.map((row) => ({ ...row, nombre: row.nombre.trim() }));
   }
 
-  async findOne(codigo: number): Promise<LegacyAgent> {
+  async findOne(codigo: number): Promise<LegacyAgent | null> {
     const rows = await this.legacyDb.query<LegacyAgent[]>(
       'SELECT codigo, nombre FROM agentes WHERE codigo = ?',
       [codigo],
     );
+    if (!rows.length) return null;
     const row = rows[0];
     return { ...row, nombre: row.nombre.trim() };
   }

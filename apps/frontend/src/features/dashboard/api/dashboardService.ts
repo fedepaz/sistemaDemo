@@ -17,20 +17,15 @@ export const dashboardService = {
       },
       {
         label: "Humedad",
-        value: weather.current.relative_humidity_2m.toString(),
+        value: weather.current.relative_humidity_2m.toFixed(1),
         unit: "%",
         trend: "stable",
       },
       {
-        label: "Amanecer",
-        value: weather.current.sunrise.toLocaleTimeString("es-AR", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        }),
-        unit: "h",
+        label: "Lluvia",
+        value: Math.round(weather.current.rainProb).toString(),
+        unit: "%",
         trend: "stable",
-        trendValue: "0",
       },
       {
         label: "Viento",

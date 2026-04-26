@@ -1,6 +1,5 @@
 // src/features/permissions/hooks/permsHooks.ts
 
-import { clientFetch } from "@/lib/api/client-fetch";
 import {
   useMutation,
   useSuspenseQuery,
@@ -8,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { Entity, UserEntityPermission, UserPermissions } from "@vivero/shared";
 import { toast } from "sonner";
+import { permissionService } from "../api/permissionService";
 
 export const permissionsQueryKeys = {
   tables: () => ["permissions", "tables"] as const,
@@ -21,9 +21,7 @@ export const permissionsQueryKeys = {
 export const useTables = () => {
   return useSuspenseQuery<Entity[]>({
     queryKey: permissionsQueryKeys.tables(),
-    queryFn: () =>
-      clientFetch<Entity[]>("permissions/tables", { method: "GET" }),
-
+    queryFn: permissionService.fetchTables,
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -31,11 +29,7 @@ export const useTables = () => {
 export const useTableByName = (tableName: string) => {
   return useSuspenseQuery<Entity>({
     queryKey: permissionsQueryKeys.table(tableName),
-    queryFn: () =>
-      clientFetch<Entity>(`permissions/table/${tableName}`, {
-        method: "GET",
-      }),
-
+    queryFn: () => permissionService.fetchTableByName(tableName),
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -43,11 +37,7 @@ export const useTableByName = (tableName: string) => {
 export const useUserPermissions = (userId: string) => {
   return useSuspenseQuery<UserPermissions>({
     queryKey: permissionsQueryKeys.byUserId(userId),
-    queryFn: () =>
-      clientFetch<UserPermissions>(`permissions/user/${userId}`, {
-        method: "GET",
-      }),
-
+    queryFn: () => permissionService.fetchUserPermissions(userId),
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -55,11 +45,7 @@ export const useUserPermissions = (userId: string) => {
 export const useEntityPermissions = (entityId: string) => {
   return useSuspenseQuery<UserEntityPermission[]>({
     queryKey: permissionsQueryKeys.byEntityId(entityId),
-    queryFn: () =>
-      clientFetch<UserEntityPermission[]>(`permissions/entity/${entityId}`, {
-        method: "GET",
-      }),
-
+    queryFn: () => permissionService.fetchEntityPermissions(entityId),
     retry: 1, // Retry once to account for transient network issues
   });
 };
@@ -82,12 +68,7 @@ export const useSetUserPermissions = () => {
       }>;
     }
   >({
-    mutationFn: async ({ userId, permissions }) => {
-      return clientFetch<void>(`permissions/user/${userId}`, {
-        method: "PATCH",
-        body: JSON.stringify({ permissions }),
-      });
-    },
+    mutationFn: permissionService.setUserPermissions,
     onSuccess: (_, data) => {
       const toastMessage = `Permisos de usuario actualizados exitosamente`;
       toast.success(toastMessage, {

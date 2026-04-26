@@ -11,7 +11,7 @@ import { CompanyWelcomeSkeleton } from "./company-welcome-skeleton";
 
 export function RootDashboard() {
   return (
-    <div className="mx-auto w-full max-w-[1600px] px-2 py-2 space-y-8">
+    <div className="mx-auto w-full max-w-[1600px] px-2 py-2 space-y-4 sm:space-y-8">
       <div className="shrink-0">
         <Suspense fallback={<DashboardKPISkeleton />}>
           <DashboardKPI />

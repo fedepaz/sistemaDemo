@@ -13,6 +13,7 @@ import {
   PermissionType,
   Entity,
   UserEntityPermission,
+  SYSTEM_ENTITIES,
 } from '@vivero/shared';
 import { PermissionsRepository } from './repositories/permissions.repository';
 import { EntitiesRepository } from '../entities/repositories/entities.repository';
@@ -44,7 +45,7 @@ export class PermissionsService {
     const requesterPerms = await this.getUserPermissionsByUserId(requesterId);
 
     // Filter: Only show entities where the requester has at least one true permission
-    return allEntities
+    const filteredEntities = allEntities
       .filter((e) => {
         const p = requesterPerms[e.name];
         return p && (p.canRead || p.canCreate || p.canUpdate || p.canDelete);
@@ -56,6 +57,10 @@ export class PermissionsService {
         permissionType: e.permissionType,
         isActive: e.isActive,
       }));
+
+    return filteredEntities.filter(
+      (e) => !(SYSTEM_ENTITIES as readonly string[]).includes(e.name),
+    );
   }
 
   async getTableByName(tableName: string): Promise<Entity> {
