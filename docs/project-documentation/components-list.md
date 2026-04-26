@@ -79,8 +79,6 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ExtendidoDataTable` | [x] | [x] | [x] | [x] |
 | `ExtendidosForm` | [x] | [x] | [x] | [x] |
 | `ExtendidoDashboardSkeleton` | [x] | [x] | [x] | [x] |
-| `ExtendidosSelectorSkeleton` | [x] | [x] | [x] | [x] |
-| `ExtendidosSelector` | [x] | [x] | [x] | [x] |
 | `ExtendidoView` | [x] | [x] | [x] | [x] |
 
 ## UI Primitives (shadcn/ui)
@@ -177,7 +175,6 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ExtendidoKPIs` | [x] | [x] | [x] | [x] |
 | `ExtendidoDashboard` | [x] | [x] | [x] | [x] |
 | `ExtendidoView` | [x] | [x] | [x] | [x] |
-| `ExtendidosSelector` | [x] | [x] | [x] | [x] |
 | `EmptyState` | [x] | [x] | [x] | [x] |
 
 ### Users

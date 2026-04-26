@@ -29,7 +29,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "nombreEspecie",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Producto</SortableHeader>;
+      return <SortableHeader column={column}>Nombre Producto</SortableHeader>;
     },
     cell: ({ row }) => (
       <TooltipProvider>
@@ -83,7 +83,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "codigoCamaraGerminacion",
     header: ({ column }) => {
-      return <SortableHeader column={column}>CG</SortableHeader>;
+      return <SortableHeader column={column}>Cámara No.</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex justify-center">
@@ -101,7 +101,9 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSiembraReal",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Siembra</SortableHeader>;
+      return (
+        <SortableHeader column={column}>Fecha Real Siembra</SortableHeader>
+      );
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">
@@ -115,7 +117,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaEgresoCamara",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Egreso</SortableHeader>;
+      return <SortableHeader column={column}>Fecha a Extender</SortableHeader>;
     },
     cell: ({ row }) => {
       const today = new Date(2025, 6, 3);

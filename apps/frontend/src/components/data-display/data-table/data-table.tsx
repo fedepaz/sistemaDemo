@@ -86,6 +86,7 @@ interface DataTableProps<TData, TValue> {
     onSave: () => void,
     onCancel: () => void,
   ) => ReactNode;
+  toolbarContent?: ReactNode;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -109,6 +110,7 @@ export function DataTable<TData, TValue>({
   onExport,
   totalCount,
   enableSelection,
+  toolbarContent,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -468,6 +470,12 @@ export function DataTable<TData, TValue>({
                   <p>{createLabel}</p>
                 </TooltipContent>
               </Tooltip>
+            )}
+
+            {toolbarContent && (
+              <div className="flex-1 flex items-center gap-2">
+                {toolbarContent}
+              </div>
             )}
 
             {selectedCount > 0 && allowedActions.canDelete && (

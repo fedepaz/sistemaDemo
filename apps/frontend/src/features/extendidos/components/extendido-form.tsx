@@ -80,11 +80,11 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
             </div>
             <div>
               <h2 className="text-lg md:text-xl font-black tracking-tight leading-none text-foreground">
-                {selectedExtendido.codigoEspecie}
+                Partida #{selectedExtendido.partidaId}
               </h2>
               <div className="flex items-center gap-2 mt-1.5">
                 <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest bg-muted px-1.5 py-0.5 rounded border border-border/40">
-                  Partida #{selectedExtendido.partidaId}
+                  {selectedExtendido.codigoEspecie}
                 </span>
                 <span className="h-1 w-1 rounded-full bg-border" />
                 <span className="text-[10px] font-bold text-primary uppercase">
