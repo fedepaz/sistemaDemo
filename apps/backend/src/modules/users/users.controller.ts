@@ -17,7 +17,7 @@ import { TenantsService } from '../tenants/tenants.service';
 @Controller('users')
 export class UsersController {
   constructor(
-    private readonly service: UsersService,
+    private readonly userService: UsersService,
     private readonly permissionsService: PermissionsService,
     private readonly tenantsService: TenantsService,
   ) {}
@@ -28,7 +28,7 @@ export class UsersController {
     action: 'read',
   })
   async getMe(@CurrentUser() user: AuthUser): Promise<UserProfileDto> {
-    const userProfile = await this.service.getProfile(user.id, user.id);
+    const userProfile = await this.userService.getProfile(user.id, user.id);
     const tenant = await this.tenantsService.getTenantById(
       userProfile.tenantId,
       user.id,
@@ -53,7 +53,7 @@ export class UsersController {
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
     body: UpdateUserProfileDto,
   ) {
-    return this.service.updateProfile(user.username, body);
+    return this.userService.updateProfile(user.username, body);
   }
 
   @Get('all')
@@ -65,22 +65,22 @@ export class UsersController {
       scope: 'ALL',
     });
     if (canReadAll) {
-      return this.service.getAllUsers(user.id);
+      return this.userService.getAllUsers(user.id);
     } else {
-      return [await this.service.getUserById(user.id, user.id)];
+      return [await this.userService.getUserById(user.id, user.id)];
     }
   }
 
   @Get('username/:username')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
   getUserByUsername(@Param('username') username: string) {
-    return this.service.getUserByUsername(username);
+    return this.userService.getUserByUsername(username);
   }
 
   @Get('tenant/:tenantId')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
   getUserByTenantId(@Param('tenantId') tenantId: string) {
-    return this.service.getUserByTenantId(tenantId);
+    return this.userService.getUserByTenantId(tenantId);
   }
 
   @Patch(':username')
@@ -91,7 +91,7 @@ export class UsersController {
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
     body: UpdateUserProfileDto,
   ) {
-    return this.service.updateProfile(username, body);
+    return this.userService.updateProfile(username, body);
   }
 
   @Delete(':username')
@@ -100,7 +100,7 @@ export class UsersController {
     @CurrentUser() user: AuthUser,
     @Param('username') username: string,
   ) {
-    return this.service.softRemoveUserByUsername(username, user.id);
+    return this.userService.softRemoveUserByUsername(username, user.id);
   }
 
   @Patch(':userId/recover')
@@ -109,6 +109,6 @@ export class UsersController {
     @Param('userId') userId: string,
     @CurrentUser() user: AuthUser,
   ) {
-    return this.service.recoverUserById(userId, user.id);
+    return this.userService.recoverUserById(userId, user.id);
   }
 }

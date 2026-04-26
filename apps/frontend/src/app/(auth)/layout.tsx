@@ -10,7 +10,7 @@ interface AuthLayoutProps {
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <Suspense fallback={<AuthSkeleton />}>
-      <div className="flex min-h-screen flex-col items-center justify-center p-4">
+      <div className="flex min-h-dvh flex-col items-center justify-center p-4">
         <div className="w-full max-w-md">{children}</div>
       </div>
     </Suspense>

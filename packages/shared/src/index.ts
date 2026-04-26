@@ -6,3 +6,5 @@ export * from "./schemas/permissions.schema";
 export * from "./schemas/tenant.schema";
 export * from "./schemas/auditLog.schema";
 export * from "./schemas/enums.schema";
+export * from "./schemas/extendido.schema";
+export * from "./constants/managed-entities";

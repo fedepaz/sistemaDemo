@@ -48,7 +48,7 @@ export class HealthService {
       cache.status = 'connected';
       cache.consecutiveFailures = 0;
       cache.lastCheck = now;
-      this.logger.log(`${label} health check result:`, 'connected');
+      this.logger.debug(`${label} health check result: connected`);
       return { status: 'connected', cached: false };
     } catch (error) {
       cache.consecutiveFailures++;

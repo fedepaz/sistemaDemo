@@ -167,6 +167,12 @@ Define standardized `ApiResponse<T>`, `ApiError`, and `PaginationInfo` interface
 
 Include utilities for lifecycle calculations, status formatting, and business rule validation.
 
+### 5. Core Constants (`packages/shared/src/constants/`)
+
+Standardized constants used across the monorepo to ensure architectural consistency:
+- `SYSTEM_ENTITIES`: Registry of internal tables (e.g., `user_profile`, `dev_account`) excluded from standard management interfaces.
+- `MANAGED_ENTITIES`: Configuration map for all entities managed by the permission system.
+
 ## Feature Review & Synchronization Process
 
 ### When to Trigger the Shared Package Agent

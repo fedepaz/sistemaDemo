@@ -20,7 +20,7 @@ type SlideOverMode = "create" | "edit" | "view";
 interface SlideOverFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  title: string;
+  title?: string;
   description?: string;
   children: React.ReactNode;
   onSave?: () => void;
@@ -71,16 +71,24 @@ export function SlideOverForm({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-xl">
+      <SheetContent className="w-full sm:max-w-xl flex flex-col h-full">
         <SheetHeader>
           <SheetTitle className="text-2xl">{title}</SheetTitle>
-          {description && <SheetDescription>{description}</SheetDescription>}
+          {description ? (
+            <SheetDescription>{description}</SheetDescription>
+          ) : (
+            <SheetDescription className="sr-only">
+              Formulario para {title}
+            </SheetDescription>
+          )}
         </SheetHeader>
-        <ScrollArea className="h-[calc(100vh-180px)] pr-4 mt-6" tabIndex={-1}>
-          <div className="space-y-6" tabIndex={-1}>
-            {children}
-          </div>
-        </ScrollArea>
+        <div className="flex-1 overflow-hidden my-6">
+          <ScrollArea className="h-full pr-4" tabIndex={-1}>
+            <div className="space-y-6" tabIndex={-1}>
+              {children}
+            </div>
+          </ScrollArea>
+        </div>
         <SheetFooter>
           {isViewMode ? (
             <Button onClick={handleCancel} className="w-full" variant="outline">

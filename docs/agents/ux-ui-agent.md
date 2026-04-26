@@ -154,7 +154,7 @@ For each interface state:
 - Confirmation patterns for operations
 - Next-step guidance for workflows
 
-### 4. Responsive Design
+### Responsive Design
 
 **Mobile (Operators)**:
 
@@ -162,6 +162,8 @@ For each interface state:
 - Simplified navigation for quick access
 - Offline-first data entry patterns
 - Task-focused layouts
+- **Dynamic Viewport Units**: Use `dvh` (dynamic viewport height) instead of `vh` for full-screen layouts to ensure the UI adapts correctly to mobile browser toolbars.
+- **Safe Area Insets**: Always apply `pb-safe-area-inset-bottom` or equivalent padding to bottom-fixed elements or main content areas to avoid overlap with device home indicators.
 
 **Tablet (Facility Managers)**:
 

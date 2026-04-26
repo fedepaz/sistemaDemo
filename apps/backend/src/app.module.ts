@@ -22,6 +22,12 @@ import { LegacyEspecieModule } from './modules/legacy/especie/especie.module';
 import { LegacyBaseModule } from './modules/legacy/legacyBase/legacyBase.module';
 import { LegacyProgramasModule } from './modules/legacy/programas/programas.module';
 import { EntitiesModule } from './modules/entities/entities.module';
+import { LoggerModule } from 'nestjs-pino';
+import { IncomingMessage } from 'http';
+import { LegacyDepositosModule } from './modules/legacy/depositos/depositos.module';
+import { LegacyPartidasModule } from './modules/legacy/partidas/partidas.module';
+import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.module';
+import { pinoStream } from './config/logger';
 
 @Module({
   imports: [
@@ -41,6 +47,27 @@ import { EntitiesModule } from './modules/entities/entities.module';
         path.join(__dirname, `../../.env`),
       ],
     }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: 'debug',
+        stream: pinoStream,
+        redact: [
+          'req.headers.authorization',
+          'req.body.password',
+          'req.body.token',
+        ],
+        customProps: (req: IncomingMessage) => ({
+          correlationId: req.headers?.['x-correlation-id'],
+        }),
+        serializers: {
+          req: (req: IncomingMessage) => ({
+            method: req.method,
+            url: req.url,
+            ip: req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress,
+          }),
+        },
+      },
+    }),
     PrismaModule,
     LegacyMysqlModule,
     HealthModule,
@@ -49,6 +76,9 @@ import { EntitiesModule } from './modules/entities/entities.module';
     LegacyConfigModule,
     LegacyEspecieModule,
     LegacyProgramasModule,
+    LegacyDepositosModule,
+    LegacyPartidasModule,
+    LegacyExtendidosModule,
     AuthModule,
     UsersModule,
     PermissionsModule,

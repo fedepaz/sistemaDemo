@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -79,11 +80,13 @@ interface DataTableProps<TData, TValue> {
   ) => void;
   loading?: boolean;
   totalCount?: number;
+  enableSelection?: boolean;
   renderInlineEdit?: (
     row: TData,
     onSave: () => void,
     onCancel: () => void,
   ) => ReactNode;
+  toolbarContent?: ReactNode;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -106,6 +109,8 @@ export function DataTable<TData, TValue>({
   createLabel = "Nuevo",
   onExport,
   totalCount,
+  enableSelection,
+  toolbarContent,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -116,11 +121,10 @@ export function DataTable<TData, TValue>({
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<TData | null>(null);
+  const [isBulkDelete, setIsBulkDelete] = useState(false);
   const dataTablePermissions = usePermission(tableName);
   const { data: entity } = useTableByName(tableName);
 
-  console.log("entity", entity);
-  console.log("dataTablePermissions", dataTablePermissions);
   const allowedActions = {
     CRUD: {
       canView: !!onView && dataTablePermissions.canRead,
@@ -141,6 +145,29 @@ export function DataTable<TData, TValue>({
       canExecute: false,
     },
   }[entity?.permissionType || "READ_ONLY"];
+
+  const selectColumn: ColumnDef<TData, TValue> = {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Seleccionar todo"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Seleccionar fila"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  };
 
   const actionColumn: ColumnDef<TData, TValue> = {
     id: "actions",
@@ -255,9 +282,21 @@ export function DataTable<TData, TValue>({
   };
 
   const enhancedColumns = useMemo(() => {
-    return [...columns, actionColumn];
+    // Smart logic: show it if explicitly enabled OR if it's not a READ_ONLY entity
+    const showSelection =
+      enableSelection !== undefined
+        ? (enableSelection ?? entity?.permissionType !== "READ_ONLY")
+        : entity?.permissionType !== "READ_ONLY";
+
+    let result = [...columns];
+
+    if (showSelection) {
+      result = [selectColumn, ...result];
+    }
+
+    return [...result, actionColumn];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns]);
+  }, [columns, entity?.permissionType, enableSelection]);
 
   const table = useReactTable({
     data,
@@ -302,18 +341,36 @@ export function DataTable<TData, TValue>({
   }, [breakpoint, table]);
 
   const handleDeleteSingle = (item: TData) => {
+    setIsBulkDelete(false);
     setItemsToDelete(item);
     setDeleteDialogOpen(true);
   };
 
+  const handleBulkDelete = () => {
+    setIsBulkDelete(true);
+    setDeleteDialogOpen(true);
+  };
+
   const confirmDelete = async () => {
-    if (onDelete && itemsToDelete) {
-      try {
+    if (!onDelete) return;
+
+    try {
+      if (isBulkDelete) {
+        const selectedRows = table.getFilteredSelectedRowModel().rows;
+        // Sequential execution to ensure each delete completes and avoid overwhelming the network
+        for (const row of selectedRows) {
+          onDelete(row.original);
+        }
+      } else if (itemsToDelete) {
         onDelete(itemsToDelete);
-        setRowSelection({});
-        setDeleteDialogOpen(false);
-        setItemsToDelete(null);
-      } catch {}
+      }
+
+      table.resetRowSelection();
+      setDeleteDialogOpen(false);
+      setItemsToDelete(null);
+      setIsBulkDelete(false);
+    } catch (error) {
+      console.error("Delete operation failed:", error);
     }
   };
 
@@ -391,6 +448,7 @@ export function DataTable<TData, TValue>({
                 disabled={data.length === 0}
               />
             )}
+
             {dataTablePermissions.canCreate && onCreate && (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -410,6 +468,37 @@ export function DataTable<TData, TValue>({
                   className="border border-border shadow-md"
                 >
                   <p>{createLabel}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+
+            {toolbarContent && (
+              <div className="flex-1 flex items-center gap-2">
+                {toolbarContent}
+              </div>
+            )}
+
+            {selectedCount > 0 && allowedActions.canDelete && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="min-h-[40px] animate-in fade-in zoom-in duration-200"
+                    onClick={handleBulkDelete}
+                    aria-label={`Eliminar ${selectedCount} seleccionados`}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {breakpoint === "sm"
+                      ? selectedCount
+                      : `Eliminar (${selectedCount})`}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="border border-border shadow-md"
+                >
+                  <p>Eliminar seleccionados</p>
                 </TooltipContent>
               </Tooltip>
             )}
@@ -581,8 +670,12 @@ export function DataTable<TData, TValue>({
       </Card>
       <DeleteDialog
         open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) setIsBulkDelete(false);
+        }}
         onConfirm={confirmDelete}
+        itemCount={isBulkDelete ? selectedCount : 1}
       />
     </>
   );

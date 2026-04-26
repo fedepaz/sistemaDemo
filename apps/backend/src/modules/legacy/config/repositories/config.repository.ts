@@ -18,11 +18,12 @@ export class ConfigRepository {
     return rows.map((row) => ({ ...row, nombre: row.nombre.trim() }));
   }
 
-  async findOne(codigo: string): Promise<LegacyConfig> {
+  async findOne(codigo: string): Promise<LegacyConfig | null> {
     const rows = await this.legacyDb.query<LegacyConfig[]>(
       'SELECT codigo, nombre FROM config WHERE codigo = ?',
       [codigo],
     );
+    if (!rows.length) return null;
     const row = rows[0];
     return { ...row, nombre: row.nombre.trim() };
   }

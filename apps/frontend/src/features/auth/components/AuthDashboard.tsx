@@ -25,7 +25,7 @@ export function AuthDashboard() {
   return (
     <div
       className={cn(
-        "min-h-screen flex items-center justify-center bg-background p-4 sm:p-6 md:p-8",
+        "min-h-dvh flex items-center justify-center bg-background p-4 sm:p-6 md:p-8",
       )}
     >
       <div className="max-w-md w-full space-y-6 md:space-y-8">

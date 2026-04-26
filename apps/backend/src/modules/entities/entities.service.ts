@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { EntitiesRepository } from './repositories/entities.repository';
-import { CreateEntityDto, Entity } from '@vivero/shared';
+import { CreateEntityDto, Entity, SYSTEM_ENTITIES } from '@vivero/shared';
 import { PermissionsService } from '../permissions/permissions.service';
 
 @Injectable()
@@ -27,8 +27,6 @@ export class EntitiesService {
       throw new InternalServerErrorException('Error getting tables');
     }
 
-    const devEntities = ['user_profile', 'dev_account'];
-
     const records = entities.map((e) => ({
       id: e.id,
       name: e.name,
@@ -37,7 +35,9 @@ export class EntitiesService {
       permissionType: e.permissionType,
     }));
 
-    return records.filter((e) => !devEntities.includes(e.name));
+    return records.filter(
+      (e) => !(SYSTEM_ENTITIES as readonly string[]).includes(e.name),
+    );
   }
 
   async getTableByName(tableName: string): Promise<Entity> {

@@ -33,6 +33,31 @@ src/features/
 │ └── ...
 ```
 
+### API Service Pattern (Mandatory)
+
+To ensure a clean separation between data-fetching logic and React hooks, every feature must implement an `api/` directory with a stateless service object.
+
+- **Stateless Service**: A constant object exported from `api/[feature]Service.ts`.
+- **Encapsulation**: All `clientFetch` calls must reside within these services.
+- **Hook Consumption**: Hooks (TanStack Query) must invoke service methods instead of calling `clientFetch` directly.
+- **Naming**: Methods should be descriptive of the action (`fetchAll`, `getById`, `update`, `delete`).
+
+**Example Service Pattern:**
+```typescript
+// features/users/api/userService.ts
+export const userService = {
+  fetchAll: () => clientFetch<UserDto[]>("users", { method: "GET" }),
+  update: (id: string, data: UpdateUserDto) => 
+    clientFetch<UserDto>(`users/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+};
+
+// features/users/hooks/useUsers.ts
+export const useUsers = () => useSuspenseQuery({
+  queryKey: ["users"],
+  queryFn: userService.fetchAll
+});
+```
+
 ## Enterprise Context Understanding
 
 ### Primary User Scenarios
@@ -148,6 +173,11 @@ Every route segment must have a `loading.tsx` file that renders a skeleton mirro
 
 ### 3. Mandatory In-Page `<Suspense>`
 Components that fetch data asynchronously must be wrapped in a `<Suspense>` boundary with a corresponding skeleton fallback. This is the **Level 2** loading strategy for granular streaming.
+
+### 4. Mandatory Mobile Optimization & Accessibility
+- **Viewport Configuration**: The `RootLayout` must export a `Viewport` object with `viewportFit: "cover"` to ensure content occupies the full screen on modern devices.
+- **Accessible Sheets/Dialogs**: All `Sheet` and `Dialog` components must include a `SheetDescription` or `DialogDescription` (even if hidden with `sr-only`) to comply with accessibility standards for screen readers.
+- **Safe Area Support**: Main dashboard layouts must include bottom padding for safe area insets (e.g., `pb-safe-area-inset-bottom`) on mobile views.
 
 ## Skeleton Loading Screen Pattern
 
