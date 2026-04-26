@@ -34,11 +34,3 @@ export const useExtendidosByFecha = (fecha: string) => {
     retry: 1,
   });
 };
-
-export const useExtendidosEnCamaraByFecha = (fecha: string) => {
-  return useSuspenseQuery<ExtendidoDto[]>({
-    queryKey: extendidosQueryKeys.byFecha(fecha),
-    queryFn: () => extendidoService.fetchExtendidosEnCamara(fecha),
-    retry: 1,
-  });
-};

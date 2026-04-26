@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Building2, RotateCcw } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface ExtendidoDataTableProps {
   partidas: ExtendidoDto[];
@@ -29,10 +28,10 @@ interface ExtendidoDataTableProps {
   currentCamaraId?: string;
 }
 
-export function ExtendidoDataTable({ 
-  partidas, 
+export function ExtendidoDataTable({
+  partidas,
   onCamaraChange,
-  currentCamaraId = "all" 
+  currentCamaraId = "all",
 }: ExtendidoDataTableProps) {
   const { data: camaras = [] } = useCamaras();
   const [slideOverOpen, setSlideOverOpen] = useState(false);
@@ -72,7 +71,11 @@ export function ExtendidoDataTable({
               Todas las cámaras
             </SelectItem>
             {camaras.map((c) => (
-              <SelectItem key={c.codigo} value={c.codigo.toString()} className="font-medium">
+              <SelectItem
+                key={c.codigo}
+                value={c.codigo.toString()}
+                className="font-medium"
+              >
                 {c.nombre}
               </SelectItem>
             ))}
