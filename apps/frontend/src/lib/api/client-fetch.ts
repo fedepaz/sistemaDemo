@@ -1,10 +1,10 @@
 // src/lib/api/client-fetch.ts
 "use client";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+const backendUrl = process.env.NEXT_PUBLIC_API_URL; // instead of BACKEND_URL
 
 if (!backendUrl) {
-  console.warn("NEXT_PUBLIC_BACKEND_URL is not set");
+  console.warn("NEXT_PUBLIC_API_URL is not set");
 }
 
 let isRefreshing = false;

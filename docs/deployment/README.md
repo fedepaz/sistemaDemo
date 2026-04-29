@@ -55,9 +55,9 @@ The system requires specific settings to run. You must create configuration file
       cp apps/frontend/.env.example apps/frontend/.env.production
       ```
     - **Key Variable**:
-        - `NEXT_PUBLIC_BACKEND_URL`: Set this to `/api` for standard routing.
+        - `NEXT_PUBLIC_API_URL`: Set this to your backend URL (e.g., `http://localhost:3001`).
 
-### 3. Build & Launch
+### 3. Build & Launch (Option A: Docker - Standby)
 In the main folder of the project, run:
 ```bash
 docker compose up -d --build
@@ -66,6 +66,15 @@ This command will:
 1.  **Download & Build**: Prepare all the necessary components automatically.
 2.  **Database Seeding**: **(Important)** On the first launch, the system will automatically create the initial administrator user so you can log in immediately.
 3.  **Resilience**: Recent improvements ensure a more stable installation even with slower internet connections.
+
+### 3b. Build & Launch (Option B: PM2 - Windows Server 2016+)
+For environments where Docker is not supported (like Windows Server 2016), use PM2:
+
+1. **Install PM2**: `npm install pm2 -g`
+2. **Build Apps**: `pnpm build`
+3. **Launch**:
+   - **Windows**: `pm2 start ecosystemWin.config.js`
+   - **Linux**: `pm2 start ecosystemLinux.config.js`
 
 ### 4. Verification
 - **Web App**: Accessible on your server's IP at port **3000**.
