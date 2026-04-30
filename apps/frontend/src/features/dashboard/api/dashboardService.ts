@@ -1,8 +1,13 @@
-// src/features/dashboard/api/dashboardService.ts
+﻿// src/features/dashboard/api/dashboardService.ts
 
 import { ClimateKpiInterface, CurrencyRateInterface } from "../types";
 import { fetchDolarBlue, fetchDolarOficial, fetchEuro } from "./dolarApi";
-import { getWeatherData } from "./openMeteo";
+
+async function getWeatherData() {
+  const response = await fetch("/api/weather");
+  if (!response.ok) throw new Error("Failed to fetch weather data");
+  return response.json();
+}
 
 export const dashboardService = {
   async fetchKPIs(): Promise<ClimateKpiInterface[]> {
@@ -41,8 +46,9 @@ export const dashboardService = {
   > {
     const weather = await getWeatherData();
 
-    return weather.forecast.map((day) => ({
-      date: day.date,
+return weather.forecast.map((day: { date: string; maxTemp: number; minTemp: number; rainProb: number }) => ({
+
+    date: new Date(day.date), 
       maxTemp: day.maxTemp,
       minTemp: day.minTemp,
     }));
