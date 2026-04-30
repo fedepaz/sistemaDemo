@@ -32,18 +32,25 @@ Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 
 ## Deployment & Development Modes
 
-### Container-First Strategy
+### Container-First & Process-Based Strategy
 
-The platform utilizes a unified Docker-based architecture for both local development and production environments to ensure environment parity and reliable deployments.
+The platform utilizes a unified Docker-based architecture for both local development and production environments. For environments where Docker is not supported (e.g., Windows Server 2016), a process-based deployment using **PM2** is supported.
 
-- **Orchestration**: `docker-compose.yml` serves as the blueprint for full-stack orchestration (Frontend, Backend, MariaDB, Valkey).
+- **Orchestration (Docker)**: `docker-compose.yml` serves as the blueprint for full-stack orchestration (Frontend, Backend, MariaDB, Valkey).
+- **Orchestration (PM2)**: `ecosystemWin.config.js` and `ecosystemLinux.config.js` manage services via process management.
 - **Service Versions**: MariaDB 11 and Valkey 8 are the standard across all environments.
-- **Migrations**: Database migrations are executed within the backend container during startup (via `entrypoint.sh`).
-- **Networking**: Services communicate via a dedicated Docker network with health-check synchronization (e.g., Backend waits for MariaDB to be healthy).
+- **Migrations**: Database migrations are executed within the backend container during startup (via `entrypoint.sh`) or manually via `pnpm prisma migrate deploy` in process-based setups.
+- **Networking**: Services communicate via a dedicated Docker network or localhost ports in PM2 setups.
 
 ### Local Development Mode
-- Hot-reloading enabled for both Frontend and Backend within containers.
-- Environment variables configured via `.env` files mapped to containers.
+- Hot-reloading enabled for both Frontend and Backend.
+- Environment variables configured via `.env` files.
+
+### Process Management (PM2)
+To ensure reliable execution on traditional servers:
+- **Service Management**: Use `pm2 start ecosystemWin.config.js` for Windows environments.
+- **Auto-restart**: PM2 handles automatic restarts on failure and system reboots.
+- **Log Management**: PM2 captures and rotates logs for both frontend and backend services.
 
 ### Container Security & Permissions
 To ensure secure and reliable execution in production environments:

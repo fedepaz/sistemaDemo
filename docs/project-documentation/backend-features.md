@@ -12,6 +12,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Legacy Database Connectivity**: `LegacyMysqlModule` providing a global `LegacyMysqlService` with enhanced connection pooling (keep-alive enabled), graceful lifecycle management, and security guards for raw SQL execution.
 - [x] **Request ID Middleware**: `RequestIdMiddleware` for traceability.
 - [x] **Zod Validation Pipe**: `ZodValidationPipe` for type-safe request validation.
+- [x] **Continuous Dependency Security**: Automated high-severity vulnerability monitoring via `pnpm audit` in CI/CD, with proactive resolution through surgical `pnpm.overrides`.
 
 ## Modules & Features
 
