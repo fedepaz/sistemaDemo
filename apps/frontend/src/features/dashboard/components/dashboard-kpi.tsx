@@ -96,7 +96,7 @@ function DashboardKPI() {
           </div>
 
           {/* Right: Forecast */}
-          <div className="flex items-center justify-between sm:justify-center gap-2 sm:gap-4 px-3 py-3 sm:px-8 sm:py-4 border-t 2xl:border-t-0 2xl:border-l border-border/50 shrink-0 bg-muted/5 overflow-x-auto w-full 2xl:w-auto scrollbar-hide">
+          <div className="flex items-center justify-center sm:justify-center gap-1 sm:gap-4 px-3 py-3 sm:px-8 sm:py-4 border-t xl:border-t-0 xl:border-l border-border/50 shrink-0 bg-muted/5 overflow-x-auto w-full xl:w-auto scrollbar-hide">
             {forecastData.map((day, index) => {
               const today = isToday(day.date);
               const past = isPast(day.date);
