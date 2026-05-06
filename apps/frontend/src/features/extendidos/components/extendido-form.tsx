@@ -6,7 +6,6 @@ import { ExtendidoDto } from "@vivero/shared";
 import {
   Package,
   Calendar,
-  Warehouse,
   Info,
   AlertCircle,
   Hash,
@@ -80,16 +79,13 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
             </div>
             <div>
               <h2 className="text-lg md:text-xl font-black tracking-tight leading-none text-foreground">
-                Partida #{selectedExtendido.partidaId}
+                {selectedExtendido.codigoEspecie}
               </h2>
               <div className="flex items-center gap-2 mt-1.5">
                 <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest bg-muted px-1.5 py-0.5 rounded border border-border/40">
-                  {selectedExtendido.codigoEspecie}
-                </span>
-                <span className="h-1 w-1 rounded-full bg-border" />
-                <span className="text-[10px] font-bold text-primary uppercase">
                   {selectedExtendido.nombreEspecie}
                 </span>
+                <span className="h-1 w-1 rounded-full bg-border" />
               </div>
             </div>
           </div>
@@ -147,16 +143,7 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
             <History className="h-3.5 w-3.5 mr-2 hidden sm:inline-block" />
             Producción
           </TabsTrigger>
-          <TabsTrigger
-            value="logistica"
-            className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
-                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
-                       data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50 data-[state=inactive]:hover:text-foreground"
-          >
-            <Warehouse className="h-3.5 w-3.5 mr-2 hidden sm:inline-block" />
-            Logística
-          </TabsTrigger>
+
           <TabsTrigger
             value="notas"
             className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
@@ -211,31 +198,6 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                   </div>
                   <Thermometer className="h-12 w-12 text-primary/20 group-hover:text-primary/30 transition-colors" />
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent
-            value="logistica"
-            className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
-          >
-            <Card className="border-border/60 shadow-sm rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-6">
-                <InfoRow
-                  icon={Warehouse}
-                  label="Destino / Invernadero"
-                  value={selectedExtendido.nombreUbicacion || "SIN ASIGNAR"}
-                />
-                <InfoRow
-                  icon={Hash}
-                  label="Código de Depósito"
-                  value={selectedExtendido.codigoUbicacion}
-                />
-                <InfoRow
-                  icon={Info}
-                  label="Tipo de Envase"
-                  value={selectedExtendido.contenedor}
-                />
               </CardContent>
             </Card>
           </TabsContent>

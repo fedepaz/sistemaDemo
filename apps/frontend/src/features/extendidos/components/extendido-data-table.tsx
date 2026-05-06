@@ -119,6 +119,7 @@ export function ExtendidoDataTable({
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={setSlideOverOpen}
+          title={`Partida #${selectedPartida.partidaId}`}
           formId="extendido-form"
           mode="view"
         >

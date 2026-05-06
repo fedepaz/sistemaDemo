@@ -99,6 +99,20 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     size: 60,
   },
   {
+    accessorKey: "fechaSugeridaSiembra",
+    header: ({ column }) => {
+      return <SortableHeader column={column}>Fecha Sugerida</SortableHeader>;
+    },
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-muted-foreground group">
+        <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
+        <span className="text-xs font-bold font-mono tracking-tighter">
+          {row.original.fechaSugeridaSiembra}
+        </span>
+      </div>
+    ),
+  },
+  {
     accessorKey: "fechaSiembraReal",
     header: ({ column }) => {
       return (
