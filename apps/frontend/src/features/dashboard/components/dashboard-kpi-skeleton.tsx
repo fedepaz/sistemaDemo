@@ -10,13 +10,13 @@ export function DashboardKPISkeleton() {
       <CardContent className="p-0">
         <div className="flex flex-col 2xl:flex-row 2xl:items-center px-1">
           {/* Middle: Current conditions skeleton */}
-          <div className="grid grid-cols-2 md:grid-cols-4 2xl:flex 2xl:flex-nowrap items-center gap-4 px-6 py-4 flex-1">
+          <div className="grid grid-cols-2 md:grid-cols-4 2xl:flex 2xl:flex-nowrap items-center gap-2 sm:gap-4 px-3 py-3 sm:px-6 sm:py-4 flex-1">
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-muted/50 rounded-2xl px-5 py-3.5 flex items-center gap-4 sm:shrink-0 flex-1"
+                className="bg-muted/50 rounded-xl sm:rounded-2xl px-2.5 py-2.5 sm:px-5 sm:py-3.5 flex items-center gap-2.5 sm:gap-4 sm:shrink-0 flex-1"
               >
-                <Skeleton className="h-10 w-10 rounded-xl" />
+                <Skeleton className="h-8 w-8 sm:h-11 sm:w-11 rounded-lg sm:rounded-xl" />
                 <div className="space-y-2 flex-1">
                   <Skeleton className="h-2 w-8" />
                   <Skeleton className="h-6 w-12" />

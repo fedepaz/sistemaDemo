@@ -54,13 +54,13 @@ function DashboardKPI() {
                   key={kpi.label}
                   className={cn(
                     colors.bg,
-                    "rounded-xl sm:rounded-2xl px-3 py-2.5 sm:px-5 sm:py-3.5 flex items-center gap-3 sm:gap-4 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer border border-transparent hover:border-border/50 min-w-0 flex-1",
+                    "rounded-xl sm:rounded-2xl px-3 py-2.5 sm:px-5 sm:py-3.5 flex items-center gap-2 sm:gap-4 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer border border-transparent hover:border-border/50 min-w-0 flex-1",
                   )}
                 >
                   <div
                     className={cn(
                       colors.icon,
-                      "h-8 w-8 sm:h-11 sm:w-11 rounded-lg sm:rounded-xl bg-background/50 flex items-center justify-center shrink-0 shadow-sm",
+                      "hidden lg:flex h-8 w-8 sm:h-11 sm:w-11 rounded-lg sm:rounded-xl bg-background/50 items-center justify-center shrink-0 shadow-sm",
                     )}
                   >
                     <div className="[&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-6 sm:[&>svg]:w-6 drop-shadow-sm">
