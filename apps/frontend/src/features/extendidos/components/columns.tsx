@@ -120,7 +120,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Fecha a Extender</SortableHeader>;
     },
     cell: ({ row }) => {
-      const today = new Date(2025, 6, 3);
+      const today = new Date();
       const dateStr = today.toISOString().split("T")[0];
       const isToday = row.original.fechaEgresoCamara === dateStr;
 
