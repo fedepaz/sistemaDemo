@@ -68,6 +68,16 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
   const isToday =
     selectedExtendido.fechaEgresoCamara === `${year}-${month}-${day}`;
 
+  const getHaiLabel = (hai: string | null | undefined) => {
+    if (!hai) return "-";
+    const map: Record<string, string> = {
+      H: "hortaliza",
+      A: "aromática",
+      I: "injerto",
+    };
+    return map[hai.toUpperCase()] || hai;
+  };
+
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500 h-full max-h-[calc(100vh-140px)] overflow-hidden">
       {/* 🚀 FIXED TOP SECTION: PRODUCTO (Always Visible) */}
@@ -106,7 +116,11 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
           {[
             { label: "Año", value: selectedExtendido.anio, icon: Calendar },
             { label: "Índice", value: selectedExtendido.indice, icon: Hash },
-            { label: "HAI", value: selectedExtendido.hai, icon: Info },
+            {
+              label: "HAI",
+              value: getHaiLabel(selectedExtendido.hai),
+              icon: Info,
+            },
             { label: "CON", value: selectedExtendido.con, icon: Activity },
           ].map((item, idx) => (
             <div
@@ -117,10 +131,10 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
                 <item.icon className="h-3 w-3 text-muted-foreground" />
               </div>
               <div className="min-w-0">
-                <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none mb-0.5">
+                <p className="text-[8px] font-bold uppercase leading-none mb-0.5">
                   {item.label}
                 </p>
-                <p className="text-xs font-black truncate">{item.value}</p>
+                <p className="text-xs truncate uppercase">{item.value}</p>
               </div>
             </div>
           ))}
@@ -132,7 +146,7 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
         defaultValue="produccion"
         className="flex-1 flex flex-col overflow-hidden min-h-0"
       >
-        <TabsList className="grid grid-cols-3 bg-muted/80 p-1.5 rounded-2xl shrink-0 h-14 border border-border/40 gap-2 shadow-inner">
+        <TabsList className="grid grid-cols-2 bg-muted/80 p-1.5 rounded-2xl shrink-0 h-14 border border-border/40 gap-2 shadow-inner">
           <TabsTrigger
             value="produccion"
             className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
@@ -163,40 +177,72 @@ export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-6">
-                <InfoRow
-                  icon={Calendar}
-                  label="Fecha de Siembra"
-                  value={selectedExtendido.fechaSiembraReal}
-                />
-                {isToday ? (
+              <CardContent className="p-6 space-y-6">
+                <div className="grid grid-cols-1 gap-1">
+                  <InfoRow
+                    icon={Calendar}
+                    label="Fecha Sugerida"
+                    value={selectedExtendido.fechaSugeridaSiembra}
+                    className="border-primary/5"
+                  />
+                  <InfoRow
+                    icon={ClipboardList}
+                    label="Fecha Real Siembra"
+                    value={selectedExtendido.fechaSiembraReal}
+                    className="border-primary/5"
+                  />
                   <InfoRow
                     icon={ChevronRight}
                     label="Egreso de Cámara"
                     value={selectedExtendido.fechaEgresoCamara}
-                    badge={<Badge variant="destructive">Hoy</Badge>}
+                    badge={
+                      isToday ? (
+                        <Badge variant="destructive" className="animate-pulse">
+                          Hoy
+                        </Badge>
+                      ) : null
+                    }
+                    className="border-0"
                   />
-                ) : (
-                  <InfoRow
-                    icon={ChevronRight}
-                    label="Egreso de Cámara"
-                    value={selectedExtendido.fechaEgresoCamara}
-                  />
-                )}
-                <div className="mt-8 p-6 bg-primary/5 border border-primary/10 rounded-2xl flex items-center justify-between group">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-primary/70 block leading-none">
-                      Estadía en Cámara
-                    </span>
-                    <p className="text-4xl font-black text-primary leading-none group-hover:scale-105 transition-transform origin-left">
-                      {selectedExtendido.diasEnCamara} Días
-                    </p>
-                    <p className="text-[9px] font-bold text-muted-foreground/60 uppercase mt-3">
-                      Cámara Germinación ID:{" "}
-                      {selectedExtendido.codigoCamaraGerminacion}
-                    </p>
+                </div>
+
+                <div className="p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-[2rem] relative overflow-hidden group shadow-md transition-all hover:shadow-lg">
+                  {/* Decorative element */}
+                  <div className="absolute -right-4 -top-4 h-24 w-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors" />
+
+                  <div className="relative z-10 flex items-center justify-between">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                          <Thermometer className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 block leading-none mb-2">
+                            Tiempo de Estadía Sugerido
+                          </span>
+                          <p className="text-sm font-bold text-foreground">
+                            {selectedExtendido.diasEnCamara} Días
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="pt-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-primary/70 block leading-none mb-1">
+                          Cámara Germinación
+                        </span>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-5xl font-black text-primary tracking-tighter">
+                            # {selectedExtendido.codigoCamaraGerminacion}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="hidden sm:flex h-20 w-20 items-center justify-center rounded-full bg-primary/5 border border-primary/10">
+                      <Activity className="h-10 w-10 text-primary/30 animate-pulse" />
+                    </div>
                   </div>
-                  <Thermometer className="h-12 w-12 text-primary/20 group-hover:text-primary/30 transition-colors" />
                 </div>
               </CardContent>
             </Card>
