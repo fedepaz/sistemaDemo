@@ -24,6 +24,14 @@ docker-compose up -d --build nextjs
 docker image prune -f
 ```
 
+### Windows Resilience
+If running on a local Windows machine without full Docker management:
+1.  Navigate to `docs/scripts/`.
+2.  Run `startapp.bat`. This script will:
+    - Change directory to the project root.
+    - Execute `pnpm start`.
+    - Automatically restart the application after a 5-second delay if it crashes.
+
 ### Backups
 ```bash
 # Manual database dump

@@ -41,7 +41,7 @@ export function ExtendidosEditForm({ selectedExtendido }: ExtendidosEditFormProp
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100vh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* 🚀 PRODUCT HEADER (Context) */}
       <div className="space-y-4 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-4 rounded-2xl border border-primary/20 shadow-sm">
