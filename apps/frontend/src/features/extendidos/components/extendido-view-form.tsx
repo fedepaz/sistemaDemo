@@ -59,7 +59,7 @@ const InfoRow = ({
   </div>
 );
 
-export function ExtendidosForm({ selectedExtendido }: ExtendidosFormProps) {
+export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
   const today = new Date();
   const year = today.getFullYear();
   const month =
