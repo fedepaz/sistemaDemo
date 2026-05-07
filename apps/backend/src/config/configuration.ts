@@ -83,7 +83,7 @@ const configFactory = (): AppConfig => ({
     refreshSecret:
       process.env.JWT_REFRESH_SECRET ||
       'your-super-secret-refresh-jwt-key-change-in-prod',
-    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '12h',
   },
   defaultTenantId: process.env.DEFAULT_TENANT_ID || '',
   defaultPassword: process.env.DEFAULT_PASSWORD || '',

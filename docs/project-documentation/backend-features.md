@@ -103,7 +103,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Specialized Retrieval**: Supports querying by date with complex joins to species and location data.
 - [x] **Full Retrieval**: `GET /l-extendidos` retrieves all production batches with optimized joins.
 - [x] **Date Discovery**: `GET /l-extendidos/fechas` retrieves distinct production dates for filtering.
-- [x] **Data Mapping & Transformation**: Implements `ExtendidoDto` with descriptive field names, species name lookup, and calculated dates.
+- [x] **Data Mapping & Transformation**: Implements `ExtendidoDto` with descriptive field names, including the newly mapped `fechaSugeridaSiembra`, species name lookup, and calculated dates.
 - [x] **Modular Design**: Encapsulated in `LegacyExtendidosModule`.
 
 ### Legacy Base Module

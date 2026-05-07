@@ -171,13 +171,14 @@ This document tracks all React components within the `apps/frontend/src` directo
 | :--- | :---: | :---: | :---: | :---: |
 | `ExtendidoDashboardSkeleton` | [x] | [x] | [x] | [x] |
 | `ExtendidoDataTable` | [x] | [x] | [x] | [x] |
-| `ExtendidosForm` | [x] | [x] | [x] | [x] |
+| `ExtendidosViewForm` | [x] | [x] | [x] | [x] |
+| `ExtendidosEditForm` | [x] | [x] | [x] | [x] |
 | `ExtendidoKPIs` | [x] | [x] | [x] | [x] |
 | `ExtendidoDashboard` | [x] | [x] | [x] | [x] |
 | `ExtendidoView` | [x] | [x] | [x] | [x] |
 | `EmptyState` | [x] | [x] | [x] | [x] |
 
-### Users
+## Users
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
 | `UsersDashboardSkeleton` | [x] | [x] | [x] | [x] |
@@ -190,6 +191,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `UserMenu` | [x] | [x] | [x] | [x] |
 | `FullNameCell` | [x] | [x] | [x] | [x] |
 | `StatusCell` | [x] | [x] | [x] | [x] |
+| `CreatedAtCell` | [x] | [x] | [x] | [x] |
 | `ChangePasswordForm` | [x] | [x] | [x] | [x] |
 
 ## Providers

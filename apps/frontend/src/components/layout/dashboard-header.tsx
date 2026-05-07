@@ -1,7 +1,7 @@
 // src/components/layout/dashboard-header.tsx
 "use client";
 
-import { User } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,12 +25,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Logo } from "../common/logo";
+import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
 
 export function DashboardHeader() {
   const { isLoading, logoutAsync } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
   const [openProfile, setOpenProfile] = useState(false);
+
+  const currentDate = new Date();
+  const weekNum = getISOWeek(currentDate);
+  const totalWeeks = getTotalWeeks(currentDate.getFullYear());
+  const formattedDate = formatSpanishDate(currentDate);
 
   useEffect(() => {
     if (!userProfile) {
@@ -66,18 +72,21 @@ export function DashboardHeader() {
             <ThemeToggle />
             */}
 
-            {/* Notifications 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative agricultural-touch-target"
-            >
-              <Bell className="h-5 w-5" />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center bg-destructive text-white text-xs">
-                3
-              </Badge>
-            </Button>
-            */}
+            {/* Notifications */}
+            {/* Left: Date header */}
+            <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 border-r border-border/50 h-16">
+              <div className="hidden sm:flex h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl bg-primary/10 items-center justify-center shadow-inner shrink-0">
+                <Calendar className="h-4 w-4 text-primary" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider sm:tracking-widest truncate leading-tight">
+                  <span className="hidden sm:inline">Mendoza • </span>Semana {weekNum}/{totalWeeks}
+                </p>
+                <p className="hidden sm:block text-[11px] sm:text-xs font-bold text-foreground capitalize truncate leading-tight">
+                  {formattedDate}
+                </p>
+              </div>
+            </div>
 
             {/* User Menu */}
             <DropdownMenu>
