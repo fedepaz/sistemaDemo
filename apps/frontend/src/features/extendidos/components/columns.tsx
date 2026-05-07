@@ -12,6 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Calendar, LogOut, Layers, Microscope } from "lucide-react";
+import { formatShortDate } from "@/lib/date-utils";
 
 export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
@@ -107,7 +108,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       <div className="flex items-center gap-2 text-muted-foreground group">
         <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
         <span className="text-xs font-bold font-mono tracking-tighter">
-          {row.original.fechaSugeridaSiembra}
+          {formatShortDate(row.original.fechaSugeridaSiembra)}
         </span>
       </div>
     ),
@@ -123,7 +124,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       <div className="flex items-center gap-2 text-muted-foreground group">
         <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
         <span className="text-xs font-bold font-mono tracking-tighter">
-          {row.original.fechaSiembraReal}
+          {formatShortDate(row.original.fechaSiembraReal)}
         </span>
       </div>
     ),
@@ -147,7 +148,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
             <span
               className={`text-xs font-black font-mono tracking-tighter ${isToday ? "text-primary" : ""}`}
             >
-              {row.original.fechaEgresoCamara}
+              {formatShortDate(row.original.fechaEgresoCamara)}
             </span>
           </div>
           {isToday && (
