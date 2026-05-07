@@ -20,6 +20,7 @@ export class ExtendidosService {
       injerto: row.injerto,
       contenedor: row.contenedor,
       codigoCamaraGerminacion: row.cg,
+      fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,
       diasEnCamara: row.diasCamara,
       fechaEgresoCamara: row.fechaEgresoCamara,

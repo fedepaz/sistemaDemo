@@ -3,7 +3,7 @@
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { useState, useCallback } from "react";
-import { ExtendidosForm } from "./extendido-form";
+import { ExtendidosViewForm } from "./extendido-view-form";
 import { partidaColumns } from "./columns";
 import { ExtendidoDto } from "@vivero/shared";
 import { useCamaras } from "../hooks/useDepositos";
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Building2, RotateCcw } from "lucide-react";
+import { ExtendidosEditForm } from "./extendido-edit-form";
 
 interface ExtendidoDataTableProps {
   partidas: ExtendidoDto[];
@@ -38,9 +39,17 @@ export function ExtendidoDataTable({
   const [selectedPartida, setSelectedPartida] = useState<ExtendidoDto | null>(
     null,
   );
+  const [mode, setMode] = useState<"view" | "edit">("view");
 
   const handleExtendidoView = (row: ExtendidoDto) => {
     setSelectedPartida(row);
+    setMode("view");
+    setSlideOverOpen(true);
+  };
+
+  const handleEdit = (row: ExtendidoDto) => {
+    setSelectedPartida(row);
+    setMode("edit");
     setSlideOverOpen(true);
   };
 
@@ -55,6 +64,13 @@ export function ExtendidoDataTable({
   const handleClear = useCallback(() => {
     onCamaraChange?.("all");
   }, [onCamaraChange]);
+
+  const handleOpenChange = (open: boolean) => {
+    setSlideOverOpen(open);
+    if (!open) {
+      setSelectedPartida(null);
+    }
+  };
 
   const hasActiveFilters = currentCamaraId !== "all";
 
@@ -112,18 +128,28 @@ export function ExtendidoDataTable({
         totalCount={partidas.length}
         onExport={handleExport}
         onView={handleExtendidoView}
+        onEdit={handleEdit}
         toolbarContent={toolbarContent}
       />
 
       {selectedPartida && (
         <SlideOverForm
           open={slideOverOpen}
-          onOpenChange={setSlideOverOpen}
+          onOpenChange={handleOpenChange}
+          title={
+            mode === "view"
+              ? `Partida #${selectedPartida.partidaId}`
+              : `Procesar Extendido #${selectedPartida.partidaId}`
+          }
           formId="extendido-form"
-          mode="view"
+          mode={mode}
         >
           <div className="space-y-2">
-            <ExtendidosForm selectedExtendido={selectedPartida} />
+            {mode === "view" ? (
+              <ExtendidosViewForm selectedExtendido={selectedPartida} />
+            ) : (
+              <ExtendidosEditForm selectedExtendido={selectedPartida} />
+            )}
           </div>
         </SlideOverForm>
       )}

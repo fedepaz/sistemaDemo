@@ -13,6 +13,7 @@ export interface LegacyExtendido extends RowDataPacket {
   injerto: string;
   contenedor: string;
   cg: number;
+  f_siem: string;
   f_siembra: string;
   diasCamara: number;
   fechaEgresoCamara: string; // DATE_ADD(...)

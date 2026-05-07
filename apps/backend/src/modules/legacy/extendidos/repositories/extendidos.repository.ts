@@ -81,7 +81,7 @@ export class ExtendidosRepository {
     SELECT 
       p.partida, p.ano, p.indice, p.hai, p.con,
       p.espvar, e.nombre AS especieNombre,
-      p.injerto, p.contenedor, p.cg, p.f_siembra,
+      p.injerto, p.contenedor, p.cg, p.f_siembra,p.f_siem,
       p1.camara AS diasCamara,
       DATE_ADD(p.f_siembra, INTERVAL p1.camara DAY) AS fechaEgresoCamara,
       p.extendido,

@@ -2,13 +2,7 @@
 "use client";
 
 import { useDashboardKPIs, useForecastKPIs } from "../hooks/hooks";
-import {
-  Calendar,
-  Droplets,
-  CloudRain,
-  Thermometer,
-  Wind,
-} from "lucide-react";
+import { Droplets, CloudRain, Thermometer, Wind } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -47,37 +41,12 @@ function DashboardKPI() {
   const { data } = useDashboardKPIs();
   const { data: forecastData } = useForecastKPIs();
 
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString("es-AR", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   return (
     <Card className="overflow-hidden border-border/40 shadow-sm bg-card">
       <CardContent className="p-0">
-        <div className="flex flex-col xl:flex-row xl:items-center px-0.5 sm:px-1">
-          {/* Left: Date header */}
-          <div className="bg-muted/30 px-4 py-3 sm:px-6 sm:py-4 xl:rounded-l-lg shrink-0 border-b xl:border-b-0 xl:border-r border-border/50">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl bg-primary/10 flex items-center justify-center shadow-inner shrink-0">
-                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest truncate">
-                  Mendoza
-                </p>
-                <p className="text-xs sm:text-sm font-bold text-foreground capitalize truncate">
-                  {formattedDate}
-                </p>
-              </div>
-            </div>
-          </div>
-
+        <div className="flex flex-col 2xl:flex-row 2xl:items-center px-0.5 sm:px-1">
           {/* Middle: Current conditions */}
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap xl:flex-nowrap sm:items-center gap-2 sm:gap-4 px-3 py-3 sm:px-6 sm:py-4 flex-1 min-w-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 2xl:flex 2xl:flex-nowrap items-center gap-2 sm:gap-4 px-3 py-3 sm:px-6 sm:py-4 flex-1 min-w-0">
             {data.map((kpi, index) => {
               const colors = kpiChartColors[index % kpiChartColors.length];
               return (
@@ -85,22 +54,37 @@ function DashboardKPI() {
                   key={kpi.label}
                   className={cn(
                     colors.bg,
-                    "rounded-xl sm:rounded-2xl px-3 py-2 sm:px-5 sm:py-3 flex items-center gap-2 sm:gap-4 transition-all hover:scale-[1.02] sm:hover:scale-[1.05] cursor-pointer border border-transparent hover:border-border min-w-0",
+                    "rounded-xl sm:rounded-2xl px-3 py-2.5 sm:px-5 sm:py-3.5 flex items-center gap-2 sm:gap-4 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer border border-transparent hover:border-border/50 min-w-0 flex-1",
                   )}
                 >
-                  <div className={`${colors.icon} [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-6 sm:[&>svg]:w-6 drop-shadow-sm shrink-0`}>
-                    {climateIcons[kpi.label]}
+                  <div
+                    className={cn(
+                      colors.icon,
+                      "hidden lg:flex h-8 w-8 sm:h-11 sm:w-11 rounded-lg sm:rounded-xl bg-background/50 items-center justify-center shrink-0 shadow-sm",
+                    )}
+                  >
+                    <div className="[&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-6 sm:[&>svg]:w-6 drop-shadow-sm">
+                      {climateIcons[kpi.label]}
+                    </div>
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.15em] opacity-50 truncate">
+                  <div className="flex flex-col min-w-0 justify-center">
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.15em] text-muted-foreground/70 truncate mb-0.5">
                       {kpi.label}
                     </span>
-                    <div className="flex items-baseline gap-1">
-                      <span className={`text-lg sm:text-2xl font-black tracking-tighter ${colors.text} truncate`}>
+                    <div className="flex items-baseline gap-1 min-w-0">
+                      <span
+                        className={cn(
+                          "text-lg sm:text-2xl font-black tracking-tighter leading-none truncate",
+                          colors.text,
+                        )}
+                      >
                         {kpi.value}
                       </span>
                       <span
-                        className={`text-[10px] sm:text-xs font-bold ${colors.text} opacity-60 shrink-0`}
+                        className={cn(
+                          "text-[10px] sm:text-xs font-bold opacity-70 shrink-0",
+                          colors.text,
+                        )}
                       >
                         {kpi.unit}
                       </span>
@@ -112,7 +96,7 @@ function DashboardKPI() {
           </div>
 
           {/* Right: Forecast */}
-          <div className="flex items-center justify-center gap-3 sm:gap-4 px-4 py-3 sm:px-8 sm:py-4 border-t xl:border-t-0 xl:border-l border-border/50 shrink-0 bg-muted/5 overflow-x-auto w-full xl:w-auto scrollbar-hide">
+          <div className="flex items-center justify-center sm:justify-center gap-1 sm:gap-4 px-3 py-3 sm:px-8 sm:py-4 border-t xl:border-t-0 xl:border-l border-border/50 shrink-0 bg-muted/5 overflow-x-auto w-full xl:w-auto scrollbar-hide">
             {forecastData.map((day, index) => {
               const today = isToday(day.date);
               const past = isPast(day.date);
@@ -132,7 +116,9 @@ function DashboardKPI() {
                   <p
                     className={cn(
                       "text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-1 sm:mb-2",
-                      today ? "text-primary-foreground/90" : "text-muted-foreground",
+                      today
+                        ? "text-primary-foreground/90"
+                        : "text-muted-foreground",
                     )}
                   >
                     {day.date.toLocaleDateString("es-AR", { weekday: "short" })}
@@ -149,7 +135,9 @@ function DashboardKPI() {
                     <p
                       className={cn(
                         "text-[10px] sm:text-[11px] font-bold",
-                        today ? "text-primary-foreground/70" : "text-muted-foreground/60",
+                        today
+                          ? "text-primary-foreground/70"
+                          : "text-muted-foreground/60",
                       )}
                     >
                       {Math.round(day.minTemp)}°
