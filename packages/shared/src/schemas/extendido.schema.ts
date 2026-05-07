@@ -17,6 +17,7 @@ export const ExtendidoDtoSchema = z.object({
   codigoCamaraGerminacion: z.number(), // cg (código de cámara de germinación)
 
   // Fechas
+  fechaSugeridaSiembra: z.string(), // f_siem
   fechaSiembraReal: z.string(), // f_siembra
   diasEnCamara: z.number(), // diasCamara
   fechaEgresoCamara: z.string(), // fechaEgresoCamara (calculada)

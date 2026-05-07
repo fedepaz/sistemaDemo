@@ -134,7 +134,7 @@ Valkey: 8+
 ## 🔒 Security Configuration
 
 ```typescript
-✅ JWT tokens with short expiration (15 min access + refresh tokens)
+✅ JWT tokens with short expiration (15 min access + 12h refresh tokens)
 ✅ Rate limiting (100 requests/minute per IP)
 ✅ Input validation with Zod schemas
 ✅ SQL injection prevention (Prisma ORM)

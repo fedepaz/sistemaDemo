@@ -271,7 +271,7 @@ Authentication & Authorization:
   - Multi-factor authentication support
   - Permission-based access control (Admin, Manager, Operator, Viewer)
   - Managed Entity Registry: All manageable tables must be registered in the `Entity` table in the database to be available for the permission system. The `EntitiesModule` provides CRUD operations for these definitions.
-  - JWT tokens with short expiration (15 min access + refresh)
+  - JWT tokens with short expiration (15 min access + 12h refresh)
   - API key management for system integrations
 
 Data Protection:
