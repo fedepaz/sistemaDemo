@@ -52,6 +52,17 @@ To ensure reliable execution on traditional servers:
 - **Auto-restart**: PM2 handles automatic restarts on failure and system reboots.
 - **Log Management**: PM2 captures and rotates logs for both frontend and backend services.
 
+### Local Deployment Resilience (Windows)
+For environments where infrastructure reliability is low (e.g., local Windows servers):
+- **Startup Script**: Use `docs/scripts/startapp.bat` to ensure the application restarts automatically in case of crashes or system reboots.
+- **Retry Loop**: The script implements a timeout loop to prevent CPU exhaustion during rapid failures.
+
+### API Proxying for External Services
+To improve security and bypass CORS limitations:
+- **Internal Routes**: External APIs (e.g., OpenMeteo) should be proxied through Next.js API routes (e.g., `/app/api/weather/route.ts`).
+- **Secret Management**: This prevents exposing API keys or sensitive external endpoints to the client-side.
+- **Reliability**: Provides a consistent internal interface for frontend features even if external API structures change.
+
 ### Container Security & Permissions
 To ensure secure and reliable execution in production environments:
 - **Non-privileged Users**: Always run containers as a non-root user (e.g., `USER nodejs`).

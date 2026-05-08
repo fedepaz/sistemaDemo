@@ -11,7 +11,8 @@ When developing or reviewing a feature, ensure it complies with the following:
 | **API Service** | Existence of `api/` directory with a stateless service object encapsulating `clientFetch` calls. |
 | **Clean Hooks** | TanStack Query hooks invoke service methods; no `clientFetch` calls inside hooks. |
 | **Suspense Ready** | All GET requests use `useSuspenseQuery` for declarative loading states. |
-| **Skeleton Strategy** | Presence of a matching skeleton component in `components/` and usage in `loading.tsx`. |
+| **Skeleton Strategy** | Presence of a matching skeleton component in `components/` and usage in `loading.tsx` |
+| **API Proxying** | External API calls (Weather, etc.) must be proxied via `/api/*` routes for security and CORS compliance. |
 | **DTO Alignment** | Exclusively uses DTOs from `@vivero/shared` for all data contracts. |
 
 ---

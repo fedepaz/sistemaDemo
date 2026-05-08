@@ -11,6 +11,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { formatShortDate } from "@/lib/date-utils";
 
 // Helper para formatear cambios
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -131,11 +132,9 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
       const date = new Date(row.getValue("timestamp"));
       return (
         <div className="flex flex-col text-sm min-w-[140px]">
-          <span className="font-medium">
-            {date.toLocaleDateString("es-ES")}
-          </span>
+          <span className="font-medium">{formatShortDate(date)}</span>
           <span className="text-xs text-muted-foreground">
-            {date.toLocaleTimeString("es-ES", {
+            {date.toLocaleTimeString("es-AR", {
               hour: "2-digit",
               minute: "2-digit",
             })}
