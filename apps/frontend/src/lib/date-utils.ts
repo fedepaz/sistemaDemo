@@ -38,3 +38,18 @@ export const formatSpanishDate = (date: Date) => {
     day: "numeric",
   });
 };
+
+/**
+ * Format a date in a compact numeric format (DD/MM/YYYY) for Argentina.
+ * Ideal for tables and dense UI.
+ */
+export const formatShortDate = (date: Date | string | null | undefined) => {
+  if (!date) return "-";
+  const d = typeof date === "string" ? new Date(date) : date;
+  // Check for invalid date
+  if (isNaN(d.getTime())) return "-";
+  
+  return d.toLocaleDateString("es-AR", {
+    dateStyle: "short",
+  });
+};

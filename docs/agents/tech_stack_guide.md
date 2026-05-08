@@ -41,7 +41,7 @@ Framework: NestJS (TypeScript-first)
 ### Infrastructure & DevOps
 
 ```yaml
-Package Manager: pnpm 8+
+Package Manager: pnpm 10+
 Container Runtime: Docker + Docker Compose (Unified Dev/Prod Strategy)
 Orchestration: Kubernetes + Helm (for scale-out)
 Infrastructure as Code: Terraform
@@ -123,7 +123,7 @@ L4: CDN (static assets) - 30 days
 ```bash
 # Required software versions
 Node.js: 18.18.0+
-pnpm: 8.15.0+
+pnpm: 10.0.0+
 Docker: 24.0+ (and Docker Compose)
 MariaDB: 11+
 Valkey: 8+

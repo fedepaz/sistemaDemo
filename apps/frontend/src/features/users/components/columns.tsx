@@ -7,6 +7,7 @@ import {
 } from "@/components/data-display/data-table";
 import { UserProfileDto } from "@vivero/shared";
 import { Calendar } from "lucide-react";
+import { formatShortDate } from "@/lib/date-utils";
 
 interface CellProps {
   row?: Row<UserProfileDto>;
@@ -38,13 +39,12 @@ function StatusCell({ row }: CellProps) {
 
 function CreatedAtCell({ row }: CellProps) {
   if (!row) return null;
-  const userCreatedAt = new Date(row.original.createdAt);
 
   return (
     <div className="flex items-center gap-2 text-muted-foreground group">
       <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
       <span className="text-xs font-bold font-mono tracking-tighter">
-        {userCreatedAt.toLocaleDateString()}
+        {formatShortDate(row.original.createdAt)}
       </span>
     </div>
   );
