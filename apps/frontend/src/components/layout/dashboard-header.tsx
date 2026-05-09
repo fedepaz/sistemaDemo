@@ -18,7 +18,6 @@ import { LoadingSpinner } from "../common/loading-spinner";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useEffect, useState } from "react";
-import { UserMenu } from "../user-profile/user-menu";
 import {
   Tooltip,
   TooltipContent,
@@ -29,10 +28,9 @@ import { Logo } from "../common/logo";
 import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
 
 export function DashboardHeader() {
-  const { isLoading, logoutAsync } = useLogout();
+  const { isLoading } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
-  const [openProfile, setOpenProfile] = useState(false);
 
   const currentDate = new Date();
   const weekNum = getISOWeek(currentDate);
@@ -44,12 +42,6 @@ export function DashboardHeader() {
       router.push("/");
     }
   }, [userProfile, router]);
-
-  const handleLogout = async () => {
-    try {
-      await logoutAsync();
-    } catch {}
-  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -109,46 +101,6 @@ export function DashboardHeader() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
-            {/* User Menu */}
-            <DropdownMenu>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="agricultural-touch-target"
-                      aria-label="Perfil de usuario"
-                    >
-                      <User className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="bottom"
-                  className="border border-border shadow-md"
-                >
-                  <p>Perfil de usuario</p>
-                </TooltipContent>
-              </Tooltip>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  {userProfile?.firstName} {userProfile?.lastName}
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setOpenProfile(true)}>
-                  Perfil
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <button className="w-full" onClick={handleLogout}>
-                    Cerrar sesión
-                  </button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <UserMenu open={openProfile} onOpenChange={setOpenProfile} />
           </div>
         </div>
       </div>
