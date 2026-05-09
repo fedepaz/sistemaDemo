@@ -28,7 +28,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "nombreEspecie",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Nombre Producto</SortableHeader>;
+      return <SortableHeader column={column}>Nombre</SortableHeader>;
     },
     cell: ({ row }) => (
       <TooltipProvider>
@@ -87,7 +87,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "codigoCamaraGerminacion",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Cámara No.</SortableHeader>;
+      return <SortableHeader column={column}>Nª Cámara</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex justify-center font-black text-xs text-foreground">
@@ -99,7 +99,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSugeridaSiembra",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha Sugerida</SortableHeader>;
+      return <SortableHeader column={column}>Fecha sug.</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">
@@ -112,9 +112,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSiembraReal",
     header: ({ column }) => {
-      return (
-        <SortableHeader column={column}>Fecha Real Siembra</SortableHeader>
-      );
+      return <SortableHeader column={column}>Fecha Siembra</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">

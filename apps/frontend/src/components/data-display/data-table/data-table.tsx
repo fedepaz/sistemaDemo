@@ -321,17 +321,26 @@ export function DataTable<TData, TValue>({
   });
 
   useEffect(() => {
-    const columnsId = table.getAllColumns().map((column) => column.id);
-
-    let visibleCount = columnsId.length;
-
-    if (breakpoint === "sm") visibleCount = 2;
+    const allColumns = table.getAllColumns();
+    const columnsId = allColumns.map((column) => column.id);
 
     const visibility: VisibilityState = {};
 
+    // 768px (md) target: Squeeze the data to fit
+    // We prioritize keeping core data and the actions column
+    let visibleCount = columnsId.length;
+
+    if (breakpoint === "sm") {
+      visibleCount = 2; // Mobile: Minimal data
+    } else if (breakpoint === "md") {
+      visibleCount = 3; // Cheap Screen (768px): Focus on the essentials
+    } else if (breakpoint === "lg") {
+      visibleCount = 5; // Standard Laptop
+    }
+
     columnsId.forEach((id, index) => {
-      if (id === "actions") {
-        visibility[id] = true;
+      if (id === "actions" || id === "select") {
+        visibility[id] = true; // Never hide actions or selection
       } else {
         visibility[id] = index < visibleCount;
       }
