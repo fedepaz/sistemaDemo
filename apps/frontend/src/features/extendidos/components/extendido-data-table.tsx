@@ -5,7 +5,11 @@ import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { useState, useCallback } from "react";
 import { ExtendidosViewForm } from "./extendido-view-form";
 import { partidaColumns } from "./columns";
-import { ExtendidoDto } from "@vivero/shared";
+import {
+  AsignarUbicacionDto,
+  AsignarUbicacionDtoSchema,
+  ExtendidoDto,
+} from "@vivero/shared";
 import { useCamaras } from "../hooks/useDepositos";
 import {
   Select,
@@ -23,6 +27,8 @@ import { Button } from "@/components/ui/button";
 import { Building2, RotateCcw } from "lucide-react";
 import { ExtendidosEditForm } from "./extendido-edit-form";
 import { usePartidaMutation } from "../hooks/usePartidaMutation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 interface ExtendidoDataTableProps {
   partidas: ExtendidoDto[];
@@ -47,7 +53,20 @@ export function ExtendidoDataTable({
     setSelectedPartida(null);
   };
 
-  const { mutate, isPending } = usePartidaMutation();
+  const { mutateAsync: asignarUbicacion, isPending: isAsignandoUbicacion } =
+    usePartidaMutation();
+
+  const formAsignarUbicacion = useForm<AsignarUbicacionDto>({
+    resolver: zodResolver(AsignarUbicacionDtoSchema),
+  });
+
+  const handleAsignarUbicacion = async (formData: AsignarUbicacionDto) => {
+    try {
+      await asignarUbicacion(formData);
+    } catch {}
+
+    if (!isAsignandoUbicacion) setSlideOpen(false);
+  };
 
   const handleExtendidoView = (row: ExtendidoDto) => {
     setSelectedPartida(row);
@@ -151,17 +170,16 @@ export function ExtendidoDataTable({
           }
           formId="extendido-form"
           mode={mode}
-          isLoading={isPending}
           saveLabel="Confirmar Extendido"
         >
           <div className="space-y-2">
             {mode === "view" ? (
               <ExtendidosViewForm selectedExtendido={selectedPartida} />
             ) : (
-              <ExtendidosEditForm 
-                selectedExtendido={selectedPartida} 
-                onSuccess={handleProcessSuccess}
-                mutate={mutate}
+              <ExtendidosEditForm
+                form={formAsignarUbicacion}
+                onSubmit={handleAsignarUbicacion}
+                onCancel={() => setSlideOpen(false)}
               />
             )}
           </div>
