@@ -19,7 +19,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Partida</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="font-black text-sm text-primary/80 tracking-tight">
+      <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
       </div>
     ),
@@ -36,11 +36,11 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="flex items-center gap-2 group cursor-help">
-                <span className="font-bold text-sm truncate leading-tight group-hover:text-primary transition-colors">
+                <span className="font-bold text-sm truncate leading-tight">
                   {row.original.codigoEspecie}
                 </span>
                 {row.original.injerto && row.original.injerto !== "N" && (
-                  <span className="text-[10px] font-black text-chart-2 uppercase">
+                  <span className="text-[10px] font-black text-muted-foreground uppercase">
                     ({row.original.injerto})
                   </span>
                 )}
@@ -51,7 +51,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
               className="bg-popover border-border shadow-xl"
             >
               <div className="space-y-1">
-                <p className="text-xs font-bold text-primary">
+                <p className="text-xs font-bold text-foreground">
                   Detalle del Producto
                 </p>
                 <p className="text-[10px] text-muted-foreground leading-tight">
@@ -90,7 +90,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Cámara No.</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="flex justify-center font-black text-xs text-chart-1">
+      <div className="flex justify-center font-black text-xs text-foreground">
         {row.original.codigoCamaraGerminacion}
       </div>
     ),
@@ -138,15 +138,15 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 text-foreground group">
             <span
-              className={`text-xs font-black font-mono tracking-tighter ${isToday ? "text-primary" : ""}`}
+              className={`text-xs font-black font-mono tracking-tighter ${isToday ? "underline" : ""}`}
             >
               {formatShortDate(row.original.fechaEgresoCamara)}
             </span>
           </div>
           {isToday && (
             <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground"></span>
             </div>
           )}
         </div>
@@ -175,7 +175,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     cell: ({ row }) => (
       <div className="flex justify-center">
         <div className="flex flex-col items-center">
-          <span className="text-primary font-black text-sm">
+          <span className="text-foreground font-black text-sm">
             {row.original.con}
           </span>
         </div>

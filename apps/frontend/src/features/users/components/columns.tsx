@@ -17,8 +17,8 @@ function FullNameCell({ row }: { row: any }) {
   const user = row.original as UserProfileDto;
   const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
   return (
-    <div className="font-black text-sm text-primary/80 tracking-tight">
-      <span className="font-bold text-sm truncate leading-tight group-hover:text-primary transition-colors">
+    <div className="font-black text-sm text-foreground tracking-tight">
+      <span className="font-bold text-sm truncate leading-tight">
         {fullName || "No name"}
       </span>
     </div>
