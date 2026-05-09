@@ -7,8 +7,8 @@ export async function GET() {
     return NextResponse.json(data);
   } catch (_error) {
     return NextResponse.json(
-      { error: "Failed to fetch weather data" },
-      { status: 500 }
+      { error: `Something went wrong fetching the weather data: ${_error}` },
+      { status: 500 },
     );
   }
 }
