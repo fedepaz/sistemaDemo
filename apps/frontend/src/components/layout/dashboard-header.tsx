@@ -1,7 +1,7 @@
 // src/components/layout/dashboard-header.tsx
 "use client";
 
-import { Calendar, User } from "lucide-react";
+import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,7 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Logo } from "../common/logo";
-import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
+import { getISOWeek } from "@/lib/date-utils";
 
 export function DashboardHeader() {
   const { isLoading, logoutAsync } = useLogout();
@@ -35,8 +35,6 @@ export function DashboardHeader() {
 
   const currentDate = new Date();
   const weekNum = getISOWeek(currentDate);
-  const totalWeeks = getTotalWeeks(currentDate.getFullYear());
-  const formattedDate = formatSpanishDate(currentDate);
 
   useEffect(() => {
     if (!userProfile) {
@@ -73,17 +71,11 @@ export function DashboardHeader() {
             */}
 
             {/* Notifications */}
-            {/* Left: Date header */}
-            <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 border-r border-border/50 h-16">
-              <div className="hidden sm:flex h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl bg-primary/10 items-center justify-center shadow-inner shrink-0">
-                <Calendar className="h-4 w-4 text-primary" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider sm:tracking-widest truncate leading-tight">
-                  <span className="hidden sm:inline">Mendoza • </span>Semana {weekNum}/{totalWeeks}
-                </p>
-                <p className="hidden sm:block text-[11px] sm:text-xs font-bold text-foreground capitalize truncate leading-tight">
-                  {formattedDate}
+            {/* Left: Week Display */}
+            <div className="flex items-center px-4 border-r border-border/50 h-16">
+              <div className="flex flex-col items-end">
+                <p className="text-2xl font-black text-foreground tracking-tighter leading-none">
+                  Sem {weekNum}
                 </p>
               </div>
             </div>
