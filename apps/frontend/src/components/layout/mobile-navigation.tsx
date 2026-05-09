@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
 import { Logo } from "@/components/common/logo";
+import { UserSidebarMenu } from "../user-profile/user-sidebar-menu";
 
 interface NavigationItem {
   title: string;
@@ -174,22 +175,7 @@ export function MobileNavigation() {
 
           {/* User Info */}
           <div className="p-4 border-t">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-primary text-sm font-medium">
-                  {userProfile?.firstName?.charAt(0)}
-                  {userProfile?.lastName?.charAt(0)}
-                </span>
-              </div>
-              <div>
-                <p className="text-sm font-medium">
-                  {userProfile?.firstName} {userProfile?.lastName}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {userProfile?.username}
-                </p>
-              </div>
-            </div>
+            <UserSidebarMenu />
           </div>
         </div>
       </SheetContent>

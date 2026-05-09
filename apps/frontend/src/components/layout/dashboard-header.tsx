@@ -1,23 +1,13 @@
 // src/components/layout/dashboard-header.tsx
 "use client";
 
-import { User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { MobileNavigation } from "./mobile-navigation";
 
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { LoadingSpinner } from "../common/loading-spinner";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Tooltip,
   TooltipContent,
