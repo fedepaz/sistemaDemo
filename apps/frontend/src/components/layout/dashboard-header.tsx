@@ -22,10 +22,11 @@ import { UserMenu } from "../user-profile/user-menu";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Logo } from "../common/logo";
-import { getISOWeek } from "@/lib/date-utils";
+import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
 
 export function DashboardHeader() {
   const { isLoading, logoutAsync } = useLogout();
@@ -35,6 +36,8 @@ export function DashboardHeader() {
 
   const currentDate = new Date();
   const weekNum = getISOWeek(currentDate);
+  const totalWeeks = getTotalWeeks(currentDate.getFullYear());
+  const formattedDate = formatSpanishDate(currentDate);
 
   useEffect(() => {
     if (!userProfile) {
@@ -71,14 +74,41 @@ export function DashboardHeader() {
             */}
 
             {/* Notifications */}
-            {/* Left: Week Display */}
-            <div className="flex items-center px-4 border-r border-border/50 h-16">
-              <div className="flex flex-col items-end">
-                <p className="text-2xl font-black text-foreground tracking-tighter leading-none">
-                  Sem {weekNum}
-                </p>
-              </div>
-            </div>
+            {/* Left: Week Display with Tooltip */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center px-4 border-r border-border/50 h-16 cursor-help">
+                    <div className="flex flex-col items-end">
+                      <p className="text-2xl font-black text-foreground tracking-tighter leading-none">
+                        S{weekNum}
+                      </p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">
+                        Semana
+                      </p>
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  className="bg-popover border-border shadow-xl"
+                >
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-foreground">
+                      {formattedDate}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground leading-tight">
+                      Semana {weekNum} de {totalWeeks}
+                    </p>
+                    <div className="pt-1 border-t border-border/50">
+                      <p className="text-[10px] text-muted-foreground leading-tight">
+                        Mendoza, Argentina
+                      </p>
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             {/* User Menu */}
             <DropdownMenu>
