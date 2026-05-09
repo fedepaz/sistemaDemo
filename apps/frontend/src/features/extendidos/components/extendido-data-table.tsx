@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Building2, RotateCcw } from "lucide-react";
 import { ExtendidosEditForm } from "./extendido-edit-form";
+import { usePartidaMutation } from "../hooks/usePartidaMutation";
 
 interface ExtendidoDataTableProps {
   partidas: ExtendidoDto[];
@@ -35,22 +36,29 @@ export function ExtendidoDataTable({
   currentCamaraId = "all",
 }: ExtendidoDataTableProps) {
   const { data: camaras = [] } = useCamaras();
-  const [slideOverOpen, setSlideOverOpen] = useState(false);
+  const [slideOverOpen, setSlideOpen] = useState(false);
   const [selectedPartida, setSelectedPartida] = useState<ExtendidoDto | null>(
     null,
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
 
+  const handleProcessSuccess = () => {
+    setSlideOpen(false);
+    setSelectedPartida(null);
+  };
+
+  const { mutate, isPending } = usePartidaMutation();
+
   const handleExtendidoView = (row: ExtendidoDto) => {
     setSelectedPartida(row);
     setMode("view");
-    setSlideOverOpen(true);
+    setSlideOpen(true);
   };
 
   const handleEdit = (row: ExtendidoDto) => {
     setSelectedPartida(row);
     setMode("edit");
-    setSlideOverOpen(true);
+    setSlideOpen(true);
   };
 
   const handleExport = () => {
@@ -66,7 +74,7 @@ export function ExtendidoDataTable({
   }, [onCamaraChange]);
 
   const handleOpenChange = (open: boolean) => {
-    setSlideOverOpen(open);
+    setSlideOpen(open);
     if (!open) {
       setSelectedPartida(null);
     }
@@ -143,12 +151,18 @@ export function ExtendidoDataTable({
           }
           formId="extendido-form"
           mode={mode}
+          isLoading={isPending}
+          saveLabel="Confirmar Extendido"
         >
           <div className="space-y-2">
             {mode === "view" ? (
               <ExtendidosViewForm selectedExtendido={selectedPartida} />
             ) : (
-              <ExtendidosEditForm selectedExtendido={selectedPartida} />
+              <ExtendidosEditForm 
+                selectedExtendido={selectedPartida} 
+                onSuccess={handleProcessSuccess}
+                mutate={mutate}
+              />
             )}
           </div>
         </SlideOverForm>
