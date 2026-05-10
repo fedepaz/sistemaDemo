@@ -57,10 +57,10 @@ export function ExtendidoDataTable({
 
   useEffect(() => {
     if (selectedPartida) {
-      // Use 'con' (Bandejas en Cámara) as the default source for stock_ini 
+      // Use 'con' (Bandejas en Cámara) as the default source for stock_ini
       // if stockInicial isn't defined yet
       const initialStock = selectedPartida.stockInicial ?? selectedPartida.con;
-      
+
       formAsignarUbicacion.reset({
         partida: selectedPartida.partidaId,
         ano: selectedPartida.anio,
@@ -127,7 +127,7 @@ export function ExtendidoDataTable({
           </SelectTrigger>
           <SelectContent className="rounded-xl border-border/60 shadow-2xl">
             <SelectItem value="all" className="font-bold text-primary italic">
-              Todas las cámaras
+              Nº Cámara
             </SelectItem>
             {camaras.map((c) => (
               <SelectItem
@@ -135,7 +135,7 @@ export function ExtendidoDataTable({
                 value={c.codigo.toString()}
                 className="font-medium"
               >
-                {c.nombre}
+                Nº {c.codigo} - {c.nombre}
               </SelectItem>
             ))}
           </SelectContent>
@@ -173,6 +173,7 @@ export function ExtendidoDataTable({
         onView={handleExtendidoView}
         onEdit={handleEdit}
         toolbarContent={toolbarContent}
+        canExecuteLabel="Asignar Ubicación"
       />
 
       {selectedPartida && (

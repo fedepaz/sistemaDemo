@@ -87,6 +87,7 @@ interface DataTableProps<TData, TValue> {
     onCancel: () => void,
   ) => ReactNode;
   toolbarContent?: ReactNode;
+  canExecuteLabel?: string;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -111,6 +112,7 @@ export function DataTable<TData, TValue>({
   totalCount,
   enableSelection,
   toolbarContent,
+  canExecuteLabel = "Cambiar",
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -263,7 +265,7 @@ export function DataTable<TData, TValue>({
                   size="sm"
                   className="min-h-[40px] text-amber-500"
                   onClick={() => onEdit(row.original)}
-                  aria-label="Ejecutar"
+                  aria-label={canExecuteLabel}
                 >
                   <Play className="h-4 w-4" />
                 </Button>
@@ -272,7 +274,7 @@ export function DataTable<TData, TValue>({
                 side="top"
                 className="border border-border shadow-md"
               >
-                <p>Ejecutar</p>
+                <p>{canExecuteLabel}</p>
               </TooltipContent>
             </Tooltip>
           )}
