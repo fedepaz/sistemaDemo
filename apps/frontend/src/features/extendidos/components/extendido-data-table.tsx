@@ -2,7 +2,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { ExtendidosViewForm } from "./extendido-view-form";
 import { partidaColumns } from "./columns";
 import {
@@ -48,11 +48,6 @@ export function ExtendidoDataTable({
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
 
-  const handleProcessSuccess = () => {
-    setSlideOpen(false);
-    setSelectedPartida(null);
-  };
-
   const { mutateAsync: asignarUbicacion, isPending: isAsignandoUbicacion } =
     usePartidaMutation();
 
@@ -60,12 +55,33 @@ export function ExtendidoDataTable({
     resolver: zodResolver(AsignarUbicacionDtoSchema),
   });
 
-  const handleAsignarUbicacion = async (formData: AsignarUbicacionDto) => {
-    try {
-      await asignarUbicacion(formData);
-    } catch {}
+  useEffect(() => {
+    if (selectedPartida) {
+      // Use 'con' (Bandejas en Cámara) as the default source for stock_ini 
+      // if stockInicial isn't defined yet
+      const initialStock = selectedPartida.stockInicial ?? selectedPartida.con;
+      
+      formAsignarUbicacion.reset({
+        partida: selectedPartida.partidaId,
+        ano: selectedPartida.anio,
+        indice: selectedPartida.indice,
+        ubicacion: selectedPartida.codigoUbicacion ?? undefined,
+        stock_ini: initialStock,
+        detalle: selectedPartida.detalle || "",
+        baja: Number(selectedPartida.baja) || 0,
+        extendido: selectedPartida.extendido,
+        edita: "S",
+      });
+    }
+  }, [selectedPartida, formAsignarUbicacion]);
 
-    if (!isAsignandoUbicacion) setSlideOpen(false);
+  const handleAsignarUbicacion = async (formData: AsignarUbicacionDto) => {
+    if (selectedPartida) {
+      try {
+        await asignarUbicacion(formData);
+        setSlideOpen(false);
+      } catch {}
+    }
   };
 
   const handleExtendidoView = (row: ExtendidoDto) => {
@@ -170,6 +186,8 @@ export function ExtendidoDataTable({
           }
           formId="extendido-form"
           mode={mode}
+          form={formAsignarUbicacion}
+          isLoading={isAsignandoUbicacion}
           saveLabel="Confirmar Extendido"
         >
           <div className="space-y-2">
@@ -180,6 +198,7 @@ export function ExtendidoDataTable({
                 form={formAsignarUbicacion}
                 onSubmit={handleAsignarUbicacion}
                 onCancel={() => setSlideOpen(false)}
+                selectedExtendido={selectedPartida}
               />
             )}
           </div>
