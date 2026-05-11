@@ -2,7 +2,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { ExtendidosViewForm } from "./extendido-view-form";
 import { partidaColumns } from "./columns";
 import {
@@ -24,7 +24,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Building2, RotateCcw } from "lucide-react";
+import { Building2, RotateCcw, CalendarDays } from "lucide-react";
 import { ExtendidosEditForm } from "./extendido-edit-form";
 import { usePartidaMutation } from "../hooks/usePartidaMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,9 +47,18 @@ export function ExtendidoDataTable({
     null,
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
+  const [filterToday, setFilterToday] = useState(false);
 
   const { mutateAsync: asignarUbicacion, isPending: isAsignandoUbicacion } =
     usePartidaMutation();
+
+  const filteredPartidas = useMemo(() => {
+    if (!filterToday) return partidas;
+
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    return partidas.filter((p) => p.fechaEgresoCamara === todayStr);
+  }, [partidas, filterToday]);
 
   const formAsignarUbicacion = useForm<AsignarUbicacionDto>({
     resolver: zodResolver(AsignarUbicacionDtoSchema),
@@ -106,6 +115,7 @@ export function ExtendidoDataTable({
 
   const handleClear = useCallback(() => {
     onCamaraChange?.("all");
+    setFilterToday(false);
   }, [onCamaraChange]);
 
   const handleOpenChange = (open: boolean) => {
@@ -115,11 +125,27 @@ export function ExtendidoDataTable({
     }
   };
 
-  const hasActiveFilters = currentCamaraId !== "all";
+  const hasActiveFilters = currentCamaraId !== "all" || filterToday;
 
   const toolbarContent = (
-    <div className="flex items-center gap-2 flex-1 max-w-sm ml-auto">
-      <div className="relative flex-1 group">
+    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
+      <Button
+        variant={filterToday ? "default" : "outline"}
+        size="sm"
+        onClick={() => setFilterToday(!filterToday)}
+        className={`h-9 rounded-full px-4 text-xs font-black uppercase tracking-tight gap-2 transition-all flex-1 sm:flex-none ${
+          filterToday
+            ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 border-primary"
+            : "hover:bg-accent hover:text-accent-foreground border-border/40"
+        }`}
+      >
+        <CalendarDays
+          className={`h-3.5 w-3.5 ${filterToday ? "animate-pulse" : ""}`}
+        />
+        Hoy
+      </Button>
+
+      <div className="relative flex-1 sm:min-w-[180px] group">
         <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
         <Select value={currentCamaraId} onValueChange={handleCamaraChange}>
           <SelectTrigger className="h-9 pl-9 rounded-full bg-background border-border/40 focus:ring-primary/20 text-xs font-bold uppercase tracking-tight">
@@ -154,7 +180,7 @@ export function ExtendidoDataTable({
               <RotateCcw className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="top">Limpiar filtro de cámara</TooltipContent>
+          <TooltipContent side="top">Limpiar filtros</TooltipContent>
         </Tooltip>
       )}
     </div>
@@ -164,11 +190,11 @@ export function ExtendidoDataTable({
     <>
       <DataTable
         columns={partidaColumns}
-        data={partidas}
+        data={filteredPartidas}
         title="Partidas a Extender"
         description="Gestión y monitoreo de bandejas en proceso de extendido"
         tableName="extendidos"
-        totalCount={partidas.length}
+        totalCount={filteredPartidas.length}
         onExport={handleExport}
         onView={handleExtendidoView}
         onEdit={handleEdit}

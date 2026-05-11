@@ -99,7 +99,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSugeridaSiembra",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha sug.</SortableHeader>;
+      return <SortableHeader column={column}>Fecha Sug.</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">

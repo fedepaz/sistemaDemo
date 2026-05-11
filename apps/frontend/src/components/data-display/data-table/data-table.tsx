@@ -109,7 +109,7 @@ export function DataTable<TData, TValue>({
   onCreate,
   createLabel = "Nuevo",
   onExport,
-  totalCount,
+  totalCount = 0,
   enableSelection,
   toolbarContent,
   canExecuteLabel = "Cambiar",
@@ -410,13 +410,14 @@ export function DataTable<TData, TValue>({
                 </CardDescription>
               )}
             </div>
-            <div className="flex items-center space-x-2">
-              {totalCount && (
+
+            {totalCount > 0 ? (
+              <div className="flex items-center space-x-2">
                 <Badge variant="secondary" className="text-sm">
                   {`${totalCount} registros`}
                 </Badge>
-              )}
-            </div>
+              </div>
+            ) : null}
           </div>
         </CardHeader>
         <CardContent>
