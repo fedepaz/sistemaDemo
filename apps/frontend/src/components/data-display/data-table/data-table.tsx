@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 // src/components/data-display/data-table/data-table.tsx
 "use client";
 

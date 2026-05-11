@@ -17,12 +17,33 @@ const AUTH_EVENT = "auth-state-change";
 
 export function useAuth() {
   const queryClient = useQueryClient();
-  const [authState, setAuthState] = useState<AuthState>({
-    accessToken: null,
-    user: null,
-    isSignedIn: false,
+  const [authState, setAuthState] = useState<AuthState>(() => {
+    if (typeof window === "undefined") {
+      return {
+        accessToken: null,
+        user: null,
+        isSignedIn: false,
+      };
+    }
+
+    try {
+      const token = localStorage.getItem(TOKEN_KEY);
+      const user = localStorage.getItem(USER_KEY);
+      const parsedUser = user ? JSON.parse(user) : null;
+
+      return {
+        accessToken: token,
+        user: parsedUser,
+        isSignedIn: !!token,
+      };
+    } catch {
+      return {
+        accessToken: null,
+        user: null,
+        isSignedIn: false,
+      };
+    }
   });
-  const [loading, setLoading] = useState(true);
 
   const signOut = useCallback(() => {
     queryClient.cancelQueries();
@@ -50,13 +71,10 @@ export function useAuth() {
       });
     } catch {
       signOut();
-    } finally {
-      setLoading(false);
     }
   }, [signOut]);
 
   useEffect(() => {
-    loadFromStorage();
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === TOKEN_KEY || e.key === USER_KEY) {
         loadFromStorage();
@@ -88,7 +106,7 @@ export function useAuth() {
 
   return {
     ...authState,
-    loading,
+    loading: false,
     signIn,
     signOut,
   };

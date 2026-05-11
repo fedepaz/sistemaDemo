@@ -42,7 +42,7 @@ export function DesktopSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
-  const { userProfile, permissions } = useAuthContext();
+  const { permissions } = useAuthContext();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["operations"]),
   );
@@ -95,7 +95,7 @@ export function DesktopSidebar() {
             <Logo variant="icon" className="h-8 w-auto" />
           ) : (
             <div className="flex items-center space-x-3">
-              <Logo variant="sidebar" className="h-8 w-auto" />
+              <Logo variant="icon" className="h-8 w-auto" />
             </div>
           )}
           <Tooltip>

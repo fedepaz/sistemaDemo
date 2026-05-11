@@ -42,7 +42,7 @@ interface NavigationGroup {
 export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { userProfile, permissions } = useAuthContext();
+  const { permissions } = useAuthContext();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["operations"]),
   );
@@ -96,7 +96,7 @@ export function MobileNavigation() {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="p-6 border-b">
-            <Logo variant="sidebar" className="h-8 w-auto" />
+            <Logo variant="icon" className="h-8 w-auto" />
           </div>
 
           {/* Navigation Items */}

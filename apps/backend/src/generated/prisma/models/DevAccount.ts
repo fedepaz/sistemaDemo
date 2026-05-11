@@ -144,7 +144,7 @@ export type DevAccountGroupByOutputType = {
   _max: DevAccountMaxAggregateOutputType | null
 }
 
-type GetDevAccountGroupByPayload<T extends DevAccountGroupByArgs> = Prisma.PrismaPromise<
+export type GetDevAccountGroupByPayload<T extends DevAccountGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DevAccountGroupByOutputType, T['by']> &
       {
@@ -841,6 +841,11 @@ export type DevAccountFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Skip the first `n` DevAccounts.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of DevAccounts.
+   */
   distinct?: Prisma.DevAccountScalarFieldEnum | Prisma.DevAccountScalarFieldEnum[]
 }
 
