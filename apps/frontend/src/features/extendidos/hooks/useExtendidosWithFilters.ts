@@ -10,9 +10,11 @@ import { extendidoService } from "../api/extendidoService";
  * Hook to manage extendidos data.
  * Always fetches records "in chamber" and applies local filtering by camaraId.
  */
+export const extendidosEnCamaraQueryKey = ["extendidos", "enCamara"] as const;
+
 export function useExtendidos(camaraId: string = "all") {
   const query = useSuspenseQuery<ExtendidoDto[]>({
-    queryKey: ["extendidos", "enCamara"],
+    queryKey: extendidosEnCamaraQueryKey,
     queryFn: extendidoService.fetchExtendidosEnCamara,
   });
 

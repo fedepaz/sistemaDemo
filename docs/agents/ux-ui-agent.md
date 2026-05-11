@@ -95,6 +95,7 @@ Focus on these proven interface patterns:
 
 - **Inline Editing:** The `DataTable` component now supports inline editing for quick modifications directly within the table.
 - **Bulk Actions:** The `DataTable` component now supports bulk actions, such as deleting multiple items at once.
+- **Descriptive Action Labels:** Always use specific, context-aware labels for action buttons (e.g., "Asignar Ubicación" instead of "Ejecutar") to improve operational clarity.
 
 ## Feature Design Process
 

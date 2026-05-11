@@ -35,7 +35,7 @@ export default function CompanyWelcome() {
             {/* Tagline or Action Hint */}
             <div className="hidden sm:flex flex-col items-center gap-2">
               <p className="text-sm font-medium text-muted-foreground uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
-                Gestionar Operaciones
+                el mejor comienzo para sus cultivos
               </p>
               <div className="h-0.5 w-8 bg-primary/20 group-hover:w-24 transition-all duration-500" />
             </div>

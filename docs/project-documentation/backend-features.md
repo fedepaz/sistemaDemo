@@ -92,9 +92,10 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Modular Design**: Encapsulated in `LegacyDepositosModule`.
 
 ### Legacy Partidas Module
-- [x] **Legacy Data Access**: Read-only integration with the legacy `partidas` table.
+- [x] **Legacy Data Access**: Read and Write integration with legacy `partidas` and `partidas2` tables.
 - [x] **Repository Pattern**: `PartidasRepository` using the `LegacyMysqlService`.
 - [x] **Basic Retrieval**: Provides access to the raw `partidas` data.
+- [x] **Ubicación Assignment**: `POST /l-partidas/asignar-ubicacion` implements the "asentar ubicación" workflow, performing a transactional insert into `partidas2` and updating the `extendido` status in `partidas`.
 - [x] **Modular Design**: Encapsulated in `LegacyPartidasModule`.
 
 ### Legacy Extendidos Module

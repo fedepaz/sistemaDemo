@@ -31,6 +31,7 @@ interface SlideOverFormProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form?: UseFormReturn<any>;
   mode?: SlideOverMode;
+  disabled?: boolean;
 }
 
 export function SlideOverForm({
@@ -46,6 +47,7 @@ export function SlideOverForm({
   formId,
   form,
   mode = "edit",
+  disabled,
 }: SlideOverFormProps) {
   const isViewMode = mode === "view";
   const isCreateMode = mode === "create";
@@ -109,9 +111,10 @@ export function SlideOverForm({
                 onClick={!formId ? () => onSave?.() : undefined}
                 className="w-full"
                 disabled={
-                  form
-                    ? !form.formState.isDirty || form.formState.isSubmitting
-                    : false
+                  disabled ||
+                  (form
+                    ? !form.formState.isValid || form.formState.isSubmitting
+                    : false)
                 }
               >
                 {isLoading ? (
