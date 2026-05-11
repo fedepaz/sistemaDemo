@@ -3,10 +3,8 @@
 import { Row, Table, type ColumnDef } from "@tanstack/react-table";
 import {
   SortableHeader,
-  StatusBadge,
 } from "@/components/data-display/data-table";
 import { UserProfileDto } from "@vivero/shared";
-import { Calendar } from "lucide-react";
 import { formatShortDate } from "@/lib/date-utils";
 
 interface CellProps {
@@ -19,8 +17,8 @@ function FullNameCell({ row }: { row: any }) {
   const user = row.original as UserProfileDto;
   const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
   return (
-    <div className="font-black text-sm text-primary/80 tracking-tight">
-      <span className="font-bold text-sm truncate leading-tight group-hover:text-primary transition-colors">
+    <div className="font-black text-sm text-foreground tracking-tight">
+      <span className="font-bold text-sm truncate leading-tight">
         {fullName || "No name"}
       </span>
     </div>
@@ -31,9 +29,9 @@ function StatusCell({ row }: CellProps) {
   if (!row) return null;
   const user = row.original as UserProfileDto;
   return (
-    <StatusBadge status={user.isActive ? "healthy" : "inactive"}>
+    <span className="text-sm font-medium">
       {user.isActive ? "Activo" : "Inactivo"}
-    </StatusBadge>
+    </span>
   );
 }
 
@@ -41,12 +39,9 @@ function CreatedAtCell({ row }: CellProps) {
   if (!row) return null;
 
   return (
-    <div className="flex items-center gap-2 text-muted-foreground group">
-      <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
-      <span className="text-xs font-bold font-mono tracking-tighter">
-        {formatShortDate(row.original.createdAt)}
-      </span>
-    </div>
+    <span className="text-xs font-bold font-mono tracking-tighter text-muted-foreground">
+      {formatShortDate(row.original.createdAt)}
+    </span>
   );
 }
 
@@ -83,12 +78,6 @@ export const userColumns: ColumnDef<UserProfileDto>[] = [
     header: ({ column }) => (
       <SortableHeader column={column}>Creado</SortableHeader>
     ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2 text-muted-foreground group">
-        <span className="text-xs font-bold font-mono tracking-tighter">
-          <CreatedAtCell row={row} />
-        </span>
-      </div>
-    ),
+    cell: ({ row }) => <CreatedAtCell row={row} />,
   },
 ];

@@ -1,13 +1,20 @@
 import { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@vivero/shared"],
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
-  allowedDevOrigins: ["cabecitanegra.dpdns.org"],
+  allowedDevOrigins: ["proplanta-sistema.ar"],
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://localhost:3001/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

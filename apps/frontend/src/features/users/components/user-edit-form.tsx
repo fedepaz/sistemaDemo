@@ -65,12 +65,13 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Correo electrónico" tabIndex={0} />
+                <Input
+                  {...field}
+                  placeholder="Correo electrónico"
+                  tabIndex={0}
+                />
               </FormControl>
-              <FormDescription>
-                No es necesario que se registre, sirve para notificaciones del
-                sistema.
-              </FormDescription>
+              <FormDescription>Email para datos del usuario.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

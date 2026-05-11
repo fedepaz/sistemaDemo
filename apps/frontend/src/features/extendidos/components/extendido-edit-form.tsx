@@ -1,183 +1,283 @@
 // src/features/extendidos/components/extendido-edit-form.tsx
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { ExtendidoDto } from "@vivero/shared";
 import {
   Package,
-  Calendar,
-  AlertCircle,
-  Hash,
   Activity,
+  FileText,
+  TrendingDown,
+  Warehouse,
+  AlertTriangle,
   CheckCircle2,
-  Hammer,
-  Clock,
-  ChevronRight,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { format } from "date-fns";
+import { useMemo } from "react";
+import { useDepositos } from "../hooks/useDepositos";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+
+import { AsignarUbicacionDto, ExtendidoDto } from "@vivero/shared";
+
+import { UseFormReturn } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface ExtendidosEditFormProps {
+  onSubmit: (data: AsignarUbicacionDto) => Promise<void>;
+  onCancel: () => void;
+  form: UseFormReturn<AsignarUbicacionDto>;
   selectedExtendido: ExtendidoDto;
 }
 
-export function ExtendidosEditForm({ selectedExtendido }: ExtendidosEditFormProps) {
-  const [fechaExtendido, setFechaExtendido] = useState(
-    format(new Date(), "yyyy-MM-dd")
-  );
-  const [bandejas, setBandejas] = useState(selectedExtendido.con.toString());
+export function ExtendidosEditForm({
+  onSubmit,
 
-  const handleProcess = () => {
-    console.log("Procesando extendido...", {
-      partidaId: selectedExtendido.partidaId,
-      fecha: fechaExtendido,
-      bandejas: Number(bandejas),
-    });
-    alert("Funcionalidad en desarrollo: El proceso de extendido se integrará con el backend próximamente.");
-  };
+  form,
+  selectedExtendido,
+}: ExtendidosEditFormProps) {
+  const { data: depositosQuery } = useDepositos();
+  const depositos = depositosQuery.filter((d) => d.camara === "");
+
+  const originalStock = selectedExtendido.con;
+  const watchedStockIni = form.watch("stock_ini");
+  const watchedBaja = form.watch("baja");
+
+  // Logic to calculate expected values but NOT override them
+  const expectedBaja = useMemo(() => {
+    const stockOk = Number(watchedStockIni) || 0;
+    return Math.max(0, originalStock - stockOk);
+  }, [watchedStockIni, originalStock]);
+
+  const hasDiscrepancy = useMemo(() => {
+    return Number(watchedBaja) !== expectedBaja;
+  }, [watchedBaja, expectedBaja]);
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-140px)] overflow-hidden">
-      {/* 🚀 PRODUCT HEADER (Context) */}
-      <div className="space-y-4 shrink-0">
-        <div className="flex items-center justify-between bg-primary/5 p-4 rounded-2xl border border-primary/20 shadow-sm">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-              <Package className="h-6 w-6" />
+    <Form {...form}>
+      <form
+        id="extendido-form"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10"
+      >
+        {/* 🚀 PRODUCT HEADER (Context) */}
+        <div className="space-y-4 shrink-0">
+          <div className="flex items-center justify-between bg-primary/5 p-4 rounded-2xl border border-primary/20 shadow-sm">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                <Package className="h-6 w-6" />
+              </div>
+              <div>
+                <h2 className="text-lg md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+                  {selectedExtendido.codigoEspecie}
+                </h2>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1.5">
+                  {selectedExtendido.nombreEspecie}
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-lg md:text-xl font-black tracking-tight leading-none text-foreground">
-                {selectedExtendido.codigoEspecie}
-              </h2>
-              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1.5">
-                {selectedExtendido.nombreEspecie}
+            <div className="text-right pr-2">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-1">
+                Bandejas en Cámara
+              </p>
+              <p className="text-2xl font-black text-primary leading-none">
+                {originalStock}
               </p>
             </div>
           </div>
-          <div className="text-right pr-2">
-            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-1">
-              Bandejas Totales
-            </p>
-            <p className="text-2xl font-black text-primary leading-none">
-              {selectedExtendido.con}
-            </p>
-          </div>
         </div>
 
-        {/* BATCH INFO GRID */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-background border border-border/60 p-2.5 rounded-xl flex items-center gap-2.5 shadow-sm">
-            <Hash className="h-3.5 w-3.5 text-muted-foreground" />
-            <div className="min-w-0">
-              <p className="text-[8px] font-bold uppercase leading-none mb-0.5 text-muted-foreground">Índice</p>
-              <p className="text-xs font-bold truncate uppercase">{selectedExtendido.indice}</p>
-            </div>
-          </div>
-          <div className="bg-background border border-border/60 p-2.5 rounded-xl flex items-center gap-2.5 shadow-sm">
-            <Activity className="h-3.5 w-3.5 text-muted-foreground" />
-            <div className="min-w-0">
-              <p className="text-[8px] font-bold uppercase leading-none mb-0.5 text-muted-foreground">Cámara</p>
-              <p className="text-xs font-bold truncate uppercase">#{selectedExtendido.codigoCamaraGerminacion}</p>
-            </div>
-          </div>
-          <div className="bg-background border border-border/60 p-2.5 rounded-xl flex items-center gap-2.5 shadow-sm">
-            <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-            <div className="min-w-0">
-              <p className="text-[8px] font-bold uppercase leading-none mb-0.5 text-muted-foreground">Días</p>
-              <p className="text-xs font-bold truncate uppercase">{selectedExtendido.diasEnCamara}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 🛠️ PROCESS FORM */}
-      <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pb-4">
-        <Card className="border-primary/20 shadow-md rounded-[1.5rem] overflow-hidden bg-card/50">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary mb-2">
-              <Hammer className="h-4 w-4" /> Formulario de Egreso
-            </div>
-
-            <div className="space-y-4">
-              <div className="grid gap-2">
-                <Label htmlFor="fecha" className="text-xs font-bold text-foreground/70 flex items-center gap-2">
-                  <Calendar className="h-3.5 w-3.5" /> Fecha de Extendido
-                </Label>
-                <Input
-                  id="fecha"
-                  type="date"
-                  value={fechaExtendido}
-                  onChange={(e) => setFechaExtendido(e.target.value)}
-                  className="rounded-xl border-border/60 focus:ring-primary/20 font-mono"
-                />
-                <p className="text-[10px] text-muted-foreground">
-                  Fecha en la que las bandejas saldrán de la cámara.
-                </p>
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="bandejas" className="text-xs font-bold text-foreground/70 flex items-center gap-2">
-                  <Activity className="h-3.5 w-3.5" /> Bandejas a Procesar
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="bandejas"
-                    type="number"
-                    value={bandejas}
-                    onChange={(e) => setBandejas(e.target.value)}
-                    className="rounded-xl border-border/60 focus:ring-primary/20 pl-4 pr-12 font-black text-lg h-12"
-                  />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground uppercase">
-                    Unid.
+        {/* 📍 UBICACION SELECTION */}
+        <div className="flex flex-col gap-8">
+          <FormField
+            control={form.control}
+            name="ubicacion"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Warehouse className="h-4 w-4 text-primary" />
                   </div>
+                  <FormLabel className="text-xs font-black uppercase tracking-widest text-foreground">
+                    Depósito de Destino
+                  </FormLabel>
                 </div>
-              </div>
-            </div>
+                <Select
+                  onValueChange={(val) => field.onChange(Number(val))}
+                  value={field.value?.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-14 rounded-xl border-border/60 bg-background shadow-sm text-base font-bold px-4">
+                      <SelectValue placeholder="Seleccione el depósito final" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent
+                    className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[300px]"
+                    position="popper"
+                  >
+                    {depositos?.map((dep) => (
+                      <SelectItem
+                        key={dep.codigo}
+                        value={dep.codigo.toString()}
+                        className="font-bold py-3 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors"
+                      >
+                        {dep.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription className="text-[10px] font-medium leading-relaxed px-1">
+                  Obligatorio: Indique hacia dónde se moverán las bandejas para
+                  habilitar el proceso.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <div className="p-4 bg-muted/40 rounded-2xl border border-border/40 space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground font-medium">Egreso Sugerido:</span>
-                <span className="font-bold">{selectedExtendido.fechaEgresoCamara}</span>
-              </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground font-medium">Estado Post-Egreso:</span>
-                <Badge variant="secondary" className="text-[8px] h-4 uppercase font-black">Extendido</Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <div className="flex flex-col gap-8">
+            {/* 📦 STOCK INICIAL */}
+            <FormField
+              control={form.control}
+              name="stock_ini"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Activity className="h-4 w-4 text-primary" />
+                    </div>
+                    <FormLabel className="text-xs font-black uppercase tracking-widest text-foreground">
+                      Bandejas Ok (Para Extender)
+                    </FormLabel>
+                  </div>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      className="h-16 rounded-xl border-border/60 bg-background shadow-sm text-3xl font-black px-4"
+                    />
+                  </FormControl>
+                  <FormDescription className="text-[10px] font-bold text-muted-foreground/60 uppercase">
+                    Ingrese el número de bandejas en buen estado.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* ⚠️ IN DEVELOPMENT ALERT */}
-        <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-start gap-4">
-          <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 leading-none">
-              Modo Desarrollo
-            </p>
-            <p className="text-[11px] font-medium text-amber-700/80 leading-snug">
-              El guardado de esta operación estará disponible cuando se finalice el endpoint de la API. Por ahora, solo puedes simular el proceso.
-            </p>
+            {/* 📉 BAJA (Manual with Advisory) */}
+            <FormField
+              control={form.control}
+              name="baja"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`p-2 rounded-lg transition-colors duration-300 ${
+                          hasDiscrepancy ? "bg-amber-100" : "bg-destructive/10"
+                        }`}
+                      >
+                        {hasDiscrepancy ? (
+                          <AlertTriangle className="h-4 w-4 text-amber-600 animate-pulse" />
+                        ) : (
+                          <TrendingDown className="h-4 w-4 text-destructive" />
+                        )}
+                      </div>
+                      <FormLabel
+                        className={`text-xs font-black uppercase tracking-widest transition-colors ${
+                          hasDiscrepancy ? "text-amber-600" : "text-destructive"
+                        }`}
+                      >
+                        Baja {hasDiscrepancy && "(Revisar Conteo)"}
+                      </FormLabel>
+                    </div>
+                    {!hasDiscrepancy && Number(watchedBaja) > 0 && (
+                      <CheckCircle2 className="h-4 w-4 text-green-500 animate-in zoom-in duration-300" />
+                    )}
+                  </div>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type="number"
+                        inputMode="numeric"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        className={`h-16 rounded-xl shadow-sm text-3xl font-black px-4 transition-all duration-300 ${
+                          hasDiscrepancy
+                            ? "border-amber-400 bg-amber-50/50 text-amber-700 focus-visible:ring-amber-200"
+                            : "border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
+                        }`}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormDescription
+                    className={`text-[10px] font-bold uppercase transition-all duration-300 ${
+                      hasDiscrepancy
+                        ? "text-amber-700 bg-amber-100/50 p-2 rounded-lg border border-amber-200 mt-2"
+                        : "text-destructive/60"
+                    }`}
+                  >
+                    {hasDiscrepancy ? (
+                      <span className="flex items-center gap-1">
+                        ⚠️ El total no coincide con el stock inicial (
+                        {originalStock}). Se esperaba {expectedBaja}.
+                      </span>
+                    ) : (
+                      `Calculado: ${originalStock} (Total) - ${watchedStockIni || 0} (Ok)`
+                    )}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-        </div>
 
-        {/* ACTIONS */}
-        <div className="grid grid-cols-1 gap-3 pt-2">
-          <Button 
-            onClick={handleProcess}
-            className="h-14 rounded-2xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-          >
-            <CheckCircle2 className="h-5 w-5 mr-2" />
-            Confirmar Extendido
-          </Button>
-          <p className="text-[9px] text-center text-muted-foreground font-medium flex items-center justify-center gap-1.5">
-            Esta acción marcará la partida como completada en cámara <ChevronRight className="h-3 w-3" />
-          </p>
+          {/* 📝 DETALLE */}
+          <FormField
+            control={form.control}
+            name="detalle"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <FileText className="h-4 w-4 text-primary" />
+                  </div>
+                  <FormLabel className="text-xs font-black uppercase tracking-widest text-foreground">
+                    Observaciones Operativas
+                  </FormLabel>
+                </div>
+                <FormControl>
+                  <Textarea
+                    placeholder="Detalles sobre el estado de la partida, anomalías o notas de ubicación..."
+                    className="min-h-[120px] rounded-xl border-border/60 bg-background shadow-sm text-base p-4 leading-relaxed focus:ring-primary/20"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="text-[9px] italic opacity-60">
+                  Esta información se guardará en el detalle técnico de la
+                  partida (Historial).
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-      </div>
-    </div>
+      </form>
+    </Form>
   );
 }

@@ -1,37 +1,26 @@
 // src/components/layout/dashboard-header.tsx
 "use client";
 
-import { Calendar, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { MobileNavigation } from "./mobile-navigation";
 
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { LoadingSpinner } from "../common/loading-spinner";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useEffect, useState } from "react";
-import { UserMenu } from "../user-profile/user-menu";
+import { useEffect } from "react";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Logo } from "../common/logo";
 import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
 
 export function DashboardHeader() {
-  const { isLoading, logoutAsync } = useLogout();
+  const { isLoading } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
-  const [openProfile, setOpenProfile] = useState(false);
 
   const currentDate = new Date();
   const weekNum = getISOWeek(currentDate);
@@ -43,12 +32,6 @@ export function DashboardHeader() {
       router.push("/");
     }
   }, [userProfile, router]);
-
-  const handleLogout = async () => {
-    try {
-      await logoutAsync();
-    } catch {}
-  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -73,60 +56,41 @@ export function DashboardHeader() {
             */}
 
             {/* Notifications */}
-            {/* Left: Date header */}
-            <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 border-r border-border/50 h-16">
-              <div className="hidden sm:flex h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl bg-primary/10 items-center justify-center shadow-inner shrink-0">
-                <Calendar className="h-4 w-4 text-primary" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider sm:tracking-widest truncate leading-tight">
-                  <span className="hidden sm:inline">Mendoza • </span>Semana {weekNum}/{totalWeeks}
-                </p>
-                <p className="hidden sm:block text-[11px] sm:text-xs font-bold text-foreground capitalize truncate leading-tight">
-                  {formattedDate}
-                </p>
-              </div>
-            </div>
-
-            {/* User Menu */}
-            <DropdownMenu>
+            {/* Left: Week Display with Tooltip */}
+            <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="agricultural-touch-target"
-                      aria-label="Perfil de usuario"
-                    >
-                      <User className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
+                  <div className="flex items-center px-4 border-r border-border/50 h-16 cursor-help">
+                    <div className="flex flex-col items-end">
+                      <p className="text-2xl font-black text-foreground tracking-tighter leading-none">
+                        S{weekNum}
+                      </p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">
+                        Semana
+                      </p>
+                    </div>
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent
                   side="bottom"
-                  className="border border-border shadow-md"
+                  className="bg-popover border-border shadow-xl"
                 >
-                  <p>Perfil de usuario</p>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-foreground">
+                      {formattedDate}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground leading-tight">
+                      Semana {weekNum} de {totalWeeks}
+                    </p>
+                    <div className="pt-1 border-t border-border/50">
+                      <p className="text-[10px] text-muted-foreground leading-tight">
+                        Mendoza, Argentina
+                      </p>
+                    </div>
+                  </div>
                 </TooltipContent>
               </Tooltip>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  {userProfile?.firstName} {userProfile?.lastName}
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setOpenProfile(true)}>
-                  Perfil
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <button className="w-full" onClick={handleLogout}>
-                    Cerrar sesión
-                  </button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <UserMenu open={openProfile} onOpenChange={setOpenProfile} />
+            </TooltipProvider>
           </div>
         </div>
       </div>

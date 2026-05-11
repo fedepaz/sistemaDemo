@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 // src/components/data-display/data-table/data-table.tsx
 "use client";
 
@@ -87,6 +88,7 @@ interface DataTableProps<TData, TValue> {
     onCancel: () => void,
   ) => ReactNode;
   toolbarContent?: ReactNode;
+  canExecuteLabel?: string;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -108,9 +110,10 @@ export function DataTable<TData, TValue>({
   onCreate,
   createLabel = "Nuevo",
   onExport,
-  totalCount,
+  totalCount = 0,
   enableSelection,
   toolbarContent,
+  canExecuteLabel = "Cambiar",
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -263,7 +266,7 @@ export function DataTable<TData, TValue>({
                   size="sm"
                   className="min-h-[40px] text-amber-500"
                   onClick={() => onEdit(row.original)}
-                  aria-label="Ejecutar"
+                  aria-label={canExecuteLabel}
                 >
                   <Play className="h-4 w-4" />
                 </Button>
@@ -272,7 +275,7 @@ export function DataTable<TData, TValue>({
                 side="top"
                 className="border border-border shadow-md"
               >
-                <p>Ejecutar</p>
+                <p>{canExecuteLabel}</p>
               </TooltipContent>
             </Tooltip>
           )}
@@ -321,17 +324,26 @@ export function DataTable<TData, TValue>({
   });
 
   useEffect(() => {
-    const columnsId = table.getAllColumns().map((column) => column.id);
-
-    let visibleCount = columnsId.length;
-
-    if (breakpoint === "sm") visibleCount = 2;
+    const allColumns = table.getAllColumns();
+    const columnsId = allColumns.map((column) => column.id);
 
     const visibility: VisibilityState = {};
 
+    // 768px (md) target: Squeeze the data to fit
+    // We prioritize keeping core data and the actions column
+    let visibleCount = columnsId.length;
+
+    if (breakpoint === "sm") {
+      visibleCount = 2; // Mobile: Minimal data
+    } else if (breakpoint === "md") {
+      visibleCount = 3; // Cheap Screen (768px): Focus on the essentials
+    } else if (breakpoint === "lg") {
+      visibleCount = 5; // Standard Laptop
+    }
+
     columnsId.forEach((id, index) => {
-      if (id === "actions") {
-        visibility[id] = true;
+      if (id === "actions" || id === "select") {
+        visibility[id] = true; // Never hide actions or selection
       } else {
         visibility[id] = index < visibleCount;
       }
@@ -399,13 +411,14 @@ export function DataTable<TData, TValue>({
                 </CardDescription>
               )}
             </div>
-            <div className="flex items-center space-x-2">
-              {totalCount && (
+
+            {totalCount > 0 ? (
+              <div className="flex items-center space-x-2">
                 <Badge variant="secondary" className="text-sm">
                   {`${totalCount} registros`}
                 </Badge>
-              )}
-            </div>
+              </div>
+            ) : null}
           </div>
         </CardHeader>
         <CardContent>

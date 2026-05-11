@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Logo } from "@/components/common/logo";
+import { UserSidebarMenu } from "../user-profile/user-sidebar-menu";
 
 interface NavigationItem {
   title: string;
@@ -41,7 +42,7 @@ export function DesktopSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
-  const { userProfile, permissions } = useAuthContext();
+  const { permissions } = useAuthContext();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["operations"]),
   );
@@ -94,7 +95,7 @@ export function DesktopSidebar() {
             <Logo variant="icon" className="h-8 w-auto" />
           ) : (
             <div className="flex items-center space-x-3">
-              <Logo variant="sidebar" className="h-8 w-auto" />
+              <Logo variant="icon" className="h-8 w-auto" />
             </div>
           )}
           <Tooltip>
@@ -242,26 +243,9 @@ export function DesktopSidebar() {
       </nav>
 
       {/* User Info */}
-      {!isCollapsed && (
-        <div className="p-3 border-t">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">
-                {userProfile?.firstName?.charAt(0)}
-                {userProfile?.lastName?.charAt(0)}
-              </span>
-            </div>
-            <div>
-              <p className="text-sm font-medium">
-                {userProfile?.firstName + " " + userProfile?.lastName}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {userProfile?.username}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="p-3 border-t">
+        <UserSidebarMenu isCollapsed={isCollapsed} />
+      </div>
     </aside>
   );
 }

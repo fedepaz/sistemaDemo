@@ -4,14 +4,12 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
 import { ExtendidoDto } from "@vivero/shared";
-import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Calendar, LogOut, Layers, Microscope } from "lucide-react";
 import { formatShortDate } from "@/lib/date-utils";
 
 export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
@@ -21,7 +19,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return <SortableHeader column={column}>Partida</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="font-black text-sm text-primary/80 tracking-tight">
+      <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
       </div>
     ),
@@ -30,7 +28,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "nombreEspecie",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Nombre Producto</SortableHeader>;
+      return <SortableHeader column={column}>Nombre</SortableHeader>;
     },
     cell: ({ row }) => (
       <TooltipProvider>
@@ -38,16 +36,13 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="flex items-center gap-2 group cursor-help">
-                <span className="font-bold text-sm truncate leading-tight group-hover:text-primary transition-colors">
+                <span className="font-bold text-sm truncate leading-tight">
                   {row.original.codigoEspecie}
                 </span>
                 {row.original.injerto && row.original.injerto !== "N" && (
-                  <Badge
-                    variant="outline"
-                    className="h-4 px-1.5 text-[8px] font-black border-chart-2/30 text-chart-2 bg-chart-2/5 uppercase"
-                  >
-                    Injerto: {row.original.injerto}
-                  </Badge>
+                  <span className="text-[10px] font-black text-muted-foreground uppercase">
+                    ({row.original.injerto})
+                  </span>
                 )}
               </div>
             </TooltipTrigger>
@@ -56,7 +51,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
               className="bg-popover border-border shadow-xl"
             >
               <div className="space-y-1">
-                <p className="text-xs font-bold text-primary">
+                <p className="text-xs font-bold text-foreground">
                   Detalle del Producto
                 </p>
                 <p className="text-[10px] text-muted-foreground leading-tight">
@@ -71,6 +66,14 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
                     {row.original.nombreEspecie}
                   </span>
                 </p>
+                {row.original.injerto && row.original.injerto !== "N" && (
+                  <p className="text-[10px] text-muted-foreground leading-tight">
+                    Injerto:{" "}
+                    <span className="text-foreground font-semibold">
+                      {row.original.injerto}
+                    </span>
+                  </p>
+                )}
               </div>
             </TooltipContent>
           </Tooltip>
@@ -84,17 +87,11 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "codigoCamaraGerminacion",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Cámara No.</SortableHeader>;
+      return <SortableHeader column={column}>Nª Cámara</SortableHeader>;
     },
     cell: ({ row }) => (
-      <div className="flex justify-center">
-        <Badge
-          variant="secondary"
-          className="h-6 w-8 flex items-center justify-center font-black text-xs bg-chart-1/10 text-chart-1 border-chart-1/20"
-          title="Cámara de Germinación"
-        >
-          {row.original.codigoCamaraGerminacion}
-        </Badge>
+      <div className="flex justify-center font-black text-xs text-foreground">
+        {row.original.codigoCamaraGerminacion}
       </div>
     ),
     size: 60,
@@ -102,11 +99,10 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSugeridaSiembra",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha Sugerida</SortableHeader>;
+      return <SortableHeader column={column}>Fecha Sug.</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">
-        <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
         <span className="text-xs font-bold font-mono tracking-tighter">
           {formatShortDate(row.original.fechaSugeridaSiembra)}
         </span>
@@ -116,13 +112,10 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSiembraReal",
     header: ({ column }) => {
-      return (
-        <SortableHeader column={column}>Fecha Real Siembra</SortableHeader>
-      );
+      return <SortableHeader column={column}>Fecha Siembra</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">
-        <Calendar className="h-3.5 w-3.5 opacity-40 group-hover:opacity-100 transition-opacity" />
         <span className="text-xs font-bold font-mono tracking-tighter">
           {formatShortDate(row.original.fechaSiembraReal)}
         </span>
@@ -142,19 +135,16 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       return (
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 text-foreground group">
-            <LogOut
-              className={`h-3.5 w-3.5 ${isToday ? "text-primary" : "opacity-40 group-hover:opacity-100"} transition-opacity`}
-            />
             <span
-              className={`text-xs font-black font-mono tracking-tighter ${isToday ? "text-primary" : ""}`}
+              className={`text-xs font-black font-mono tracking-tighter ${isToday ? "underline" : ""}`}
             >
               {formatShortDate(row.original.fechaEgresoCamara)}
             </span>
           </div>
           {isToday && (
             <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground"></span>
             </div>
           )}
         </div>
@@ -168,14 +158,8 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="flex justify-center">
-          <Badge
-            variant="outline"
-            className="h-6 px-2 font-black border-border bg-background text-foreground/70 text-[10px] shadow-sm flex gap-1.5 items-center"
-          >
-            <Microscope className="h-3 w-3 opacity-50" />
-            {row.original.diasEnCamara}
-          </Badge>
+        <div className="flex justify-center text-foreground/70 text-[10px] font-black">
+          {row.original.diasEnCamara}
         </div>
       );
     },
@@ -189,10 +173,9 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     cell: ({ row }) => (
       <div className="flex justify-center">
         <div className="flex flex-col items-center">
-          <Badge className="h-7 px-3 bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 transition-colors shadow-inner font-black text-sm">
-            <Layers className="h-3.5 w-3.5 mr-1.5 opacity-70" />
+          <span className="text-foreground font-black text-sm">
             {row.original.con}
-          </Badge>
+          </span>
         </div>
       </div>
     ),
