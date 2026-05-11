@@ -7,9 +7,11 @@ import {
   FileText,
   TrendingDown,
   Warehouse,
+  AlertTriangle,
+  CheckCircle2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { useDepositos } from "../hooks/useDepositos";
 import {
   Select,
@@ -42,21 +44,26 @@ interface ExtendidosEditFormProps {
 
 export function ExtendidosEditForm({
   onSubmit,
-  onCancel,
+
   form,
   selectedExtendido,
 }: ExtendidosEditFormProps) {
-  const { data: depositos } = useDepositos();
+  const { data: depositosQuery } = useDepositos();
+  const depositos = depositosQuery.filter((d) => d.camara === "");
 
-  // Logic to calculate baja automatically: original_stock - new_stock
-  const watchedStockIni = form.watch("stock_ini");
   const originalStock = selectedExtendido.con;
+  const watchedStockIni = form.watch("stock_ini");
+  const watchedBaja = form.watch("baja");
 
-  useEffect(() => {
-    const newStock = Number(watchedStockIni) || 0;
-    const calculatedBaja = Math.max(0, originalStock - newStock);
-    form.setValue("baja", calculatedBaja);
-  }, [watchedStockIni, originalStock, form]);
+  // Logic to calculate expected values but NOT override them
+  const expectedBaja = useMemo(() => {
+    const stockOk = Number(watchedStockIni) || 0;
+    return Math.max(0, originalStock - stockOk);
+  }, [watchedStockIni, originalStock]);
+
+  const hasDiscrepancy = useMemo(() => {
+    return Number(watchedBaja) !== expectedBaja;
+  }, [watchedBaja, expectedBaja]);
 
   return (
     <Form {...form}>
@@ -116,7 +123,7 @@ export function ExtendidosEditForm({
                       <SelectValue placeholder="Seleccione el depósito final" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent 
+                  <SelectContent
                     className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[300px]"
                     position="popper"
                   >
@@ -132,7 +139,8 @@ export function ExtendidosEditForm({
                   </SelectContent>
                 </Select>
                 <FormDescription className="text-[10px] font-medium leading-relaxed px-1">
-                  Obligatorio: Indique hacia dónde se moverán las bandejas para habilitar el proceso.
+                  Obligatorio: Indique hacia dónde se moverán las bandejas para
+                  habilitar el proceso.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -171,35 +179,67 @@ export function ExtendidosEditForm({
               )}
             />
 
-            {/* 📉 BAJA (Calculated) */}
+            {/* 📉 BAJA (Manual with Advisory) */}
             <FormField
               control={form.control}
               name="baja"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-destructive/10 rounded-lg">
-                      <TrendingDown className="h-4 w-4 text-destructive" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`p-2 rounded-lg transition-colors duration-300 ${
+                          hasDiscrepancy ? "bg-amber-100" : "bg-destructive/10"
+                        }`}
+                      >
+                        {hasDiscrepancy ? (
+                          <AlertTriangle className="h-4 w-4 text-amber-600 animate-pulse" />
+                        ) : (
+                          <TrendingDown className="h-4 w-4 text-destructive" />
+                        )}
+                      </div>
+                      <FormLabel
+                        className={`text-xs font-black uppercase tracking-widest transition-colors ${
+                          hasDiscrepancy ? "text-amber-600" : "text-destructive"
+                        }`}
+                      >
+                        Baja {hasDiscrepancy && "(Revisar Conteo)"}
+                      </FormLabel>
                     </div>
-                    <FormLabel className="text-xs font-black uppercase tracking-widest text-destructive">
-                      Baja (Descarte Automático)
-                    </FormLabel>
+                    {!hasDiscrepancy && Number(watchedBaja) > 0 && (
+                      <CheckCircle2 className="h-4 w-4 text-green-500 animate-in zoom-in duration-300" />
+                    )}
                   </div>
                   <FormControl>
                     <div className="relative">
                       <Input
                         type="number"
+                        inputMode="numeric"
                         {...field}
-                        disabled
-                        className="h-16 rounded-xl border-destructive/20 bg-destructive/5 shadow-inner text-3xl font-black text-destructive px-4 opacity-100"
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        className={`h-16 rounded-xl shadow-sm text-3xl font-black px-4 transition-all duration-300 ${
+                          hasDiscrepancy
+                            ? "border-amber-400 bg-amber-50/50 text-amber-700 focus-visible:ring-amber-200"
+                            : "border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
+                        }`}
                       />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                        <span className="text-[10px] font-black uppercase text-destructive/40 tracking-tighter">Waste</span>
-                      </div>
                     </div>
                   </FormControl>
-                  <FormDescription className="text-[10px] font-bold text-destructive/60 uppercase">
-                    Calculado: {originalStock} (Total) - {watchedStockIni || 0} (Ok)
+                  <FormDescription
+                    className={`text-[10px] font-bold uppercase transition-all duration-300 ${
+                      hasDiscrepancy
+                        ? "text-amber-700 bg-amber-100/50 p-2 rounded-lg border border-amber-200 mt-2"
+                        : "text-destructive/60"
+                    }`}
+                  >
+                    {hasDiscrepancy ? (
+                      <span className="flex items-center gap-1">
+                        ⚠️ El total no coincide con el stock inicial (
+                        {originalStock}). Se esperaba {expectedBaja}.
+                      </span>
+                    ) : (
+                      `Calculado: ${originalStock} (Total) - ${watchedStockIni || 0} (Ok)`
+                    )}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -229,7 +269,8 @@ export function ExtendidosEditForm({
                   />
                 </FormControl>
                 <FormDescription className="text-[9px] italic opacity-60">
-                  Esta información se guardará en el detalle técnico de la partida (Historial).
+                  Esta información se guardará en el detalle técnico de la
+                  partida (Historial).
                 </FormDescription>
                 <FormMessage />
               </FormItem>
