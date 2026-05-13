@@ -39,19 +39,19 @@ const InfoRow = ({
 }) => (
   <div
     className={cn(
-      "flex items-center gap-4 py-3 border-b border-border/40 last:border-0",
+      "flex items-center gap-3 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
       className,
     )}
   >
-    <div className="p-2 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-4 w-4 text-primary" />
+    <div className="p-1.5 md:p-2 bg-primary/5 rounded-lg border border-primary/10">
+      <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1.5">
+      <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1 md:mb-1.5">
         {label}
       </p>
       <div className="flex items-center gap-2">
-        <p className="text-sm md:text-base font-bold truncate text-foreground">
+        <p className="text-xs md:text-base font-bold truncate text-foreground">
           {value ?? "-"}
         </p>
         {badge}
@@ -83,32 +83,31 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-3 md:gap-6 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* 🚀 FIXED TOP SECTION: PRODUCTO (Always Visible) */}
-      <div className="space-y-4 shrink-0">
-        <div className="flex items-center justify-between bg-primary/5 p-4 rounded-2xl border border-primary/20 shadow-sm">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-              <Package className="h-6 w-6" />
+      <div className="space-y-3 md:space-y-4 shrink-0">
+        <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+              <Package className="h-5 w-5 md:h-6 md:w-6" />
             </div>
             <div>
-              <h2 className="text-lg md:text-xl font-black tracking-tight leading-none text-foreground">
+              <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground">
                 {selectedExtendido.codigoEspecie}
               </h2>
-              <div className="flex items-center gap-2 mt-1.5">
-                <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest bg-muted px-1.5 py-0.5 rounded border border-border/40">
+              <div className="flex items-center gap-2 mt-1 md:mt-1.5">
+                <span className="text-[9px] md:text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest bg-muted px-1 py-0.5 rounded border border-border/40">
                   {selectedExtendido.nombreEspecie}
                 </span>
-                <span className="h-1 w-1 rounded-full bg-border" />
               </div>
             </div>
           </div>
           {selectedExtendido.stockInicial ? (
-            <div className="text-right hidden sm:block pr-2">
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-1">
-                Stock Inicial
+            <div className="text-right pr-1 md:pr-2">
+              <p className="text-[8px] md:text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-0.5 md:mb-1">
+                Stock
               </p>
-              <p className="text-2xl font-black text-primary leading-none">
+              <p className="text-xl md:text-2xl font-black text-primary leading-none">
                 {selectedExtendido.stockInicial}
               </p>
             </div>
@@ -116,7 +115,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
         </div>
 
         {/* BASIC SPECS GRID */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-4 gap-2">
           {[
             { label: "Año", value: selectedExtendido.anio, icon: Calendar },
             { label: "Índice", value: selectedExtendido.indice, icon: Hash },
@@ -129,16 +128,18 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-background border border-border/60 p-2.5 rounded-xl flex items-center gap-2.5 shadow-sm"
+              className="bg-background border border-border/60 p-1.5 md:p-2.5 rounded-lg md:rounded-xl flex items-center gap-1.5 md:gap-2.5 shadow-sm overflow-hidden"
             >
-              <div className="p-1.5 bg-muted rounded-md shrink-0">
-                <item.icon className="h-3 w-3 text-muted-foreground" />
+              <div className="p-1 md:p-1.5 bg-muted rounded-md shrink-0">
+                <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
               </div>
               <div className="min-w-0">
-                <p className="text-[8px] font-bold uppercase leading-none mb-0.5">
+                <p className="text-[7px] md:text-[8px] font-bold uppercase leading-none mb-0.5">
                   {item.label}
                 </p>
-                <p className="text-xs truncate uppercase">{item.value}</p>
+                <p className="text-[10px] md:text-xs truncate uppercase font-bold">
+                  {item.value}
+                </p>
               </div>
             </div>
           ))}
@@ -150,39 +151,37 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
         defaultValue="produccion"
         className="flex-1 flex flex-col overflow-hidden min-h-0"
       >
-        <TabsList className="grid grid-cols-2 bg-muted/80 p-1.5 rounded-2xl shrink-0 h-14 border border-border/40 gap-2 shadow-inner">
+        <TabsList className="grid grid-cols-2 bg-muted/80 p-1 rounded-xl md:rounded-2xl shrink-0 h-10 md:h-14 border border-border/40 gap-1 md:gap-2 shadow-inner">
           <TabsTrigger
             value="produccion"
-            className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
-                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
-                       data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50 data-[state=inactive]:hover:text-foreground"
+            className="rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
+                       data-[state=inactive]:text-muted-foreground"
           >
-            <History className="h-3.5 w-3.5 mr-2 hidden sm:inline-block" />
+            <History className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 md:mr-2 hidden sm:inline-block" />
             Producción
           </TabsTrigger>
 
           <TabsTrigger
             value="notas"
-            className="rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
-                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]
-                       data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-background/50 data-[state=inactive]:hover:text-foreground"
+            className="rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
+                       data-[state=inactive]:text-muted-foreground"
           >
-            <ClipboardList className="h-3.5 w-3.5 mr-2 hidden sm:inline-block" />
+            <ClipboardList className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 md:mr-2 hidden sm:inline-block" />
             Notas
           </TabsTrigger>
         </TabsList>
 
-        <div className="flex-1 overflow-y-auto no-scrollbar pt-6 pb-2">
+        <div className="flex-1 overflow-y-auto no-scrollbar pt-3 md:pt-6 pb-2">
           {/* TAB CONTENT: Same high-quality cards with refined padding */}
           <TabsContent
             value="produccion"
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
-            <Card className="border-border/60 shadow-sm rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-6 space-y-6">
-                <div className="grid grid-cols-1 gap-1">
+            <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
+              <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
+                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
                   <InfoRow
                     icon={Calendar}
                     label="Fecha Sugerida"
@@ -203,14 +202,14 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                       isToday ? (
                         <Badge
                           variant="default"
-                          className="bg-primary/10 text-primary border-primary/20 font-bold px-2 py-0 h-5"
+                          className="bg-primary/10 text-primary border-primary/20 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
                         >
                           Hoy
                         </Badge>
                       ) : isTomorrow ? (
                         <Badge
                           variant="outline"
-                          className="text-amber-600 border-amber-200 bg-amber-50 font-bold px-2 py-0 h-5"
+                          className="text-amber-600 border-amber-200 bg-amber-50 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
                         >
                           Mañana
                         </Badge>
@@ -220,41 +219,32 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                   />
                 </div>
 
-                <div className="p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-[2rem] relative overflow-hidden group shadow-md transition-all hover:shadow-lg">
-                  {/* Decorative element */}
-                  <div className="absolute -right-4 -top-4 h-24 w-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors" />
-
+                <div className="p-4 md:p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-xl md:rounded-[2rem] relative overflow-hidden group shadow-md">
                   <div className="relative z-10 flex items-center justify-between">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-                          <Thermometer className="h-5 w-5" />
+                    <div className="space-y-3 md:space-y-4">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                          <Thermometer className="h-4 w-4 md:h-5 md:w-5" />
                         </div>
                         <div>
-                          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 block leading-none mb-2">
-                            Tiempo de Estadía Sugerido
+                          <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 block leading-none mb-1 md:mb-2">
+                            Estadía Sugerida
                           </span>
-                          <p className="text-sm font-bold text-foreground">
+                          <p className="text-xs md:text-sm font-bold text-foreground">
                             {selectedExtendido.diasEnCamara} Días
                           </p>
                         </div>
                       </div>
 
-                      <div className="pt-2">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary/70 block leading-none mb-1">
+                      <div>
+                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary/70 block leading-none mb-1">
                           Cámara Germinación
                         </span>
 
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-5xl font-black text-primary tracking-tighter">
-                            # {selectedExtendido.codigoCamaraGerminacion}
-                          </span>
-                        </div>
+                        <p className="text-3xl md:text-5xl font-black text-primary tracking-tighter">
+                          # {selectedExtendido.codigoCamaraGerminacion}
+                        </p>
                       </div>
-                    </div>
-
-                    <div className="hidden sm:flex h-20 w-20 items-center justify-center rounded-full bg-primary/5 border border-primary/10">
-                      <Activity className="h-10 w-10 text-primary/30 animate-pulse" />
                     </div>
                   </div>
                 </div>
@@ -266,42 +256,41 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
             value="notas"
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
-            <Card className="border-border/60 shadow-sm rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-6 space-y-8">
-                <div className="mb-8 flex items-center gap-5 bg-muted/40 p-5 rounded-2xl border border-border/40">
-                  <div className="p-3 bg-background rounded-xl border border-border/60 shadow-sm">
-                    <Activity className="h-6 w-6 text-primary/60" />
+            <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
+              <CardContent className="p-4 md:p-6 space-y-4 md:space-y-8">
+                <div className="flex items-center gap-3 md:gap-5 bg-muted/40 p-3 md:p-5 rounded-xl md:rounded-2xl border border-border/40">
+                  <div className="p-2 md:p-3 bg-background rounded-lg md:rounded-xl border border-border/60 shadow-sm">
+                    <Activity className="h-4 w-4 md:h-6 md:w-6 text-primary/60" />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-foreground">
+                    <p className="text-xs md:text-sm font-bold text-foreground">
                       Nota de Extendido
                     </p>
-                    <p className="text-sm font-black uppercase tracking-widest text-muted-foreground">
+                    <p className="text-xs md:text-sm font-black uppercase tracking-widest text-muted-foreground">
                       {selectedExtendido.extendido ||
-                        "No existen observaciones registradas."}
+                        "Sin observaciones."}
                     </p>
                   </div>
                 </div>
                 {selectedExtendido.detalle ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary/70">
-                      <ClipboardList className="h-4 w-4" /> Detalle Técnico
-                      Operativo
+                  <div className="space-y-2 md:space-y-3">
+                    <div className="flex items-center gap-2 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary/70">
+                      <ClipboardList className="h-3 w-3 md:h-4 md:w-4" /> Detalle Técnico
                     </div>
-                    <div className="p-5 rounded-2xl bg-muted/30 border border-border/40 text-sm leading-relaxed text-foreground/70 min-h-[80px]">
+                    <div className="p-3 md:p-5 rounded-xl md:rounded-2xl bg-muted/30 border border-border/40 text-xs md:text-sm leading-relaxed text-foreground/70 min-h-[60px] md:min-h-[80px]">
                       {selectedExtendido.detalle}
                     </div>
                   </div>
                 ) : null}
 
                 {selectedExtendido.baja ? (
-                  <div className="mt-4 p-4 bg-destructive/10 border border-destructive/20 rounded-2xl flex items-center gap-4 animate-in pulse duration-1000 infinite">
-                    <AlertCircle className="h-7 w-7 text-destructive" />
+                  <div className="p-3 md:p-4 bg-destructive/10 border border-destructive/20 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4">
+                    <AlertCircle className="h-5 w-5 md:h-7 md:w-7 text-destructive" />
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-destructive leading-none mb-1">
-                        Registro de Baja
+                      <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-destructive leading-none mb-1">
+                        Baja
                       </p>
-                      <p className="text-sm font-bold text-destructive/80 leading-tight">
+                      <p className="text-xs md:text-sm font-bold text-destructive/80 leading-tight">
                         {selectedExtendido.baja}
                       </p>
                     </div>
