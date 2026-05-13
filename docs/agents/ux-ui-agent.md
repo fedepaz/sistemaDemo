@@ -95,6 +95,9 @@ Focus on these proven interface patterns:
 
 - **Inline Editing:** The `DataTable` component now supports inline editing for quick modifications directly within the table.
 - **Bulk Actions:** The `DataTable` component now supports bulk actions, such as deleting multiple items at once.
+- **Permission-Based Visibility:** The `DataTable` component dynamically adapts its interface based on the entity's `permissionType`:
+    - For `PROCESS` types: Row selection is hidden by default, and bulk delete actions are disabled if execution (create) is allowed, prioritizing the operational process flow.
+    - For `READ_ONLY` types: All mutation actions and selection are hidden.
 - **Descriptive Action Labels:** Always use specific, context-aware labels for action buttons (e.g., "Asignar Ubicación" instead of "Ejecutar") to improve operational clarity.
 
 ## Feature Design Process
