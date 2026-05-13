@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
 
 interface ExtendidosFormProps {
   selectedExtendido: ExtendidoDto;
@@ -61,12 +62,15 @@ const InfoRow = ({
 
 export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
   const today = new Date();
-  const year = today.getFullYear();
-  const month =
-    today.getMonth() > 9 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;
-  const day = today.getDate() > 9 ? today.getDate() : `0${today.getDate()}`;
-  const isToday =
-    selectedExtendido.fechaEgresoCamara === `${year}-${month}-${day}`;
+  const todayStr = getLocalDateStr(today);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowStr = getLocalDateStr(tomorrow);
+
+  const targetDate = selectedExtendido.fechaEgresoCamara;
+  const isToday = targetDate === todayStr;
+  const isTomorrow = targetDate === tomorrowStr;
 
   const getHaiLabel = (hai: string | null | undefined) => {
     if (!hai) return "-";
@@ -194,11 +198,21 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                   <InfoRow
                     icon={ChevronRight}
                     label="Egreso de Cámara"
-                    value={selectedExtendido.fechaEgresoCamara}
+                    value={formatShortDate(selectedExtendido.fechaEgresoCamara)}
                     badge={
                       isToday ? (
-                        <Badge variant="destructive" className="animate-pulse">
+                        <Badge
+                          variant="default"
+                          className="bg-primary/10 text-primary border-primary/20 font-bold px-2 py-0 h-5"
+                        >
                           Hoy
+                        </Badge>
+                      ) : isTomorrow ? (
+                        <Badge
+                          variant="outline"
+                          className="text-amber-600 border-amber-200 bg-amber-50 font-bold px-2 py-0 h-5"
+                        >
+                          Mañana
                         </Badge>
                       ) : null
                     }

@@ -1,7 +1,7 @@
 # Extendidos Page Overrides
 
 > **PROJECT:** vivero-client-alpha
-> **Generated:** 2026-04-20 20:48:12
+> **Generated:** 2026-05-12 21:52:54
 > **Page Type:** Dashboard / Data View
 
 > ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`design-system/MASTER.md`).
@@ -31,9 +31,8 @@
 
 ### Component Overrides
 
-- Avoid: No feedback after submit
-- Avoid: Placeholder-only inputs
 - Avoid: Single row actions only
+- Avoid: Auto-play high-res video loops
 
 ---
 
@@ -46,7 +45,6 @@
 ## Recommendations
 
 - Effects: Hover tooltips, chart zoom on click, row highlighting on hover, smooth filter animations, data loading spinners
-- Forms: Show loading then success/error state
-- Accessibility: Use label with for attribute or wrap input
 - Data Entry: Allow multi-select and bulk edit
+- Sustainability: Click-to-play or pause when off-screen
 - CTA Placement: Contact Sales (Primary) + Login (Secondary)

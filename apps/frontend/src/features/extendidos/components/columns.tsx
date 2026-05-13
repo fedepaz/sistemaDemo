@@ -10,7 +10,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { formatShortDate } from "@/lib/date-utils";
+import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
+import { cn } from "@/lib/utils";
 
 export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
@@ -129,24 +130,43 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     },
     cell: ({ row }) => {
       const today = new Date();
-      const dateStr = today.toISOString().split("T")[0];
-      const isToday = row.original.fechaEgresoCamara === dateStr;
+      const todayStr = getLocalDateStr(today);
+
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowStr = getLocalDateStr(tomorrow);
+
+      const targetDate = row.original.fechaEgresoCamara;
+      const isToday = targetDate === todayStr;
+      const isTomorrow = targetDate === tomorrowStr;
 
       return (
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 text-foreground group">
-            <span
-              className={`text-xs font-black font-mono tracking-tighter ${isToday ? "underline" : ""}`}
-            >
-              {formatShortDate(row.original.fechaEgresoCamara)}
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-mono tabular-nums text-muted-foreground">
+              {formatShortDate(targetDate)}
             </span>
+            {(isToday || isTomorrow) && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="relative flex h-2 w-2 cursor-help">
+                    {isToday && (
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    )}
+                    <span
+                      className={cn(
+                        "relative inline-flex rounded-full h-2 w-2",
+                        isToday ? "bg-primary" : "bg-amber-500",
+                      )}
+                    ></span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>{isToday ? "Egreso hoy" : "Egreso mañana"}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
           </div>
-          {isToday && (
-            <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground"></span>
-            </div>
-          )}
         </div>
       );
     },
