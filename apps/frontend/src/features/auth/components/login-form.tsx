@@ -48,25 +48,25 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 font-serif"
+        className="flex flex-col gap-3 md:gap-4 font-serif"
       >
         {/* Username Field */}
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-sans">Nombre de usuario</FormLabel>
+            <FormItem className="space-y-1 md:space-y-2">
+              <FormLabel className="font-sans text-[10px] md:text-sm uppercase tracking-widest opacity-70">Nombre de usuario</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="h-4 w-4 text-primary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <User className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
                   <Input
                     {...field}
                     placeholder="juanperez007"
                     disabled={isLoading}
-                    className="pl-14 h-12"
+                    className="pl-12 md:pl-14 h-10 md:h-12 text-sm md:text-base"
                     autoFocus
                     tabIndex={0}
                   />
@@ -81,35 +81,35 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-sans">Contraseña</FormLabel>
+            <FormItem className="space-y-1 md:space-y-2">
+              <FormLabel className="font-sans text-[10px] md:text-sm uppercase tracking-widest opacity-70">Contraseña</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Lock className="h-4 w-4 text-primary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Lock className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Ingresa tu contraseña"
+                    placeholder="Tu contraseña"
                     disabled={isLoading}
-                    className="pl-14 h-12"
+                    className="pl-12 md:pl-14 h-10 md:h-12 text-sm md:text-base"
                     {...field}
                     tabIndex={0}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 md:w-8 md:h-8 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                     tabIndex={-1}
                     aria-label={
                       showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
                     }
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-3.5 w-3.5 md:h-4 md:w-4" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-3.5 w-3.5 md:h-4 md:w-4" />
                     )}
                   </button>
                 </div>
@@ -121,14 +121,12 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full h-12 bg-primary rounded p-2 cursor-pointer"
+          className="w-full h-10 md:h-12 bg-primary rounded p-2 cursor-pointer mt-2"
           disabled={isLoading || !form.formState.isDirty}
           tabIndex={0}
         >
           {isLoading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-            </>
+            <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
             "Iniciar sesión"
           )}

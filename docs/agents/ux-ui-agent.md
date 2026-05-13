@@ -168,6 +168,11 @@ For each interface state:
 - Task-focused layouts
 - **Dynamic Viewport Units**: Use `dvh` (dynamic viewport height) instead of `vh` for full-screen layouts to ensure the UI adapts correctly to mobile browser toolbars.
 - **Safe Area Insets**: Always apply `pb-safe-area-inset-bottom` or equivalent padding to bottom-fixed elements or main content areas to avoid overlap with device home indicators.
+- **High-Density Mobile Strategy (The "Shrink-to-Fit" Standard)**: To deliver a professional, zero-scroll experience on smartphones, all forms and data views must implement high-density refinements:
+    - **Tightened Spacing**: Reduce vertical gaps (`gap-3/4` instead of `gap-6/8`) and padding (`p-3` instead of `p-5`) on mobile.
+    - **High-Definition Scaling**: Shrink icons (e.g., `h-4/3.5` instead of `h-6`) and font sizes (e.g., `text-[9px]/[10px]` for labels) on small screens.
+    - **Smart Grids**: Use multi-column grids for numeric or short inputs on mobile to minimize vertical footprint.
+    - **Viewport Fit**: Use `dvh` units and `max-h` constraints to ensure content fits perfectly between mobile browser toolbars.
 
 **Tablet (Facility Managers)**:
 
