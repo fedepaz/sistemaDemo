@@ -201,15 +201,15 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                     badge={
                       isToday ? (
                         <Badge
-                          variant="default"
-                          className="bg-primary/10 text-primary border-primary/20 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
+                          variant="outline"
+                          className="text-amber-600 border-amber-200 bg-amber-50 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
                         >
                           Hoy
                         </Badge>
                       ) : isTomorrow ? (
                         <Badge
-                          variant="outline"
-                          className="text-amber-600 border-amber-200 bg-amber-50 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
+                          variant="default"
+                          className="bg-primary/10 text-primary border-primary/20 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
                         >
                           Mañana
                         </Badge>
@@ -267,15 +267,15 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                       Nota de Extendido
                     </p>
                     <p className="text-xs md:text-sm font-black uppercase tracking-widest text-muted-foreground">
-                      {selectedExtendido.extendido ||
-                        "Sin observaciones."}
+                      {selectedExtendido.extendido || "Sin observaciones."}
                     </p>
                   </div>
                 </div>
                 {selectedExtendido.detalle ? (
                   <div className="space-y-2 md:space-y-3">
                     <div className="flex items-center gap-2 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary/70">
-                      <ClipboardList className="h-3 w-3 md:h-4 md:w-4" /> Detalle Técnico
+                      <ClipboardList className="h-3 w-3 md:h-4 md:w-4" />{" "}
+                      Detalle Técnico
                     </div>
                     <div className="p-3 md:p-5 rounded-xl md:rounded-2xl bg-muted/30 border border-border/40 text-xs md:text-sm leading-relaxed text-foreground/70 min-h-[60px] md:min-h-[80px]">
                       {selectedExtendido.detalle}

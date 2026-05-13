@@ -156,7 +156,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
                     <span
                       className={cn(
                         "relative inline-flex rounded-full h-2 w-2",
-                        isToday ? "bg-primary" : "bg-amber-500",
+                        isToday ? "bg-amber-500" : "",
                       )}
                     ></span>
                   </div>
