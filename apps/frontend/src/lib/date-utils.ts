@@ -7,9 +7,12 @@ export const getISOWeek = (date: Date) => {
   const d = new Date(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
   );
+
   const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+
+  d.setUTCDate(d.getUTCDate() + 3 - dayNum);
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+
   return Math.ceil(((d.valueOf() - yearStart.valueOf()) / 86400000 + 1) / 7);
 };
 
@@ -45,11 +48,32 @@ export const formatSpanishDate = (date: Date) => {
  */
 export const formatShortDate = (date: Date | string | null | undefined) => {
   if (!date) return "-";
-  const d = typeof date === "string" ? new Date(date) : date;
-  // Check for invalid date
-  if (isNaN(d.getTime())) return "-";
-  
-  return d.toLocaleDateString("es-AR", {
-    dateStyle: "short",
-  });
+
+  let dateObj: Date;
+
+  if (typeof date === "string") {
+    // Check for YYYY-MM-DD format
+    if (date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      const [year, month, day] = date.split("-").map(Number);
+      dateObj = new Date(year, month - 1, day);
+    } else {
+      dateObj = new Date(date);
+    }
+  } else {
+    dateObj = date;
+  }
+
+  if (isNaN(dateObj.getTime())) return "-";
+
+  const day = String(dateObj.getDate()).padStart(2, "0");
+  const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const year = String(dateObj.getFullYear()).slice(-2);
+
+  return `${day}/${month}/${year}`;
 };
+export function getLocalDateStr(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}

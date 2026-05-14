@@ -196,6 +196,10 @@ Components that fetch data asynchronously must be wrapped in a `<Suspense>` boun
 - **Virtualized Rendering**: Use for large lists (10,000+ items).
 - **Mobile-first**: Optimistic updates and offline-first handling.
 
+## Utility Standards: Date Handling
+
+- **Week Calculation**: The `getISOWeek` utility is optimized for agricultural sowing cycles, using Wednesday as the reference day to align with project-specific planning weeks.
+
 ## Quality Gates
 
 - **Husky**: Pre-commit hooks for linting, branch protection, and commitlint.
