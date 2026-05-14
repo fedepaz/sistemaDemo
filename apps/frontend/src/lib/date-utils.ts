@@ -7,9 +7,12 @@ export const getISOWeek = (date: Date) => {
   const d = new Date(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
   );
+
   const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+
+  d.setUTCDate(d.getUTCDate() + 3 - dayNum);
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+
   return Math.ceil(((d.valueOf() - yearStart.valueOf()) / 86400000 + 1) / 7);
 };
 

@@ -22,6 +22,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     cell: ({ row }) => (
       <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
+        {row.original.indice !== 0 && `/ ${row.original.indice}`}
       </div>
     ),
     size: 70,
@@ -100,7 +101,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSugeridaSiembra",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha Sug.</SortableHeader>;
+      return <SortableHeader column={column}>Siembra Sug.</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">
@@ -113,7 +114,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
     accessorKey: "fechaSiembraReal",
     header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha Siembra</SortableHeader>;
+      return <SortableHeader column={column}>Siembra Real</SortableHeader>;
     },
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-muted-foreground group">
