@@ -6,7 +6,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 
 | Criterion | Description |
 | :--- | :--- |
-| **Responsive** | Component follows a mobile-first approach and adapts correctly to Tablet and Desktop views using Tailwind breakpoints (`sm:`, `md:`, `lg:`, `xl:`). |
+| **Responsive** | Component follows a high-density mobile-first approach (zero-scroll goal). Shrinks gaps, padding, and icons on smartphones while using Tailwind breakpoints for Tablet/Desktop. |
 | **Color Tokens** | Component strictly uses theme variables/tokens (e.g., `text-foreground`, `bg-primary/10`, `border-border/60`) and avoids hardcoded hex/RGB/HSL colors. |
 | **UX Helpers** | Component implements Tooltips for icon-only actions, `aria-label` for screen readers, and `FormDescription` for complex input guidance. |
 | **Viewport dvh** | Component uses dynamic viewport height units (`dvh`) where full-screen or screen-relative height is required, avoiding `100vh` cutoffs on mobile. |

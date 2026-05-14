@@ -95,6 +95,9 @@ Focus on these proven interface patterns:
 
 - **Inline Editing:** The `DataTable` component now supports inline editing for quick modifications directly within the table.
 - **Bulk Actions:** The `DataTable` component now supports bulk actions, such as deleting multiple items at once.
+- **Permission-Based Visibility:** The `DataTable` component dynamically adapts its interface based on the entity's `permissionType`:
+    - For `PROCESS` types: Row selection is hidden by default, and bulk delete actions are disabled if execution (create) is allowed, prioritizing the operational process flow.
+    - For `READ_ONLY` types: All mutation actions and selection are hidden.
 - **Descriptive Action Labels:** Always use specific, context-aware labels for action buttons (e.g., "Asignar Ubicación" instead of "Ejecutar") to improve operational clarity.
 
 ## Feature Design Process
@@ -165,6 +168,11 @@ For each interface state:
 - Task-focused layouts
 - **Dynamic Viewport Units**: Use `dvh` (dynamic viewport height) instead of `vh` for full-screen layouts to ensure the UI adapts correctly to mobile browser toolbars.
 - **Safe Area Insets**: Always apply `pb-safe-area-inset-bottom` or equivalent padding to bottom-fixed elements or main content areas to avoid overlap with device home indicators.
+- **High-Density Mobile Strategy (The "Shrink-to-Fit" Standard)**: To deliver a professional, zero-scroll experience on smartphones, all forms and data views must implement high-density refinements:
+    - **Tightened Spacing**: Reduce vertical gaps (`gap-3/4` instead of `gap-6/8`) and padding (`p-3` instead of `p-5`) on mobile.
+    - **High-Definition Scaling**: Shrink icons (e.g., `h-4/3.5` instead of `h-6`) and font sizes (e.g., `text-[9px]/[10px]` for labels) on small screens.
+    - **Smart Grids**: Use multi-column grids for numeric or short inputs on mobile to minimize vertical footprint.
+    - **Viewport Fit**: Use `dvh` units and `max-h` constraints to ensure content fits perfectly between mobile browser toolbars.
 
 **Tablet (Facility Managers)**:
 

@@ -210,52 +210,51 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
         ) : (
           <div className="flex flex-col">
             {/* Search + column headers */}
-            <div className="sticky top-0 z-10 flex flex-col gap-4 border-b bg-background/95 backdrop-blur-md px-6 py-4 lg:flex-row lg:items-center">
+            <div className="sticky top-0 z-10 flex flex-col gap-2 md:gap-4 border-b bg-background/95 backdrop-blur-md px-3 py-3 md:px-6 md:py-4 lg:flex-row lg:items-center">
               <div className="relative flex-1 group">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
                 <Input
-                  placeholder="Filtrar por nombre de tabla o recurso..."
+                  placeholder="Filtrar por nombre o recurso..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-10 border-border/60 bg-muted/20 pl-10 text-sm shadow-none transition-all focus:bg-background focus:ring-primary/20 rounded-xl"
+                  className="h-9 md:h-10 border-border/60 bg-muted/20 pl-10 text-sm shadow-none transition-all focus:bg-background focus:ring-primary/20 rounded-xl"
                 />
               </div>
               {!canEdit ? (
                 <Badge
                   variant="outline"
-                  className="h-9 px-4 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[10px] uppercase tracking-widest gap-2"
+                  className="h-8 md:h-9 px-3 md:px-4 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[9px] md:text-[10px] uppercase tracking-widest gap-2"
                 >
-                  <Shield className="h-3.5 w-3.5" />
-                  Modo de solo lectura
+                  <Shield className="h-3 md:h-3.5 w-3 md:h-3.5" />
+                  Modo lectura
                 </Badge>
               ) : null}
             </div>
 
             {/* Rows */}
             <ScrollArea className="flex flex-col bg-muted/5">
-              <div className="flex flex-col gap-6 p-6">
+              <div className="flex flex-col gap-4 md:gap-6 p-3 md:p-6">
                 {totalResults === 0 ? (
                   // ✅ Empty state mejorado
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-3">
-                      <Search className="h-6 w-6 text-muted-foreground/40" />
+                  <div className="flex flex-col items-center justify-center py-8 md:py-12 text-center">
+                    <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-muted flex items-center justify-center mb-3">
+                      <Search className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground/40" />
                     </div>
-                    <p className="text-sm font-bold text-foreground">
+                    <p className="text-xs md:text-sm font-bold text-foreground">
                       No hay coincidencias
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      No encontramos ningún recurso que coincida con &quot;
-                      {searchQuery}&quot;
+                    <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
+                      No encontramos ningún recurso.
                     </p>
                     {searchQuery.trim() && (
                       <Button
                         variant="outline"
                         size="sm"
-                        className="mt-4"
+                        className="mt-3 md:mt-4 h-8 text-[10px]"
                         onClick={() => setSearchQuery("")}
                       >
                         <RotateCcw className="h-3 w-3 mr-1.5" />
-                        Limpiar búsqueda
+                        Limpiar
                       </Button>
                     )}
                   </div>
@@ -266,25 +265,25 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                     if (rows.length === 0) return null;
 
                     return (
-                      <div key={type} className="space-y-3">
+                      <div key={type} className="space-y-2 md:space-y-3">
                         {/* Header del grupo */}
-                        <div className="flex items-center gap-3 px-1 py-2">
+                        <div className="flex items-center gap-2 md:gap-3 px-1 py-1 md:py-2">
                           <div
                             className={cn(
-                              "h-6 w-1.5 rounded-full",
+                              "h-4 md:h-6 w-1 md:w-1.5 rounded-full",
                               type === "CRUD" && "bg-emerald-500",
                               type === "PROCESS" && "bg-amber-500",
                               type === "READ_ONLY" && "bg-sky-500",
                             )}
                           />
                           <div className="flex items-center gap-2">
-                            <span className="text-lg font-bold text-foreground">
+                            <span className="text-base md:text-lg font-bold text-foreground">
                               {GROUP_LABELS[type]}
                             </span>
                             <Badge
                               variant="secondary"
                               className={cn(
-                                "text-xs font-bold px-2 py-0.5 rounded-md",
+                                "text-[10px] md:text-xs font-bold px-1.5 md:px-2 py-0.5 rounded-md",
                                 GROUP_COLORS[type],
                               )}
                             >
@@ -297,7 +296,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                         <div className="h-px bg-border/30 mx-1" />
 
                         {/* Filas del grupo */}
-                        <div className="space-y-3">
+                        <div className="space-y-2 md:space-y-3">
                           {rows.map((row) => {
                             const originalRow = userPermissions[
                               row.tableName
@@ -338,45 +337,45 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
       {tables.length > 0 && canEdit ? (
         <>
           <Separator className="opacity-50" />
-          <CardFooter className="flex flex-col gap-4 items-center justify-between px-6 py-6 bg-muted/5 sm:flex-row">
+          <CardFooter className="flex flex-col gap-3 md:gap-4 items-center justify-between px-4 py-4 md:px-6 md:py-6 bg-muted/5 sm:flex-row">
             <div className="flex items-center gap-2">
               <div
                 className={cn(
-                  "h-2 w-2 rounded-full",
+                  "h-1.5 md:h-2 w-1.5 md:w-2 rounded-full",
                   isDirty
                     ? "bg-primary animate-pulse"
                     : "bg-muted-foreground/20",
                 )}
               />
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+              <p className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest">
                 {isDirty
-                  ? `${changedCount} ${changedCount === 1 ? "cambio pendiente" : "cambios pendientes"}`
-                  : "Estado actualizado"}
+                  ? `${changedCount} ${changedCount === 1 ? "pendiente" : "pendientes"}`
+                  : "Actualizado"}
               </p>
             </div>
-            <div className="flex items-center gap-1 ">
+            <div className="flex items-center gap-1 w-full sm:w-auto">
               <Button
                 variant="outline"
-                size="lg"
+                size="sm"
                 onClick={handleDiscard}
                 disabled={!isDirty || !canEdit}
-                className="flex-1 gap-2 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-xs uppercase tracking-widest"
+                className="flex-1 md:h-11 h-9 gap-1.5 md:gap-2 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
               >
-                <RotateCcw className="h-4 w-4" />
+                <RotateCcw className="h-3.5 md:h-4 w-3.5 md:w-4" />
                 Descartar
               </Button>
               <Button
-                size="lg"
+                size="sm"
                 onClick={handleSave}
                 disabled={!isDirty || isSaving || !canEdit}
-                className="flex-1 gap-2 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-xs uppercase tracking-widest"
+                className="flex-1 md:h-11 h-9 gap-1.5 md:gap-2 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
               >
                 {isSaving ? (
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                  <div className="h-3.5 md:h-4 w-3.5 md:w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                 ) : (
-                  <Save className="h-4 w-4" />
+                  <Save className="h-3.5 md:h-4 w-3.5 md:w-4" />
                 )}
-                Guardar cambios
+                Guardar
               </Button>
             </div>
           </CardFooter>

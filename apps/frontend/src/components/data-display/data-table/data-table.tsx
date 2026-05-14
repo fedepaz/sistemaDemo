@@ -289,7 +289,8 @@ export function DataTable<TData, TValue>({
     const showSelection =
       enableSelection !== undefined
         ? (enableSelection ?? entity?.permissionType !== "READ_ONLY")
-        : entity?.permissionType !== "READ_ONLY";
+        : entity?.permissionType !== "READ_ONLY" &&
+          entity?.permissionType !== "PROCESS";
 
     let result = [...columns];
 
@@ -491,30 +492,32 @@ export function DataTable<TData, TValue>({
               </div>
             )}
 
-            {selectedCount > 0 && allowedActions.canDelete && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="min-h-[40px] animate-in fade-in zoom-in duration-200"
-                    onClick={handleBulkDelete}
-                    aria-label={`Eliminar ${selectedCount} seleccionados`}
+            {selectedCount > 0 &&
+              allowedActions.canDelete &&
+              !allowedActions.canExecute && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="min-h-[40px] animate-in fade-in zoom-in duration-200"
+                      onClick={handleBulkDelete}
+                      aria-label={`Eliminar ${selectedCount} seleccionados`}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {breakpoint === "sm"
+                        ? selectedCount
+                        : `Eliminar (${selectedCount})`}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-border shadow-md"
                   >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    {breakpoint === "sm"
-                      ? selectedCount
-                      : `Eliminar (${selectedCount})`}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="top"
-                  className="border border-border shadow-md"
-                >
-                  <p>Eliminar seleccionados</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
+                    <p>Eliminar seleccionados</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
           </div>
           <div className="overflow-x-auto rounded-md border">
             <Table className="min-w-full">
