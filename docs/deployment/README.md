@@ -18,14 +18,19 @@ The system is designed to run as a set of interconnected containers:
 For specific instructions, please refer to the following documents:
 
 1.  **[🗺️ Infrastructure Roadmap](./ROADMAP.md)**: Steps from server prep to automated deployment.
-2.  **[🛠️ Maintenance & Operations](./MAINTENANCE.md)**: Common commands, backups, and pre-launch checklists.
+2.  **[🛠️ Maintenance & Operations (Lean)](./MAINTENANCE-LEAN-STRATEGY.md)**: Lean deployment commands (local build), backups, and checklists.
 3.  **[☁️ Cloudflare SSH Tunnel Setup](./cloudfare-ssh-setup.md)**: Secure remote access without open ports.
 
 ---
 
-## 🌐 Deployment for Non-Programmers (Step-by-Step)
+## 🌐 Deployment Overview (Local Build Strategy)
 
-If you're not a developer, follow these steps to set up the system on your server:
+If you're not using Docker, the recommended path is to **Build Locally** and copy the artifacts to the server:
+
+### 1. Build and Prepare
+- Run `pnpm build` on your local machine.
+- Copy only the `dist`, `.next`, and `package.json` files (excluding `src` and `node_modules`).
+- See **[Maintenance Guide](./MAINTENANCE-LEAN-STRATEGY.md)** for the specific "Lean Purge" command.
 
 ### 1. Prerequisites
 - **Docker Installed**: Ensure your server has Docker and Docker Compose installed.
