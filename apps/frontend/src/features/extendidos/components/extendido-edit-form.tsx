@@ -217,10 +217,10 @@ export function ExtendidosEditForm({
             />
           </div>
 
-          {/* 📝 DETALLE */}
+          {/* 📝 OBSERVACIONES (EXTENDIDO) */}
           <FormField
             control={form.control}
-            name="detalle"
+            name="extendido"
             render={({ field }) => (
               <FormItem className="space-y-2 md:space-y-3">
                 <div className="flex items-center gap-2">
