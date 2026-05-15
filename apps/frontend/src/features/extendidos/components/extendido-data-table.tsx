@@ -76,9 +76,9 @@ export function ExtendidoDataTable({
         indice: selectedPartida.indice,
         ubicacion: selectedPartida.codigoUbicacion ?? undefined,
         stock_ini: initialStock,
-        detalle: selectedPartida.detalle || "",
+        detalle: "", // Reset detalle (limit 30)
         baja: Number(selectedPartida.baja) || 0,
-        extendido: selectedPartida.extendido,
+        extendido: selectedPartida.extendido || selectedPartida.detalle || "",
         edita: "S",
       });
     }
