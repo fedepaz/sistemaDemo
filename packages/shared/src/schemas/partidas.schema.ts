@@ -7,9 +7,9 @@ export const AsignarUbicacionDtoSchema = z.object({
   indice: z.number(),
   ubicacion: z.number().int().positive(),
   stock_ini: z.number().int().nonnegative(),
-  detalle: z.string().optional().default(""), // undefined → ''
-  baja: z.number().int().nonnegative().optional().default(0), // undefined → 0
-  extendido: z.string(),
-  edita: z.string().optional(), // solo para validación, no va a DB
+  detalle: z.string().max(30, "El detalle no puede superar los 30 caracteres").optional().default(""), 
+  baja: z.number().int().nonnegative().optional().default(0), 
+  extendido: z.string().default(""), // For long notes
+  edita: z.string().optional(), 
 });
 export type AsignarUbicacionDto = z.infer<typeof AsignarUbicacionDtoSchema>;
