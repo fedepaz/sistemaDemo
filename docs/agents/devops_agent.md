@@ -52,6 +52,13 @@ To ensure reliable execution on traditional servers:
 - **Auto-restart**: PM2 handles automatic restarts on failure and system reboots.
 - **Log Management**: PM2 captures and rotates logs for both frontend and backend services.
 
+### Lean Strategy (Local Build & Remote Deployment)
+For environments where a traditional CI/CD or Docker registry is not available:
+- **Local Build**: Generate production assets (`dist`, `.next`) on a development machine.
+- **Remote Synchronization**: Push only the necessary runtime files to the server.
+- **Lean Purge**: Delete source folders (`src/`, `test/`) on the server after build to maintain a clean, runtime-only environment.
+- **Git Resilience**: The strategy leverages Git's ability to restore missing tracked files on `git pull`, allowing for seamless updates without local commits. See `docs/deployment/MAINTENANCE-LEAN-STRATEGY.md` for details.
+
 ### Local Deployment Resilience (Windows)
 For environments where infrastructure reliability is low (e.g., local Windows servers):
 - **Startup Script**: Use `docs/scripts/startapp.bat` to ensure the application restarts automatically in case of crashes or system reboots.
