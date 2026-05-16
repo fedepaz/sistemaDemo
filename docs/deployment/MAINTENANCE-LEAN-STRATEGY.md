@@ -56,6 +56,10 @@ rm -f apps/frontend/postcss.config.mjs apps/frontend/postcss.config.test.mjs
 rm -f apps/frontend/components.json apps/frontend/clerk.lock
 rm -f apps/frontend/vitest.config.mts apps/frontend/vitest.setup.ts
 
+rm -rf apps/backend/node/
+rm -rf apps/frontend/node/
+rm -rf packages/shared/node/
+
 # Shared
 rm -rf packages/shared/src/ packages/shared/.turbo/ packages/shared/node/
 rm -f packages/shared/tsconfig.json
