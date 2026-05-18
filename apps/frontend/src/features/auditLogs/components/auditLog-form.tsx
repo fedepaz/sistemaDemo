@@ -45,10 +45,10 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
             </div>
             <div className="space-y-0.5 md:space-y-1">
               <span className="text-[9px] md:text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70">
-                Email
+                Nombre de Usuario
               </span>
               <p className="text-xs md:text-sm font-medium truncate">
-                {selectedAuditLog.user.email}
+                {selectedAuditLog.user.username}
               </p>
             </div>
             <div className="sm:col-span-2 space-y-0.5 md:space-y-1">
@@ -172,7 +172,10 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="font-semibold text-[8px] md:text-[10px] h-4 md:h-5">
+              <Badge
+                variant="secondary"
+                className="font-semibold text-[8px] md:text-[10px] h-4 md:h-5"
+              >
                 {isMobile ? "Móvil" : "Desktop"}
               </Badge>
             </div>

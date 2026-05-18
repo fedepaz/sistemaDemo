@@ -78,33 +78,28 @@ export function DesktopSidebar() {
     <aside
       className={cn(
         "hidden md:flex flex-col bg-card border-r transition-all duration-300",
-        isCollapsed ? "w-16" : "w-60 mx-0.5",
+        isCollapsed ? "w-14" : "w-56",
       )}
     >
-      {/* Header 
-      <div className={`p-3 border-b flex items-center ${isCollapsed ? 'justify-center min-h-[65px]' : 'justify-between'}`}>
-      */}
-      <div className="p-3 border-b">
+      <div className="p-2 border-b">
         <div
           className={cn(
             "flex items-center",
-            isCollapsed ? "justify-center" : "justify-between",
+            isCollapsed ? "justify-center" : "justify-between pl-1",
           )}
         >
-          {isCollapsed ? (
-            <Logo variant="icon" className="h-8 w-auto" />
-          ) : (
-            <div className="flex items-center space-x-3">
-              <Logo variant="icon" className="h-8 w-auto" />
-            </div>
-          )}
+          <Logo
+            variant="icon"
+            className={cn("h-6 w-auto", isCollapsed ? "h-7" : "h-6")}
+          />
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className="h-8 w-8 "
+                className="h-7 w-7"
                 aria-label={
                   isCollapsed
                     ? "Expandir barra lateral"
@@ -112,9 +107,9 @@ export function DesktopSidebar() {
                 }
               >
                 {isCollapsed ? (
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-3.5 w-3.5" />
                 ) : (
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-3.5 w-3.5" />
                 )}
               </Button>
             </TooltipTrigger>
@@ -129,31 +124,28 @@ export function DesktopSidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 overflow-y-auto p-2">
+      <nav className="flex-1 space-y-0.5 overflow-y-auto p-1.5">
         {visibleNavigation.map((group) => {
           const GroupIcon = group.icon;
           const isExpanded = expandedGroups.has(group.id);
 
           return (
-            <div key={group.id}>
+            <div key={group.id} className="mb-1">
               {/* Group Header */}
               {!isCollapsed && (
                 <Button
                   variant="ghost"
                   onClick={() => !isCollapsed && toggleGroup(group.id)}
                   className={cn(
-                    "w-full justify-start gap-2 font-medium",
-                    isCollapsed && "justify-center",
+                    "h-8 w-full justify-start gap-2 font-medium text-[10px] uppercase tracking-widest text-muted-foreground/60 hover:text-foreground",
                   )}
                 >
-                  <GroupIcon className="h-5 w-5 shrink-0" />
+                  <GroupIcon className="h-3.5 w-3.5 shrink-0" />
                   <>
-                    <span className="flex-1 text-left text-sm">
-                      {group.title}
-                    </span>
+                    <span className="flex-1 text-left">{group.title}</span>
                     <ChevronDown
                       className={cn(
-                        "h-4 w-4 transition-transform",
+                        "h-3 w-3 transition-transform",
                         isExpanded && "rotate-180",
                       )}
                     />
@@ -163,7 +155,9 @@ export function DesktopSidebar() {
 
               {/* Group Items */}
               {(isExpanded || isCollapsed) && (
-                <div className={cn("space-y-1", !isCollapsed && "ml-3 mt-1")}>
+                <div
+                  className={cn("space-y-0.5", !isCollapsed && "ml-1 mt-0.5")}
+                >
                   {group.items.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
@@ -174,20 +168,20 @@ export function DesktopSidebar() {
                           <TooltipTrigger asChild>
                             <div
                               className={cn(
-                                "flex items-center space-x-3 p-2 rounded-lg transition-colors",
+                                "flex items-center space-x-2.5 p-1.5 rounded-md transition-colors",
                                 isActive
                                   ? "bg-primary/10 text-primary border border-primary/20"
-                                  : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                                  : "hover:bg-muted text-muted-foreground/80 hover:text-foreground",
                                 isCollapsed && "justify-center",
                               )}
                               aria-label={item.title}
                             >
                               <div className="relative">
-                                <Icon className="h-5 w-5" />
+                                <Icon className="h-4 w-4" />
                                 {item.badge && isCollapsed && (
                                   <Badge
                                     variant={item.badgeVariant || "secondary"}
-                                    className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs"
+                                    className="absolute -top-1 -right-1 h-3.5 w-3.5 p-0 flex items-center justify-center text-[8px]"
                                   >
                                     {item.badge.length > 2 ? "99+" : item.badge}
                                   </Badge>
@@ -195,18 +189,15 @@ export function DesktopSidebar() {
                               </div>
                               {!isCollapsed && (
                                 <>
-                                  <div className="flex-1">
-                                    <p className="font-medium text-sm">
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-medium text-[12px] truncate">
                                       {item.title}
-                                    </p>
-                                    <p className="text-xs opacity-75">
-                                      {item.description}
                                     </p>
                                   </div>
                                   {item.badge && (
                                     <Badge
                                       variant={item.badgeVariant || "secondary"}
-                                      className="text-xs"
+                                      className="text-[9px] h-4 px-1"
                                     >
                                       {item.badge}
                                     </Badge>
@@ -243,7 +234,7 @@ export function DesktopSidebar() {
       </nav>
 
       {/* User Info */}
-      <div className="p-3 border-t">
+      <div className="p-2 border-t">
         <UserSidebarMenu isCollapsed={isCollapsed} />
       </div>
     </aside>

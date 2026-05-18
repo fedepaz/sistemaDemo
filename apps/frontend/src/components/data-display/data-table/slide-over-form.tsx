@@ -73,35 +73,35 @@ export function SlideOverForm({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-xl flex flex-col h-full">
-        <SheetHeader>
-          <SheetTitle className="text-2xl">{title}</SheetTitle>
+      <SheetContent className="w-full sm:max-w-xl flex flex-col h-dvh p-0">
+        <SheetHeader className="px-6 py-4 border-b shrink-0">
+          <SheetTitle className="text-xl">{title}</SheetTitle>
           {description ? (
-            <SheetDescription>{description}</SheetDescription>
+            <SheetDescription className="text-xs">{description}</SheetDescription>
           ) : (
             <SheetDescription className="sr-only">
               Formulario para {title}
             </SheetDescription>
           )}
         </SheetHeader>
-        <div className="flex-1 overflow-hidden my-6">
-          <ScrollArea className="h-full pr-4" tabIndex={-1}>
-            <div className="space-y-6" tabIndex={-1}>
+        <div className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full px-6 py-4" tabIndex={-1}>
+            <div className="space-y-4" tabIndex={-1}>
               {children}
             </div>
           </ScrollArea>
         </div>
-        <SheetFooter>
+        <SheetFooter className="px-6 py-3 border-t shrink-0">
           {isViewMode ? (
-            <Button onClick={handleCancel} className="w-full" variant="outline">
+            <Button onClick={handleCancel} className="w-full h-9 text-sm" variant="outline">
               {getActionLabel()}
             </Button>
           ) : (
-            <div className="flex w-full justify-end gap-4">
+            <div className="flex w-full justify-end gap-3">
               <Button
                 variant="outline"
                 onClick={handleCancel}
-                className="w-full"
+                className="w-full h-9 text-sm"
               >
                 Cancelar
               </Button>
@@ -109,7 +109,7 @@ export function SlideOverForm({
                 type={formId ? "submit" : "button"}
                 form={formId || undefined} // Only set if provided
                 onClick={!formId ? () => onSave?.() : undefined}
-                className="w-full"
+                className="w-full h-9 text-sm"
                 disabled={
                   disabled ||
                   (form
@@ -119,7 +119,7 @@ export function SlideOverForm({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
                     {isCreateMode ? saveLabel || "Creando" : "Actualizando"}
                   </>
                 ) : (

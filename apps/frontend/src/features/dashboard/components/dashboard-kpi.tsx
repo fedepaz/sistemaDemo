@@ -44,9 +44,9 @@ function DashboardKPI() {
   return (
     <Card className="overflow-hidden border-border/40 shadow-sm bg-card">
       <CardContent className="p-0">
-        <div className="flex flex-col 2xl:flex-row 2xl:items-center px-0.5 sm:px-1">
+        <div className="flex flex-col xl:flex-row xl:items-center px-0.5">
           {/* Middle: Current conditions */}
-          <div className="grid grid-cols-2 md:grid-cols-4 2xl:flex 2xl:flex-nowrap items-center gap-2 sm:gap-4 px-3 py-3 sm:px-6 sm:py-4 flex-1 min-w-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 xl:flex xl:flex-nowrap items-center gap-2 px-2 py-2 flex-1 min-w-0">
             {data.map((kpi, index) => {
               const colors = kpiChartColors[index % kpiChartColors.length];
               return (
@@ -54,27 +54,27 @@ function DashboardKPI() {
                   key={kpi.label}
                   className={cn(
                     colors.bg,
-                    "rounded-xl sm:rounded-2xl px-3 py-2.5 sm:px-5 sm:py-3.5 flex items-center gap-2 sm:gap-4 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer border border-transparent hover:border-border/50 min-w-0 flex-1",
+                    "rounded-xl px-2 py-1.5 sm:px-3 sm:py-2 flex items-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer border border-transparent hover:border-border/50 min-w-0 flex-1",
                   )}
                 >
                   <div
                     className={cn(
                       colors.icon,
-                      "hidden lg:flex h-8 w-8 sm:h-11 sm:w-11 rounded-lg sm:rounded-xl bg-background/50 items-center justify-center shrink-0 shadow-sm",
+                      "hidden md:flex h-7 w-7 sm:h-9 sm:w-9 rounded-lg bg-background/50 items-center justify-center shrink-0 shadow-sm",
                     )}
                   >
-                    <div className="[&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-6 sm:[&>svg]:w-6 drop-shadow-sm">
+                    <div className="[&>svg]:h-3.5 [&>svg]:w-3.5 sm:[&>svg]:h-5 sm:[&>svg]:w-5 drop-shadow-sm">
                       {climateIcons[kpi.label]}
                     </div>
                   </div>
                   <div className="flex flex-col min-w-0 justify-center">
-                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.15em] text-muted-foreground/70 truncate mb-0.5">
+                    <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.12em] text-muted-foreground/70 truncate">
                       {kpi.label}
                     </span>
                     <div className="flex items-baseline gap-1 min-w-0">
                       <span
                         className={cn(
-                          "text-lg sm:text-2xl font-black tracking-tighter leading-none truncate",
+                          "text-base sm:text-xl font-black tracking-tighter leading-none truncate",
                           colors.text,
                         )}
                       >
@@ -82,7 +82,7 @@ function DashboardKPI() {
                       </span>
                       <span
                         className={cn(
-                          "text-[10px] sm:text-xs font-bold opacity-70 shrink-0",
+                          "text-[9px] sm:text-[10px] font-bold opacity-70 shrink-0",
                           colors.text,
                         )}
                       >
@@ -96,7 +96,7 @@ function DashboardKPI() {
           </div>
 
           {/* Right: Forecast */}
-          <div className="flex items-center justify-center sm:justify-center gap-1 sm:gap-4 px-3 py-3 sm:px-8 sm:py-4 border-t xl:border-t-0 xl:border-l border-border/50 shrink-0 bg-muted/5 overflow-x-auto w-full xl:w-auto scrollbar-hide">
+          <div className="flex items-center justify-center gap-1.5 px-2 py-2 border-t xl:border-t-0 xl:border-l border-border/50 shrink-0 bg-muted/5 overflow-x-auto w-full xl:w-auto scrollbar-hide">
             {forecastData.map((day, index) => {
               const today = isToday(day.date);
               const past = isPast(day.date);
@@ -105,9 +105,9 @@ function DashboardKPI() {
                 <div
                   key={index}
                   className={cn(
-                    "relative rounded-lg sm:rounded-xl px-3 py-2 sm:px-5 sm:py-3 text-center shrink-0 transition-all cursor-pointer hover:shadow-md",
+                    "relative rounded-lg px-2 py-1 sm:px-3 sm:py-2 text-center shrink-0 transition-all cursor-pointer hover:shadow-md",
                     today
-                      ? "bg-primary text-primary-foreground shadow-lg scale-105 sm:scale-110 z-10"
+                      ? "bg-primary text-primary-foreground shadow-lg scale-105 z-10"
                       : past
                         ? "opacity-30 grayscale blur-[0.5px]"
                         : "bg-background border border-border/60 hover:border-primary/50",
@@ -115,7 +115,7 @@ function DashboardKPI() {
                 >
                   <p
                     className={cn(
-                      "text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-1 sm:mb-2",
+                      "text-[8px] sm:text-[9px] font-black uppercase tracking-widest mb-0.5",
                       today
                         ? "text-primary-foreground/90"
                         : "text-muted-foreground",
@@ -126,7 +126,7 @@ function DashboardKPI() {
                   <div className="flex flex-col gap-0">
                     <p
                       className={cn(
-                        "text-sm sm:text-base font-black tracking-tighter",
+                        "text-xs sm:text-sm font-black tracking-tighter",
                         today ? "text-white" : "text-foreground",
                       )}
                     >
@@ -134,7 +134,7 @@ function DashboardKPI() {
                     </p>
                     <p
                       className={cn(
-                        "text-[10px] sm:text-[11px] font-bold",
+                        "text-[9px] sm:text-[10px] font-bold",
                         today
                           ? "text-primary-foreground/70"
                           : "text-muted-foreground/60",
@@ -144,7 +144,7 @@ function DashboardKPI() {
                     </p>
                   </div>
                   {today && (
-                    <div className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 bg-background rounded-full border border-primary animate-pulse" />
+                    <div className="absolute -top-0.5 -right-0.5 h-2 w-2 bg-background rounded-full border border-primary animate-pulse" />
                   )}
                 </div>
               );

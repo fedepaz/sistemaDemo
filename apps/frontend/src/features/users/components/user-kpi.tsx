@@ -14,7 +14,7 @@ function UserKPIs() {
   const emailUsers = data?.filter((u) => u.email?.includes("@")).length || 0;
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-2 sm:gap-3 md:grid-cols-2 lg:grid-cols-4">
       <KPICard
         title="Total de Usuarios"
         value={totalUsers}

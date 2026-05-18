@@ -7,12 +7,12 @@ import { UsersDataTable } from "./user-data-table";
 
 export function UsersDashboard() {
   return (
-    <>
+    <div className="flex flex-col gap-3">
       <Suspense
         fallback={<DataTableSkeleton columnCount={userColumns.length} />}
       >
         <UsersDataTable />
       </Suspense>
-    </>
+    </div>
   );
 }
