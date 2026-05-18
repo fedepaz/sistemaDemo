@@ -21,7 +21,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Administrative User Registration**: `POST /auth/register` protected by `auth:read:ALL` permissions.
 - [x] **User Login**: `POST /auth/login` with username/password.
 - [x] **Force Password Change**: Intercepts logins using default credentials to ensure security compliance.
-- [x] **Token Refresh**: `POST /auth/refresh` for long-lived sessions.
+- [x] **Token Refresh**: `POST /auth/refresh` protected by `user_profile:read:OWN` permissions for session continuity.
 - [x] **Password Management**: `PATCH /auth/password` for authenticated users.
 - [x] **Public Access Decorator**: `@Public()` to bypass global auth.
 
@@ -52,8 +52,9 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Repository Pattern**: `TenantsRepository` extending `BaseRepository`.
 
 ### Audit Log Module
-- [x] **Automatic Logging**: Integrated into the exception filter for security events.
-- [x] **Audit Retrieval**: `GET /:tenantId` and `GET /user/:userId`. Protected by `audit_logs` table permissions.
+- [x] **Automatic Logging**: Integrated into the exception filter for security events and via `AuditCrudInterceptor` for all CREATE, UPDATE, and DELETE operations.
+- [x] **Audit Retrieval**: `GET /auditLog` retrieves all logs, or `GET /auditLog/:tenantName` for tenant-specific logs. Protected by `audit_logs` table permissions.
+- [x] **Repository Pattern**: `AuditLogRepository` extending `BaseRepository`, now including user details and sorted by timestamp.
 - [x] **JSON Changes**: Storage of action metadata in JSON format.
 
 ### Health Module
@@ -65,41 +66,41 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Repository Pattern**: `HealthRepository` abstracts health check logic for both DB connections.
 
 ### Legacy Agentes Module
-- [x] **Legacy Data Access**: Read-only integration with the legacy `agentes` table.
+- [x] **Legacy Data Access**: Read-only integration with the legacy `agentes` table. Protected by `user_profile:read:OWN` permissions.
 - [x] **Repository Pattern**: `AgentesRepository` using the `LegacyMysqlService`.
 - [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
 - [x] **Modular Design**: Encapsulated in `LegacyAgentesModule`.
 
 ### Legacy Especie Module
-- [x] **Legacy Data Access**: Read-only integration with the legacy `especie` table.
+- [x] **Legacy Data Access**: Read-only integration with the legacy `especie` table. Protected by `user_profile:read:OWN` permissions.
 - [x] **Repository Pattern**: `EspecieRepository` using the `LegacyMysqlService`.
 - [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
 - [x] **Modular Design**: Encapsulated in `LegacyEspecieModule`.
 
 ### Legacy Config Module
-- [x] **Legacy Data Access**: Read-only integration with the legacy `config` table.
+- [x] **Legacy Data Access**: Read-only integration with the legacy `config` table. Protected by `user_profile:read:OWN` permissions.
 - [x] **Repository Pattern**: `ConfigRepository` using the `LegacyMysqlService`.
 - [x] **Error Handling**: Implements null checking in `findOne` to handle non-existent records gracefully.
 - [x] **Modular Design**: Encapsulated in `LegacyConfigModule`.
 
 ### Legacy Programas Module
-- [x] **Legacy Data Access**: Read-only integration with the legacy `programas` table.
+- [x] **Legacy Data Access**: Read-only integration with the legacy `programas` table. Protected by `user_profile:read:OWN` permissions.
 - [x] **Modular Design**: Encapsulated in `LegacyProgramasModule`.
 
 ### Legacy Depositos Module
-- [x] **Legacy Data Access**: Read-only integration with the legacy `depositos` table for warehouses and cold storage (cámaras).
+- [x] **Legacy Data Access**: Read-only integration with the legacy `depositos` table for warehouses and cold storage (cámaras). Protected by `user_profile:read:OWN` permissions.
 - [x] **Repository Pattern**: `DepositosRepository` using the `LegacyMysqlService`.
 - [x] **Modular Design**: Encapsulated in `LegacyDepositosModule`.
 
 ### Legacy Partidas Module
-- [x] **Legacy Data Access**: Read and Write integration with legacy `partidas` and `partidas2` tables.
+- [x] **Legacy Data Access**: Read and Write integration with legacy `partidas` and `partidas2` tables. Protected by `extendidos` table permissions.
 - [x] **Repository Pattern**: `PartidasRepository` using the `LegacyMysqlService`.
 - [x] **Basic Retrieval**: Provides access to the raw `partidas` data.
 - [x] **Ubicación Assignment**: `POST /l-partidas/asignar-ubicacion` implements the "asentar ubicación" workflow, performing a transactional insert into `partidas2` and updating the `extendido` status in `partidas`. Transactions are now tagged with `[webApp]` in both `detalle` and `extendido` fields for traceability.
 - [x] **Modular Design**: Encapsulated in `LegacyPartidasModule`.
 
 ### Legacy Extendidos Module
-- [x] **Legacy Data Access**: Read-only integration with detailed `extendidos` query logic.
+- [x] **Legacy Data Access**: Read-only integration with detailed `extendidos` query logic. Protected by `extendidos:read:ALL` permissions.
 - [x] **Repository Pattern**: `ExtendidosRepository` using the `LegacyMysqlService`.
 - [x] **Specialized Retrieval**: Supports querying by date with complex joins to species and location data.
 - [x] **Full Retrieval**: `GET /l-extendidos` retrieves all production batches with optimized joins.
@@ -108,7 +109,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Modular Design**: Encapsulated in `LegacyExtendidosModule`.
 
 ### Legacy Base Module
-- [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables.
+- [x] **Generic Legacy Access**: Dynamic querying of whitelisted legacy tables. Protected by `user_profile:read:OWN` permissions.
 - [x] **Repository Pattern**: `LegacyBaseRepository` with support for pagination, sorting, and filtering.
 - [x] **Data Sanitization**: Automatic trimming of legacy `char()` padding in `LegacyBaseService`.
 - [x] **Security Guard**: Strict whitelist validation for table names and safe JSON filter parsing.
