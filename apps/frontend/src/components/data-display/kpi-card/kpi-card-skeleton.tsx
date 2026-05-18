@@ -5,16 +5,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function KPICardSkeleton() {
   return (
-    <Card data-testid="kpi-card-skeleton">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
-          <Skeleton className="h-4 w-[100px]" />
-        </CardTitle>
-        <Skeleton className="h-4 w-4 rounded-full" />
+    <Card className="overflow-hidden" data-testid="kpi-card-skeleton">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 px-3 py-2">
+        <Skeleton className="h-2.5 w-16" />
+        <Skeleton className="h-3.5 w-3.5 rounded-full" />
       </CardHeader>
-      <CardContent className="space-y-2">
-        <Skeleton className="h-8 w-[120px] sm:w-[140px]" />
-        <Skeleton className="h-3 w-full max-w-[180px]" />
+      <CardContent className="px-3 pb-3 pt-0 space-y-1">
+        <Skeleton className="h-6 w-20" />
+        <Skeleton className="h-2 w-24" />
       </CardContent>
     </Card>
   );

@@ -7,12 +7,12 @@ import { AuditLogDataTable } from "./auditLog-data-table";
 
 export function AuditLogDashboard() {
   return (
-    <>
+    <div className="flex flex-col gap-3">
       <Suspense
         fallback={<DataTableSkeleton columnCount={auditLogColumns.length} />}
       >
         <AuditLogDataTable />
       </Suspense>
-    </>
+    </div>
   );
 }

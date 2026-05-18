@@ -95,29 +95,29 @@ export function MobileNavigation() {
         </SheetHeader>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b">
-            <Logo variant="icon" className="h-8 w-auto" />
+          <div className="p-4 border-b shrink-0">
+            <Logo variant="icon" className="h-7 w-auto" />
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto">
             {visibleNavigation.map((group) => {
               const GroupIcon = group.icon;
               const isExpanded = expandedGroups.has(group.id);
 
               return (
-                <div key={group.id}>
+                <div key={group.id} className="mb-1">
                   {/* Group Header */}
                   <Button
                     variant="ghost"
                     onClick={() => toggleGroup(group.id)}
-                    className="w-full justify-start gap-2 font-medium text-base p-3 h-auto"
+                    className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
                   >
-                    <GroupIcon className="h-5 w-5 shrink-0" />
+                    <GroupIcon className="h-4 w-4 shrink-0" />
                     <span className="flex-1 text-left">{group.title}</span>
                     <ChevronDown
                       className={cn(
-                        "h-4 w-4 transition-transform",
+                        "h-3.5 w-3.5 transition-transform",
                         isExpanded && "rotate-180",
                       )}
                     />
@@ -125,7 +125,7 @@ export function MobileNavigation() {
 
                   {/* Group Items */}
                   {isExpanded && (
-                    <div className="space-y-1 ml-4 mt-1">
+                    <div className="space-y-0.5 ml-2 mt-0.5">
                       {group.items.map((item) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href;
@@ -137,27 +137,22 @@ export function MobileNavigation() {
                           >
                             <div
                               className={cn(
-                                "flex items-center space-x-3 p-3 rounded-lg transition-colors agricultural-touch-target",
+                                "flex items-center space-x-3 p-2 rounded-lg transition-colors agricultural-touch-target",
                                 isActive
                                   ? "bg-primary/10 text-primary border border-primary/20"
                                   : "hover:bg-muted text-muted-foreground hover:text-foreground",
                               )}
                             >
-                              <Icon className="h-5 w-5" />
-                              <div className="flex-1">
-                                <p className="font-medium text-sm">
+                              <Icon className="h-4.5 w-4.5" />
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-[13px] truncate">
                                   {item.title}
                                 </p>
-                                {item.description && (
-                                  <p className="text-xs opacity-75">
-                                    {item.description}
-                                  </p>
-                                )}
                               </div>
                               {item.badge && (
                                 <Badge
                                   variant={item.badgeVariant || "secondary"}
-                                  className="text-xs"
+                                  className="text-[9px] h-4 px-1"
                                 >
                                   {item.badge}
                                 </Badge>
@@ -174,7 +169,7 @@ export function MobileNavigation() {
           </nav>
 
           {/* User Info */}
-          <div className="p-4 border-t">
+          <div className="p-3 border-t shrink-0">
             <UserSidebarMenu />
           </div>
         </div>

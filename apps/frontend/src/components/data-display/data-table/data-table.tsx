@@ -401,7 +401,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <Card className="w-full">
+      <Card className="w-full flex-1 flex flex-col overflow-hidden">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -422,15 +422,15 @@ export function DataTable<TData, TValue>({
             ) : null}
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center py-4 space-x-2">
+        <CardContent className="p-0 flex-1 flex flex-col overflow-hidden">
+          <div className="flex items-center px-4 py-2 space-x-2 shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="min-h-[40px]">
-                  <Filter className="mr-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="h-8 text-xs">
+                  <Filter className="mr-2 h-3.5 w-3.5" />
                   {breakpoint === "sm" ? "" : "Columnas"}
 
-                  <ChevronDown className="mr-2 h-4 w-4" />
+                  <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -469,11 +469,11 @@ export function DataTable<TData, TValue>({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="min-h-[40px] bg-transparent"
+                    className="h-8 text-xs bg-transparent"
                     onClick={onCreate}
                     aria-label={createLabel}
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-3.5 w-3.5 mr-1" />
                     {breakpoint === "sm" ? "" : createLabel}
                   </Button>
                 </TooltipTrigger>
@@ -500,11 +500,11 @@ export function DataTable<TData, TValue>({
                     <Button
                       variant="destructive"
                       size="sm"
-                      className="min-h-[40px] animate-in fade-in zoom-in duration-200"
+                      className="h-8 text-xs animate-in fade-in zoom-in duration-200"
                       onClick={handleBulkDelete}
                       aria-label={`Eliminar ${selectedCount} seleccionados`}
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
+                      <Trash2 className="mr-1.5 h-3.5 w-3.5" />
                       {breakpoint === "sm"
                         ? selectedCount
                         : `Eliminar (${selectedCount})`}
@@ -519,73 +519,84 @@ export function DataTable<TData, TValue>({
                 </Tooltip>
               )}
           </div>
-          <div className="overflow-x-auto rounded-md border">
-            <Table className="min-w-full">
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              )}
-                        </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <Fragment key={row.id}>
-                      <TableRow
-                        data-state={row.getIsSelected() && "selected"}
-                        className="hover:bg-accent/50"
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </Fragment>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={enhancedColumns.length}
-                      className="h-24 text-center"
+          <div className="flex-1 overflow-auto px-4">
+            <div className="rounded-md border">
+              <Table className="min-w-full">
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow
+                      key={headerGroup.id}
+                      className="hover:bg-transparent"
                     >
-                      No se encontraron resultados
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <TableHead
+                            key={header.id}
+                            className="h-9 py-1 text-xs"
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext(),
+                                )}
+                          </TableHead>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <Fragment key={row.id}>
+                        <TableRow
+                          data-state={row.getIsSelected() && "selected"}
+                          className="hover:bg-accent/50 group"
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell
+                              key={cell.id}
+                              className="py-1 px-3 text-sm h-10"
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </Fragment>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={enhancedColumns.length}
+                        className="h-24 text-center"
+                      >
+                        No se encontraron resultados
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 py-4">
+          <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-2 shrink-0 border-t mt-auto">
             {" "}
-            <div className="flex-1 text-sm text-muted-foreground">
+            <div className="flex-1 text-[11px] text-muted-foreground">
               {`${table.getFilteredSelectedRowModel().rows.length} de ${table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).`}
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center space-x-2">
-                <p className="text-sm font-medium">Filas por página</p>
+                <p className="text-[11px] font-medium">Filas por página</p>
                 <select
                   value={table.getState().pagination.pageSize}
                   onChange={(e) => {
                     table.setPageSize(Number(e.target.value));
                   }}
-                  className="h-8 w-[70px] rounded border border-input bg-background px-2 text-sm"
+                  className="h-7 w-[60px] rounded border border-input bg-background px-1 text-[11px]"
                 >
                   {[10, 20, 30, 40, 50, 100].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
@@ -594,15 +605,15 @@ export function DataTable<TData, TValue>({
                   ))}
                 </select>
               </div>
-              <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+              <div className="flex w-[80px] items-center justify-center text-[11px] font-medium">
                 {`Página ${table.getState().pagination.pageIndex + 1} de ${table.getPageCount()}`}
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      className="hidden h-8 w-8 p-0 lg:flex bg-transparent"
+                      className="hidden h-7 w-7 p-0 lg:flex bg-transparent"
                       onClick={() => table.setPageIndex(0)}
                       disabled={!table.getCanPreviousPage()}
                       aria-label="Ir a la primera página"
@@ -622,12 +633,12 @@ export function DataTable<TData, TValue>({
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      className="h-8 w-8 p-0 bg-transparent"
+                      className="h-7 w-7 p-0 bg-transparent"
                       onClick={() => table.previousPage()}
                       disabled={!table.getCanPreviousPage()}
                       aria-label="Ir a la página anterior"
                     >
-                      <ChevronLeft className="h-4 w-4" />
+                      <ChevronLeft className="h-3.5 w-3.5" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent
@@ -642,12 +653,12 @@ export function DataTable<TData, TValue>({
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      className="h-8 w-8 p-0 bg-transparent"
+                      className="h-7 w-7 p-0 bg-transparent"
                       onClick={() => table.nextPage()}
                       disabled={!table.getCanNextPage()}
                       aria-label="Ir a la página siguiente"
                     >
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-3.5 w-3.5" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent
@@ -662,7 +673,7 @@ export function DataTable<TData, TValue>({
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      className="hidden h-8 w-8 p-0 lg:flex bg-transparent"
+                      className="hidden h-7 w-7 p-0 lg:flex bg-transparent"
                       onClick={() =>
                         table.setPageIndex(table.getPageCount() - 1)
                       }
