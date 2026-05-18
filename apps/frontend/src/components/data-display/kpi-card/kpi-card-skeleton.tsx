@@ -1,6 +1,6 @@
 // app/components/data-display/kpi-card/kpi-card-skeleton.tsx
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function KPICardSkeleton() {

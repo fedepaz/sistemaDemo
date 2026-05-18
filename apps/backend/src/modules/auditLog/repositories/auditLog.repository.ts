@@ -21,6 +21,30 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
     super(prisma, prisma.auditLog);
   }
 
+  async findAll(): Promise<AuditLog[]> {
+    const include = {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+    };
+
+    return this.prisma.auditLog.findMany({
+      where: {
+        deletedAt: null,
+        isActive: true,
+      },
+      include,
+      orderBy: {
+        timestamp: 'desc',
+      },
+    });
+  }
+
   findAllByTenantName(
     tenantName: string,
     skip: number = 0,

@@ -2,23 +2,28 @@
 
 import { Controller, Get, Param } from '@nestjs/common';
 import { LegacyAgentesService } from './agentes.service';
-
-import { Public } from '../../../shared/decorators/public.decorator';
+import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
 
 @Controller('l-agentes')
 export class LegacyAgentesController {
   constructor(private readonly service: LegacyAgentesService) {}
 
   @Get()
-  //@RequirePermission({ tableName: 'agentes', action: 'read' })
-  @Public()
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   async getAllAgents() {
     return this.service.getAllAgents();
   }
 
   @Get('/:codigo')
-  //@RequirePermission({ tableName: 'agentes', action: 'read' })
-  @Public()
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   async getAgentByCodigo(@Param('codigo') codigo: number) {
     return this.service.getAgentByCodigo(codigo);
   }

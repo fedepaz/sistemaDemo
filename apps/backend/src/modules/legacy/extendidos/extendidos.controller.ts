@@ -3,31 +3,47 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ExtendidosService } from './extendidos.service';
 import { ExtendidoDto } from '@vivero/shared';
-import { Public } from '../../../shared/decorators/public.decorator';
+import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
 
 @Controller('l-extendidos')
 export class ExtendidosController {
   constructor(private readonly extendidosService: ExtendidosService) {}
 
   @Get()
-  @Public()
+  @RequirePermission({
+    tableName: 'extendidos',
+    action: 'read',
+    scope: 'ALL',
+  })
   async getAllExtendidos(): Promise<ExtendidoDto[]> {
     return this.extendidosService.getAllExtendidos();
   }
 
   @Get('fechas')
-  @Public()
+  @RequirePermission({
+    tableName: 'extendidos',
+    action: 'read',
+    scope: 'ALL',
+  })
   async getAvailableExtendidoDates(): Promise<string[]> {
     return this.extendidosService.getAvailableExtendidoDates();
   }
 
   @Get('camara/')
-  @Public()
+  @RequirePermission({
+    tableName: 'extendidos',
+    action: 'read',
+    scope: 'ALL',
+  })
   async getExtendidosEnCamara(): Promise<ExtendidoDto[]> {
     return this.extendidosService.getExtendidosEnCamara();
   }
   @Get(':fecha')
-  @Public()
+  @RequirePermission({
+    tableName: 'extendidos',
+    action: 'read',
+    scope: 'ALL',
+  })
   async getExtendidosByFecha(
     @Param('fecha') fecha: string,
   ): Promise<ExtendidoDto[]> {
