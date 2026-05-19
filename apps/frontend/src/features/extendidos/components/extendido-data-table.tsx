@@ -29,6 +29,7 @@ import { ExtendidosEditForm } from "./extendido-edit-form";
 import { usePartidaMutation } from "../hooks/usePartidaMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { getLocalDateStr } from "@/lib/date-utils";
 
 interface ExtendidoDataTableProps {
   partidas: ExtendidoDto[];
@@ -55,7 +56,8 @@ export function ExtendidoDataTable({
   const filteredPartidas = useMemo(() => {
     if (!filterToday) return partidas;
 
-    const todayStr = new Date().toISOString().split("T")[0];
+    const today = new Date();
+    const todayStr = getLocalDateStr(today);
 
     return partidas.filter((p) => p.fechaEgresoCamara === todayStr);
   }, [partidas, filterToday]);
