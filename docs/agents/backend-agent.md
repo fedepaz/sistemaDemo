@@ -118,6 +118,21 @@ export abstract class BaseRepository<TEntity> {
 }
 ```
 
+### Global CRUD Auditing Pattern
+
+To ensure enterprise-grade traceability, the system implements an automatic CRUD auditing mechanism via the `AuditCrudInterceptor`.
+
+**Mechanism:**
+- **Automatic Logging**: The interceptor is registered globally and automatically captures `CREATE`, `UPDATE`, and `DELETE` actions.
+- **Traceability**: Each log entry records the `userId`, `tenantId`, `action`, `entityType`, `entityId`, and a `changes` payload containing the request metadata (query, params, sanitized body).
+- **Sanitization**: Sensitive fields are automatically stripped before storage to comply with security standards.
+- **Traceability Tagging**: When updating legacy databases, transactions are tagged with `[webApp]` in relevant fields to distinguish platform-initiated changes from legacy system actions.
+
+**Implementation Checklist:**
+- [ ] Register new entity types in the `EntityType` enum in `AuditCrudInterceptor`.
+- [ ] Ensure the entity has a corresponding entry in the `Entity` table for permission and audit resolution.
+- [ ] Use `AuditLogRepository` for any custom audit retrieval logic.
+
 ### `recoverById` Method for Soft-Deleted Entities
 
 The `recoverById` method is implemented within repositories to complement soft-delete functionality.
