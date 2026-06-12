@@ -97,6 +97,7 @@ This document lists all the modules, services, and core functionalities implemen
 - [x] **Repository Pattern**: `PartidasRepository` using the `LegacyMysqlService`.
 - [x] **Basic Retrieval**: Provides access to the raw `partidas` data.
 - [x] **Ubicación Assignment**: `POST /l-partidas/asignar-ubicacion` implements the "asentar ubicación" workflow, performing a transactional insert into `partidas2` and updating the `extendido` status in `partidas`. Transactions are now tagged with `[webApp]` in both `detalle` and `extendido` fields for traceability.
+- [x] **Legacy Constraint Alignment**: Implements a mapping strategy where the `detalle` field is limited to 30 characters (Legacy DB constraint), and long-form notes are moved to the `extendido` field.
 - [x] **Modular Design**: Encapsulated in `LegacyPartidasModule`.
 
 ### Legacy Extendidos Module

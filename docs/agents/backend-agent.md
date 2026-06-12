@@ -210,6 +210,13 @@ Your implementations must understand these core enterprise entities and workflow
 - Batch tracking for regulatory compliance
 All entities managed by the `BaseRepository` must include an `isActive` field (Boolean, default true) to control their operational status within their lifecycle.
 
+**Legacy System Integration Patterns:**
+
+When integrating with legacy databases that have restrictive character limits (e.g., `char(30)`), follow the **Extended Field Strategy**:
+*   **Primary Field (`detalle`)**: Store a truncated or brief summary (max 30 chars).
+*   **Extended Field (`extendido`)**: Store the full, long-form description for traceability and internal audit logs.
+*   **Validation**: Enforce these limits in the `@plant-mgmt/shared` package via Zod schemas to prevent DB write failures.
+
 **Supply Chain & Resource Operations:**
 
 - Supplier relationship management
