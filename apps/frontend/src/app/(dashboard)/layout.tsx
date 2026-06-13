@@ -26,7 +26,7 @@ export default async function DashboardLayout({
           <div className="flex flex-1 flex-col overflow-hidden">
             <DashboardHeader />
             <main className="flex-1 overflow-auto pb-safe-area-inset-bottom md:pb-0 px-1 sm:px-2 lg:px-4 py-1.5">
-              <div className="mx-auto w-full max-w-[1600px] space-y-4">
+              <div className="mx-auto w-full max-w-[1600px] space-y-4 pb-1 mb-0.5">
                 {children}
               </div>
             </main>

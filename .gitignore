@@ -21,6 +21,7 @@ pids
 **/.next/
 **/.turbo/
 **/out/
+**/src/generated/
 *.tsbuildinfo
 next-env.d.ts
 

@@ -93,6 +93,7 @@ Focus on these proven interface patterns:
 
 #### Data Table Enhancements
 
+- **Premium Visual Style:** Use `bg-card/40`, `border-border/40`, and `shadow-premium` combined with `rounded-none` to create a sophisticated, high-density enterprise aesthetic.
 - **Inline Editing:** The `DataTable` component now supports inline editing for quick modifications directly within the table.
 - **Bulk Actions:** The `DataTable` component now supports bulk actions, such as deleting multiple items at once.
 - **Permission-Based Visibility:** The `DataTable` component dynamically adapts its interface based on the entity's `permissionType`:
