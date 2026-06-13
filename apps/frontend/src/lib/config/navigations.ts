@@ -47,6 +47,14 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         description: "Vista general y alertas",
       },
       {
+        title: "Siembra",
+        href: ROUTES.SIEMBRA,
+        icon: Package,
+        description: "Gestión de partidas a siembrar",
+        dashboard: { statsLabel: "Partidas a siembrar" },
+        requiredPermission: { table: "extendidos", action: "read" },
+      },
+      {
         title: "A Extender",
         href: ROUTES.EXTENDIDOS,
         icon: Package,

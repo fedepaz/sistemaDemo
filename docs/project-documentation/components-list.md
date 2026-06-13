@@ -81,6 +81,15 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ExtendidoDashboardSkeleton` | [ ] | [ ] | [ ] | [ ] |
 | `ExtendidoView` | [x] | [ ] | [ ] | [ ] |
 
+## Siembra
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `SiembraDashboardSkeleton` | [x] | [ ] | [ ] | [ ] |
+| `SiembraDataTable` | [x] | [x] | [ ] | [x] |
+| `SiembraEditForm` | [x] | [x] | [ ] | [x] |
+| `SiembraView` | [x] | [x] | [ ] | [ ] |
+| `SiembraDashboard` | [x] | [x] | [ ] | [x] |
+
 ## UI Primitives (shadcn/ui)
 
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
