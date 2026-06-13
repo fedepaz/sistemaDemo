@@ -157,7 +157,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const ip = this.getClientIp(request);
     const path = request.url;
     const method = request.method;
-    const userId = (request as any)?.user?.userId || 'Baddy User';
+    const userId = (request as any)?.user?.id || 'Baddy User';
 
     const logData = {
       status,
@@ -195,7 +195,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     try {
-      const userId = (request as any)?.user?.userId || 'Baddy User';
+      const userId = (request as any)?.user?.id || 'Baddy User';
       const tenantId = (request as any)?.user?.tenantId || 'Baddy Tenant';
       const ip = this.getClientIp(request);
       const userAgent = request.headers['user-agent'] || 'Unknown User Agent';

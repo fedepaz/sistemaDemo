@@ -76,7 +76,8 @@ export class AuditCrudInterceptor implements NestInterceptor {
             {
               user: request.user,
               requestId: (request as any).requestId,
-              headers: request.headers.authorization,
+              // Redact header for logs
+              headers: request.headers.authorization ? '[REDACTED]' : undefined,
             },
             'Auditing CRUD',
           );

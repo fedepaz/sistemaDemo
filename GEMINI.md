@@ -12,7 +12,7 @@ This document outlines the specialized agents that assist in the development of 
 
 When the user asks me to check and summarize changes in the codebase, I will follow this exact procedure:
 
-1.  **Inspect Commits**: Use `github.list_commits` and `github.get_commit` to retrieve the details of the recent changes.
+1.  **Inspect Commits**: Use `git status && git diff HEAD` to retrieve the details of the recent changes.
 2.  **Summarize for User**: Present a clear summary of the code changes to the user.
 3.  **Internal Alignment Check**: Compare the code changes against the agent documentation in the `docs/agents/` directory to check for deviations or new patterns.
 4.  **Propose All Documentation Updates**: Formulate a single, comprehensive proposal for all necessary documentation changes.
