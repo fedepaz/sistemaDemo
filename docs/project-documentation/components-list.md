@@ -21,7 +21,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `LoginPage` | [ ] | [ ] | [ ] | [ ] |
 | `RegisterPage` | [ ] | [ ] | [ ] | [ ] |
 | `CatchAllPage` | [ ] | [ ] | [ ] | [ ] |
-| `DashboardLayout` | [ ] | [ ] | [ ] | [ ] |
+| `DashboardLayout` | [x] | [ ] | [ ] | [ ] |
 | `Loading` | [ ] | [ ] | [ ] | [ ] |
 | `NotFound` | [ ] | [ ] | [ ] | [ ] |
 | `DashboardPage` | [ ] | [ ] | [ ] | [ ] |
@@ -52,7 +52,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | :--- | :---: | :---: | :---: | :---: |
 | `DataTableFacetedFilter` | [ ] | [ ] | [ ] | [ ] |
 | `DataTableSkeleton` | [ ] | [ ] | [ ] | [ ] |
-| `DataTable` | [x] | [ ] | [ ] | [x] |
+| `DataTable` | [x] | [x] | [ ] | [x] |
 | `SortableHeader` | [ ] | [ ] | [ ] | [ ] |
 | `StatusBadge` | [ ] | [ ] | [ ] | [ ] |
 | `InlineEditRow` | [ ] | [ ] | [ ] | [ ] |

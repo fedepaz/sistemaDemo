@@ -401,8 +401,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <Card className="w-full flex-1 flex flex-col overflow-hidden">
-        <CardHeader>
+      <Card className="w-full flex flex-col overflow-hidden bg-card/40 border-border/40 shadow-premium rounded-none my-2 ">
+        {" "}
+        <CardHeader className="px-5 pt-5 pb-3">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl font-bold">{title}</CardTitle>
@@ -422,7 +423,8 @@ export function DataTable<TData, TValue>({
             ) : null}
           </div>
         </CardHeader>
-        <CardContent className="p-0 flex-1 flex flex-col overflow-hidden">
+        <CardContent className="p-0 flex-1 flex flex-col min-h-0 overflow-hidden">
+          {" "}
           <div className="flex items-center px-4 py-2 space-x-2 shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -582,7 +584,6 @@ export function DataTable<TData, TValue>({
               </Table>
             </div>
           </div>
-
           <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-2 shrink-0 border-t mt-auto">
             {" "}
             <div className="flex-1 text-[11px] text-muted-foreground">
