@@ -12,12 +12,12 @@ export const AuditActionTypeSchema = z.enum([
 export type AuditActionType = z.infer<typeof AuditActionTypeSchema>;
 
 export const EntityTypeSchema = z.enum([
-  "USER",
-  "TENANT",
-  "ROLE",
-  "AUDIT_LOG",
-  "LOCALE",
-  "MESSAGE",
-  "USER_PREFERENCE",
+  "USER_PROFILE",
+  "USER_PERMISSIONS",
+  "USERS",
+  "ENTITIES",
+  "AUDIT_LOGS",
+  "DEV_ACCOUNTS",
+  "EXTENDIDOS",
 ]);
 export type EntityType = z.infer<typeof EntityTypeSchema>;

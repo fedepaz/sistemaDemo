@@ -5,7 +5,7 @@ import { configuration, validationSchema } from './config/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './infra/prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { GlobalExceptionFilter } from './shared/exceptions/security-exception.filter';
 import { GlobalAuthGuard } from './modules/auth/guards/global-auth.guard';
 import { PermissionsGuard } from './modules/permissions/guards/permissions.guard';
@@ -28,6 +28,7 @@ import { LegacyDepositosModule } from './modules/legacy/depositos/depositos.modu
 import { LegacyPartidasModule } from './modules/legacy/partidas/partidas.module';
 import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.module';
 import { pinoStream } from './config/logger';
+import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.interceptor';
 
 @Module({
   imports: [
@@ -87,6 +88,10 @@ import { pinoStream } from './config/logger';
     TenantsModule,
   ],
   providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditCrudInterceptor,
+    },
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,

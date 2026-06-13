@@ -53,3 +53,7 @@ export const useExtendidosByFecha = (fecha: string) => useSuspenseQuery({
   queryFn: () => extendidoService.fetchByFecha(fecha)
 });
 ```
+
+**Pattern Reference: Legacy System Integration (Extendidos Domain)**
+*   **Validation**: `detalle` field limited to 30 characters; `extendido` used for long notes.
+*   **Data Mapping**: Table columns now include `contenedor` for operational clarity.

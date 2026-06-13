@@ -76,7 +76,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-3 md:gap-6 rounded-xl border-l-4 p-3 md:p-5 transition-all lg:flex-row lg:items-center lg:gap-4",
+        "group relative flex flex-col gap-2 md:gap-3 rounded-lg border-l-4 p-2 md:p-3 transition-all lg:flex-row lg:items-center lg:gap-4",
         isDirty
           ? "border-primary/40 bg-primary/[0.04] shadow-sm"
           : "border-border/50 bg-muted/30 hover:bg-muted/50",
@@ -90,26 +90,26 @@ export const PermissionRowItem = memo(function PermissionRowItem({
     >
       {/* Dirty indicator */}
       {isDirty ? (
-        <div className="absolute left-0 top-3 bottom-3 w-1 rounded-r-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.4)]" />
+        <div className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.4)]" />
       ) : null}
 
       {/* Resource label */}
-      <div className="flex items-center gap-3 md:gap-4 lg:w-52 lg:shrink-0">
-        <div className="flex h-9 w-9 md:h-11 md:w-11 shrink-0 items-center justify-center rounded-lg md:rounded-xl bg-background shadow-sm border border-border/50">
-          <Icon className="h-4 w-4 md:h-5 md:w-5 text-primary" />
+      <div className="flex items-center gap-2.5 lg:w-48 lg:shrink-0">
+        <div className="flex h-8 w-8 md:h-9 md:w-9 shrink-0 items-center justify-center rounded-lg bg-background shadow-sm border border-border/50">
+          <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
         </div>
         <div className="flex flex-col gap-0 min-w-0">
-          <span className="text-xs md:text-sm font-semibold text-foreground truncate">
+          <span className="text-[11px] md:text-xs font-bold text-foreground truncate">
             {row.label}
           </span>
-          <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70">
+          <span className="text-[8px] md:text-[9px] font-mono uppercase tracking-wider text-muted-foreground/60">
             {row.tableName}
           </span>
         </div>
       </div>
 
       {/* CRUD switches or Status View */}
-      <div className="grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-4 lg:flex lg:flex-1 lg:items-center lg:gap-8 lg:px-4">
+      <div className="grid grid-cols-2 gap-x-2 gap-y-2 sm:grid-cols-4 lg:flex lg:flex-1 lg:items-center lg:gap-6 lg:px-2">
         {visibleColumns.map((col) => {
           const isActive = row[col.key];
           const wasChanged = row[col.key] !== originalRow[col.key];
@@ -119,37 +119,37 @@ export const PermissionRowItem = memo(function PermissionRowItem({
             return (
               <div
                 key={col.key}
-                className="flex flex-col items-center gap-1 px-1"
+                className="flex flex-col items-center gap-0.5 px-1"
               >
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1">
                   <col.icon
                     className={cn(
-                      "h-3.5 w-3.5 md:h-4 md:w-4",
+                      "h-3 w-3",
                       isActive ? col.color : "text-muted-foreground/20",
                     )}
                   />
                   <span
                     className={cn(
-                      "text-[9px] md:text-[10px] font-bold uppercase tracking-widest",
+                      "text-[8px] md:text-[9px] font-bold uppercase tracking-widest",
                       isActive ? "text-foreground" : "text-muted-foreground/30",
                     )}
                   >
                     {col.label}
                   </span>
                 </div>
-                <div className="flex h-8 md:h-11 items-center justify-center">
+                <div className="flex h-7 md:h-8 items-center justify-center">
                   <div
                     className={cn(
-                      "flex h-5 w-5 md:h-6 md:w-6 items-center justify-center rounded-full border-2 transition-all",
+                      "flex h-4 w-4 md:h-5 md:w-5 items-center justify-center rounded-full border transition-all",
                       isActive
                         ? "border-primary/20 bg-primary/5 text-primary"
                         : "border-muted-foreground/10 bg-muted/30 text-muted-foreground/20",
                     )}
                   >
                     {isActive ? (
-                      <div className="h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-primary" />
+                      <div className="h-1 w-1 rounded-full bg-primary" />
                     ) : (
-                      <div className="h-0.5 w-1.5 md:h-0.5 md:w-2 rounded-full bg-current" />
+                      <div className="h-0.5 w-1 rounded-full bg-current" />
                     )}
                   </div>
                 </div>
@@ -171,14 +171,14 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                   <div className="flex items-center gap-2">
                     <col.icon
                       className={cn(
-                        "h-3.5 w-3.5 md:h-4 md:w-4 transition-all duration-300",
+                        "h-3 w-3 transition-all duration-300",
                         isActive
                           ? col.color
                           : "text-muted-foreground/30 group-hover/switch:text-muted-foreground/50",
                       )}
                     />
                   </div>
-                  <div className="flex h-10 md:h-11 items-center justify-center">
+                  <div className="flex h-8 md:h-9 items-center justify-center">
                     {" "}
                     {/* Minimum touch target height */}
                     <Switch
@@ -188,9 +188,9 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                       }
                       disabled={!canEdit || !requesterHasThisAction}
                       className={cn(
-                        "h-5 w-9 md:h-6 md:w-11 data-[state=checked]:bg-primary",
+                        "scale-75 md:scale-90 h-5 w-9 data-[state=checked]:bg-primary",
                         wasChanged
-                          ? "ring-4 ring-primary/10 ring-offset-0 ring-offset-background"
+                          ? "ring-2 ring-primary/10 ring-offset-0 ring-offset-background"
                           : "",
                       )}
                       aria-label={col.label}
@@ -200,10 +200,10 @@ export const PermissionRowItem = memo(function PermissionRowItem({
               </TooltipTrigger>
               <TooltipContent
                 side="top"
-                className="bg-popover border border-border shadow-md text-foreground px-3 py-1.5 rounded-md" // ✅ Padding + color explícito
+                className="bg-popover border border-border shadow-md text-foreground px-2 py-1 rounded-md" // ✅ Padding + color explícito
                 sideOffset={5}
               >
-                <p className="text-xs font-medium">
+                <p className="text-[10px] font-medium">
                   {!requesterHasThisAction
                     ? `No tienes permiso para conceder "${col.label.toLowerCase()}"`
                     : canEdit
@@ -222,16 +222,16 @@ export const PermissionRowItem = memo(function PermissionRowItem({
       </div>
 
       {/* Active count badge */}
-      <div className="absolute right-3 top-3 md:right-5 md:top-5 lg:static lg:ml-auto lg:shrink-0">
+      <div className="absolute right-2 top-2 md:right-3 md:top-3 lg:static lg:ml-auto lg:shrink-0">
         <Badge
           variant={activeCrudCount > 0 ? "default" : "secondary"}
           className={cn(
-            "h-6 md:h-7 min-w-[2rem] md:min-w-[2.5rem] justify-center text-[9px] md:text-[11px] font-bold tabular-nums rounded-full shadow-sm transition-all",
+            "h-5 md:h-6 min-w-[1.75rem] md:min-w-[2rem] justify-center text-[8px] md:text-[10px] font-bold tabular-nums rounded-full shadow-sm transition-all",
             activeCrudCount === 4
-              ? "bg-primary/10 text-primary border border-primary/20 dark:bg-primary/20 dark:text-primary-foreground"
+              ? "bg-primary/10 text-primary border border-primary/20"
               : "",
             activeCrudCount > 0 && activeCrudCount < 4
-              ? "bg-accent/10 text-accent-foreground border border-accent/20 dark:bg-accent/20 dark:text-accent-foreground"
+              ? "bg-accent/10 text-accent-foreground border border-accent/20"
               : "",
             activeCrudCount === 0
               ? "bg-muted text-muted-foreground/60 border-transparent"

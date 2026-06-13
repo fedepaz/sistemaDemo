@@ -56,73 +56,73 @@ function DashboardAlerts() {
   return (
     <Card className="overflow-hidden flex flex-col border-border/40 shadow-sm h-full">
       {/* Header - professional gradient using theme tokens */}
-      <div className="bg-gradient-to-r from-primary/90 to-primary px-3 py-2 sm:px-4 sm:py-3 shrink-0">
+      <div className="bg-gradient-to-r from-primary/90 to-primary px-2 py-1.5 sm:px-3 sm:py-2 shrink-0">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-primary-foreground/20 flex items-center justify-center backdrop-blur-sm shrink-0">
-              <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-primary-foreground" />
+          <div className="flex items-center gap-1.5">
+            <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-primary-foreground/20 flex items-center justify-center backdrop-blur-sm shrink-0">
+              <DollarSign className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-primary-foreground" />
             </div>
             <div>
-              <h2 className="text-xs sm:text-sm font-bold text-primary-foreground tracking-tight">
+              <h2 className="text-[11px] sm:text-xs font-bold text-primary-foreground tracking-tight">
                 Cotizaciones
               </h2>
-              <p className="text-[9px] sm:text-[10px] text-primary-foreground/70 font-medium">ARS • En Vivo</p>
+              <p className="text-[8px] sm:text-[9px] text-primary-foreground/70 font-medium leading-none">ARS • En Vivo</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-primary-foreground/60 text-[9px] sm:text-[10px] font-bold">
-            <RefreshCw className="h-2 w-2 sm:h-2.5 sm:w-2.5 animate-spin-slow" />
+          <div className="flex items-center gap-1 text-primary-foreground/60 text-[8px] sm:text-[9px] font-bold">
+            <RefreshCw className="h-2 w-2 animate-spin-slow" />
             <span>{currentTime}</span>
           </div>
         </div>
       </div>
 
-      <CardContent className="p-2 sm:p-3 flex-1 overflow-auto bg-card">
-        <div className="flex flex-col gap-2 sm:gap-3">
+      <CardContent className="p-1.5 sm:p-2 flex-1 overflow-auto bg-card">
+        <div className="flex flex-col gap-1.5 sm:gap-2">
           {currencyRates.map((currency, index) => {
             const colors = chartColors[index % chartColors.length];
 
             return (
               <div
                 key={currency.code}
-                className={`${colors.bg} rounded-lg sm:rounded-xl p-2 sm:p-3 transition-all hover:scale-[1.01] sm:hover:scale-[1.02] cursor-pointer group flex flex-col justify-center border border-transparent hover:border-border`}
+                className={`${colors.bg} rounded-lg p-1.5 sm:p-2 transition-all hover:scale-[1.01] cursor-pointer group flex flex-col justify-center border border-transparent hover:border-border`}
               >
                 {/* Currency Header */}
-                <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-                  <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="flex items-center justify-between mb-1 sm:mb-1.5">
+                  <div className="flex items-center gap-1.5">
                     <div
-                      className={`h-5 w-5 sm:h-6 sm:w-6 rounded-md sm:rounded-lg ${colors.accent} flex items-center justify-center shadow-sm shrink-0`}
+                      className={`h-4 w-4 sm:h-5 sm:w-5 rounded-md ${colors.accent} flex items-center justify-center shadow-sm shrink-0`}
                     >
-                      <span className="text-primary-foreground text-[9px] sm:text-[10px] font-black">
+                      <span className="text-primary-foreground text-[8px] sm:text-[9px] font-black">
                         {currency.code === "BLUE"
                           ? "B"
                           : currency.code.charAt(0)}
                       </span>
                     </div>
-                    <p className={`text-[10px] sm:text-xs font-bold ${colors.text} uppercase tracking-tight truncate`}>
+                    <p className={`text-[9px] sm:text-[10px] font-bold ${colors.text} uppercase tracking-tight truncate`}>
                       {currency.name}
                     </p>
                   </div>
                 </div>
 
                 {/* Buy/Sell Rates */}
-                <div className="flex gap-1.5 sm:gap-2">
-                  <div className="bg-background/80 dark:bg-background/40 rounded-md sm:rounded-lg px-2 py-1 sm:px-3 sm:py-2 text-center flex-1 border border-border/50">
+                <div className="flex gap-1">
+                  <div className="bg-background/80 dark:bg-background/40 rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1 text-center flex-1 border border-border/50">
                     <p
-                      className={`text-[8px] sm:text-[9px] font-bold ${colors.text} opacity-60 uppercase tracking-widest mb-0.5`}
+                      className={`text-[7px] sm:text-[8px] font-bold ${colors.text} opacity-60 uppercase tracking-widest leading-none mb-0.5`}
                     >
                       Compra
                     </p>
-                    <p className={`text-sm sm:text-base font-black ${colors.text}`}>
+                    <p className={`text-xs sm:text-sm font-black ${colors.text}`}>
                       ${formatNumber(currency.buyRate)}
                     </p>
                   </div>
-                  <div className="bg-background/80 dark:bg-background/40 rounded-md sm:rounded-lg px-2 py-1 sm:px-3 sm:py-2 text-center flex-1 border border-border/50">
+                  <div className="bg-background/80 dark:bg-background/40 rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1 text-center flex-1 border border-border/50">
                     <p
-                      className={`text-[8px] sm:text-[9px] font-bold ${colors.text} opacity-60 uppercase tracking-widest mb-0.5`}
+                      className={`text-[7px] sm:text-[8px] font-bold ${colors.text} opacity-60 uppercase tracking-widest leading-none mb-0.5`}
                     >
                       Venta
                     </p>
-                    <p className={`text-sm sm:text-base font-black ${colors.text}`}>
+                    <p className={`text-xs sm:text-sm font-black ${colors.text}`}>
                       ${formatNumber(currency.sellRate)}
                     </p>
                   </div>

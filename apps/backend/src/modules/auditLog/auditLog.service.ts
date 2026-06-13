@@ -7,8 +7,8 @@ import { AuditLogRepository } from './repositories/auditLog.repository';
 export class AuditLogService {
   constructor(private auditLogRepository: AuditLogRepository) {}
 
-  async getAllAuditLogs(requesterId: string) {
-    const auditLogs = await this.auditLogRepository.findAll(requesterId);
+  async getAllAuditLogs() {
+    const auditLogs = await this.auditLogRepository.findAll();
     return auditLogs;
   }
 

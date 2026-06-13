@@ -29,6 +29,7 @@ import { ExtendidosEditForm } from "./extendido-edit-form";
 import { usePartidaMutation } from "../hooks/usePartidaMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { getLocalDateStr } from "@/lib/date-utils";
 
 interface ExtendidoDataTableProps {
   partidas: ExtendidoDto[];
@@ -55,7 +56,8 @@ export function ExtendidoDataTable({
   const filteredPartidas = useMemo(() => {
     if (!filterToday) return partidas;
 
-    const todayStr = new Date().toISOString().split("T")[0];
+    const today = new Date();
+    const todayStr = getLocalDateStr(today);
 
     return partidas.filter((p) => p.fechaEgresoCamara === todayStr);
   }, [partidas, filterToday]);
@@ -133,23 +135,23 @@ export function ExtendidoDataTable({
         variant={filterToday ? "default" : "outline"}
         size="sm"
         onClick={() => setFilterToday(!filterToday)}
-        className={`h-9 rounded-full px-4 text-xs font-black uppercase tracking-tight gap-2 transition-all flex-1 sm:flex-none ${
+        className={`h-8 rounded-full px-3 text-[10px] font-black uppercase tracking-tight gap-1.5 transition-all flex-1 sm:flex-none ${
           filterToday
             ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 border-primary"
             : "hover:bg-accent hover:text-accent-foreground border-border/40"
         }`}
       >
         <CalendarDays
-          className={`h-3.5 w-3.5 ${filterToday ? "animate-pulse" : ""}`}
+          className={`h-3 w-3 ${filterToday ? "animate-pulse" : ""}`}
         />
         Hoy
       </Button>
 
-      <div className="relative flex-1 sm:min-w-[180px] group">
-        <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
+      <div className="relative flex-1 sm:min-w-[160px] group">
+        <Building2 className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
         <Select value={currentCamaraId} onValueChange={handleCamaraChange}>
-          <SelectTrigger className="h-9 pl-9 rounded-full bg-background border-border/40 focus:ring-primary/20 text-xs font-bold uppercase tracking-tight">
-            <SelectValue placeholder="Filtrar por Cámara" />
+          <SelectTrigger className="h-8 pl-8 rounded-full bg-background border-border/40 focus:ring-primary/20 text-[10px] font-bold uppercase tracking-tight">
+            <SelectValue placeholder="Cámara" />
           </SelectTrigger>
           <SelectContent className="rounded-xl border-border/60 shadow-2xl">
             <SelectItem value="all" className="font-bold text-primary italic">

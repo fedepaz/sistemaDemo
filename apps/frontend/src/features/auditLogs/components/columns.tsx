@@ -6,9 +6,9 @@ import {
   Pencil,
   Trash2,
   FileText,
-  Database,
   Globe,
   Smartphone,
+  User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatShortDate } from "@/lib/date-utils";
@@ -47,21 +47,6 @@ const getActionIcon = (action: string) => {
   }
 };
 
-// Helper para entidad legible
-const getEntityDisplay = (entityType: string, entityId: string) => {
-  const entityMap: Record<string, string> = {
-    USER: "Usuario",
-    TRANSACTION: "Transacción",
-    INVENTORY: "Inventario",
-    SUPPLIER: "Proveedor",
-    CUSTOMER: "Cliente",
-    PRODUCT: "Producto",
-    CATEGORY: "Categoría",
-  };
-
-  return `${entityMap[entityType] || entityType}: ${entityId.slice(0, 8)}...`;
-};
-
 export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
   {
     accessorKey: "action",
@@ -91,24 +76,24 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
     },
   },
   {
-    id: "entityType",
+    accessorKey: "user.username",
     header: ({ column }) => (
-      <SortableHeader column={column}>Entidad</SortableHeader>
+      <SortableHeader column={column}>Usuario</SortableHeader>
     ),
     cell: ({ row }) => {
-      const entityType = row.original.entityType;
-      const entityId = row.original.entityId;
-
+      const user =
+        row.original.user !== null ? row.original.user.username : "No user";
       return (
         <div className="flex items-center space-x-2 min-w-[160px]">
-          <Database className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           <span className="text-sm font-medium truncate max-w-[140px]">
-            {getEntityDisplay(entityType, entityId)}
+            {user}
           </span>
         </div>
       );
     },
   },
+
   {
     accessorKey: "changes",
     header: ({ column }) => (

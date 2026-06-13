@@ -38,34 +38,30 @@ export function DashboardHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-1 ">
-        <div className="flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
+      <div className="container mx-auto px-1">
+        <div className="flex h-14 items-center justify-between">
           {/* Logo and Mobile Navigation */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <MobileNavigation />
             <div className="flex items-center space-x-2 md:hidden">
-              <Logo variant="icon" className="h-5 w-auto" />
+              <Logo variant="icon" className="h-4 w-auto" />
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex items-center space-x-2">
-            {/* Theme Toggle 
-            <ThemeToggle />
-            */}
-
             {/* Notifications */}
             {/* Left: Week Display with Tooltip */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="flex items-center px-4 border-r border-border/50 h-16 cursor-help">
+                  <div className="flex items-center px-3 border-r border-border/50 h-14 cursor-help">
                     <div className="flex flex-col items-end">
-                      <p className="text-2xl font-black text-foreground tracking-tighter leading-none">
+                      <p className="text-xl font-black text-foreground tracking-tighter leading-none">
                         S{weekNum}
                       </p>
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">
+                      <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
                         Semana
                       </p>
                     </div>

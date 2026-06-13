@@ -14,14 +14,18 @@ import {
   LEGACY_TABLE_WHITELIST,
   LegacyTableName,
 } from './interfaces/legacyBase.types';
-import { Public } from '../../../shared/decorators/public.decorator';
+import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
 
 @Controller('legacy')
 export class LegacyBaseController {
   constructor(private readonly service: LegacyBaseService) {}
 
   @Get(':tablename')
-  @Public()
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   async findAll(
     @Param('tablename') tableName: string,
     @Query('page', new ParseIntPipe({ optional: true })) page = 1,
@@ -65,7 +69,11 @@ export class LegacyBaseController {
   }
 
   @Get(':tablename/:id')
-  @Public()
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   async findOne(
     @Param('tablename') tableName: string,
     @Param('id') id: string,

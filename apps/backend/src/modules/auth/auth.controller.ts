@@ -66,7 +66,11 @@ export class AuthController {
    * Protected endpoint - refresh access token
    */
 
-  @Public()
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+    scope: 'OWN',
+  })
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   async refresh(

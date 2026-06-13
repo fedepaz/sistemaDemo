@@ -173,6 +173,40 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     },
   },
   {
+    accessorKey: "contenedor",
+    header: ({ column }) => {
+      return (
+        <SortableHeader column={column}>Tipo de Contenedor</SortableHeader>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center">
+          <span className="text-foreground font-black text-sm">
+            {row.original.contenedor}
+          </span>
+        </div>
+      </div>
+    ),
+    size: 100,
+  },
+  {
+    accessorKey: "con",
+    header: ({ column }) => {
+      return <SortableHeader column={column}>Cantidad</SortableHeader>;
+    },
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center">
+          <span className="text-foreground font-black text-sm">
+            {row.original.con}
+          </span>
+        </div>
+      </div>
+    ),
+    size: 100,
+  },
+  {
     accessorKey: "diasEnCamara",
     header: ({ column }) => {
       return <SortableHeader column={column}>Días</SortableHeader>;
@@ -185,21 +219,5 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       );
     },
     size: 80,
-  },
-  {
-    accessorKey: "con",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Bandejas</SortableHeader>;
-    },
-    cell: ({ row }) => (
-      <div className="flex justify-center">
-        <div className="flex flex-col items-center">
-          <span className="text-foreground font-black text-sm">
-            {row.original.con}
-          </span>
-        </div>
-      </div>
-    ),
-    size: 100,
   },
 ];

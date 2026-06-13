@@ -98,7 +98,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     this.logToPino(exception, status, request, safeMessage);
 
-    if (this.shouldAudit(status)) {
+    if (this.shouldAudit(status, request)) {
       this.saveAuditLog(status, request, safeMessage, exception).catch(
         (error) => this.logger.error({ err: error }, 'Error saving audit log'),
       );
@@ -157,7 +157,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const ip = this.getClientIp(request);
     const path = request.url;
     const method = request.method;
-    const userId = (request as any)?.user?.userId || 'Baddy User';
+    const userId = (request as any)?.user?.id || 'Baddy User';
 
     const logData = {
       status,
@@ -170,13 +170,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     };
 
     if (status === 401 || status === 403) {
-      this.logger.warn(logData, 'SECURITY EXCEPTION');
+      // sin stack — la causa es siempre auth, no un bug
+      this.logger.warn(
+        { status, method, path, ip, userId, message },
+        'SECURITY EXCEPTION',
+      );
     } else if (status >= 500) {
+      // acá sí querés el stack porque es un bug inesperado
       this.logger.error(logData, 'INTERNAL SERVER ERROR');
-    } else if (status >= 400) {
-      this.logger.warn(logData, 'WARNING');
-    } else {
-      this.logger.log(logData, 'INFO');
     }
   }
 
@@ -194,7 +195,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     try {
-      const userId = (request as any)?.user?.userId || 'Baddy User';
+      const userId = (request as any)?.user?.id || 'Baddy User';
       const tenantId = (request as any)?.user?.tenantId || 'Baddy Tenant';
       const ip = this.getClientIp(request);
       const userAgent = request.headers['user-agent'] || 'Unknown User Agent';
@@ -257,8 +258,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
   }
 
-  private shouldAudit(status: number): boolean {
-    return [401, 403, 500].includes(status);
+  private shouldAudit(status: number, request: SocketRequest): boolean {
+    const path = request.url?.split('?')[0] ?? '';
+
+    // 401 solo vale si fue un intento de login explícito
+    if (status === 401) {
+      return path === '/auth/login';
+    }
+
+    // 403 y 500 siempre auditar
+    return [403, 500].includes(status);
   }
 
   private getClientIp(request: SocketRequest): string {

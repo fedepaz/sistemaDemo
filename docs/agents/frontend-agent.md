@@ -174,10 +174,11 @@ Every route segment must have a `loading.tsx` file that renders a skeleton mirro
 ### 3. Mandatory In-Page `<Suspense>`
 Components that fetch data asynchronously must be wrapped in a `<Suspense>` boundary with a corresponding skeleton fallback. This is the **Level 2** loading strategy for granular streaming.
 
-### 4. Mandatory Mobile Optimization & Accessibility
-- **Viewport Configuration**: The `RootLayout` must export a `Viewport` object with `viewportFit: "cover"` to ensure content occupies the full screen on modern devices.
-- **Accessible Sheets/Dialogs**: All `Sheet` and `Dialog` components must include a `SheetDescription` or `DialogDescription` (even if hidden with `sr-only`) to comply with accessibility standards for screen readers.
-- **Safe Area Support**: Main dashboard layouts must include bottom padding for safe area insets (e.g., `pb-safe-area-inset-bottom`) on mobile views.
+### 5. Mandatory "Zero-Scroll" / "Shrink-to-Fit" Standard
+- **Viewport Mastery**: Every main view (Dashboard, Tables, Forms) must be designed to fit within `100dvh`.
+- **Vertical Economy**: Prioritize content by minimizing header heights, reducing vertical gaps (`gap-2` or `gap-3`), and using compact padding (`p-2` to `p-4`).
+- **Scroll Containment**: Use `flex-1 overflow-hidden` layouts combined with `ScrollArea` to ensure the main UI stays static while only specific data containers scroll internally.
+- **Breakpoint Optimization**: On larger screens, use smart grid distribution to fill horizontal space rather than allowing vertical expansion that forces content off-screen.
 
 ## Skeleton Loading Screen Pattern
 
