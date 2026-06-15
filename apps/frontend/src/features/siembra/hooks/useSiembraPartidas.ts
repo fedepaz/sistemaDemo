@@ -1,9 +1,8 @@
 // apps/frontend/src/features/siembra/hooks/useSiembraPartidas.ts
 "use client";
 
-import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ExtendidoDto } from "@vivero/shared";
+import { SiembraDto } from "@vivero/shared";
 import { siembraService } from "../api/siembraService";
 
 /**
@@ -13,7 +12,7 @@ import { siembraService } from "../api/siembraService";
 export const siembraPartidasQueryKey = ["siembra", "partidas"] as const;
 
 export function useSiembraPartidas() {
-  return useSuspenseQuery<ExtendidoDto[]>({
+  return useSuspenseQuery<SiembraDto[]>({
     queryKey: siembraPartidasQueryKey,
     queryFn: siembraService.fetchAll,
   });

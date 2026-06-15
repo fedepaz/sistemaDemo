@@ -3,7 +3,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
-import { ExtendidoDto } from "@vivero/shared";
+import { SiembraDto } from "@vivero/shared";
 import {
   Tooltip,
   TooltipContent,
@@ -13,7 +13,7 @@ import {
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
 import { cn } from "@/lib/utils";
 
-export const partidaSiembraColumns: ColumnDef<ExtendidoDto>[] = [
+export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
   {
     accessorKey: "partidaId",
     header: ({ column }) => {

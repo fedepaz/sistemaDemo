@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { AsignarUbicacionDto, ExtendidoDto } from "@vivero/shared";
+import { AsignarUbicacionDto, SiembraDto } from "@vivero/shared";
 
 import { UseFormReturn } from "react-hook-form";
 import {
@@ -38,7 +38,7 @@ interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbicacionDto) => Promise<void>;
   onCancel: () => void;
   form: UseFormReturn<AsignarUbicacionDto>;
-  selectedExtendido: ExtendidoDto;
+  selectedExtendido: SiembraDto;
 }
 
 export function SiembraEditForm({

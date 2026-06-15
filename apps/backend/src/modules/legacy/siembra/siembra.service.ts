@@ -2,13 +2,13 @@
 
 import { Injectable } from '@nestjs/common';
 import { LegacySiembra } from './interfaces/siembra.interface';
-import { ExtendidoDto } from '@vivero/shared';
+import { SiembraDto } from '@vivero/shared';
 import { SiembraRepository } from './repositories/siembra.repository';
 
 @Injectable()
 export class SiembraService {
-  constructor(private readonly SiembraRepository: SiembraRepository) {}
-  private mapToDto(row: LegacySiembra): ExtendidoDto {
+  constructor(private readonly siembraRepo: SiembraRepository) {}
+  private mapToDto(row: LegacySiembra): SiembraDto {
     return {
       partidaId: row.partida,
       anio: row.ano,
@@ -33,8 +33,8 @@ export class SiembraService {
     };
   }
 
-  async getAllSiembra(): Promise<ExtendidoDto[]> {
-    const rows = await this.SiembraRepository.findAllSiembra();
+  async getAllSiembra(): Promise<SiembraDto[]> {
+    const rows = await this.siembraRepo.findAllSiembra();
     return rows.map((row) => this.mapToDto(row));
   }
 }

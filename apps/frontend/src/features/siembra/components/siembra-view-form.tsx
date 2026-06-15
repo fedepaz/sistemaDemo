@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ExtendidoDto } from "@vivero/shared";
+import { SiembraDto } from "@vivero/shared";
 import {
   Package,
   Calendar,
@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
 
 interface SiembraFormProps {
-  selectedExtendido: ExtendidoDto;
+  selectedExtendido: SiembraDto;
 }
 
 const InfoRow = ({

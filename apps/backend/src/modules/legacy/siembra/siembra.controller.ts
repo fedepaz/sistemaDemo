@@ -2,7 +2,7 @@
 
 import { Controller, Get } from '@nestjs/common';
 
-import { ExtendidoDto } from '@vivero/shared';
+import { SiembraDto } from '@vivero/shared';
 import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
 import { SiembraService } from './siembra.service';
 
@@ -16,7 +16,7 @@ export class SiembraController {
     action: 'read',
     scope: 'ALL',
   })
-  async getAllSiembra(): Promise<ExtendidoDto[]> {
+  async getAllSiembra(): Promise<SiembraDto[]> {
     return this.siembraService.getAllSiembra();
   }
 }

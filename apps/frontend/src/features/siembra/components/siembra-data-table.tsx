@@ -7,7 +7,7 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import {
   AsignarUbicacionDto,
   AsignarUbicacionDtoSchema,
-  ExtendidoDto,
+  SiembraDto,
 } from "@vivero/shared";
 
 import {
@@ -26,12 +26,12 @@ import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
 
 interface SiembraDataTableProps {
-  partidas: ExtendidoDto[];
+  partidas: SiembraDto[];
 }
 
 export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const [slideOverOpen, setSlideOpen] = useState(false);
-  const [selectedPartida, setSelectedPartida] = useState<ExtendidoDto | null>(
+  const [selectedPartida, setSelectedPartida] = useState<SiembraDto | null>(
     null,
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
@@ -80,13 +80,13 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     }
   };
 
-  const handleExtendidoView = (row: ExtendidoDto) => {
+  const handleExtendidoView = (row: SiembraDto) => {
     setSelectedPartida(row);
     setMode("view");
     setSlideOpen(true);
   };
 
-  const handleEdit = (row: ExtendidoDto) => {
+  const handleEdit = (row: SiembraDto) => {
     setSelectedPartida(row);
     setMode("edit");
     setSlideOpen(true);
