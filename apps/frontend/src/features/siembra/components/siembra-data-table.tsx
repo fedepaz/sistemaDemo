@@ -110,39 +110,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const hasActiveFilters = filterToday;
 
   const toolbarContent = (
-    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
-      <Button
-        variant={filterToday ? "default" : "outline"}
-        size="sm"
-        onClick={() => setFilterToday(!filterToday)}
-        className={`h-8 rounded-full px-3 text-[10px] font-black uppercase tracking-tight gap-1.5 transition-all flex-1 sm:flex-none ${
-          filterToday
-            ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 border-primary"
-            : "hover:bg-accent hover:text-accent-foreground border-border/40"
-        }`}
-      >
-        <CalendarDays
-          className={`h-3 w-3 ${filterToday ? "animate-pulse" : ""}`}
-        />
-        Hoy
-      </Button>
-
-      {hasActiveFilters && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleClear}
-              className="h-8 w-8 rounded-full bg-destructive/5 text-destructive hover:bg-destructive/10 transition-all"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="top">Limpiar filtros</TooltipContent>
-        </Tooltip>
-      )}
-    </div>
+    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto"></div>
   );
 
   return (

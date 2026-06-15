@@ -19,17 +19,8 @@ export class SiembraService {
       nombreEspecie: row.especieNombre,
       injerto: row.injerto,
       contenedor: row.contenedor,
-      codigoCamaraGerminacion: row.cg,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,
-      diasEnCamara: row.diasCamara,
-      fechaEgresoCamara: row.fechaEgresoCamara,
-      extendido: row.extendido,
-      codigoUbicacion: row.ubicacion,
-      nombreUbicacion: row.nomubicacion,
-      stockInicial: row.stock_ini,
-      detalle: row.detalle,
-      baja: row.baja,
     };
   }
 

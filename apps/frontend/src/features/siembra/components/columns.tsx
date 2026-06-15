@@ -86,18 +86,7 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
       </TooltipProvider>
     ),
   },
-  {
-    accessorKey: "codigoCamaraGerminacion",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Nª Cámara</SortableHeader>;
-    },
-    cell: ({ row }) => (
-      <div className="flex justify-center font-black text-xs text-foreground">
-        {row.original.codigoCamaraGerminacion}
-      </div>
-    ),
-    size: 60,
-  },
+
   {
     accessorKey: "fechaSugeridaSiembra",
     header: ({ column }) => {
@@ -124,54 +113,7 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
       </div>
     ),
   },
-  {
-    accessorKey: "fechaEgresoCamara",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha a Extender</SortableHeader>;
-    },
-    cell: ({ row }) => {
-      const today = new Date();
-      const todayStr = getLocalDateStr(today);
 
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowStr = getLocalDateStr(tomorrow);
-
-      const targetDate = row.original.fechaEgresoCamara;
-      const isToday = targetDate === todayStr;
-      const isTomorrow = targetDate === tomorrowStr;
-
-      return (
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs font-mono tabular-nums text-muted-foreground">
-              {formatShortDate(targetDate)}
-            </span>
-            {(isToday || isTomorrow) && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="relative flex h-2 w-2 cursor-help">
-                    {isToday && (
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    )}
-                    <span
-                      className={cn(
-                        "relative inline-flex rounded-full h-2 w-2",
-                        isToday ? "bg-amber-500" : "",
-                      )}
-                    ></span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>{isToday ? "Egreso hoy" : "Egreso mañana"}</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-          </div>
-        </div>
-      );
-    },
-  },
   {
     accessorKey: "contenedor",
     header: ({ column }) => {
@@ -205,19 +147,5 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
       </div>
     ),
     size: 100,
-  },
-  {
-    accessorKey: "diasEnCamara",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Días</SortableHeader>;
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="flex justify-center text-foreground/70 text-[10px] font-black">
-          {row.original.diasEnCamara}
-        </div>
-      );
-    },
-    size: 80,
   },
 ];
