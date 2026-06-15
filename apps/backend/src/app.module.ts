@@ -29,6 +29,7 @@ import { LegacyPartidasModule } from './modules/legacy/partidas/partidas.module'
 import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.module';
 import { pinoStream } from './config/logger';
 import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.interceptor';
+import { LegacySiembraModule } from './modules/legacy/siembra/siembra.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.intercept
     LegacyDepositosModule,
     LegacyPartidasModule,
     LegacyExtendidosModule,
+    LegacySiembraModule,
     AuthModule,
     UsersModule,
     PermissionsModule,

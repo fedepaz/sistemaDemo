@@ -27,7 +27,7 @@ When developing or reviewing a feature, ensure it complies with the following:
 | **Entities**    |     [x]     |     [x]     |      [x]       |   [x]    |      [x]      |
 | **Extendidos**  |     [x]     |     [x]     |      [x]       |   [x]    |      [x]      |
 | **Permissions** |     [x]     |     [x]     |      [x]       |   [x]    |      [x]      |
-| **Siembra**     |     [ ]     |     [ ]     |      [ ]       |   [ ]    |      [ ]      |
+| **Siembra**     |     [x]     |     [x]     |      [x]       |   [x]    |      [x]      |
 | **Users**       |     [x]     |     [x]     |      [x]       |   [x]    |      [x]      |
 
 ---

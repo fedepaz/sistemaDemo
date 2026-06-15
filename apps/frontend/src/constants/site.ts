@@ -1,8 +1,8 @@
 export const SITE_CONFIG = {
   name: "AgriManage",
   description: "Professional agricultural plant management dashboard",
-  author: "cabecitaNegraDevOps",
-  url: "https://agrimanage.com",
+  author: "cincoOesteDesarrollos",
+  url: "https://proplanta-sistema.ar/",
   image: "developing",
   twitter: "developing",
   github: "developing",

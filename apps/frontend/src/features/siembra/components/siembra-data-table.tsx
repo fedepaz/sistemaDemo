@@ -9,51 +9,33 @@ import {
   AsignarUbicacionDtoSchema,
   ExtendidoDto,
 } from "@vivero/shared";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Building2, RotateCcw, CalendarDays } from "lucide-react";
+import { RotateCcw, CalendarDays } from "lucide-react";
 
-import { usePartidaMutation } from "../hooks/usePartidaMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { getLocalDateStr } from "@/lib/date-utils";
-import { useCamaras } from "@/features/extendidos/hooks/useDepositos";
 import { partidaSiembraColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
 
 interface SiembraDataTableProps {
   partidas: ExtendidoDto[];
-  onCamaraChange?: (camaraId: string) => void;
-  currentCamaraId?: string;
 }
 
-export function SiembraDataTable({
-  partidas,
-  onCamaraChange,
-  currentCamaraId = "all",
-}: SiembraDataTableProps) {
-  const { data: camaras = [] } = useCamaras();
+export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const [slideOverOpen, setSlideOpen] = useState(false);
   const [selectedPartida, setSelectedPartida] = useState<ExtendidoDto | null>(
     null,
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [filterToday, setFilterToday] = useState(false);
-
-  const { mutateAsync: asignarUbicacion, isPending: isAsignandoUbicacion } =
-    usePartidaMutation();
 
   const filteredPartidas = useMemo(() => {
     if (!filterToday) return partidas;
@@ -91,7 +73,8 @@ export function SiembraDataTable({
   const handleAsignarUbicacion = async (formData: AsignarUbicacionDto) => {
     if (selectedPartida) {
       try {
-        await asignarUbicacion(formData);
+        //await asignarUbicacion(formData);
+        console.log("asignar ubicacion", formData);
         setSlideOpen(false);
       } catch {}
     }
@@ -113,14 +96,9 @@ export function SiembraDataTable({
     console.log("Exporting...");
   };
 
-  const handleCamaraChange = (value: string) => {
-    onCamaraChange?.(value);
-  };
-
   const handleClear = useCallback(() => {
-    onCamaraChange?.("all");
     setFilterToday(false);
-  }, [onCamaraChange]);
+  }, []);
 
   const handleOpenChange = (open: boolean) => {
     setSlideOpen(open);
@@ -129,7 +107,7 @@ export function SiembraDataTable({
     }
   };
 
-  const hasActiveFilters = currentCamaraId !== "all" || filterToday;
+  const hasActiveFilters = filterToday;
 
   const toolbarContent = (
     <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
@@ -148,29 +126,6 @@ export function SiembraDataTable({
         />
         Hoy
       </Button>
-
-      <div className="relative flex-1 sm:min-w-[160px] group">
-        <Building2 className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
-        <Select value={currentCamaraId} onValueChange={handleCamaraChange}>
-          <SelectTrigger className="h-8 pl-8 rounded-full bg-background border-border/40 focus:ring-primary/20 text-[10px] font-bold uppercase tracking-tight">
-            <SelectValue placeholder="Cámara" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl border-border/60 shadow-2xl">
-            <SelectItem value="all" className="font-bold text-primary italic">
-              Nº Cámara
-            </SelectItem>
-            {camaras.map((c) => (
-              <SelectItem
-                key={c.codigo}
-                value={c.codigo.toString()}
-                className="font-medium"
-              >
-                Nº {c.codigo} - {c.nombre}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
 
       {hasActiveFilters && (
         <Tooltip>
@@ -195,8 +150,8 @@ export function SiembraDataTable({
       <DataTable
         columns={partidaSiembraColumns}
         data={filteredPartidas}
-        title="Partidas a Extender"
-        description="Gestión y monitoreo de bandejas en proceso de extendido"
+        title="Siembra"
+        description="Gestión y monitoreo de bandejas en proceso de siembra"
         tableName="extendidos"
         totalCount={filteredPartidas.length}
         onExport={handleExport}
@@ -218,7 +173,7 @@ export function SiembraDataTable({
           formId="extendido-form"
           mode={mode}
           form={formAsignarUbicacion}
-          isLoading={isAsignandoUbicacion}
+          //isLoading={isAsignandoUbicacion}
           saveLabel="Confirmar Extendido"
         >
           <div className="space-y-2">

@@ -1,14 +1,10 @@
 // src/features/siembra/api/siembraService.ts
 
 import { clientFetch } from "@/lib/api/client-fetch";
-import { AsignarUbicacionDto } from "@vivero/shared";
+import { ExtendidoDto } from "@vivero/shared";
 
 export const siembraService = {
-  async fetchAll() {
-    return clientFetch("l-partidas", { method: "GET" });
-  },
-
-  asignarUbicacion(data: AsignarUbicacionDto) {
-    return console.log(data);
+  fetchAll: () => {
+    return clientFetch<ExtendidoDto[]>("l-siembra", { method: "GET" });
   },
 };

@@ -52,7 +52,7 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
         icon: Package,
         description: "Gestión de partidas a siembrar",
         dashboard: { statsLabel: "Partidas a siembrar" },
-        requiredPermission: { table: "extendidos", action: "read" },
+        requiredPermission: { table: "siembra", action: "read" },
       },
       {
         title: "A Extender",

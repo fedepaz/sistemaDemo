@@ -1,24 +1,19 @@
 // apps/frontend/src/features/siembra/components/siembra-view.tsx
 "use client";
 
-import { useState, Suspense } from "react";
+import { Suspense } from "react";
 
 import { EmptyState } from "./empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { partidaSiembraColumns } from "./columns";
-import { useExtendidos } from "@/features/extendidos/hooks/useExtendidosWithFilters";
+
 import { SiembraDataTable } from "./siembra-data-table";
+import { useSiembraPartidas } from "../hooks/useSiembraPartidas";
 
-function SiembraList({
-  camaraId,
-  onCamaraChange,
-}: {
-  camaraId: string;
-  onCamaraChange: (id: string) => void;
-}) {
-  const { data: extendidos, isFetching } = useExtendidos(camaraId);
+function SiembraList({ camaraId }: { camaraId: string }) {
+  const { data: siembraPartidas, isFetching } = useSiembraPartidas();
 
-  const hasData = extendidos && extendidos.length > 0;
+  const hasData = siembraPartidas && siembraPartidas.length > 0;
 
   if (!hasData && !isFetching && camaraId === "all") {
     return (
@@ -31,11 +26,7 @@ function SiembraList({
 
   return (
     <>
-      <SiembraDataTable
-        partidas={extendidos || []}
-        onCamaraChange={onCamaraChange}
-        currentCamaraId={camaraId}
-      />
+      <SiembraDataTable partidas={siembraPartidas || []} />
 
       {/* Visual indicator for background fetching */}
       {isFetching && (
@@ -46,8 +37,6 @@ function SiembraList({
 }
 
 export function SiembraView() {
-  const [camaraId, setCamaraId] = useState<string>("all");
-
   return (
     <div className="space-y-4">
       <Suspense
@@ -55,7 +44,7 @@ export function SiembraView() {
           <DataTableSkeleton columnCount={partidaSiembraColumns.length} />
         }
       >
-        <SiembraList camaraId={camaraId} onCamaraChange={setCamaraId} />
+        <SiembraList camaraId="all" />
       </Suspense>
     </div>
   );

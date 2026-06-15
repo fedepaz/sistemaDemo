@@ -84,11 +84,11 @@ This document tracks all React components within the `apps/frontend/src` directo
 ## Siembra
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
-| `SiembraDashboardSkeleton` | [x] | [ ] | [ ] | [ ] |
-| `SiembraDataTable` | [x] | [x] | [ ] | [x] |
-| `SiembraEditForm` | [x] | [x] | [ ] | [x] |
-| `SiembraView` | [x] | [x] | [ ] | [ ] |
-| `SiembraDashboard` | [x] | [x] | [ ] | [x] |
+| `SiembraDashboardSkeleton` | [x] | [x] | [ ] | [ ] |
+| `SiembraDataTable` | [x] | [x] | [x] | [x] |
+| `SiembraEditForm` | [x] | [x] | [x] | [x] |
+| `SiembraView` | [x] | [x] | [x] | [ ] |
+| `SiembraDashboard` | [x] | [x] | [x] | [x] |
 
 ## UI Primitives (shadcn/ui)
 
