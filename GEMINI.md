@@ -119,4 +119,34 @@ Agents must **always read and apply** the following project guides:
 
 ---
 
+## 🧩 Skills System
+
+This project uses a modular skills system to extend agent capabilities. Skills are installed in the `.agents/skills/` directory and tracked via `skills-lock.json`.
+
+### Available Skills
+
+Skills provide specialized capabilities for various development tasks:
+
+- **Frontend**: `frontend-design`, `shadcn`, `tailwind-css-patterns`, `next-best-practices`, `react-best-practices`
+- **Backend**: `nestjs-best-practices`, `nodejs-backend-patterns`, `prisma-client-api`, `prisma-cli`
+- **Quality**: `accessibility`, `seo`, `vitest`, `zod`
+- **DevOps**: `bash-defensive-patterns`, `turborepo`
+- **TypeScript**: `typescript-advanced-types`
+- **Workflow**: `commit-workflow`, `review-code-changes`, `conduct-research`
+
+### Using Skills
+
+To use a skill, activate it with the `skill()` function:
+```javascript
+skill("frontend-design")  // Activate a skill
+```
+
+### Managing Skills
+
+- Skills are tracked in `skills-lock.json` with source and hash information
+- The `.agents/skills/` directory is excluded from version control via `.gitignore`
+- See `docs/agents/skills-guide.md` for detailed documentation
+
+---
+
 🌱💻🚀 _This file is the AI agent’s constitution. Always follow it._
