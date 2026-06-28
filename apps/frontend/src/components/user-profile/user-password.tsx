@@ -1,6 +1,6 @@
 // src/components/user-profile/user-password.tsx
 
-import { useChangePassword } from "@/features/auth/hooks/useChangePassword";
+import { useChangePassword } from "@/features/auth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChangePasswordDto, ChangePasswordSchema } from "@vivero/shared";

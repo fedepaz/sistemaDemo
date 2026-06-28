@@ -32,7 +32,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useDepositos } from "@/features/extendidos/hooks/useDepositos";
+import { useDepositos } from "@/features/extendidos";
 
 interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbicacionDto) => Promise<void>;
@@ -179,18 +179,18 @@ export function SiembraEditForm({
                   <div className="flex items-center gap-2">
                     <div
                       className={`p-1.5 md:p-2 rounded-lg transition-colors duration-300 ${
-                        hasDiscrepancy ? "bg-amber-100" : "bg-destructive/10"
+                        hasDiscrepancy ? "bg-warning/10" : "bg-destructive/10"
                       }`}
                     >
                       {hasDiscrepancy ? (
-                        <AlertTriangle className="h-3.5 w-3.5 md:h-4 md:w-4 text-amber-600 animate-pulse" />
+                        <AlertTriangle className="h-3.5 w-3.5 md:h-4 md:w-4 text-warning animate-pulse" />
                       ) : (
                         <TrendingDown className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
                       )}
                     </div>
                     <FormLabel
                       className={`text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors ${
-                        hasDiscrepancy ? "text-amber-600" : "text-destructive"
+                        hasDiscrepancy ? "text-warning" : "text-destructive"
                       }`}
                     >
                       Baja
@@ -205,7 +205,7 @@ export function SiembraEditForm({
                         onChange={(e) => field.onChange(Number(e.target.value))}
                         className={`h-12 md:h-16 rounded-xl shadow-sm text-xl md:text-3xl font-black px-4 transition-all duration-300 ${
                           hasDiscrepancy
-                            ? "border-amber-400 bg-amber-50/50 text-amber-700 focus-visible:ring-amber-200"
+                            ? "border-warning bg-warning/5 text-warning focus-visible:ring-warning/20"
                             : "border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
                         }`}
                       />

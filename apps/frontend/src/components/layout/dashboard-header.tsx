@@ -3,7 +3,7 @@
 
 import { MobileNavigation } from "./mobile-navigation";
 
-import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useLogout } from "@/features/auth";
 import { LoadingSpinner } from "../common/loading-spinner";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";

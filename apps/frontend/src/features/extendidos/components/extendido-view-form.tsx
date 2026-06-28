@@ -202,7 +202,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                       isToday ? (
                         <Badge
                           variant="outline"
-                          className="text-amber-600 border-amber-200 bg-amber-50 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
+                          className="text-warning border-warning/20 bg-warning/10 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
                         >
                           Hoy
                         </Badge>

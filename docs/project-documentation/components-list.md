@@ -43,7 +43,6 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DeleteDialog` | [ ] | [ ] | [ ] | [ ] |
 | `EditDialog` | [ ] | [ ] | [ ] | [ ] |
 | `ExportDropdown` | [ ] | [ ] | [ ] | [ ] |
-| `FloatingActionButton` | [ ] | [ ] | [ ] | [ ] |
 | `SlideOverForm` | [x] | [ ] | [ ] | [x] |
 
 ## Data Display Components
@@ -55,7 +54,6 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DataTable` | [x] | [x] | [ ] | [x] |
 | `SortableHeader` | [ ] | [ ] | [ ] | [ ] |
 | `StatusBadge` | [ ] | [ ] | [ ] | [ ] |
-| `InlineEditRow` | [ ] | [ ] | [ ] | [ ] |
 | `FeatureCardSkeleton` | [ ] | [ ] | [ ] | [ ] |
 | `FeatureCard` | [ ] | [ ] | [ ] | [ ] |
 | `KPICardSkeleton` | [x] | [ ] | [ ] | [ ] |

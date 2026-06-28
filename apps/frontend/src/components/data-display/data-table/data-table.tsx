@@ -62,7 +62,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useTableByName } from "@/features/permissions/hooks/permsHooks";
+import { useTableByName } from "@/features/permissions";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -194,14 +194,14 @@ export function DataTable<TData, TValue>({
         return null;
 
       return (
-        <div className="flex items-center justify-center gap-2 min-h-[40px]">
+        <div className="flex items-center justify-center gap-2 min-h-[44px]">
           {allowedActions.canView && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="min-h-[40px] text-muted-foreground"
+                  className="min-h-[44px] text-muted-foreground"
                   onClick={() => onView?.(row.original)}
                   aria-label="Ver detalles"
                 >
@@ -222,7 +222,7 @@ export function DataTable<TData, TValue>({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="min-h-[40px] text-primary"
+                  className="min-h-[44px] text-primary"
                   onClick={() => onEdit && onEdit(row.original)}
                   aria-label="Editar"
                 >
@@ -242,7 +242,7 @@ export function DataTable<TData, TValue>({
               <TooltipTrigger asChild>
                 <Button
                   onClick={() => handleDeleteSingle(row.original)}
-                  className="min-h-[40px] text-destructive"
+                  className="min-h-[44px] text-destructive"
                   variant="outline"
                   size="sm"
                   aria-label="Eliminar"
@@ -264,7 +264,7 @@ export function DataTable<TData, TValue>({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="min-h-[40px] text-amber-500"
+                  className="min-h-[44px] text-warning"
                   onClick={() => onEdit(row.original)}
                   aria-label={canExecuteLabel}
                 >
@@ -591,8 +591,9 @@ export function DataTable<TData, TValue>({
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center space-x-2">
-                <p className="text-[11px] font-medium">Filas por página</p>
+                <label htmlFor="pagination-page-size" className="text-[11px] font-medium">Filas por página</label>
                 <select
+                  id="pagination-page-size"
                   value={table.getState().pagination.pageSize}
                   onChange={(e) => {
                     table.setPageSize(Number(e.target.value));

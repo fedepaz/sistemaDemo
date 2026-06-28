@@ -89,12 +89,12 @@ Focus on these proven interface patterns:
 #### CRUD Operations
 
 - **SlideOverForm:** A slide-over panel for creating and editing entities. This is the standard pattern for all CRUD forms, replacing traditional modals.
-- **FloatingActionButton:** A floating action button for initiating the "add new" action. This provides a clear and accessible entry point for creating new entities.
+- ~~**FloatingActionButton:**~~ *Deprecated:* Not used in the current implementation. The "Nuevo" button in the DataTable toolbar serves as the entry point for creating new entities.
 
 #### Data Table Enhancements
 
 - **Premium Visual Style:** Use `bg-card/40`, `border-border/40`, and `shadow-premium` combined with `rounded-none` to create a sophisticated, high-density enterprise aesthetic.
-- **Inline Editing:** The `DataTable` component now supports inline editing for quick modifications directly within the table.
+- ~~**Inline Editing:**~~ *Deprecated:* Not implemented. All editing is done via SlideOverForm for consistency.
 - **Bulk Actions:** The `DataTable` component now supports bulk actions, such as deleting multiple items at once.
 - **Permission-Based Visibility:** The `DataTable` component dynamically adapts its interface based on the entity's `permissionType`:
     - For `PROCESS` types: Row selection is hidden by default, and bulk delete actions are disabled if execution (create) is allowed, prioritizing the operational process flow.

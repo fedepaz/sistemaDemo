@@ -1,0 +1,31 @@
+refactor(frontend): accessibility, design system, docs, and code quality improvements
+
+Phase 1: Critical Accessibility Fixes
+- Add prefers-reduced-motion media query to globals.css
+- Add lang="es" to <html> element in layout.tsx
+- Remove userScalable: false from viewport metadata
+- Add scrollbar-hide, no-scrollbar, custom-scrollbar CSS utilities
+- Add role="status" and aria-label to LoadingSpinner
+- Remove tabIndex={-1} from password toggle in login-form
+- Add aria-label to export button for mobile icon-only state
+- Add htmlFor/id association for "Filas por pagina" select
+- Add aria-label to permission dot indicators
+
+Phase 2: Design System Alignment
+- Add semantic color tokens (success, warning, info) to globals.css
+- Add @theme inline mappings for semantic colors
+- Increase DataTable action button touch targets from 40px to 44px (WCAG 2.5.8)
+- Replace raw palette colors (emerald, amber, sky, slate, blue) with semantic tokens in 8 files
+
+Phase 3: Documentation Updates
+- Update Next.js version from 14 to 15 in tech_stack_guide.md and frontend-agent.md
+- Document auth useQuery exception for conditional fetching
+- Mark FloatingActionButton and InlineEditRow as deprecated in ux-ui-agent.md
+- Remove dead code references from components-list.md
+- Document mandatory barrel export pattern in frontend-agent.md
+
+Phase 4: Code Quality
+- Remove dead code: FloatingActionButton and InlineEditRow (unused)
+- Implement proper useMutation structure in siembra hook (TODO for backend)
+- Export hooks and services from all feature barrel files (index.ts)
+- Convert 9 deep imports to barrel imports across codebase

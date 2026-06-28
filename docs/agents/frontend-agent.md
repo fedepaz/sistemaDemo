@@ -152,7 +152,7 @@ Creation → Processing → Status Updates → Verification → Completion → A
 
 ```
 src/
-├── app/                     # Next.js 14 App Router
+├── app/                     # Next.js 15 App Router
 │   ├── (dashboard)/         # Protected routes
 │   └── (auth)/              # Auth routes
 ├── features/                # 🚀 CORE: Domain-specific features (Colocated)
@@ -180,7 +180,7 @@ This project is Spanish-only. All user-facing strings in the UI should be writte
 
 ```typescript
 Tech Stack Configuration:
-├── Framework: Next.js 14+ (App Router, Server Components)
+├── Framework: Next.js 15+ (App Router, Server Components)
 ├── Styling: Tailwind CSS + shadcn/ui
 ├── State Management: TanStack Query (Mandatory: useSuspenseQuery for all GET) + Zustand
 ├── Forms: React Hook Form + Zod
@@ -221,7 +221,31 @@ To prevent build-time timeouts and ensure data freshness:
 1. **Scaffold Feature**: `mkdir -p src/features/<name>/{api,components,hooks,stores,utils}`.
 2. **Create Page Route**: `app/<name>/page.tsx` and always include `app/<name>/loading.tsx` for route-level skeleton.
 3. **Implement Logic**: Use shared contracts, colocate API calls and hooks. **Mandatory: Hooks for GET requests must use `useSuspenseQuery` from TanStack Query.**
-4. **Export Public API**: Curate `src/features/<name>/index.ts`.
+4. **Export Public API**: Curate `src/features/<name>/index.ts` with Components, Hooks, and Services sections.
+
+### Barrel Export Pattern (Mandatory)
+
+Every feature's `index.ts` must export all public APIs organized in three sections:
+
+```typescript
+// src/features/<name>/index.ts
+
+// Components
+export { FeatureDashboard } from "./components/FeatureDashboard";
+export { FeatureDashboardSkeleton } from "./components/feature-dashboard-skeleton";
+
+// Hooks
+export { useFeatureData, useFeatureMutation } from "./hooks/useFeatureHooks";
+
+// Services
+export { featureService } from "./api/featureService";
+```
+
+**Rules:**
+- Always include `// Components`, `// Hooks`, `// Services` section comments
+- Export all hooks that other features might consume
+- Export services for cross-feature API access
+- Never export internal/private hooks or utilities
 
 ## Data Fetching & Loading Rules
 
@@ -229,6 +253,8 @@ To ensure a seamless and high-performance user experience, the following pattern
 
 ### 1. Mandatory use of `useSuspenseQuery`
 For all data retrieval (GET requests), use `useSuspenseQuery` instead of the traditional `useQuery`. This leverages React's Suspense for declarative loading states and error boundaries.
+
+**Exception**: Auth-related queries that depend on `isSignedIn` must use `useQuery` with `enabled: isSignedIn` because `useSuspenseQuery` does not support conditional fetching. Example: `use-authUser.ts`, `use-permissions.ts`.
 
 ### 2. Mandatory Route-Level Skeleton (`loading.tsx`)
 Every route segment must have a `loading.tsx` file that renders a skeleton mirroring the layout of the final page. This is the **Level 1** loading strategy.

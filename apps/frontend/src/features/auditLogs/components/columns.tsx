@@ -153,7 +153,7 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
       return (
         <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[140px]">
           {isMobile ? (
-            <Smartphone className="h-3 w-3 text-blue-500" />
+            <Smartphone className="h-3 w-3 text-info" />
           ) : (
             <Globe className="h-3 w-3 text-muted-foreground" />
           )}

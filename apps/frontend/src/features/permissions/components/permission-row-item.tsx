@@ -145,6 +145,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                         ? "border-primary/20 bg-primary/5 text-primary"
                         : "border-muted-foreground/10 bg-muted/30 text-muted-foreground/20",
                     )}
+                    aria-label={isActive ? "Activo" : "Inactivo"}
                   >
                     {isActive ? (
                       <div className="h-1 w-1 rounded-full bg-primary" />

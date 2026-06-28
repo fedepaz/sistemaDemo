@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useUsers } from "@/features/users/hooks/usersHooks";
+import { useUsers } from "@/features/users";
 import { useCallback, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { UserProfileDto } from "@vivero/shared";

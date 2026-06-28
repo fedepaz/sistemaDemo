@@ -3,7 +3,7 @@
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Label } from "../ui/label";
-import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
+import { useCompanyData } from "@/features/dashboard";
 
 export function UserProfileInfo() {
   const { userProfile } = useAuthContext();

@@ -41,6 +41,7 @@ export function ExportDropdown({
           size="sm"
           disabled={disabled}
           className="min-h-[40px] bg-transparent"
+          aria-label={exportLabel}
         >
           <Download className="mr-2 h-4 w-4" />
           {breakpoint === "sm" ? "" : "Exportar"}

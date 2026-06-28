@@ -11,7 +11,7 @@ Build a bulletproof, enterprise-grade management system that converts 30-day tri
 ### Frontend Stack
 
 ```typescript
-Framework: Next.js 14+ (App Router)
+Framework: Next.js 15+ (App Router)
 ├── UI Foundation: Tailwind CSS
 ├── Component Registry: shadcn/ui
 ├── Icons: Lucide React

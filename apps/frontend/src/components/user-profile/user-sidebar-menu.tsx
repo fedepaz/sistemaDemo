@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserMenu } from "../user-profile/user-menu";
-import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useLogout } from "@/features/auth";
 import { useState } from "react";
 import {
   Tooltip,
