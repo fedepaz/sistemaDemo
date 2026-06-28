@@ -3,12 +3,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { AuditLogDto } from "@vivero/shared";
 import { auditLogService } from "../api/auditLogService";
-
-export const auditLogQueryKeys = {
-  all: () => ["auditLog"],
-  bytenantName: (tenantName: string) => ["auditLog", tenantName],
-  byUserId: (userId: string) => ["auditLog", "user", userId],
-};
+import { auditLogQueryKeys } from "@/lib/queryKeys";
 
 export const useAuditLogs = () => {
   return useSuspenseQuery<AuditLogDto[]>({
@@ -20,7 +15,7 @@ export const useAuditLogs = () => {
 
 export const useAuditLogsByTenantName = (tenantName?: string) => {
   return useSuspenseQuery<AuditLogDto[]>({
-    queryKey: auditLogQueryKeys.bytenantName(tenantName || ""),
+    queryKey: auditLogQueryKeys.byTenantName(tenantName || ""),
     queryFn: () => auditLogService.fetchByTenantName(tenantName || ""),
     retry: 1, // Retry once to account for transient network issues
   });

@@ -4,13 +4,8 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 import { CreateEntityDto, Entity } from "@vivero/shared";
 import { toast } from "sonner";
 import { entityService } from "../api/entityService";
-
-export const entityQueryKeys = {
-  all: () => ["entities"] as const,
-  byName: (name: string) => [...entityQueryKeys.all(), "byName", name] as const,
-  byLabel: (label: string) =>
-    [...entityQueryKeys.all(), "byLabel", label] as const,
-};
+import { entityQueryKeys } from "@/lib/queryKeys";
+import { invalidateQueries } from "@/lib/query-invalidation-map";
 
 export const useEntities = () => {
   return useSuspenseQuery<Entity[]>({
@@ -21,6 +16,8 @@ export const useEntities = () => {
 };
 
 export const useCreateEntity = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<Entity, Error, CreateEntityDto>({
     mutationFn: entityService.create,
     onSuccess: (data) => {
@@ -28,6 +25,7 @@ export const useCreateEntity = () => {
       toast.success(toastMessage, {
         duration: 3000,
       });
+      invalidateQueries(queryClient, "createEntity");
     },
   });
 };
@@ -42,7 +40,7 @@ export const useDeleteEntity = () => {
       toast.success(toastMessage, {
         duration: 3000,
       });
-      queryClient.invalidateQueries({ queryKey: entityQueryKeys.all() });
+      invalidateQueries(queryClient, "deleteEntity");
     },
   });
 };

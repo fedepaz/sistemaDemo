@@ -58,6 +58,68 @@ export const useUsers = () => useSuspenseQuery({
 });
 ```
 
+### Query Key Management (Mandatory)
+
+All query keys must be defined in `src/lib/queryKeys.ts` as the single source of truth. This enables centralized cache invalidation and prevents key inconsistencies.
+
+**Rules:**
+- All query key factories live in `src/lib/queryKeys.ts`
+- Naming convention: `xxxQueryKeys` (camelCase, plural)
+- All keys must use `as const` for type safety
+- Features import from `@/lib/queryKeys`, never define local keys
+
+**Example Query Key Factory:**
+```typescript
+// lib/queryKeys.ts
+export const usersQueryKeys = {
+  all: () => ["users"] as const,
+  byUserName: (username: string) =>
+    [...usersQueryKeys.all(), "byUserName", username] as const,
+  byTenantId: (tenantId: string) =>
+    [...usersQueryKeys.all(), "byTenantId", tenantId] as const,
+  admin: () => [...usersQueryKeys.all(), "allAdmin"] as const,
+};
+```
+
+### Mutation Invalidation (Mandatory)
+
+All mutation invalidation must use the centralized map in `src/lib/query-invalidation-map.ts`.
+
+**Rules:**
+- Add one entry per mutation in `mutationInvalidationMap`
+- Use `invalidateQueries(queryClient, 'mutationName')` in `onSuccess`
+- Cross-feature invalidation is handled by the map, not raw strings
+
+**Example Invalidation Map Entry:**
+```typescript
+// lib/query-invalidation-map.ts
+export const mutationInvalidationMap = {
+  updateUser: {
+    queries: () => [usersQueryKeys.all(), authProfileQueryKeys.me()],
+  },
+  deleteUser: {
+    queries: () => [usersQueryKeys.all()],
+  },
+} as const;
+```
+
+**Example Hook Usage:**
+```typescript
+// features/users/hooks/usersHooks.ts
+import { invalidateQueries } from "@/lib/query-invalidation-map";
+
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: userService.delete,
+    onSuccess: () => {
+      toast.success("Usuario eliminado");
+      invalidateQueries(queryClient, "deleteUser");
+    },
+  });
+};
+```
+
 ## Enterprise Context Understanding
 
 ### Primary User Scenarios

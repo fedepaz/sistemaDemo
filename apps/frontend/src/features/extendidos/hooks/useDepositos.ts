@@ -2,13 +2,7 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DepositoDto, depositosService } from "../api/depositosService";
-
-export const depositosQueryKeys = {
-  all: () => ["depositos"] as const,
-  byCamara: () => [...depositosQueryKeys.all(), "byCamara"] as const,
-  byCodigo: (codigo: number) =>
-    [...depositosQueryKeys.all(), "byCodigo", codigo] as const,
-};
+import { depositosQueryKeys } from "@/lib/queryKeys";
 
 export const useDepositos = () => {
   return useSuspenseQuery<DepositoDto[]>({

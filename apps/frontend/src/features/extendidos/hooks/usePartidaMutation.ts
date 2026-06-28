@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AsignarUbicacionDto } from "@vivero/shared";
 import { toast } from "sonner";
 import { partidaService } from "../api/partidaService";
-import { extendidosEnCamaraQueryKey } from "./useExtendidosWithFilters";
+import { invalidateQueries } from "@/lib/query-invalidation-map";
 
 /**
  * Hook for administrative partida ubicacion assignment.
@@ -16,9 +16,7 @@ export const usePartidaMutation = () => {
   return useMutation<void, Error, AsignarUbicacionDto>({
     mutationFn: partidaService.asignarUbicacion,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: extendidosEnCamaraQueryKey,
-      });
+      invalidateQueries(queryClient, "partidaUbicacion");
       toast.success("Ubicación asignada exitosamente", {
         duration: 3000,
       });

@@ -8,19 +8,12 @@ import {
 import { Entity, UserEntityPermission, UserPermissions } from "@vivero/shared";
 import { toast } from "sonner";
 import { permissionService } from "../api/permissionService";
-
-export const permissionsQueryKeys = {
-  tables: () => ["permissions", "tables"] as const,
-  table: (tableName: string) =>
-    [...permissionsQueryKeys.tables(), tableName] as const,
-  byUserId: (userId: string) => ["permissions", "user", userId] as const,
-  byEntityId: (entityId: string) =>
-    ["permissions", "entity", entityId] as const,
-};
+import { adminPermissionsQueryKeys } from "@/lib/queryKeys";
+import { invalidateQueries } from "@/lib/query-invalidation-map";
 
 export const useTables = () => {
   return useSuspenseQuery<Entity[]>({
-    queryKey: permissionsQueryKeys.tables(),
+    queryKey: adminPermissionsQueryKeys.tables(),
     queryFn: permissionService.fetchTables,
     retry: 1, // Retry once to account for transient network issues
   });
@@ -28,7 +21,7 @@ export const useTables = () => {
 
 export const useTableByName = (tableName: string) => {
   return useSuspenseQuery<Entity>({
-    queryKey: permissionsQueryKeys.table(tableName),
+    queryKey: adminPermissionsQueryKeys.table(tableName),
     queryFn: () => permissionService.fetchTableByName(tableName),
     retry: 1, // Retry once to account for transient network issues
   });
@@ -36,7 +29,7 @@ export const useTableByName = (tableName: string) => {
 
 export const useUserPermissions = (userId: string) => {
   return useSuspenseQuery<UserPermissions>({
-    queryKey: permissionsQueryKeys.byUserId(userId),
+    queryKey: adminPermissionsQueryKeys.byUserId(userId),
     queryFn: () => permissionService.fetchUserPermissions(userId),
     retry: 1, // Retry once to account for transient network issues
   });
@@ -44,7 +37,7 @@ export const useUserPermissions = (userId: string) => {
 
 export const useEntityPermissions = (entityId: string) => {
   return useSuspenseQuery<UserEntityPermission[]>({
-    queryKey: permissionsQueryKeys.byEntityId(entityId),
+    queryKey: adminPermissionsQueryKeys.byEntityId(entityId),
     queryFn: () => permissionService.fetchEntityPermissions(entityId),
     retry: 1, // Retry once to account for transient network issues
   });
@@ -74,17 +67,7 @@ export const useSetUserPermissions = () => {
       toast.success(toastMessage, {
         duration: 3000,
       });
-      queryClient.invalidateQueries({
-        queryKey: permissionsQueryKeys.byUserId(data.userId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: permissionsQueryKeys.tables(),
-      });
-
-      const authContext = queryClient.getQueryData(["userPermissions"]);
-      if (authContext) {
-        queryClient.setQueryData(["userPermissions"], data);
-      }
+      invalidateQueries(queryClient, "setUserPermissions", data);
     },
   });
 };
