@@ -60,6 +60,8 @@ export function ErrorProvider({ children }: { children: ReactNode }) {
       }
 
       if (parsed.title === "Sesión expirada") {
+        localStorage.clear();
+        router.push("/login");
         return;
       }
       const toastConfig = getToastConfig(parsed);

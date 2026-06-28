@@ -145,6 +145,10 @@ export async function clientFetch<T>(
           processQueue(new Error("Token refresh failed"), null);
           console.warn(refreshError, "Token refresh failed");
           logout();
+          // Redirect to login on token refresh failure
+          if (typeof window !== "undefined") {
+            window.location.href = "/login";
+          }
         } finally {
           isRefreshing = false;
         }
