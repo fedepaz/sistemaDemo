@@ -23,7 +23,6 @@ You will be invoked with one of three specific contexts:
 - Multi-tenant API endpoints with tenant isolation validation.
 - Business logic and enterprise workflows.
 - Database operations across tenant boundaries (MariaDB + Prisma).
-- Integration testing with Valkey caching and BullMQ job processing.
 - Authentication flows (username/password with JWT) and authorization boundaries.
 
 ### Frontend Testing Context

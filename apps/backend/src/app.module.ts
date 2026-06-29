@@ -1,6 +1,7 @@
 // src/app.module.ts
 
 import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { configuration, validationSchema } from './config/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './infra/prisma/prisma.module';
@@ -30,6 +31,7 @@ import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.m
 import { pinoStream } from './config/logger';
 import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.interceptor';
 import { LegacySiembraModule } from './modules/legacy/siembra/siembra.module';
+import { RequestIdMiddleware } from './shared/middleware/request-id.middleware';
 
 @Module({
   imports: [
@@ -108,4 +110,8 @@ import { LegacySiembraModule } from './modules/legacy/siembra/siembra.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}

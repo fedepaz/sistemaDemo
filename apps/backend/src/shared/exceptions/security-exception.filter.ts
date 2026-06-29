@@ -14,26 +14,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { PrismaService } from '../../infra/prisma/prisma.service';
-
-// Use enums values (from prisma)
-enum AuditActionType {
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
-  ACCESS = 'ACCESS',
-}
-
-enum EntityType {
-  USER = 'USER',
-  TENANT = 'TENANT',
-  ROLE = 'ROLE',
-  AUDIT_LOG = 'AUDIT_LOG',
-  LOCALE = 'LOCALE',
-  MESSAGE = 'MESSAGE',
-  USER_PREFERENCE = 'USER_PREFERENCE',
-}
+import { AuditActionType, EntityType } from '../../generated/prisma/enums';
 
 // Create a type that includes socket information
 interface SocketRequest extends Request {
@@ -66,8 +47,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse() as any;
-      message =
-        exceptionResponse.message || exception.message || 'Baddy Request';
+      message = exceptionResponse.message || exception.message || 'Bad Request';
     } else if (exception instanceof Error) {
       const msg = exception.message.toLowerCase();
       isDatabaseError =
@@ -86,13 +66,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         status = HttpStatus.INTERNAL_SERVER_ERROR;
         message =
           process.env.NODE_ENV === 'production'
-            ? 'Baddy Request'
+            ? 'Internal Server Error'
             : exception.message;
         stack = exception.stack;
       }
     } else {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = 'Baddy Uknown Error';
+      message = 'Bad Unknown Error';
     }
     const safeMessage = this.sanitizeMessage(message);
 
@@ -142,7 +122,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     if (sanitized.includes('[REDACTED]')) {
-      return 'Invaliddy Request';
+      return 'Invalid Request';
     }
 
     return sanitized;
@@ -157,7 +137,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const ip = this.getClientIp(request);
     const path = request.url;
     const method = request.method;
-    const userId = (request as any)?.user?.id || 'Baddy User';
+    const userId = (request as any)?.user?.id || 'unknown';
 
     const logData = {
       status,
@@ -195,8 +175,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     try {
-      const userId = (request as any)?.user?.id || 'Baddy User';
-      const tenantId = (request as any)?.user?.tenantId || 'Baddy Tenant';
+      const userId = (request as any)?.user?.id || 'unknown';
+      const tenantId = (request as any)?.user?.tenantId || 'unknown';
       const ip = this.getClientIp(request);
       const userAgent = request.headers['user-agent'] || 'Unknown User Agent';
 
@@ -233,7 +213,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         method: request.method,
         message,
         exceptionType:
-          exception instanceof Error ? exception.constructor.name : 'Unknownny',
+          exception instanceof Error ? exception.constructor.name : 'Unknown',
         timestamp: new Date().toISOString(),
       };
 

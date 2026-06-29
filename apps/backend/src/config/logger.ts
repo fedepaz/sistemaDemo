@@ -1,9 +1,7 @@
 // src/config/logger.ts
 import pretty from 'pino-pretty';
 
-// const isDev = process.env.NODE_ENV === 'development';
-// true for local dev until finishing the development
-const isDev = true;
+const isDev = process.env.BACKEND_NODE_ENV !== 'production';
 
 export const pinoStream = isDev
   ? pretty({
