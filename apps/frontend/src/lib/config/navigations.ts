@@ -8,44 +8,25 @@ import {
   Key,
   UserCircle,
   Package,
+  Briefcase,
 } from "lucide-react";
+import type { NavigationConfig } from "./navigation.types";
 
-export interface NavigationItem {
-  title: string;
-  href: string;
-  icon: React.ComponentType;
-  description?: string;
-  badge?: string;
-  badgeVariant?: "default" | "secondary" | "destructive" | "outline";
-  dashboard?: {
-    statsLabel: string; // e.g., "Entidades activas"
-    // Note: Actual stats value will come from KPIs hook
-  };
-  requiredPermission?: {
-    table: string; // must match Prisma @@map name
-    action: "read"; // for visibility, we only care about read
-  };
-}
-
-export interface NavigationGroup {
-  id: string;
-  title: string;
-  icon: React.ComponentType;
-  items: NavigationItem[];
-}
-
-export const NAVIGATION_CONFIG: NavigationGroup[] = [
+export const NAVIGATION_CONFIG: NavigationConfig = [
   {
+    kind: "standalone",
+    title: "Dashboard",
+    href: ROUTES.DASHBOARD,
+    icon: Home,
+    description: "Vista general y alertas",
+  },
+
+  {
+    kind: "group",
     id: "operations",
     title: "Operaciones",
-    icon: Home,
+    icon: Briefcase,
     items: [
-      {
-        title: "Dashboard",
-        href: ROUTES.DASHBOARD,
-        icon: Home,
-        description: "Vista general y alertas",
-      },
       {
         title: "Siembra",
         href: ROUTES.SIEMBRA,
@@ -66,27 +47,37 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
   },
 
   {
+    kind: "nestedGroup",
     id: "admin",
     title: "Administración",
     icon: Settings,
     items: [
       {
+        kind: "subGroup",
+        id: "usuarios",
         title: "Usuarios",
-        href: ROUTES.USERS,
-        icon: UserCircle,
-        description: "Gestión de usuarios del sistema",
-        dashboard: { statsLabel: "Usuarios activos" },
-        requiredPermission: { table: "users", action: "read" },
+        items: [
+          {
+            title: "Lista",
+            href: ROUTES.USERS,
+            icon: UserCircle,
+            description: "Gestión de usuarios del sistema",
+            dashboard: { statsLabel: "Usuarios activos" },
+            requiredPermission: { table: "users", action: "read" },
+          },
+          {
+            title: "Permisos",
+            href: ROUTES.USER_PERMISSIONS,
+            icon: Key,
+            description: "Configuración de permisos por usuario",
+            dashboard: { statsLabel: "Permisos configurados" },
+            requiredPermission: {
+              table: "user_permissions",
+              action: "read",
+            },
+          },
+        ],
       },
-      {
-        title: "Permisos de Usuario",
-        href: ROUTES.USER_PERMISSIONS,
-        icon: Key,
-        description: "Configuración de permisos por usuario",
-        dashboard: { statsLabel: "Permisos configurados" },
-        requiredPermission: { table: "user_permissions", action: "read" },
-      },
-
       {
         title: "Auditoría",
         href: ROUTES.AUDIT_LOGS,
