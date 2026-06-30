@@ -9,30 +9,7 @@ import {
   UserCircle,
   Package,
 } from "lucide-react";
-
-export interface NavigationItem {
-  title: string;
-  href: string;
-  icon: React.ComponentType;
-  description?: string;
-  badge?: string;
-  badgeVariant?: "default" | "secondary" | "destructive" | "outline";
-  dashboard?: {
-    statsLabel: string; // e.g., "Entidades activas"
-    // Note: Actual stats value will come from KPIs hook
-  };
-  requiredPermission?: {
-    table: string; // must match Prisma @@map name
-    action: "read"; // for visibility, we only care about read
-  };
-}
-
-export interface NavigationGroup {
-  id: string;
-  title: string;
-  icon: React.ComponentType;
-  items: NavigationItem[];
-}
+import type { NavigationGroup } from "./navigation.types";
 
 export const NAVIGATION_CONFIG: NavigationGroup[] = [
   {

@@ -20,24 +20,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { NAVIGATION_CONFIG } from "@/lib/config/navigations";
+import { filterNavigation } from "./nav-filtered";
 import { Logo } from "@/components/common/logo";
 import { UserSidebarMenu } from "../user-profile/user-sidebar-menu";
-
-interface NavigationItem {
-  title: string;
-  href: string;
-  icon: React.ElementType;
-  description?: string;
-  badge?: string;
-  badgeVariant?: "default" | "secondary" | "destructive" | "outline";
-}
-
-interface NavigationGroup {
-  id: string;
-  title: string;
-  icon: React.ElementType;
-  items: NavigationItem[];
-}
 
 export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,22 +42,10 @@ export function MobileNavigation() {
     setExpandedGroups(newExpandedGroups);
   };
 
-  const visibleNavigation: NavigationGroup[] = useMemo(() => {
-    return NAVIGATION_CONFIG.map((group) => {
-      const filteredItems = group.items.filter((item) => {
-        if (!item.requiredPermission) return true;
-
-        const { table } = item.requiredPermission;
-        const perm = permissions[table];
-        return !!perm?.canRead;
-      });
-
-      return {
-        ...group,
-        items: filteredItems,
-      };
-    }).filter((group) => group.items.length > 0);
-  }, [permissions]);
+  const visibleNavigation = useMemo(
+    () => filterNavigation(NAVIGATION_CONFIG, permissions),
+    [permissions],
+  );
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
