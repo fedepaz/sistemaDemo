@@ -165,15 +165,22 @@ function MobileNestedGroupSection({
           {group.items.map((item) => {
             if (isSubGroup(item)) {
               const isSubExpanded = expandedSubGroups.has(item.id);
+              const SubGroupIcon = item.icon;
 
               return (
-                <div key={item.id} className="mb-0.5">
+                <div
+                  key={item.id}
+                  className="mb-0.5 bg-muted/30 rounded-md px-1"
+                >
                   <Button
                     variant="ghost"
                     onClick={() => toggleSubGroup(item.id)}
-                    className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/60 p-2 h-7"
+                    className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/50 p-2 h-7"
                   >
-                    <span className="flex-1 text-left pl-3">{item.title}</span>
+                    <SubGroupIcon className="h-3.5 w-3.5 shrink-0" />
+                    <span className="flex-1 text-left pl-3">
+                      {item.title}
+                    </span>
                     <ChevronDown
                       className={cn(
                         "h-3.5 w-3.5 transition-transform",
@@ -182,7 +189,7 @@ function MobileNestedGroupSection({
                     />
                   </Button>
                   {isSubExpanded && (
-                    <div className="space-y-0.5 ml-4 mt-0.5">
+                    <div className="space-y-0.5 ml-4 mt-0.5 pb-0.5">
                       {item.items.map((subItem) => (
                         <MobileNavItemLink
                           key={subItem.href}

@@ -22,6 +22,7 @@ export interface NavigationSubGroup {
   kind: "subGroup";
   id: string;
   title: string;
+  icon: IconComponent;
   items: NavigationItem[];
 }
 

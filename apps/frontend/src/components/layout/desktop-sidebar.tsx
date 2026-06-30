@@ -202,6 +202,7 @@ function NavNestedGroupSection({
           {group.items.map((item) => {
             if (isSubGroup(item)) {
               const isSubExpanded = expandedSubGroups.has(item.id);
+              const SubGroupIcon = item.icon;
 
               if (isCollapsed) {
                 return (
@@ -218,13 +219,17 @@ function NavNestedGroupSection({
               }
 
               return (
-                <div key={item.id} className="mb-0.5">
+                <div
+                  key={item.id}
+                  className="mb-0.5 bg-muted/90 rounded-md px-1 pb-0.5"
+                >
                   <Button
                     variant="ghost"
                     onClick={() => toggleSubGroup(item.id)}
-                    className="h-7 w-full justify-start gap-2 font-medium text-[10px] uppercase tracking-widest text-muted-foreground/60 hover:text-foreground"
+                    className="h-7 w-full justify-start gap-2 font-medium text-[10px] uppercase tracking-widest text-muted-foreground/50 hover:text-foreground"
                   >
-                    <span className="flex-1 text-left pl-5">{item.title}</span>
+                    <SubGroupIcon className="h-3 w-3 shrink-0" />
+                    <span className="flex-1 text-left pl-4">{item.title}</span>
                     <ChevronDown
                       className={cn(
                         "h-3 w-3 transition-transform",
@@ -233,7 +238,7 @@ function NavNestedGroupSection({
                     />
                   </Button>
                   {isSubExpanded && (
-                    <div className="space-y-0.5 ml-5 mt-0.5">
+                    <div className="space-y-0.5 ml-5 pb-0.5 bg-accent/40 rounded-md">
                       {item.items.map((subItem) => (
                         <NavItemLink
                           key={subItem.href}
