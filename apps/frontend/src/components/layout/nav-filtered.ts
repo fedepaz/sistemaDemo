@@ -55,9 +55,7 @@ function filterConfig(
               }
               return hasReadPermission(item, permissions) ? item : null;
             })
-            .filter(
-              (item): item is NonNullable<typeof item> => item !== null,
-            );
+            .filter((item): item is NonNullable<typeof item> => item !== null);
           return items.length > 0 ? { ...entry, items } : null;
         }
 

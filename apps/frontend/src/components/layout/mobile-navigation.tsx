@@ -173,9 +173,7 @@ function MobileNestedGroupSection({
                     onClick={() => toggleSubGroup(item.id)}
                     className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/60 p-2 h-7"
                   >
-                    <span className="flex-1 text-left pl-3">
-                      {item.title}
-                    </span>
+                    <span className="flex-1 text-left pl-3">{item.title}</span>
                     <ChevronDown
                       className={cn(
                         "h-3.5 w-3.5 transition-transform",
