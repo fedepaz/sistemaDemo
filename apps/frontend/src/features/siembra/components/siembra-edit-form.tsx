@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { AsignarUbicacionDto, SiembraDto } from "@vivero/shared";
+import { AsignarUbiSiembraDto, SiembraDto } from "@vivero/shared";
 
 import { UseFormReturn } from "react-hook-form";
 import {
@@ -35,9 +35,9 @@ import {
 import { useDepositos } from "@/features/extendidos";
 
 interface SiembraEditFormProps {
-  onSubmit: (data: AsignarUbicacionDto) => Promise<void>;
+  onSubmit: (data: AsignarUbiSiembraDto) => Promise<void>;
   onCancel: () => void;
-  form: UseFormReturn<AsignarUbicacionDto>;
+  form: UseFormReturn<AsignarUbiSiembraDto>;
   selectedExtendido: SiembraDto;
 }
 
