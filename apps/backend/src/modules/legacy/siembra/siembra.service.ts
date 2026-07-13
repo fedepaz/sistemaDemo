@@ -1,8 +1,8 @@
 // src/modules/legacy/siembra/services/siembra.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { LegacySiembra } from './interfaces/siembra.interface';
-import { SiembraDto } from '@vivero/shared';
+import { AsignarUbiSiembraDto, SiembraDto } from '@vivero/shared';
 import { SiembraRepository } from './repositories/siembra.repository';
 
 @Injectable()
@@ -27,5 +27,17 @@ export class SiembraService {
   async getAllSiembra(): Promise<SiembraDto[]> {
     const rows = await this.siembraRepo.findAllSiembra();
     return rows.map((row) => this.mapToDto(row));
+  }
+
+  async asignarUbicacionSiembra(data: AsignarUbiSiembraDto): Promise<void> {
+    if (data.edita === 'N') {
+      throw new BadRequestException('La partida no se puede editar');
+    }
+
+    if (!data.ubicacion || data.ubicacion === 0) {
+      throw new BadRequestException('Debe seleccionar una ubicación válida');
+    }
+
+    await this.siembraRepo.asignarUbicacionSiembra(data);
   }
 }

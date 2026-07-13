@@ -2,7 +2,7 @@
 
 // Components
 export { SiembraDashboard } from "./components/SiembraDashboard";
-export { SiembraDashboardSkeleton } from "./components/siembra-dashboad-skeleton";
+export { SiembraDashboardSkeleton } from "./components/siembra-dashboard-skeleton";
 
 // Hooks
 export { useSiembraPartidas } from "./hooks/useSiembraPartidas";

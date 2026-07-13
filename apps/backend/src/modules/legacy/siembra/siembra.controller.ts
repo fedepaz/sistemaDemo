@@ -1,8 +1,13 @@
 // src/modules/legacy/siembra/siembra.controller.ts
 
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 
-import { SiembraDto } from '@vivero/shared';
+import {
+  AsignarUbiSiembraDto,
+  AsignarUbiSiembraDtoSchema,
+  SiembraDto,
+} from '@vivero/shared';
+import { ZodValidationPipe } from '../../../shared/pipes/zod-validation-pipe';
 import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
 import { SiembraService } from './siembra.service';
 
@@ -18,5 +23,18 @@ export class SiembraController {
   })
   async getAllSiembra(): Promise<SiembraDto[]> {
     return this.siembraService.getAllSiembra();
+  }
+
+  @Post('asignar-ubicacion-siembra')
+  @RequirePermission({
+    tableName: 'siembra',
+    action: 'create',
+    scope: 'ALL',
+  })
+  async asignarUbicacionSiembra(
+    @Body(new ZodValidationPipe(AsignarUbiSiembraDtoSchema))
+    data: AsignarUbiSiembraDto,
+  ): Promise<void> {
+    await this.siembraService.asignarUbicacionSiembra(data);
   }
 }

@@ -10,8 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
-import { cn } from "@/lib/utils";
+import { formatShortDate } from "@/lib/date-utils";
 
 export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
   {

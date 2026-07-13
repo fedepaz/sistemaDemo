@@ -1,29 +1,22 @@
-// src/features/extendidos/components/extendido-data-table.tsx
+// src/features/siembra/components/siembra-data-table.tsx
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { useState, useCallback, useEffect, useMemo } from "react";
 
 import {
-  AsignarUbicacionDto,
-  AsignarUbicacionDtoSchema,
+  AsignarUbiSiembraDto,
+  AsignarUbiSiembraDtoSchema,
   SiembraDto,
 } from "@vivero/shared";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { RotateCcw, CalendarDays } from "lucide-react";
-
+import { getLocalDateStr } from "@/lib/date-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { getLocalDateStr } from "@/lib/date-utils";
 import { partidaSiembraColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
+import { useSiembraPartidaMutation } from "../hooks/useSiembraPartidaMutation";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
@@ -37,6 +30,9 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [filterToday, setFilterToday] = useState(false);
 
+  const { mutateAsync: asignarUbicacionSiembra } =
+    useSiembraPartidaMutation();
+
   const filteredPartidas = useMemo(() => {
     if (!filterToday) return partidas;
 
@@ -46,14 +42,12 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     return partidas.filter((p) => p.fechaEgresoCamara === todayStr);
   }, [partidas, filterToday]);
 
-  const formAsignarUbicacion = useForm<AsignarUbicacionDto>({
-    resolver: zodResolver(AsignarUbicacionDtoSchema),
+  const formAsignarUbicacion = useForm<AsignarUbiSiembraDto>({
+    resolver: zodResolver(AsignarUbiSiembraDtoSchema),
   });
 
   useEffect(() => {
     if (selectedPartida) {
-      // Use 'con' (Bandejas en Cámara) as the default source for stock_ini
-      // if stockInicial isn't defined yet
       const initialStock = selectedPartida.stockInicial ?? selectedPartida.con;
 
       formAsignarUbicacion.reset({
@@ -62,7 +56,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         indice: selectedPartida.indice,
         ubicacion: selectedPartida.codigoUbicacion ?? undefined,
         stock_ini: initialStock,
-        detalle: "", // Reset detalle (limit 30)
+        detalle: "",
         baja: Number(selectedPartida.baja) || 0,
         extendido: selectedPartida.extendido || selectedPartida.detalle || "",
         edita: "S",
@@ -70,11 +64,12 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     }
   }, [selectedPartida, formAsignarUbicacion]);
 
-  const handleAsignarUbicacion = async (formData: AsignarUbicacionDto) => {
+  const handleAsignarUbicacionSiembra = async (
+    formData: AsignarUbiSiembraDto,
+  ) => {
     if (selectedPartida) {
       try {
-        //await asignarUbicacion(formData);
-        console.log("asignar ubicacion", formData);
+        await asignarUbicacionSiembra(formData);
         setSlideOpen(false);
       } catch {}
     }
@@ -141,7 +136,6 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           formId="extendido-form"
           mode={mode}
           form={formAsignarUbicacion}
-          //isLoading={isAsignandoUbicacion}
           saveLabel="Confirmar Extendido"
         >
           <div className="space-y-2">
@@ -150,7 +144,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
             ) : (
               <SiembraEditForm
                 form={formAsignarUbicacion}
-                onSubmit={handleAsignarUbicacion}
+                onSubmit={handleAsignarUbicacionSiembra}
                 onCancel={() => setSlideOpen(false)}
                 selectedExtendido={selectedPartida}
               />
