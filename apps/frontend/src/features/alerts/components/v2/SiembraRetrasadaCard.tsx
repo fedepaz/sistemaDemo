@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { AlertTriangle, MessageSquare, Send } from "lucide-react";
+import { AlertTriangle, Send } from "lucide-react";
 import type { SiembraRetrasadaDto } from "@vivero/shared";
 
 interface SiembraRetrasadaCardProps {
