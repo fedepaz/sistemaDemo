@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -78,9 +79,9 @@ export function FaltantePlantasCard({
           </div>
         </div>
 
-        <div className="w-full bg-muted rounded-full h-2">
+        <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
           <div
-            className={`h-2 rounded-full transition-all ${
+            className={`h-full rounded-full transition-all ${
               percentage >= 80 ? "bg-success" : percentage >= 50 ? "bg-warning" : "bg-destructive"
             }`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -97,7 +98,7 @@ export function FaltantePlantasCard({
         <div>
           <button
             onClick={() => setShowSubpartidas(!showSubpartidas)}
-            className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider hover:text-foreground"
+            className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider hover:text-foreground cursor-pointer"
           >
             {showSubpartidas ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
             Detalle subpartidas
@@ -123,13 +124,13 @@ export function FaltantePlantasCard({
         )}
 
         <div className="flex gap-2">
-          <input
+          <Input
             type="text"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             placeholder="Agregar comentario..."
             aria-label="Agregar comentario a faltante de plantas"
-            className="flex-1 text-xs border border-border rounded px-2 py-1 bg-background"
+            className="flex-1 h-7 text-xs"
             onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
           />
           <TooltipProvider>

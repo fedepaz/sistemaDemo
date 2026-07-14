@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -104,14 +105,15 @@ export function FaltaGerminacionCard({ alerta, onDismiss }: FaltaGerminacionCard
         ) : (
           <div className="space-y-2 border-t border-border pt-3">
             <div className="flex items-center gap-2">
-              <label className="text-[10px] font-bold text-muted-foreground uppercase">
+              <label htmlFor="solicitadas" className="text-[10px] font-bold text-muted-foreground uppercase shrink-0">
                 Solicitadas
               </label>
-              <input
+              <Input
+                id="solicitadas"
                 type="number"
                 value={solicitadas || ""}
                 onChange={(e) => setSolicitadas(Number(e.target.value))}
-                className="w-20 text-xs border border-border rounded px-2 py-1 bg-background"
+                className="w-20 h-7 text-xs"
               />
             </div>
 
@@ -120,17 +122,18 @@ export function FaltaGerminacionCard({ alerta, onDismiss }: FaltaGerminacionCard
                 <p className="text-[10px] font-bold text-muted-foreground uppercase">
                   Subpartidas
                 </p>
-                <Button size="sm" variant="ghost" onClick={addSubpartida} className="h-6 px-2">
+                <Button size="sm" variant="ghost" onClick={addSubpartida} className="h-6 px-2 cursor-pointer" aria-label="Agregar subpartida">
                   <Plus className="h-3 w-3" />
                 </Button>
               </div>
               {subpartidas.map((sp) => (
                 <div key={sp.id} className="flex items-center gap-2">
-                  <input
+                  <Input
+                    id={`subpartida-${sp.id}`}
                     type="number"
                     value={sp.germinadas || ""}
                     onChange={(e) => updateSubpartida(sp.id, Number(e.target.value))}
-                    className="flex-1 text-xs border border-border rounded px-2 py-1 bg-background"
+                    className="flex-1 h-7 text-xs"
                     placeholder="Germinadas"
                   />
                   <Button

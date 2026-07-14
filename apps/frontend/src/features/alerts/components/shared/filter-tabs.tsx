@@ -70,7 +70,11 @@ const TABS: {
 
 export function FilterTabs({ activeTab, onTabChange, counts }: FilterTabsProps) {
   return (
-    <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Filtrar alertas por tipo">
+    <div
+      className="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide"
+      role="tablist"
+      aria-label="Filtrar alertas por tipo"
+    >
       {TABS.map((tab) => {
         const isActive = activeTab === tab.key;
         const Icon = tab.icon;
@@ -83,7 +87,7 @@ export function FilterTabs({ activeTab, onTabChange, counts }: FilterTabsProps) 
             aria-selected={isActive}
             onClick={() => onTabChange(tab.key)}
             className={cn(
-              "px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all border cursor-pointer",
+              "px-3 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-all border cursor-pointer whitespace-nowrap",
               isActive
                 ? tab.activeClass
                 : cn("bg-background border-border text-muted-foreground", tab.hoverClass)
@@ -91,7 +95,7 @@ export function FilterTabs({ activeTab, onTabChange, counts }: FilterTabsProps) 
           >
             <span
               className={cn(
-                "h-4 w-4 rounded-full flex items-center justify-center text-[9px] font-mono font-extrabold",
+                "min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[11px] font-mono font-extrabold px-1",
                 isActive
                   ? "bg-white/20 text-white"
                   : count > 0
@@ -101,7 +105,7 @@ export function FilterTabs({ activeTab, onTabChange, counts }: FilterTabsProps) 
             >
               {count}
             </span>
-            <Icon className="h-3.5 w-3.5" />
+            <Icon className="h-3.5 w-3.5 shrink-0" />
             {tab.label}
           </button>
         );

@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -115,13 +116,13 @@ export function SiembraRetrasadaCard({ alerta, onDismiss }: SiembraRetrasadaCard
         )}
 
         <div className="flex gap-2">
-          <input
+          <Input
             type="text"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             placeholder="Agregar comentario..."
             aria-label="Agregar comentario a siembra retrasada"
-            className="flex-1 text-xs border border-border rounded px-2 py-1 bg-background"
+            className="flex-1 h-7 text-xs"
             onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
           />
           <TooltipProvider>

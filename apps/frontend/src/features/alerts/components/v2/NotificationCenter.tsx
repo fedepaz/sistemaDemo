@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Bell } from "lucide-react";
+import { Bell, X } from "lucide-react";
 
 interface NotificacionAuditoria {
   id: string;
@@ -84,10 +84,10 @@ export function NotificationCenter({
                         size="sm"
                         variant="ghost"
                         onClick={() => onClearItem(n.id)}
-                        className="h-5 w-5 px-0 opacity-0 group-hover:opacity-100 shrink-0"
+                        className="h-6 w-6 px-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 shrink-0"
                         aria-label="Eliminar notificación"
                       >
-                        ×
+                        <X className="h-3 w-3" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>Eliminar notificación</TooltipContent>

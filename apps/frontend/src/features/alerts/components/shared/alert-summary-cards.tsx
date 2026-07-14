@@ -84,10 +84,10 @@ export function AlertSummaryCards({
             <Tooltip key={alert.key}>
               <TooltipTrigger asChild>
                 <Card
-                  className={`border ${alert.colorClass} shadow-sm cursor-default`}
+                  className={`border ${alert.colorClass} shadow-sm`}
                 >
                   <CardContent className="p-4 flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${alert.colorClass}`}>
+                    <div className={`p-2.5 rounded-lg ${alert.colorClass} shrink-0`}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
