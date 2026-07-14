@@ -9,6 +9,7 @@ export const ROUTES = {
   ENTITIES: "/entities",
   EXTENDIDOS: "/extendidos",
   SIEMBRA: "/siembra",
+  ALERTS: "/alerts",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

@@ -12,6 +12,7 @@ import {
   Briefcase,
   Expand,
   Shield,
+  Bell,
 } from "lucide-react";
 import type { NavigationConfig } from "./navigation.types";
 
@@ -22,6 +23,15 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
     href: ROUTES.DASHBOARD,
     icon: Home,
     description: "Vista general y alertas",
+  },
+
+  {
+    kind: "standalone",
+    title: "Alertas",
+    href: ROUTES.ALERTS,
+    icon: Bell,
+    description: "Alertas del sistema",
+    requiredPermission: { table: "alerts", action: "read" },
   },
 
   {

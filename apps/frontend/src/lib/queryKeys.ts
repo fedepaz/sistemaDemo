@@ -122,3 +122,12 @@ export const siembraQueryKeys = {
   all: () => ["siembra"] as const,
   partidas: () => [...siembraQueryKeys.all(), "partidas"] as const,
 };
+
+// ============================================================================
+// ALERTS
+// ============================================================================
+
+export const alertsQueryKeys = {
+  all: () => ["alerts"] as const,
+  byType: (type: string) => [...alertsQueryKeys.all(), type] as const,
+};

@@ -88,6 +88,14 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `SiembraView` | [x] | [x] | [x] | [ ] |
 | `SiembraDashboard` | [x] | [x] | [x] | [x] |
 
+### Alerts
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `AlertsDashboard` | [x] | [x] | [ ] | [ ] |
+| `AlertDashboardSkeleton` | [x] | [ ] | [ ] | [ ] |
+| `AlertSummaryCards` | [x] | [x] | [x] | [ ] |
+| `AlertsDataTable` | [x] | [x] | [ ] | [ ] |
+
 ## UI Primitives (shadcn/ui)
 
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
