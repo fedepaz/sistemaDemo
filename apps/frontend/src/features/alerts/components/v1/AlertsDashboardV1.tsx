@@ -75,6 +75,9 @@ function AlertsContent() {
         faltantePlantasCount={faltantePlantas.length}
         faltaPreExpedicionCount={faltaPreExpedicion.length}
       />
+      {/**
+       * 
+
       {totalAlerts === 0 ? (
         <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
           <div className="p-3 rounded-full bg-muted">
@@ -83,47 +86,51 @@ function AlertsContent() {
           <div>
             <p className="text-sm font-bold text-foreground">
               No hay alertas activas
-            </p>
+              </p>
             <p className="text-xs text-muted-foreground mt-1">
               Todas las partidas están dentro de los parámetros esperados
             </p>
           </div>
         </div>
       ) : (
-        <>
-          <AlertSection
-            title="Siembra Retrasada"
-            description="Partidas que no se han sembrado en la semana programada"
-            count={siembraRetrasada.length}
-            columns={siembraRetrasadaColumns}
-            data={siembraRetrasada}
-          />
-
-          <AlertSection
-            title="Falta Recuento Germinación"
-            description="Partidas que estando en fecha no cuentan con dato de germinación"
-            count={faltaGerminacion.length}
-            columns={faltaGerminacionColumns}
-            data={faltaGerminacion}
-          />
-
-          <AlertSection
-            title="Faltante Estimado de Plantas"
-            description="Partidas donde plantas germinadas son menor a las solicitadas"
-            count={faltantePlantas.length}
-            columns={faltantePlantasColumns}
-            data={faltantePlantas}
-          />
-
-          <AlertSection
-            title="Falta Pre-Expedición"
-            description="Partidas sin pre-expedición cargada"
-            count={faltaPreExpedicion.length}
-            columns={faltaPreExpedicionColumns}
-            data={faltaPreExpedicion}
-          />
-        </>
+        <p>
+          something
+          </p>
       )}
+          */}
+      <>
+        <AlertSection
+          title="Siembra Retrasada"
+          description="Partidas que no se han sembrado en la semana programada"
+          count={siembraRetrasada.length}
+          columns={siembraRetrasadaColumns}
+          data={siembraRetrasada}
+        />
+
+        <AlertSection
+          title="Falta Recuento Germinación"
+          description="Partidas que estando en fecha no cuentan con dato de germinación"
+          count={faltaGerminacion.length}
+          columns={faltaGerminacionColumns}
+          data={faltaGerminacion}
+        />
+
+        <AlertSection
+          title="Faltante Estimado de Plantas"
+          description="Partidas donde plantas germinadas son menor a las solicitadas"
+          count={faltantePlantas.length}
+          columns={faltantePlantasColumns}
+          data={faltantePlantas}
+        />
+
+        <AlertSection
+          title="Falta Pre-Expedición"
+          description="Partidas sin pre-expedición cargada"
+          count={faltaPreExpedicion.length}
+          columns={faltaPreExpedicionColumns}
+          data={faltaPreExpedicion}
+        />
+      </>
     </div>
   );
 }
