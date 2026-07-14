@@ -13,6 +13,8 @@ import {
   Expand,
   Shield,
   Bell,
+  TableProperties,
+  Sparkles,
 } from "lucide-react";
 import type { NavigationConfig } from "./navigation.types";
 
@@ -26,12 +28,36 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
   },
 
   {
-    kind: "standalone",
+    kind: "nestedGroup",
+    id: "alerts",
     title: "Alertas",
-    href: ROUTES.ALERTS,
     icon: Bell,
-    description: "Alertas del sistema",
-    requiredPermission: { table: "alerts", action: "read" },
+    items: [
+      {
+        kind: "subGroup",
+        id: "alerts-views",
+        title: "Vistas",
+        icon: Layers,
+        items: [
+          {
+            title: "Tablero",
+            href: ROUTES.ALERTS_V1,
+            icon: TableProperties,
+            description: "Vista de tablas de datos",
+            dashboard: { statsLabel: "Alertas en tabla" },
+            requiredPermission: { table: "alerts", action: "read" },
+          },
+          {
+            title: "Interactivo",
+            href: ROUTES.ALERTS_V2,
+            icon: Sparkles,
+            description: "Vista interactiva con tarjetas",
+            dashboard: { statsLabel: "Alertas interactivas" },
+            requiredPermission: { table: "alerts", action: "read" },
+          },
+        ],
+      },
+    ],
   },
 
   {

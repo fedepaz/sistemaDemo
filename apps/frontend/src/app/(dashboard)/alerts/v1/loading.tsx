@@ -1,4 +1,4 @@
-// src/app/(dashboard)/alerts/loading.tsx
+// src/app/(dashboard)/alerts/v1/loading.tsx
 
 import { AlertDashboardSkeleton } from "@/features/alerts";
 

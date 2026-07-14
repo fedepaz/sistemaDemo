@@ -1,23 +1,23 @@
-// src/features/alerts/components/AlertsDashboard.tsx
+// src/features/alerts/components/v1/AlertsDashboardV1.tsx
 "use client";
 
 import { Suspense } from "react";
 import { AlertTriangle } from "lucide-react";
-import { AlertSummaryCards } from "./alert-summary-cards";
+import { AlertSummaryCards } from "../shared/alert-summary-cards";
 import { AlertsDataTable } from "./alerts-data-table";
 import {
   siembraRetrasadaColumns,
   faltaGerminacionColumns,
   faltantePlantasColumns,
   faltaPreExpedicionColumns,
-} from "./alert-columns";
+} from "../shared/alert-columns";
 import {
   useSiembraRetrasada,
   useFaltaGerminacion,
   useFaltantePlantas,
   useFaltaPreExpedicion,
-} from "../hooks/useAlerts";
-import { AlertDashboardSkeleton } from "./alert-dashboard-skeleton";
+} from "../../hooks/useAlerts";
+import { AlertDashboardSkeleton } from "../shared/alert-dashboard-skeleton";
 
 function AlertSection({
   title,
@@ -128,7 +128,7 @@ function AlertsContent() {
   );
 }
 
-export function AlertsDashboard() {
+export function AlertsDashboardV1() {
   return (
     <Suspense fallback={<AlertDashboardSkeleton />}>
       <AlertsContent />
