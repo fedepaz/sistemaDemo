@@ -3,6 +3,8 @@
 // Shared Components
 export { AlertSummaryCards } from "./components/shared/alert-summary-cards";
 export { AlertDashboardSkeleton } from "./components/shared/alert-dashboard-skeleton";
+export { FilterTabs } from "./components/shared/filter-tabs";
+export type { AlertTab } from "./components/shared/filter-tabs";
 
 // v1 Components
 export { AlertsDashboardV1 } from "./components/v1/AlertsDashboardV1";
@@ -17,6 +19,7 @@ export {
   useFaltantePlantas,
   useFaltaPreExpedicion,
 } from "./hooks/useAlerts";
+export { useAlertActions } from "./hooks/useAlertActions";
 
 // Services
 export { alertService } from "./api/alertService";

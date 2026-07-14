@@ -3,6 +3,12 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Bell } from "lucide-react";
 
 interface NotificacionAuditoria {
@@ -47,6 +53,7 @@ export function NotificationCenter({
               variant="ghost"
               onClick={onClearAll}
               className="text-[10px] h-6 px-2"
+              aria-label="Limpiar todas las notificaciones"
             >
               Limpiar todo
             </Button>
@@ -70,14 +77,22 @@ export function NotificationCenter({
                     {n.destino} — {n.fecha}
                   </p>
                 </div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => onClearItem(n.id)}
-                  className="h-5 w-5 px-0 opacity-0 group-hover:opacity-100 shrink-0"
-                >
-                  ×
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => onClearItem(n.id)}
+                        className="h-5 w-5 px-0 opacity-0 group-hover:opacity-100 shrink-0"
+                        aria-label="Eliminar notificación"
+                      >
+                        ×
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Eliminar notificación</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             ))
           )}

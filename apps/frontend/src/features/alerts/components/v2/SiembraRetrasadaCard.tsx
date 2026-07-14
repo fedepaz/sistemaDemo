@@ -16,9 +16,10 @@ import type { SiembraRetrasadaDto } from "@vivero/shared";
 
 interface SiembraRetrasadaCardProps {
   alerta: SiembraRetrasadaDto;
+  onDismiss: (action: "sembrada" | "anulada") => void;
 }
 
-export function SiembraRetrasadaCard({ alerta }: SiembraRetrasadaCardProps) {
+export function SiembraRetrasadaCard({ alerta, onDismiss }: SiembraRetrasadaCardProps) {
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<string[]>([]);
 
@@ -52,7 +53,7 @@ export function SiembraRetrasadaCard({ alerta }: SiembraRetrasadaCardProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
           <div>
             <p className="text-muted-foreground">Fecha sugerida</p>
             <p className="font-mono font-bold">{alerta.fechaSugeridaSiembra}</p>
@@ -71,7 +72,12 @@ export function SiembraRetrasadaCard({ alerta }: SiembraRetrasadaCardProps) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="sm" variant="outline" className="flex-1 text-xs">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1 text-xs"
+                  onClick={() => onDismiss("sembrada")}
+                >
                   Sembrada
                 </Button>
               </TooltipTrigger>
@@ -81,7 +87,12 @@ export function SiembraRetrasadaCard({ alerta }: SiembraRetrasadaCardProps) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button size="sm" variant="destructive" className="flex-1 text-xs">
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  className="flex-1 text-xs"
+                  onClick={() => onDismiss("anulada")}
+                >
                   Anular
                 </Button>
               </TooltipTrigger>
@@ -109,6 +120,7 @@ export function SiembraRetrasadaCard({ alerta }: SiembraRetrasadaCardProps) {
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             placeholder="Agregar comentario..."
+            aria-label="Agregar comentario a siembra retrasada"
             className="flex-1 text-xs border border-border rounded px-2 py-1 bg-background"
             onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
           />

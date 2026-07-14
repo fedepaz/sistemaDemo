@@ -16,6 +16,7 @@ import type { FaltaGerminacionDto } from "@vivero/shared";
 
 interface FaltaGerminacionCardProps {
   alerta: FaltaGerminacionDto;
+  onDismiss: () => void;
 }
 
 interface Subpartida {
@@ -23,7 +24,7 @@ interface Subpartida {
   germinadas: number;
 }
 
-export function FaltaGerminacionCard({ alerta }: FaltaGerminacionCardProps) {
+export function FaltaGerminacionCard({ alerta, onDismiss }: FaltaGerminacionCardProps) {
   const [showForm, setShowForm] = useState(false);
   const [solicitadas, setSolicitadas] = useState(0);
   const [subpartidas, setSubpartidas] = useState<Subpartida[]>([]);
@@ -43,6 +44,10 @@ export function FaltaGerminacionCard({ alerta }: FaltaGerminacionCardProps) {
     setSubpartidas((prev) =>
       prev.map((s) => (s.id === id ? { ...s, germinadas: value } : s)),
     );
+  };
+
+  const handleSubmit = () => {
+    onDismiss();
   };
 
   return (
@@ -68,7 +73,7 @@ export function FaltaGerminacionCard({ alerta }: FaltaGerminacionCardProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
           <div>
             <p className="text-muted-foreground">Contenedor</p>
             <p className="font-semibold">{alerta.contenedor}</p>
@@ -142,13 +147,17 @@ export function FaltaGerminacionCard({ alerta }: FaltaGerminacionCardProps) {
 
             {shortage && (
               <p className="text-[10px] font-bold text-destructive">
-                ⚠ Total germinadas ({totalGerminadas}) menor a solicitadas ({solicitadas})
+                Total germinadas ({totalGerminadas}) menor a solicitadas ({solicitadas})
               </p>
             )}
 
             <p className="text-[10px] text-muted-foreground">
               Total germinadas: <span className="font-bold">{totalGerminadas}</span>
             </p>
+
+            <Button size="sm" variant="outline" className="w-full text-xs" onClick={handleSubmit}>
+              Registrar Recuento
+            </Button>
           </div>
         )}
       </CardContent>

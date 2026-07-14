@@ -16,12 +16,12 @@ import type { FaltantePlantasDto } from "@vivero/shared";
 
 interface FaltantePlantasCardProps {
   alerta: FaltantePlantasDto;
-  userRole?: "operador" | "supervisor";
+  onDismiss: () => void;
 }
 
 export function FaltantePlantasCard({
   alerta,
-  userRole = "operador",
+  onDismiss,
 }: FaltantePlantasCardProps) {
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<string[]>([]);
@@ -63,7 +63,7 @@ export function FaltantePlantasCard({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
           <div className="text-center">
             <p className="text-muted-foreground">Solicitadas</p>
             <p className="text-lg font-black">{alerta.solicitadas}</p>
@@ -87,7 +87,7 @@ export function FaltantePlantasCard({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
           <div>
             <p className="text-muted-foreground">Invernadero</p>
             <p className="font-semibold">{alerta.invernadero}</p>
@@ -128,6 +128,7 @@ export function FaltantePlantasCard({
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             placeholder="Agregar comentario..."
+            aria-label="Agregar comentario a faltante de plantas"
             className="flex-1 text-xs border border-border rounded px-2 py-1 bg-background"
             onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
           />
@@ -148,22 +149,16 @@ export function FaltantePlantasCard({
           </TooltipProvider>
         </div>
 
-        {userRole === "supervisor" ? (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size="sm" variant="destructive" className="w-full text-xs">
-                  Intervenir y Resolver
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Requiere permisos de supervisor</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ) : (
-          <p className="text-[10px] text-muted-foreground text-center bg-muted/30 rounded py-1">
-            🔒 Requiere permisos de supervisor para resolver
-          </p>
-        )}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="sm" variant="destructive" className="w-full text-xs" onClick={onDismiss}>
+                Intervenir y Resolver
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>MARCAR FALTANTE COMO RESUELTO</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </CardContent>
     </Card>
   );

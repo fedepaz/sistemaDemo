@@ -15,9 +15,10 @@ import type { FaltaPreExpedicionDto } from "@vivero/shared";
 
 interface FaltaPreExpedicionCardProps {
   alerta: FaltaPreExpedicionDto;
+  onDismiss: () => void;
 }
 
-export function FaltaPreExpedicionCard({ alerta }: FaltaPreExpedicionCardProps) {
+export function FaltaPreExpedicionCard({ alerta, onDismiss }: FaltaPreExpedicionCardProps) {
   return (
     <Card className="border border-info/20 bg-info/5 shadow-sm">
       <CardContent className="p-4 space-y-3">
@@ -41,7 +42,7 @@ export function FaltaPreExpedicionCard({ alerta }: FaltaPreExpedicionCardProps) 
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
           <div>
             <p className="text-muted-foreground">Fecha entrega</p>
             <p className="font-mono font-bold">{alerta.fechaEntrega}</p>
@@ -59,7 +60,7 @@ export function FaltaPreExpedicionCard({ alerta }: FaltaPreExpedicionCardProps) 
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="sm" variant="outline" className="w-full text-xs">
+              <Button size="sm" variant="outline" className="w-full text-xs" onClick={onDismiss}>
                 <Truck className="h-3 w-3 mr-1" />
                 Cargar Datos de Pre-expedición
               </Button>

@@ -16,6 +16,7 @@ export const useSiembraRetrasada = () => {
     queryKey: alertsQueryKeys.byType("siembra-retrasada"),
     queryFn: alertService.fetchSiembraRetrasada,
     retry: 1,
+    refetchInterval: 30_000,
   });
 };
 
@@ -24,6 +25,7 @@ export const useFaltaGerminacion = () => {
     queryKey: alertsQueryKeys.byType("falta-germinacion"),
     queryFn: alertService.fetchFaltaGerminacion,
     retry: 1,
+    refetchInterval: 30_000,
   });
 };
 
@@ -32,6 +34,7 @@ export const useFaltantePlantas = () => {
     queryKey: alertsQueryKeys.byType("faltante-plantas"),
     queryFn: alertService.fetchFaltantePlantas,
     retry: 1,
+    refetchInterval: 30_000,
   });
 };
 
@@ -40,5 +43,6 @@ export const useFaltaPreExpedicion = () => {
     queryKey: alertsQueryKeys.byType("falta-pre-expedicion"),
     queryFn: alertService.fetchFaltaPreExpedicion,
     retry: 1,
+    refetchInterval: 30_000,
   });
 };
