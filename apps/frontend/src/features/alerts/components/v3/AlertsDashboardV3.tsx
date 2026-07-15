@@ -4,6 +4,7 @@ import { Suspense, useState, useMemo, useCallback } from "react";
 import { AlertTriangle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useBreakpoint } from "@/hooks/useMediaQuery";
 import { AlertDashboardSkeleton } from "../shared/alert-dashboard-skeleton";
 import { AlertListPanel, type AlertListItem } from "./alert-list-panel";
 import { AlertDetailPanel } from "./alert-detail-panel";
@@ -42,6 +43,9 @@ function AlertsContent() {
   const { data: faltantePlantas } = useFaltantePlantas();
   const { data: faltaPreExpedicion } = useFaltaPreExpedicion();
   const actions = useAlertActions();
+  const breakpoint = useBreakpoint();
+  const isDesktop =
+    breakpoint === "lg" || breakpoint === "xl" || breakpoint === "2xl";
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
@@ -113,8 +117,8 @@ function AlertsContent() {
 
   const handleSelect = useCallback((id: string) => {
     setSelectedId(id);
-    setMobileSheetOpen(true);
-  }, []);
+    if (!isDesktop) setMobileSheetOpen(true);
+  }, [isDesktop]);
 
   const handleBack = useCallback(() => {
     setSelectedId(null);
@@ -125,9 +129,9 @@ function AlertsContent() {
     (handler: () => void) => {
       handler();
       setSelectedId(null);
-      setMobileSheetOpen(false);
+      if (!isDesktop) setMobileSheetOpen(false);
     },
-    [],
+    [isDesktop],
   );
 
   if (totalAlerts === 0) {
@@ -197,7 +201,7 @@ function AlertsContent() {
           />
         </div>
 
-        <div className={cn("overflow-y-auto hidden lg:block", !selectedAlert && "flex items-center justify-center")}>
+        <div className={cn("overflow-y-auto hidden lg:block w-full", !selectedAlert && "flex items-center justify-center")}>
           {detailPanel}
         </div>
       </div>

@@ -15,6 +15,7 @@ import {
   Bell,
   TableProperties,
   Sparkles,
+  PanelRightOpen,
 } from "lucide-react";
 import type { NavigationConfig } from "./navigation.types";
 
@@ -53,6 +54,14 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
             icon: Sparkles,
             description: "Vista interactiva con tarjetas",
             dashboard: { statsLabel: "Alertas interactivas" },
+            requiredPermission: { table: "alerts", action: "read" },
+          },
+          {
+            title: "Maestro-Detalle",
+            href: ROUTES.ALERTS_V3,
+            icon: PanelRightOpen,
+            description: "Vista dividida de maestro-detalle",
+            dashboard: { statsLabel: "Alertas en panel dividido" },
             requiredPermission: { table: "alerts", action: "read" },
           },
         ],

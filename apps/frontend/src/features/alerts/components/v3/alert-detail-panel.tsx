@@ -137,7 +137,7 @@ export function AlertDetailPanel({
   }
 
   return (
-    <div className={cn("space-y-3", className)}>
+    <div className={cn("space-y-3 w-full", className)}>
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
