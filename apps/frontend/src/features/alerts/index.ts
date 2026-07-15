@@ -12,6 +12,9 @@ export { AlertsDashboardV1 } from "./components/v1/AlertsDashboardV1";
 // v2 Components
 export { AlertsDashboardV2 } from "./components/v2/AlertsDashboardV2";
 
+// v3 Components
+export { AlertsDashboardV3 } from "./components/v3/AlertsDashboardV3";
+
 // Hooks
 export {
   useSiembraRetrasada,
