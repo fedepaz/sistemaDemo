@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
 import { cn } from "@/lib/utils";
+import type { ExportColumn } from "@/lib/export/types";
 
 export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
   {
@@ -219,5 +220,57 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
       );
     },
     size: 80,
+  },
+];
+
+export const partidaExportColumns: ExportColumn<ExtendidoDto>[] = [
+  {
+    accessorKey: "partidaId",
+    exportHeader: "Partida",
+    exportValue: (_, row) => `${row.partidaId}${row.indice !== 0 ? `/${row.indice}` : ""}`,
+  },
+  {
+    accessorKey: "nombreEspecie",
+    exportHeader: "Especie",
+  },
+  {
+    accessorKey: "codigoEspecie",
+    exportHeader: "Código",
+  },
+  {
+    accessorKey: "injerto",
+    exportHeader: "Injerto",
+    exportValue: (value) => (value === "N" ? "" : (value as string)),
+  },
+  {
+    accessorKey: "contenedor",
+    exportHeader: "Contenedor",
+  },
+  {
+    accessorKey: "con",
+    exportHeader: "Cantidad",
+  },
+  {
+    accessorKey: "codigoCamaraGerminacion",
+    exportHeader: "Cámara",
+  },
+  {
+    accessorKey: "fechaSugeridaSiembra",
+    exportHeader: "Siembra Sugerida",
+    exportValue: (value) => formatShortDate(value as string),
+  },
+  {
+    accessorKey: "fechaSiembraReal",
+    exportHeader: "Siembra Real",
+    exportValue: (value) => formatShortDate(value as string),
+  },
+  {
+    accessorKey: "fechaEgresoCamara",
+    exportHeader: "Fecha a Extender",
+    exportValue: (value) => formatShortDate(value as string),
+  },
+  {
+    accessorKey: "diasEnCamara",
+    exportHeader: "Días en Cámara",
   },
 ];

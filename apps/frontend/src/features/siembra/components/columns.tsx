@@ -4,6 +4,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
 import { SiembraDto } from "@vivero/shared";
+import type { ExportColumn } from "@/lib/export/types";
 import {
   Tooltip,
   TooltipContent,
@@ -146,5 +147,44 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
       </div>
     ),
     size: 100,
+  },
+];
+
+export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
+  {
+    accessorKey: "partidaId",
+    exportHeader: "Partida",
+    exportValue: (_, row) => `${row.partidaId}${row.indice !== 0 ? `/${row.indice}` : ""}`,
+  },
+  {
+    accessorKey: "nombreEspecie",
+    exportHeader: "Especie",
+  },
+  {
+    accessorKey: "codigoEspecie",
+    exportHeader: "Código",
+  },
+  {
+    accessorKey: "injerto",
+    exportHeader: "Injerto",
+    exportValue: (value) => (value === "N" ? "" : (value as string)),
+  },
+  {
+    accessorKey: "contenedor",
+    exportHeader: "Contenedor",
+  },
+  {
+    accessorKey: "con",
+    exportHeader: "Cantidad",
+  },
+  {
+    accessorKey: "fechaSugeridaSiembra",
+    exportHeader: "Siembra Sugerida",
+    exportValue: (value) => formatShortDate(value as string),
+  },
+  {
+    accessorKey: "fechaSiembraReal",
+    exportHeader: "Siembra Real",
+    exportValue: (value) => formatShortDate(value as string),
   },
 ];

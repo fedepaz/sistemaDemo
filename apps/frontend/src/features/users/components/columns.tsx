@@ -6,6 +6,7 @@ import {
 } from "@/components/data-display/data-table";
 import { UserProfileDto } from "@vivero/shared";
 import { formatShortDate } from "@/lib/date-utils";
+import type { ExportColumn } from "@/lib/export/types";
 
 interface CellProps {
   row?: Row<UserProfileDto>;
@@ -79,5 +80,36 @@ export const userColumns: ColumnDef<UserProfileDto>[] = [
       <SortableHeader column={column}>Creado</SortableHeader>
     ),
     cell: ({ row }) => <CreatedAtCell row={row} />,
+  },
+];
+
+export const userExportColumns: ExportColumn<UserProfileDto>[] = [
+  {
+    accessorKey: "firstName",
+    exportHeader: "Nombre",
+    exportValue: (_, row) => row.firstName || "",
+  },
+  {
+    accessorKey: "lastName",
+    exportHeader: "Apellido",
+    exportValue: (_, row) => row.lastName || "",
+  },
+  {
+    accessorKey: "email",
+    exportHeader: "Correo electrónico",
+  },
+  {
+    accessorKey: "isActive",
+    exportHeader: "Estado",
+    exportValue: (value) => (value ? "Activo" : "Inactivo"),
+  },
+  {
+    accessorKey: "username",
+    exportHeader: "Usuario",
+  },
+  {
+    accessorKey: "createdAt",
+    exportHeader: "Creado",
+    exportValue: (value) => new Date(value as Date).toLocaleDateString("es-AR"),
   },
 ];

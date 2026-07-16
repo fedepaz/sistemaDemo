@@ -56,6 +56,8 @@ import {
 import { ExportDropdown } from "@/components/data-display/data-table/export-dropdown";
 import { DeleteDialog } from "@/components/data-display/data-table/delete-dialog-button";
 import { usePermission } from "@/hooks/usePermission";
+import type { ExportColumn } from "@/lib/export/types";
+import { useExportData } from "@/hooks/useExportData";
 import { useBreakpoint } from "@/hooks/useMediaQuery";
 import {
   Tooltip,
@@ -64,7 +66,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useTableByName } from "@/features/permissions";
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends Record<string, unknown>, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   title: string;
@@ -75,10 +77,6 @@ interface DataTableProps<TData, TValue> {
   onDelete?: (row: TData) => void;
   onCreate?: () => void;
   createLabel?: string;
-  onExport?: (
-    format: "csv" | "excel" | "json" | "pdf",
-    selectedRows: TData[],
-  ) => void;
   loading?: boolean;
   totalCount?: number;
   enableSelection?: boolean;
@@ -89,6 +87,7 @@ interface DataTableProps<TData, TValue> {
   ) => ReactNode;
   toolbarContent?: ReactNode;
   canExecuteLabel?: string;
+  exportColumns?: ExportColumn<TData>[];
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -98,7 +97,7 @@ function HeaderComponent({ titulo }: { titulo: string }) {
     </div>
   );
 }
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Record<string, unknown>, TValue>({
   columns,
   data,
   title,
@@ -109,11 +108,11 @@ export function DataTable<TData, TValue>({
   onDelete,
   onCreate,
   createLabel = "Nuevo",
-  onExport,
   totalCount = 0,
   enableSelection,
   toolbarContent,
   canExecuteLabel = "Cambiar",
+  exportColumns,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -127,6 +126,7 @@ export function DataTable<TData, TValue>({
   const [isBulkDelete, setIsBulkDelete] = useState(false);
   const dataTablePermissions = usePermission(tableName);
   const { data: entity } = useTableByName(tableName);
+  const { exportData } = useExportData<TData>();
 
   const allowedActions = {
     CRUD: {
@@ -387,14 +387,19 @@ export function DataTable<TData, TValue>({
     }
   };
 
-  const handleExport = (format: "csv" | "excel" | "json" | "pdf") => {
-    if (onExport) {
-      const selectedRows = table
-        .getFilteredSelectedRowModel()
-        .rows.map((row) => row.original);
-      const rowsToExport = selectedRows.length > 0 ? selectedRows : data;
-      onExport(format, rowsToExport);
-    }
+  const handleExport = async (format: "csv" | "excel" | "pdf") => {
+    if (!exportColumns || exportColumns.length === 0) return;
+
+    const selectedRows = table
+      .getFilteredSelectedRowModel()
+      .rows.map((row) => row.original);
+    const rowsToExport = selectedRows.length > 0 ? selectedRows : data;
+    await exportData({
+      data: rowsToExport,
+      columns: exportColumns,
+      title,
+      format,
+    });
   };
 
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
@@ -462,6 +467,7 @@ export function DataTable<TData, TValue>({
                 selectedCount={selectedCount}
                 totalCount={data.length}
                 disabled={data.length === 0}
+                hasExportColumns={!!exportColumns && exportColumns.length > 0}
               />
             )}
 
@@ -591,7 +597,12 @@ export function DataTable<TData, TValue>({
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center space-x-2">
-                <label htmlFor="pagination-page-size" className="text-[11px] font-medium">Filas por página</label>
+                <label
+                  htmlFor="pagination-page-size"
+                  className="text-[11px] font-medium"
+                >
+                  Filas por página
+                </label>
                 <select
                   id="pagination-page-size"
                   value={table.getState().pagination.pageSize}

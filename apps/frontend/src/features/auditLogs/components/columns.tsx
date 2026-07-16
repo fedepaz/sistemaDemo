@@ -1,6 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
 import { AuditLogDto } from "@vivero/shared";
+import type { ExportColumn } from "@/lib/export/types";
 import {
   Plus,
   Pencil,
@@ -162,6 +163,41 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
           </span>
         </div>
       );
+    },
+  },
+];
+
+export const auditLogExportColumns: ExportColumn<AuditLogDto>[] = [
+  {
+    accessorKey: "action",
+    exportHeader: "Acción",
+  },
+  {
+    accessorKey: "user",
+    exportHeader: "Usuario",
+    exportValue: (_, row) => row.user?.username || "N/A",
+  },
+  {
+    accessorKey: "changes",
+    exportHeader: "Cambios",
+    exportValue: (_, row) => formatChanges(row.changes),
+  },
+  {
+    accessorKey: "timestamp",
+    exportHeader: "Fecha",
+    exportValue: (value) => new Date(value as Date).toLocaleDateString("es-AR"),
+  },
+  {
+    accessorKey: "ipAddress",
+    exportHeader: "IP",
+    exportValue: (value) => (value as string) || "N/A",
+  },
+  {
+    accessorKey: "userAgent",
+    exportHeader: "Dispositivo",
+    exportValue: (value) => {
+      const ua = (value as string) || "";
+      return /mobile|android|iphone|ipad/i.test(ua.toLowerCase()) ? "Móvil" : "Escritorio";
     },
   },
 ];
