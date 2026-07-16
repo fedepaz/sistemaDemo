@@ -27,8 +27,8 @@ describe("exportToExcel", () => {
     ];
 
     const columns = [
-      { accessorKey: "name" as const, exportHeader: "Nombre" },
-      { accessorKey: "email" as const, exportHeader: "Correo" },
+      { accessorKey: "name" as const, exportHeader: "Nombre", pdfWidth: "*" },
+      { accessorKey: "email" as const, exportHeader: "Correo", pdfWidth: "*" },
     ];
 
     exportToExcel({ data, columns, title: "Usuarios", format: "excel" });

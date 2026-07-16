@@ -88,28 +88,34 @@ export const userExportColumns: ExportColumn<UserProfileDto>[] = [
     accessorKey: "firstName",
     exportHeader: "Nombre",
     exportValue: (_, row) => row.firstName || "",
+    pdfWidth: "15%",
   },
   {
     accessorKey: "lastName",
     exportHeader: "Apellido",
     exportValue: (_, row) => row.lastName || "",
+    pdfWidth: "15%",
   },
   {
     accessorKey: "email",
     exportHeader: "Correo electrónico",
+    pdfWidth: "25%",
   },
   {
     accessorKey: "isActive",
     exportHeader: "Estado",
     exportValue: (value) => (value ? "Activo" : "Inactivo"),
+    pdfWidth: "10%",
   },
   {
     accessorKey: "username",
     exportHeader: "Usuario",
+    pdfWidth: "15%",
   },
   {
     accessorKey: "createdAt",
     exportHeader: "Creado",
     exportValue: (value) => new Date(value as Date).toLocaleDateString("es-AR"),
+    pdfWidth: "20%",
   },
 ];

@@ -26,7 +26,7 @@ describe("useExportData", () => {
 
     result.current.exportData({
       data: [{ name: "test" }],
-      columns: [{ accessorKey: "name", exportHeader: "Name" }],
+      columns: [{ accessorKey: "name", exportHeader: "Name", pdfWidth: "*" }],
       title: "Test",
       format: "csv",
     });
@@ -40,7 +40,7 @@ describe("useExportData", () => {
 
     result.current.exportData({
       data: [{ name: "test" }],
-      columns: [{ accessorKey: "name", exportHeader: "Name" }],
+      columns: [{ accessorKey: "name", exportHeader: "Name", pdfWidth: "*" }],
       title: "Test",
       format: "excel",
     });
@@ -54,7 +54,7 @@ describe("useExportData", () => {
 
     result.current.exportData({
       data: [{ name: "test" }],
-      columns: [{ accessorKey: "name", exportHeader: "Name" }],
+      columns: [{ accessorKey: "name", exportHeader: "Name", pdfWidth: "*" }],
       title: "Test",
       format: "pdf",
     });

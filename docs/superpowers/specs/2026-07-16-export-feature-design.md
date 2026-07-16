@@ -60,6 +60,8 @@ export interface ExportColumn<T> {
   exportHeader: string;
   /** Optional: transform value before export */
   exportValue?: (value: T[keyof T], row: T) => string | number;
+  /** PDF column width — '*' for equal distribution, or a fixed value like '15%' */
+  pdfWidth: string | number;
 }
 
 export interface ExportOptions<T> {
@@ -77,13 +79,14 @@ export interface ExportOptions<T> {
 export const EXPORT_CONFIG = {
   company: {
     name: "Proplanta S.A.",
+    tagline: "El mejor comienzo para sus cultivos",
     logoUrl: "/images/logo-big-removebg-preview.png",
   },
   pdf: {
     primaryColor: "#16a34a",
     headerBg: "#f0fdf4",
     fontSize: 10,
-    margins: { top: 40, bottom: 40, left: 40, right: 40 },
+    margins: { top: 85, bottom: 30, left: 30, right: 30 },
     pageSize: "A4" as const,
   },
   csv: {
@@ -157,12 +160,13 @@ export function useExportData<T extends Record<string, any>>() {
 
 ## PDF Styling
 
-- Company logo header (top-left) — fetched as base64 data URL at runtime, passed via `docDefinition.images`
-- Table title + export date (top-right)
-- Styled table with alternating row colors via `layout.fillColor` (single source of truth)
-- Primary color (#16a34a) for headers
+- Letterhead header: logo (left) + company name + tagline (right), separated by a canvas rule in primaryColor
+- Logo fetched as base64 data URL at runtime, passed via `docDefinition.images`
+- Table title + export date below the header rule
+- Styled table with column widths driven by `pdfWidth` on each `ExportColumn`
+- Alternating row colors via `layout.fillColor` (single source of truth)
+- Primary color (#16a34a) for headers and rule
 - Footer with page numbers
-- Proper margins (40px all sides)
 - A4 page size
 
 ## Dependencies

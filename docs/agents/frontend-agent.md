@@ -298,12 +298,13 @@ All data tables support client-side export (CSV, Excel, PDF) via the `exportColu
 
 ```typescript
 export const myFeatureExportColumns: ExportColumn<MyDto>[] = [
-  { accessorKey: "name", exportHeader: "Nombre" },
-  { accessorKey: "status", exportHeader: "Estado" },
+  { accessorKey: "name", exportHeader: "Nombre", pdfWidth: "20%" },
+  { accessorKey: "status", exportHeader: "Estado", pdfWidth: "10%" },
   {
     accessorKey: "createdAt",
     exportHeader: "Fecha de creación",
     exportValue: (val) => new Date(val as string).toLocaleDateString("es-AR"),
+    pdfWidth: "15%",
   },
 ];
 ```
@@ -322,6 +323,7 @@ export const myFeatureExportColumns: ExportColumn<MyDto>[] = [
 ### Rules
 
 - Export columns are defined alongside display columns in the feature's `columns.tsx`.
+- `pdfWidth` is **required** on every `ExportColumn` — use `"*"` for equal distribution, or a percentage/fixed value for fine control.
 - If `exportColumns` is omitted, the export button is hidden automatically.
 - PDF export uses lazy-loaded pdfmake (~500KB). The logo is fetched as base64 at runtime.
 - CSV and Excel export synchronously from already-loaded table data.

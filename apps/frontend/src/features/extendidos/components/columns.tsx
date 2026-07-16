@@ -228,49 +228,60 @@ export const partidaExportColumns: ExportColumn<ExtendidoDto>[] = [
     accessorKey: "partidaId",
     exportHeader: "Partida",
     exportValue: (_, row) => `${row.partidaId}${row.indice !== 0 ? `/${row.indice}` : ""}`,
+    pdfWidth: "8%",
   },
   {
     accessorKey: "nombreEspecie",
     exportHeader: "Especie",
+    pdfWidth: "14%",
   },
   {
     accessorKey: "codigoEspecie",
     exportHeader: "Código",
+    pdfWidth: "8%",
   },
   {
     accessorKey: "injerto",
     exportHeader: "Injerto",
     exportValue: (value) => (value === "N" ? "" : (value as string)),
+    pdfWidth: "7%",
   },
   {
     accessorKey: "contenedor",
     exportHeader: "Contenedor",
+    pdfWidth: "10%",
   },
   {
     accessorKey: "con",
     exportHeader: "Cantidad",
+    pdfWidth: "8%",
   },
   {
     accessorKey: "codigoCamaraGerminacion",
     exportHeader: "Cámara",
+    pdfWidth: "8%",
   },
   {
     accessorKey: "fechaSugeridaSiembra",
     exportHeader: "Siembra Sugerida",
     exportValue: (value) => formatShortDate(value as string),
+    pdfWidth: "10%",
   },
   {
     accessorKey: "fechaSiembraReal",
     exportHeader: "Siembra Real",
     exportValue: (value) => formatShortDate(value as string),
+    pdfWidth: "10%",
   },
   {
     accessorKey: "fechaEgresoCamara",
     exportHeader: "Fecha a Extender",
     exportValue: (value) => formatShortDate(value as string),
+    pdfWidth: "10%",
   },
   {
     accessorKey: "diasEnCamara",
     exportHeader: "Días en Cámara",
+    pdfWidth: "7%",
   },
 ];

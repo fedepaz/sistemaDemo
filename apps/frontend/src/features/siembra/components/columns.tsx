@@ -155,36 +155,44 @@ export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
     accessorKey: "partidaId",
     exportHeader: "Partida",
     exportValue: (_, row) => `${row.partidaId}${row.indice !== 0 ? `/${row.indice}` : ""}`,
+    pdfWidth: "10%",
   },
   {
     accessorKey: "nombreEspecie",
     exportHeader: "Especie",
+    pdfWidth: "16%",
   },
   {
     accessorKey: "codigoEspecie",
     exportHeader: "Código",
+    pdfWidth: "10%",
   },
   {
     accessorKey: "injerto",
     exportHeader: "Injerto",
     exportValue: (value) => (value === "N" ? "" : (value as string)),
+    pdfWidth: "9%",
   },
   {
     accessorKey: "contenedor",
     exportHeader: "Contenedor",
+    pdfWidth: "12%",
   },
   {
     accessorKey: "con",
     exportHeader: "Cantidad",
+    pdfWidth: "10%",
   },
   {
     accessorKey: "fechaSugeridaSiembra",
     exportHeader: "Siembra Sugerida",
     exportValue: (value) => formatShortDate(value as string),
+    pdfWidth: "13%",
   },
   {
     accessorKey: "fechaSiembraReal",
     exportHeader: "Siembra Real",
     exportValue: (value) => formatShortDate(value as string),
+    pdfWidth: "13%",
   },
 ];

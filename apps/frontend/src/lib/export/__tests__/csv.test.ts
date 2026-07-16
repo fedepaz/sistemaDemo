@@ -27,8 +27,8 @@ describe("exportToCSV", () => {
     ];
 
     const columns = [
-      { accessorKey: "name" as const, exportHeader: "Nombre" },
-      { accessorKey: "email" as const, exportHeader: "Correo" },
+      { accessorKey: "name" as const, exportHeader: "Nombre", pdfWidth: "*" },
+      { accessorKey: "email" as const, exportHeader: "Correo", pdfWidth: "*" },
     ];
 
     exportToCSV({ data, columns, title: "Usuarios", format: "csv" });
@@ -45,6 +45,7 @@ describe("exportToCSV", () => {
         exportHeader: "Nombre completo",
         exportValue: (_: unknown, row: { firstName: string; lastName: string }) =>
           `${row.firstName} ${row.lastName}`,
+        pdfWidth: "*",
       },
     ];
 

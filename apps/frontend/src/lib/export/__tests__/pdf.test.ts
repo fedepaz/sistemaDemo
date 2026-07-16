@@ -50,8 +50,8 @@ describe("exportToPDF", () => {
     ];
 
     const columns = [
-      { accessorKey: "name" as const, exportHeader: "Nombre" },
-      { accessorKey: "email" as const, exportHeader: "Correo" },
+      { accessorKey: "name" as const, exportHeader: "Nombre", pdfWidth: "*" },
+      { accessorKey: "email" as const, exportHeader: "Correo", pdfWidth: "*" },
     ];
 
     await expect(
@@ -66,8 +66,8 @@ describe("exportToPDF", () => {
 
     const data = [{ name: "Juan", email: "juan@test.com" }];
     const columns = [
-      { accessorKey: "name" as const, exportHeader: "Nombre" },
-      { accessorKey: "email" as const, exportHeader: "Correo" },
+      { accessorKey: "name" as const, exportHeader: "Nombre", pdfWidth: "*" },
+      { accessorKey: "email" as const, exportHeader: "Correo", pdfWidth: "*" },
     ];
 
     await expect(
@@ -82,8 +82,8 @@ describe("exportToPDF", () => {
 
     const data = [{ name: "Juan", email: "juan@test.com" }];
     const columns = [
-      { accessorKey: "name" as const, exportHeader: "Nombre" },
-      { accessorKey: "email" as const, exportHeader: "Correo" },
+      { accessorKey: "name" as const, exportHeader: "Nombre", pdfWidth: "*" },
+      { accessorKey: "email" as const, exportHeader: "Correo", pdfWidth: "*" },
     ];
 
     await expect(
