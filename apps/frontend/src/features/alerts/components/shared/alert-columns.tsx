@@ -3,6 +3,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
+import type { ExportColumn } from "@/lib/export/types";
 import {
   SiembraRetrasadaDto,
   FaltaGerminacionDto,
@@ -246,4 +247,42 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
     },
     size: 100,
   },
+];
+
+// ============================================================================
+// EXPORT COLUMNS
+// ============================================================================
+
+export const siembraRetrasadaExportColumns: ExportColumn<SiembraRetrasadaDto>[] = [
+  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
+  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
+  { accessorKey: "fechaSugeridaSiembra", exportHeader: "Fecha Sug. Siembra", pdfWidth: "20%" },
+  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "16%" },
+  { accessorKey: "con", exportHeader: "Cantidad", pdfWidth: "10%" },
+];
+
+export const faltaGerminacionExportColumns: ExportColumn<FaltaGerminacionDto>[] = [
+  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "12%" },
+  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "15%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "20%" },
+  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "18%" },
+  { accessorKey: "invernadero", exportHeader: "Invernadero", pdfWidth: "18%" },
+];
+
+export const faltantePlantasExportColumns: ExportColumn<FaltantePlantasDto>[] = [
+  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
+  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
+  { accessorKey: "solicitadas", exportHeader: "Solicitadas", pdfWidth: "14%" },
+  { accessorKey: "germinadasTotales", exportHeader: "Germinadas", pdfWidth: "14%" },
+  { accessorKey: "invernadero", exportHeader: "Invernadero", pdfWidth: "14%" },
+];
+
+export const faltaPreExpedicionExportColumns: ExportColumn<FaltaPreExpedicionDto>[] = [
+  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "12%" },
+  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "15%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "20%" },
+  { accessorKey: "fechaEntrega", exportHeader: "Fecha Entrega", pdfWidth: "18%" },
+  { accessorKey: "invernadero", exportHeader: "Invernadero", pdfWidth: "18%" },
 ];

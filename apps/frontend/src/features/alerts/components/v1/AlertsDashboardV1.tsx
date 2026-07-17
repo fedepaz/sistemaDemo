@@ -10,6 +10,10 @@ import {
   faltaGerminacionColumns,
   faltantePlantasColumns,
   faltaPreExpedicionColumns,
+  siembraRetrasadaExportColumns,
+  faltaGerminacionExportColumns,
+  faltantePlantasExportColumns,
+  faltaPreExpedicionExportColumns,
 } from "../shared/alert-columns";
 import {
   useSiembraRetrasada,
@@ -19,12 +23,15 @@ import {
 } from "../../hooks/useAlerts";
 import { AlertDashboardSkeleton } from "../shared/alert-dashboard-skeleton";
 
+import type { ExportColumn } from "@/lib/export/types";
+
 function AlertSection({
   title,
   description,
   count,
   columns,
   data,
+  exportColumns,
 }: {
   title: string;
   description: string;
@@ -33,6 +40,8 @@ function AlertSection({
   columns: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  exportColumns?: ExportColumn<any>[];
 }) {
   return (
     <div className="space-y-2">
@@ -50,6 +59,7 @@ function AlertSection({
         description={description}
         columns={columns}
         data={data}
+        exportColumns={exportColumns}
       />
     </div>
   );
@@ -99,6 +109,7 @@ function AlertsContent() {
               count={siembraRetrasada.length}
               columns={siembraRetrasadaColumns}
               data={siembraRetrasada}
+              exportColumns={siembraRetrasadaExportColumns}
             />
           )}
 
@@ -109,6 +120,7 @@ function AlertsContent() {
               count={faltaGerminacion.length}
               columns={faltaGerminacionColumns}
               data={faltaGerminacion}
+              exportColumns={faltaGerminacionExportColumns}
             />
           )}
 
@@ -119,6 +131,7 @@ function AlertsContent() {
               count={faltantePlantas.length}
               columns={faltantePlantasColumns}
               data={faltantePlantas}
+              exportColumns={faltantePlantasExportColumns}
             />
           )}
 
@@ -129,6 +142,7 @@ function AlertsContent() {
               count={faltaPreExpedicion.length}
               columns={faltaPreExpedicionColumns}
               data={faltaPreExpedicion}
+              exportColumns={faltaPreExpedicionExportColumns}
             />
           )}
         </>
