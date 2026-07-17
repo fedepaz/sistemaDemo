@@ -1,6 +1,7 @@
 import pdfMakeModule from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import type { ExportOptions } from "./types";
+import { poppinsVfs } from "./fonts/poppins-vfs";
+import type { ExportOptions, CompanyConfig } from "./types";
 import { generateFilename } from "./file-utils";
 import { EXPORT_CONFIG } from "@/constants/export-config";
 
@@ -9,8 +10,33 @@ import { EXPORT_CONFIG } from "@/constants/export-config";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const pdfMake = pdfMakeModule as any;
 pdfMake.addVirtualFileSystem(pdfFonts);
+pdfMake.addVirtualFileSystem(poppinsVfs);
+
+// Register Poppins alongside default Roboto
+pdfMake.addFonts({
+  Poppins: {
+    normal: "Poppins-Regular.ttf",
+    bold: "Poppins-Bold.ttf",
+    italics: "Poppins-Regular.ttf",
+    bolditalics: "Poppins-Bold.ttf",
+  },
+});
 
 const LOGO_KEY = "company-logo";
+
+function resolveCompany(cfg?: CompanyConfig) {
+  return {
+    name: cfg?.name || EXPORT_CONFIG.company.name,
+    tagline: EXPORT_CONFIG.company.tagline,
+    address: cfg?.address,
+    city: cfg?.city,
+    province: cfg?.province,
+    phone: cfg?.phone,
+    email: cfg?.email,
+    taxId: cfg?.taxId,
+    country: cfg?.country,
+  };
+}
 
 async function fetchLogoAsDataURL(): Promise<string | null> {
   try {
@@ -31,23 +57,41 @@ async function fetchLogoAsDataURL(): Promise<string | null> {
 export async function exportToPDF<T extends Record<string, unknown>>(
   options: ExportOptions<T>,
 ): Promise<void> {
-  const { data, columns, title, filename } = options;
+  const { data, columns, title, filename, companyConfig } = options;
   const finalFilename = filename ?? generateFilename(title, "pdf");
 
-  const { primaryColor, headerBg, fontSize, margins, pageSize } =
-    EXPORT_CONFIG.pdf;
+  const {
+    primary,
+    primaryFg,
+    accent,
+    mutedFg,
+    border,
+    background,
+    fontSize,
+    margins,
+    pageSize,
+  } = EXPORT_CONFIG.pdf;
 
+  const company = resolveCompany(companyConfig);
   const logoDataURL = await fetchLogoAsDataURL();
 
   // A4 width = 595pt, minus left+right margins = available content width
   const contentWidth = 595 - margins.left - margins.right;
+
+  // Build address line from config (if available)
+  const addressParts = [company.address, company.city, company.province].filter(
+    Boolean,
+  );
+  const addressLine = addressParts.join(", ");
+  const contactParts = [company.phone, company.email].filter(Boolean);
+  const contactLine = contactParts.join(" | ");
 
   // Build table header
   const tableHeader = columns.map((col) => ({
     text: col.exportHeader,
     style: "tableHeader",
     bold: true,
-    color: "#ffffff",
+    color: primaryFg,
   }));
 
   // Build table body
@@ -65,7 +109,49 @@ export async function exportToPDF<T extends Record<string, unknown>>(
       };
     }),
   );
+
   const HEADER_INSET = 15; // tighter than body margins — logo/title sit closer to the edge
+
+  // Right column: company name + address/tagline
+  const rightColumn: Array<Record<string, unknown>> = [
+    {
+      text: company.name,
+      font: "Poppins",
+      alignment: "right" as const,
+      fontSize: fontSize + 5,
+      bold: true,
+      color: primary,
+    },
+  ];
+
+  if (addressLine) {
+    rightColumn.push({
+      text: addressLine,
+      alignment: "right" as const,
+      fontSize: fontSize,
+      color: mutedFg,
+      margin: [0, 1, 0, 0] as [number, number, number, number],
+    });
+  }
+  if (contactLine) {
+    rightColumn.push({
+      text: contactLine,
+      alignment: "right" as const,
+      fontSize: fontSize,
+      color: mutedFg,
+      margin: [0, 1, 0, 0] as [number, number, number, number],
+    });
+  }
+  if (!addressLine && !contactLine) {
+    // Fallback: show tagline when no config data
+    rightColumn.push({
+      text: company.tagline ?? "Sistema de Gestión",
+      alignment: "right" as const,
+      fontSize: fontSize,
+      color: mutedFg,
+      margin: [0, 2, 0, 0] as [number, number, number, number],
+    });
+  }
 
   // Letterhead: logo left, company name + tagline right, separated by a rule
   const headerBlock = {
@@ -83,22 +169,7 @@ export async function exportToPDF<T extends Record<string, unknown>>(
             : { text: "", width: 90 },
           {
             width: "*",
-            stack: [
-              {
-                text: EXPORT_CONFIG.company.name,
-                alignment: "right" as const,
-                fontSize: fontSize + 3,
-                bold: true,
-                color: primaryColor,
-              },
-              {
-                text: EXPORT_CONFIG.company.tagline ?? "Sistema de Gestión",
-                alignment: "right" as const,
-                fontSize: fontSize - 2,
-                color: "#6b7280",
-                margin: [0, 2, 0, 0] as [number, number, number, number],
-              },
-            ],
+            stack: rightColumn,
           },
         ],
         columnGap: 12,
@@ -112,7 +183,7 @@ export async function exportToPDF<T extends Record<string, unknown>>(
             x2: contentWidth,
             y2: 0,
             lineWidth: 1,
-            lineColor: primaryColor,
+            lineColor: primary,
           },
         ],
         margin: [0, 12, 0, 0] as [number, number, number, number],
@@ -120,10 +191,23 @@ export async function exportToPDF<T extends Record<string, unknown>>(
     ],
   };
 
+  // Build subject line for metadata
+  const subjectParts = [company.taxId, company.address].filter(Boolean);
+  const subject = subjectParts.join(" - ");
+
   const docDefinition = {
     pageSize,
     pageMargins: [margins.left, margins.top, margins.right, margins.bottom],
     ...(logoDataURL && { images: { [LOGO_KEY]: logoDataURL } }),
+    info: {
+      title,
+      author: company.name,
+      ...(subject && { subject }),
+      creator: "Sistema de Gestión",
+    },
+    defaultStyle: {
+      font: "Roboto",
+    },
     header: headerBlock,
     content: [
       {
@@ -141,39 +225,38 @@ export async function exportToPDF<T extends Record<string, unknown>>(
           widths: columns.map((col) => col.pdfWidth),
           body: [tableHeader, ...tableBody],
         },
+        width: "100%",
         layout: {
           hLineWidth: (i: number) => (i === 0 || i === 1 ? 1 : 0.5),
           vLineWidth: () => 0.5,
-          hLineColor: () => "#e5e7eb",
-          vLineColor: () => "#e5e7eb",
+          hLineColor: () => border,
+          vLineColor: () => border,
           fillColor: (rowIndex: number) =>
-            rowIndex === 0
-              ? primaryColor
-              : rowIndex % 2 === 0
-                ? headerBg
-                : "#ffffff",
-          paddingLeft: () => 8,
-          paddingRight: () => 8,
-          paddingTop: () => 6,
-          paddingBottom: () => 6,
+            rowIndex === 0 ? primary : rowIndex % 2 === 0 ? accent : background,
+          paddingLeft: () => 1,
+          paddingRight: () => 1,
+          paddingTop: () => 3,
+          paddingBottom: () => 3,
         },
       },
     ],
     styles: {
       title: {
+        font: "Poppins",
         fontSize: fontSize + 6,
         bold: true,
-        color: primaryColor,
+        color: primary,
       },
       date: {
         fontSize,
         margin: [0, 0, 0, 16] as [number, number, number, number],
-        color: "#6b7280",
+        color: mutedFg,
       },
       tableHeader: {
+        font: "Poppins",
         fontSize,
         bold: true,
-        color: "#ffffff",
+        color: primaryFg,
       },
       tableRowEven: {
         fontSize,
@@ -183,11 +266,40 @@ export async function exportToPDF<T extends Record<string, unknown>>(
       },
     },
     footer: ((currentPage: number, pageCount: number) => ({
-      text: `Página ${currentPage} de ${pageCount}`,
-      alignment: "center" as const,
-      margin: [0, 10, 0, 0],
-      fontSize: fontSize - 2,
-      color: "#9ca3af",
+      margin: [30, 0, 30, 15] as [number, number, number, number],
+      stack: [
+        {
+          canvas: [
+            {
+              type: "line" as const,
+              x1: 0,
+              y1: 0,
+              x2: contentWidth,
+              y2: 0,
+              lineWidth: 0.5,
+              lineColor: border,
+            },
+          ],
+        },
+        {
+          columns: [
+            {
+              text: `Página ${currentPage} de ${pageCount}`,
+              fontSize: fontSize - 2,
+              color: mutedFg,
+            },
+            {
+              text: company.name,
+              font: "Poppins",
+              alignment: "right" as const,
+              fontSize: fontSize - 2,
+              bold: true,
+              color: primary,
+            },
+          ],
+          margin: [0, 6, 0, 0] as [number, number, number, number],
+        },
+      ],
     })) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
   };
 

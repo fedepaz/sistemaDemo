@@ -22,12 +22,17 @@ vi.mock("pdfmake/build/pdfmake", () => ({
       download: vi.fn(),
     })),
     addVirtualFileSystem: vi.fn(),
+    addFonts: vi.fn(),
   },
 }));
 
 vi.mock("pdfmake/build/vfs_fonts", () => ({
   default: { pdfMake: { vfs: {} } },
   pdfMake: { vfs: {} },
+}));
+
+vi.mock("../fonts/poppins-vfs", () => ({
+  poppinsVfs: {},
 }));
 
 describe("exportToPDF", () => {
@@ -78,6 +83,51 @@ describe("exportToPDF", () => {
   it("creates PDF even when fetch throws", async () => {
     mockFetch.mockRejectedValue(new Error("Network error"));
 
+    const { exportToPDF } = await import("../pdf");
+
+    const data = [{ name: "Juan", email: "juan@test.com" }];
+    const columns = [
+      { accessorKey: "name" as const, exportHeader: "Nombre", pdfWidth: "*" },
+      { accessorKey: "email" as const, exportHeader: "Correo", pdfWidth: "*" },
+    ];
+
+    await expect(
+      exportToPDF({ data, columns, title: "Test", format: "pdf" })
+    ).resolves.toBeUndefined();
+  });
+
+  it("creates PDF with company config data", async () => {
+    const { exportToPDF } = await import("../pdf");
+
+    const data = [{ name: "Juan", email: "juan@test.com" }];
+    const columns = [
+      { accessorKey: "name" as const, exportHeader: "Nombre", pdfWidth: "*" },
+      { accessorKey: "email" as const, exportHeader: "Correo", pdfWidth: "*" },
+    ];
+
+    const companyConfig = {
+      name: "PROPLANTA S.A.",
+      address: "QUINTANA 4690",
+      city: "EL ALGARROBAL LAS HERAS",
+      province: "MENDOZA",
+      phone: "(0261) 490-7017",
+      email: "proplanta@com.ar",
+      taxId: "30-69470646-7",
+      country: "ARGENTINA",
+    };
+
+    await expect(
+      exportToPDF({
+        data,
+        columns,
+        title: "Usuarios",
+        format: "pdf",
+        companyConfig,
+      })
+    ).resolves.toBeUndefined();
+  });
+
+  it("creates PDF with fallback when companyConfig is undefined", async () => {
     const { exportToPDF } = await import("../pdf");
 
     const data = [{ name: "Juan", email: "juan@test.com" }];

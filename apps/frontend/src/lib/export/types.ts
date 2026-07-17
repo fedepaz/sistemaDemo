@@ -13,10 +13,24 @@ export interface ExportColumn<T> {
   pdfWidth: string | number;
 }
 
+/** Company information from the legacy config table — used in PDF header/footer/metadata */
+export interface CompanyConfig {
+  name?: string;
+  address?: string;
+  city?: string;
+  province?: string;
+  phone?: string;
+  email?: string;
+  taxId?: string;
+  country?: string;
+}
+
 export interface ExportOptions<T> {
   data: T[];
   columns: ExportColumn<T>[];
   title: string;
   format: ExportFormat;
   filename?: string;
+  /** Company config from legacy DB — used for PDF header, footer, and metadata */
+  companyConfig?: CompanyConfig;
 }

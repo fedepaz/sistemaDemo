@@ -26,17 +26,21 @@ Implement client-side data export (CSV, Excel, PDF) for all data tables. CSV and
 ```
 apps/frontend/src/
 ├── constants/
-│   └── export-config.ts          # Centralized export/branding config
+│   └── export-config.ts          # Centralized export/branding config (imports PDF_THEME)
 ├── lib/
 │   └── export/
 │       ├── index.ts              # Barrel export
 │       ├── csv.ts                # CSV generator (papaparse)
 │       ├── excel.ts              # Excel generator (xlsx)
 │       ├── pdf.ts                # PDF generator (pdfmake, lazy-loaded)
-│       ├── types.ts              # Shared export types
-│       └── file-utils.ts         # Filename generation, download trigger
+│       ├── types.ts              # Shared export types (ExportColumn, CompanyConfig)
+│       ├── file-utils.ts         # Filename generation, download trigger
+│       ├── pdf-theme.ts          # PDF color palette (⚠️ keep in sync with globals.css)
+│       ├── theme.ts              # OKLCH-to-hex converter (runtime theme extraction)
+│       └── fonts/
+│           └── poppins-vfs.ts    # Poppins font as base64 VFS for pdfmake
 ├── hooks/
-│   └── useExportData.ts          # Hook that orchestrates exports
+│   └── useExportData.ts          # Hook that orchestrates exports + reads company config
 ├── components/data-display/data-table/
 │   ├── export-dropdown.tsx       # Wire to useExportData
 │   └── data-table.tsx            # Pass column mappings
@@ -64,18 +68,34 @@ export interface ExportColumn<T> {
   pdfWidth: string | number;
 }
 
+/** Company information from the legacy config table — used in PDF header/footer/metadata */
+export interface CompanyConfig {
+  name?: string;
+  address?: string;
+  city?: string;
+  province?: string;
+  phone?: string;
+  email?: string;
+  taxId?: string;
+  country?: string;
+}
+
 export interface ExportOptions<T> {
   data: T[];
   columns: ExportColumn<T>[];
   title: string;
   format: ExportFormat;
   filename?: string;
+  /** Company config from legacy DB — used for PDF header, footer, and metadata */
+  companyConfig?: CompanyConfig;
 }
 ```
 
 ### `src/constants/export-config.ts`
 
 ```ts
+import { PDF_THEME } from "@/lib/export/pdf-theme";
+
 export const EXPORT_CONFIG = {
   company: {
     name: "Proplanta S.A.",
@@ -83,9 +103,8 @@ export const EXPORT_CONFIG = {
     logoUrl: "/images/logo-big-removebg-preview.png",
   },
   pdf: {
-    primaryColor: "#16a34a",
-    headerBg: "#f0fdf4",
-    fontSize: 10,
+    ...PDF_THEME,
+    fontSize: 6,
     margins: { top: 85, bottom: 30, left: 30, right: 30 },
     pageSize: "A4" as const,
   },
@@ -106,8 +125,10 @@ DataTable (exportColumns prop)
 ExportDropdown → handleExport("csv" | "excel" | "pdf")
   ↓
 useExportData.exportData({ data, columns, format, title })
+  │ reads company config from legacy DB (useQuery, non-suspending)
   ↓
 lib/export/csv.ts | excel.ts | pdf.ts
+  │ pdf.ts receives companyConfig for dynamic header/footer/metadata
   ↓
 Browser download (blob URL)
 ```
@@ -135,24 +156,63 @@ Each feature's `columns.tsx` adds `exportHeader`:
 ### `src/hooks/useExportData.ts`
 
 ```ts
-export function useExportData<T extends Record<string, any>>() {
-  const exportData = useCallback(async (options: ExportOptions<T>) => {
-    const { data, columns, title, format, filename } = options;
-    const finalFilename = filename ?? generateFilename(title, format);
+"use client";
 
-    switch (format) {
-      case "csv":
-        exportToCSV({ data, columns, filename: finalFilename });
-        break;
-      case "excel":
-        exportToExcel({ data, columns, filename: finalFilename });
-        break;
-      case "pdf":
-        const { exportToPDF } = await import("@/lib/export/pdf");
-        exportToPDF({ data, columns, title, filename: finalFilename });
-        break;
-    }
-  }, []);
+import { useCallback, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { ExportOptions, CompanyConfig } from "@/lib/export/types";
+import { exportToCSV } from "@/lib/export/csv";
+import { exportToExcel } from "@/lib/export/excel";
+import { configService } from "@/features/dashboard/api/configService";
+import { configQueryKeys } from "@/lib/queryKeys";
+
+// Maps legacy config keys to CompanyConfig fields
+const CONFIG_KEY_MAP: Record<string, keyof CompanyConfig> = {
+  Nombre: "name",
+  Direccion: "address",
+  Localidad: "city",
+  Provincia: "province",
+  Telefono: "phone",
+  Mail: "email",
+  Cuit: "taxId",
+  Pais: "country",
+};
+
+function buildCompanyConfig(config: Array<{ codigo: string; nombre: string }>): CompanyConfig {
+  const map = Object.fromEntries(config.map((c) => [c.codigo, c.nombre]));
+  const result: CompanyConfig = {};
+  for (const [key, field] of Object.entries(CONFIG_KEY_MAP)) {
+    const value = map[key];
+    if (value) result[field] = value;
+  }
+  return result;
+}
+
+export function useExportData<T extends Record<string, unknown>>() {
+  const { data: config = [] } = useQuery({
+    queryKey: configQueryKeys.all(),
+    queryFn: configService.fetchAll,
+    retry: false,
+    throwOnError: false,  // Config is optional — never crash the DataTable
+    staleTime: Infinity,
+  });
+
+  const companyConfig = useMemo(() => buildCompanyConfig(config), [config]);
+
+  const exportData = useCallback(
+    async (options: ExportOptions<T>) => {
+      const { format } = options;
+      switch (format) {
+        case "csv":  exportToCSV(options); break;
+        case "excel": exportToExcel(options); break;
+        case "pdf":
+          const { exportToPDF } = await import("@/lib/export/pdf");
+          exportToPDF({ ...options, companyConfig });
+          break;
+      }
+    },
+    [companyConfig],
+  );
 
   return { exportData };
 }
@@ -160,14 +220,17 @@ export function useExportData<T extends Record<string, any>>() {
 
 ## PDF Styling
 
-- Letterhead header: logo (left) + company name + tagline (right), separated by a canvas rule in primaryColor
+- Letterhead header: logo (left) + company name + address/contact info (right), separated by a canvas rule in primary color
 - Logo fetched as base64 data URL at runtime, passed via `docDefinition.images`
 - Table title + export date below the header rule
 - Styled table with column widths driven by `pdfWidth` on each `ExportColumn`
 - Alternating row colors via `layout.fillColor` (single source of truth)
-- Primary color (#16a34a) for headers and rule
-- Footer with page numbers
-- A4 page size
+- Dynamic company config from legacy `config` table (fallback to defaults if unavailable)
+- PDF metadata: title, author (company name), subject (tax ID + address), creator
+- Custom Poppins font for headings/brand, Roboto for body text (Poppins embedded as base64 VFS)
+- Footer with indigo rule line + page numbers + company name
+- A4 page size, compact cell padding for 6pt content font
+- Theme colors synced from `globals.css` via `pdf-theme.ts` (⚠️ keep in sync)
 
 ## Dependencies
 

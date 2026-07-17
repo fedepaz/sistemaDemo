@@ -162,8 +162,10 @@ src/
 │   └── data-display/        # Generic tables, charts, visualizations
 ├── lib/                     # Utilities and configurations
 │   └── export/              # CSV, Excel, PDF generators (lazy-loaded)
+│       ├── pdf-theme.ts     # PDF color palette (⚠️ keep in sync with globals.css)
+│       └── fonts/           # Embedded custom fonts (Poppins VFS)
 ├── hooks/                   # truly global hooks
-│   └── useExportData.ts     # Export orchestrator hook
+│   └── useExportData.ts     # Export orchestrator + company config reader
 ├── constants/               # Centralized configs (export-config.ts)
 ├── stores/                  # global state
 ├── providers/               # AppProviders
@@ -325,10 +327,14 @@ export const myFeatureExportColumns: ExportColumn<MyDto>[] = [
 - Export columns are defined alongside display columns in the feature's `columns.tsx`.
 - `pdfWidth` is **required** on every `ExportColumn` — use `"*"` for equal distribution, or a percentage/fixed value for fine control.
 - If `exportColumns` is omitted, the export button is hidden automatically.
-- PDF export uses lazy-loaded pdfmake (~500KB). The logo is fetched as base64 at runtime.
+- PDF export uses lazy-loaded pdfmake (~500KB + ~400KB Poppins fonts). The logo is fetched as base64 at runtime.
 - CSV and Excel export synchronously from already-loaded table data.
 - Filenames are auto-generated: `{TableName}_{YYYY-MM-DD}.{ext}`.
 - Centralized branding config lives in `src/constants/export-config.ts`.
+- PDF theme colors live in `src/lib/export/pdf-theme.ts` — **⚠️ keep in sync with `globals.css` when changing theme**.
+- Company info is pulled dynamically from the legacy `config` table (non-suspending, graceful fallback to defaults if unavailable).
+- PDF metadata includes company name (author), tax ID + address (subject), and "Sistema de Gestión" (creator).
+- Custom fonts: Poppins (headings/brand) embedded as base64 VFS, Roboto (body) built-in to pdfmake.
 
 ### Utility Standards: Date Handling
 

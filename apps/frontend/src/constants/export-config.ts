@@ -1,4 +1,5 @@
 // src/constants/export-config.ts
+import { PDF_THEME } from "@/lib/export/pdf-theme";
 
 export const EXPORT_CONFIG = {
   company: {
@@ -7,9 +8,8 @@ export const EXPORT_CONFIG = {
     logoUrl: "/images/logo-big-removebg-preview.png",
   },
   pdf: {
-    primaryColor: "#16a34a",
-    headerBg: "#f0fdf4",
-    fontSize: 10,
+    ...PDF_THEME,
+    fontSize: 6,
     margins: { top: 85, bottom: 30, left: 30, right: 30 },
     pageSize: "A4" as const,
   },
