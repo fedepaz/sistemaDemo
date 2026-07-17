@@ -12,7 +12,7 @@ import {
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { partidaSiembraColumns } from "./columns";
+import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
 import { useSiembraPartidaMutation } from "../hooks/useSiembraPartidaMutation";
@@ -94,7 +94,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         description="Gestión y monitoreo de bandejas en proceso de siembra"
         tableName="siembra"
         totalCount={partidas.length}
-        onExport={handleExport}
+        exportColumns={partidaSiembraExportColumns}
         onView={handleView}
         onEdit={handleEdit}
         canExecuteLabel="Asignar Ubicación"

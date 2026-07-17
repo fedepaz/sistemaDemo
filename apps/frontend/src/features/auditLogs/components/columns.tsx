@@ -1,6 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
 import { AuditLogDto } from "@vivero/shared";
+import type { ExportColumn } from "@/lib/export/types";
 import {
   Plus,
   Pencil,
@@ -163,5 +164,46 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
         </div>
       );
     },
+  },
+];
+
+export const auditLogExportColumns: ExportColumn<AuditLogDto>[] = [
+  {
+    accessorKey: "action",
+    exportHeader: "Acción",
+    pdfWidth: "12%",
+  },
+  {
+    accessorKey: "user",
+    exportHeader: "Usuario",
+    exportValue: (_, row) => row.user?.username || "N/A",
+    pdfWidth: "15%",
+  },
+  {
+    accessorKey: "changes",
+    exportHeader: "Cambios",
+    exportValue: (_, row) => formatChanges(row.changes),
+    pdfWidth: "30%",
+  },
+  {
+    accessorKey: "timestamp",
+    exportHeader: "Fecha",
+    exportValue: (value) => new Date(value as Date).toLocaleDateString("es-AR"),
+    pdfWidth: "15%",
+  },
+  {
+    accessorKey: "ipAddress",
+    exportHeader: "IP",
+    exportValue: (value) => (value as string) || "N/A",
+    pdfWidth: "12%",
+  },
+  {
+    accessorKey: "userAgent",
+    exportHeader: "Dispositivo",
+    exportValue: (value) => {
+      const ua = (value as string) || "";
+      return /mobile|android|iphone|ipad/i.test(ua.toLowerCase()) ? "Móvil" : "Escritorio";
+    },
+    pdfWidth: "16%",
   },
 ];

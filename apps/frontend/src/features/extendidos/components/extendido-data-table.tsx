@@ -4,7 +4,7 @@
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { ExtendidosViewForm } from "./extendido-view-form";
-import { partidaColumns } from "./columns";
+import { partidaColumns, partidaExportColumns } from "./columns";
 import {
   AsignarUbicacionDto,
   AsignarUbicacionDtoSchema,
@@ -197,11 +197,11 @@ export function ExtendidoDataTable({
         description="Gestión y monitoreo de bandejas en proceso de extendido"
         tableName="extendidos"
         totalCount={filteredPartidas.length}
-        onExport={handleExport}
         onView={handleExtendidoView}
         onEdit={handleEdit}
         toolbarContent={toolbarContent}
         canExecuteLabel="Asignar Ubicación"
+        exportColumns={partidaExportColumns}
       />
 
       {selectedPartida && (

@@ -161,7 +161,12 @@ src/
 │   ├── dashboard/           # Layout components
 │   └── data-display/        # Generic tables, charts, visualizations
 ├── lib/                     # Utilities and configurations
+│   └── export/              # CSV, Excel, PDF generators (lazy-loaded)
+│       ├── pdf-theme.ts     # PDF color palette (⚠️ keep in sync with globals.css)
+│       └── fonts/           # Embedded custom fonts (Poppins VFS)
 ├── hooks/                   # truly global hooks
+│   └── useExportData.ts     # Export orchestrator + company config reader
+├── constants/               # Centralized configs (export-config.ts)
 ├── stores/                  # global state
 ├── providers/               # AppProviders
 └── types/                   # global or shared types
@@ -285,7 +290,53 @@ Components that fetch data asynchronously must be wrapped in a `<Suspense>` boun
 - **Virtualized Rendering**: Use for large lists (10,000+ items).
 - **Mobile-first**: Optimistic updates and offline-first handling.
 
-## Utility Standards: Date Handling
+## Data Export Pattern
+
+All data tables support client-side export (CSV, Excel, PDF) via the `exportColumns` prop.
+
+### Adding Export to a New Table
+
+1. **Define export columns** in the feature's `columns.tsx`:
+
+```typescript
+export const myFeatureExportColumns: ExportColumn<MyDto>[] = [
+  { accessorKey: "name", exportHeader: "Nombre", pdfWidth: "20%" },
+  { accessorKey: "status", exportHeader: "Estado", pdfWidth: "10%" },
+  {
+    accessorKey: "createdAt",
+    exportHeader: "Fecha de creación",
+    exportValue: (val) => new Date(val as string).toLocaleDateString("es-AR"),
+    pdfWidth: "15%",
+  },
+];
+```
+
+2. **Pass `exportColumns`** to `<DataTable>`:
+
+```typescript
+<DataTable
+  columns={myColumns}
+  data={data}
+  exportColumns={myFeatureExportColumns}
+  ...
+/>
+```
+
+### Rules
+
+- Export columns are defined alongside display columns in the feature's `columns.tsx`.
+- `pdfWidth` is **required** on every `ExportColumn` — use `"*"` for equal distribution, or a percentage/fixed value for fine control.
+- If `exportColumns` is omitted, the export button is hidden automatically.
+- PDF export uses lazy-loaded pdfmake (~500KB + ~400KB Poppins fonts). The logo is fetched as base64 at runtime.
+- CSV and Excel export synchronously from already-loaded table data.
+- Filenames are auto-generated: `{TableName}_{YYYY-MM-DD}.{ext}`.
+- Centralized branding config lives in `src/constants/export-config.ts`.
+- PDF theme colors live in `src/lib/export/pdf-theme.ts` — **⚠️ keep in sync with `globals.css` when changing theme**.
+- Company info is pulled dynamically from the legacy `config` table (non-suspending, graceful fallback to defaults if unavailable).
+- PDF metadata includes company name (author), tax ID + address (subject), and "Sistema de Gestión" (creator).
+- Custom fonts: Poppins (headings/brand) embedded as base64 VFS, Roboto (body) built-in to pdfmake.
+
+### Utility Standards: Date Handling
 
 - **Week Calculation**: The `getISOWeek` utility is optimized for agricultural sowing cycles, using Wednesday as the reference day to align with project-specific planning weeks.
 
