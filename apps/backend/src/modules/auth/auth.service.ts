@@ -55,6 +55,7 @@ export class AuthService {
     }
 
     // hash password
+    // Admin-setup flow: users receive a default password and must change it on first login
     const passwordHash = await bcrypt.hash(
       this.config.get('config.defaultPassword') || '123456',
       this.BCRYPT_ROUNDS,
@@ -80,8 +81,10 @@ export class AuthService {
 
     // generate tokens
     const tokens = await this.generateTokens(userPayload);
-    const isDefaultPassword =
-      user.passwordHash === this.config.get('config.defaultPassword');
+    const isDefaultPassword = await bcrypt.compare(
+      this.config.get('config.defaultPassword') || '',
+      user.passwordHash,
+    );
 
     return {
       user: {
@@ -126,8 +129,10 @@ export class AuthService {
       tenantId: user.tenantId,
     });
 
-    const isDefaultPassword =
-      dto.password === this.config.get('config.defaultPassword');
+    const isDefaultPassword = await bcrypt.compare(
+      this.config.get('config.defaultPassword') || '',
+      user.passwordHash,
+    );
 
     return {
       user: {

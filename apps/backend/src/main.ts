@@ -10,6 +10,7 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
 
   const configService = app.get(ConfigService);
+  const logger = app.get(Logger);
 
   const port = Number(process.env.PORT);
 
@@ -34,14 +35,14 @@ async function bootstrap() {
 
   try {
     await app.listen(port, '0.0.0.0');
-    console.log('🚀 Backend started', {
+    logger.log('Backend started', {
       port,
       environment: isProd ? 'production' : 'development',
       corsOrigins,
     });
   } catch (error) {
-    console.error('❌ BACKEND STARTUP FAILED');
-    console.error(`   Error: ${error}`);
+    logger.error('BACKEND STARTUP FAILED');
+    logger.error(`Error: ${error}`);
     process.exit(1);
   }
 }

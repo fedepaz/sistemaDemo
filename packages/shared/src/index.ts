@@ -1,5 +1,12 @@
 // shared/src/index.ts
 
+// Enums
+export * from "./enums";
+
+// Utils
+export * from "./utils";
+
+// Schemas
 export * from "./schemas/user.schema";
 export * from "./schemas/auth.schema";
 export * from "./schemas/permissions.schema";
@@ -10,4 +17,5 @@ export * from "./schemas/extendido.schema";
 export * from "./schemas/partidas.schema";
 export * from "./schemas/siembra.schema";
 export * from "./schemas/alerts.schema";
+export * from "./schemas/pagination.schema";
 export * from "./constants/managed-entities";
