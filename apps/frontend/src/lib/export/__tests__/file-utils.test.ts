@@ -1,10 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { generateFilename, triggerDownload } from "../file-utils";
 
 describe("generateFilename", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date("2026-07-16T12:00:00Z"));
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-07-16T12:00:00Z"));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it("generates CSV filename from title", () => {
@@ -26,10 +29,10 @@ describe("generateFilename", () => {
 
 describe("triggerDownload", () => {
   it("creates and clicks a download link", () => {
-    const clickSpy = vi.fn();
-    const appendChildSpy = vi.spyOn(document.body, "appendChild").mockReturnValue({} as unknown as Node);
-    const removeChildSpy = vi.spyOn(document.body, "removeChild").mockReturnValue({} as unknown as Node);
-    const createElementSpy = vi.spyOn(document, "createElement").mockReturnValue({
+    const clickSpy = jest.fn();
+    const appendChildSpy = jest.spyOn(document.body, "appendChild").mockReturnValue({} as unknown as Node);
+    const removeChildSpy = jest.spyOn(document.body, "removeChild").mockReturnValue({} as unknown as Node);
+    const createElementSpy = jest.spyOn(document, "createElement").mockReturnValue({
       href: "",
       download: "",
       click: clickSpy,

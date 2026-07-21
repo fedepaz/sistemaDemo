@@ -1,11 +1,7 @@
-// apps/frontend/src/__tests__/setup.ts
-import { beforeAll, afterEach, afterAll } from "vitest";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 
-// Mock API handlers
 export const handlers = [
-  // Auth endpoints
   http.post("/api/auth/login", () => {
     return HttpResponse.json({
       user: {
@@ -38,7 +34,6 @@ export const handlers = [
     });
   }),
 
-  // Users endpoints
   http.get("/api/users", () => {
     return HttpResponse.json({
       data: [],
@@ -49,7 +44,6 @@ export const handlers = [
     });
   }),
 
-  // Entities endpoints
   http.get("/api/entities", () => {
     return HttpResponse.json({
       data: [],

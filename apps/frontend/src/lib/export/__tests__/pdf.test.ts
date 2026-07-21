@@ -1,10 +1,31 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+jest.mock("pdfmake/build/pdfmake", () => ({
+  __esModule: true,
+  default: {
+    createPdf: jest.fn(() => ({
+      download: jest.fn(),
+    })),
+    addVirtualFileSystem: jest.fn(),
+    addFonts: jest.fn(),
+  },
+}));
 
-// Mock fetch for logo
-const mockFetch = vi.fn();
-vi.stubGlobal("fetch", mockFetch);
+jest.mock("pdfmake/build/vfs_fonts", () => ({
+  __esModule: true,
+  default: { pdfMake: { vfs: {} } },
+  pdfMake: { vfs: {} },
+}));
 
-// Mock FileReader — synchronous invocation for fake timers
+jest.mock("../fonts/poppins-vfs", () => ({
+  poppinsVfs: {},
+}));
+
+const mockFetch = jest.fn();
+Object.defineProperty(globalThis, "fetch", {
+  value: mockFetch,
+  writable: true,
+  configurable: true,
+});
+
 class MockFileReader {
   result: string | null = null;
   onloadend: (() => void) | null = null;
@@ -13,37 +34,25 @@ class MockFileReader {
     this.onloadend?.();
   }
 }
-vi.stubGlobal("FileReader", MockFileReader);
-
-// Mock pdfmake
-vi.mock("pdfmake/build/pdfmake", () => ({
-  default: {
-    createPdf: vi.fn(() => ({
-      download: vi.fn(),
-    })),
-    addVirtualFileSystem: vi.fn(),
-    addFonts: vi.fn(),
-  },
-}));
-
-vi.mock("pdfmake/build/vfs_fonts", () => ({
-  default: { pdfMake: { vfs: {} } },
-  pdfMake: { vfs: {} },
-}));
-
-vi.mock("../fonts/poppins-vfs", () => ({
-  poppinsVfs: {},
-}));
+Object.defineProperty(globalThis, "FileReader", {
+  value: MockFileReader,
+  writable: true,
+  configurable: true,
+});
 
 describe("exportToPDF", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date("2026-07-16T12:00:00Z"));
-
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-07-16T12:00:00Z"));
     mockFetch.mockResolvedValue({
       ok: true,
       blob: () => Promise.resolve(new Blob()),
     });
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it("creates PDF with logo, title, and table", async () => {
