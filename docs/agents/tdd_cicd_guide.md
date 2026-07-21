@@ -37,10 +37,11 @@ Rule #3: If it's business logic, it needs unit tests.
 
 The canonical CI/CD workflow structure is defined in `docs/agents/cicd_agent.md`.
 
-1.  `pr-checks.yml`: Quality Assurance.
-2.  `deploy.yml`: Deployments.
-3.  `scheduled.yml`: Maintenance.
-4.  `reusable-setup.yml`: Common steps.
+1.  `.github/actions/setup/action.yml`: Composite action for shared setup (pnpm, Node, deps, Prisma).
+2.  `.github/workflows/ci-test.yml`: Reusable workflow with 3 parallel jobs (lint, unit-tests, integration-tests).
+3.  `.github/workflows/pr-checks.yml`: PR gate — calls `ci-test.yml` on PRs to main/dev.
+4.  `.github/workflows/deploy.yml`: Build verification — frontend + backend builds on push to main/dev.
+5.  `.github/workflows/scheduled.yml`: Maintenance — security scans, dependency updates.
 
 ---
 
