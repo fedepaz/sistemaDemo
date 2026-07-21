@@ -24,6 +24,7 @@ You will be invoked with one of three specific contexts:
 - Business logic and enterprise workflows.
 - Database operations across tenant boundaries (MariaDB + Prisma).
 - Authentication flows (username/password with JWT) and authorization boundaries.
+- HTTP integration tests with mocked guards and services (supertest + TestingModule).
 
 ### Frontend Testing Context
 
@@ -78,6 +79,13 @@ You will be invoked with one of three specific contexts:
 
 ### 4. Integration Testing Specialization
 
+**Backend HTTP Integration Tests** (`apps/backend/test/integration/`):
+
+- Full HTTP request/response cycle via NestJS TestingModule + supertest.
+- Guards (AuthGuard, PermissionsGuard) mocked at module level — no real JWT/DB needed.
+- Service mocks injected for deterministic responses.
+- Run with: `pnpm test:integration` (from `apps/backend/`).
+
 **External Service Integration:**
 
 - Authentication provider (username/password with JWT).
@@ -115,6 +123,8 @@ You will be invoked with one of three specific contexts:
 ## Success Metrics & KPIs
 
 ### Technical Quality Metrics
+- Unit test count: 85 (shared + backend) — enforced by pre-commit hook.
+- Integration test count: 36 (backend HTTP-level) — mocked guards + services.
 - Unit test coverage: branches 60%, functions 80%, lines 70%, statements 70% (enforced by Jest 30).
 - Integration test coverage: >70%.
 - E2E test coverage: Critical user journeys (100%).

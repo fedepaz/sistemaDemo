@@ -3,9 +3,10 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { EntitiesService } from './entities.service';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
-import { CreateEntityDto } from '@vivero/shared';
+import { CreateEntityDto, CreateEntitySchema } from '@vivero/shared';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
+import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
 
 @Controller('entities')
 export class EntitiesController {
@@ -43,7 +44,7 @@ export class EntitiesController {
     scope: 'ALL',
   })
   async createEntity(
-    @Body() data: CreateEntityDto,
+    @Body(new ZodValidationPipe(CreateEntitySchema)) data: CreateEntityDto,
     @CurrentUser() user: AuthUser,
   ) {
     const entity = await this.entitiesService.createEntity(data, user.id);

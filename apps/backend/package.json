@@ -18,6 +18,7 @@
     "test:watch": "jest --config jest.config.ts --watch --passWithNoTests",
     "test:cov": "jest --config jest.config.ts --coverage --passWithNoTests",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:integration": "jest --config test/integration/jest.config.ts",
     "db:migrate": "pnpm prisma migrate deploy",
     "db:migrate:dev": "pnpm prisma migrate dev",
     "db:seed:users": "pnpm ts-node prisma/seed-users.ts",
