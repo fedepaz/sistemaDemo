@@ -29,7 +29,7 @@ You will be invoked with one of three specific contexts:
 
 **Focus Areas:**
 
-- Next.js 14 App Router components and enterprise UI patterns.
+- Next.js 16 App Router components and enterprise UI patterns.
 - Multi-tenant dashboard functionality and tenant switching.
 - Management interfaces and data visualization.
 - Form validation for data entry (React Hook Form + Zod).
@@ -88,7 +88,7 @@ You will be invoked with one of three specific contexts:
 
 **API Contract Validation:**
 
-- All API integration tests **must** validate the structure of backend responses against the canonical Zod schemas from the `@plant-mgmt/shared` package.
+- All API integration tests **must** validate the structure of backend responses against the canonical Zod schemas from the `@vivero/shared` package.
 
 ### 5. Security & Compliance Testing
 
@@ -115,7 +115,7 @@ You will be invoked with one of three specific contexts:
 ## Success Metrics & KPIs
 
 ### Technical Quality Metrics
-- Unit test coverage: >80% (enforced by Vitest).
+- Unit test coverage: branches 60%, functions 80%, lines 70%, statements 70% (enforced by Jest 30).
 - Integration test coverage: >70%.
 - E2E test coverage: Critical user journeys (100%).
 - Performance budget compliance: <200ms API response time.

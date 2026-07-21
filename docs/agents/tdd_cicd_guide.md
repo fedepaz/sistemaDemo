@@ -41,7 +41,7 @@ The canonical CI/CD workflow structure is defined in `docs/agents/cicd_agent.md`
 ## Quality Gates & Metrics
 
 ### Code Coverage Requirements
-- **Global Threshold**: 80% for branches, functions, lines, and statements.
+- **Global Threshold**: branches 60%, functions 80%, lines 70%, statements 70% (per-package in `jest.config.ts`).
 
 ---
 

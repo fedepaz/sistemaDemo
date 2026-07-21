@@ -30,4 +30,13 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+echo "✅ Lint pasado. Ejecutando tests unitarios..."
+
+# Ejecutar tests unitarios para asegurar TDD
+pnpm test
+if [ $? -ne 0 ]; then
+  echo "❌ Los tests han fallado. Por favor, corrige los tests antes de continuar."
+  exit 1
+fi
+
 echo "✅ ¡Todas las verificaciones han pasado! Commit realizado con éxito."
