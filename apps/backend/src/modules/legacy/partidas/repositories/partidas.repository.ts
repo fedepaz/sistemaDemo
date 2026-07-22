@@ -77,15 +77,11 @@ export class PartidasRepository {
       const now = new Date().toISOString().slice(0, 10);
       const baja = data.baja ?? 0;
       const saldo = data.stock_ini - baja; // stock (saldo)
-      const webAppTag = '[webApp]';
+      // Envelope new message in curly braces, or append empty braces if no message
+      const finalDetalle = data.detalle ? `{${data.detalle}}` : '{}';
 
-      // We append the tag to the detail if provided, or just use the tag
-      const finalDetalle = data.detalle
-        ? `${data.detalle} ${webAppTag}`.trim()
-        : webAppTag;
-
-      // We append the tag to the extendido field
-      const finalExtendido = `${data.extendido} ${webAppTag}`.trim();
+      const finalExtendido =
+        `${data.extendido} {${data.extendido || ''}}`.trim();
 
       await conn.query(
         `INSERT INTO partidas2 (
