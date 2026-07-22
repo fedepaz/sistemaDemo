@@ -77,15 +77,6 @@ export class PartidasRepository {
       const now = new Date().toISOString().slice(0, 10);
       const baja = data.baja ?? 0;
       const saldo = data.stock_ini - baja; // stock (saldo)
-      const webAppTag = '[webApp]';
-
-      // We append the tag to the detail if provided, or just use the tag
-      const finalDetalle = data.detalle
-        ? `${data.detalle} ${webAppTag}`.trim()
-        : webAppTag;
-
-      // We append the tag to the extendido field
-      const finalExtendido = `${data.extendido} ${webAppTag}`.trim();
 
       await conn.query(
         `INSERT INTO partidas2 (
@@ -102,7 +93,7 @@ export class PartidasRepository {
           data.ubicacion,
           data.stock_ini,
           0,
-          finalDetalle,
+          data.detalle,
           baja,
           saldo,
           '0000-00-00',
@@ -120,7 +111,7 @@ export class PartidasRepository {
 
       await conn.query(
         `UPDATE partidas SET extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`,
-        [finalExtendido, data.partida, data.ano, data.indice],
+        [data.extendido, data.partida, data.ano, data.indice],
       );
     });
   }
