@@ -1,25 +1,18 @@
 // src/shared/pipes/zod-validation-pipe.ts
 
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { z, ZodError, ZodSchema } from 'zod';
+import { ZodSchema } from 'zod';
 
 export class ZodValidationPipe<T> implements PipeTransform {
   constructor(private readonly schema: ZodSchema<T>) {}
 
-  transform(value: unknown): z.infer<typeof this.schema> {
-    try {
-      const result = this.schema.safeParse(value);
-
-      if (result.success) return result.data;
-    } catch (error) {
-      if (error instanceof ZodError) {
-        throw new BadRequestException({
-          message: 'Validation error',
-          error: error.flatten(),
-        });
-      }
-      throw new BadRequestException('Validation error');
-    }
-    throw new BadRequestException('Validation error');
+  transform(value: unknown): T {
+    const result = this.schema.safeParse(value);
+    if (result.success) return result.data;
+    throw new BadRequestException({
+      message: 'Validation error',
+      code: 'VALIDATION_ERROR',
+      details: result.error.flatten(),
+    });
   }
 }

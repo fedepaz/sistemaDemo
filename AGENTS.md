@@ -34,7 +34,7 @@ pnpm --filter backend db:studio         # Open Prisma Studio
 
 ## Monorepo Structure
 
-- `apps/frontend` - Next.js 15 (App Router) + shadcn/ui + Tailwind v4
+- `apps/frontend` - Next.js 16 (App Router) + shadcn/ui + Tailwind v4
 - `apps/backend` - NestJS 11 + Prisma + MariaDB
 - `packages/shared` - Zod schemas & DTOs (`@vivero/shared`)
 

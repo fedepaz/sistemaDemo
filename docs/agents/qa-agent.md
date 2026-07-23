@@ -24,12 +24,13 @@ You will be invoked with one of three specific contexts:
 - Business logic and enterprise workflows.
 - Database operations across tenant boundaries (MariaDB + Prisma).
 - Authentication flows (username/password with JWT) and authorization boundaries.
+- HTTP integration tests with mocked guards and services (supertest + TestingModule).
 
 ### Frontend Testing Context
 
 **Focus Areas:**
 
-- Next.js 14 App Router components and enterprise UI patterns.
+- Next.js 16 App Router components and enterprise UI patterns.
 - Multi-tenant dashboard functionality and tenant switching.
 - Management interfaces and data visualization.
 - Form validation for data entry (React Hook Form + Zod).
@@ -78,6 +79,13 @@ You will be invoked with one of three specific contexts:
 
 ### 4. Integration Testing Specialization
 
+**Backend HTTP Integration Tests** (`apps/backend/test/integration/`):
+
+- Full HTTP request/response cycle via NestJS TestingModule + supertest.
+- Guards (AuthGuard, PermissionsGuard) mocked at module level — no real JWT/DB needed.
+- Service mocks injected for deterministic responses.
+- Run with: `pnpm test:integration` (from `apps/backend/`).
+
 **External Service Integration:**
 
 - Authentication provider (username/password with JWT).
@@ -88,7 +96,7 @@ You will be invoked with one of three specific contexts:
 
 **API Contract Validation:**
 
-- All API integration tests **must** validate the structure of backend responses against the canonical Zod schemas from the `@plant-mgmt/shared` package.
+- All API integration tests **must** validate the structure of backend responses against the canonical Zod schemas from the `@vivero/shared` package.
 
 ### 5. Security & Compliance Testing
 
@@ -115,7 +123,9 @@ You will be invoked with one of three specific contexts:
 ## Success Metrics & KPIs
 
 ### Technical Quality Metrics
-- Unit test coverage: >80% (enforced by Vitest).
+- Unit test count: 85 (shared + backend) — enforced by pre-commit hook.
+- Integration test count: 36 (backend HTTP-level) — mocked guards + services.
+- Unit test coverage: branches 60%, functions 80%, lines 70%, statements 70% (enforced by Jest 30).
 - Integration test coverage: >70%.
 - E2E test coverage: Critical user journeys (100%).
 - Performance budget compliance: <200ms API response time.

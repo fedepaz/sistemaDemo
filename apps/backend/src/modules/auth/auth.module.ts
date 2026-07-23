@@ -18,7 +18,7 @@ import { AuthController } from './auth.controller';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const secret = configService.get<string>('config.jwt.secret', ' ');
+        const secret = configService.getOrThrow<string>('config.jwt.secret');
         const expiresIn = configService.get<number>(
           'config.jwt.expiresIn',
           3600,

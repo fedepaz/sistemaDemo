@@ -1,7 +1,7 @@
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
+  // reactStrictMode is enabled by default in Next.js 16
   transpilePackages: ["@vivero/shared"],
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,

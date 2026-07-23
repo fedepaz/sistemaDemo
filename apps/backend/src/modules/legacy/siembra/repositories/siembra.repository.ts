@@ -35,7 +35,7 @@ export class SiembraRepository {
     return this.legacyDb.query<LegacySiembra[]>(sql);
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/require-await
   async asignarUbicacionSiembra(_data: AsignarUbiSiembraDto): Promise<void> {
     // TODO: Implement legacy MySQL write
     this.logger.warn('asignarUbicacionSiembra not yet implemented');

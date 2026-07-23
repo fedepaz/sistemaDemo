@@ -43,24 +43,42 @@ The CI/CD agent should leverage this structured history to automate release and 
 
 ### Workflow Structure
 
-#### 1. `pr-checks.yml` (Pull Request Quality Gate)
+#### 1. Composite Action: `.github/actions/setup/action.yml`
+
+- **Purpose**: Centralizes CI/CD setup steps for all workflows.
+- **Inputs**: `node-version` (default: `20`), `pnpm-version` (default: `10.33.2`).
+- **Responsibilities**:
+  - Installs pnpm via `pnpm/action-setup@v4`.
+  - Sets up Node.js via `actions/setup-node@v4` with pnpm cache.
+  - Runs `pnpm install --frozen-lockfile`.
+  - Runs `npx prisma generate`.
+
+#### 2. Reusable Workflow: `.github/workflows/ci-test.yml`
+
+- **Purpose**: Reusable CI pipeline with 3 parallel jobs.
+- **Trigger**: `workflow_call` (called by other workflows).
+- **Responsibilities**:
+  - **lint**: Runs `pnpm lint`.
+  - **unit-tests**: Runs `pnpm test` (85 unit tests).
+  - **integration-tests**: Runs `pnpm --filter backend test:integration` (36 integration tests).
+
+#### 3. PR Checks: `.github/workflows/pr-checks.yml`
 
 - **Purpose**: Ensures code quality and correctness before merging.
 - **Trigger**: Runs on every `pull_request` to `main` and `dev` branches.
 - **Responsibilities**:
-  - Runs linting, type-checking, and unit tests for the changed application(s) using `turbo run lint --filter=//apps/backend`, `turbo run test --filter=//apps/backend`, etc., ensuring all modules within the backend are covered. The test suites executed in this workflow are defined and maintained by the `qa-engineer`.
+  - Calls the reusable `ci-test.yml` workflow (lint + unit-tests + integration-tests).
 
-#### 2. `deploy.yml` (Deployment Workflow)
+#### 4. Deploy: `.github/workflows/deploy.yml`
 
-- **Purpose**: Manages deployments to all environments.
-- **Trigger**: Runs on every `push` to `main` (production) and `dev` (staging).
+- **Purpose**: Build verification on push to main/dev.
+- **Trigger**: Runs on every `push` to `main` and `dev` branches.
 - **Responsibilities**:
-  - Builds the application artifact using `turbo run build --filter=//apps/backend` for the backend, and `--filter=//apps/frontend` for the frontend.
-  - Deploys to the target environment (Vercel for frontend, Render for backend).
-  - Dispatches an `e2e-tests.yml` run after a successful staging deployment.
-  - Runs smoke tests after a successful production deployment.
+  - **frontend**: Builds frontend with `pnpm --filter frontend build`.
+  - **backend**: Builds backend with `pnpm --filter backend build`.
+  - Build failures trigger GitHub email notifications.
 
-#### 3. `scheduled.yml` (Scheduled Maintenance)
+#### 5. Scheduled: `.github/workflows/scheduled.yml`
 
 - **Purpose**: Performs routine, automated tasks.
 - **Trigger**: Runs on a `schedule` (e.g., daily).

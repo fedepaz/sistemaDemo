@@ -12,6 +12,10 @@ import {
   Briefcase,
   Expand,
   Shield,
+  Bell,
+  TableProperties,
+  Sparkles,
+  PanelRightOpen,
 } from "lucide-react";
 import type { NavigationConfig } from "./navigation.types";
 
@@ -22,6 +26,47 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
     href: ROUTES.DASHBOARD,
     icon: Home,
     description: "Vista general y alertas",
+  },
+
+  {
+    kind: "nestedGroup",
+    id: "alerts",
+    title: "Alertas",
+    icon: Bell,
+    items: [
+      {
+        kind: "subGroup",
+        id: "alerts-views",
+        title: "Vistas",
+        icon: Layers,
+        items: [
+          {
+            title: "Tablero",
+            href: ROUTES.ALERTS_V1,
+            icon: TableProperties,
+            description: "Vista de tablas de datos",
+            dashboard: { statsLabel: "Alertas en tabla" },
+            requiredPermission: { table: "alerts", action: "read" },
+          },
+          {
+            title: "Interactivo",
+            href: ROUTES.ALERTS_V2,
+            icon: Sparkles,
+            description: "Vista interactiva con tarjetas",
+            dashboard: { statsLabel: "Alertas interactivas" },
+            requiredPermission: { table: "alerts", action: "read" },
+          },
+          {
+            title: "Maestro-Detalle",
+            href: ROUTES.ALERTS_V3,
+            icon: PanelRightOpen,
+            description: "Vista dividida de maestro-detalle",
+            dashboard: { statsLabel: "Alertas en panel dividido" },
+            requiredPermission: { table: "alerts", action: "read" },
+          },
+        ],
+      },
+    ],
   },
 
   {

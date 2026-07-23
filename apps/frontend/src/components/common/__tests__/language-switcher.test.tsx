@@ -1,8 +1,6 @@
-import { describe, it, expect } from "vitest";
-
+// language-switcher component does not exist yet
 describe("LanguageSwitcher", () => {
-  it("should pass and remind to be implemented", () => {
-    console.log("TODO: Implement test for LanguageSwitcher");
+  it("placeholder - component not yet implemented", () => {
     expect(true).toBe(true);
   });
 });

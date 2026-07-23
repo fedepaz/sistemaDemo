@@ -1,25 +1,24 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { exportToCSV } from "../csv";
 
 describe("exportToCSV", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date("2026-07-16T12:00:00Z"));
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-07-16T12:00:00Z"));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it("generates CSV with headers and data", () => {
-    const downloadSpy = vi.fn();
-    vi.stubGlobal("document", {
-      createElement: vi.fn(() => ({
-        href: "",
-        download: "",
-        click: downloadSpy,
-      })),
-      body: {
-        appendChild: vi.fn(),
-        removeChild: vi.fn(),
-      },
-    });
+    const clickSpy = jest.fn();
+    const createElementSpy = jest.spyOn(document, "createElement").mockReturnValue({
+      href: "",
+      download: "",
+      click: clickSpy,
+    } as unknown as HTMLAnchorElement);
+    const appendChildSpy = jest.spyOn(document.body, "appendChild").mockReturnValue({} as unknown as Node);
+    const removeChildSpy = jest.spyOn(document.body, "removeChild").mockReturnValue({} as unknown as Node);
 
     const data = [
       { name: "Juan", email: "juan@test.com" },
@@ -33,8 +32,10 @@ describe("exportToCSV", () => {
 
     exportToCSV({ data, columns, title: "Usuarios", format: "csv" });
 
-    // Verify download was triggered
-    expect(downloadSpy).toHaveBeenCalled();
+    expect(clickSpy).toHaveBeenCalled();
+    createElementSpy.mockRestore();
+    appendChildSpy.mockRestore();
+    removeChildSpy.mockRestore();
   });
 
   it("uses exportValue when provided", () => {
@@ -49,7 +50,6 @@ describe("exportToCSV", () => {
       },
     ];
 
-    // This should not throw
     expect(() =>
       exportToCSV({ data, columns, title: "Test", format: "csv" })
     ).not.toThrow();

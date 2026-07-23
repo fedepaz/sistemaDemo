@@ -88,6 +88,21 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `SiembraView` | [x] | [x] | [x] | [ ] |
 | `SiembraDashboard` | [x] | [x] | [x] | [x] |
 
+### Alerts
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `AlertsDashboardV1` | [x] | [x] | [ ] | [ ] |
+| `AlertsDashboardV2` | [x] | [x] | [x] | [ ] |
+| `AlertDashboardSkeleton` | [x] | [x] | [ ] | [ ] |
+| `AlertSummaryCards` | [x] | [x] | [x] | [ ] |
+| `AlertsDataTable` | [x] | [x] | [ ] | [ ] |
+| `FilterTabs` | [x] | [x] | [x] | [ ] |
+| `SiembraRetrasadaCard` | [x] | [x] | [x] | [ ] |
+| `FaltaGerminacionCard` | [x] | [x] | [x] | [ ] |
+| `FaltantePlantasCard` | [x] | [x] | [x] | [ ] |
+| `FaltaPreExpedicionCard` | [x] | [x] | [x] | [ ] |
+| `NotificationCenter` | [x] | [x] | [x] | [ ] |
+
 ## UI Primitives (shadcn/ui)
 
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
