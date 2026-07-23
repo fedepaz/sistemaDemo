@@ -16,8 +16,12 @@ import {
 } from "@/components/ui/tooltip";
 import { Logo } from "../common/logo";
 import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
+import { Bell } from "lucide-react";
+import { useAlertModal } from "@/providers/alert-modal-provider";
+import { AlertModalDialog } from "@/components/modals/alert-modal-dialog";
 
 export function DashboardHeader() {
+  const { openAlert } = useAlertModal();
   const { isLoading } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
@@ -50,9 +54,17 @@ export function DashboardHeader() {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             {/* Notifications */}
-            {/* Left: Week Display with Tooltip */}
+            <button
+              type="button"
+              onClick={() => openAlert("info")}
+              className="flex items-center justify-center px-3 h-14 hover:bg-accent transition-colors"
+            >
+              <Bell className="h-5 w-5 text-muted-foreground" />
+            </button>
+
+            {/* Week Display with Tooltip */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -90,6 +102,7 @@ export function DashboardHeader() {
           </div>
         </div>
       </div>
+      <AlertModalDialog />
     </header>
   );
 }
