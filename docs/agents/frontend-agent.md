@@ -181,6 +181,28 @@ This project is Spanish-only. All user-facing strings in the UI should be writte
 - **Local State Management**: Manage visibility and selection state in the parent component.
 - **Data Flow**: Use `SlideOverForm` for CRUD, encapsulated with dedicated form components.
 
+### Modal Infrastructure (Context + Portal Pattern)
+
+Reusable modal systems use a **global context + portal** pattern:
+
+```
+src/providers/
+├── alert-modal-provider.tsx      # Context + useAlertModal() hook
+├── wizard-modal-provider.tsx     # Context + useWizard() hook (multi-step stub)
+└── app-providers.tsx             # Mounts both providers globally
+src/components/modals/
+├── alert-modal-dialog.tsx        # Single Dialog shell — mounted once in layout
+└── alert-modal-content.tsx       # Content renderer dispatched by alert type
+```
+
+**Rules:**
+- **Separate provider per modal** — each modal gets its own context, independently testable
+- **Provider is context-only** — holds `open`/`close`/`state`, renders children, no dialog JSX
+- **Dialog component is mounted once** — in the layout or header, reads from context via hook
+- **Portal at body level** — shadcn/ui `Dialog` handles this automatically via `DialogPortal`
+- **`useModal()` hook throws outside provider** — catches usage errors at dev time
+- **Content components fetch their own data** — provider is a container, not a data fetcher
+
 ## Core Technology Implementation
 
 ```typescript
