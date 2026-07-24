@@ -3,7 +3,6 @@
 import { ROUTES } from "@/constants/routes";
 import {
   Home,
-  Settings,
   ClipboardList,
   Users,
   Sprout,
@@ -12,10 +11,6 @@ import {
   Briefcase,
   Expand,
   Shield,
-  Bell,
-  TableProperties,
-  Sparkles,
-  PanelRightOpen,
 } from "lucide-react";
 import type { NavigationConfig } from "./navigation.types";
 
@@ -30,110 +25,53 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
 
   {
     kind: "nestedGroup",
-    id: "alerts",
-    title: "Alertas",
-    icon: Bell,
+    id: "partidas",
+    title: "Partidas",
+    icon: Layers,
     items: [
       {
-        kind: "subGroup",
-        id: "alerts-views",
-        title: "Vistas",
-        icon: Layers,
-        items: [
-          {
-            title: "Tablero",
-            href: ROUTES.ALERTS_V1,
-            icon: TableProperties,
-            description: "Vista de tablas de datos",
-            dashboard: { statsLabel: "Alertas en tabla" },
-            requiredPermission: { table: "alerts", action: "read" },
-          },
-          {
-            title: "Interactivo",
-            href: ROUTES.ALERTS_V2,
-            icon: Sparkles,
-            description: "Vista interactiva con tarjetas",
-            dashboard: { statsLabel: "Alertas interactivas" },
-            requiredPermission: { table: "alerts", action: "read" },
-          },
-          {
-            title: "Maestro-Detalle",
-            href: ROUTES.ALERTS_V3,
-            icon: PanelRightOpen,
-            description: "Vista dividida de maestro-detalle",
-            dashboard: { statsLabel: "Alertas en panel dividido" },
-            requiredPermission: { table: "alerts", action: "read" },
-          },
-        ],
+        title: "Siembra",
+        href: ROUTES.SIEMBRA,
+        icon: Sprout,
+        description: "Gestión de partidas a siembrar",
+        dashboard: { statsLabel: "Partidas a siembrar" },
+        requiredPermission: { table: "siembra", action: "read" },
+      },
+      {
+        title: "A Extender",
+        href: ROUTES.EXTENDIDOS,
+        icon: Expand,
+        description: "Gestión de partidas a extender",
+        dashboard: { statsLabel: "Partidas a extender" },
+        requiredPermission: { table: "extendidos", action: "read" },
       },
     ],
   },
 
   {
     kind: "nestedGroup",
-    id: "operations",
-    title: "Operaciones",
-    icon: Briefcase,
+    id: "usuarios",
+    title: "Usuarios",
+    icon: Users,
     items: [
       {
-        kind: "subGroup",
-        id: "partidas",
-        title: "Partidas",
-        icon: Layers,
-        items: [
-          {
-            title: "Siembra",
-            href: ROUTES.SIEMBRA,
-            icon: Sprout,
-            description: "Gestión de partidas a siembrar",
-            dashboard: { statsLabel: "Partidas a siembrar" },
-            requiredPermission: { table: "siembra", action: "read" },
-          },
-          {
-            title: "A Extender",
-            href: ROUTES.EXTENDIDOS,
-            icon: Expand,
-            description: "Gestión de partidas a extender",
-            dashboard: { statsLabel: "Partidas a extender" },
-            requiredPermission: { table: "extendidos", action: "read" },
-          },
-        ],
-      },
-    ],
-  },
-
-  {
-    kind: "nestedGroup",
-    id: "admin",
-    title: "Administración",
-    icon: Settings,
-    items: [
-      {
-        kind: "subGroup",
-        id: "usuarios",
-        title: "Usuarios",
+        title: "Lista",
+        href: ROUTES.USERS,
         icon: Users,
-        items: [
-          {
-            title: "Lista",
-            href: ROUTES.USERS,
-            icon: Users,
-            description: "Gestión de usuarios del sistema",
-            dashboard: { statsLabel: "Usuarios activos" },
-            requiredPermission: { table: "users", action: "read" },
-          },
-          {
-            title: "Permisos",
-            href: ROUTES.USER_PERMISSIONS,
-            icon: Shield,
-            description: "Configuración de permisos por usuario",
-            dashboard: { statsLabel: "Permisos configurados" },
-            requiredPermission: {
-              table: "user_permissions",
-              action: "read",
-            },
-          },
-        ],
+        description: "Gestión de usuarios del sistema",
+        dashboard: { statsLabel: "Usuarios activos" },
+        requiredPermission: { table: "users", action: "read" },
+      },
+      {
+        title: "Permisos",
+        href: ROUTES.USER_PERMISSIONS,
+        icon: Shield,
+        description: "Configuración de permisos por usuario",
+        dashboard: { statsLabel: "Permisos configurados" },
+        requiredPermission: {
+          table: "user_permissions",
+          action: "read",
+        },
       },
     ],
   },
