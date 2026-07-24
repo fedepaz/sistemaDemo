@@ -1,5 +1,7 @@
 # Frontend Components Registry & QA Review
 
+> **📍 Source of truth**: `apps/frontend/components.json` now contains the definitive component registry with structured QA metadata. This markdown file is a human-readable reference; update both when reviewing components.
+
 This document tracks all React components within the `apps/frontend/src` directory, ensuring they meet the project's enterprise standards for responsiveness, color token usage, and UX accessibility helpers.
 
 ## Review Criteria
@@ -51,7 +53,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | :--- | :---: | :---: | :---: | :---: |
 | `DataTableFacetedFilter` | [ ] | [ ] | [ ] | [ ] |
 | `DataTableSkeleton` | [ ] | [ ] | [ ] | [ ] |
-| `DataTable` | [x] | [x] | [ ] | [x] |
+| `DataTable` | [x] | [x] | [x] | [x] |
 | `SortableHeader` | [ ] | [ ] | [ ] | [ ] |
 | `StatusBadge` | [ ] | [ ] | [ ] | [ ] |
 | `FeatureCardSkeleton` | [ ] | [ ] | [ ] | [ ] |
@@ -70,7 +72,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
-| `DashboardHeader` | [x] | [ ] | [ ] | [ ] |
+| `DashboardHeader` | [x] | [x] | [x] | [x] |
 | `DesktopSidebar` | [x] | [ ] | [ ] | [ ] |
 | `MobileNavigation` | [x] | [ ] | [ ] | [x] |
 | `ExtendidoDashboard` | [x] | [ ] | [ ] | [ ] |
@@ -91,11 +93,11 @@ This document tracks all React components within the `apps/frontend/src` directo
 ### Alerts
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
-| `AlertsDashboardV1` | [x] | [x] | [ ] | [ ] |
+| `AlertsDashboardV1` | [x] | [x] | [x] | [x] |
 | `AlertsDashboardV2` | [x] | [x] | [x] | [ ] |
-| `AlertDashboardSkeleton` | [x] | [x] | [ ] | [ ] |
+| `AlertDashboardSkeleton` | [x] | [x] | [x] | [ ] |
 | `AlertSummaryCards` | [x] | [x] | [x] | [ ] |
-| `AlertsDataTable` | [x] | [x] | [ ] | [ ] |
+| `AlertsDataTable` | [x] | [x] | [x] | [ ] |
 | `FilterTabs` | [x] | [x] | [x] | [ ] |
 | `SiembraRetrasadaCard` | [x] | [x] | [x] | [ ] |
 | `FaltaGerminacionCard` | [x] | [x] | [x] | [ ] |
@@ -216,6 +218,12 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `CreatedAtCell` | [ ] | [ ] | [ ] | [ ] |
 | `ChangePasswordForm` | [ ] | [ ] | [ ] | [ ] |
 
+## Modals
+
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `AlertModalDialog` | [x] | [x] | [x] | [x] |
+
 ## Providers
 
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
@@ -225,3 +233,5 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `ThemeProvider` | [ ] | [ ] | [ ] | [ ] |
 | `AuthProvider` | [ ] | [ ] | [ ] | [ ] |
 | `ErrorProvider` | [ ] | [ ] | [ ] | [ ] |
+| `AlertModalProvider` | — | [x] | [x] | — |
+| `WizardModalProvider` | — | [x] | [x] | — |

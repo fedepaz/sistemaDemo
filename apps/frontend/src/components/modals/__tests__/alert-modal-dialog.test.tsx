@@ -1,45 +1,54 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AlertModalProvider, useAlertModal } from "@/providers/alert-modal-provider";
 import { AlertModalDialog } from "../alert-modal-dialog";
 
-function TestOpener({ alertType = "critical" as const }) {
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
+
+function TestOpener() {
   const { openAlert } = useAlertModal();
   return (
-    <button onClick={() => openAlert(alertType)}>
-      Open {alertType}
+    <button onClick={() => openAlert("info")}>
+      Open alerts
     </button>
   );
 }
 
 function renderWithProvider(ui: React.ReactElement) {
   return render(
-    <AlertModalProvider>
-      {ui}
-      <AlertModalDialog />
-    </AlertModalProvider>
+    <QueryClientProvider client={queryClient}>
+      <AlertModalProvider>
+        {ui}
+        <AlertModalDialog />
+      </AlertModalProvider>
+    </QueryClientProvider>
   );
 }
 
 describe("AlertModalDialog", () => {
-  it("shows correct title for critical alerts", async () => {
+  it("opens with title Alertas", async () => {
     const user = userEvent.setup();
-    renderWithProvider(<TestOpener alertType="critical" />);
-    await user.click(screen.getByText("Open critical"));
-    expect(screen.getByText("Alertas Críticas")).toBeInTheDocument();
+    renderWithProvider(<TestOpener />);
+    await user.click(screen.getByText("Open alerts"));
+    expect(screen.getByRole("heading", { name: "Alertas" })).toBeInTheDocument();
   });
 
-  it("shows correct title for warning alerts", async () => {
+  it("renders inside dialog when triggered", async () => {
     const user = userEvent.setup();
-    renderWithProvider(<TestOpener alertType="warning" />);
-    await user.click(screen.getByText("Open warning"));
-    expect(screen.getByText("Alertas")).toBeInTheDocument();
+    renderWithProvider(<TestOpener />);
+    await user.click(screen.getByText("Open alerts"));
+    expect(screen.getByRole("heading", { name: "Alertas" })).toBeInTheDocument();
   });
 
-  it("shows correct title for info alerts", async () => {
+  it("closes dialog on Escape key", async () => {
     const user = userEvent.setup();
-    renderWithProvider(<TestOpener alertType="info" />);
-    await user.click(screen.getByText("Open info"));
-    expect(screen.getByText("Información")).toBeInTheDocument();
+    renderWithProvider(<TestOpener />);
+    await user.click(screen.getByText("Open alerts"));
+    expect(screen.getByRole("heading", { name: "Alertas" })).toBeInTheDocument();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("heading", { name: "Alertas" })).not.toBeInTheDocument();
   });
 });

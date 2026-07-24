@@ -60,6 +60,7 @@
   --shadow-xl:
     0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+  --shadow-premium: 0px 4px 12px -2px hsl(0 0% 0% / 0.08), 0px 2px 4px -2px hsl(0 0% 0% / 0.06);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 }
@@ -191,6 +192,7 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+  --shadow-premium: var(--shadow-premium);
 }
 /* Semantic status tokens (migrated from globals_copy.css) */
 :root {

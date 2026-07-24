@@ -17,6 +17,7 @@ import {
 import { Logo } from "../common/logo";
 import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
 import { Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useAlertModal } from "@/providers/alert-modal-provider";
 import { AlertModalDialog } from "@/components/modals/alert-modal-dialog";
 
@@ -56,13 +57,15 @@ export function DashboardHeader() {
           {/* Actions */}
           <div className="flex items-center space-x-1">
             {/* Notifications */}
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => openAlert("info")}
-              className="flex items-center justify-center px-3 h-14 hover:bg-accent transition-colors"
+              aria-label="Alertas"
+              className="h-14 w-10 rounded-none"
             >
               <Bell className="h-5 w-5 text-muted-foreground" />
-            </button>
+            </Button>
 
             {/* Week Display with Tooltip */}
             <TooltipProvider>
