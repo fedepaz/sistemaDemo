@@ -20,12 +20,16 @@ import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAlertModal } from "@/providers/alert-modal-provider";
 import { AlertModalDialog } from "@/components/modals/alert-modal-dialog";
+import { usePermission } from "@/hooks/usePermission";
+import { useHasAlerts } from "@/features/alerts";
 
 export function DashboardHeader() {
   const { openAlert } = useAlertModal();
   const { isLoading } = useLogout();
   const router = useRouter();
   const { userProfile } = useAuthContext();
+  const { canRead } = usePermission("alerts");
+  const { hasAlerts, isLoading: isLoadingAlerts } = useHasAlerts(canRead);
 
   const currentDate = new Date();
   const weekNum = getISOWeek(currentDate);
@@ -57,15 +61,18 @@ export function DashboardHeader() {
           {/* Actions */}
           <div className="flex items-center space-x-1">
             {/* Notifications */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => openAlert("info")}
-              aria-label="Alertas"
-              className="h-14 w-10 rounded-none"
-            >
-              <Bell className="h-5 w-5 text-muted-foreground" />
-            </Button>
+            {canRead && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => openAlert("info")}
+                disabled={!hasAlerts && !isLoadingAlerts}
+                aria-label="Alertas"
+                className="h-14 w-10 rounded-none"
+              >
+                <Bell className={`h-5 w-5 ${!hasAlerts && !isLoadingAlerts ? "text-muted-foreground/50" : "text-muted-foreground"}`} />
+              </Button>
+            )}
 
             {/* Week Display with Tooltip */}
             <TooltipProvider>
@@ -105,7 +112,7 @@ export function DashboardHeader() {
           </div>
         </div>
       </div>
-      <AlertModalDialog />
+      {canRead && <AlertModalDialog />}
     </header>
   );
 }

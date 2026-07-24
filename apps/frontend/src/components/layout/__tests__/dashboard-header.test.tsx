@@ -1,4 +1,6 @@
+import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({ push: jest.fn() }),
@@ -41,8 +43,103 @@ jest.mock("@/components/ui/tooltip", () => ({
   TooltipProvider: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }));
 
+const mockUsePermission = jest.fn();
+jest.mock("@/hooks/usePermission", () => ({
+  usePermission: (table: string) => mockUsePermission(table),
+}));
+
+const mockUseHasAlerts = jest.fn();
+jest.mock("@/features/alerts", () => ({
+  useHasAlerts: (canRead: boolean) => mockUseHasAlerts(canRead),
+}));
+
+jest.mock("@/providers/alert-modal-provider", () => ({
+  useAlertModal: () => ({ openAlert: jest.fn(), closeAlert: jest.fn(), state: { isOpen: false } }),
+}));
+
+jest.mock("@/components/modals/alert-modal-dialog", () => ({
+  AlertModalDialog: () => <div data-testid="alert-modal-dialog" />,
+}));
+
+jest.mock("@/components/ui/button", () => ({
+  Button: ({ children, disabled, ...props }: { children: ReactNode; disabled?: boolean; [key: string]: unknown }) => (
+    <button disabled={disabled} {...props}>{children}</button>
+  ),
+}));
+
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  const Wrapper = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+  Wrapper.displayName = "QueryWrapper";
+  return Wrapper;
+};
+
+// Import after mocks
+import { DashboardHeader } from "../dashboard-header";
+
 describe("DashboardHeader", () => {
-  it("placeholder - component has heavy dependencies requiring full app context", () => {
-    expect(true).toBe(true);
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockUsePermission.mockReturnValue({ canRead: false });
+    mockUseHasAlerts.mockReturnValue({ hasAlerts: false, isLoading: false });
+  });
+
+  it("renders bell button when user has alerts permission", () => {
+    mockUsePermission.mockReturnValue({ canRead: true });
+    mockUseHasAlerts.mockReturnValue({ hasAlerts: true, isLoading: false });
+
+    render(<DashboardHeader />, { wrapper: createWrapper() });
+
+    expect(screen.getByLabelText("Alertas")).toBeInTheDocument();
+  });
+
+  it("hides bell button when user lacks alerts permission", () => {
+    mockUsePermission.mockReturnValue({ canRead: false });
+
+    render(<DashboardHeader />, { wrapper: createWrapper() });
+
+    expect(screen.queryByLabelText("Alertas")).not.toBeInTheDocument();
+  });
+
+  it("hides alert modal dialog when user lacks alerts permission", () => {
+    mockUsePermission.mockReturnValue({ canRead: false });
+
+    render(<DashboardHeader />, { wrapper: createWrapper() });
+
+    expect(screen.queryByTestId("alert-modal-dialog")).not.toBeInTheDocument();
+  });
+
+  it("disables bell button when there are no alerts", () => {
+    mockUsePermission.mockReturnValue({ canRead: true });
+    mockUseHasAlerts.mockReturnValue({ hasAlerts: false, isLoading: false });
+
+    render(<DashboardHeader />, { wrapper: createWrapper() });
+
+    const button = screen.getByLabelText("Alertas");
+    expect(button).toBeDisabled();
+  });
+
+  it("enables bell button when there are alerts", () => {
+    mockUsePermission.mockReturnValue({ canRead: true });
+    mockUseHasAlerts.mockReturnValue({ hasAlerts: true, isLoading: false });
+
+    render(<DashboardHeader />, { wrapper: createWrapper() });
+
+    const button = screen.getByLabelText("Alertas");
+    expect(button).not.toBeDisabled();
+  });
+
+  it("keeps button enabled while loading (optimistic)", () => {
+    mockUsePermission.mockReturnValue({ canRead: true });
+    mockUseHasAlerts.mockReturnValue({ hasAlerts: false, isLoading: true });
+
+    render(<DashboardHeader />, { wrapper: createWrapper() });
+
+    const button = screen.getByLabelText("Alertas");
+    expect(button).not.toBeDisabled();
   });
 });
