@@ -23,6 +23,7 @@ export {
   useFaltaPreExpedicion,
 } from "./hooks/useAlerts";
 export { useAlertActions } from "./hooks/useAlertActions";
+export { useHasAlerts } from "./hooks/useHasAlerts";
 
 // Services
 export { alertService } from "./api/alertService";
