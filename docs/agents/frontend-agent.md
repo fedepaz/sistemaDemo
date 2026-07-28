@@ -154,7 +154,8 @@ Creation → Processing → Status Updates → Verification → Completion → A
 src/
 ├── app/                     # Next.js 15 App Router
 │   ├── (dashboard)/         # Protected routes
-│   └── (auth)/              # Auth routes
+│   ├── (auth)/              # Auth routes
+│   └── manifest.ts          # PWA web app manifest
 ├── features/                # 🚀 CORE: Domain-specific features (Colocated)
 ├── components/              # Reusable UI components (NOT domain logic)
 │   ├── ui/                  # shadcn/ui base components
@@ -209,6 +210,7 @@ src/components/modals/
 Tech Stack Configuration:
 ├── Framework: Next.js 15+ (App Router, Server Components)
 ├── Styling: Tailwind CSS + shadcn/ui
+├── PWA: Web App Manifest (`manifest.ts`) + Apple Web App metadata
 ├── State Management: TanStack Query (Mandatory: useSuspenseQuery for all GET) + Zustand
 ├── Forms: React Hook Form + Zod
 ├── Tables: TanStack Table + AG Grid Enterprise (optional)

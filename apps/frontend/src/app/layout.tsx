@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   generator: "v0.app",
   icons: {
     icon: "/proIcon.png",
+    apple: "/proIcon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Sistema de gestión",
   },
 };
 
