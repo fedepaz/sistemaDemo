@@ -1,0 +1,23 @@
+model AlertComment {
+  id        String   @id @default(cuid())
+  alertType String   @db.VarChar(30)
+  partidaId Int
+  anio      Int
+  indice    Int
+  content   String   @db.VarChar(500)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deletedByUserId String? 
+  deletedByUser User? @relation("deleted_alert_comments", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
+  deletedAt DateTime? @db.Timestamp(0)
+
+  @@index([alertType, partidaId, anio, indice])
+  @@index([deletedByUserId])
+  @@map("alert_comments")
+}

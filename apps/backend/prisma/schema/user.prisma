@@ -14,6 +14,8 @@ model User {
   
   auditLogs  AuditLog[]
 
+  alertComments AlertComment[]
+
   userPermissions UserPermission[]
 
   createdAt DateTime @default(now())
@@ -25,6 +27,7 @@ model User {
   deletedPermissions UserPermission[] @relation("deleted_user_permissions")
   deletedEntities Entity[] @relation("deleted_entities")
   deletedUsers User[] @relation("deleted_users")
+  deletedAlertComments AlertComment[] @relation("deleted_alert_comments")
   
   deletedAt DateTime? @db.Timestamp(0)
 
