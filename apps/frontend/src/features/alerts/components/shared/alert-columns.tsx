@@ -1,4 +1,3 @@
-// src/features/alerts/components/alert-columns.tsx
 "use client";
 
 import { type ColumnDef } from "@tanstack/react-table";
@@ -18,9 +17,9 @@ import {
 export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
   {
     accessorKey: "partidaId",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Partida</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Partida</SortableHeader>
+    ),
     cell: ({ row }) => (
       <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
@@ -31,9 +30,9 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
   },
   {
     accessorKey: "codigoEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Código</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Código</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="font-mono font-bold text-sm">
         {row.original.codigoEspecie}
@@ -42,18 +41,54 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
   },
   {
     accessorKey: "nombreEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Especie</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Especie</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="text-sm font-semibold">{row.original.nombreEspecie}</span>
     ),
   },
   {
+    accessorKey: "injerto",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Injerto</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs text-muted-foreground font-mono">
+        {row.original.injerto}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "nrocont",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Nro Contenedor</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.nrocont}</span>
+    ),
+  },
+  {
+    accessorKey: "contenedor",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Contenedor</SortableHeader>
+    ),
+    size: 100,
+  },
+  {
+    accessorKey: "semSiembra",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Sem Siembra</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.semSiembra}</span>
+    ),
+  },
+  {
     accessorKey: "fechaSugeridaSiembra",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha Sug. Siembra</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Fecha Sug. Siembra</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="text-xs font-bold font-mono text-muted-foreground">
         {row.original.fechaSugeridaSiembra}
@@ -61,18 +96,24 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
     ),
   },
   {
-    accessorKey: "contenedor",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Contenedor</SortableHeader>;
-    },
-    size: 100,
+    accessorKey: "semEntrega",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Sem Entrega</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.semEntrega}</span>
+    ),
   },
   {
-    accessorKey: "con",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Cantidad</SortableHeader>;
-    },
-    size: 100,
+    accessorKey: "estado",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Estado</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-bold uppercase tracking-wider">
+        {row.original.estado}
+      </span>
+    ),
   },
 ];
 
@@ -83,9 +124,9 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
 export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
   {
     accessorKey: "partidaId",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Partida</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Partida</SortableHeader>
+    ),
     cell: ({ row }) => (
       <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
@@ -96,9 +137,9 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
   },
   {
     accessorKey: "codigoEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Código</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Código</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="font-mono font-bold text-sm">
         {row.original.codigoEspecie}
@@ -107,26 +148,59 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
   },
   {
     accessorKey: "nombreEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Especie</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Especie</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="text-sm font-semibold">{row.original.nombreEspecie}</span>
     ),
   },
   {
+    accessorKey: "injerto",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Injerto</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs text-muted-foreground font-mono">
+        {row.original.injerto}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "nrocont",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Nro Contenedor</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.nrocont}</span>
+    ),
+  },
+  {
     accessorKey: "contenedor",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Contenedor</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Contenedor</SortableHeader>
+    ),
     size: 100,
   },
   {
-    accessorKey: "invernadero",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Invernadero</SortableHeader>;
-    },
-    size: 100,
+    accessorKey: "fPrimer",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Fecha Primer</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-bold font-mono text-muted-foreground">
+        {row.original.fPrimer}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "pr",
+    header: ({ column }) => (
+      <SortableHeader column={column}>PR</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.pr}</span>
+    ),
   },
 ];
 
@@ -137,9 +211,9 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
 export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
   {
     accessorKey: "partidaId",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Partida</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Partida</SortableHeader>
+    ),
     cell: ({ row }) => (
       <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
@@ -149,10 +223,19 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
     size: 70,
   },
   {
+    accessorKey: "hai",
+    header: ({ column }) => (
+      <SortableHeader column={column}>HAI</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.hai}</span>
+    ),
+  },
+  {
     accessorKey: "codigoEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Código</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Código</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="font-mono font-bold text-sm">
         {row.original.codigoEspecie}
@@ -161,32 +244,56 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
   },
   {
     accessorKey: "nombreEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Especie</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Especie</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="text-sm font-semibold">{row.original.nombreEspecie}</span>
     ),
   },
   {
-    accessorKey: "solicitadas",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Solicitadas</SortableHeader>;
-    },
+    accessorKey: "nrocont",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Nro Contenedor</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.nrocont}</span>
+    ),
+  },
+  {
+    accessorKey: "contenedor",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Contenedor</SortableHeader>
+    ),
     size: 100,
   },
   {
-    accessorKey: "germinadasTotales",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Germinadas</SortableHeader>;
-    },
+    accessorKey: "solicito",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Solicitadas</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono text-right">{row.original.solicito}</span>
+    ),
     size: 100,
   },
   {
-    accessorKey: "invernadero",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Invernadero</SortableHeader>;
-    },
+    accessorKey: "pr",
+    header: ({ column }) => (
+      <SortableHeader column={column}>PR</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.pr}</span>
+    ),
+  },
+  {
+    accessorKey: "porPr",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Por PR</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono text-right">{row.original.porPr}</span>
+    ),
     size: 100,
   },
 ];
@@ -198,9 +305,9 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
 export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
   {
     accessorKey: "partidaId",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Partida</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Partida</SortableHeader>
+    ),
     cell: ({ row }) => (
       <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
@@ -211,9 +318,9 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
   },
   {
     accessorKey: "codigoEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Código</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Código</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="font-mono font-bold text-sm">
         {row.original.codigoEspecie}
@@ -222,30 +329,59 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
   },
   {
     accessorKey: "nombreEspecie",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Especie</SortableHeader>;
-    },
+    header: ({ column }) => (
+      <SortableHeader column={column}>Especie</SortableHeader>
+    ),
     cell: ({ row }) => (
       <span className="text-sm font-semibold">{row.original.nombreEspecie}</span>
     ),
   },
   {
-    accessorKey: "fechaEntrega",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Fecha Entrega</SortableHeader>;
-    },
+    accessorKey: "injerto",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Injerto</SortableHeader>
+    ),
     cell: ({ row }) => (
-      <span className="text-xs font-bold font-mono text-muted-foreground">
-        {row.original.fechaEntrega}
+      <span className="text-xs text-muted-foreground font-mono">
+        {row.original.injerto}
       </span>
     ),
   },
   {
-    accessorKey: "invernadero",
-    header: ({ column }) => {
-      return <SortableHeader column={column}>Invernadero</SortableHeader>;
-    },
+    accessorKey: "nrocont",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Nro Contenedor</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.nrocont}</span>
+    ),
+  },
+  {
+    accessorKey: "contenedor",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Contenedor</SortableHeader>
+    ),
     size: 100,
+  },
+  {
+    accessorKey: "fPreexp",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Fecha Pre-Exp</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-bold font-mono text-muted-foreground">
+        {row.original.fPreexp}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "pe",
+    header: ({ column }) => (
+      <SortableHeader column={column}>PE</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-mono">{row.original.pe}</span>
+    ),
   },
 ];
 
@@ -254,35 +390,44 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
 // ============================================================================
 
 export const siembraRetrasadaExportColumns: ExportColumn<SiembraRetrasadaDto>[] = [
-  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
-  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
-  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
-  { accessorKey: "fechaSugeridaSiembra", exportHeader: "Fecha Sug. Siembra", pdfWidth: "20%" },
-  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "16%" },
-  { accessorKey: "con", exportHeader: "Cantidad", pdfWidth: "10%" },
+  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
+  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
+  { accessorKey: "injerto", exportHeader: "Injerto", pdfWidth: "8%" },
+  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "12%" },
+  { accessorKey: "semSiembra", exportHeader: "Sem Siembra", pdfWidth: "10%" },
+  { accessorKey: "fechaSugeridaSiembra", exportHeader: "Fecha Sug. Siembra", pdfWidth: "12%" },
+  { accessorKey: "semEntrega", exportHeader: "Sem Entrega", pdfWidth: "12%" },
+  { accessorKey: "estado", exportHeader: "Estado", pdfWidth: "8%" },
 ];
 
 export const faltaGerminacionExportColumns: ExportColumn<FaltaGerminacionDto>[] = [
-  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "12%" },
-  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "15%" },
-  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "20%" },
-  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "18%" },
-  { accessorKey: "invernadero", exportHeader: "Invernadero", pdfWidth: "18%" },
-];
-
-export const faltantePlantasExportColumns: ExportColumn<FaltantePlantasDto>[] = [
   { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
   { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
   { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
-  { accessorKey: "solicitadas", exportHeader: "Solicitadas", pdfWidth: "14%" },
-  { accessorKey: "germinadasTotales", exportHeader: "Germinadas", pdfWidth: "14%" },
-  { accessorKey: "invernadero", exportHeader: "Invernadero", pdfWidth: "14%" },
+  { accessorKey: "injerto", exportHeader: "Injerto", pdfWidth: "10%" },
+  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "15%" },
+  { accessorKey: "fPrimer", exportHeader: "Fecha Primer", pdfWidth: "15%" },
+  { accessorKey: "pr", exportHeader: "PR", pdfWidth: "10%" },
+];
+
+export const faltantePlantasExportColumns: ExportColumn<FaltantePlantasDto>[] = [
+  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
+  { accessorKey: "hai", exportHeader: "HAI", pdfWidth: "6%" },
+  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
+  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "12%" },
+  { accessorKey: "solicito", exportHeader: "Solicitadas", pdfWidth: "10%" },
+  { accessorKey: "pr", exportHeader: "PR", pdfWidth: "10%" },
+  { accessorKey: "porPr", exportHeader: "Por PR", pdfWidth: "10%" },
 ];
 
 export const faltaPreExpedicionExportColumns: ExportColumn<FaltaPreExpedicionDto>[] = [
-  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "12%" },
-  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "15%" },
-  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "20%" },
-  { accessorKey: "fechaEntrega", exportHeader: "Fecha Entrega", pdfWidth: "18%" },
-  { accessorKey: "invernadero", exportHeader: "Invernadero", pdfWidth: "18%" },
+  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
+  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
+  { accessorKey: "injerto", exportHeader: "Injerto", pdfWidth: "10%" },
+  { accessorKey: "contenedor", exportHeader: "Contenedor", pdfWidth: "15%" },
+  { accessorKey: "fPreexp", exportHeader: "Fecha Pre-Exp", pdfWidth: "15%" },
+  { accessorKey: "pe", exportHeader: "PE", pdfWidth: "10%" },
 ];

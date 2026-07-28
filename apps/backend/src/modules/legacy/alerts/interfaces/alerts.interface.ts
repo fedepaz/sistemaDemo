@@ -1,5 +1,3 @@
-// src/modules/legacy/alerts/interfaces/alerts.interface.ts
-
 import { RowDataPacket } from 'mysql2/promise';
 
 export interface LegacySiembraRetrasada extends RowDataPacket {
@@ -7,10 +5,16 @@ export interface LegacySiembraRetrasada extends RowDataPacket {
   ano: number;
   indice: number;
   espvar: string;
-  especieNombre: string;
-  f_siem: string;
+  nombre: string;
+  injerto: string;
+  nrocont: string;
   contenedor: string;
-  con: number;
+  semSiembra: string;
+  f_siem: string;
+  f_siembra: number;
+  semEntrega: string;
+  f_ent: string;
+  estado: string;
 }
 
 export interface LegacyFaltaGerminacion extends RowDataPacket {
@@ -18,20 +22,28 @@ export interface LegacyFaltaGerminacion extends RowDataPacket {
   ano: number;
   indice: number;
   espvar: string;
-  especieNombre: string;
+  nombre: string;
+  injerto: string;
+  nrocont: string;
   contenedor: string;
-  invernadero: string;
+  f_primer: string;
+  pr: string;
 }
 
 export interface LegacyFaltantePlantas extends RowDataPacket {
+  hai: string;
   partida: number;
   ano: number;
   indice: number;
   espvar: string;
-  especieNombre: string;
-  solicitadas: number;
-  germinadasTotales: number;
-  invernadero: string;
+  nombre: string;
+  nrocont: string;
+  contenedor: string;
+  solicito: number;
+  f_primer: string;
+  pr: string;
+  st_ini_pr: string;
+  porPr: number;
 }
 
 export interface LegacyFaltaPreExpedicion extends RowDataPacket {
@@ -39,7 +51,10 @@ export interface LegacyFaltaPreExpedicion extends RowDataPacket {
   ano: number;
   indice: number;
   espvar: string;
-  especieNombre: string;
-  fechaEntrega: string;
-  invernadero: string;
+  nombre: string;
+  injerto: string;
+  nrocont: string;
+  contenedor: string;
+  f_preexp: string;
+  pe: number;
 }

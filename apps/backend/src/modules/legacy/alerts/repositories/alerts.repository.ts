@@ -1,6 +1,5 @@
-// src/modules/legacy/alerts/repositories/alerts.repository.ts
-
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
 import {
   LegacySiembraRetrasada,
   LegacyFaltaGerminacion,
@@ -10,123 +9,66 @@ import {
 
 @Injectable()
 export class AlertsRepository {
-  // eslint-disable-next-line @typescript-eslint/require-await
+  constructor(
+    @Inject(LegacyMysqlService)
+    private readonly legacyDb: LegacyMysqlService,
+  ) {}
+
   async findSiembraRetrasada(): Promise<LegacySiembraRetrasada[]> {
-    return [
-      {
-        partida: 1045,
-        ano: 2026,
-        indice: 1,
-        espvar: 'EUC01',
-        especieNombre: 'Eucalipto Grandis',
-        f_siem: '2026-06-01',
-        contenedor: 'Ban Plastico',
-        con: 48,
-      } as LegacySiembraRetrasada,
-      {
-        partida: 2087,
-        ano: 2026,
-        indice: 1,
-        espvar: 'OLI03',
-        especieNombre: 'Olivo Arbequina',
-        f_siem: '2026-06-15',
-        contenedor: 'Bandeja 200',
-        con: 200,
-      } as LegacySiembraRetrasada,
-      {
-        partida: 3012,
-        ano: 2026,
-        indice: 2,
-        espvar: 'LIM02',
-        especieNombre: 'Limonero Volkameriano',
-        f_siem: '2026-07-01',
-        contenedor: 'Ban Plastico',
-        con: 96,
-      } as LegacySiembraRetrasada,
-    ];
+    return this.legacyDb.query<LegacySiembraRetrasada[]>(
+      `SELECT partidas.partida, partidas.ano, partidas.indice,
+        partidas.espvar, articulo.nombre, partidas.injerto, partidas.nrocont,
+        partidas.contenedor,
+        CONCAT(partidas.sem_siem,'-',partidas.ano_siem) AS semSiembra,
+        partidas.f_siem, partidas.f_siembra,
+        CONCAT(partidas.sem_ent,'-',partidas.ano_ent,' ',partidas.i_f) AS semEntrega,
+        partidas.f_ent, partidas.estado
+      FROM partidas
+      LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
+      WHERE estado <> 'ANULADA' AND f_siembra=0 AND partidas.hai<>'A'
+        AND partidas.sem_siem=WEEK(CURRENT_DATE()) AND partidas.ano>2025
+      ORDER BY partidas.ano, partidas.partida`,
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   async findFaltaGerminacion(): Promise<LegacyFaltaGerminacion[]> {
-    return [
-      {
-        partida: 1050,
-        ano: 2026,
-        indice: 1,
-        espvar: 'ROS01',
-        especieNombre: 'Rosa Hybrid Tea',
-        contenedor: 'Bandeja 104',
-        invernadero: 'Invernadero 3',
-      } as LegacyFaltaGerminacion,
-      {
-        partida: 2091,
-        ano: 2026,
-        indice: 1,
-        espvar: 'PIN02',
-        especieNombre: 'Pino Elliottii',
-        contenedor: 'Ban Plastico',
-        invernadero: 'Invernadero 1',
-      } as LegacyFaltaGerminacion,
-    ];
+    return this.legacyDb.query<LegacyFaltaGerminacion[]>(
+      `SELECT partidas.partida, partidas.ano, partidas.indice,
+        partidas.espvar, articulo.nombre, partidas.injerto, partidas.nrocont,
+        partidas.contenedor, partidas.f_primer, partidas.pr
+      FROM partidas
+      LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
+      WHERE partidas.f_primer<=CURRENT_DATE() AND estado <> 'ANULADA'
+        AND pr=0 AND partidas.hai<>'A' AND partidas.ano>2025
+      ORDER BY partidas.ano, partidas.partida`,
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   async findFaltantePlantas(): Promise<LegacyFaltantePlantas[]> {
-    return [
-      {
-        partida: 1048,
-        ano: 2026,
-        indice: 1,
-        espvar: 'EUC01',
-        especieNombre: 'Eucalipto Grandis',
-        solicitadas: 500,
-        germinadasTotales: 320,
-        invernadero: 'Invernadero 2',
-      } as LegacyFaltantePlantas,
-      {
-        partida: 2095,
-        ano: 2026,
-        indice: 1,
-        espvar: 'CAS03',
-        especieNombre: 'Casiopea',
-        solicitadas: 200,
-        germinadasTotales: 145,
-        invernadero: 'Invernadero 1',
-      } as LegacyFaltantePlantas,
-      {
-        partida: 3015,
-        ano: 2026,
-        indice: 2,
-        espvar: 'OLI03',
-        especieNombre: 'Olivo Arbequina',
-        solicitadas: 300,
-        germinadasTotales: 280,
-        invernadero: 'Invernadero 4',
-      } as LegacyFaltantePlantas,
-    ];
+    return this.legacyDb.query<LegacyFaltantePlantas[]>(
+      `SELECT partidas.hai, partidas.partida, partidas.ano, partidas.indice,
+        partidas.espvar, articulo.nombre, partidas.nrocont, partidas.solicito,
+        partidas.contenedor, partidas.f_primer, partidas.pr, partidas.st_ini_pr,
+        FLOOR(partidas.pr*partidas.cant_s/100)*partidas.st_ini_pr AS porPr
+      FROM partidas
+      LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
+      WHERE estado <> 'ANULADA' AND pr<>0 AND pe=0
+        AND partidas.solicito>FLOOR(partidas.pr*partidas.cant_s/100)*partidas.st_ini_pr
+        AND partidas.hai<>'A' AND partidas.ano>2025
+      ORDER BY partidas.ano, partidas.partida, partidas.indice`,
+    );
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   async findFaltaPreExpedicion(): Promise<LegacyFaltaPreExpedicion[]> {
-    return [
-      {
-        partida: 1052,
-        ano: 2026,
-        indice: 1,
-        espvar: 'LIM02',
-        especieNombre: 'Limonero Volkameriano',
-        fechaEntrega: '2026-07-20',
-        invernadero: 'Invernadero 3',
-      } as LegacyFaltaPreExpedicion,
-      {
-        partida: 2093,
-        ano: 2026,
-        indice: 1,
-        espvar: 'ROS01',
-        especieNombre: 'Rosa Hybrid Tea',
-        fechaEntrega: '2026-07-25',
-        invernadero: 'Invernadero 1',
-      } as LegacyFaltaPreExpedicion,
-    ];
+    return this.legacyDb.query<LegacyFaltaPreExpedicion[]>(
+      `SELECT partidas.partida, partidas.ano, partidas.indice,
+        partidas.espvar, articulo.nombre, partidas.injerto, partidas.nrocont,
+        partidas.contenedor, partidas.f_preexp, partidas.pe
+      FROM partidas
+      LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
+      WHERE partidas.f_preexp<=CURRENT_DATE() AND estado <> 'ANULADA'
+        AND pe=0 AND partidas.hai<>'A' AND partidas.ano>2025
+      ORDER BY partidas.ano, partidas.partida`,
+    );
   }
 }

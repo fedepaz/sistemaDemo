@@ -1,5 +1,3 @@
-// src/modules/legacy/alerts/alerts.service.ts
-
 import { Injectable } from '@nestjs/common';
 import { AlertsRepository } from './repositories/alerts.repository';
 import {
@@ -27,10 +25,16 @@ export class AlertsService {
       anio: row.ano,
       indice: row.indice,
       codigoEspecie: row.espvar,
-      nombreEspecie: row.especieNombre,
-      fechaSugeridaSiembra: row.f_siem,
+      nombreEspecie: row.nombre,
+      injerto: row.injerto,
+      nrocont: row.nrocont,
       contenedor: row.contenedor,
-      con: row.con,
+      semSiembra: row.semSiembra,
+      fechaSugeridaSiembra: row.f_siem,
+      fSiembra: row.f_siembra,
+      semEntrega: row.semEntrega,
+      fEnt: row.f_ent,
+      estado: row.estado,
     };
   }
 
@@ -42,22 +46,30 @@ export class AlertsService {
       anio: row.ano,
       indice: row.indice,
       codigoEspecie: row.espvar,
-      nombreEspecie: row.especieNombre,
+      nombreEspecie: row.nombre,
+      injerto: row.injerto,
+      nrocont: row.nrocont,
       contenedor: row.contenedor,
-      invernadero: row.invernadero,
+      fPrimer: row.f_primer,
+      pr: row.pr,
     };
   }
 
   private mapFaltantePlantas(row: LegacyFaltantePlantas): FaltantePlantasDto {
     return {
+      hai: row.hai,
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
       codigoEspecie: row.espvar,
-      nombreEspecie: row.especieNombre,
-      solicitadas: row.solicitadas,
-      germinadasTotales: row.germinadasTotales,
-      invernadero: row.invernadero,
+      nombreEspecie: row.nombre,
+      nrocont: row.nrocont,
+      contenedor: row.contenedor,
+      solicito: row.solicito,
+      fPrimer: row.f_primer,
+      pr: row.pr,
+      stIniPr: row.st_ini_pr,
+      porPr: row.porPr,
     };
   }
 
@@ -69,9 +81,12 @@ export class AlertsService {
       anio: row.ano,
       indice: row.indice,
       codigoEspecie: row.espvar,
-      nombreEspecie: row.especieNombre,
-      fechaEntrega: row.fechaEntrega,
-      invernadero: row.invernadero,
+      nombreEspecie: row.nombre,
+      injerto: row.injerto,
+      nrocont: row.nrocont,
+      contenedor: row.contenedor,
+      fPreexp: row.f_preexp,
+      pe: row.pe,
     };
   }
 
