@@ -68,18 +68,14 @@ export function ExtendidoDataTable({
 
   useEffect(() => {
     if (selectedPartida) {
-      // Use 'con' (Bandejas en Cámara) as the default source for stock_ini
-      // if stockInicial isn't defined yet
-      const initialStock = selectedPartida.stockInicial ?? selectedPartida.con;
-
       formAsignarUbicacion.reset({
         partida: selectedPartida.partidaId,
         ano: selectedPartida.anio,
         indice: selectedPartida.indice,
         ubicacion: selectedPartida.codigoUbicacion ?? undefined,
-        stock_ini: initialStock,
+        stock_ini: selectedPartida.con,
         detalle: "", // Reset detalle (limit 30)
-        baja: Number(selectedPartida.baja) || 0,
+        baja: 0,
         extendido: selectedPartida.extendido || selectedPartida.detalle || "",
         edita: "S",
       });
