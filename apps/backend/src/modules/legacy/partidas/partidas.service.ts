@@ -22,6 +22,13 @@ export class PartidasService {
     if (!data.ubicacion || data.ubicacion === 0) {
       throw new BadRequestException('Debe seleccionar una ubicación válida');
     }
+
+    if (!data.stock_ini || data.stock_ini <= 0) {
+      throw new BadRequestException('stock_ini debe ser mayor a 0');
+    }
+    if (data.baja && data.baja > data.stock_ini) {
+      throw new BadRequestException('baja no puede ser mayor al stock inicial');
+    }
     const repoData = {
       partida: data.partida,
       ano: data.ano,
