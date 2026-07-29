@@ -1,16 +1,8 @@
 // src/features/extendidos/components/extendido-edit-form.tsx
 "use client";
 
-import {
-  Package,
-  Activity,
-  FileText,
-  TrendingDown,
-  Warehouse,
-  AlertTriangle,
-} from "lucide-react";
+import { Package, FileText, Warehouse } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useMemo } from "react";
 import { useDepositos } from "../hooks/useDepositos";
 import {
   Select,
@@ -50,18 +42,6 @@ export function ExtendidosEditForm({
   const depositos = depositosQuery.filter((d) => d.camara === "");
 
   const originalStock = selectedExtendido.con;
-  const watchedStockIni = form.watch("stock_ini");
-  const watchedBaja = form.watch("baja");
-
-  // Logic to calculate expected values but NOT override them
-  const expectedBaja = useMemo(() => {
-    const stockOk = Number(watchedStockIni) || 0;
-    return Math.max(0, originalStock - stockOk);
-  }, [watchedStockIni, originalStock]);
-
-  const hasDiscrepancy = useMemo(() => {
-    return Number(watchedBaja) !== expectedBaja;
-  }, [watchedBaja, expectedBaja]);
 
   return (
     <Form {...form}>
@@ -85,14 +65,6 @@ export function ExtendidosEditForm({
                   {selectedExtendido.nombreEspecie}
                 </p>
               </div>
-            </div>
-            <div className="text-right pr-1 md:pr-2">
-              <p className="text-[8px] md:text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-0.5 md:mb-1">
-                Bandejas
-              </p>
-              <p className="text-xl md:text-2xl font-black text-primary leading-none">
-                {originalStock}
-              </p>
             </div>
           </div>
         </div>
@@ -142,33 +114,17 @@ export function ExtendidosEditForm({
           />
 
           <div className="grid grid-cols-2 gap-4 md:gap-8">
-            {/* 📦 STOCK INICIAL */}
-            <FormField
-              control={form.control}
-              name="stock_ini"
-              render={({ field }) => (
-                <FormItem className="space-y-2 md:space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                      <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                    </div>
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                      Bandejas Ok
-                    </FormLabel>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      inputMode="numeric"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* 📦 STOCK INICIAL (solo lectura) */}
+            <div className="space-y-2 md:space-y-3">
+              <div className="flex items-center gap-2">
+                <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  Bandejas Recibidas
+                </p>
+              </div>
+              <p className="h-12 md:h-16 rounded-xl border border-border/60 bg-muted/50 shadow-sm text-xl md:text-3xl font-black px-4 flex items-center text-foreground/80">
+                {originalStock}
+              </p>
+            </div>
 
             {/* 📉 BAJA (Manual with Advisory) */}
             <FormField
@@ -177,22 +133,7 @@ export function ExtendidosEditForm({
               render={({ field }) => (
                 <FormItem className="space-y-2 md:space-y-3">
                   <div className="flex items-center gap-2">
-                    <div
-                      className={`p-1.5 md:p-2 rounded-lg transition-colors duration-300 ${
-                        hasDiscrepancy ? "bg-amber-100" : "bg-destructive/10"
-                      }`}
-                    >
-                      {hasDiscrepancy ? (
-                        <AlertTriangle className="h-3.5 w-3.5 md:h-4 md:w-4 text-amber-600 animate-pulse" />
-                      ) : (
-                        <TrendingDown className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
-                      )}
-                    </div>
-                    <FormLabel
-                      className={`text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors ${
-                        hasDiscrepancy ? "text-amber-600" : "text-destructive"
-                      }`}
-                    >
+                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors text-destructive">
                       Baja
                     </FormLabel>
                   </div>
@@ -203,11 +144,7 @@ export function ExtendidosEditForm({
                         inputMode="numeric"
                         {...field}
                         onChange={(e) => field.onChange(Number(e.target.value))}
-                        className={`h-12 md:h-16 rounded-xl shadow-sm text-xl md:text-3xl font-black px-4 transition-all duration-300 ${
-                          hasDiscrepancy
-                            ? "border-amber-400 bg-amber-50/50 text-amber-700 focus-visible:ring-amber-200"
-                            : "border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
-                        }`}
+                        className="h-12 md:h-16 rounded-xl shadow-sm text-xl md:text-3xl font-black px-4 transition-all duration-300 border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
                       />
                     </div>
                   </FormControl>
