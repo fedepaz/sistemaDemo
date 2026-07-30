@@ -1,4 +1,7 @@
+// next.config.ts
+
 import { NextConfig } from "next";
+import { withSerwist } from "@serwist/turbopack";
 
 const nextConfig: NextConfig = {
   // reactStrictMode is enabled by default in Next.js 16
@@ -30,4 +33,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSerwist(nextConfig);

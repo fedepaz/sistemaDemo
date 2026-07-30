@@ -155,12 +155,14 @@ src/
 ├── app/                     # Next.js 15 App Router
 │   ├── (dashboard)/         # Protected routes
 │   ├── (auth)/              # Auth routes
-│   └── manifest.ts          # PWA web app manifest
+│   ├── manifest.ts          # PWA web app manifest
+│   └── sw.ts                # Serwist service worker config
 ├── features/                # 🚀 CORE: Domain-specific features (Colocated)
 ├── components/              # Reusable UI components (NOT domain logic)
 │   ├── ui/                  # shadcn/ui base components
 │   ├── dashboard/           # Layout components
-│   └── data-display/        # Generic tables, charts, visualizations
+│   ├── data-display/        # Generic tables, charts, visualizations
+│   └── service-worker/      # PWA: registration, update notification
 ├── lib/                     # Utilities and configurations
 │   └── export/              # CSV, Excel, PDF generators (lazy-loaded)
 │       ├── pdf-theme.ts     # PDF color palette (⚠️ keep in sync with globals.css)
@@ -210,7 +212,7 @@ src/components/modals/
 Tech Stack Configuration:
 ├── Framework: Next.js 15+ (App Router, Server Components)
 ├── Styling: Tailwind CSS + shadcn/ui
-├── PWA: Web App Manifest (`manifest.ts`) + Apple Web App metadata
+├── PWA: Serwist (`@serwist/next`) + Web App Manifest + Apple Web App metadata
 ├── State Management: TanStack Query (Mandatory: useSuspenseQuery for all GET) + Zustand
 ├── Forms: React Hook Form + Zod
 ├── Tables: TanStack Table + AG Grid Enterprise (optional)

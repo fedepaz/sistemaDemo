@@ -3,7 +3,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AppProviders } from "@/providers/app-providers";
-import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
+import { ServiceWorkerRegistration } from "@/components/service-worker/service-worker-registration";
+import { UpdateNotification } from "@/components/service-worker/update-notification";
 
 export const metadata: Metadata = {
   title: "Sistema de gestión",
@@ -35,6 +36,7 @@ export default async function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body>
         <ServiceWorkerRegistration />
+        <UpdateNotification />
         <AppProviders>{children}</AppProviders>
       </body>
     </html>
