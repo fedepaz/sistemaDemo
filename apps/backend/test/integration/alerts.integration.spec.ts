@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { createTestApp } from './helpers/create-app';
+import { createAlertsMock } from './helpers/mock-factories';
 import {
   SiembraRetrasadaDtoSchema,
   FaltaGerminacionDtoSchema,
@@ -11,16 +11,84 @@ import {
 
 describe('Alerts Integration', () => {
   let app: INestApplication;
+  let alertsMock: ReturnType<typeof createAlertsMock>;
+
+  const mockSiembraRetrasada = [
+    {
+      partidaId: 1045,
+      anio: 2026,
+      indice: 1,
+      codigoEspecie: 'EUC01',
+      nombreEspecie: 'Eucalipto Grandis',
+      injerto: 'I001',
+      nrocont: '48',
+      contenedor: 'Ban Plastico',
+      semSiembra: '24-2026',
+      fechaSugeridaSiembra: '2026-06-01',
+      fSiembra: 0,
+      semEntrega: '28-2026 1',
+      fEnt: '2026-07-15',
+      estado: 'PENDIENTE',
+    },
+  ];
+
+  const mockFaltaGerminacion = [
+    {
+      partidaId: 1050,
+      anio: 2026,
+      indice: 1,
+      codigoEspecie: 'ROS01',
+      nombreEspecie: 'Rosa Hybrid Tea',
+      injerto: 'I002',
+      nrocont: '104',
+      contenedor: 'Bandeja 104',
+      fPrimer: '2026-07-01',
+      pr: '0',
+    },
+  ];
+
+  const mockFaltantePlantas = [
+    {
+      hai: 'A',
+      partidaId: 1048,
+      anio: 2026,
+      indice: 1,
+      codigoEspecie: 'EUC01',
+      nombreEspecie: 'Eucalipto Grandis',
+      nrocont: '500',
+      contenedor: 'Ban Plastico',
+      solicito: 500,
+      fPrimer: '2026-06-15',
+      pr: '85.5',
+      stIniPr: '4',
+      porPr: 171,
+    },
+  ];
+
+  const mockFaltaPreExpedicion = [
+    {
+      partidaId: 1052,
+      anio: 2026,
+      indice: 1,
+      codigoEspecie: 'LIM02',
+      nombreEspecie: 'Limonero Volkameriano',
+      injerto: 'I003',
+      nrocont: '96',
+      contenedor: 'Ban Plastico',
+      fPreexp: '2026-07-20',
+      pe: 0,
+    },
+  ];
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    alertsMock = createAlertsMock();
+    alertsMock.getSiembraRetrasada.mockResolvedValue(mockSiembraRetrasada);
+    alertsMock.getFaltaGerminacion.mockResolvedValue(mockFaltaGerminacion);
+    alertsMock.getFaltantePlantas.mockResolvedValue(mockFaltantePlantas);
+    alertsMock.getFaltaPreExpedicion.mockResolvedValue(mockFaltaPreExpedicion);
 
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ transform: true }));
-    await app.init();
-  }, 30000);
+    app = await createTestApp({ alerts: alertsMock });
+  });
 
   afterAll(async () => {
     await app.close();
@@ -34,11 +102,10 @@ describe('Alerts Integration', () => {
 
       const body = res.body as unknown[];
       expect(Array.isArray(body)).toBe(true);
+      expect(body).toHaveLength(1);
 
-      if (body.length > 0) {
-        const parsed = SiembraRetrasadaDtoSchema.safeParse(body[0]);
-        expect(parsed.success).toBe(true);
-      }
+      const parsed = SiembraRetrasadaDtoSchema.safeParse(body[0]);
+      expect(parsed.success).toBe(true);
     });
   });
 
@@ -50,11 +117,10 @@ describe('Alerts Integration', () => {
 
       const body = res.body as unknown[];
       expect(Array.isArray(body)).toBe(true);
+      expect(body).toHaveLength(1);
 
-      if (body.length > 0) {
-        const parsed = FaltaGerminacionDtoSchema.safeParse(body[0]);
-        expect(parsed.success).toBe(true);
-      }
+      const parsed = FaltaGerminacionDtoSchema.safeParse(body[0]);
+      expect(parsed.success).toBe(true);
     });
   });
 
@@ -66,11 +132,10 @@ describe('Alerts Integration', () => {
 
       const body = res.body as unknown[];
       expect(Array.isArray(body)).toBe(true);
+      expect(body).toHaveLength(1);
 
-      if (body.length > 0) {
-        const parsed = FaltantePlantasDtoSchema.safeParse(body[0]);
-        expect(parsed.success).toBe(true);
-      }
+      const parsed = FaltantePlantasDtoSchema.safeParse(body[0]);
+      expect(parsed.success).toBe(true);
     });
   });
 
@@ -82,11 +147,10 @@ describe('Alerts Integration', () => {
 
       const body = res.body as unknown[];
       expect(Array.isArray(body)).toBe(true);
+      expect(body).toHaveLength(1);
 
-      if (body.length > 0) {
-        const parsed = FaltaPreExpedicionDtoSchema.safeParse(body[0]);
-        expect(parsed.success).toBe(true);
-      }
+      const parsed = FaltaPreExpedicionDtoSchema.safeParse(body[0]);
+      expect(parsed.success).toBe(true);
     });
   });
 });

@@ -12,6 +12,8 @@ import { SiembraService } from '../../../src/modules/legacy/siembra/siembra.serv
 import { PermissionsController } from '../../../src/modules/permissions/permissions.controller';
 import { PermissionsService } from '../../../src/modules/permissions/permissions.service';
 import { TenantsService } from '../../../src/modules/tenants/tenants.service';
+import { AlertsController } from '../../../src/modules/legacy/alerts/alerts.controller';
+import { AlertsService } from '../../../src/modules/legacy/alerts/alerts.service';
 import { MockAuthGuard, MockPermissionsGuard } from './mock-guards';
 import {
   createAuthMock,
@@ -20,6 +22,7 @@ import {
   createSiembraMock,
   createPermissionsMock,
   createTenantsMock,
+  createAlertsMock,
 } from './mock-factories';
 
 export interface ServiceOverrides {
@@ -29,6 +32,7 @@ export interface ServiceOverrides {
   siembra?: ReturnType<typeof createSiembraMock>;
   permissions?: ReturnType<typeof createPermissionsMock>;
   tenants?: ReturnType<typeof createTenantsMock>;
+  alerts?: ReturnType<typeof createAlertsMock>;
 }
 
 export async function createTestApp(
@@ -40,6 +44,7 @@ export async function createTestApp(
   const siembraMock = overrides?.siembra ?? createSiembraMock();
   const permissionsMock = overrides?.permissions ?? createPermissionsMock();
   const tenantsMock = overrides?.tenants ?? createTenantsMock();
+  const alertsMock = overrides?.alerts ?? createAlertsMock();
 
   const module: TestingModule = await Test.createTestingModule({
     controllers: [
@@ -48,6 +53,7 @@ export async function createTestApp(
       EntitiesController,
       SiembraController,
       PermissionsController,
+      AlertsController,
     ],
     providers: [
       { provide: APP_GUARD, useClass: MockAuthGuard },
@@ -58,6 +64,7 @@ export async function createTestApp(
       { provide: SiembraService, useValue: siembraMock },
       { provide: PermissionsService, useValue: permissionsMock },
       { provide: TenantsService, useValue: tenantsMock },
+      { provide: AlertsService, useValue: alertsMock },
     ],
   }).compile();
 

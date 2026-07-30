@@ -67,3 +67,12 @@ export function createTenantsMock() {
     recoverById: jest.fn(),
   };
 }
+
+export function createAlertsMock() {
+  return {
+    getSiembraRetrasada: jest.fn(),
+    getFaltaGerminacion: jest.fn(),
+    getFaltantePlantas: jest.fn(),
+    getFaltaPreExpedicion: jest.fn(),
+  };
+}
