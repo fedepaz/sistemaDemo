@@ -6,7 +6,14 @@ const config: Config = {
   testEnvironment: 'node',
   testRegex: '.integration.spec.ts$',
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': [
+      'ts-jest',
+      {
+        diagnostics: {
+          ignoreCodes: [151002],
+        },
+      },
+    ],
   },
   moduleNameMapper: {
     '^(\\.\\.?\\/.*)\\.js$': '$1',
