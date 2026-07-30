@@ -5,7 +5,7 @@ import { useDataTableActions } from "@/hooks/useDataTable";
 import { useDeleteUser, useUpdateUser, useUsers } from "../hooks/usersHooks";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { userColumns } from "./columns";
+import { userColumns, userExportColumns } from "./columns";
 import { UserEditForm } from "./user-edit-form";
 import { useEffect, useState } from "react";
 import {
@@ -77,12 +77,7 @@ export function UsersDataTable() {
     }
   };
 
-  const handleExport = (
-    format: "csv" | "excel" | "json" | "pdf",
-    selectedRows: UserProfileDto[],
-  ) => {
-    console.log("Export Users:", selectedRows);
-  };
+
 
   const handleUpdate = async (formData: UpdateUserProfileDto) => {
     if (selectedUser) {
@@ -117,7 +112,7 @@ export function UsersDataTable() {
         createLabel="Nuevo Usuario"
         onEdit={handleEdit}
         onDelete={handleDelete}
-        onExport={handleExport}
+        exportColumns={userExportColumns}
       />
       {slideOverOpen && (
         <SlideOverForm

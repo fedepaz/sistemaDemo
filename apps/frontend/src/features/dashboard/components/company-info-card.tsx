@@ -73,7 +73,7 @@ export function CompanyInfoCard() {
                 <Building2 className="w-10 h-10 sm:w-12 sm:h-12 text-primary/60" />
               </div>
               <div
-                className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm"
+                className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-success flex items-center justify-center shadow-sm"
                 title="Verificado"
               >
                 <BadgeCheck className="w-4 h-4 text-white" />
@@ -93,7 +93,7 @@ export function CompanyInfoCard() {
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="text-xs bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:text-emerald-400 font-bold"
+                  className="text-xs bg-success/10 text-success border-success/20 font-bold"
                 >
                   {companyData["Situacion"]}
                 </Badge>

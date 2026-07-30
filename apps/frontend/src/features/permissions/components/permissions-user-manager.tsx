@@ -189,9 +189,9 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
     READ_ONLY: "Solo Lectura",
   };
   const GROUP_COLORS: Record<PermissionType, string> = {
-    CRUD: "bg-emerald-400/20 text-emerald-600 dark:text-emerald-400",
-    PROCESS: "bg-amber-400/20 text-amber-600 dark:text-amber-400",
-    READ_ONLY: "bg-sky-400/20 text-sky-600 dark:text-sky-400",
+    CRUD: "bg-success/20 text-success",
+    PROCESS: "bg-warning/20 text-warning",
+    READ_ONLY: "bg-info/20 text-info",
   };
 
   const totalResults = Object.values(groupedPermissions).reduce(
@@ -271,9 +271,9 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                           <div
                             className={cn(
                               "h-4 md:h-6 w-1 md:w-1.5 rounded-full",
-                              type === "CRUD" && "bg-emerald-500",
-                              type === "PROCESS" && "bg-amber-500",
-                              type === "READ_ONLY" && "bg-sky-500",
+                              type === "CRUD" && "bg-success",
+                              type === "PROCESS" && "bg-warning",
+                              type === "READ_ONLY" && "bg-info",
                             )}
                           />
                           <div className="flex items-center gap-2">

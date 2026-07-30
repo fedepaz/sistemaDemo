@@ -1,12 +1,11 @@
 // src/config/logger.ts
-import pretty from 'pino-pretty';
 
-// const isDev = process.env.NODE_ENV === 'development';
-// true for local dev until finishing the development
-const isDev = true;
+const isDev = process.env.BACKEND_NODE_ENV === 'development';
 
-export const pinoStream = isDev
-  ? pretty({
+export const getPinoStream = async (): Promise<any> => {
+  if (isDev) {
+    const pretty = await import('pino-pretty');
+    return pretty.default({
       colorize: true,
       colorizeObjects: true,
       singleLine: false,
@@ -14,5 +13,7 @@ export const pinoStream = isDev
       translateTime: 'SYS:HH:MM:ss.l',
       ignore: 'pid,hostname',
       messageFormat: '{context} - {msg}',
-    })
-  : process.stdout; // raw JSON → Datadog/Sentry ingests this directly
+    });
+  }
+  return process.stdout;
+};

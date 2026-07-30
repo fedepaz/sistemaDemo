@@ -11,7 +11,7 @@ Build a bulletproof, enterprise-grade management system that converts 30-day tri
 ### Frontend Stack
 
 ```typescript
-Framework: Next.js 14+ (App Router)
+Framework: Next.js 15+ (App Router)
 ├── UI Foundation: Tailwind CSS
 ├── Component Registry: shadcn/ui
 ├── Icons: Lucide React
@@ -30,8 +30,6 @@ Framework: NestJS (TypeScript-first)
 ├── Database ORM: Prisma
 ├── Database: MariaDB 11+
 ├── Authentication: Manages users, permissions, and session tokens
-├── Caching: Valkey (Redis 8+ compatible fork)
-├── Queue System: BullMQ (Valkey/Redis-based)
 ├── File Storage: AWS S3 compatible
 ├── Email: SendGrid / AWS SES
 ├── Background Jobs: Node.js workers
@@ -73,16 +71,13 @@ Coverage: Vitest coverage (80%+ required)
 ### Multi-Tenancy Strategy
 
 ```typescript
-Pattern: Database-per-tenant (maximum isolation)
+Pattern: Single-tenant with tenantId column
 
 Rationale:
-✅ Complete data isolation (security requirement)
-✅ Easy backup/restore per client
-✅ Custom schemas per tenant possible
-✅ Regulatory compliance (GDPR)
-❌ More complex deployment
-❌ Higher infrastructure costs
-✅ Worth it for enterprise clients paying €50k+
+  ✅ Simpler deployment and operations
+  ✅ Single-tenant SaaS model (one organization)
+  ✅ tenantId retained for audit trail and future flexibility
+  ✅ No cross-tenant data access risk (single tenant)
 ```
 
 ### Deployment Strategy
@@ -109,9 +104,8 @@ The platform uses a traditional username/password authentication model managed b
 ```typescript
 Multi-Level Caching:
 L1: React Query (browser cache) - 5 minutes
-L2: Valkey 8 (server cache) - 1 hour
-L3: Database query optimization - indexes
-L4: CDN (static assets) - 30 days
+L2: Database query optimization - indexes
+L3: CDN (static assets) - 30 days
 ```
 
 ---
@@ -126,7 +120,6 @@ Node.js: 18.18.0+
 pnpm: 10.0.0+
 Docker: 24.0+ (and Docker Compose)
 MariaDB: 11+
-Valkey: 8+
 ```
 
 ---

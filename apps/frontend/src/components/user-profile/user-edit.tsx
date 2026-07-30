@@ -2,7 +2,7 @@
 "use client";
 
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUpdateUserProfile } from "@/features/users/hooks/usersHooks";
+import { useUpdateUserProfile } from "@/features/users";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

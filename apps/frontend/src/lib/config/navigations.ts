@@ -3,53 +3,44 @@
 import { ROUTES } from "@/constants/routes";
 import {
   Home,
-  Settings,
-  BarChart3,
-  Key,
-  UserCircle,
-  Package,
+  ClipboardList,
+  Users,
+  Sprout,
+  Layers,
+  Building2,
+  Briefcase,
+  Expand,
+  Shield,
 } from "lucide-react";
+import type { NavigationConfig } from "./navigation.types";
 
-export interface NavigationItem {
-  title: string;
-  href: string;
-  icon: React.ComponentType;
-  description?: string;
-  badge?: string;
-  badgeVariant?: "default" | "secondary" | "destructive" | "outline";
-  dashboard?: {
-    statsLabel: string; // e.g., "Entidades activas"
-    // Note: Actual stats value will come from KPIs hook
-  };
-  requiredPermission?: {
-    table: string; // must match Prisma @@map name
-    action: "read"; // for visibility, we only care about read
-  };
-}
-
-export interface NavigationGroup {
-  id: string;
-  title: string;
-  icon: React.ComponentType;
-  items: NavigationItem[];
-}
-
-export const NAVIGATION_CONFIG: NavigationGroup[] = [
+export const NAVIGATION_CONFIG: NavigationConfig = [
   {
-    id: "operations",
-    title: "Operaciones",
+    kind: "standalone",
+    title: "Home",
+    href: ROUTES.DASHBOARD,
     icon: Home,
+    description: "Vista general y alertas",
+  },
+
+  {
+    kind: "nestedGroup",
+    id: "partidas",
+    title: "Partidas",
+    icon: Layers,
     items: [
       {
-        title: "Dashboard",
-        href: ROUTES.DASHBOARD,
-        icon: Home,
-        description: "Vista general y alertas",
+        title: "Siembra",
+        href: ROUTES.SIEMBRA,
+        icon: Sprout,
+        description: "Gestión de partidas a siembrar",
+        dashboard: { statsLabel: "Partidas a siembrar" },
+        requiredPermission: { table: "siembra", action: "read" },
       },
       {
         title: "A Extender",
         href: ROUTES.EXTENDIDOS,
-        icon: Package,
+        icon: Expand,
         description: "Gestión de partidas a extender",
         dashboard: { statsLabel: "Partidas a extender" },
         requiredPermission: { table: "extendidos", action: "read" },
@@ -58,31 +49,42 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
   },
 
   {
-    id: "admin",
-    title: "Administración",
-    icon: Settings,
+    kind: "nestedGroup",
+    id: "usuarios",
+    title: "Usuarios",
+    icon: Users,
     items: [
       {
-        title: "Usuarios",
+        title: "Lista",
         href: ROUTES.USERS,
-        icon: UserCircle,
+        icon: Users,
         description: "Gestión de usuarios del sistema",
         dashboard: { statsLabel: "Usuarios activos" },
         requiredPermission: { table: "users", action: "read" },
       },
       {
-        title: "Permisos de Usuario",
+        title: "Permisos",
         href: ROUTES.USER_PERMISSIONS,
-        icon: Key,
+        icon: Shield,
         description: "Configuración de permisos por usuario",
         dashboard: { statsLabel: "Permisos configurados" },
-        requiredPermission: { table: "user_permissions", action: "read" },
+        requiredPermission: {
+          table: "user_permissions",
+          action: "read",
+        },
       },
-
+    ],
+  },
+  {
+    kind: "nestedGroup",
+    id: "dev",
+    title: "Desarrollo",
+    icon: Briefcase,
+    items: [
       {
         title: "Auditoría",
         href: ROUTES.AUDIT_LOGS,
-        icon: BarChart3,
+        icon: ClipboardList,
         description: "Registro de actividades del sistema",
         dashboard: { statsLabel: "Registros de auditoría" },
         requiredPermission: { table: "audit_logs", action: "read" },
@@ -90,7 +92,7 @@ export const NAVIGATION_CONFIG: NavigationGroup[] = [
       {
         title: "Entidades",
         href: ROUTES.ENTITIES,
-        icon: Package,
+        icon: Building2,
         description: "Gestión de entidades del sistema",
         dashboard: { statsLabel: "Entidades activas" },
         requiredPermission: { table: "entities", action: "read" },

@@ -1,6 +1,6 @@
-// src/modules/tenants/tenats.service.ts
+// src/modules/tenants/tenants.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TenantsRepository } from './repositories/tenants.repository';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class TenantsService {
 
   async getTenantById(tenantId: string, requesterId: string) {
     const tenant = await this.repo.findById(tenantId, requesterId);
-    if (!tenant) throw new Error('Tenant not found');
+    if (!tenant) throw new NotFoundException('Tenant not found');
     return tenant;
   }
 

@@ -1,10 +1,7 @@
 // src/modules/permissions/interfaces/permission.interface.ts
 
 export interface IPermissionRepository {
-  findManyByUserId(
-    userId: string,
-    requesterId: string,
-  ): Promise<UserPermissionRecord[]>;
+  findManyByUserId(userId: string): Promise<UserPermissionRecord[]>;
   findManyByEntityId(
     entityId: string,
     requesterId: string,

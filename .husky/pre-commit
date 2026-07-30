@@ -30,4 +30,4 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "✅ ¡Todas las verificaciones han pasado! Commit realizado con éxito."
+echo "✅ Lint pasado."

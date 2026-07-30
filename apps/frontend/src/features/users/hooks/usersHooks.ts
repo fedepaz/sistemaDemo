@@ -8,19 +8,12 @@ import {
 import { toast } from "sonner";
 import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
 import { userService } from "../api/userService";
-
-export const userProfileQueryKeys = {
-  all: () => ["users"] as const,
-  byUserName: (username: string) =>
-    [...userProfileQueryKeys.all(), "byUserName", username] as const,
-  byTenantId: (tenantId: string) =>
-    [...userProfileQueryKeys.all(), "byTenantId", tenantId] as const,
-  admin: () => ["users", "allAdmin"] as const,
-};
+import { usersQueryKeys } from "@/lib/queryKeys";
+import { invalidateQueries } from "@/lib/query-invalidation-map";
 
 export const useUsers = () => {
   return useSuspenseQuery<UserProfileDto[]>({
-    queryKey: userProfileQueryKeys.all(),
+    queryKey: usersQueryKeys.all(),
     queryFn: userService.fetchAll,
     retry: 1, // Retry once to account for transient network issues
   });
@@ -40,20 +33,15 @@ export const useUpdateUserProfile = () => {
       toast.success(toastMessage, {
         duration: 3000,
       });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-
-      const authContext = queryClient.getQueryData(["userProfile"]);
-      if (authContext) {
-        queryClient.setQueryData(["userProfile"], data);
-      }
+      invalidateQueries(queryClient, "updateUserProfile");
+      queryClient.setQueryData(usersQueryKeys.all(), data);
     },
   });
 };
 
 export const useUsersByUserName = (username: string) => {
   return useSuspenseQuery<UserProfileDto | null>({
-    queryKey: userProfileQueryKeys.byUserName(username),
+    queryKey: usersQueryKeys.byUserName(username),
     queryFn: () => userService.fetchByUserName(username),
     retry: 1, // Retry once to account for transient network issues
   });
@@ -61,7 +49,7 @@ export const useUsersByUserName = (username: string) => {
 
 export const useUsersByTenantId = (tenantId: string) => {
   return useSuspenseQuery<UserProfileDto[]>({
-    queryKey: userProfileQueryKeys.byTenantId(tenantId),
+    queryKey: usersQueryKeys.byTenantId(tenantId),
     queryFn: () => userService.fetchByTenantId(tenantId),
     retry: 1, // Retry once to account for transient network issues
   });
@@ -81,7 +69,7 @@ export const useUpdateUser = () => {
       toast.success(toastMessage, {
         duration: 3000,
       });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      invalidateQueries(queryClient, "updateUser");
     },
   });
 };
@@ -96,14 +84,14 @@ export const useDeleteUser = () => {
       toast.success(toastMessage, {
         duration: 3000,
       });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      invalidateQueries(queryClient, "deleteUser");
     },
   });
 };
 
 export const useGetAllUsersAdmin = () => {
   return useSuspenseQuery<UserProfileDto[]>({
-    queryKey: userProfileQueryKeys.admin(),
+    queryKey: usersQueryKeys.admin(),
     queryFn: userService.fetchAllAdmin,
     retry: 1, // Retry once to account for transient network issues
   });

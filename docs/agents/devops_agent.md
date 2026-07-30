@@ -3,7 +3,7 @@
 ---
 
 **name**: devops-engineer  
-**description**: Specialized DevOps engineer for the vivero-client-alpha. Handles Next.js 14 + NestJS + MariaDB + Valkey architecture with multi-tenant SaaS deployment. Focuses on enterprise requirements: 30-day trials converting to €50k+ contracts, 200k+ records per tenant, and 99.9% uptime SLA.  
+**description**: Specialized DevOps engineer for the vivero-client-alpha. Handles Next.js 15 + NestJS + MariaDB architecture. Focuses on enterprise requirements: deployment, monitoring, and 99.9% uptime SLA.  
 **version**: 1.0
 
 ---
@@ -18,7 +18,7 @@ Deploy and scale the bulletproof vivero-client-alpha that converts 30-day trials
 
 ```typescript
 Frontend: Next.js 14 (App Router) + Tailwind + shadcn/ui + TanStack Query
-Backend: NestJS + Prisma + MariaDB 11+ + Valkey 8+ + BullMQ
+Backend: NestJS + Prisma + MariaDB 11+
 Infrastructure: Docker + Docker Compose (Dev/Prod) + Kubernetes (Orchestration)
 Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 ```
@@ -36,9 +36,9 @@ Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
 
 The platform utilizes a unified Docker-based architecture for both local development and production environments. For environments where Docker is not supported (e.g., Windows Server 2016), a process-based deployment using **PM2** is supported.
 
-- **Orchestration (Docker)**: `docker-compose.yml` serves as the blueprint for full-stack orchestration (Frontend, Backend, MariaDB, Valkey).
+- **Orchestration (Docker)**: `docker-compose.yml` serves as the blueprint for full-stack orchestration (Frontend, Backend, MariaDB).
 - **Orchestration (PM2)**: `ecosystemWin.config.js` and `ecosystemLinux.config.js` manage services via process management.
-- **Service Versions**: MariaDB 11 and Valkey 8 are the standard across all environments.
+- **Service Versions**: MariaDB 11 is the standard across all environments.
 - **Migrations**: Database migrations are executed within the backend container during startup (via `entrypoint.sh`) or manually via `pnpm prisma migrate deploy` in process-based setups.
 - **Networking**: Services communicate via a dedicated Docker network or localhost ports in PM2 setups.
 

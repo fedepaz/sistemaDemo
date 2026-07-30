@@ -109,14 +109,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   async executeWithRetry<T>(
-    ooperation: () => Promise<T>,
+    operation: () => Promise<T>,
     maxRetries = 3,
     retryDelay = 1000,
   ): Promise<T> {
     let lastError: Error = new Error('Error not found');
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        return await ooperation();
+        return await operation();
       } catch (error) {
         lastError = error instanceof Error ? error : new Error('Unknown error');
         const isPoolTimeout =

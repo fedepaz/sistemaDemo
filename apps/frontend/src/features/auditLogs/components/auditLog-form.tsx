@@ -110,11 +110,11 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-3 md:pt-4">
-          <div className="relative rounded-lg border bg-slate-950 p-3 md:p-4 font-mono text-[10px] md:text-xs overflow-hidden">
+          <div className="relative rounded-lg border bg-card p-3 md:p-4 font-mono text-[10px] md:text-xs overflow-hidden">
             <div className="absolute right-2 top-2">
-              <Settings className="h-3 w-3 md:h-3.5 md:w-3.5 text-slate-500 animate-spin-slow" />
+              <Settings className="h-3 w-3 md:h-3.5 md:w-3.5 text-muted-foreground animate-spin-slow" />
             </div>
-            <pre className="text-slate-300 overflow-auto max-h-40 md:max-h-80 custom-scrollbar">
+            <pre className="text-muted-foreground overflow-auto max-h-40 md:max-h-80 custom-scrollbar">
               {JSON.stringify(selectedAuditLog.changes, null, 2)}
             </pre>
           </div>

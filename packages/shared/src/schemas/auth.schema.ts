@@ -1,6 +1,26 @@
 // shared/src/schemas/auth.schema.ts
 
 import { z } from "zod";
+
+// Reusable password validation rules
+export const passwordRules = z
+  .string()
+  .min(6, {
+    message: "La contraseña debe tener al menos 6 caracteres",
+  })
+  .max(20, {
+    message: "La contraseña debe tener máximo 20 caracteres",
+  })
+  .regex(/[A-Z]/, {
+    message: "La contraseña debe contener al menos una letra mayúscula",
+  })
+  .regex(/[a-z]/, {
+    message: "La contraseña debe contener al menos una letra minúscula",
+  })
+  .regex(/[0-9]/, {
+    message: "La contraseña debe contener al menos un número",
+  });
+
 export const RegisterAuthSchema = z.object({
   username: z.string().min(1, { message: "Nombre de usuario es obligatorio" }),
   firstName: z
@@ -69,25 +89,7 @@ export const ChangePasswordSchema = z
     currentPassword: z
       .string()
       .min(1, { message: "Contraseña es obligatoria" }),
-    newPassword: z
-      .string()
-      .min(6, {
-        message: "La nueva contraseña debe tener al menos 6 caracteres",
-      })
-      .max(20, {
-        message: "La nueva contraseña debe tener máximo 20 caracteres",
-      })
-      .regex(/[A-Z]/, {
-        message:
-          "La nueva contraseña debe contener al menos una letra mayúscula",
-      })
-      .regex(/[a-z]/, {
-        message:
-          "La nueva contraseña debe contener al menos una letra minúscula",
-      })
-      .regex(/[0-9]/, {
-        message: "La nueva contraseña debe contener al menos un número",
-      }),
+    newPassword: passwordRules,
   })
   .refine((data) => data.newPassword !== data.currentPassword, {
     message: "La nueva contraseña no puede ser la misma que la actual",

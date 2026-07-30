@@ -77,13 +77,10 @@ const configFactory = (): AppConfig => ({
     databaseUrl: process.env.DATABASE_LEGACY_URL || '',
   },
   jwt: {
-    secret:
-      process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-prod',
+    secret: process.env.JWT_SECRET || '',
     expiresIn: process.env.JWT_EXPIRES_IN || '15m',
-    refreshSecret:
-      process.env.JWT_REFRESH_SECRET ||
-      'your-super-secret-refresh-jwt-key-change-in-prod',
-    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '12h',
+    refreshSecret: process.env.JWT_REFRESH_SECRET || '',
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   },
   defaultTenantId: process.env.DEFAULT_TENANT_ID || '',
   defaultPassword: process.env.DEFAULT_PASSWORD || '',

@@ -2,7 +2,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { auditLogColumns } from "./columns";
+import { auditLogColumns, auditLogExportColumns } from "./columns";
 
 import { AuditLogDto } from "@vivero/shared";
 import { useAuditLogs } from "../hooks/auditLogHooks";
@@ -20,13 +20,6 @@ export function AuditLogDataTable() {
     setSlideOverOpen(true);
   };
 
-  const handleExport = (
-    format: "csv" | "excel" | "json" | "pdf",
-    selectedRows: AuditLogDto[],
-  ) => {
-    console.log("Export Users:", selectedRows);
-  };
-
   return (
     <>
       <DataTable
@@ -36,8 +29,8 @@ export function AuditLogDataTable() {
         description="Log de auditoría del sistema"
         tableName="audit_logs"
         totalCount={auditLogs.length}
-        onExport={handleExport}
         onView={handleViewAuditLog}
+        exportColumns={auditLogExportColumns}
       />
       {selectedAuditLog && (
         <SlideOverForm

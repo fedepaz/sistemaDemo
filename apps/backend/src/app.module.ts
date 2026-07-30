@@ -1,6 +1,7 @@
 // src/app.module.ts
 
 import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { configuration, validationSchema } from './config/configuration';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './infra/prisma/prisma.module';
@@ -27,8 +28,12 @@ import { IncomingMessage } from 'http';
 import { LegacyDepositosModule } from './modules/legacy/depositos/depositos.module';
 import { LegacyPartidasModule } from './modules/legacy/partidas/partidas.module';
 import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.module';
-import { pinoStream } from './config/logger';
+
 import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.interceptor';
+import { LegacySiembraModule } from './modules/legacy/siembra/siembra.module';
+import { LegacyAlertsModule } from './modules/legacy/alerts/alerts.module';
+import { RequestIdMiddleware } from './shared/middleware/request-id.middleware';
+import { getPinoStream } from './config/logger';
 
 @Module({
   imports: [
@@ -48,26 +53,33 @@ import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.intercept
         path.join(__dirname, `../../.env`),
       ],
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        level: 'debug',
-        stream: pinoStream,
-        redact: [
-          'req.headers.authorization',
-          'req.body.password',
-          'req.body.token',
-        ],
-        customProps: (req: IncomingMessage) => ({
-          correlationId: req.headers?.['x-correlation-id'],
-        }),
-        serializers: {
-          req: (req: IncomingMessage) => ({
-            method: req.method,
-            url: req.url,
-            ip: req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress,
+    LoggerModule.forRootAsync({
+      useFactory: async () => ({
+        pinoHttp: {
+          level:
+            process.env.BACKEND_NODE_ENV === 'production' ? 'info' : 'debug',
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          stream: await getPinoStream(),
+          redact: [
+            'req.headers.authorization',
+            'req.body.password',
+            'req.body.newPassword',
+            'req.body.currentPassword',
+            'req.body.token',
+            'req.body.refreshToken',
+          ],
+          customProps: (req: IncomingMessage) => ({
+            correlationId: req.headers?.['x-correlation-id'],
           }),
+          serializers: {
+            req: (req: IncomingMessage) => ({
+              method: req.method,
+              url: req.url,
+              ip: req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress,
+            }),
+          },
         },
-      },
+      }),
     }),
     PrismaModule,
     LegacyMysqlModule,
@@ -80,6 +92,8 @@ import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.intercept
     LegacyDepositosModule,
     LegacyPartidasModule,
     LegacyExtendidosModule,
+    LegacySiembraModule,
+    LegacyAlertsModule,
     AuthModule,
     UsersModule,
     PermissionsModule,
@@ -106,4 +120,8 @@ import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.intercept
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}
