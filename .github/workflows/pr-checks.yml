@@ -2,10 +2,8 @@ name: PR Checks
 
 on:
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [dev, main]
 
 jobs:
-  ci:
+  test:
     uses: ./.github/workflows/ci-test.yml

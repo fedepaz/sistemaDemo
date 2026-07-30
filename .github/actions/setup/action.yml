@@ -1,28 +1,31 @@
-name: Setup
-description: Setup pnpm + Node + deps + Prisma
+name: "Setup Monorepo"
+description: "Install pnpm + Node, install deps, generate Prisma client"
 
 inputs:
   node-version:
-    description: Node.js version
-    default: '20'
+    description: "Node.js version"
+    default: "20"
   pnpm-version:
-    description: pnpm version
-    default: '10.33.2'
+    description: "pnpm version"
+    default: "10.33.2"
 
 runs:
-  using: composite
+  using: "composite"
   steps:
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         version: ${{ inputs.pnpm-version }}
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
-        cache: 'pnpm'
+        cache: "pnpm"
+        cache-dependency-path: pnpm-lock.yaml
 
     - run: pnpm install --frozen-lockfile
       shell: bash
 
-    - run: npx prisma generate
+    - name: Generate Prisma Client
+      working-directory: apps/backend
+      run: npx prisma generate
       shell: bash
