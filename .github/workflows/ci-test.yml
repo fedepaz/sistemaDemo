@@ -25,4 +25,5 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup
+      - run: pnpm build --filter=@vivero/shared
       - run: pnpm --filter backend test:integration
