@@ -32,6 +32,7 @@ import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.m
 import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.interceptor';
 import { LegacySiembraModule } from './modules/legacy/siembra/siembra.module';
 import { LegacyAlertsModule } from './modules/legacy/alerts/alerts.module';
+import { AlertCommentsModule } from './modules/alertComments/alertComments.module';
 import { RequestIdMiddleware } from './shared/middleware/request-id.middleware';
 import { getPinoStream } from './config/logger';
 
@@ -94,6 +95,7 @@ import { getPinoStream } from './config/logger';
     LegacyExtendidosModule,
     LegacySiembraModule,
     LegacyAlertsModule,
+    AlertCommentsModule,
     AuthModule,
     UsersModule,
     PermissionsModule,

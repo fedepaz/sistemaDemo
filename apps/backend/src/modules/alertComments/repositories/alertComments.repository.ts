@@ -2,9 +2,20 @@
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
-
 import { BaseRepository } from '../../../shared/baseModule/base.repository';
 import { AlertComment } from '../../../generated/prisma/client';
+
+export type AlertCommentWithUser = {
+  id: string;
+  alertType: string;
+  partidaId: number;
+  anio: number;
+  indice: number;
+  content: string;
+  userId: string;
+  user: { username: string };
+  createdAt: Date;
+};
 
 @Injectable()
 export class AlertCommentsRepository extends BaseRepository<AlertComment> {
@@ -12,17 +23,32 @@ export class AlertCommentsRepository extends BaseRepository<AlertComment> {
     super(prisma, prisma.alertComment);
   }
 
-  findByPartida(
+  async findByPartida(
     alertType: string,
     partidaId: number,
     anio: number,
     indice: number,
-  ) {
-    return this.model.findMany({
+  ): Promise<AlertCommentWithUser[]> {
+    return this.prisma.alertComment.findMany({
       where: { alertType, partidaId, anio, indice },
       orderBy: { createdAt: 'desc' },
-      include: { author: { select: { username: true } } },
+      include: { user: { select: { username: true } } },
     });
+  }
+
+  async createWithUser(data: {
+    alertType: string;
+    partidaId: number;
+    anio: number;
+    indice: number;
+    content: string;
+    userId: string;
+  }): Promise<AlertCommentWithUser> {
+    const row = await this.prisma.alertComment.create({
+      data,
+      include: { user: { select: { username: true } } },
+    });
+    return row;
   }
 
   async getCommentCounts(

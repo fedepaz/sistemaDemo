@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AlertsService } from '../alerts.service';
 import { AlertsRepository } from '../repositories/alerts.repository';
+import { AlertCommentsRepository } from '../../../alertComments/repositories/alertComments.repository';
 import {
   LegacySiembraRetrasada,
   LegacyFaltaGerminacion,
@@ -19,17 +20,23 @@ describe('AlertsService', () => {
     findFaltaPreExpedicion: jest.fn(),
   };
 
+  const mockAlertCommentsRepo = {
+    getCommentCounts: jest.fn().mockResolvedValue(new Map()),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AlertsService,
         { provide: AlertsRepository, useValue: mockRepository },
+        { provide: AlertCommentsRepository, useValue: mockAlertCommentsRepo },
       ],
     }).compile();
 
     service = module.get<AlertsService>(AlertsService);
     repository = module.get(AlertsRepository);
     jest.clearAllMocks();
+    mockAlertCommentsRepo.getCommentCounts.mockResolvedValue(new Map());
   });
 
   describe('getSiembraRetrasada', () => {
@@ -71,6 +78,7 @@ describe('AlertsService', () => {
         semEntrega: '28-2026 1',
         fEnt: '2026-07-15',
         estado: 'PENDIENTE',
+        commentCount: 0,
       });
     });
 
@@ -78,6 +86,63 @@ describe('AlertsService', () => {
       repository.findSiembraRetrasada.mockResolvedValue([]);
       const result = await service.getSiembraRetrasada();
       expect(result).toEqual([]);
+    });
+
+    it('merges commentCount from AlertCommentsRepository', async () => {
+      const legacyRow: LegacySiembraRetrasada = {
+        partida: 1045,
+        ano: 2026,
+        indice: 1,
+        espvar: 'EUC01',
+        nombre: 'Eucalipto Grandis',
+        injerto: 'I001',
+        nrocont: '48',
+        contenedor: 'Ban Plastico',
+        semSiembra: '24-2026',
+        f_siem: '2026-06-01',
+        f_siembra: 0,
+        semEntrega: '28-2026 1',
+        f_ent: '2026-07-15',
+        estado: 'PENDIENTE',
+      } as LegacySiembraRetrasada;
+
+      repository.findSiembraRetrasada.mockResolvedValue([legacyRow]);
+      const countsMap = new Map([['1045-2026-1', 3]]);
+      mockAlertCommentsRepo.getCommentCounts.mockResolvedValue(countsMap);
+
+      const result = await service.getSiembraRetrasada();
+
+      expect(result[0].commentCount).toBe(3);
+      expect(mockAlertCommentsRepo.getCommentCounts).toHaveBeenCalledWith(
+        'SIEMBRA_RETRASADA',
+        expect.arrayContaining([
+          expect.objectContaining({ partidaId: 1045, anio: 2026, indice: 1 }),
+        ]),
+      );
+    });
+
+    it('defaults commentCount to 0 when no comments exist', async () => {
+      const legacyRow: LegacySiembraRetrasada = {
+        partida: 1045,
+        ano: 2026,
+        indice: 1,
+        espvar: 'EUC01',
+        nombre: 'Eucalipto Grandis',
+        injerto: 'I001',
+        nrocont: '48',
+        contenedor: 'Ban Plastico',
+        semSiembra: '24-2026',
+        f_siem: '2026-06-01',
+        f_siembra: 0,
+        semEntrega: '28-2026 1',
+        f_ent: '2026-07-15',
+        estado: 'PENDIENTE',
+      } as LegacySiembraRetrasada;
+
+      repository.findSiembraRetrasada.mockResolvedValue([legacyRow]);
+
+      const result = await service.getSiembraRetrasada();
+      expect(result[0].commentCount).toBe(0);
     });
   });
 
@@ -112,6 +177,7 @@ describe('AlertsService', () => {
         contenedor: 'Bandeja 104',
         fPrimer: '2026-07-01',
         pr: '0',
+        commentCount: 0,
       });
     });
 
@@ -175,6 +241,7 @@ describe('AlertsService', () => {
         pr: '85.5',
         stIniPr: '4',
         porPr: 171,
+        commentCount: 0,
       });
     });
 
@@ -237,6 +304,7 @@ describe('AlertsService', () => {
         contenedor: 'Ban Plastico',
         fPreexp: '2026-07-20',
         pe: 0,
+        commentCount: 0,
       });
     });
 
