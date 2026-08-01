@@ -4,11 +4,10 @@ export interface LegacySiembraRetrasada extends RowDataPacket {
   partida: number;
   ano: number;
   indice: number;
-  espvar: string;
+  planta: string;
   nombre: string;
   injerto: string;
   nrocont: string;
-  contenedor: string;
   semSiembra: string;
   f_siem: string;
   f_siembra: number;
@@ -21,11 +20,10 @@ export interface LegacyFaltaGerminacion extends RowDataPacket {
   partida: number;
   ano: number;
   indice: number;
-  espvar: string;
+  planta: string;
   nombre: string;
   injerto: string;
   nrocont: string;
-  contenedor: string;
   f_primer: string;
   pr: string;
 }
@@ -35,10 +33,9 @@ export interface LegacyFaltantePlantas extends RowDataPacket {
   partida: number;
   ano: number;
   indice: number;
-  espvar: string;
+  planta: string;
   nombre: string;
   nrocont: string;
-  contenedor: string;
   solicito: number;
   f_primer: string;
   pr: string;
@@ -50,11 +47,10 @@ export interface LegacyFaltaPreExpedicion extends RowDataPacket {
   partida: number;
   ano: number;
   indice: number;
-  espvar: string;
+  planta: string;
   nombre: string;
   injerto: string;
   nrocont: string;
-  contenedor: string;
   f_preexp: string;
   pe: number;
 }

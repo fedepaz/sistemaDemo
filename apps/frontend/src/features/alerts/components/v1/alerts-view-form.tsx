@@ -85,8 +85,7 @@ function getSharedSpecGrid(alert: AlertBaseDto): SpecItem[] {
   return [
     { icon: Hash, label: "Código", value: getField(alert, "codigoEspecie") },
     { icon: Leaf, label: "Especie", value: getField(alert, "nombreEspecie") },
-    { icon: Package, label: "Contenedor", value: getField(alert, "contenedor") },
-    { icon: Package, label: "Nro", value: getField(alert, "nrocont") },
+    { icon: Package, label: "Nro Contenedor", value: getField(alert, "nrocont") },
   ];
 }
 
@@ -243,7 +242,7 @@ export function AlertsViewForm({ selectedAlert, alertType }: AlertsViewFormProps
   return (
     <div className="space-y-3 md:space-y-4 animate-in fade-in duration-500">
       {/* Compact Spec Grid — shared fields */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {specGrid.map((item) => (
           <SpecGridCell key={item.label} {...item} />
         ))}

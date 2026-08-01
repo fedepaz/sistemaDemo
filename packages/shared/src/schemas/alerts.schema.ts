@@ -27,7 +27,6 @@ export const SiembraRetrasadaDtoSchema = AlertBaseDtoSchema.extend({
   nombreEspecie: z.string(),
   injerto: z.string(),
   nrocont: z.string(),
-  contenedor: z.string(),
   semSiembra: z.string(),
   fechaSugeridaSiembra: z.string(),
   fSiembra: z.number(),
@@ -47,7 +46,6 @@ export const FaltaGerminacionDtoSchema = AlertBaseDtoSchema.extend({
   nombreEspecie: z.string(),
   injerto: z.string(),
   nrocont: z.string(),
-  contenedor: z.string(),
   fPrimer: z.string(),
   pr: z.string(),
 });
@@ -63,7 +61,6 @@ export const FaltantePlantasDtoSchema = AlertBaseDtoSchema.extend({
   codigoEspecie: z.string(),
   nombreEspecie: z.string(),
   nrocont: z.string(),
-  contenedor: z.string(),
   solicito: z.number(),
   fPrimer: z.string(),
   pr: z.string(),
@@ -82,7 +79,6 @@ export const FaltaPreExpedicionDtoSchema = AlertBaseDtoSchema.extend({
   nombreEspecie: z.string(),
   injerto: z.string(),
   nrocont: z.string(),
-  contenedor: z.string(),
   fPreexp: z.string(),
   pe: z.number(),
 });
