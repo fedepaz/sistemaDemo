@@ -1,10 +1,11 @@
 // src/features/alerts/components/v1/alerts-view-form.tsx
 
 import { Calendar, Hash, MessageSquare, Activity } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/common/user-avatar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAlertComments } from "@/features/alerts/hooks/useAlertComments";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { cn } from "@/lib/utils";
 import type { AlertBaseDto } from "@vivero/shared";
 import type { AlertType } from "@/features/alerts/types";
@@ -13,15 +14,6 @@ import { ALERT_TYPE_CONFIGS } from "./alert-type-config";
 interface AlertsViewFormProps {
   selectedAlert: AlertBaseDto;
   alertType: AlertType;
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 }
 
 function formatRelativeTime(dateString: string): string {
@@ -42,6 +34,7 @@ export function AlertsViewForm({
   selectedAlert,
   alertType,
 }: AlertsViewFormProps) {
+  const { userProfile } = useAuthContext();
   const config = ALERT_TYPE_CONFIGS[alertType];
   const { data: comments, isPending: commentsLoading } = useAlertComments(
     alertType,
@@ -49,6 +42,8 @@ export function AlertsViewForm({
     selectedAlert.anio,
     selectedAlert.indice,
   );
+
+  if (!userProfile) return null;
 
   const TypeIcon = config.icon;
 
@@ -130,28 +125,56 @@ export function AlertsViewForm({
             ))}
           </div>
         ) : comments && comments.length > 0 ? (
-          comments.map((comment) => (
-            <div key={comment.id} className="flex items-start gap-3">
-              <Avatar className="h-8 w-8 shrink-0">
-                <AvatarFallback className="text-xs bg-muted">
-                  {getInitials(comment.userName)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-sm font-medium truncate">
-                    {comment.userName}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground shrink-0">
-                    {formatRelativeTime(comment.createdAt)}
-                  </span>
+          comments.map((comment) => {
+            const isMe = comment.userId === userProfile.id;
+            return (
+              <div
+                key={comment.id}
+                className={cn(
+                  "flex items-start gap-3",
+                  isMe && "flex-row-reverse",
+                )}
+              >
+                <UserAvatar
+                  name={
+                    isMe
+                      ? `${userProfile.firstName ?? ""} ${userProfile.lastName ?? ""}`
+                      : comment.userName
+                  }
+                />
+                <div
+                  className={cn(
+                    "flex-1 min-w-0",
+                    isMe && "flex flex-col items-end",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "flex items-baseline gap-2",
+                      isMe && "flex-row-reverse",
+                    )}
+                  >
+                    <span className="text-sm font-mono truncate uppercase">
+                      {isMe ? "Yo" : comment.userName}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground shrink-0">
+                      {formatRelativeTime(comment.createdAt)}
+                    </span>
+                  </div>
+                  <div
+                    className={cn(
+                      "mt-1 px-3 py-2 rounded-xl text-sm break-words max-w-[80%]",
+                      isMe
+                        ? "bg-primary text-primary-foreground rounded-tr-sm"
+                        : "bg-muted rounded-tl-sm",
+                    )}
+                  >
+                    {comment.content}
+                  </div>
                 </div>
-                <p className="text-sm text-muted-foreground wrap-break-word">
-                  {comment.content}
-                </p>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className="text-sm text-muted-foreground text-center py-4">
             No hay comentarios aún

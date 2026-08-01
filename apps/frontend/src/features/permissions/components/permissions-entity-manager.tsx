@@ -1,7 +1,7 @@
 // src/features/permissions/components/permissions-entity-manager.tsx
 
 import { useEntityPermissions } from "../hooks/permsHooks";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/common/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -33,13 +33,6 @@ export function PermissionsEntityManager({
         up.lastName?.toLowerCase().includes(q),
     );
   }, [userPermissions, searchQuery]);
-
-  const getInitials = (firstName?: string | null, lastName?: string | null) => {
-    return (
-      [firstName?.[0], lastName?.[0]].filter(Boolean).join("").toUpperCase() ||
-      "U"
-    );
-  };
 
   return (
     <>
@@ -90,11 +83,10 @@ export function PermissionsEntityManager({
                   >
                     {/* User Info */}
                     <div className="flex items-center gap-3 md:gap-4 lg:w-64 lg:shrink-0">
-                      <Avatar className="h-9 w-9 md:h-11 md:w-11 border border-border/50 shadow-sm">
-                        <AvatarFallback className="bg-primary/5 text-[10px] md:text-xs font-bold text-primary">
-                          {getInitials(up.firstName, up.lastName)}
-                        </AvatarFallback>
-                      </Avatar>
+                      <UserAvatar
+                        name={`${up.firstName ?? ""} ${up.lastName ?? ""}`}
+                        size="lg"
+                      />
                       <div className="flex flex-col gap-0 min-w-0">
                         <span className="text-xs md:text-sm font-bold text-foreground truncate">
                           {up.firstName && up.lastName

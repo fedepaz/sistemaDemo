@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/common/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { useTables } from "../hooks/permsHooks";
 import { useCallback, useState, useMemo } from "react";
@@ -49,14 +49,6 @@ export function PermissionSelector({
     [onSelectedEntityId],
   );
 
-  const getInitials = (table: Entity) => {
-    return (
-      [table.name[0], table.label[0]].filter(Boolean).join("").toUpperCase() ||
-      table.name[0]?.toUpperCase() ||
-      "T"
-    );
-  };
-
   const getDisplayName = (table: Entity) => {
     if (table.label) {
       // turn first letter all words to uppercase
@@ -87,11 +79,7 @@ export function PermissionSelector({
               >
                 {selectedTable ? (
                   <div className="flex items-center gap-2 truncate">
-                    <Avatar className="h-6 w-6 border border-border/50">
-                      <AvatarFallback className="bg-primary/5 text-[10px] font-bold text-primary">
-                        {getInitials(selectedTable)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <UserAvatar name={getDisplayName(selectedTable as Entity)} size="sm" />
                     <span className="truncate">
                       {getDisplayName(selectedTable)}
                     </span>
@@ -125,11 +113,7 @@ export function PermissionSelector({
                         onSelect={() => handleTableChange(table.id)}
                         className="flex items-center gap-3 px-3 py-2 rounded-lg my-1 cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-foreground"
                       >
-                        <Avatar className="h-8 w-8 border border-border/50">
-                          <AvatarFallback className="bg-primary/5 text-xs font-bold text-primary">
-                            {getInitials(table)}
-                          </AvatarFallback>
-                        </Avatar>
+                        <UserAvatar name={getDisplayName(table)} />
                         <div className="flex flex-col flex-1 min-w-0">
                           <span className="text-sm font-semibold truncate">
                             {getDisplayName(table)}

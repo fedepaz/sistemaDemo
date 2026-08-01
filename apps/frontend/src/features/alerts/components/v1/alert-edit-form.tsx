@@ -2,7 +2,7 @@
 "use client";
 
 import { MessageSquare } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/common/user-avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useAlertComments } from "@/features/alerts/hooks/useAlertComments";
@@ -25,15 +25,6 @@ interface AlertEditFormProps {
   alertType: AlertType;
   form: UseFormReturn<CreateAlertCommentDto>;
   onSubmit: (data: CreateAlertCommentDto) => void;
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 }
 
 function formatRelativeTime(dateString: string): string {
@@ -141,18 +132,13 @@ export function AlertEditForm({
                     isMe && "flex-row-reverse",
                   )}
                 >
-                  <Avatar className="h-8 w-8 shrink-0">
-                    <AvatarFallback
-                      className={cn(
-                        "text-xs",
-                        isMe
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted",
-                      )}
-                    >
-                      {getInitials(comment.userName)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    name={
+                      isMe
+                        ? `${userProfile.firstName ?? ""} ${userProfile.lastName ?? ""}`
+                        : comment.userName
+                    }
+                  />
                   <div
                     className={cn(
                       "flex-1 min-w-0",
@@ -165,7 +151,7 @@ export function AlertEditForm({
                         isMe && "flex-row-reverse",
                       )}
                     >
-                      <span className="text-sm font-medium truncate">
+                      <span className="text-sm font-mono truncate uppercase">
                         {isMe ? "Yo" : comment.userName}
                       </span>
                       <span className="text-[10px] text-muted-foreground shrink-0">

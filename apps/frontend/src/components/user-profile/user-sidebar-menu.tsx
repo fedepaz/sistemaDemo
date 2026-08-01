@@ -1,7 +1,6 @@
 // src/components/user-profile/user-sidebar-menu.tsx
 "use client";
 
-import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,6 +20,7 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { UserAvatar } from "@/components/common/user-avatar";
 import { cn } from "@/lib/utils";
 
 interface UserSidebarMenuProps {
@@ -38,8 +38,6 @@ export function UserSidebarMenu({ isCollapsed = false }: UserSidebarMenuProps) {
     } catch {}
   };
 
-  const initials = `${userProfile?.firstName?.charAt(0) || ""}${userProfile?.lastName?.charAt(0) || ""}`;
-
   return (
     <>
       <DropdownMenu>
@@ -55,17 +53,11 @@ export function UserSidebarMenu({ isCollapsed = false }: UserSidebarMenuProps) {
                   )}
                   aria-label="Perfil de usuario"
                 >
-                  <div className={cn(
-                    "shrink-0 bg-primary rounded-full flex items-center justify-center transition-all",
-                    isCollapsed ? "h-8 w-8" : "h-9 w-9 shadow-sm"
-                  )}>
-                    <span className={cn(
-                      "text-primary-foreground font-black tracking-tighter",
-                      isCollapsed ? "text-[10px]" : "text-xs"
-                    )}>
-                      {initials || <User className="h-4 w-4" />}
-                    </span>
-                  </div>
+                  <UserAvatar
+                    name={`${userProfile?.firstName ?? ""} ${userProfile?.lastName ?? ""}`}
+                    size="md"
+                    className={cn("transition-all", !isCollapsed && "shadow-sm")}
+                  />
                   
                   {!isCollapsed && (
                     <div className="flex flex-col items-start min-w-0 flex-1">
