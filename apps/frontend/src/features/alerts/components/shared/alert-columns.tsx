@@ -4,6 +4,13 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
 import type { ExportColumn } from "@/lib/export/types";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
+import {
   SiembraRetrasadaDto,
   FaltaGerminacionDto,
   FaltantePlantasDto,
@@ -84,11 +91,33 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
     header: ({ column }) => (
       <SortableHeader column={column}>Fecha Sug. Siembra</SortableHeader>
     ),
-    cell: ({ row }) => (
-      <span className="text-xs font-bold font-mono text-muted-foreground">
-        {row.original.fechaSugeridaSiembra}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const today = new Date();
+      const todayStr = getLocalDateStr(today);
+      const targetDate = row.original.fechaSugeridaSiembra;
+      const isToday = targetDate === todayStr;
+
+      return (
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-bold font-mono text-muted-foreground">
+            {formatShortDate(targetDate)}
+          </span>
+          {isToday && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="relative flex h-2 w-2 cursor-help">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-warning"></span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Siembra sugerida hoy</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "semEntrega",
@@ -237,7 +266,7 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
   {
     accessorKey: "nrocont",
     header: ({ column }) => (
-      <SortableHeader column={column}>Nro Contenedor</SortableHeader>
+      <SortableHeader column={column}>Cantidad</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className="text-xs font-mono">{row.original.nrocont}</span>
@@ -271,6 +300,22 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
       <span className="text-xs font-mono text-right">{row.original.porPr}</span>
     ),
     size: 100,
+  },
+  {
+    accessorKey: "diferencia",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Diferencia</SortableHeader>
+    ),
+    cell: ({ row }) => {
+      const diff =
+        Number(row.original.solicito ?? 0) -
+        Number(row.original.porPr ?? 0);
+      return (
+        <span className="text-xs font-mono font-bold text-right text-destructive">
+          {diff > 0 ? `-${diff}` : diff}
+        </span>
+      );
+    },
   },
 ];
 
@@ -328,7 +373,7 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
   {
     accessorKey: "nrocont",
     header: ({ column }) => (
-      <SortableHeader column={column}>Nro Contenedor</SortableHeader>
+      <SortableHeader column={column}>Cantidad</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className="text-xs font-mono">{row.original.nrocont}</span>
