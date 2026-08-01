@@ -2,10 +2,27 @@
 
 import { z } from "zod";
 
-export const SiembraRetrasadaDtoSchema = z.object({
+// ============================================================================
+// ALERT BASE (shared across all alert types)
+// ============================================================================
+
+export const AlertPartidaHeaderSchema = z.object({
   partidaId: z.number(),
   anio: z.number(),
   indice: z.number(),
+});
+
+export const AlertBaseDtoSchema = AlertPartidaHeaderSchema.extend({
+  commentCount: z.number().default(0),
+});
+
+export type AlertBaseDto = z.infer<typeof AlertBaseDtoSchema>;
+
+// ============================================================================
+// SIEMBRA RETRASADA
+// ============================================================================
+
+export const SiembraRetrasadaDtoSchema = AlertBaseDtoSchema.extend({
   codigoEspecie: z.string(),
   nombreEspecie: z.string(),
   injerto: z.string(),
@@ -17,15 +34,15 @@ export const SiembraRetrasadaDtoSchema = z.object({
   semEntrega: z.string(),
   fEnt: z.string(),
   estado: z.string(),
-  commentCount: z.number().default(0),
 });
 
 export type SiembraRetrasadaDto = z.infer<typeof SiembraRetrasadaDtoSchema>;
 
-export const FaltaGerminacionDtoSchema = z.object({
-  partidaId: z.number(),
-  anio: z.number(),
-  indice: z.number(),
+// ============================================================================
+// FALTA GERMINACION
+// ============================================================================
+
+export const FaltaGerminacionDtoSchema = AlertBaseDtoSchema.extend({
   codigoEspecie: z.string(),
   nombreEspecie: z.string(),
   injerto: z.string(),
@@ -33,16 +50,16 @@ export const FaltaGerminacionDtoSchema = z.object({
   contenedor: z.string(),
   fPrimer: z.string(),
   pr: z.string(),
-  commentCount: z.number().default(0),
 });
 
 export type FaltaGerminacionDto = z.infer<typeof FaltaGerminacionDtoSchema>;
 
-export const FaltantePlantasDtoSchema = z.object({
+// ============================================================================
+// FALTANTE PLANTAS
+// ============================================================================
+
+export const FaltantePlantasDtoSchema = AlertBaseDtoSchema.extend({
   hai: z.string(),
-  partidaId: z.number(),
-  anio: z.number(),
-  indice: z.number(),
   codigoEspecie: z.string(),
   nombreEspecie: z.string(),
   nrocont: z.string(),
@@ -52,15 +69,15 @@ export const FaltantePlantasDtoSchema = z.object({
   pr: z.string(),
   stIniPr: z.string(),
   porPr: z.number(),
-  commentCount: z.number().default(0),
 });
 
 export type FaltantePlantasDto = z.infer<typeof FaltantePlantasDtoSchema>;
 
-export const FaltaPreExpedicionDtoSchema = z.object({
-  partidaId: z.number(),
-  anio: z.number(),
-  indice: z.number(),
+// ============================================================================
+// FALTA PRE-EXPEDICION
+// ============================================================================
+
+export const FaltaPreExpedicionDtoSchema = AlertBaseDtoSchema.extend({
   codigoEspecie: z.string(),
   nombreEspecie: z.string(),
   injerto: z.string(),
@@ -68,7 +85,6 @@ export const FaltaPreExpedicionDtoSchema = z.object({
   contenedor: z.string(),
   fPreexp: z.string(),
   pe: z.number(),
-  commentCount: z.number().default(0),
 });
 
 export type FaltaPreExpedicionDto = z.infer<typeof FaltaPreExpedicionDtoSchema>;
@@ -92,7 +108,12 @@ export const AlertCommentSchema = z.object({
 export type AlertCommentDto = z.infer<typeof AlertCommentSchema>;
 
 export const CreateAlertCommentSchema = z.object({
-  alertType: z.enum(["SIEMBRA_RETRASADA", "FALTANTE_PLANTAS"]),
+  alertType: z.enum([
+    "SIEMBRA_RETRASADA",
+    "FALTA_GERMINACION",
+    "FALTANTE_PLANTAS",
+    "FALTA_PRE_EXPEDICION",
+  ]),
   partidaId: z.number(),
   anio: z.number(),
   indice: z.number(),

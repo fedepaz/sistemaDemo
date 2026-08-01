@@ -29,6 +29,7 @@ function AlertSection({
   title,
   description,
   count,
+  alertType,
   columns,
   data,
   exportColumns,
@@ -36,6 +37,7 @@ function AlertSection({
   title: string;
   description: string;
   count: number;
+  alertType: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,6 +59,7 @@ function AlertSection({
       <AlertsDataTable
         title={title}
         description={description}
+        alertType={alertType}
         columns={columns}
         data={data}
         exportColumns={exportColumns}
@@ -107,6 +110,7 @@ function AlertsContent() {
               title="Siembra Retrasada"
               description="Partidas que no se han sembrado en la semana programada"
               count={siembraRetrasada.length}
+              alertType="siembra-retrasada"
               columns={siembraRetrasadaColumns}
               data={siembraRetrasada}
               exportColumns={siembraRetrasadaExportColumns}
@@ -118,6 +122,7 @@ function AlertsContent() {
               title="Falta Recuento Germinación"
               description="Partidas que estando en fecha no cuentan con dato de germinación"
               count={faltaGerminacion.length}
+              alertType="falta-germinacion"
               columns={faltaGerminacionColumns}
               data={faltaGerminacion}
               exportColumns={faltaGerminacionExportColumns}
@@ -129,6 +134,7 @@ function AlertsContent() {
               title="Faltante Estimado de Plantas"
               description="Partidas donde plantas germinadas son menor a las solicitadas"
               count={faltantePlantas.length}
+              alertType="faltante-plantas"
               columns={faltantePlantasColumns}
               data={faltantePlantas}
               exportColumns={faltantePlantasExportColumns}
@@ -140,6 +146,7 @@ function AlertsContent() {
               title="Falta Pre-Expedición"
               description="Partidas sin pre-expedición cargada"
               count={faltaPreExpedicion.length}
+              alertType="falta-pre-expedicion"
               columns={faltaPreExpedicionColumns}
               data={faltaPreExpedicion}
               exportColumns={faltaPreExpedicionExportColumns}

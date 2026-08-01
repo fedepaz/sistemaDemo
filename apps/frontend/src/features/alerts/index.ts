@@ -15,6 +15,9 @@ export {
   useFaltaPreExpedicion,
 } from "./hooks/useAlerts";
 export { useHasAlerts } from "./hooks/useHasAlerts";
+export { useAlertComments } from "./hooks/useAlertComments";
+export { useAlertCommentsMutation } from "./hooks/useAlertCommentsMutation";
 
 // Services
 export { alertService } from "./api/alertService";
+export { alertCommentsService } from "./api/alertCommentsService";
