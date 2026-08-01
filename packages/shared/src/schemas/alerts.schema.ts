@@ -10,6 +10,8 @@ export const AlertPartidaHeaderSchema = z.object({
   partidaId: z.number(),
   anio: z.number(),
   indice: z.number(),
+  codigoEspecie: z.string(),
+  nombreEspecie: z.string(),
 });
 
 export const AlertBaseDtoSchema = AlertPartidaHeaderSchema.extend({
@@ -23,8 +25,6 @@ export type AlertBaseDto = z.infer<typeof AlertBaseDtoSchema>;
 // ============================================================================
 
 export const SiembraRetrasadaDtoSchema = AlertBaseDtoSchema.extend({
-  codigoEspecie: z.string(),
-  nombreEspecie: z.string(),
   injerto: z.string(),
   nrocont: z.string(),
   semSiembra: z.string(),
@@ -42,8 +42,6 @@ export type SiembraRetrasadaDto = z.infer<typeof SiembraRetrasadaDtoSchema>;
 // ============================================================================
 
 export const FaltaGerminacionDtoSchema = AlertBaseDtoSchema.extend({
-  codigoEspecie: z.string(),
-  nombreEspecie: z.string(),
   injerto: z.string(),
   nrocont: z.string(),
   fPrimer: z.string(),
@@ -58,8 +56,7 @@ export type FaltaGerminacionDto = z.infer<typeof FaltaGerminacionDtoSchema>;
 
 export const FaltantePlantasDtoSchema = AlertBaseDtoSchema.extend({
   hai: z.string(),
-  codigoEspecie: z.string(),
-  nombreEspecie: z.string(),
+
   nrocont: z.string(),
   solicito: z.number(),
   fPrimer: z.string(),
@@ -75,8 +72,6 @@ export type FaltantePlantasDto = z.infer<typeof FaltantePlantasDtoSchema>;
 // ============================================================================
 
 export const FaltaPreExpedicionDtoSchema = AlertBaseDtoSchema.extend({
-  codigoEspecie: z.string(),
-  nombreEspecie: z.string(),
   injerto: z.string(),
   nrocont: z.string(),
   fPreexp: z.string(),

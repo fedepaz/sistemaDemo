@@ -206,11 +206,33 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
     header: ({ column }) => (
       <SortableHeader column={column}>Fecha Primer</SortableHeader>
     ),
-    cell: ({ row }) => (
-      <span className="text-xs font-bold font-mono text-muted-foreground">
-        {row.original.fPrimer}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const today = new Date();
+      const todayStr = getLocalDateStr(today);
+      const targetDate = row.original.fPrimer;
+      const isToday = targetDate === todayStr;
+
+      return (
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-bold font-mono text-muted-foreground">
+            {targetDate}
+          </span>
+          {isToday && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="relative flex h-2 w-2 cursor-help">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-warning"></span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Fecha primer hoy</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      );
+    },
   },
 ];
 
@@ -384,11 +406,33 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
     header: ({ column }) => (
       <SortableHeader column={column}>Fecha Pre-Exp</SortableHeader>
     ),
-    cell: ({ row }) => (
-      <span className="text-xs font-bold font-mono text-muted-foreground">
-        {row.original.fPreexp}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const today = new Date();
+      const todayStr = getLocalDateStr(today);
+      const targetDate = row.original.fPreexp;
+      const isToday = targetDate === todayStr;
+
+      return (
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-bold font-mono text-muted-foreground">
+            {targetDate}
+          </span>
+          {isToday && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="relative flex h-2 w-2 cursor-help">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-warning"></span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Fecha pre-expedición hoy</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      );
+    },
   },
 ];
 
