@@ -1,6 +1,7 @@
 // src/features/alerts/components/v1/alerts-view-form.tsx
+"use client";
 
-import { Calendar, Hash, MessageSquare, Activity } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,24 +11,11 @@ import { cn } from "@/lib/utils";
 import type { AlertBaseDto } from "@vivero/shared";
 import type { AlertType } from "@/features/alerts/types";
 import { ALERT_TYPE_CONFIGS } from "./alert-type-config";
+import { formatRelativeTime } from "../../utils/format-relative-time";
 
 interface AlertsViewFormProps {
   selectedAlert: AlertBaseDto;
   alertType: AlertType;
-}
-
-function formatRelativeTime(dateString: string): string {
-  const now = new Date();
-  const date = new Date(dateString);
-  const diffMs = now.getTime() - date.getTime();
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffH = Math.floor(diffMin / 60);
-  const diffD = Math.floor(diffH / 24);
-
-  if (diffMin < 1) return "ahora";
-  if (diffMin < 60) return `hace ${diffMin}m`;
-  if (diffH < 24) return `hace ${diffH}h`;
-  return `hace ${diffD}d`;
 }
 
 export function AlertsViewForm({
@@ -70,34 +58,11 @@ export function AlertsViewForm({
                 Partida #{selectedAlert.partidaId}/{selectedAlert.indice} · Año{" "}
                 {selectedAlert.anio}
               </p>
+              <p className="text-[9px] md:text-[10px] font-mono text-primary mt-0.5">
+                {selectedAlert.codigoEspecie} · {selectedAlert.nombreEspecie}
+              </p>
             </div>
           </div>
-        </div>
-
-        {/* BASIC SPECS GRID */}
-        <div className="grid grid-cols-4 gap-2">
-          {[
-            { label: "Año", value: selectedAlert.anio, icon: Calendar },
-            { label: "Índice", value: selectedAlert.indice, icon: Hash },
-            { label: "CON", value: selectedAlert.commentCount, icon: Activity },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-background border border-border/60 p-1.5 md:p-2.5 rounded-lg md:rounded-xl flex items-center gap-1.5 md:gap-2.5 shadow-sm overflow-hidden"
-            >
-              <div className="p-1 md:p-1.5 bg-muted rounded-md shrink-0">
-                <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[7px] md:text-[8px] font-bold uppercase leading-none mb-0.5">
-                  {item.label}
-                </p>
-                <p className="text-[10px] md:text-xs truncate uppercase font-bold">
-                  {item.value}
-                </p>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -154,10 +119,10 @@ export function AlertsViewForm({
                       isMe && "flex-row-reverse",
                     )}
                   >
-                    <span className="text-sm font-mono truncate uppercase">
-                      {isMe ? "Yo" : comment.userName}
+                    <span className="text-[10px] font-mono text-muted-foreground">
+                      @{comment.userName}
                     </span>
-                    <span className="text-[10px] text-muted-foreground shrink-0">
+                    <span className="text-[10px] font-mono text-muted-foreground shrink-0">
                       {formatRelativeTime(comment.createdAt)}
                     </span>
                   </div>

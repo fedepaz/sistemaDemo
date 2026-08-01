@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import type { AlertBaseDto, CreateAlertCommentDto } from "@vivero/shared";
 import type { AlertType } from "@/features/alerts/types";
 import { ALERT_TYPE_CONFIGS } from "./alert-type-config";
+import { formatRelativeTime } from "../../utils/format-relative-time";
 import { UseFormReturn } from "react-hook-form";
 import {
   Form,
@@ -25,20 +26,6 @@ interface AlertEditFormProps {
   alertType: AlertType;
   form: UseFormReturn<CreateAlertCommentDto>;
   onSubmit: (data: CreateAlertCommentDto) => void;
-}
-
-function formatRelativeTime(dateString: string): string {
-  const now = new Date();
-  const date = new Date(dateString);
-  const diffMs = now.getTime() - date.getTime();
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffH = Math.floor(diffMin / 60);
-  const diffD = Math.floor(diffH / 24);
-
-  if (diffMin < 1) return "ahora";
-  if (diffMin < 60) return `hace ${diffMin}m`;
-  if (diffH < 24) return `hace ${diffH}h`;
-  return `hace ${diffD}d`;
 }
 
 export function AlertEditForm({
@@ -88,6 +75,9 @@ export function AlertEditForm({
                 <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
                   Partida #{selectedAlert.partidaId}/{selectedAlert.indice} ·
                   Año {selectedAlert.anio}
+                </p>
+                <p className="text-[9px] md:text-[10px] font-mono text-primary mt-0.5">
+                  {selectedAlert.codigoEspecie} · {selectedAlert.nombreEspecie}
                 </p>
               </div>
             </div>
@@ -151,10 +141,10 @@ export function AlertEditForm({
                         isMe && "flex-row-reverse",
                       )}
                     >
-                      <span className="text-sm font-mono truncate uppercase">
-                        {isMe ? "Yo" : comment.userName}
+                      <span className="text-[10px] font-mono text-muted-foreground">
+                        @{comment.userName}
                       </span>
-                      <span className="text-[10px] text-muted-foreground shrink-0">
+                      <span className="text-[10px] font-mono text-muted-foreground shrink-0">
                         {formatRelativeTime(comment.createdAt)}
                       </span>
                     </div>
