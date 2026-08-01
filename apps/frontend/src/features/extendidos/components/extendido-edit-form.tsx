@@ -34,7 +34,6 @@ interface ExtendidosEditFormProps {
 
 export function ExtendidosEditForm({
   onSubmit,
-
   form,
   selectedExtendido,
 }: ExtendidosEditFormProps) {

@@ -1,15 +1,7 @@
-"use client";
+// src/features/alerts/components/v1/alerts-view-form.tsx
 
-import { MessageSquare } from "lucide-react";
+import { Calendar, Hash, MessageSquare, Activity } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTitle,
-  SheetFooter,
-} from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAlertComments } from "@/features/alerts/hooks/useAlertComments";
@@ -19,33 +11,8 @@ import type { AlertType } from "@/features/alerts/types";
 import { ALERT_TYPE_CONFIGS } from "./alert-type-config";
 
 interface AlertsViewFormProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  alert: AlertBaseDto | null;
+  selectedAlert: AlertBaseDto;
   alertType: AlertType;
-}
-
-function SpecGridCell({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string | number | null;
-}) {
-  if (value === null || value === undefined || value === "") return null;
-  return (
-    <div className="bg-muted/50 p-2 rounded-lg border border-border/40">
-      <div className="flex items-center gap-1.5 mb-0.5">
-        <Icon className="h-3 w-3 text-muted-foreground" />
-        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide truncate">
-          {label}
-        </span>
-      </div>
-      <p className="text-sm font-semibold truncate">{String(value)}</p>
-    </div>
-  );
 }
 
 function getInitials(name: string): string {
@@ -72,143 +39,125 @@ function formatRelativeTime(dateString: string): string {
 }
 
 export function AlertsViewForm({
-  open,
-  onOpenChange,
-  alert,
+  selectedAlert,
   alertType,
 }: AlertsViewFormProps) {
   const config = ALERT_TYPE_CONFIGS[alertType];
   const { data: comments, isPending: commentsLoading } = useAlertComments(
     alertType,
-    alert?.partidaId ?? 0,
-    alert?.anio ?? 0,
-    alert?.indice ?? 0,
+    selectedAlert.partidaId,
+    selectedAlert.anio,
+    selectedAlert.indice,
   );
-
-  if (!alert) return null;
-
-  const keyMetricValue = config.keyMetric
-    ? (alert as Record<string, unknown>)[config.keyMetric.field]
-    : null;
 
   const TypeIcon = config.icon;
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        className="w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col h-dvh p-0 overflow-hidden"
-        side="right"
-      >
-        {/* Type-specific header */}
-        <div className={cn("px-6 py-4", config.bgColor)}>
-          <div className="flex items-center gap-3">
-            <div className={cn("p-2 rounded-lg", config.bgColor)}>
-              <TypeIcon className={cn("h-5 w-5", config.color)} />
+    <div className="flex flex-col gap-3 md:gap-6 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+      {/* FIXED TOP SECTION: TYPE HEADER */}
+      <div className="space-y-3 md:space-y-4 shrink-0">
+        <div
+          className={cn(
+            "flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
+            config.bgColor,
+            config.borderColor,
+          )}
+        >
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+              <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
             </div>
             <div>
-              <SheetTitle className={cn("text-base font-semibold", config.color)}>
+              <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                 {config.label}
-              </SheetTitle>
-              <p className="text-xs text-muted-foreground">
-                Partida #{alert.partidaId}/{alert.indice} · Año {alert.anio}
+              </h2>
+              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                Partida #{selectedAlert.partidaId}/{selectedAlert.indice} · Año{" "}
+                {selectedAlert.anio}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-          {/* Key Metric Card */}
-          {config.keyMetric && keyMetricValue !== null && keyMetricValue !== undefined && (
-            <div className="bg-card/40 p-4 rounded-xl border border-border/40 shadow-premium">
-              <div className="flex items-center gap-2 mb-1">
-                <config.keyMetric.icon className={cn("h-4 w-4", config.color)} />
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                  {config.keyMetric.label}
-                </span>
+        {/* BASIC SPECS GRID */}
+        <div className="grid grid-cols-4 gap-2">
+          {[
+            { label: "Año", value: selectedAlert.anio, icon: Calendar },
+            { label: "Índice", value: selectedAlert.indice, icon: Hash },
+            { label: "CON", value: selectedAlert.commentCount, icon: Activity },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="bg-background border border-border/60 p-1.5 md:p-2.5 rounded-lg md:rounded-xl flex items-center gap-1.5 md:gap-2.5 shadow-sm overflow-hidden"
+            >
+              <div className="p-1 md:p-1.5 bg-muted rounded-md shrink-0">
+                <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
               </div>
-              <p className={cn("text-2xl font-bold", config.color)}>
-                {String(keyMetricValue)}
-              </p>
+              <div className="min-w-0">
+                <p className="text-[7px] md:text-[8px] font-bold uppercase leading-none mb-0.5">
+                  {item.label}
+                </p>
+                <p className="text-[10px] md:text-xs truncate uppercase font-bold">
+                  {item.value}
+                </p>
+              </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
 
-          {/* Spec Grid */}
-          {config.fields.length > 0 && (
-            <div className="grid grid-cols-3 gap-2">
-              {config.fields.map((field) => {
-                const value = (alert as Record<string, unknown>)[field.field];
-                return (
-                  <SpecGridCell
-                    key={field.field}
-                    icon={field.icon}
-                    label={field.label}
-                    value={value as string | number | null}
-                  />
-                );
-              })}
-            </div>
-          )}
+      {/* Separator + Comments */}
+      <Separator className="my-4" />
 
-          {/* Separator + Comments */}
-          <Separator className="my-4" />
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium">
+            Comentarios {comments ? `(${comments.length})` : ""}
+          </span>
+        </div>
 
+        {commentsLoading ? (
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">
-                Comentarios {comments ? `(${comments.length})` : ""}
-              </span>
-            </div>
-
-            {commentsLoading ? (
-              <div className="space-y-3">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <Skeleton className="h-8 w-8 rounded-full" />
-                    <div className="flex-1 space-y-1">
-                      <Skeleton className="h-3 w-24" />
-                      <Skeleton className="h-4 w-full" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : comments && comments.length > 0 ? (
-              comments.map((comment) => (
-                <div key={comment.id} className="flex items-start gap-3">
-                  <Avatar className="h-8 w-8 shrink-0">
-                    <AvatarFallback className="text-xs bg-muted">
-                      {getInitials(comment.userName)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-sm font-medium truncate">
-                        {comment.userName}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground shrink-0">
-                        {formatRelativeTime(comment.createdAt)}
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground break-words">
-                      {comment.content}
-                    </p>
-                  </div>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <div className="flex-1 space-y-1">
+                  <Skeleton className="h-3 w-24" />
+                  <Skeleton className="h-4 w-full" />
                 </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted-foreground text-center py-4">
-                No hay comentarios aún
-              </p>
-            )}
+              </div>
+            ))}
           </div>
-        </div>
-
-        <SheetFooter className="px-6 py-4 border-t">
-          <SheetClose asChild>
-            <Button variant="outline">Cerrar</Button>
-          </SheetClose>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        ) : comments && comments.length > 0 ? (
+          comments.map((comment) => (
+            <div key={comment.id} className="flex items-start gap-3">
+              <Avatar className="h-8 w-8 shrink-0">
+                <AvatarFallback className="text-xs bg-muted">
+                  {getInitials(comment.userName)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm font-medium truncate">
+                    {comment.userName}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground shrink-0">
+                    {formatRelativeTime(comment.createdAt)}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground wrap-break-word">
+                  {comment.content}
+                </p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-muted-foreground text-center py-4">
+            No hay comentarios aún
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

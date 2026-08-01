@@ -1,11 +1,10 @@
 import type React from "react";
 import {
-  Scissors,
-  Sprout,
   AlertTriangle,
-  Package,
-  Calendar,
+  FlaskConical,
+  Sprout,
   Truck,
+  Calendar,
   Flag,
   Leaf,
   Hash,
@@ -17,6 +16,7 @@ export interface AlertTypeConfig {
   icon: React.ElementType;
   color: string;
   bgColor: string;
+  borderColor: string;
   label: string;
   keyMetric?: {
     field: string;
@@ -32,9 +32,10 @@ export interface AlertTypeConfig {
 
 export const ALERT_TYPE_CONFIGS: Record<AlertType, AlertTypeConfig> = {
   SIEMBRA_RETRASADA: {
-    icon: Scissors,
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
+    icon: AlertTriangle,
+    color: "text-warning",
+    bgColor: "bg-warning/10",
+    borderColor: "border-warning/20",
     label: "Siembra Retrasada",
     keyMetric: {
       field: "fechaSugeridaSiembra",
@@ -49,10 +50,11 @@ export const ALERT_TYPE_CONFIGS: Record<AlertType, AlertTypeConfig> = {
     ],
   },
   FALTA_GERMINACION: {
-    icon: Sprout,
-    color: "text-amber-500",
-    bgColor: "bg-amber-500/10",
-    label: "Falta Germinación",
+    icon: FlaskConical,
+    color: "text-info",
+    bgColor: "bg-info/10",
+    borderColor: "border-info/20",
+    label: "Falta Recuento Germinación",
     keyMetric: {
       field: "fPrimer",
       label: "Fecha Primer",
@@ -64,10 +66,11 @@ export const ALERT_TYPE_CONFIGS: Record<AlertType, AlertTypeConfig> = {
     ],
   },
   FALTANTE_PLANTAS: {
-    icon: AlertTriangle,
-    color: "text-red-500",
-    bgColor: "bg-red-500/10",
-    label: "Faltante Plantas",
+    icon: Sprout,
+    color: "text-warning",
+    bgColor: "bg-warning/10",
+    borderColor: "border-warning/20",
+    label: "Faltante Estimado de Plantas",
     keyMetric: {
       field: "solicito",
       label: "Faltante",
@@ -81,9 +84,10 @@ export const ALERT_TYPE_CONFIGS: Record<AlertType, AlertTypeConfig> = {
     ],
   },
   FALTA_PRE_EXPEDICION: {
-    icon: Package,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
+    icon: Truck,
+    color: "text-info",
+    bgColor: "bg-info/10",
+    borderColor: "border-info/20",
     label: "Falta Pre-Expedición",
     keyMetric: {
       field: "fPreexp",

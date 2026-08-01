@@ -5,10 +5,12 @@ import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { ExportColumn } from "@/lib/export/types";
 import { useState } from "react";
-import type { AlertBaseDto } from "@vivero/shared";
+import { useForm } from "react-hook-form";
+import type { AlertBaseDto, CreateAlertCommentDto } from "@vivero/shared";
 import { AlertsViewForm } from "./alerts-view-form";
 import { AlertEditForm } from "./alert-edit-form";
 import type { AlertType } from "@/features/alerts/types";
+import { useAlertCommentsMutation } from "@/features/alerts/hooks/useAlertCommentsMutation";
 
 const ALERT_TYPE_SLUG_TO_ENUM: Record<string, AlertType> = {
   "siembra-retrasada": "SIEMBRA_RETRASADA",
@@ -38,6 +40,31 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
   const [selectedAlert, setSelectedAlert] = useState<TData | null>(null);
   const [mode, setMode] = useState<"view" | "edit">("view");
 
+  const form = useForm<CreateAlertCommentDto>({
+    defaultValues: { content: "" },
+  });
+
+  const { mutate: createComment } = useAlertCommentsMutation();
+
+  const handleCommentSubmit = (data: CreateAlertCommentDto) => {
+    if (!selectedAlert) return;
+    createComment(
+      {
+        ...data,
+        alertType: resolvedAlertType,
+        partidaId: selectedAlert.partidaId,
+        anio: selectedAlert.anio,
+        indice: selectedAlert.indice,
+      },
+      {
+        onSuccess: () => {
+          form.reset({ content: "" });
+          setSlideOpen(false);
+        },
+      },
+    );
+  };
+
   const resolvedAlertType: AlertType =
     ALERT_TYPE_SLUG_TO_ENUM[alertType] ?? (alertType as AlertType);
 
@@ -50,6 +77,7 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
   const handleAlertComment = (row: TData) => {
     setSelectedAlert(row);
     setMode("edit");
+    form.reset({ content: "" });
     setSlideOpen(true);
   };
 
@@ -74,27 +102,31 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
         canExecuteLabel="Agregar Comentario"
         exportColumns={exportColumns}
       />
-      {selectedAlert && mode === "view" && (
-        <AlertsViewForm
-          open={slideOverOpen}
-          onOpenChange={handleOpenChange}
-          alert={selectedAlert}
-          alertType={resolvedAlertType}
-        />
-      )}
-      {selectedAlert && mode === "edit" && (
+      {selectedAlert && (
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
           title={`Partida #${selectedAlert.partidaId}/${selectedAlert.indice}`}
-          formId=""
+          formId="alert-comment-form"
           mode={mode}
+          form={form}
+          saveLabel="Agregar Comentario"
         >
-          <AlertEditForm
-            alert={selectedAlert}
-            alertType={resolvedAlertType}
-            onSubmitted={() => setSlideOpen(false)}
-          />
+          <div className="space-y-2">
+            {mode === "view" ? (
+              <AlertsViewForm
+                selectedAlert={selectedAlert}
+                alertType={resolvedAlertType}
+              />
+            ) : (
+              <AlertEditForm
+                selectedAlert={selectedAlert}
+                alertType={resolvedAlertType}
+                form={form}
+                onSubmit={handleCommentSubmit}
+              />
+            )}
+          </div>
         </SlideOverForm>
       )}
     </>
