@@ -24,11 +24,11 @@ import {
 import { AlertDashboardSkeleton } from "../shared/alert-dashboard-skeleton";
 
 import type { ExportColumn } from "@/lib/export/types";
+import { Separator } from "@/components/ui/separator";
 
 function AlertSection({
   title,
   description,
-  count,
   alertType,
   columns,
   data,
@@ -46,25 +46,14 @@ function AlertSection({
   exportColumns?: ExportColumn<any>[];
 }) {
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <h2 className="text-sm font-black uppercase tracking-widest text-foreground">
-          {title}
-        </h2>
-        <span className="text-xs font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-          {count}
-        </span>
-      </div>
-      <p className="text-xs text-muted-foreground">{description}</p>
-      <AlertsDataTable
-        title={title}
-        description={description}
-        alertType={alertType}
-        columns={columns}
-        data={data}
-        exportColumns={exportColumns}
-      />
-    </div>
+    <AlertsDataTable
+      title={title}
+      description={description}
+      alertType={alertType}
+      columns={columns}
+      data={data}
+      exportColumns={exportColumns}
+    />
   );
 }
 
@@ -116,6 +105,9 @@ function AlertsContent() {
               exportColumns={siembraRetrasadaExportColumns}
             />
           )}
+          {siembraRetrasada.length > 0 && faltaGerminacion.length > 0 && (
+            <Separator />
+          )}
 
           {faltaGerminacion.length > 0 && (
             <AlertSection
@@ -128,6 +120,9 @@ function AlertsContent() {
               exportColumns={faltaGerminacionExportColumns}
             />
           )}
+          {faltaGerminacion.length > 0 && faltantePlantas.length > 0 && (
+            <Separator />
+          )}
 
           {faltantePlantas.length > 0 && (
             <AlertSection
@@ -139,6 +134,9 @@ function AlertsContent() {
               data={faltantePlantas}
               exportColumns={faltantePlantasExportColumns}
             />
+          )}
+          {faltantePlantas.length > 0 && faltaPreExpedicion.length > 0 && (
+            <Separator />
           )}
 
           {faltaPreExpedicion.length > 0 && (

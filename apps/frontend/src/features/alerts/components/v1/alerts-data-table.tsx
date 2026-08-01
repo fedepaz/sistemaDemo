@@ -4,14 +4,18 @@
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { ExportColumn } from "@/lib/export/types";
-import { useEffect, useState } from "react";
-import { useAlertCommentsMutation } from "../../hooks/useAlertCommentsMutation";
-import type { AlertBaseDto, CreateAlertCommentDto } from "@vivero/shared";
-import { CreateAlertCommentSchema } from "@vivero/shared";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import type { AlertBaseDto } from "@vivero/shared";
 import { AlertsViewForm } from "./alerts-view-form";
 import { AlertEditForm } from "./alert-edit-form";
+import type { AlertType } from "@/features/alerts/types";
+
+const ALERT_TYPE_SLUG_TO_ENUM: Record<string, AlertType> = {
+  "siembra-retrasada": "SIEMBRA_RETRASADA",
+  "falta-germinacion": "FALTA_GERMINACION",
+  "faltante-plantas": "FALTANTE_PLANTAS",
+  "falta-pre-expedicion": "FALTA_PRE_EXPEDICION",
+};
 
 interface AlertsDataTableProps<TData extends AlertBaseDto> {
   title: string;
@@ -34,33 +38,8 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
   const [selectedAlert, setSelectedAlert] = useState<TData | null>(null);
   const [mode, setMode] = useState<"view" | "edit">("view");
 
-  const { mutateAsync: createAlertComment, isPending } =
-    useAlertCommentsMutation();
-
-  const formAlertComment = useForm<CreateAlertCommentDto>({
-    resolver: zodResolver(CreateAlertCommentSchema),
-  });
-
-  useEffect(() => {
-    if (selectedAlert) {
-      formAlertComment.reset({
-        alertType: alertType.toUpperCase().replace(/-/g, "_") as CreateAlertCommentDto["alertType"],
-        partidaId: selectedAlert.partidaId,
-        anio: selectedAlert.anio,
-        indice: selectedAlert.indice,
-        content: "",
-      });
-    }
-  }, [selectedAlert, alertType, formAlertComment]);
-
-  const handleCreateAlertComment = async (formData: CreateAlertCommentDto) => {
-    try {
-      await createAlertComment(formData);
-      setSlideOpen(false);
-    } catch {
-      // error toast handled by mutation hook
-    }
-  };
+  const resolvedAlertType: AlertType =
+    ALERT_TYPE_SLUG_TO_ENUM[alertType] ?? (alertType as AlertType);
 
   const handleAlertView = (row: TData) => {
     setSelectedAlert(row);
@@ -95,27 +74,27 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
         canExecuteLabel="Agregar Comentario"
         exportColumns={exportColumns}
       />
-      {selectedAlert && (
+      {selectedAlert && mode === "view" && (
+        <AlertsViewForm
+          open={slideOverOpen}
+          onOpenChange={handleOpenChange}
+          alert={selectedAlert}
+          alertType={resolvedAlertType}
+        />
+      )}
+      {selectedAlert && mode === "edit" && (
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
           title={`Partida #${selectedAlert.partidaId}/${selectedAlert.indice}`}
-          formId="alert-comment-form"
+          formId=""
           mode={mode}
-          form={formAlertComment}
-          isLoading={isPending}
-          saveLabel="Confirmar Comentario"
         >
-          {mode === "view" ? (
-            <AlertsViewForm selectedAlert={selectedAlert} alertType={alertType} />
-          ) : (
-            <AlertEditForm
-              form={formAlertComment}
-              onSubmit={handleCreateAlertComment}
-              onCancel={() => setSlideOpen(false)}
-              selectedAlert={selectedAlert}
-            />
-          )}
+          <AlertEditForm
+            alert={selectedAlert}
+            alertType={resolvedAlertType}
+            onSubmitted={() => setSlideOpen(false)}
+          />
         </SlideOverForm>
       )}
     </>
