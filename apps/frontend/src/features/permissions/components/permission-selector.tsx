@@ -79,7 +79,6 @@ export function PermissionSelector({
               >
                 {selectedTable ? (
                   <div className="flex items-center gap-2 truncate">
-                    <UserAvatar name={getDisplayName(selectedTable as Entity)} size="sm" />
                     <span className="truncate">
                       {getDisplayName(selectedTable)}
                     </span>
@@ -113,7 +112,6 @@ export function PermissionSelector({
                         onSelect={() => handleTableChange(table.id)}
                         className="flex items-center gap-3 px-3 py-2 rounded-lg my-1 cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-foreground"
                       >
-                        <UserAvatar name={getDisplayName(table)} />
                         <div className="flex flex-col flex-1 min-w-0">
                           <span className="text-sm font-semibold truncate">
                             {getDisplayName(table)}
