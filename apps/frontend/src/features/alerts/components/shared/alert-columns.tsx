@@ -6,10 +6,10 @@ import type { ExportColumn } from "@/lib/export/types";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
+import { Badge } from "@/components/ui/badge";
 import {
   SiembraRetrasadaDto,
   FaltaGerminacionDto,
@@ -57,17 +57,7 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
       </span>
     ),
   },
-  {
-    accessorKey: "injerto",
-    header: ({ column }) => (
-      <SortableHeader column={column}>Injerto</SortableHeader>
-    ),
-    cell: ({ row }) => (
-      <span className="text-xs text-muted-foreground font-mono">
-        {row.original.injerto}
-      </span>
-    ),
-  },
+
   {
     accessorKey: "nrocont",
     header: ({ column }) => (
@@ -181,17 +171,7 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
       </span>
     ),
   },
-  {
-    accessorKey: "injerto",
-    header: ({ column }) => (
-      <SortableHeader column={column}>Injerto</SortableHeader>
-    ),
-    cell: ({ row }) => (
-      <span className="text-xs text-muted-foreground font-mono">
-        {row.original.injerto}
-      </span>
-    ),
-  },
+
   {
     accessorKey: "nrocont",
     header: ({ column }) => (
@@ -250,19 +230,38 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
       <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
         {row.original.indice !== 0 && `/ ${row.original.indice}`}
+        {row.original.subRowCount && row.original.subRowCount > 0 && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Badge
+                variant="secondary"
+                className="ml-1 text-[9px] cursor-help"
+              >
+                +{row.original.subRowCount}
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent
+              side="bottom"
+              className="bg-popover border-border shadow-xl"
+            >
+              <div className="space-y-1">
+                <p className="text-xs font-bold text-foreground">
+                  Partidas agrupadas:
+                </p>
+                <p className="text-[10px] text-muted-foreground leading-tight">
+                  {row.original.subRows
+                    ?.map((sub) => `#${sub.partidaId}/${sub.indice}`)
+                    .join(", ")}
+                </p>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        )}
       </div>
     ),
-    size: 70,
+    size: 90,
   },
-  {
-    accessorKey: "hai",
-    header: ({ column }) => (
-      <SortableHeader column={column}>HAI</SortableHeader>
-    ),
-    cell: ({ row }) => (
-      <span className="text-xs font-mono">{row.original.hai}</span>
-    ),
-  },
+
   {
     accessorKey: "codigoEspecie",
     header: ({ column }) => (
@@ -330,8 +329,7 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
     ),
     cell: ({ row }) => {
       const diff =
-        Number(row.original.solicito ?? 0) -
-        Number(row.original.porPr ?? 0);
+        Number(row.original.solicito ?? 0) - Number(row.original.porPr ?? 0);
       return (
         <span className="text-xs font-mono font-bold text-right text-destructive">
           {diff > 0 ? `-${diff}` : diff}
@@ -381,17 +379,7 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
       </span>
     ),
   },
-  {
-    accessorKey: "injerto",
-    header: ({ column }) => (
-      <SortableHeader column={column}>Injerto</SortableHeader>
-    ),
-    cell: ({ row }) => (
-      <span className="text-xs text-muted-foreground font-mono">
-        {row.original.injerto}
-      </span>
-    ),
-  },
+
   {
     accessorKey: "nrocont",
     header: ({ column }) => (
@@ -445,7 +433,7 @@ export const siembraRetrasadaExportColumns: ExportColumn<SiembraRetrasadaDto>[] 
     { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
     { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
     { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
-    { accessorKey: "injerto", exportHeader: "Injerto", pdfWidth: "8%" },
+    { accessorKey: "nrocont", exportHeader: "Nro Contenedor", pdfWidth: "10%" },
     { accessorKey: "semSiembra", exportHeader: "Sem Siembra", pdfWidth: "10%" },
     {
       accessorKey: "fechaSugeridaSiembra",
@@ -461,7 +449,7 @@ export const faltaGerminacionExportColumns: ExportColumn<FaltaGerminacionDto>[] 
     { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
     { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
     { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
-    { accessorKey: "injerto", exportHeader: "Injerto", pdfWidth: "10%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "12%" },
     { accessorKey: "fPrimer", exportHeader: "Fecha Primer", pdfWidth: "15%" },
     { accessorKey: "pr", exportHeader: "PR", pdfWidth: "10%" },
   ];
@@ -469,12 +457,13 @@ export const faltaGerminacionExportColumns: ExportColumn<FaltaGerminacionDto>[] 
 export const faltantePlantasExportColumns: ExportColumn<FaltantePlantasDto>[] =
   [
     { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
-    { accessorKey: "hai", exportHeader: "HAI", pdfWidth: "6%" },
     { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
     { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
     { accessorKey: "solicito", exportHeader: "Solicitadas", pdfWidth: "10%" },
     { accessorKey: "pr", exportHeader: "PR", pdfWidth: "10%" },
     { accessorKey: "porPr", exportHeader: "Por PR", pdfWidth: "10%" },
+    { accessorKey: "diferencia", exportHeader: "Diferencia", pdfWidth: "10%" },
   ];
 
 export const faltaPreExpedicionExportColumns: ExportColumn<FaltaPreExpedicionDto>[] =
@@ -482,7 +471,7 @@ export const faltaPreExpedicionExportColumns: ExportColumn<FaltaPreExpedicionDto
     { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
     { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
     { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
-    { accessorKey: "injerto", exportHeader: "Injerto", pdfWidth: "10%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "12%" },
     { accessorKey: "fPreexp", exportHeader: "Fecha Pre-Exp", pdfWidth: "15%" },
     { accessorKey: "pe", exportHeader: "PE", pdfWidth: "10%" },
   ];

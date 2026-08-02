@@ -63,6 +63,10 @@ export const FaltantePlantasDtoSchema = AlertBaseDtoSchema.extend({
   pr: z.string(),
   stIniPr: z.string(),
   porPr: z.number(),
+  subRowCount: z.number().optional(),
+  subRows: z
+    .array(z.object({ partidaId: z.number(), indice: z.number() }))
+    .optional(),
 });
 
 export type FaltantePlantasDto = z.infer<typeof FaltantePlantasDtoSchema>;

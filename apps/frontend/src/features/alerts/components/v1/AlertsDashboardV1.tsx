@@ -1,7 +1,7 @@
 // src/features/alerts/components/v1/AlertsDashboardV1.tsx
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { AlertTriangle } from "lucide-react";
 import { AlertSummaryCards } from "../shared/alert-summary-cards";
 import { AlertsDataTable } from "./alerts-data-table";
@@ -22,6 +22,7 @@ import {
   useFaltaPreExpedicion,
 } from "../../hooks/useAlerts";
 import { AlertDashboardSkeleton } from "../shared/alert-dashboard-skeleton";
+import { groupFaltantePlantas } from "../../utils/group-faltante-plantas";
 
 import type { ExportColumn } from "@/lib/export/types";
 import { Separator } from "@/components/ui/separator";
@@ -63,10 +64,15 @@ function AlertsContent() {
   const { data: faltantePlantas } = useFaltantePlantas();
   const { data: faltaPreExpedicion } = useFaltaPreExpedicion();
 
+  const faltantePlantasGrouped = useMemo(
+    () => groupFaltantePlantas(faltantePlantas),
+    [faltantePlantas],
+  );
+
   const totalAlerts =
     siembraRetrasada.length +
     faltaGerminacion.length +
-    faltantePlantas.length +
+    faltantePlantasGrouped.length +
     faltaPreExpedicion.length;
 
   return (
@@ -74,7 +80,7 @@ function AlertsContent() {
       <AlertSummaryCards
         siembraRetrasadaCount={siembraRetrasada.length}
         faltaGerminacionCount={faltaGerminacion.length}
-        faltantePlantasCount={faltantePlantas.length}
+        faltantePlantasCount={faltantePlantasGrouped.length}
         faltaPreExpedicionCount={faltaPreExpedicion.length}
       />
 
@@ -120,22 +126,22 @@ function AlertsContent() {
               exportColumns={faltaGerminacionExportColumns}
             />
           )}
-          {faltaGerminacion.length > 0 && faltantePlantas.length > 0 && (
+          {faltaGerminacion.length > 0 && faltantePlantasGrouped.length > 0 && (
             <Separator />
           )}
 
-          {faltantePlantas.length > 0 && (
+          {faltantePlantasGrouped.length > 0 && (
             <AlertSection
               title="Faltante Estimado de Plantas"
               description="Partidas donde plantas germinadas son menor a las solicitadas"
-              count={faltantePlantas.length}
+              count={faltantePlantasGrouped.length}
               alertType="faltante-plantas"
               columns={faltantePlantasColumns}
-              data={faltantePlantas}
+              data={faltantePlantasGrouped}
               exportColumns={faltantePlantasExportColumns}
             />
           )}
-          {faltantePlantas.length > 0 && faltaPreExpedicion.length > 0 && (
+          {faltantePlantasGrouped.length > 0 && faltaPreExpedicion.length > 0 && (
             <Separator />
           )}
 
