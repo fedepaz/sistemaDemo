@@ -1,7 +1,7 @@
 // src/components/common/export-dropdown.tsx
 "use client";
 
-import { Download, FileSpreadsheet, FileText, FileJson } from "lucide-react";
+import { Download, FileSpreadsheet, FileText, FileDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,10 +14,11 @@ import {
 import { useBreakpoint } from "@/hooks/useMediaQuery";
 
 interface ExportDropdownProps {
-  onExport: (format: "csv" | "excel" | "json" | "pdf") => void;
+  onExport: (format: "csv" | "excel" | "pdf") => void;
   selectedCount?: number;
   totalCount?: number;
   disabled?: boolean;
+  hasExportColumns?: boolean;
 }
 
 export function ExportDropdown({
@@ -25,6 +26,7 @@ export function ExportDropdown({
   selectedCount = 0,
   totalCount = 0,
   disabled = false,
+  hasExportColumns = false,
 }: ExportDropdownProps) {
   const breakpoint = useBreakpoint();
 
@@ -39,8 +41,9 @@ export function ExportDropdown({
         <Button
           variant="outline"
           size="sm"
-          disabled={disabled}
+          disabled={disabled || !hasExportColumns}
           className="min-h-[40px] bg-transparent"
+          aria-label={exportLabel}
         >
           <Download className="mr-2 h-4 w-4" />
           {breakpoint === "sm" ? "" : "Exportar"}
@@ -57,9 +60,9 @@ export function ExportDropdown({
           <FileSpreadsheet className="mr-2 h-4 w-4" />
           Excel
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onExport("json")}>
-          <FileJson className="mr-2 h-4 w-4" />
-          JSON
+        <DropdownMenuItem onClick={() => onExport("pdf")}>
+          <FileDown className="mr-2 h-4 w-4" />
+          PDF
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

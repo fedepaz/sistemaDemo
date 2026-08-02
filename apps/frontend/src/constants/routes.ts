@@ -8,6 +8,7 @@ export const ROUTES = {
   AUDIT_LOGS: "/audit-logs",
   ENTITIES: "/entities",
   EXTENDIDOS: "/extendidos",
+  SIEMBRA: "/siembra",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

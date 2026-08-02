@@ -1,0 +1,10 @@
+chore: add agent skills system and update gitignore
+
+- Add .agents/ and .skills/ to .gitignore to exclude skill directories from version control
+- Create skills-lock.json registry for tracking installed skills and their sources
+- Document the skill system in GEMINI.md for better developer understanding
+- Add comprehensive skills guide in docs/agents/skills-guide.md
+
+This commit introduces a skill management system that allows for modular
+agent capabilities while keeping the skill directories out of version control.
+The skills-lock.json file tracks installed skills similarly to package-lock.json.

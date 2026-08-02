@@ -6,18 +6,13 @@ import { UserProfileDto } from "@vivero/shared";
 import { useAuth } from "./useAuth";
 import { ApiError } from "@/lib/api/client-fetch";
 import { authService } from "../api/authService";
-
-// This is the key for the query cache
-export const userProfileQueryKeys = {
-  all: ["userProfile"] as const,
-  me: () => [...userProfileQueryKeys.all, "me"] as const,
-};
+import { authProfileQueryKeys } from "@/lib/queryKeys";
 
 export const useAuthUserProfile = () => {
   const { isSignedIn, loading: authLoading } = useAuth();
 
   const query = useQuery<UserProfileDto>({
-    queryKey: userProfileQueryKeys.me(),
+    queryKey: authProfileQueryKeys.me(),
     queryFn: authService.getProfileMe,
     enabled: isSignedIn,
     retry: 1, // Retry once to account for transient network issues

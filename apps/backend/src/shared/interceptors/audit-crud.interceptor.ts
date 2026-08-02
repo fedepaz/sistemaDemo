@@ -15,22 +15,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { Request } from 'express';
-
-enum AuditActionType {
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-}
-
-enum EntityType {
-  USER = 'USER',
-  TENANT = 'TENANT',
-  ROLE = 'ROLE',
-  AUDIT_LOG = 'AUDIT_LOG',
-  LOCALE = 'LOCALE',
-  MESSAGE = 'MESSAGE',
-  USER_PREFERENCE = 'USER_PREFERENCE',
-}
+import { AuditActionType, EntityType } from '../../generated/prisma/enums';
 
 const METHOD_TO_ACTION: Record<string, AuditActionType> = {
   POST: AuditActionType.CREATE,

@@ -2,18 +2,16 @@
 "use client";
 
 import { createContext, useContext, useEffect } from "react";
-import {
-  useAuthUserProfile,
-  userProfileQueryKeys,
-} from "../hooks/use-authUser";
+import { useAuthUserProfile } from "../hooks/use-authUser";
 import { useAuth } from "../hooks/useAuth";
 import {
   AuthResponseDto,
   UserPermissions,
   UserProfileDto,
 } from "@vivero/shared";
-import { permissionsQueryKeys, usePermissions } from "../hooks/use-permissions";
+import { usePermissions } from "../hooks/use-permissions";
 import { useQueryClient } from "@tanstack/react-query";
+import { authProfileQueryKeys, authPermissionsQueryKeys } from "@/lib/queryKeys";
 
 type AuthContextType = {
   userProfile: UserProfileDto | undefined;
@@ -38,11 +36,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (auth.isSignedIn) {
-      queryClient.invalidateQueries({ queryKey: userProfileQueryKeys.me() });
-      queryClient.invalidateQueries({ queryKey: permissionsQueryKeys.me() });
+      queryClient.invalidateQueries({ queryKey: authProfileQueryKeys.me() });
+      queryClient.invalidateQueries({ queryKey: authPermissionsQueryKeys.me() });
     } else {
-      queryClient.removeQueries({ queryKey: userProfileQueryKeys.me() });
-      queryClient.removeQueries({ queryKey: permissionsQueryKeys.me() });
+      queryClient.removeQueries({ queryKey: authProfileQueryKeys.me() });
+      queryClient.removeQueries({ queryKey: authPermissionsQueryKeys.me() });
     }
   }, [auth.isSignedIn, queryClient]);
 

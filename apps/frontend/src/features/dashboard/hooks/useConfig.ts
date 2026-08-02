@@ -2,14 +2,11 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { configService, Config } from "../api/configService";
-
-export const CONFIG_QUERY_KEY = {
-  all: () => ["l-config"] as const,
-};
+import { configQueryKeys } from "@/lib/queryKeys";
 
 export const useConfig = () => {
   return useSuspenseQuery<Config[]>({
-    queryKey: CONFIG_QUERY_KEY.all(),
+    queryKey: configQueryKeys.all(),
     queryFn: configService.fetchAll,
     retry: 1, // Retry once to account for transient network issues
   });

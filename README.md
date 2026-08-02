@@ -217,11 +217,28 @@ pnpm install
 viveroApp/
 ├── apps/           # Aplicaciones del monorepo
 ├── packages/       # Paquetes compartidos
+├── .agents/        # Agentes y skills (no versionado)
 ├── .github/        # Configuración de GitHub Actions
 │   └── workflows/  # Archivos de CI/CD
 ├── docs/           # Documentación
 └── package.json    # Configuración principal
 ```
+
+---
+
+## Sistema de Skills
+
+El proyecto utiliza un sistema de skills modulares para extender las capacidades de los agentes. Los skills se instalan en `.agents/skills/` y se rastrean via `skills-lock.json`.
+
+**Skills disponibles:**
+- Frontend: `frontend-design`, `shadcn`, `tailwind-css-patterns`
+- Backend: `nestjs-best-practices`, `prisma-client-api`
+- Quality: `accessibility`, `seo`, `vitest`
+- Workflow: `commit-workflow`, `review-code-changes`
+
+**Uso:** Activa un skill con `skill("nombre-del-skill")`
+
+**Documentación:** Ver `docs/agents/skills-guide.md`
 
 ---
 

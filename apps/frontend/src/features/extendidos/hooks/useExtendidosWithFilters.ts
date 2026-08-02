@@ -5,16 +5,16 @@ import { useMemo } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExtendidoDto } from "@vivero/shared";
 import { extendidoService } from "../api/extendidoService";
+import { extendidosQueryKeys } from "@/lib/queryKeys";
 
 /**
  * Hook to manage extendidos data.
  * Always fetches records "in chamber" and applies local filtering by camaraId.
  */
-export const extendidosEnCamaraQueryKey = ["extendidos", "enCamara"] as const;
 
 export function useExtendidos(camaraId: string = "all") {
   const query = useSuspenseQuery<ExtendidoDto[]>({
-    queryKey: extendidosEnCamaraQueryKey,
+    queryKey: extendidosQueryKeys.enCamara(),
     queryFn: extendidoService.fetchExtendidosEnCamara,
   });
 

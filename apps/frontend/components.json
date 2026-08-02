@@ -18,5 +18,378 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {},
+  "components": {
+    "version": 1,
+    "reviewCriteria": {
+      "responsive": "Mobile-first zero-scroll: dvh, flex-1 overflow-hidden, max-h constraints, mobile-first grids",
+      "colorTokens": "Only OKLCH theme variables — no hardcoded hex/rgb/hsl",
+      "uxHelpers": "Tooltips for icon-only actions, aria-labels for screen readers, form descriptions",
+      "viewportDvh": "Uses dynamic viewport height (dvh) where full-screen height is needed"
+    },
+    "reviewed": {
+      "lastReview": "2026-07-23",
+      "reviewer": "opencode"
+    },
+    "categories": {
+      "Pages": {
+        "_note": "Route-level page components and their loading/error boundaries",
+        "RootLayout": { "path": "app/layout" },
+        "DashboardLayout": { "path": "app/(dashboard)/layout" },
+        "DashboardPage": { "path": "app/(dashboard)/page" },
+        "DashboardLoading": { "path": "app/(dashboard)/loading" },
+        "DashboardNotFound": { "path": "app/(dashboard)/not-found" },
+        "CatchAllPage": { "path": "app/(dashboard)/[...rest]/page" },
+        "AuthLayout": { "path": "app/(auth)/layout" },
+        "LoginPage": { "path": "app/(auth)/login/page" },
+        "LoginLoading": { "path": "app/(auth)/login/loading" },
+        "AlertsV1Page": { "path": "app/(dashboard)/alerts/v1/page" },
+        "AlertsV1Loading": { "path": "app/(dashboard)/alerts/v1/loading" },
+        "AlertsV2Page": { "path": "app/(dashboard)/alerts/v2/page" },
+        "AlertsV2Loading": { "path": "app/(dashboard)/alerts/v2/loading" },
+        "AlertsV3Page": { "path": "app/(dashboard)/alerts/v3/page" },
+        "AlertsV3Loading": { "path": "app/(dashboard)/alerts/v3/loading" },
+        "AuditLogsPage": { "path": "app/(dashboard)/audit-logs/page" },
+        "AuditLogsLoading": { "path": "app/(dashboard)/audit-logs/loading" },
+        "EntitiesPage": { "path": "app/(dashboard)/entities/page" },
+        "EntitiesLoading": { "path": "app/(dashboard)/entities/loading" },
+        "ExtendidosPage": { "path": "app/(dashboard)/extendidos/page" },
+        "ExtendidosLoading": { "path": "app/(dashboard)/extendidos/loading" },
+        "PermissionsPage": { "path": "app/(dashboard)/user-permissions/page" },
+        "PermissionsLoading": { "path": "app/(dashboard)/user-permissions/loading" },
+        "SiembraPage": { "path": "app/(dashboard)/siembra/page" },
+        "SiembraLoading": { "path": "app/(dashboard)/siembra/loading" },
+        "UsersPage": { "path": "app/(dashboard)/users/page" },
+        "UsersLoading": { "path": "app/(dashboard)/users/loading" }
+      },
+      "Layout": {
+        "_note": "Layout structural components: headers, sidebars, navigation",
+        "DashboardHeader": {
+          "path": "components/layout/dashboard-header",
+          "reviewed": true,
+          "responsive": true,
+          "colorTokens": true,
+          "uxHelpers": true,
+          "viewportDvh": true
+        },
+        "DesktopSidebar": { "path": "components/layout/desktop-sidebar" },
+        "MobileNavigation": { "path": "components/layout/mobile-navigation" },
+        "DashboardProtectedLayout": { "path": "components/common/dashboard-protected-layout" }
+      },
+      "Common": {
+        "_note": "Shared/common components used across the app",
+        "ComingSoonPage": { "path": "components/common/coming-soon" },
+        "DatabaseUnavailablePage": { "path": "components/common/database-unavailable" },
+        "LoadingSpinner": { "path": "components/common/loading-spinner" },
+        "Logo": { "path": "components/common/logo" },
+        "NotFoundPage": { "path": "components/common/not-found" },
+        "PendingPermissionsPage": { "path": "components/common/pending-permissions" },
+        "ThemeToggle": { "path": "components/common/theme-toggle" },
+        "ErrorBoundary": { "path": "components/error/error-boundary" },
+        "FormErrorHandler": { "path": "components/error/form-error-handler" }
+      },
+      "Modals": {
+        "_note": "Global modal systems with context+portal infrastructure",
+        "AlertModalDialog": {
+          "path": "components/modals/alert-modal-dialog",
+          "reviewed": true,
+          "responsive": true,
+          "colorTokens": true,
+          "uxHelpers": true,
+          "viewportDvh": true
+        }
+      },
+      "DataDisplay": {
+        "_note": "Data-oriented display components: tables, cards, KPIs",
+        "DataTable": {
+          "path": "components/data-display/data-table/data-table",
+          "reviewed": true,
+          "responsive": true,
+          "colorTokens": true,
+          "uxHelpers": true,
+          "viewportDvh": true
+        },
+        "DataTableSkeleton": { "path": "components/data-display/data-table/data-table-skeleton" },
+        "DataTableFacetedFilter": { "path": "components/data-display/data-table/column-filters" },
+        "SortableHeader": {
+          "path": "components/data-display/data-table/data-table",
+          "reviewed": true,
+          "responsive": true,
+          "colorTokens": true,
+          "uxHelpers": true,
+          "viewportDvh": null
+        },
+        "DeleteDialog": { "path": "components/data-display/data-table/delete-dialog-button" },
+        "EditDialog": { "path": "components/data-display/data-table/edit-dialog-button" },
+        "ExportDropdown": { "path": "components/data-display/data-table/export-dropdown" },
+        "SlideOverForm": { "path": "components/data-display/data-table/slide-over-form" },
+        "StatusBadge": { "path": "components/data-display/data-table/status-badge" },
+        "FeatureCard": { "path": "components/data-display/feature-card/feature-card" },
+        "FeatureCardSkeleton": { "path": "components/data-display/feature-card/feature-card-skeleton" },
+        "KPICard": { "path": "components/data-display/kpi-card/kpi-card" },
+        "KPICardSkeleton": { "path": "components/data-display/kpi-card/kpi-card-skeleton" }
+      },
+      "Providers": {
+        "_note": "React context providers that wrap the app tree",
+        "AppProviders": { "path": "providers/app-providers" },
+        "ThemeProvider": { "path": "providers/theme-provider" },
+        "ReactClientProvider": { "path": "providers/query-client-provider" },
+        "AlertModalProvider": {
+          "path": "providers/alert-modal-provider",
+          "reviewed": true,
+          "responsive": null,
+          "colorTokens": true,
+          "uxHelpers": true,
+          "viewportDvh": null
+        },
+        "ErrorProvider": { "path": "providers/error-provider" },
+        "WizardModalProvider": {
+          "path": "providers/wizard-modal-provider",
+          "reviewed": true,
+          "responsive": null,
+          "colorTokens": true,
+          "uxHelpers": true,
+          "viewportDvh": null
+        },
+        "AuthProvider": { "path": "features/auth/providers/AuthProvider" }
+      },
+      "UI": {
+        "_note": "shadcn/ui primitives — library baseline, not custom",
+        "AlertDialog": { "path": "components/ui/alert-dialog", "_type": "shadcn" },
+        "Avatar": { "path": "components/ui/avatar", "_type": "shadcn" },
+        "Badge": { "path": "components/ui/badge", "_type": "shadcn" },
+        "Button": { "path": "components/ui/button", "_type": "shadcn" },
+        "Card": { "path": "components/ui/card", "_type": "shadcn" },
+        "Checkbox": { "path": "components/ui/checkbox", "_type": "shadcn" },
+        "Command": { "path": "components/ui/command", "_type": "shadcn" },
+        "Dialog": { "path": "components/ui/dialog", "_type": "shadcn" },
+        "DropdownMenu": { "path": "components/ui/dropdown-menu", "_type": "shadcn" },
+        "Form": { "path": "components/ui/form", "_type": "shadcn" },
+        "Input": { "path": "components/ui/input", "_type": "shadcn" },
+        "Label": { "path": "components/ui/label", "_type": "shadcn" },
+        "Popover": { "path": "components/ui/popover", "_type": "shadcn" },
+        "Progress": { "path": "components/ui/progress", "_type": "shadcn" },
+        "ScrollArea": { "path": "components/ui/scroll-area", "_type": "shadcn" },
+        "Select": { "path": "components/ui/select", "_type": "shadcn" },
+        "Separator": { "path": "components/ui/separator", "_type": "shadcn" },
+        "Sheet": { "path": "components/ui/sheet", "_type": "shadcn" },
+        "Skeleton": { "path": "components/ui/skeleton", "_type": "shadcn" },
+        "Sonner": { "path": "components/ui/sonner", "_type": "shadcn" },
+        "Switch": { "path": "components/ui/switch", "_type": "shadcn" },
+        "Table": { "path": "components/ui/table", "_type": "shadcn" },
+        "Tabs": { "path": "components/ui/tabs", "_type": "shadcn" },
+        "Textarea": { "path": "components/ui/textarea", "_type": "shadcn" },
+        "Toggle": { "path": "components/ui/toggle", "_type": "shadcn" },
+        "ToggleGroup": { "path": "components/ui/toggle-group", "_type": "shadcn" },
+        "Tooltip": { "path": "components/ui/tooltip", "_type": "shadcn" }
+      },
+      "Features": {
+        "alerts": {
+          "_note": "Alert monitoring and notification system (v1/v2/v3)",
+          "AlertsDashboardV1": {
+            "path": "features/alerts/components/v1/AlertsDashboardV1",
+            "reviewed": true,
+            "responsive": true,
+            "colorTokens": true,
+            "uxHelpers": true,
+            "viewportDvh": null
+          },
+          "AlertsDataTable": {
+            "path": "features/alerts/components/v1/alerts-data-table",
+            "reviewed": true,
+            "responsive": true,
+            "colorTokens": true,
+            "uxHelpers": true,
+            "viewportDvh": null
+          },
+          "AlertSummaryCards": {
+            "path": "features/alerts/components/shared/alert-summary-cards",
+            "reviewed": true,
+            "responsive": true,
+            "colorTokens": true,
+            "uxHelpers": true,
+            "viewportDvh": null
+          },
+          "AlertDashboardSkeleton": {
+            "path": "features/alerts/components/shared/alert-dashboard-skeleton",
+            "reviewed": true,
+            "responsive": true,
+            "colorTokens": true,
+            "uxHelpers": true,
+            "viewportDvh": null
+          },
+          "FilterTabs": {
+            "path": "features/alerts/components/shared/filter-tabs",
+            "reviewed": true,
+            "responsive": true,
+            "colorTokens": true,
+            "uxHelpers": true,
+            "viewportDvh": null
+          },
+          "AlertsDashboardV2": { "path": "features/alerts/components/v2/AlertsDashboardV2" },
+          "AlertsDashboardV3": { "path": "features/alerts/components/v3/AlertsDashboardV3" },
+          "SiembraRetrasadaCard": { "path": "features/alerts/components/v2/SiembraRetrasadaCard" },
+          "FaltaGerminacionCard": { "path": "features/alerts/components/v2/FaltaGerminacionCard" },
+          "FaltantePlantasCard": { "path": "features/alerts/components/v2/FaltantePlantasCard" },
+          "FaltaPreExpedicionCard": { "path": "features/alerts/components/v2/FaltaPreExpedicionCard" },
+          "NotificationCenter": { "path": "features/alerts/components/v2/NotificationCenter" },
+          "AlertDetailPanel": { "path": "features/alerts/components/v3/alert-detail-panel" },
+          "AlertListPanel": { "path": "features/alerts/components/v3/alert-list-panel" },
+          "_columns": {
+            "_note": "Column definition arrays for alert data tables",
+            "siembraRetrasadaColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            },
+            "faltaGerminacionColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            },
+            "faltantePlantasColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            },
+            "faltaPreExpedicionColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            },
+            "siembraRetrasadaExportColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            },
+            "faltaGerminacionExportColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            },
+            "faltantePlantasExportColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            },
+            "faltaPreExpedicionExportColumns": {
+              "path": "features/alerts/components/shared/alert-columns",
+              "type": "columns",
+              "reviewed": true,
+              "colorTokens": true
+            }
+          }
+        },
+        "dashboard": {
+          "_note": "Dashboard homepage widgets",
+          "RootDashboard": { "path": "features/dashboard/components/RootDashboard" },
+          "RootDashboardSkeleton": { "path": "features/dashboard/components/root-dashboard-skeleton" },
+          "CompanyInfoCard": { "path": "features/dashboard/components/company-info-card" },
+          "CompanyInfoCardSkeleton": { "path": "features/dashboard/components/company-info-card-skeleton" },
+          "CompanyWelcome": { "path": "features/dashboard/components/company-welcome" },
+          "CompanyWelcomeSkeleton": { "path": "features/dashboard/components/company-welcome-skeleton" },
+          "DashboardAlerts": { "path": "features/dashboard/components/dashboard-alerts" },
+          "DashboardAlertsSkeleton": { "path": "features/dashboard/components/dashboard-alerts-skeleton" },
+          "DashboardKPI": { "path": "features/dashboard/components/dashboard-kpi" },
+          "DashboardKPISkeleton": { "path": "features/dashboard/components/dashboard-kpi-skeleton" }
+        },
+        "siembra": {
+          "_note": "Sowing/planting operations management",
+          "SiembraDashboard": { "path": "features/siembra/components/SiembraDashboard" },
+          "SiembraDashboardSkeleton": { "path": "features/siembra/components/siembra-dashboard-skeleton" },
+          "SiembraDataTable": { "path": "features/siembra/components/siembra-data-table" },
+          "SiembraEditForm": { "path": "features/siembra/components/siembra-edit-form" },
+          "SiembraView": { "path": "features/siembra/components/siembra-view" },
+          "SiembraViewForm": { "path": "features/siembra/components/siembra-view-form" },
+          "EmptyState": { "path": "features/siembra/components/empty-state" },
+          "_columns": {
+            "_note": "Column definitions for sowing data tables",
+            "partidaSiembraColumns": { "path": "features/siembra/components/columns", "type": "columns" },
+            "partidaSiembraExportColumns": { "path": "features/siembra/components/columns", "type": "columns" }
+          }
+        },
+        "extendidos": {
+          "_note": "Greenhouse bed extension management",
+          "ExtendidoDashboard": { "path": "features/extendidos/components/ExtendidoDashboard" },
+          "ExtendidoDashboardSkeleton": { "path": "features/extendidos/components/extendido-dashboad-skeleton" },
+          "ExtendidoDataTable": { "path": "features/extendidos/components/extendido-data-table" },
+          "ExtendidosEditForm": { "path": "features/extendidos/components/extendido-edit-form" },
+          "ExtendidoView": { "path": "features/extendidos/components/extendidos-view" },
+          "ExtendidosViewForm": { "path": "features/extendidos/components/extendido-view-form" },
+          "EmptyState": { "path": "features/extendidos/components/empty-state" },
+          "_columns": {
+            "partidaColumns": { "path": "features/extendidos/components/columns", "type": "columns" },
+            "partidaExportColumns": { "path": "features/extendidos/components/columns", "type": "columns" }
+          }
+        },
+        "auth": {
+          "_note": "Authentication and login",
+          "AuthDashboard": { "path": "features/auth/components/AuthDashboard" },
+          "AuthSkeleton": { "path": "features/auth/components/auth-skeleton" },
+          "LoginForm": { "path": "features/auth/components/login-form" }
+        },
+        "users": {
+          "_note": "User management",
+          "UsersDashboard": { "path": "features/users/components/UsersDashboard" },
+          "UsersDashboardSkeleton": { "path": "features/users/components/user-dashboard-skeleton" },
+          "UsersDataTable": { "path": "features/users/components/user-data-table" },
+          "UserCreateForm": { "path": "features/users/components/user-create-form" },
+          "UserEditForm": { "path": "features/users/components/user-edit-form" },
+          "UserKPIs": { "path": "features/users/components/user-kpi" },
+          "UserProfileEdit": { "path": "components/user-profile/user-edit" },
+          "UserProfileInfo": { "path": "components/user-profile/user-info" },
+          "UserMenu": { "path": "components/user-profile/user-menu" },
+          "ChangePasswordForm": { "path": "components/user-profile/user-password" },
+          "UserSidebarMenu": { "path": "components/user-profile/user-sidebar-menu" },
+          "_columns": {
+            "userColumns": { "path": "features/users/components/columns", "type": "columns" },
+            "userExportColumns": { "path": "features/users/components/columns", "type": "columns" }
+          }
+        },
+        "permissions": {
+          "_note": "Role-based permissions management",
+          "PermissionsDashboard": { "path": "features/permissions/components/PermissionsDashboard" },
+          "PermissionsDashboardSkeleton": { "path": "features/permissions/components/permission-dashboard-skeleton" },
+          "PermissionsManagerSkeleton": { "path": "features/permissions/components/permission-manager-skeleton" },
+          "PermissionRowItem": { "path": "features/permissions/components/permission-row-item" },
+          "PermissionSelector": { "path": "features/permissions/components/permission-selector" },
+          "PermissionSelectorSkeleton": { "path": "features/permissions/components/permission-selector-skeleton" },
+          "PermissionsEntityManager": { "path": "features/permissions/components/permissions-entity-manager" },
+          "PermissionsUserManager": { "path": "features/permissions/components/permissions-user-manager" },
+          "UserSelector": { "path": "features/permissions/components/user-selector" },
+          "UserSelectorSkeleton": { "path": "features/permissions/components/user-selector-skeleton" },
+          "EmptyState": { "path": "features/permissions/components/empty-state" }
+        },
+        "entities": {
+          "_note": "Business entity management",
+          "EntityDashboard": { "path": "features/entities/components/EntityDashboard" },
+          "EntityDashboardSkeleton": { "path": "features/entities/components/entity-dashboard-skeleton" },
+          "EntityDataTable": { "path": "features/entities/components/entity-data-table" },
+          "EntityCreateForm": { "path": "features/entities/components/entity-create-form" },
+          "EntitiesKPIs": { "path": "features/entities/components/entities-kpi" },
+          "_columns": {
+            "entityColumns": { "path": "features/entities/components/columns", "type": "columns" }
+          }
+        },
+        "audit": {
+          "_note": "Audit log tracking",
+          "AuditLogDashboard": { "path": "features/auditLogs/components/AuditLogDashboard" },
+          "AuditLogDashboardSkeleton": { "path": "features/auditLogs/components/auditLog-dashboard-skeleton" },
+          "AuditLogDataTable": { "path": "features/auditLogs/components/auditLog-data-table" },
+          "AuditLogForm": { "path": "features/auditLogs/components/auditLog-form" },
+          "_columns": {
+            "auditLogColumns": { "path": "features/auditLogs/components/columns", "type": "columns" },
+            "auditLogExportColumns": { "path": "features/auditLogs/components/columns", "type": "columns" }
+          }
+        }
+      }
+    }
+  }
 }

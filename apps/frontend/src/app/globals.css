@@ -60,6 +60,7 @@
   --shadow-xl:
     0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+  --shadow-premium: 0px 4px 12px -2px hsl(0 0% 0% / 0.08), 0px 2px 4px -2px hsl(0 0% 0% / 0.06);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 }
@@ -156,6 +157,24 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* Semantic status colors */
+  --color-success: var(--color-success);
+  --color-success-foreground: oklch(1 0 0);
+  --color-warning: var(--color-warning);
+  --color-warning-foreground: oklch(0.2 0 0);
+  --color-info: var(--color-info);
+  --color-info-foreground: oklch(1 0 0);
+
+  /* Alert type colors */
+  --color-siembra: var(--color-siembra);
+  --color-siembra-foreground: var(--color-siembra-foreground);
+  --color-germinacion: var(--color-germinacion);
+  --color-germinacion-foreground: var(--color-germinacion-foreground);
+  --color-faltante: var(--color-faltante);
+  --color-faltante-foreground: var(--color-faltante-foreground);
+  --color-pre-expedicion: var(--color-pre-expedicion);
+  --color-pre-expedicion-foreground: var(--color-pre-expedicion-foreground);
+
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
@@ -173,7 +192,40 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+  --shadow-premium: var(--shadow-premium);
 }
+/* Semantic status tokens (migrated from globals_copy.css) */
+:root {
+  --color-success: oklch(0.65 0.19 155);
+  --color-warning: oklch(0.75 0.18 65);
+  --color-info: oklch(0.7 0.15 230);
+
+  /* Alert type colors */
+  --color-siembra: oklch(0.65 0.22 45);
+  --color-siembra-foreground: oklch(1 0 0);
+  --color-germinacion: oklch(0.55 0.18 230);
+  --color-germinacion-foreground: oklch(1 0 0);
+  --color-faltante: oklch(0.55 0.22 25);
+  --color-faltante-foreground: oklch(1 0 0);
+  --color-pre-expedicion: oklch(0.45 0.18 300);
+  --color-pre-expedicion-foreground: oklch(1 0 0);
+}
+
+.dark {
+  --color-success: oklch(0.72 0.19 155);
+  --color-warning: oklch(0.82 0.16 65);
+  --color-info: oklch(0.78 0.12 230);
+
+  --color-siembra: oklch(0.75 0.2 45);
+  --color-siembra-foreground: oklch(0.2 0 0);
+  --color-germinacion: oklch(0.65 0.16 230);
+  --color-germinacion-foreground: oklch(1 0 0);
+  --color-faltante: oklch(0.65 0.2 25);
+  --color-faltante-foreground: oklch(1 0 0);
+  --color-pre-expedicion: oklch(0.55 0.16 300);
+  --color-pre-expedicion-foreground: oklch(1 0 0);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -187,5 +239,52 @@
   body {
     height: 100%;
     /* overflow: hidden; */ /* REMOVED */
+  }
+}
+
+@layer utilities {
+  /* Scrollbar hide utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* No scrollbar utility */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom scrollbar utility */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: oklch(0.5 0 0 / 0.3);
+    border-radius: 2px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.5 0 0 / 0.5);
+  }
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

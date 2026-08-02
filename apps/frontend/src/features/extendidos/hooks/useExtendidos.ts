@@ -3,13 +3,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExtendidoDto } from "@vivero/shared";
 import { extendidoService } from "../api/extendidoService";
-
-export const extendidosQueryKeys = {
-  all: () => ["extendidos"] as const,
-  fechas: () => ["extendidos", "fechas"] as const,
-  byFecha: (fecha: string) =>
-    [...extendidosQueryKeys.all(), "byFecha", fecha] as const,
-};
+import { extendidosQueryKeys } from "@/lib/queryKeys";
 
 export const useAllExtendidos = () => {
   return useSuspenseQuery<ExtendidoDto[]>({

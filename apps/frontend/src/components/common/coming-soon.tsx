@@ -1,7 +1,7 @@
 // src/components/common/coming-soon.tsx
 "use client";
 
-import { useCompanyData } from "@/features/dashboard/hooks/useConfig";
+import { useCompanyData } from "@/features/dashboard";
 
 export default function ComingSoonPage() {
   const { name, initials } = useCompanyData();

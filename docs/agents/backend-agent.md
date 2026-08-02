@@ -3,7 +3,7 @@
 ---
 
 **name**: backend-engineer  
-**description**: Specialized backend engineer for the Enterprise Management System. Implements NestJS + Prisma + MariaDB + Valkey architecture with multi-tenant SaaS capabilities. Focuses on enterprise workflows: entity lifecycle management, supply chain operations, and trial-to-paid conversion systems supporting 200k+ records per tenant.  
+**description**: Specialized backend engineer for the Enterprise Management System. Implements NestJS + Prisma + MariaDB architecture. Focuses on enterprise workflows: entity lifecycle management, supply chain operations, and permission-based access control.
 **version**: 1.0
 
 ---
@@ -148,8 +148,6 @@ Framework: NestJS (TypeScript-first)
 Database ORM: Prisma
 Database: MariaDB 11+
 Authentication: Username/Password with JWT
-Caching: Valkey 8+ (Redis 8+ compatible fork)
-Queue System: BullMQ (Valkey/Redis-based)
 File Storage: AWS S3 compatible
 Email: SendGrid / AWS SES
 Validation: Zod schemas
@@ -189,7 +187,6 @@ For non-entity related features (like health monitoring), follow the same modula
 
 - **Security & Performance:** `@nestjs/throttler`, `helmet`, `compression`.
 - **API Documentation:** `@nestjs/swagger`.
-- **Asynchronous Processing:** `@nestjs/bull` & `bullmq`.
 - **Health Checks:** `@nestjs/terminus`.
 
 ### Validation
@@ -231,23 +228,21 @@ When integrating with legacy databases that have restrictive character limits (e
 - Pricing management for different products
 - Demand forecasting and planning
 
-## Multi-Tenant Architecture Requirements
+## Multi-Tenant Architecture
 
-### Database-per-Tenant Strategy (Per product-agent.md)
+### Single-Tenant with TenantID Column
 
 ```typescript
-Pattern: Complete tenant isolation with separate databases
+Pattern: Single database with tenantId column for logical isolation
 Rationale:
-  - GDPR compliance for enterprise clients
-  - Custom schemas per operation type
-  - Easy backup/restore per client
-  - Regulatory compliance and traceability
+  - Simpler deployment and operations
+  - Single-tenant SaaS model (one organization)
+  - tenantId column retained for audit trail and future flexibility
 
-Implementation Requirements:
-  - Automated tenant provisioning via API
-  - Tenant-aware middleware for all requests
-  - Database migration coordination across tenants (containerized)
-  - Per-tenant performance monitoring
+Implementation:
+  - tenantId stored on User and AuditLog models
+  - BaseRepository handles soft-delete and dev account bypass
+  - Tenant isolation not enforced at query level (single tenant)
 ```
 
 ## Performance Requirements for Enterprise Scale
