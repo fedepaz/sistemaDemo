@@ -463,7 +463,6 @@ export const faltantePlantasExportColumns: ExportColumn<FaltantePlantasDto>[] =
     { accessorKey: "solicito", exportHeader: "Solicitadas", pdfWidth: "10%" },
     { accessorKey: "pr", exportHeader: "PR", pdfWidth: "10%" },
     { accessorKey: "porPr", exportHeader: "Por PR", pdfWidth: "10%" },
-    { accessorKey: "diferencia", exportHeader: "Diferencia", pdfWidth: "10%" },
   ];
 
 export const faltaPreExpedicionExportColumns: ExportColumn<FaltaPreExpedicionDto>[] =
