@@ -17,11 +17,11 @@ export class AlertsRepository {
   async findSiembraRetrasada(): Promise<LegacySiembraRetrasada[]> {
     return this.legacyDb.query<LegacySiembraRetrasada[]>(
       `SELECT partidas.partida, partidas.ano, partidas.indice, CONCAT(partidas.espvar,partidas.contenedor) AS planta, articulo.nombre,
-	partidas.injerto, partidas.nrocont, partidas.propiedad, 
-	CONCAT(partidas.sem_siem,'-',partidas.ano_siem) AS sem_siembra, 
-	        partidas.f_siem, partidas.f_siembra,
-	CONCAT(partidas.sem_ent,'-',partidas.ano_ent,' ',partidas.i_f) AS sem_entrega, 
-	partidas.f_ent, partidas.estado
+		partidas.injerto, partidas.nrocont, partidas.propiedad, 
+		CONCAT(partidas.sem_siem,'-',partidas.ano_siem) AS semSiembra,
+        partidas.f_siem, partidas.f_siembra,
+        CONCAT(partidas.sem_ent,'-',partidas.ano_ent,' ',partidas.i_f) AS semEntrega,
+		partidas.f_ent, partidas.estado
 	FROM partidas
 	LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
 	WHERE estado <> 'ANULADA' AND f_siembra=0 AND partidas.hai<>'A' 
