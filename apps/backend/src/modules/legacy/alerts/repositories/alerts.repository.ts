@@ -42,12 +42,14 @@ export class AlertsRepository {
   async findFaltantePlantas(): Promise<LegacyFaltantePlantas[]> {
     return this.legacyDb.query<LegacyFaltantePlantas[]>(
       `SELECT partidas.hai, partidas.partida, partidas.ano, partidas.indice, CONCAT(partidas.espvar,partidas.contenedor) AS planta, articulo.nombre,
-	partidas.nrocont, partidas.solicito, f_primer, pr, st_ini_pr,
-	FLOOR(pr*cant_s/100)*st_ini_pr AS por_pr
+	partidas.nrocont, partidas.solicito, partidas.f_primer, partidas.pr, partidas.st_ini_pr,
+        FLOOR(partidas.pr*partidas.cant_s/100)*partidas.st_ini_pr AS porPr
 	FROM partidas
 	LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
-	WHERE estado <> 'ANULADA' AND pr<>0 AND pe=0 AND partidas.solicito>FLOOR(pr*cant_s/100)*st_ini_pr AND partidas.hai<>'A' AND partidas.ano>2025 
-	ORDER BY partidas.ano, partidas.partida, partidas.indice`,
+	WHERE estado <> 'ANULADA' AND pr<>0 AND pe=0
+        AND partidas.solicito>FLOOR(partidas.pr*partidas.cant_s/100)*partidas.st_ini_pr
+        AND partidas.hai<>'A' AND partidas.ano>2025
+      ORDER BY partidas.ano, partidas.partida, partidas.indice`,
     );
   }
 
