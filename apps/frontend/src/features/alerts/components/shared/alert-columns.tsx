@@ -187,7 +187,7 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
       return (
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-bold font-mono text-muted-foreground">
-            {targetDate}
+            {formatShortDate(targetDate)}
           </span>
           {isToday && (
             <Tooltip>
@@ -395,7 +395,7 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
       return (
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-bold font-mono text-muted-foreground">
-            {targetDate}
+            {formatShortDate(targetDate)}
           </span>
           {isToday && (
             <Tooltip>
