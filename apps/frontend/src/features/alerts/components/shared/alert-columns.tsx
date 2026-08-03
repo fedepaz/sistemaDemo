@@ -61,21 +61,13 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
   {
     accessorKey: "nrocont",
     header: ({ column }) => (
-      <SortableHeader column={column}>Nro Contenedor</SortableHeader>
+      <SortableHeader column={column}>Cantidad</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className="text-xs font-mono">{row.original.nrocont}</span>
     ),
   },
-  {
-    accessorKey: "semSiembra",
-    header: ({ column }) => (
-      <SortableHeader column={column}>Sem Siembra</SortableHeader>
-    ),
-    cell: ({ row }) => (
-      <span className="text-xs font-mono">{row.original.semSiembra}</span>
-    ),
-  },
+
   {
     accessorKey: "fechaSugeridaSiembra",
     header: ({ column }) => (
@@ -119,13 +111,13 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
     ),
   },
   {
-    accessorKey: "estado",
+    accessorKey: "propiedad",
     header: ({ column }) => (
-      <SortableHeader column={column}>Estado</SortableHeader>
+      <SortableHeader column={column}>Propiedad</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className="text-xs font-bold uppercase tracking-wider">
-        {row.original.estado}
+        {row.original.propiedad}
       </span>
     ),
   },
@@ -433,15 +425,15 @@ export const siembraRetrasadaExportColumns: ExportColumn<SiembraRetrasadaDto>[] 
     { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
     { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
     { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
-    { accessorKey: "nrocont", exportHeader: "Nro Contenedor", pdfWidth: "10%" },
-    { accessorKey: "semSiembra", exportHeader: "Sem Siembra", pdfWidth: "10%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
+
     {
       accessorKey: "fechaSugeridaSiembra",
       exportHeader: "Fecha Sug. Siembra",
       pdfWidth: "12%",
     },
     { accessorKey: "semEntrega", exportHeader: "Sem Entrega", pdfWidth: "12%" },
-    { accessorKey: "estado", exportHeader: "Estado", pdfWidth: "8%" },
+    { accessorKey: "propiedad", exportHeader: "Propiedad", pdfWidth: "8%" },
   ];
 
 export const faltaGerminacionExportColumns: ExportColumn<FaltaGerminacionDto>[] =

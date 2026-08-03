@@ -33,6 +33,7 @@ export const SiembraRetrasadaDtoSchema = AlertBaseDtoSchema.extend({
   semEntrega: z.string(),
   fEnt: z.string(),
   estado: z.string(),
+  propiedad: z.string(),
 });
 
 export type SiembraRetrasadaDto = z.infer<typeof SiembraRetrasadaDtoSchema>;

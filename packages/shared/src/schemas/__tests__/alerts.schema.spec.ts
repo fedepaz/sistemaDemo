@@ -22,6 +22,7 @@ describe("SiembraRetrasadaDtoSchema", () => {
     semEntrega: "28-2026 1",
     fEnt: "2026-07-15",
     estado: "PENDIENTE",
+    propiedad: "SI",
     commentCount: 0,
   };
 

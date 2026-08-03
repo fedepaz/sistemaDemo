@@ -14,6 +14,7 @@ export interface LegacySiembraRetrasada extends RowDataPacket {
   semEntrega: string;
   f_ent: string;
   estado: string;
+  propiedad: string;
 }
 
 export interface LegacyFaltaGerminacion extends RowDataPacket {

@@ -17,7 +17,7 @@ export class AlertsRepository {
   async findSiembraRetrasada(): Promise<LegacySiembraRetrasada[]> {
     return this.legacyDb.query<LegacySiembraRetrasada[]>(
       `SELECT partidas.partida, partidas.ano, partidas.indice, CONCAT(partidas.espvar,partidas.contenedor) AS planta, articulo.nombre,
-	partidas.injerto, partidas.nrocont, 
+	partidas.injerto, partidas.nrocont, partidas.propiedad, 
 	CONCAT(partidas.sem_siem,'-',partidas.ano_siem) AS sem_siembra, f_siem,
 	f_siembra,
 	CONCAT(partidas.sem_ent,'-',partidas.ano_ent,' ',partidas.i_f) AS sem_entrega, f_ent, partidas.estado

@@ -38,6 +38,7 @@ export class AlertsService {
       semEntrega: row.semEntrega,
       fEnt: row.f_ent,
       estado: row.estado,
+      propiedad: row.propiedad,
       commentCount: 0,
     };
   }
