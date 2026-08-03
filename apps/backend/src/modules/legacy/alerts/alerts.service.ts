@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AlertsRepository } from './repositories/alerts.repository';
+import { AlertCommentsRepository } from '../../alertComments/repositories/alertComments.repository';
 import {
   LegacySiembraRetrasada,
   LegacyFaltaGerminacion,
@@ -15,7 +16,10 @@ import {
 
 @Injectable()
 export class AlertsService {
-  constructor(private readonly alertsRepo: AlertsRepository) {}
+  constructor(
+    private readonly alertsRepo: AlertsRepository,
+    private readonly alertCommentsRepo: AlertCommentsRepository,
+  ) {}
 
   private mapSiembraRetrasada(
     row: LegacySiembraRetrasada,
@@ -24,17 +28,18 @@ export class AlertsService {
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
-      codigoEspecie: row.espvar,
+      codigoEspecie: row.planta,
       nombreEspecie: row.nombre,
       injerto: row.injerto,
       nrocont: row.nrocont,
-      contenedor: row.contenedor,
       semSiembra: row.semSiembra,
       fechaSugeridaSiembra: row.f_siem,
       fSiembra: row.f_siembra,
       semEntrega: row.semEntrega,
       fEnt: row.f_ent,
       estado: row.estado,
+      propiedad: row.propiedad,
+      commentCount: 0,
     };
   }
 
@@ -45,13 +50,13 @@ export class AlertsService {
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
-      codigoEspecie: row.espvar,
+      codigoEspecie: row.planta,
       nombreEspecie: row.nombre,
       injerto: row.injerto,
       nrocont: row.nrocont,
-      contenedor: row.contenedor,
       fPrimer: row.f_primer,
       pr: row.pr,
+      commentCount: 0,
     };
   }
 
@@ -61,15 +66,15 @@ export class AlertsService {
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
-      codigoEspecie: row.espvar,
+      codigoEspecie: row.planta,
       nombreEspecie: row.nombre,
       nrocont: row.nrocont,
-      contenedor: row.contenedor,
       solicito: row.solicito,
       fPrimer: row.f_primer,
       pr: row.pr,
       stIniPr: row.st_ini_pr,
       porPr: row.porPr,
+      commentCount: 0,
     };
   }
 
@@ -80,33 +85,56 @@ export class AlertsService {
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
-      codigoEspecie: row.espvar,
+      codigoEspecie: row.planta,
       nombreEspecie: row.nombre,
       injerto: row.injerto,
       nrocont: row.nrocont,
-      contenedor: row.contenedor,
       fPreexp: row.f_preexp,
       pe: row.pe,
+      commentCount: 0,
     };
+  }
+
+  private async mergeCommentCounts<
+    T extends { partidaId: number; anio: number; indice: number },
+  >(dtos: T[], alertType: string): Promise<(T & { commentCount: number })[]> {
+    const keys = dtos.map((d) => ({
+      partidaId: d.partidaId,
+      anio: d.anio,
+      indice: d.indice,
+    }));
+    const counts = await this.alertCommentsRepo.getCommentCounts(
+      alertType,
+      keys,
+    );
+    return dtos.map((dto) => ({
+      ...dto,
+      commentCount:
+        counts.get(`${dto.partidaId}-${dto.anio}-${dto.indice}`) ?? 0,
+    }));
   }
 
   async getSiembraRetrasada(): Promise<SiembraRetrasadaDto[]> {
     const rows = await this.alertsRepo.findSiembraRetrasada();
-    return rows.map((row) => this.mapSiembraRetrasada(row));
+    const dtos = rows.map((row) => this.mapSiembraRetrasada(row));
+    return this.mergeCommentCounts(dtos, 'SIEMBRA_RETRASADA');
   }
 
   async getFaltaGerminacion(): Promise<FaltaGerminacionDto[]> {
     const rows = await this.alertsRepo.findFaltaGerminacion();
-    return rows.map((row) => this.mapFaltaGerminacion(row));
+    const dtos = rows.map((row) => this.mapFaltaGerminacion(row));
+    return this.mergeCommentCounts(dtos, 'FALTA_GERMINACION');
   }
 
   async getFaltantePlantas(): Promise<FaltantePlantasDto[]> {
     const rows = await this.alertsRepo.findFaltantePlantas();
-    return rows.map((row) => this.mapFaltantePlantas(row));
+    const dtos = rows.map((row) => this.mapFaltantePlantas(row));
+    return this.mergeCommentCounts(dtos, 'FALTANTE_PLANTAS');
   }
 
   async getFaltaPreExpedicion(): Promise<FaltaPreExpedicionDto[]> {
     const rows = await this.alertsRepo.findFaltaPreExpedicion();
-    return rows.map((row) => this.mapFaltaPreExpedicion(row));
+    const dtos = rows.map((row) => this.mapFaltaPreExpedicion(row));
+    return this.mergeCommentCounts(dtos, 'FALTA_PRE_EXPEDICION');
   }
 }

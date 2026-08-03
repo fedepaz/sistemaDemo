@@ -103,10 +103,6 @@ export function ExtendidoDataTable({
     setSlideOpen(true);
   };
 
-  const handleExport = () => {
-    console.log("Exporting...");
-  };
-
   const handleCamaraChange = (value: string) => {
     onCamaraChange?.(value);
   };

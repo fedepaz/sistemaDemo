@@ -1,20 +1,24 @@
 // src/modules/alertComments/alertComments.service.ts
 
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { AlertCommentsRepository } from './repositories/alertComments.repository';
+import { PartidasRepository } from '../legacy/partidas/repositories/partidas.repository';
+import { CreateAlertCommentDto, AlertCommentDto } from '@vivero/shared';
 
 @Injectable()
 export class AlertCommentsService {
-  constructor(private readonly repo: AlertCommentsRepository) {}
+  private readonly logger = new Logger(AlertCommentsService.name);
+  constructor(
+    private readonly repo: AlertCommentsRepository,
+    private readonly partidaRepo: PartidasRepository,
+  ) {}
 
   async getComments(
     alertType: string,
     partidaId: number,
     anio: number,
     indice: number,
-  ) {
+  ): Promise<AlertCommentDto[]> {
     const rows = await this.repo.findByPartida(
       alertType,
       partidaId,
@@ -28,8 +32,8 @@ export class AlertCommentsService {
       anio: r.anio,
       indice: r.indice,
       content: r.content,
-      authorId: r.authorId,
-
+      userId: r.userId,
+      userName: r.user.username,
       createdAt: r.createdAt.toISOString(),
     }));
   }
@@ -41,14 +45,22 @@ export class AlertCommentsService {
     return this.repo.getCommentCounts(alertType, keys);
   }
 
-  async createComment(dto, authorId: string) {
-    const row = await this.repo.create({
-      alertType: dto.alertType,
-      partidaId: dto.partidaId,
-      anio: dto.anio,
-      indice: dto.indice,
-      content: dto.content,
-      authorId,
+  async createComment(
+    data: CreateAlertCommentDto,
+    userId: string,
+  ): Promise<AlertCommentDto> {
+    const partidaExists = await this.partidaRepo.findOne(data.partidaId);
+    if (!partidaExists) {
+      throw new NotFoundException('Partida not found');
+    }
+
+    const row = await this.repo.createWithUser({
+      alertType: data.alertType,
+      partidaId: data.partidaId,
+      anio: data.anio,
+      indice: data.indice,
+      content: data.content,
+      userId,
     });
     return {
       id: row.id,
@@ -57,8 +69,8 @@ export class AlertCommentsService {
       anio: row.anio,
       indice: row.indice,
       content: row.content,
-      authorId: row.authorId,
-
+      userId: row.userId,
+      userName: row.user.username,
       createdAt: row.createdAt.toISOString(),
     };
   }

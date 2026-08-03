@@ -9,5 +9,6 @@ import { EspecieRepository } from '../especie/repositories/especie.repository';
 @Module({
   controllers: [PartidasController],
   providers: [PartidasService, PartidasRepository, EspecieRepository],
+  exports: [PartidasRepository],
 })
 export class LegacyPartidasModule {}

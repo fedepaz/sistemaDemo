@@ -5,8 +5,8 @@ model AlertComment {
   anio      Int
   indice    Int
   content   String   @db.VarChar(500)
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
+  userId  String
+  user    User     @relation(fields: [userId], references: [id])
   
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())

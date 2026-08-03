@@ -12,6 +12,8 @@ import {
   entityQueryKeys,
   extendidosQueryKeys,
   siembraQueryKeys,
+  alertCommentsQueryKeys,
+  alertsQueryKeys,
 } from "./queryKeys";
 
 // ============================================================================
@@ -73,6 +75,14 @@ export const mutationInvalidationMap = {
   // --- Siembra ---
   siembraPartida: {
     queries: () => [siembraQueryKeys.partidas()],
+  },
+
+  // --- Alert Comments ---
+  createAlertComment: {
+    queries: () => [
+      alertCommentsQueryKeys.all(),
+      alertsQueryKeys.all(),
+    ],
   },
 } as const;
 

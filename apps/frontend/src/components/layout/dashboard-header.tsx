@@ -2,32 +2,47 @@
 "use client";
 
 import { MobileNavigation } from "./mobile-navigation";
-
-import { useLogout } from "@/features/auth";
-import { LoadingSpinner } from "../common/loading-spinner";
-import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useEffect } from "react";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Logo } from "../common/logo";
 import { getISOWeek, getTotalWeeks, formatSpanishDate } from "@/lib/date-utils";
-import { Bell } from "lucide-react";
+import { Bell, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAlertModal } from "@/providers/alert-modal-provider";
 import { AlertModalDialog } from "@/components/modals/alert-modal-dialog";
 import { usePermission } from "@/hooks/usePermission";
 import { useHasAlerts } from "@/features/alerts";
+import { cn } from "@/lib/utils";
+
+function WeekInfoContent({
+  formattedDate,
+  weekNum,
+  totalWeeks,
+}: {
+  formattedDate: string;
+  weekNum: number;
+  totalWeeks: number;
+}) {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs font-bold text-foreground">{formattedDate}</p>
+      <p className="text-[10px] text-muted-foreground leading-tight">
+        Semana {weekNum} de {totalWeeks}
+      </p>
+      <div className="pt-1 border-t border-border/50">
+        <p className="text-[10px] text-muted-foreground leading-tight">
+          Mendoza, Argentina
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export function DashboardHeader() {
   const { openAlert } = useAlertModal();
-  const { isLoading } = useLogout();
-  const router = useRouter();
-  const { userProfile } = useAuthContext();
   const { canRead } = usePermission("alerts");
   const { hasAlerts, isLoading: isLoadingAlerts } = useHasAlerts(canRead);
 
@@ -35,16 +50,6 @@ export function DashboardHeader() {
   const weekNum = getISOWeek(currentDate);
   const totalWeeks = getTotalWeeks(currentDate.getFullYear());
   const formattedDate = formatSpanishDate(currentDate);
-
-  useEffect(() => {
-    if (!userProfile) {
-      router.push("/");
-    }
-  }, [userProfile, router]);
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
@@ -62,53 +67,90 @@ export function DashboardHeader() {
           <div className="flex items-center space-x-1">
             {/* Notifications */}
             {canRead && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => openAlert("info")}
-                disabled={!hasAlerts && !isLoadingAlerts}
-                aria-label="Alertas"
-                className="h-14 w-10 rounded-none"
-              >
-                <Bell className={`h-5 w-5 ${!hasAlerts && !isLoadingAlerts ? "text-muted-foreground/50" : "text-muted-foreground"}`} />
-              </Button>
-            )}
-
-            {/* Week Display with Tooltip */}
-            <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="flex items-center px-3 border-r border-border/50 h-14 cursor-help">
-                    <div className="flex flex-col items-end">
-                      <p className="text-xl font-black text-foreground tracking-tighter leading-none">
-                        S{weekNum}
-                      </p>
-                      <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
-                        Semana
-                      </p>
-                    </div>
-                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => openAlert("info")}
+                    disabled={!hasAlerts && !isLoadingAlerts}
+                    aria-label="Alertas"
+                  >
+                    <Bell
+                      className={cn(
+                        "h-5 w-5 transition-colors",
+                        hasAlerts
+                          ? "text-primary hover"
+                          : "text-muted-foreground/50",
+                      )}
+                    />
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent
                   side="bottom"
-                  className="bg-popover border-border shadow-xl"
+                  className="bg-popover border-border shadow-xl w-56"
                 >
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-foreground">
-                      {formattedDate}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground leading-tight">
-                      Semana {weekNum} de {totalWeeks}
-                    </p>
-                    <div className="pt-1 border-t border-border/50">
-                      <p className="text-[10px] text-muted-foreground leading-tight">
-                        Mendoza, Argentina
+                  {hasAlerts ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4 text-warning" />
+                        <p className="text-xs font-bold text-foreground">
+                          Alertas Activas
+                        </p>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed">
+                        Hay partidas que requieren tu atención. Haz click para
+                        ver el detalle completo.
+                      </p>
+                      <div className="pt-1 border-t border-border/50">
+                        <p className="text-[10px] font-medium text-warning">
+                          Ver alertas →
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-muted-foreground/50" />
+                        <p className="text-xs font-bold text-muted-foreground">
+                          Sin Alertas
+                        </p>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed">
+                        Todas las partidas están dentro de los parámetros
+                        esperados.
                       </p>
                     </div>
-                  </div>
+                  )}
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>
+            )}
+
+            {/* Week Display with Tooltip */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center px-3 border-r border-border/50 h-14 cursor-help">
+                  <div className="flex flex-col items-end">
+                    <p className="text-xl font-black text-foreground tracking-tighter leading-none">
+                      S{weekNum}
+                    </p>
+                    <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
+                      Semana
+                    </p>
+                  </div>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent
+                side="bottom"
+                className="bg-popover border-border shadow-xl"
+              >
+                <WeekInfoContent
+                  formattedDate={formattedDate}
+                  weekNum={weekNum}
+                  totalWeeks={totalWeeks}
+                />
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>

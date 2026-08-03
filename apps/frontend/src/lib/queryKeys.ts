@@ -131,3 +131,13 @@ export const alertsQueryKeys = {
   all: () => ["alerts"] as const,
   byType: (type: string) => [...alertsQueryKeys.all(), type] as const,
 };
+
+export const alertCommentsQueryKeys = {
+  all: () => ["alertComments"] as const,
+  byPartida: (
+    alertType: string,
+    partidaId: number,
+    anio: number,
+    indice: number,
+  ) => [...alertCommentsQueryKeys.all(), alertType, partidaId, anio, indice] as const,
+};
