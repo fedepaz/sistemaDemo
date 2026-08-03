@@ -28,6 +28,7 @@ describe('Alerts Integration', () => {
       semEntrega: '28-2026 1',
       fEnt: '2026-07-15',
       estado: 'PENDIENTE',
+      propiedad: 'PRIVADA',
     },
   ];
 
