@@ -102,12 +102,12 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
     },
   },
   {
-    accessorKey: "semEntrega",
+    accessorKey: "semSiembra",
     header: ({ column }) => (
-      <SortableHeader column={column}>Sem Entrega</SortableHeader>
+      <SortableHeader column={column}>Sem Siembra</SortableHeader>
     ),
     cell: ({ row }) => (
-      <span className="text-xs font-mono">{row.original.semEntrega}</span>
+      <span className="text-xs font-mono">{row.original.semSiembra}</span>
     ),
   },
   {
