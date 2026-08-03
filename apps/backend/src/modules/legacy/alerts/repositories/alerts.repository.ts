@@ -18,12 +18,14 @@ export class AlertsRepository {
     return this.legacyDb.query<LegacySiembraRetrasada[]>(
       `SELECT partidas.partida, partidas.ano, partidas.indice, CONCAT(partidas.espvar,partidas.contenedor) AS planta, articulo.nombre,
 	partidas.injerto, partidas.nrocont, partidas.propiedad, 
-	CONCAT(partidas.sem_siem,'-',partidas.ano_siem) AS sem_siembra, f_siem,
-	f_siembra,
-	CONCAT(partidas.sem_ent,'-',partidas.ano_ent,' ',partidas.i_f) AS sem_entrega, f_ent, partidas.estado
+	CONCAT(partidas.sem_siem,'-',partidas.ano_siem) AS sem_siembra, 
+	        partidas.f_siem, partidas.f_siembra,
+	CONCAT(partidas.sem_ent,'-',partidas.ano_ent,' ',partidas.i_f) AS sem_entrega, 
+	partidas.f_ent, partidas.estado
 	FROM partidas
 	LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
-	WHERE estado <> 'ANULADA' AND f_siembra=0 AND partidas.hai<>'A' AND partidas.sem_siem=WEEK(CURRENT_DATE()) AND partidas.ano>2025
+	WHERE estado <> 'ANULADA' AND f_siembra=0 AND partidas.hai<>'A' 
+	AND partidas.sem_siem=WEEK(CURRENT_DATE()) AND partidas.ano>2025
 	ORDER BY partidas.ano, partidas.partida`,
     );
   }
@@ -31,7 +33,7 @@ export class AlertsRepository {
   async findFaltaGerminacion(): Promise<LegacyFaltaGerminacion[]> {
     return this.legacyDb.query<LegacyFaltaGerminacion[]>(
       `SELECT partidas.partida, partidas.ano, partidas.indice, CONCAT(partidas.espvar,partidas.contenedor) AS planta, articulo.nombre,
-	partidas.injerto, partidas.nrocont, f_primer, pr
+	partidas.injerto, partidas.nrocont, partidas.f_primer, partidas.pr
 	FROM partidas
 	LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
 	WHERE partidas.f_primer<=CURRENT_DATE() AND estado <> 'ANULADA' AND pr=0 AND partidas.hai<>'A' AND partidas.ano>2025 
@@ -56,7 +58,7 @@ export class AlertsRepository {
   async findFaltaPreExpedicion(): Promise<LegacyFaltaPreExpedicion[]> {
     return this.legacyDb.query<LegacyFaltaPreExpedicion[]>(
       `SELECT partidas.partida, partidas.ano, partidas.indice, CONCAT(partidas.espvar,partidas.contenedor) AS planta, articulo.nombre,
-	partidas.injerto, partidas.nrocont, f_preexp, pe
+	partidas.injerto, partidas.nrocont, partidas.f_preexp, partidas.pe
 	FROM partidas
 	LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
 	WHERE partidas.f_preexp<=CURRENT_DATE() AND estado <> 'ANULADA' AND pe=0 AND partidas.hai<>'A' AND partidas.ano>2025 
