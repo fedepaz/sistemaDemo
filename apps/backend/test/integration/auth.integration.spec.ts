@@ -12,6 +12,7 @@ import {
   validRegisterPayload,
   validChangePasswordPayload,
   validRefreshPayload,
+  validRestorePasswordPayload,
   mockAuthResponse,
   mockTokens,
 } from './fixtures/fixtures';
@@ -207,6 +208,42 @@ describe('Auth (integration)', () => {
         .expect(200);
 
       expect(response.body).toHaveProperty('message');
+    });
+  });
+
+  describe('PATCH /auth/restore', () => {
+    it('returns 200 on successful password restore', async () => {
+      authMock.restorePassword.mockResolvedValue({
+        success: true,
+        message: 'Contraseña de usuario testuser restaurada correctamente',
+      });
+
+      const response = await request(app.getHttpServer())
+        .patch('/auth/restore')
+        .send(validRestorePasswordPayload())
+        .expect(200);
+
+      expect(response.body).toHaveProperty('success', true);
+      expect(response.body).toHaveProperty('message');
+      expect(authMock.restorePassword).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        }),
+      );
+    });
+
+    it('returns 400 on missing userId', async () => {
+      await request(app.getHttpServer())
+        .patch('/auth/restore')
+        .send({})
+        .expect(400);
+    });
+
+    it('returns 400 on empty userId', async () => {
+      await request(app.getHttpServer())
+        .patch('/auth/restore')
+        .send({ userId: '' })
+        .expect(400);
     });
   });
 });
