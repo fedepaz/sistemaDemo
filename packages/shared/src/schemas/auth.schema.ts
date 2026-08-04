@@ -97,3 +97,10 @@ export const ChangePasswordSchema = z
   });
 
 export type ChangePasswordDto = z.infer<typeof ChangePasswordSchema>;
+
+// Restore Password
+export const RestorePasswordSchema = z.object({
+  userId: z.string().min(1, { message: "ID de usuario es obligatorio" }),
+});
+
+export type RestorePasswordDto = z.infer<typeof RestorePasswordSchema>;

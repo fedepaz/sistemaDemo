@@ -2,7 +2,16 @@
 "use client";
 
 import { useDataTableActions } from "@/hooks/useDataTable";
-import { useDeleteUser, useUpdateUser, useUsers } from "../hooks/usersHooks";
+import {
+  useDeleteUser,
+  useUpdateUser,
+  useUsers,
+  useRestorePassword,
+} from "../hooks/usersHooks";
+import { usePermission } from "@/hooks/usePermission";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { Button } from "@/components/ui/button";
+import { Loader2, KeyRound } from "lucide-react";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { userColumns, userExportColumns } from "./columns";
@@ -31,6 +40,10 @@ export function UsersDataTable() {
   const { mutateAsync: deleteUser } = useDeleteUser();
 
   const { mutateAsync: createUser, isPending: isCreatingUser } = useRegister();
+  const { mutateAsync: restorePassword, isPending: isRestoring } =
+    useRestorePassword();
+  const { canUpdate } = usePermission("users");
+  const { userProfile: currentUser } = useAuthContext();
 
   const formEditUser = useForm<UpdateUserProfileDto>({
     resolver: zodResolver(UpdateUserProfileSchema),
@@ -77,8 +90,6 @@ export function UsersDataTable() {
     }
   };
 
-
-
   const handleUpdate = async (formData: UpdateUserProfileDto) => {
     if (selectedUser) {
       try {
@@ -99,6 +110,16 @@ export function UsersDataTable() {
 
     if (!isCreatingUser) setSlideOverOpen(false);
   };
+
+  const handleRestorePassword = async () => {
+    if (!selectedUser) return;
+    try {
+      await restorePassword({ userId: selectedUser.id });
+    } catch {}
+
+    if (!isRestoring) setSlideOverOpen(false);
+  };
+
   return (
     <>
       <DataTable
@@ -147,6 +168,25 @@ export function UsersDataTable() {
                 formId="create"
               />
             )}
+            {selectedUser &&
+              canUpdate &&
+              selectedUser.id !== currentUser?.id && (
+                <div className="pt-4 border-t">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleRestorePassword}
+                    disabled={isRestoring}
+                  >
+                    {isRestoring ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <KeyRound className="mr-2 h-4 w-4" />
+                    )}
+                    Restaurar contraseña
+                  </Button>
+                </div>
+              )}
           </div>
         </SlideOverForm>
       )}

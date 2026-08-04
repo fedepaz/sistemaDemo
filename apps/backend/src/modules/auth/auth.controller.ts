@@ -21,6 +21,8 @@ import {
   TokensDto,
   ChangePasswordDto,
   ChangePasswordSchema,
+  RestorePasswordSchema,
+  RestorePasswordDto,
 } from '@vivero/shared';
 import { AuthUser } from './types/auth-user.type';
 import { Public } from '../../shared/decorators/public.decorator';
@@ -114,5 +116,18 @@ export class AuthController {
       success: true,
       message: 'Contraseña actualizada correctamente',
     };
+  }
+
+  /**
+   * PATCH /auth/restore
+   * Protected endpoint - restore user password to default
+   */
+  @Patch('restore')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission({ tableName: 'users', action: 'update', scope: 'ALL' })
+  async restorePassword(
+    @Body(new ZodValidationPipe(RestorePasswordSchema)) dto: RestorePasswordDto,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.authService.restorePassword(dto);
   }
 }
