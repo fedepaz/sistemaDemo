@@ -183,6 +183,8 @@ export class AuditCrudInterceptor implements NestInterceptor {
     const REDACTED_KEYS = new Set([
       'password',
       'passwordhash',
+      'currentpassword',
+      'newpassword',
       'secret',
       'token',
       'accesstoken',
@@ -191,12 +193,20 @@ export class AuditCrudInterceptor implements NestInterceptor {
       'apikey',
     ]);
 
-    return Object.fromEntries(
-      Object.entries(body as Record<string, unknown>).map(([k, v]) => [
-        k,
-        REDACTED_KEYS.has(k.toLowerCase()) ? '[REDACTED]' : v,
-      ]),
-    );
+    const sanitize = (value: unknown): unknown => {
+      if (Array.isArray(value)) return value.map(sanitize);
+      if (value && typeof value === 'object') {
+        return Object.fromEntries(
+          Object.entries(value as Record<string, unknown>).map(([k, v]) => [
+            k,
+            REDACTED_KEYS.has(k.toLowerCase()) ? '[REDACTED]' : sanitize(v),
+          ]),
+        );
+      }
+      return value;
+    };
+
+    return sanitize(body);
   }
 
   private getClientIp(request: Request): string {
