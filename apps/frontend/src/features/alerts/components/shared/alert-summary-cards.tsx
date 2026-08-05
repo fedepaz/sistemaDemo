@@ -8,12 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  AlertTriangle,
-  FlaskConical,
-  Sprout,
-  Truck,
-} from "lucide-react";
+import { ALERT_TYPE_CONFIGS } from "../v1/alert-type-config";
+import type { AlertType } from "@/features/alerts/types";
 
 interface AlertSummaryCardsProps {
   siembraRetrasadaCount: number;
@@ -22,40 +18,21 @@ interface AlertSummaryCardsProps {
   faltaPreExpedicionCount: number;
 }
 
-const ALERT_CONFIG = [
-  {
-    key: "siembraRetrasada",
-    title: "Siembra Retrasada",
-    description: "Partidas que no se han sembrado en la semana programada",
-    icon: AlertTriangle,
-    severity: "warning" as const,
-    colorClass: "text-warning bg-warning/10 border-warning/20",
-  },
-  {
-    key: "faltaGerminacion",
-    title: "Falta Recuento Germinación",
-    description: "Partidas que estando en fecha no cuentan con dato de germinación",
-    icon: FlaskConical,
-    severity: "info" as const,
-    colorClass: "text-info bg-info/10 border-info/20",
-  },
-  {
-    key: "faltantePlantas",
-    title: "Faltante Estimado de Plantas",
-    description: "Partidas donde plantas germinadas son menor a las solicitadas",
-    icon: Sprout,
-    severity: "warning" as const,
-    colorClass: "text-warning bg-warning/10 border-warning/20",
-  },
-  {
-    key: "faltaPreExpedicion",
-    title: "Falta Pre-Expedición",
-    description: "Partidas sin pre-expedición cargada",
-    icon: Truck,
-    severity: "info" as const,
-    colorClass: "text-info bg-info/10 border-info/20",
-  },
+const ALERT_TYPE_ORDER: AlertType[] = [
+  "SIEMBRA_RETRASADA",
+  "FALTA_GERMINACION",
+  "FALTANTE_PLANTAS",
+  "FALTA_PRE_EXPEDICION",
 ];
+
+const DESCRIPTIONS: Record<AlertType, string> = {
+  SIEMBRA_RETRASADA: "Partidas que no se han sembrado en la semana programada",
+  FALTA_GERMINACION:
+    "Partidas que estando en fecha no cuentan con dato de germinación",
+  FALTANTE_PLANTAS:
+    "Partidas donde plantas germinadas son menor a las solicitadas",
+  FALTA_PRE_EXPEDICION: "Partidas sin pre-expedición cargada",
+};
 
 export function AlertSummaryCards({
   siembraRetrasadaCount,
@@ -63,11 +40,11 @@ export function AlertSummaryCards({
   faltantePlantasCount,
   faltaPreExpedicionCount,
 }: AlertSummaryCardsProps) {
-  const counts: Record<string, number> = {
-    siembraRetrasada: siembraRetrasadaCount,
-    faltaGerminacion: faltaGerminacionCount,
-    faltantePlantas: faltantePlantasCount,
-    faltaPreExpedicion: faltaPreExpedicionCount,
+  const counts: Record<AlertType, number> = {
+    SIEMBRA_RETRASADA: siembraRetrasadaCount,
+    FALTA_GERMINACION: faltaGerminacionCount,
+    FALTANTE_PLANTAS: faltantePlantasCount,
+    FALTA_PRE_EXPEDICION: faltaPreExpedicionCount,
   };
 
   return (
@@ -77,30 +54,37 @@ export function AlertSummaryCards({
         aria-label="Resumen de alertas"
         className="grid gap-2 sm:gap-3 md:grid-cols-2 lg:grid-cols-4"
       >
-        {ALERT_CONFIG.map((alert) => {
-          const count = counts[alert.key];
-          const Icon = alert.icon;
+        {ALERT_TYPE_ORDER.map((alertType) => {
+          const config = ALERT_TYPE_CONFIGS[alertType];
+          const count = counts[alertType];
+          const Icon = config.icon;
+          const colorClass = `${config.color} ${config.bgColor} ${config.borderColor}`;
           return (
-            <Tooltip key={alert.key}>
+            <Tooltip key={alertType}>
               <TooltipTrigger asChild>
-                <Card
-                  className={`border ${alert.colorClass} shadow-sm`}
-                >
+                <Card className={`border ${colorClass} shadow-sm`}>
                   <CardContent className="p-4 flex items-center gap-3">
-                    <div className={`p-2.5 rounded-lg ${alert.colorClass} shrink-0`}>
+                    <div
+                      className={`p-2.5 rounded-lg ${colorClass} shrink-0`}
+                    >
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
                       <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                        {alert.title}
+                        {config.label}
                       </p>
                       <p className="text-2xl font-black">{count}</p>
                     </div>
                   </CardContent>
                 </Card>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="bg-popover border-border shadow-xl">
-                <p className="text-xs text-muted-foreground">{alert.description}</p>
+              <TooltipContent
+                side="bottom"
+                className="bg-popover border-border shadow-xl"
+              >
+                <p className="text-xs text-muted-foreground">
+                  {DESCRIPTIONS[alertType]}
+                </p>
               </TooltipContent>
             </Tooltip>
           );

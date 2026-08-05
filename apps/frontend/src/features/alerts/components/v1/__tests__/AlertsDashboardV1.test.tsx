@@ -13,7 +13,6 @@ jest.mock('@/features/alerts/hooks/useAlerts', () => ({
         nombreEspecie: 'Eucalipto Grandis',
         injerto: 'I001',
         nrocont: '48',
-        contenedor: 'Ban Plastico',
         semSiembra: '24-2026',
         fechaSugeridaSiembra: '2026-06-01',
         fSiembra: 0,

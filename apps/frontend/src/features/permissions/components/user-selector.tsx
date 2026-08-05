@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/common/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { useUsers } from "@/features/users";
 import { useCallback, useState, useMemo } from "react";
@@ -47,17 +47,6 @@ export function UserSelector({ onSelectedUserId }: UserSelectorProps) {
     [onSelectedUserId],
   );
 
-  const getInitials = (user: UserProfileDto) => {
-    return (
-      [user.firstName?.[0], user.lastName?.[0]]
-        .filter(Boolean)
-        .join("")
-        .toUpperCase() ||
-      user.username[0]?.toUpperCase() ||
-      "U"
-    );
-  };
-
   const getDisplayName = (user: UserProfileDto) => {
     return (
       [user.firstName, user.lastName].filter(Boolean).join(" ") || user.username
@@ -82,11 +71,7 @@ export function UserSelector({ onSelectedUserId }: UserSelectorProps) {
               >
                 {selectedUser ? (
                   <div className="flex items-center gap-2 truncate">
-                    <Avatar className="h-6 w-6 border border-border/50">
-                      <AvatarFallback className="bg-primary/5 text-[10px] font-bold text-primary">
-                        {getInitials(selectedUser)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <UserAvatar name={getDisplayName(selectedUser!)} size="sm" />
                     <span className="truncate">
                       {getDisplayName(selectedUser)}
                     </span>
@@ -120,11 +105,7 @@ export function UserSelector({ onSelectedUserId }: UserSelectorProps) {
                         onSelect={() => handleUserChange(user.id)}
                         className="flex items-center gap-3 px-3 py-2 rounded-lg my-1 cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-foreground"
                       >
-                        <Avatar className="h-8 w-8 border border-border/50">
-                          <AvatarFallback className="bg-primary/5 text-xs font-bold text-primary">
-                            {getInitials(user)}
-                          </AvatarFallback>
-                        </Avatar>
+                        <UserAvatar name={getDisplayName(user)} />
                         <div className="flex flex-col flex-1 min-w-0">
                           <span className="text-sm font-semibold truncate">
                             {getDisplayName(user)}

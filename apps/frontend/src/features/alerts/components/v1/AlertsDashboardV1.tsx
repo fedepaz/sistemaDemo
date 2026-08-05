@@ -1,7 +1,7 @@
 // src/features/alerts/components/v1/AlertsDashboardV1.tsx
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { AlertTriangle } from "lucide-react";
 import { AlertSummaryCards } from "../shared/alert-summary-cards";
 import { AlertsDataTable } from "./alerts-data-table";
@@ -22,13 +22,15 @@ import {
   useFaltaPreExpedicion,
 } from "../../hooks/useAlerts";
 import { AlertDashboardSkeleton } from "../shared/alert-dashboard-skeleton";
+import { groupFaltantePlantas } from "../../utils/group-faltante-plantas";
 
 import type { ExportColumn } from "@/lib/export/types";
+import { Separator } from "@/components/ui/separator";
 
 function AlertSection({
   title,
   description,
-  count,
+  alertType,
   columns,
   data,
   exportColumns,
@@ -36,6 +38,7 @@ function AlertSection({
   title: string;
   description: string;
   count: number;
+  alertType: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,24 +47,14 @@ function AlertSection({
   exportColumns?: ExportColumn<any>[];
 }) {
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <h2 className="text-sm font-black uppercase tracking-widest text-foreground">
-          {title}
-        </h2>
-        <span className="text-xs font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-          {count}
-        </span>
-      </div>
-      <p className="text-xs text-muted-foreground">{description}</p>
-      <AlertsDataTable
-        title={title}
-        description={description}
-        columns={columns}
-        data={data}
-        exportColumns={exportColumns}
-      />
-    </div>
+    <AlertsDataTable
+      title={title}
+      description={description}
+      alertType={alertType}
+      columns={columns}
+      data={data}
+      exportColumns={exportColumns}
+    />
   );
 }
 
@@ -71,10 +64,15 @@ function AlertsContent() {
   const { data: faltantePlantas } = useFaltantePlantas();
   const { data: faltaPreExpedicion } = useFaltaPreExpedicion();
 
+  const faltantePlantasGrouped = useMemo(
+    () => groupFaltantePlantas(faltantePlantas),
+    [faltantePlantas],
+  );
+
   const totalAlerts =
     siembraRetrasada.length +
     faltaGerminacion.length +
-    faltantePlantas.length +
+    faltantePlantasGrouped.length +
     faltaPreExpedicion.length;
 
   return (
@@ -82,7 +80,7 @@ function AlertsContent() {
       <AlertSummaryCards
         siembraRetrasadaCount={siembraRetrasada.length}
         faltaGerminacionCount={faltaGerminacion.length}
-        faltantePlantasCount={faltantePlantas.length}
+        faltantePlantasCount={faltantePlantasGrouped.length}
         faltaPreExpedicionCount={faltaPreExpedicion.length}
       />
 
@@ -107,10 +105,14 @@ function AlertsContent() {
               title="Siembra Retrasada"
               description="Partidas que no se han sembrado en la semana programada"
               count={siembraRetrasada.length}
+              alertType="siembra-retrasada"
               columns={siembraRetrasadaColumns}
               data={siembraRetrasada}
               exportColumns={siembraRetrasadaExportColumns}
             />
+          )}
+          {siembraRetrasada.length > 0 && faltaGerminacion.length > 0 && (
+            <Separator />
           )}
 
           {faltaGerminacion.length > 0 && (
@@ -118,21 +120,29 @@ function AlertsContent() {
               title="Falta Recuento Germinación"
               description="Partidas que estando en fecha no cuentan con dato de germinación"
               count={faltaGerminacion.length}
+              alertType="falta-germinacion"
               columns={faltaGerminacionColumns}
               data={faltaGerminacion}
               exportColumns={faltaGerminacionExportColumns}
             />
           )}
+          {faltaGerminacion.length > 0 && faltantePlantasGrouped.length > 0 && (
+            <Separator />
+          )}
 
-          {faltantePlantas.length > 0 && (
+          {faltantePlantasGrouped.length > 0 && (
             <AlertSection
               title="Faltante Estimado de Plantas"
               description="Partidas donde plantas germinadas son menor a las solicitadas"
-              count={faltantePlantas.length}
+              count={faltantePlantasGrouped.length}
+              alertType="faltante-plantas"
               columns={faltantePlantasColumns}
-              data={faltantePlantas}
+              data={faltantePlantasGrouped}
               exportColumns={faltantePlantasExportColumns}
             />
+          )}
+          {faltantePlantasGrouped.length > 0 && faltaPreExpedicion.length > 0 && (
+            <Separator />
           )}
 
           {faltaPreExpedicion.length > 0 && (
@@ -140,6 +150,7 @@ function AlertsContent() {
               title="Falta Pre-Expedición"
               description="Partidas sin pre-expedición cargada"
               count={faltaPreExpedicion.length}
+              alertType="falta-pre-expedicion"
               columns={faltaPreExpedicionColumns}
               data={faltaPreExpedicion}
               exportColumns={faltaPreExpedicionExportColumns}

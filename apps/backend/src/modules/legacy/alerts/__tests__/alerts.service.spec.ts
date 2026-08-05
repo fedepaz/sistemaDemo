@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AlertsService } from '../alerts.service';
 import { AlertsRepository } from '../repositories/alerts.repository';
+import { AlertCommentsRepository } from '../../../alertComments/repositories/alertComments.repository';
 import {
   LegacySiembraRetrasada,
   LegacyFaltaGerminacion,
@@ -19,17 +20,23 @@ describe('AlertsService', () => {
     findFaltaPreExpedicion: jest.fn(),
   };
 
+  const mockAlertCommentsRepo = {
+    getCommentCounts: jest.fn().mockResolvedValue(new Map()),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AlertsService,
         { provide: AlertsRepository, useValue: mockRepository },
+        { provide: AlertCommentsRepository, useValue: mockAlertCommentsRepo },
       ],
     }).compile();
 
     service = module.get<AlertsService>(AlertsService);
     repository = module.get(AlertsRepository);
     jest.clearAllMocks();
+    mockAlertCommentsRepo.getCommentCounts.mockResolvedValue(new Map());
   });
 
   describe('getSiembraRetrasada', () => {
@@ -38,11 +45,10 @@ describe('AlertsService', () => {
         partida: 1045,
         ano: 2026,
         indice: 1,
-        espvar: 'EUC01',
+        planta: 'EUC01',
         nombre: 'Eucalipto Grandis',
         injerto: 'I001',
         nrocont: '48',
-        contenedor: 'Ban Plastico',
         semSiembra: '24-2026',
         f_siem: '2026-06-01',
         f_siembra: 0,
@@ -64,13 +70,13 @@ describe('AlertsService', () => {
         nombreEspecie: 'Eucalipto Grandis',
         injerto: 'I001',
         nrocont: '48',
-        contenedor: 'Ban Plastico',
         semSiembra: '24-2026',
         fechaSugeridaSiembra: '2026-06-01',
         fSiembra: 0,
         semEntrega: '28-2026 1',
         fEnt: '2026-07-15',
         estado: 'PENDIENTE',
+        commentCount: 0,
       });
     });
 
@@ -78,6 +84,61 @@ describe('AlertsService', () => {
       repository.findSiembraRetrasada.mockResolvedValue([]);
       const result = await service.getSiembraRetrasada();
       expect(result).toEqual([]);
+    });
+
+    it('merges commentCount from AlertCommentsRepository', async () => {
+      const legacyRow: LegacySiembraRetrasada = {
+        partida: 1045,
+        ano: 2026,
+        indice: 1,
+        planta: 'EUC01',
+        nombre: 'Eucalipto Grandis',
+        injerto: 'I001',
+        nrocont: '48',
+        semSiembra: '24-2026',
+        f_siem: '2026-06-01',
+        f_siembra: 0,
+        semEntrega: '28-2026 1',
+        f_ent: '2026-07-15',
+        estado: 'PENDIENTE',
+      } as LegacySiembraRetrasada;
+
+      repository.findSiembraRetrasada.mockResolvedValue([legacyRow]);
+      const countsMap = new Map([['1045-2026-1', 3]]);
+      mockAlertCommentsRepo.getCommentCounts.mockResolvedValue(countsMap);
+
+      const result = await service.getSiembraRetrasada();
+
+      expect(result[0].commentCount).toBe(3);
+      expect(mockAlertCommentsRepo.getCommentCounts).toHaveBeenCalledWith(
+        'SIEMBRA_RETRASADA',
+        expect.arrayContaining([
+          expect.objectContaining({ partidaId: 1045, anio: 2026, indice: 1 }),
+        ]),
+      );
+    });
+
+    it('defaults commentCount to 0 when no comments exist', async () => {
+      const legacyRow: LegacySiembraRetrasada = {
+        partida: 1045,
+        ano: 2026,
+        indice: 1,
+        planta: 'EUC01',
+        nombre: 'Eucalipto Grandis',
+        injerto: 'I001',
+        nrocont: '48',
+        semSiembra: '24-2026',
+        f_siem: '2026-06-01',
+        f_siembra: 0,
+        semEntrega: '28-2026 1',
+        f_ent: '2026-07-15',
+        estado: 'PENDIENTE',
+      } as LegacySiembraRetrasada;
+
+      repository.findSiembraRetrasada.mockResolvedValue([legacyRow]);
+
+      const result = await service.getSiembraRetrasada();
+      expect(result[0].commentCount).toBe(0);
     });
   });
 
@@ -87,11 +148,10 @@ describe('AlertsService', () => {
         partida: 1050,
         ano: 2026,
         indice: 1,
-        espvar: 'ROS01',
+        planta: 'ROS01',
         nombre: 'Rosa Hybrid Tea',
         injerto: 'I002',
         nrocont: '104',
-        contenedor: 'Bandeja 104',
         f_primer: '2026-07-01',
         pr: '0',
       } as LegacyFaltaGerminacion;
@@ -109,9 +169,9 @@ describe('AlertsService', () => {
         nombreEspecie: 'Rosa Hybrid Tea',
         injerto: 'I002',
         nrocont: '104',
-        contenedor: 'Bandeja 104',
         fPrimer: '2026-07-01',
         pr: '0',
+        commentCount: 0,
       });
     });
 
@@ -120,11 +180,10 @@ describe('AlertsService', () => {
         partida: 1051,
         ano: 2026,
         indice: 1,
-        espvar: 'EUC01',
+        planta: 'EUC01',
         nombre: 'Eucalipto',
         injerto: 'I001',
         nrocont: '48',
-        contenedor: 'Ban Plastico',
         f_primer: '2026-07-01',
         pr: '85.5',
       } as LegacyFaltaGerminacion;
@@ -145,10 +204,9 @@ describe('AlertsService', () => {
         partida: 1048,
         ano: 2026,
         indice: 1,
-        espvar: 'EUC01',
+        planta: 'EUC01',
         nombre: 'Eucalipto Grandis',
         nrocont: '500',
-        contenedor: 'Ban Plastico',
         solicito: 500,
         f_primer: '2026-06-15',
         pr: '85.5',
@@ -169,12 +227,12 @@ describe('AlertsService', () => {
         codigoEspecie: 'EUC01',
         nombreEspecie: 'Eucalipto Grandis',
         nrocont: '500',
-        contenedor: 'Ban Plastico',
         solicito: 500,
         fPrimer: '2026-06-15',
         pr: '85.5',
         stIniPr: '4',
         porPr: 171,
+        commentCount: 0,
       });
     });
 
@@ -184,10 +242,9 @@ describe('AlertsService', () => {
         partida: 1049,
         ano: 2026,
         indice: 1,
-        espvar: 'ROS01',
+        planta: 'ROS01',
         nombre: 'Rosa',
         nrocont: '100',
-        contenedor: 'Bandeja',
         solicito: 200,
         f_primer: '2026-06-15',
         pr: '92.3',
@@ -212,11 +269,10 @@ describe('AlertsService', () => {
         partida: 1052,
         ano: 2026,
         indice: 1,
-        espvar: 'LIM02',
+        planta: 'LIM02',
         nombre: 'Limonero Volkameriano',
         injerto: 'I003',
         nrocont: '96',
-        contenedor: 'Ban Plastico',
         f_preexp: '2026-07-20',
         pe: 0,
       } as LegacyFaltaPreExpedicion;
@@ -234,9 +290,9 @@ describe('AlertsService', () => {
         nombreEspecie: 'Limonero Volkameriano',
         injerto: 'I003',
         nrocont: '96',
-        contenedor: 'Ban Plastico',
         fPreexp: '2026-07-20',
         pe: 0,
+        commentCount: 0,
       });
     });
 
