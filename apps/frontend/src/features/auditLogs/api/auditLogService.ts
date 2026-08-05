@@ -1,7 +1,7 @@
 // apps/frontend/src/features/auditLogs/api/auditLogService.ts
 
 import { clientFetch } from "@/lib/api/client-fetch";
-import { AuditLogDto } from "@vivero/shared";
+import { AuditLogDto, PaginatedResponse } from "@vivero/shared";
 
 export const auditLogService = {
   fetchAll: () => {
@@ -10,8 +10,15 @@ export const auditLogService = {
     });
   },
 
-  fetchByTenantName: (tenantName: string) => {
-    return clientFetch<AuditLogDto[]>(`auditLog/${tenantName}`, {
+  fetchByTenantName: (tenantName: string, page?: number, limit?: number) => {
+    const params = new URLSearchParams();
+    if (page !== undefined) params.set("page", String(page));
+    if (limit !== undefined) params.set("limit", String(limit));
+    const query = params.toString();
+    const url = query
+      ? `auditLog/${tenantName}?${query}`
+      : `auditLog/${tenantName}`;
+    return clientFetch<PaginatedResponse<AuditLogDto>>(url, {
       method: "GET",
     });
   },

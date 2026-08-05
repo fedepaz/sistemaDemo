@@ -62,8 +62,8 @@ export const entityQueryKeys = {
 
 export const auditLogQueryKeys = {
   all: () => ["auditLog"] as const,
-  byTenantName: (tenantName: string) =>
-    ["auditLog", tenantName] as const,
+  byTenantName: (tenantName: string, page?: number, limit?: number) =>
+    ["auditLog", tenantName, page, limit] as const,
   byUserId: (userId: string) =>
     ["auditLog", "user", userId] as const,
 };

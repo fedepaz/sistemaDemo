@@ -22,5 +22,6 @@ model AuditLog {
   @@index([tenantId, timestamp])
   @@index([userId])
   @@index([entityType, entityId])
+  @@index([timestamp])
   @@map("audit_logs")
 }

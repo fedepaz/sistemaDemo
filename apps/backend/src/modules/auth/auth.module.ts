@@ -10,9 +10,11 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt-auth.strategy';
 import { TenantsRepository } from '../tenants/repositories/tenants.repository';
 import { AuthController } from './auth.controller';
+import { AuditLogModule } from '../auditLog/auditLog.module';
 
 @Module({
   imports: [
+    AuditLogModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

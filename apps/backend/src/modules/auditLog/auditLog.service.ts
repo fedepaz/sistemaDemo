@@ -1,15 +1,14 @@
 // src/modules/auditLog/auditLog.service.ts
 
 import { Injectable } from '@nestjs/common';
-import { AuditLogRepository } from './repositories/auditLog.repository';
+import { AuditService } from './audit.service';
 
 @Injectable()
 export class AuditLogService {
-  constructor(private auditLogRepository: AuditLogRepository) {}
+  constructor(private auditService: AuditService) {}
 
   async getAllAuditLogs() {
-    const auditLogs = await this.auditLogRepository.findAll();
-    return auditLogs;
+    return this.auditService.findAll();
   }
 
   async getAllByTenantName(
@@ -18,10 +17,10 @@ export class AuditLogService {
     limit: number = 50,
   ) {
     const skip = (page - 1) * limit;
-    return this.auditLogRepository.findAllByTenantName(tenantName, skip, limit);
+    return this.auditService.findAllByTenantName(tenantName, skip, limit);
   }
 
   async getAllByUserId(userId: string) {
-    return this.auditLogRepository.findAllByUserId(userId);
+    return this.auditService.findAllByUserId(userId);
   }
 }

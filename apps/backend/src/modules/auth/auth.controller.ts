@@ -91,8 +91,9 @@ export class AuthController {
     action: 'read',
     scope: 'OWN',
   })
-  logout(@CurrentUser() user: AuthUser) {
-    this.logger.log(`👋 Logout: ${user.username}`);
+  async logout(@CurrentUser() user: AuthUser) {
+    this.logger.log(`Logout: ${user.username}`);
+    await this.authService.logout(user.id, user.tenantId);
     return { message: 'Logged out successfully' };
   }
   /**

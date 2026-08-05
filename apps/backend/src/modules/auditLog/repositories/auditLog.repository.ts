@@ -55,6 +55,18 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
         tenant: {
           name: tenantName,
         },
+        deletedAt: null,
+        isActive: true,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
       },
       skip,
       take,
@@ -68,6 +80,18 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
     return this.prisma.auditLog.findMany({
       where: {
         userId,
+        deletedAt: null,
+        isActive: true,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
       },
     });
   }

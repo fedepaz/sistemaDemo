@@ -79,7 +79,21 @@ describe('AuditLogRepository', () => {
 
       expect(result).toEqual(logs);
       expect(prisma.auditLog.findMany).toHaveBeenCalledWith({
-        where: { tenant: { name: 'Default' } },
+        where: {
+          tenant: { name: 'Default' },
+          deletedAt: null,
+          isActive: true,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
         skip: 0,
         take: 10,
         orderBy: { timestamp: 'desc' },
@@ -96,7 +110,21 @@ describe('AuditLogRepository', () => {
 
       expect(result).toEqual(logs);
       expect(prisma.auditLog.findMany).toHaveBeenCalledWith({
-        where: { userId: 'user-1' },
+        where: {
+          userId: 'user-1',
+          deletedAt: null,
+          isActive: true,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
       });
     });
   });

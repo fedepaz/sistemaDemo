@@ -25,6 +25,7 @@ import {
   JwtRefreshPayload,
 } from './interfaces/jwt-payload.interface';
 import { TenantsRepository } from '../tenants/repositories/tenants.repository';
+import { AuditEventEmitter } from '../auditLog/events/audit-event.emitter';
 
 @Injectable()
 export class AuthService {
@@ -36,6 +37,7 @@ export class AuthService {
     private readonly tenantRepo: TenantsRepository,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
+    private readonly auditEventEmitter: AuditEventEmitter,
   ) {}
 
   async validateUser(userId: string) {
@@ -106,6 +108,15 @@ export class AuthService {
     const user = await this.userAuthRepo.findByUsername(dto.username);
 
     if (!user) {
+      this.auditEventEmitter.emitAuth({
+        tenantId: 'unknown',
+        userId: dto.username,
+        action: 'LOGIN_FAILED',
+        entityType: 'user',
+        entityId: dto.username,
+        timestamp: new Date(),
+        changes: { reason: 'User not found' },
+      });
       throw new UnauthorizedException('Invalid credentials - email');
     }
 
@@ -115,11 +126,29 @@ export class AuthService {
       user.passwordHash,
     );
     if (!isPasswordValid) {
+      this.auditEventEmitter.emitAuth({
+        tenantId: user.tenantId,
+        userId: user.id,
+        action: 'LOGIN_FAILED',
+        entityType: 'user',
+        entityId: user.id,
+        timestamp: new Date(),
+        changes: { reason: 'Invalid password' },
+      });
       throw new UnauthorizedException('Invalid credentials - password');
     }
 
     // check if user is active
     if (!user.isActive) {
+      this.auditEventEmitter.emitAuth({
+        tenantId: user.tenantId,
+        userId: user.id,
+        action: 'LOGIN_FAILED',
+        entityType: 'user',
+        entityId: user.id,
+        timestamp: new Date(),
+        changes: { reason: 'User is inactive' },
+      });
       throw new UnauthorizedException('User is inactive');
     }
 
@@ -134,6 +163,16 @@ export class AuthService {
       this.config.get('config.defaultPassword') || '',
       user.passwordHash,
     );
+
+    this.auditEventEmitter.emitAuth({
+      tenantId: user.tenantId,
+      userId: user.id,
+      action: 'LOGIN',
+      entityType: 'user',
+      entityId: user.id,
+      timestamp: new Date(),
+      changes: {},
+    });
 
     return {
       user: {
@@ -219,6 +258,19 @@ export class AuthService {
       success: true,
       message: `Contraseña de usuario ${user.username} restaurada correctamente`,
     };
+  }
+
+  async logout(userId: string, tenantId: string): Promise<void> {
+    this.auditEventEmitter.emitAuth({
+      tenantId,
+      userId,
+      action: 'LOGOUT',
+      entityType: 'user',
+      entityId: userId,
+      timestamp: new Date(),
+      changes: {},
+    });
+    return Promise.resolve();
   }
 
   // Helper to generate tokens using the injected JwtService

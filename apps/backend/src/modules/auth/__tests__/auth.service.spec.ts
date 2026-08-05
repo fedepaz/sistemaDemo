@@ -10,6 +10,7 @@ import { UserAuthRepository } from '../repositories/userAuth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TenantsRepository } from '../../tenants/repositories/tenants.repository';
+import { AuditEventEmitter } from '../../auditLog/events/audit-event.emitter';
 
 jest.mock('bcrypt');
 import * as bcrypt from 'bcrypt';
@@ -32,6 +33,9 @@ describe('AuthService', () => {
   let configService: {
     get: jest.Mock;
     getOrThrow: jest.Mock;
+  };
+  let auditEventEmitter: {
+    emitAuth: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -72,6 +76,10 @@ describe('AuthService', () => {
       }),
     };
 
+    auditEventEmitter = {
+      emitAuth: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -79,6 +87,7 @@ describe('AuthService', () => {
         { provide: TenantsRepository, useValue: tenantRepo },
         { provide: JwtService, useValue: jwtService },
         { provide: ConfigService, useValue: configService },
+        { provide: AuditEventEmitter, useValue: auditEventEmitter },
       ],
     }).compile();
 

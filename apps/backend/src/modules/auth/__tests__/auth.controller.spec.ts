@@ -10,6 +10,7 @@ describe('AuthController', () => {
     refreshTokens: jest.Mock;
     changePassword: jest.Mock;
     restorePassword: jest.Mock;
+    logout: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -19,6 +20,7 @@ describe('AuthController', () => {
       refreshTokens: jest.fn(),
       changePassword: jest.fn(),
       restorePassword: jest.fn(),
+      logout: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -116,11 +118,13 @@ describe('AuthController', () => {
   });
 
   describe('logout', () => {
-    it('should return success message', () => {
-      const user = { id: 'user-1', username: 'testuser' };
+    it('should return success message', async () => {
+      const user = { id: 'user-1', username: 'testuser', tenantId: 'tenant-1' };
+      authService.logout.mockResolvedValue(undefined);
 
-      const result = controller.logout(user as any);
+      const result = await controller.logout(user);
 
+      expect(authService.logout).toHaveBeenCalledWith('user-1', 'tenant-1');
       expect(result).toEqual({ message: 'Logged out successfully' });
     });
   });

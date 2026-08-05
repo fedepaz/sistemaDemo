@@ -10,6 +10,11 @@ import {
   Globe,
   Smartphone,
   User,
+  LogIn,
+  LogOut,
+  ShieldCheck,
+  Lock,
+  AlertTriangle,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatShortDate } from "@/lib/date-utils";
@@ -43,6 +48,16 @@ const getActionIcon = (action: string) => {
       return <Pencil className="h-4 w-4 text-secondary" />;
     case "DELETE":
       return <Trash2 className="h-4 w-4 text-destructive" />;
+    case "LOGIN":
+      return <LogIn className="h-4 w-4 text-primary" />;
+    case "LOGOUT":
+      return <LogOut className="h-4 w-4 text-muted-foreground" />;
+    case "ACCESS":
+      return <ShieldCheck className="h-4 w-4 text-info" />;
+    case "LOGIN_FAILED":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "PASSWORD_CHANGE":
+      return <Lock className="h-4 w-4 text-secondary" />;
     default:
       return <FileText className="h-4 w-4 text-muted-foreground" />;
   }
@@ -58,11 +73,16 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
       const action = row.getValue("action") as string;
       const variantMap: Record<
         string,
-        "default" | "destructive" | "secondary"
+        "default" | "destructive" | "secondary" | "outline"
       > = {
         CREATE: "default",
         UPDATE: "secondary",
         DELETE: "destructive",
+        LOGIN: "default",
+        LOGOUT: "outline",
+        ACCESS: "outline",
+        LOGIN_FAILED: "destructive",
+        PASSWORD_CHANGE: "secondary",
       };
 
       return (

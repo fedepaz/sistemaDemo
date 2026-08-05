@@ -13,7 +13,62 @@ import {
   Hash,
   Globe,
   Settings,
+  LogIn,
+  LogOut,
+  AlertTriangle,
+  Key,
 } from "lucide-react";
+
+// Action badge color mapping for auth events
+const getActionBadge = (action: string): string => {
+  const colors: Record<string, string> = {
+    CREATE: "bg-green-100 text-green-800",
+    UPDATE: "bg-blue-100 text-blue-800",
+    DELETE: "bg-red-100 text-red-800",
+    LOGIN: "bg-green-100 text-green-800",
+    LOGOUT: "bg-gray-100 text-gray-800",
+    ACCESS: "bg-purple-100 text-purple-800",
+    LOGIN_FAILED: "bg-orange-100 text-orange-800",
+    PASSWORD_CHANGE: "bg-blue-100 text-blue-800",
+  };
+  return colors[action] || "bg-gray-100 text-gray-800";
+};
+
+// Helper to get action icon
+const getActionIcon = (action: string) => {
+  switch (action) {
+    case "LOGIN":
+      return <LogIn className="h-4 w-4" />;
+    case "LOGOUT":
+      return <LogOut className="h-4 w-4" />;
+    case "LOGIN_FAILED":
+      return <AlertTriangle className="h-4 w-4" />;
+    case "PASSWORD_CHANGE":
+      return <Key className="h-4 w-4" />;
+    default:
+      return null;
+  }
+};
+
+// Helper to format changes for display, filtering out metadata fields
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const formatChangesForDisplay = (changes: Record<string, any> | null) => {
+  if (!changes || Object.keys(changes).length === 0) return null;
+
+  // Filter out metadata fields for cleaner display
+  const metadataFields = [
+    "requestId",
+    "endpoint",
+    "method",
+    "durationMs",
+    "timestamp",
+  ];
+  const displayFields = Object.entries(changes).filter(
+    ([key]) => !metadataFields.includes(key),
+  );
+
+  return displayFields.length > 0 ? Object.fromEntries(displayFields) : null;
+};
 
 interface AuditLogFormProps {
   selectedAuditLog: AuditLogDto;
@@ -101,23 +156,81 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
         </CardContent>
       </Card>
 
-      {/* Registro de Cambios */}
+      {/* Acción Realizada */}
       <Card className="border-border/60 shadow-sm overflow-hidden">
         <CardHeader className="bg-muted/30 border-b py-2 md:py-4">
           <CardTitle className="flex items-center gap-2 text-sm md:text-base font-semibold">
             <History className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+            Acción Realizada
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-3 md:pt-4">
+          <div className="flex items-center gap-3">
+            <Badge
+              variant="outline"
+              className={`${getActionBadge(selectedAuditLog.action)} font-bold uppercase tracking-widest text-[10px] md:text-xs h-5 md:h-6 px-2 flex items-center gap-1.5`}
+            >
+              {getActionIcon(selectedAuditLog.action)}
+              {selectedAuditLog.action}
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Registro de Cambios */}
+      <Card className="border-border/60 shadow-sm overflow-hidden">
+        <CardHeader className="bg-muted/30 border-b py-2 md:py-4">
+          <CardTitle className="flex items-center gap-2 text-sm md:text-base font-semibold">
+            <Database className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
             Registro de Cambios
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-3 md:pt-4">
-          <div className="relative rounded-lg border bg-card p-3 md:p-4 font-mono text-[10px] md:text-xs overflow-hidden">
-            <div className="absolute right-2 top-2">
-              <Settings className="h-3 w-3 md:h-3.5 md:w-3.5 text-muted-foreground animate-spin-slow" />
-            </div>
-            <pre className="text-muted-foreground overflow-auto max-h-40 md:max-h-80 custom-scrollbar">
-              {JSON.stringify(selectedAuditLog.changes, null, 2)}
-            </pre>
-          </div>
+          {(() => {
+            const displayChanges = formatChangesForDisplay(
+              selectedAuditLog.changes,
+            );
+            if (!displayChanges) {
+              return (
+                <p className="text-xs md:text-sm text-muted-foreground italic">
+                  No hay cambios registrados para esta acción
+                </p>
+              );
+            }
+            return (
+              <div className="space-y-2">
+                {Object.entries(displayChanges).map(([key, value]) => (
+                  <div
+                    key={key}
+                    className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 py-1.5 border-b border-border/30 last:border-0"
+                  >
+                    <span className="text-[9px] md:text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[100px] md:min-w-[120px]">
+                      {key}
+                    </span>
+                    <div className="flex-1">
+                      {typeof value === "object" && value !== null && "before" in value && "after" in value ? (
+                        <div className="flex items-center gap-2 text-xs md:text-sm">
+                          <span className="text-muted-foreground line-through">
+                            {String(value.before)}
+                          </span>
+                          <span className="text-muted-foreground">→</span>
+                          <span className="font-medium text-foreground">
+                            {String(value.after)}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-xs md:text-sm font-medium text-foreground">
+                          {typeof value === "object"
+                            ? JSON.stringify(value, null, 2)
+                            : String(value)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
         </CardContent>
       </Card>
 
