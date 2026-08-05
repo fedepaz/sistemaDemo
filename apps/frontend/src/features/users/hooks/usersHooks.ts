@@ -6,7 +6,11 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
+import {
+  RestorePasswordDto,
+  UpdateUserProfileDto,
+  UserProfileDto,
+} from "@vivero/shared";
 import { userService } from "../api/userService";
 import { usersQueryKeys } from "@/lib/queryKeys";
 import { invalidateQueries } from "@/lib/query-invalidation-map";
@@ -63,7 +67,8 @@ export const useUpdateUser = () => {
     Error,
     { username: string; userUpdate: UpdateUserProfileDto }
   >({
-    mutationFn: async ({ username, userUpdate }) => userService.updateUser(username, userUpdate),
+    mutationFn: async ({ username, userUpdate }) =>
+      userService.updateUser(username, userUpdate),
     onSuccess: (data) => {
       const toastMessage = `Perfil de usuario ${data.username} actualizado exitosamente`;
       toast.success(toastMessage, {
@@ -94,5 +99,26 @@ export const useGetAllUsersAdmin = () => {
     queryKey: usersQueryKeys.admin(),
     queryFn: userService.fetchAllAdmin,
     retry: 1, // Retry once to account for transient network issues
+  });
+};
+
+export const useRestorePassword = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    { success: boolean; message: string },
+    Error,
+    RestorePasswordDto
+  >({
+    mutationFn: async (dto) => userService.restorePassword(dto),
+
+    onSuccess: (data) => {
+      const toastMessage =
+        data.message ?? `Contraseña restaurada correctamente`;
+      toast.success(toastMessage, {
+        duration: 3000,
+      });
+      invalidateQueries(queryClient, "restorePassword");
+    },
   });
 };

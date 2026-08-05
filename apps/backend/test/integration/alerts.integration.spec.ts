@@ -48,18 +48,17 @@ describe('Alerts Integration', () => {
 
   const mockFaltantePlantas = [
     {
-      hai: 'A',
       partidaId: 1048,
       anio: 2026,
       indice: 1,
+      siembras: 3,
       codigoEspecie: 'EUC01',
       nombreEspecie: 'Eucalipto Grandis',
       nrocont: '500',
       solicito: 500,
-      fPrimer: '2026-06-15',
-      pr: '85.5',
-      stIniPr: '4',
-      porPr: 171,
+      producido: 342,
+      diferencia: -158,
+      commentCount: 0,
     },
   ];
 

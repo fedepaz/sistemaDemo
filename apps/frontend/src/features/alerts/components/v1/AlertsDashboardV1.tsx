@@ -22,7 +22,6 @@ import {
   useFaltaPreExpedicion,
 } from "../../hooks/useAlerts";
 import { AlertDashboardSkeleton } from "../shared/alert-dashboard-skeleton";
-import { groupFaltantePlantas } from "../../utils/group-faltante-plantas";
 
 import type { ExportColumn } from "@/lib/export/types";
 import { Separator } from "@/components/ui/separator";
@@ -64,15 +63,10 @@ function AlertsContent() {
   const { data: faltantePlantas } = useFaltantePlantas();
   const { data: faltaPreExpedicion } = useFaltaPreExpedicion();
 
-  const faltantePlantasGrouped = useMemo(
-    () => groupFaltantePlantas(faltantePlantas),
-    [faltantePlantas],
-  );
-
   const totalAlerts =
     siembraRetrasada.length +
     faltaGerminacion.length +
-    faltantePlantasGrouped.length +
+    faltantePlantas.length +
     faltaPreExpedicion.length;
 
   return (
@@ -80,7 +74,7 @@ function AlertsContent() {
       <AlertSummaryCards
         siembraRetrasadaCount={siembraRetrasada.length}
         faltaGerminacionCount={faltaGerminacion.length}
-        faltantePlantasCount={faltantePlantasGrouped.length}
+        faltantePlantasCount={faltantePlantas.length}
         faltaPreExpedicionCount={faltaPreExpedicion.length}
       />
 
@@ -126,22 +120,22 @@ function AlertsContent() {
               exportColumns={faltaGerminacionExportColumns}
             />
           )}
-          {faltaGerminacion.length > 0 && faltantePlantasGrouped.length > 0 && (
+          {faltaGerminacion.length > 0 && faltantePlantas.length > 0 && (
             <Separator />
           )}
 
-          {faltantePlantasGrouped.length > 0 && (
+          {faltantePlantas.length > 0 && (
             <AlertSection
               title="Faltante Estimado de Plantas"
               description="Partidas donde plantas germinadas son menor a las solicitadas"
-              count={faltantePlantasGrouped.length}
+              count={faltantePlantas.length}
               alertType="faltante-plantas"
               columns={faltantePlantasColumns}
-              data={faltantePlantasGrouped}
+              data={faltantePlantas}
               exportColumns={faltantePlantasExportColumns}
             />
           )}
-          {faltantePlantasGrouped.length > 0 && faltaPreExpedicion.length > 0 && (
+          {faltantePlantas.length > 0 && faltaPreExpedicion.length > 0 && (
             <Separator />
           )}
 

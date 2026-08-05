@@ -17,6 +17,7 @@ import {
   TokensDto,
   RegisterAuthDto,
   ChangePasswordDto,
+  RestorePasswordDto,
 } from '@vivero/shared';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -199,6 +200,25 @@ export class AuthService {
 
     // Update password
     await this.userAuthRepo.updatePassword(userId, newPasswordHash);
+  }
+
+  async restorePassword(
+    dto: RestorePasswordDto,
+  ): Promise<{ success: boolean; message: string }> {
+    const user = await this.userAuthRepo.findById(dto.userId);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    const defaultPassword: string =
+      this.config.get<string>('config.defaultPassword') || '123456';
+    const passwordHash = await bcrypt.hash(defaultPassword, this.BCRYPT_ROUNDS);
+    await this.userAuthRepo.updatePassword(dto.userId, passwordHash);
+
+    return {
+      success: true,
+      message: `Contraseña de usuario ${user.username} restaurada correctamente`,
+    };
   }
 
   // Helper to generate tokens using the injected JwtService

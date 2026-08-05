@@ -15,6 +15,10 @@ export const validChangePasswordPayload = () => ({
   newPassword: 'NewPass1',
 });
 
+export const validRestorePasswordPayload = () => ({
+  userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+});
+
 export const validRefreshPayload = () => ({
   refreshToken: 'valid-refresh-token',
 });

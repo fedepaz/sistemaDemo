@@ -356,6 +356,58 @@ describe('AuthService', () => {
     });
   });
 
+  describe('restorePassword', () => {
+    it('should restore password to default successfully', async () => {
+      const user = {
+        id: 'user-1',
+        username: 'testuser',
+        passwordHash: 'old-hash',
+      };
+      userAuthRepo.findById.mockResolvedValue(user);
+      (bcrypt.hash as jest.Mock).mockResolvedValue('default-hash');
+
+      const result = await service.restorePassword({ userId: 'user-1' });
+
+      expect(result).toEqual({
+        success: true,
+        message: 'Contraseña de usuario testuser restaurada correctamente',
+      });
+      expect(userAuthRepo.updatePassword).toHaveBeenCalledWith(
+        'user-1',
+        'default-hash',
+      );
+      expect(bcrypt.hash).toHaveBeenCalledWith('123456', 12);
+    });
+
+    it('should throw NotFoundException if user not found', async () => {
+      userAuthRepo.findById.mockResolvedValue(null);
+
+      await expect(
+        service.restorePassword({ userId: 'nonexistent' }),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should use config defaultPassword when available', async () => {
+      const user = {
+        id: 'user-1',
+        username: 'testuser',
+        passwordHash: 'old-hash',
+      };
+      userAuthRepo.findById.mockResolvedValue(user);
+      (bcrypt.hash as jest.Mock).mockResolvedValue('custom-hash');
+
+      configService.get.mockImplementation((key: string) => {
+        if (key === 'config.defaultPassword') return 'CustomPass1';
+        return undefined;
+      });
+
+      const result = await service.restorePassword({ userId: 'user-1' });
+
+      expect(result.success).toBe(true);
+      expect(bcrypt.hash).toHaveBeenCalledWith('CustomPass1', 12);
+    });
+  });
+
   describe('validateUser', () => {
     it('should return user by id', async () => {
       const user = { id: 'user-1', username: 'testuser' };
