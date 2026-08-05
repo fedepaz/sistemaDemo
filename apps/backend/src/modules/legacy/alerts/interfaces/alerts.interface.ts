@@ -30,18 +30,15 @@ export interface LegacyFaltaGerminacion extends RowDataPacket {
 }
 
 export interface LegacyFaltantePlantas extends RowDataPacket {
-  hai: string;
   partida: number;
   ano: number;
-  indice: number;
+  siembras: number;
   planta: string;
   nombre: string;
   nrocont: string;
   solicito: number;
-  f_primer: string;
-  pr: string;
-  st_ini_pr: string;
-  porPr: number;
+  produido: number;
+  diferencia: number;
 }
 
 export interface LegacyFaltaPreExpedicion extends RowDataPacket {

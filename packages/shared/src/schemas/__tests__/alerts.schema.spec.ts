@@ -66,26 +66,24 @@ describe("FaltaGerminacionDtoSchema", () => {
 
 describe("FaltantePlantasDtoSchema", () => {
   const valid = {
-    hai: "A",
     partidaId: 1048,
     anio: 2026,
-    indice: 1,
+    siembras: 3,
     codigoEspecie: "EUC01",
     nombreEspecie: "Eucalipto Grandis",
     nrocont: "500",
     solicito: 500,
-    fPrimer: "2026-06-15",
-    pr: "85.5",
-    stIniPr: "4",
-    porPr: 171,
+    producido: 342,
+    diferencia: -158,
     commentCount: 0,
   };
 
   it("accepts valid faltante plantas", () => {
     const result = FaltantePlantasDtoSchema.parse(valid);
     expect(result.solicito).toBe(500);
-    expect(result.pr).toBe("85.5");
-    expect(result.porPr).toBe(171);
+    expect(result.producido).toBe(342);
+    expect(result.diferencia).toBe(-158);
+    expect(result.siembras).toBe(3);
   });
 
   it("rejects missing required fields", () => {
