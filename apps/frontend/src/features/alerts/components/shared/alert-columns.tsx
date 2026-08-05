@@ -222,36 +222,9 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
       <div className="font-black text-sm text-foreground/80 tracking-tight">
         #{row.original.partidaId}
         {row.original.indice !== 0 && `/ ${row.original.indice}`}
-        {row.original.subRowCount && row.original.subRowCount > 0 && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Badge
-                variant="secondary"
-                className="ml-1 text-[9px] cursor-help"
-              >
-                +{row.original.subRowCount}
-              </Badge>
-            </TooltipTrigger>
-            <TooltipContent
-              side="bottom"
-              className="bg-popover border-border shadow-xl"
-            >
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-foreground">
-                  Partidas agrupadas:
-                </p>
-                <p className="text-[10px] text-muted-foreground leading-tight">
-                  {row.original.subRows
-                    ?.map((sub) => `#${sub.partidaId}/${sub.indice}`)
-                    .join(", ")}
-                </p>
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        )}
       </div>
     ),
-    size: 90,
+    size: 70,
   },
 
   {
@@ -298,30 +271,23 @@ export const faltantePlantasColumns: ColumnDef<FaltantePlantasDto>[] = [
     size: 100,
   },
   {
-    accessorKey: "pr",
-    header: ({ column }) => <SortableHeader column={column}>PR</SortableHeader>,
-    cell: ({ row }) => (
-      <span className="text-xs font-mono">{row.original.pr}</span>
-    ),
-  },
-  {
-    accessorKey: "porPr",
+    accessorKey: "producido",
     header: ({ column }) => (
-      <SortableHeader column={column}>Por PR</SortableHeader>
+      <SortableHeader column={column}>Producido</SortableHeader>
     ),
     cell: ({ row }) => (
-      <span className="text-xs font-mono text-right">{row.original.porPr}</span>
+      <span className="text-xs font-mono">{row.original.producido}</span>
     ),
-    size: 100,
   },
+
   {
     accessorKey: "diferencia",
     header: ({ column }) => (
       <SortableHeader column={column}>Diferencia</SortableHeader>
     ),
     cell: ({ row }) => {
-      const diff =
-        Number(row.original.solicito ?? 0) - Number(row.original.porPr ?? 0);
+      const diff = row.original.diferencia;
+
       return (
         <span className="text-xs font-mono font-bold text-right text-destructive">
           {diff > 0 ? `-${diff}` : diff}
@@ -453,8 +419,8 @@ export const faltantePlantasExportColumns: ExportColumn<FaltantePlantasDto>[] =
     { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
     { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
     { accessorKey: "solicito", exportHeader: "Solicitadas", pdfWidth: "10%" },
-    { accessorKey: "pr", exportHeader: "PR", pdfWidth: "10%" },
-    { accessorKey: "porPr", exportHeader: "Por PR", pdfWidth: "10%" },
+    { accessorKey: "producido", exportHeader: "Producido", pdfWidth: "10%" },
+    { accessorKey: "diferencia", exportHeader: "Diferencia", pdfWidth: "10%" },
   ];
 
 export const faltaPreExpedicionExportColumns: ExportColumn<FaltaPreExpedicionDto>[] =

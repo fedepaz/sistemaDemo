@@ -56,7 +56,6 @@ export type FaltaGerminacionDto = z.infer<typeof FaltaGerminacionDtoSchema>;
 // ============================================================================
 
 export const FaltantePlantasDtoSchema = AlertBaseDtoSchema.extend({
-  indice: z.number().optional(),
   siembras: z.number(),
   nrocont: z.string(),
   solicito: z.number(),

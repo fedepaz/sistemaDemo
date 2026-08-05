@@ -32,6 +32,7 @@ export interface LegacyFaltaGerminacion extends RowDataPacket {
 export interface LegacyFaltantePlantas extends RowDataPacket {
   partida: number;
   ano: number;
+  indice: number;
   siembras: number;
   planta: string;
   nombre: string;

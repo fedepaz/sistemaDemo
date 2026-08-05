@@ -64,6 +64,7 @@ export class AlertsService {
     return {
       partidaId: row.partida,
       anio: row.ano,
+      indice: row.indice,
       siembras: Number(row.siembras),
       codigoEspecie: row.planta,
       nombreEspecie: row.nombre,

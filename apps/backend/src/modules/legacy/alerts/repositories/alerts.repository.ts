@@ -45,6 +45,7 @@ export class AlertsRepository {
     return this.legacyDb.query<LegacyFaltantePlantas[]>(
       `SELECT 
   partida, ano, 
+  indice,
   COUNT(indice) AS siembras, 
   CONCAT(partidas.espvar, partidas.contenedor) AS planta, 
   articulo.nombre,
