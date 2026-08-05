@@ -68,6 +68,7 @@ describe("FaltantePlantasDtoSchema", () => {
   const valid = {
     partidaId: 1048,
     anio: 2026,
+    indice: 1,
     siembras: 3,
     codigoEspecie: "EUC01",
     nombreEspecie: "Eucalipto Grandis",
