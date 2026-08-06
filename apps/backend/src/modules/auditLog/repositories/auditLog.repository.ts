@@ -103,6 +103,8 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
     entityType: EntityType;
     entityId: string;
     changes: Record<string, any>;
+    ipAddress?: string;
+    userAgent?: string;
   }): Promise<AuditLog> {
     try {
       const auditLog = await this.prisma.auditLog.create({

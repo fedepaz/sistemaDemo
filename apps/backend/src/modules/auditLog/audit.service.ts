@@ -54,6 +54,8 @@ export class AuditService {
         entityType,
         entityId: event.entityId,
         changes,
+        ipAddress: event.ipAddress,
+        userAgent: event.userAgent,
       });
 
       this.logger.debug(
@@ -118,6 +120,9 @@ export class AuditService {
       requestId: event.changes.requestId,
       endpoint: event.changes.endpoint,
       method: event.changes.method,
+      status: event.changes.status,
+      message: event.changes.message,
+      exceptionType: event.changes.exceptionType,
       timestamp: event.timestamp.toISOString(),
     };
   }

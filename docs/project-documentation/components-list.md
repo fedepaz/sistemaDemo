@@ -137,10 +137,10 @@ This document tracks all React components within the `apps/frontend/src` directo
 ### Audit Logs
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
-| `AuditLogDashboard` | [x] | [ ] | [ ] | [ ] |
-| `AuditLogDashboardSkeleton` | [ ] | [ ] | [ ] | [ ] |
-| `AuditLogDataTable` | [ ] | [ ] | [ ] | [ ] |
-| `AuditLogForm` | [ ] | [ ] | [ ] | [ ] |
+| `AuditLogDashboard` | [x] | [x] | [x] | [x] |
+| `AuditLogDashboardSkeleton` | [x] | [x] | [ ] | [ ] |
+| `AuditLogDataTable` | [x] | [x] | [x] | [x] |
+| `AuditLogForm` | [x] | [x] | [x] | [x] |
 
 ### Auth
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |

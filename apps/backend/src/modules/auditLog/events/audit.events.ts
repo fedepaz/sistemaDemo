@@ -30,6 +30,9 @@ export interface AuditAccessEvent extends AuditEventBase {
     requestId: string;
     endpoint: string;
     method: string;
+    status?: number;
+    message?: string;
+    exceptionType?: string;
   };
 }
 
