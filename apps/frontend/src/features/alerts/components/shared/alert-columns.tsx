@@ -77,14 +77,14 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
       const today = new Date();
       const todayStr = getLocalDateStr(today);
       const targetDate = row.original.fechaSugeridaSiembra;
-      const isToday = targetDate === todayStr;
+      const isPastDue = targetDate < todayStr;
 
       return (
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-bold font-mono text-muted-foreground">
             {formatShortDate(targetDate)}
           </span>
-          {isToday && (
+          {isPastDue && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="relative flex h-2 w-2 cursor-help">
@@ -93,7 +93,7 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
                 </div>
               </TooltipTrigger>
               <TooltipContent side="top">
-                <p>Siembra sugerida hoy</p>
+                <p>Siembra sugerida pasada</p>
               </TooltipContent>
             </Tooltip>
           )}
