@@ -39,8 +39,8 @@ describe('AuditLogRepository', () => {
     jest.clearAllMocks();
   });
 
-  describe('findAll', () => {
-    it('should return all audit logs with user include', async () => {
+  describe('findAllPaginated', () => {
+    it('should return paginated audit logs with user include', async () => {
       const logs = [
         {
           id: '1',
@@ -50,7 +50,7 @@ describe('AuditLogRepository', () => {
       ];
       prisma.auditLog.findMany.mockResolvedValue(logs);
 
-      const result = await repository.findAll();
+      const result = await repository.findAllPaginated(0, 50);
 
       expect(result).toEqual(logs);
       expect(prisma.auditLog.findMany).toHaveBeenCalledWith({
@@ -65,6 +65,8 @@ describe('AuditLogRepository', () => {
             },
           },
         },
+        skip: 0,
+        take: 50,
         orderBy: { timestamp: 'desc' },
       });
     });
@@ -125,6 +127,8 @@ describe('AuditLogRepository', () => {
             },
           },
         },
+        skip: 0,
+        take: 50,
       });
     });
   });

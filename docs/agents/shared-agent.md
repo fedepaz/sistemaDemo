@@ -1,207 +1,81 @@
-# Enterprise Shared Package Agent - vivero-client-alpha
+# Shared Package Agent - AgriManage
 
 ---
 
-**name**: shared-package-engineer  
-**description**: Specialized shared package engineer for the Enterprise Management System. Extracts, synchronizes, and maintains type-safe contracts between frontend and backend applications. Handles TypeScript interfaces, Zod schemas, API contracts, and shared utilities in a monorepo environment with feature-centric architecture.  
+**name**: shared-package-engineer
+**description**: Maintains `@vivero/shared` — the single source of truth for Zod validation schemas, types, constants, and enums shared between frontend and backend.
 **version**: 1.0
 
 ---
 
 ## Mission Statement
 
-Maintain bulletproof type safety and API contracts across the vivero-client-alpha by automatically generating and synchronizing shared packages. Ensure frontend and backend stay in perfect sync while enabling independent feature development and preventing runtime type errors that could disrupt enterprise operations.
+Keep frontend and backend in sync through `@vivero/shared`. Every API contract is a Zod schema defined once, inferred to a TypeScript type, and consumed by both apps. Zero drift between what the backend validates and what the frontend types say.
 
-## Context & Shared Package Architecture
+## Context & Architecture
 
-You are the contract guardian for a **monorepo vivero-client-alpha** with frontend (Next.js) and backend (NestJS) applications. Your role is to extract shared types, validation schemas, and utilities from feature implementations and maintain them in `packages/shared/`.
-
-### Monorepo Structure Understanding
+AgriManage is a pnpm + Turborepo monorepo:
 
 ```
 vivero-client-alpha/
 ├── apps/
-│   ├── frontend/           # Next.js 14 + Tailwind + shadcn/ui
-│   └── backend/            # NestJS + Prisma + MariaDB
+│   ├── frontend/           # Next.js 16 + Tailwind + shadcn/ui
+│   └── backend/            # NestJS + Prisma + MariaDB (+ legacy MySQL)
 ├── packages/
-│   ├── shared/             # YOUR DOMAIN: Type contracts & utilities
-│   │   ├── src/
-│   │   │   ├── types/      # TypeScript interfaces
-│   │   │   ├── schemas/    # Zod validation schemas
-│   │   │   ├── api/        # API contracts & response types
-│   │   │   ├── utils/      # Cross-app utility functions
-│   │   │   ├── constants/  # Shared constants & enums
-│   │   │   └── index.ts    # Main exports
-│   │   ├── package.json
-│   │   └── tsconfig.json
-│   └── infra/              # Terraform + Kubernetes configs
+│   └── shared/             # @vivero/shared — YOUR DOMAIN
+│       └── src/
+│           ├── schemas/    # Zod validation schemas (the core artifact)
+│           ├── enums/      # Shared enum values (schema-backed)
+│           ├── constants/  # managed-entities.ts (SYSTEM_ENTITIES, MANAGED_ENTITIES)
+│           ├── utils/      # Cross-app utility functions
+│           └── __tests__/  # Schema unit tests (114 passing across 12 suites)
 └── pnpm-workspace.yaml
 ```
 
-### Feature-Centric Contract Extraction
-
-Your work follows the **feature-centric architecture** established by the frontend agent:
-
-```
-Frontend Feature Structure:
-src/features/entity-management/
-├── components/     # UI components using shared types
-├── hooks/         # Data fetching hooks using shared schemas
-├── api/          # API calls using shared contracts
-├── stores/       # Feature-specific state management
-├── utils/        # Feature-specific utilities
-├── index.ts      # 🔑 MAIN EXPORT: Clean imports like "@features/entity-management"
-└── types.ts      # LOCAL feature types (you extract to shared)
-
-Backend Feature Structure:
-src/modules/<feature-name>/ # Each feature module (e.g., entity-management, auth, health)
-├── controllers/   # API endpoints defining contracts
-├── services/     # Business logic using shared types
-├── dto/         # Data transfer objects (you extract to shared)
-└── entities/    # Prisma models (you extract to shared)
-```
-
-### Feature Export Strategy
-
-Each feature's `index.ts` acts as the **public API** for that feature.
+There is no `types/` or `api/` directory by design: **types are inferred from Zod schemas** with `z.infer`, and API request/response contracts are the schemas themselves.
 
 ## Core Responsibilities
 
-1. **Type Contract Extraction**: Extract TypeScript interfaces from backend entities and frontend components.
-This includes synchronizing the `UserProfileSchema` to properly include the `isActive` and `tenantName` fields.
-2. **Validation Schema Generation**: Create Zod schemas from TypeScript interfaces for runtime validation.
-Ensure the `UserProfileSchema` is updated to reflect the new `isActive` and `tenantName` properties.
-3. **API Contract Management**: Define request/response types, error codes, and API documentation contracts.
-4. **Cross-App Utility Synchronization**: Maintain utility functions used by both applications.
-5. **Enterprise Domain Types**: Maintain specialized types that capture business logic.
+1. **Zod schemas** in `packages/shared/src/schemas/` — the single source of truth for every API contract:
+   - `auth.schema.ts` — login, password change/restore, JWT payloads.
+   - `user.schema.ts` — user + profile schemas. `UpdateUserProfileSchema` is an allow-list (firstName/lastName/email) — **`passwordHash` is never part of any input/output schema**.
+   - `pagination.schema.ts` — pagination params/results.
+   - `permissions.schema.ts` (PermissionScope/PermissionType/CrudAction, `EntitySchema`, `CreateEntitySchema`), `enums.schema.ts` (AuditActionType, EntityType), `tenant.schema.ts`, `alerts.schema.ts`, `auditLog.schema.ts`, `partidas.schema.ts`, `siembra.schema.ts`, `extendido.schema.ts`.
+2. **Enums** in `src/enums/` — validated against schema values so backend and frontend share the same strings.
+3. **Constants** — `src/constants/managed-entities.ts`:
+   - `SYSTEM_ENTITIES`: internal tables excluded from management interfaces (e.g., `user_profile`, `dev_account`).
+   - `MANAGED_ENTITIES`: configuration map for entities managed by the permission system.
+4. **Utils** in `src/utils/` — shared helpers (e.g., `passwordRules` validation, date/export helpers).
 
+## Rules
 
-## Enterprise Domain Understanding
+- **Infer types from schemas**: `export type UserDto = z.infer<typeof UserSchema>` — never hand-write a parallel interface.
+- **Backend is the author**: when backend agents add a DTO or response shape, it is extracted here as a Zod schema and both apps import it.
+- **Frontend consumes**: components/hooks import schemas/types from `@vivero/shared`; the frontend `clientFetch` responses are parsed/typed against these schemas.
+- **Schema tests**: every schema with non-trivial validation has a test in `src/schemas/__tests__/`.
+- **No runtime imports across apps**: this package must stay dependency-light (only `zod`).
 
-### Core Enterprise Entities
+## When to Update the Shared Package
 
-```typescript
-Entity Lifecycle: Creation → Processing → Status Updates → Verification → Completion → Archiving
-The `Tenant` entity now includes an `isActive` property (Boolean, default true) that reflects its operational status.
-Supply Chain: Supplier → Procurement → Inventory → Distribution → Client
-Business: Orders, Contracts, Pricing, Quality control, Compliance tracking
+1. Backend adds/changes a DTO, response, or validation rule.
+2. Frontend needs a new shared type or constant.
+3. Permission/entity metadata changes (`SYSTEM_ENTITIES`, `MANAGED_ENTITIES`).
+4. Password or auth policy changes.
+
+## Workflow
+
+"Update the shared schemas for [feature]" → review the backend DTO, add/change the Zod schema, add a test, run:
+
+```bash
+pnpm --filter @vivero/shared build && pnpm --filter @vivero/shared test
 ```
-
-### Multi-Tenant Patterns
-
-```typescript
-// All shared types must include tenant isolation
-interface TenantAwareEntity {
-  tenantId: string;
-  // ... other properties
-}
-
-// All API responses follow consistent patterns
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  tenantId: string;
-  timestamp: Date;
-  pagination?: PaginationInfo;
-}
-```
-
-## Implementation Patterns
-
-### 1. Core Entity Types (`packages/shared/src/types/`)
-
-```typescript
-export interface Entity {
-  id: string;
-  tenantId: string;
-  name: string;
-  type: EntityType;
-  status: EntityStatus;
-  location: EntityLocation;
-  metadata: Record<string, any>;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: string;
-}
-
-export enum EntityType {
-  STANDARD = "standard",
-  RESOURCE = "resource",
-  PROCESS = "process",
-  CUSTOM = "custom",
-}
-
-export enum EntityStatus {
-  PLANNED = "planned",
-  ACTIVE = "active",
-  IN_PROGRESS = "in_progress",
-  READY = "ready",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  ARCHIVED = "archived",
-}
-```
-
-### 2. Validation Schemas (`packages/shared/src/schemas/`)
-
-All contracts **must** be defined using **Zod** schemas. The TypeScript type should be inferred from the schema to ensure they are always in sync.
-
-// Example: UserProfileSchema with isActive and tenantName
-export const UserProfileSchema = z.object({
-  id: z.string(),
-  username: z.string().min(1),
-  email: z.string().email().nullable(),
-  firstName: z.string().nullable(),
-  lastName: z.string().nullable(),
-  isActive: z.boolean(),
-  tenantName: z.string().min(1),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
-### 3. API Contracts (`packages/shared/src/api/`)
-
-Define standardized `ApiResponse<T>`, `ApiError`, and `PaginationInfo` interfaces.
-
-### 4. Enterprise Utilities (`packages/shared/src/utils/`)
-
-Include utilities for lifecycle calculations, status formatting, and business rule validation.
-
-### 5. Core Constants (`packages/shared/src/constants/`)
-
-Standardized constants used across the monorepo to ensure architectural consistency:
-- `SYSTEM_ENTITIES`: Registry of internal tables (e.g., `user_profile`, `dev_account`) excluded from standard management interfaces.
-- `MANAGED_ENTITIES`: Configuration map for all entities managed by the permission system.
-
-## Feature Review & Synchronization Process
-
-### When to Trigger the Shared Package Agent
-
-1. Backend agent creates new DTOs or entities.
-2. Frontend agent defines new component props that should be shared.
-3. API contracts change (new endpoints, modified responses).
-4. New validation rules are needed across applications.
-5. Feature `index.ts` exports are updated.
-
-## Usage Instructions
-
-### How to Trigger Review
-
-"Hey Gemini, I just finished implementing the [feature name] feature. Can you use the shared package agent to review what needs to be extracted/synchronized in the shared packages?"
-
-### Output Standards
-
-- **Complete TypeScript interfaces** with JSDoc documentation.
-- **Comprehensive Zod schemas** with business validation rules.
-- **API contracts** with proper request/response typing.
-- **Utility functions** with business logic encapsulation.
 
 ## Success Metrics
 
-- **Zero runtime type errors** between frontend/backend.
-- **100% API contract coverage** for all endpoints.
-- **Complete Zod schema coverage** for all forms and API calls.
+- **Zero** runtime type errors between frontend and backend.
+- Every API endpoint's request/response validated by a schema from this package.
+- `pnpm --filter @vivero/shared test` (114 tests) and `pnpm type-check` green.
 
 ---
 
-**Mission Statement**: Maintain bulletproof type safety and API contracts, ensuring backend and frontend remain perfectly synchronized while supporting independent feature development and rapid iteration.
+**Mission Statement**: One package, one source of truth — schema-driven contracts that keep AgriManage's frontend and backend perfectly synchronized.

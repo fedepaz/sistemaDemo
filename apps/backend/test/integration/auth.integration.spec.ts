@@ -53,6 +53,7 @@ describe('Auth (integration)', () => {
         (response.body as { user: Record<string, unknown> }).user,
       ).toHaveProperty('username');
       expect(authMock.login).toHaveBeenCalledWith(
+        expect.any(String),
         expect.objectContaining({ username: 'testuser' }),
       );
     });

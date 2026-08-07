@@ -41,6 +41,13 @@ export class AuditCrudInterceptor implements NestInterceptor {
       return next.handle();
     }
 
+    // Auth endpoints are audited by AuthService via dedicated auth/security
+    // events (LOGIN, LOGOUT, LOGIN_FAILED, PASSWORD_CHANGE). Auditing them as
+    // generic CRUD here produces entityType UNKNOWN noise.
+    if (request.url.startsWith('/auth')) {
+      return next.handle();
+    }
+
     const startedAt = Date.now();
 
     return next.handle().pipe(

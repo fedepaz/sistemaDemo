@@ -21,7 +21,10 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
     super(prisma, prisma.auditLog);
   }
 
-  async findAll(): Promise<AuditLog[]> {
+  async findAllPaginated(
+    skip: number = 0,
+    take: number = 50,
+  ): Promise<AuditLog[]> {
     const include = {
       user: {
         select: {
@@ -39,6 +42,8 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
         isActive: true,
       },
       include,
+      skip,
+      take,
       orderBy: {
         timestamp: 'desc',
       },
@@ -76,7 +81,11 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
     });
   }
 
-  findAllByUserId(userId: string): Promise<AuditLog[] | null> {
+  findAllByUserId(
+    userId: string,
+    skip: number = 0,
+    take: number = 50,
+  ): Promise<AuditLog[]> {
     return this.prisma.auditLog.findMany({
       where: {
         userId,
@@ -93,12 +102,14 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
           },
         },
       },
+      skip,
+      take,
     });
   }
 
   async createAuditLog(data: {
-    tenantId: string;
-    userId: string;
+    tenantId: string | null;
+    userId: string | null;
     action: AuditActionType;
     entityType: EntityType;
     entityId: string;

@@ -11,6 +11,7 @@ import { JwtStrategy } from './strategies/jwt-auth.strategy';
 import { TenantsRepository } from '../tenants/repositories/tenants.repository';
 import { AuthController } from './auth.controller';
 import { AuditLogModule } from '../auditLog/auditLog.module';
+import { LoginRateLimiter } from './services/login-rate-limiter';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { AuditLogModule } from '../auditLog/auditLog.module';
     UserAuthRepository,
     JwtStrategy,
     TenantsRepository,
+    LoginRateLimiter,
   ],
   controllers: [AuthController],
 

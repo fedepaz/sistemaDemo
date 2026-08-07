@@ -79,7 +79,11 @@ describe('AuditLogService', () => {
       const result = await service.getAllByUserId('user-1');
 
       expect(result).toEqual(logs);
-      expect(auditService.findAllByUserId).toHaveBeenCalledWith('user-1');
+      expect(auditService.findAllByUserId).toHaveBeenCalledWith(
+        'user-1',
+        0,
+        50,
+      );
     });
   });
 });

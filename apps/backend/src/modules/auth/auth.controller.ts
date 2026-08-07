@@ -8,6 +8,7 @@ import {
   HttpStatus,
   Logger,
   Patch,
+  Ip,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -58,9 +59,10 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(
+    @Ip() ip: string,
     @Body(new ZodValidationPipe(LoginAuthSchema)) dto: LoginAuthDto,
   ): Promise<AuthResponseDto> {
-    return this.authService.login(dto);
+    return this.authService.login(ip, dto);
   }
 
   /**

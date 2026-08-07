@@ -7,8 +7,9 @@ import { AuditService } from './audit.service';
 export class AuditLogService {
   constructor(private auditService: AuditService) {}
 
-  async getAllAuditLogs() {
-    return this.auditService.findAll();
+  async getAllAuditLogs(page: number = 1, limit: number = 50) {
+    const skip = (page - 1) * limit;
+    return this.auditService.findAll(skip, limit);
   }
 
   async getAllByTenantName(
@@ -20,7 +21,8 @@ export class AuditLogService {
     return this.auditService.findAllByTenantName(tenantName, skip, limit);
   }
 
-  async getAllByUserId(userId: string) {
-    return this.auditService.findAllByUserId(userId);
+  async getAllByUserId(userId: string, page: number = 1, limit: number = 50) {
+    const skip = (page - 1) * limit;
+    return this.auditService.findAllByUserId(userId, skip, limit);
   }
 }

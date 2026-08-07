@@ -40,10 +40,14 @@ export type RegisterAuthDto = z.infer<typeof RegisterAuthSchema>;
 
 export const LoginAuthSchema = z.object({
   username: z.string().min(1, { message: "Nombre de usuario es obligatorio" }),
+  // El login NO debe imponer la política de contraseña (6-20 + complejidad):
+  // una validación más estricta bloquearía contraseñas válidas y filtraría
+  // las reglas de la política a través de mensajes de error. La política se
+  // aplica al momento de crear/cambiar la contraseña (passwordRules).
   password: z
     .string()
-    .min(4, { message: "Contraseña es obligatoria, mínimo 4 caracteres" })
-    .max(12, { message: "Contraseña es obligatoria, máximo 12 caracteres" }),
+    .min(1, { message: "Contraseña es obligatoria" })
+    .max(100, { message: "Contraseña demasiado larga" }),
 });
 
 export type LoginAuthDto = z.infer<typeof LoginAuthSchema>;

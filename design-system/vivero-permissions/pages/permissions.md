@@ -1,52 +1,48 @@
 # Permissions Page Overrides
 
-> **PROJECT:** Vivero Permissions
-> **Generated:** 2026-02-21 13:02:01
-> **Page Type:** Dashboard / Data View
+> **PROJECT:** vivero-client-alpha (AgriManage) — permissions module
+> **Page Type:** Admin data views (entities + user permissions)
 
-> ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`design-system/MASTER.md`).
-> Only deviations from the Master are documented here. For all other rules, refer to the Master.
+> ⚠️ **IMPORTANT:** This page follows `design-system/vivero-permissions/MASTER.md`
+> which in turn delegates to `design-system/vivero-client-alpha/MASTER.md` for all
+> global rules (tokens, typography, spacing, components).
 
 ---
 
 ## Page-Specific Rules
 
-### Layout Overrides
+### Layout
 
-- **Max Width:** 800px (narrow, focused)
-- **Layout:** Single column, centered
-- **Sections:** 1. Hero (Value Prop + Form), 2. Recent Issues/Archives, 3. Social Proof (Subscriber count), 4. About Author
+- **Entities view:** full-width `DataTable` (registered entities, PermissionType badges).
+- **User permission assignment:** `DataTable` with per-entity scope selection, edits via `SlideOverForm` or inline dialog.
 
-### Spacing Overrides
+### Spacing
 
-- **Content Density:** Low — focus on clarity
+- **Content Density:** High — permissions grids are information-dense.
 
-### Typography Overrides
+### Typography
 
-- No overrides — use Master typography
+- No overrides — use Master typography.
 
-### Color Overrides
+### Color
 
-- **Strategy:** Minimalist. Paper-like background. Text focus. Accent color for Subscribe.
+- No overrides — use Master OKLCH tokens.
+- Status/semantic colors only from the token set (no red/green hardcoding).
 
-### Component Overrides
+### Components
 
-- Avoid: Red/green only for error/success
-- Avoid: Use arbitrary large z-index values
-- Avoid: Let text span full viewport width
+- `DataTable`, `SlideOverForm`, `Badge` for PermissionType labels, skeletons.
+- Avoid: using arbitrary large `z-index` values; text spanning the full viewport width.
 
 ---
 
 ## Page-Specific Components
 
-- No unique components for this page
+- No unique components — reuse the shared data-table/slide-over infrastructure.
 
 ---
 
 ## Recommendations
 
-- Effects: KPI value animations (count-up), trend arrow direction animations, metric card hover lift, alert pulse effect
-- Accessibility: Use icons/text in addition to color
-- Layout: Define z-index scale system (10 20 30 50)
-- Layout: Limit max-width for text content (65-75ch)
-- CTA Placement: Hero inline form + Sticky header form
+- Accessibility: use icons/text in addition to color for scope/PermissionType.
+- `SYSTEM_ENTITIES` must stay filtered out of the management UI (enforced by `@vivero/shared` constant).

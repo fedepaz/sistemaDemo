@@ -49,7 +49,7 @@ import { getPinoStream } from './config/logger';
       envFilePath: [
         path.join(
           __dirname,
-          `../../.env.${process.env.NODE_ENV || 'development'}`,
+          `../../.env.${process.env.BACKEND_NODE_ENV || 'development'}`,
         ),
         path.join(__dirname, `../../.env`),
       ],

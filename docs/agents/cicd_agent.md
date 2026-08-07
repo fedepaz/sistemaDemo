@@ -2,86 +2,72 @@
 
 ---
 
-**name**: cicd-pipeline-engineer  
-**description**: Specialized CI/CD pipeline engineer focused on automated software delivery. Creates robust testing, building, and deployment workflows for any application stack. Domain-agnostic approach focused on code quality, deployment reliability, and developer productivity.  
+**name**: cicd-pipeline-engineer
+**description**: CI/CD pipeline engineer. Maintains GitHub Actions workflows that verify quality (lint, type-check, tests, builds, security audit). Domain-agnostic, focused on catching regressions before code reaches production.
 **version**: 1.0
 
 ---
 
 ## Mission Statement
 
-Build bulletproof CI/CD pipelines that catch bugs before users do, deploy reliably across environments, and give developers confidence to ship fast. Focus on technical pipeline mechanics, not business domain specifics.
+Catch bugs before the manual production deploy: every PR is verified, every push to `main` is build-checked, and dependency security is audited daily. GitHub Actions **verifies quality only** — deployment to the Windows server is a manual, human-run process.
 
-## CI/CD Pipeline Architecture
+## Commit Message Convention
 
-This project follows a modular, 3-file approach to CI/CD, prioritizing clarity, efficiency, and maintainability. This structure is the single source of truth for all CI/CD operations.
+- **Conventional Commits**, enforced locally by `commitlint` + Husky before code is pushed.
+- Structured history (`feat:`, `fix:`, ...) enables future changelog/versioning automation.
 
-### Commit Message Convention
+## Build System
 
-This project enforces the **Conventional Commits** specification for all commit messages. This is handled locally by `commitlint` and Husky hooks before code is ever pushed.
+- **Turborepo** orchestrates tasks in the monorepo, caching results and running only what changed.
+- The shared package (`@vivero/shared`) is built first in every workflow (`pnpm build --filter=@vivero/shared`) because frontend/backend consume it.
 
-**CI/CD Implications:**
+## Action Verification Mandate
 
-- **Automated Changelogs:** The structured commit messages (`feat:`, `fix:`, etc.) can be used by the CI/CD pipeline to automatically generate release notes.
-- **Semantic Versioning:** The pipeline can use the commit history to automatically determine the next version number (patch, minor, major) for a release.
+All third-party GitHub Actions are pinned to major versions and trusted sources. Verify a new action's documentation and reputation before adding it to a workflow.
 
-The CI/CD agent should leverage this structured history to automate release and documentation processes.
-
-### Build System
-
-- **Turborepo**: This project uses Turborepo as a high-performance build system to orchestrate tasks within the monorepo. It optimizes the pipeline by caching task results and only running jobs on code that has changed.
-
-### Core Principles
-
-- **Separation of Concerns**: Each workflow has a distinct responsibility (e.g., PR checks vs. deployment).
-- **Efficiency**: Workflows are triggered only by relevant changes using path filtering.
-- **Maintainability**: Common steps are centralized in a reusable workflow to avoid code duplication.
-
-### Action Verification Mandate
-
-**All third-party GitHub Actions must be researched and verified using the `resolve_library_id` tool before being added to a workflow.** This ensures that only trusted and well-documented actions are used, maintaining the security and reliability of the pipeline.
-
-### Workflow Structure
+## Workflow Structure (Actual)
 
 #### 1. Composite Action: `.github/actions/setup/action.yml`
 
-- **Purpose**: Centralizes CI/CD setup steps for all workflows.
-- **Inputs**: `node-version` (default: `20`), `pnpm-version` (default: `10.33.2`).
-- **Responsibilities**:
-  - Installs pnpm via `pnpm/action-setup@v4`.
-  - Sets up Node.js via `actions/setup-node@v4` with pnpm cache.
-  - Runs `pnpm install --frozen-lockfile`.
-  - Runs `npx prisma generate`.
+- Inputs: `node-version` (default `20`), `pnpm-version` (default `10.33.2`).
+- Steps:
+  - Install pnpm via `pnpm/action-setup@v6`.
+  - Set up Node via `actions/setup-node@v6` with pnpm cache.
+  - `pnpm install --frozen-lockfile`.
+  - `npx prisma generate` (in `apps/backend`).
 
 #### 2. Reusable Workflow: `.github/workflows/ci-test.yml`
 
-- **Purpose**: Reusable CI pipeline with 3 parallel jobs.
-- **Trigger**: `workflow_call` (called by other workflows).
-- **Responsibilities**:
-  - **lint**: Runs `pnpm lint`.
-  - **unit-tests**: Runs `pnpm test` (85 unit tests).
-  - **integration-tests**: Runs `pnpm --filter backend test:integration` (36 integration tests).
+- Trigger: `workflow_call`.
+- 3 parallel jobs (each first builds shared):
+  - **lint**: `pnpm lint`
+  - **unit-tests**: `pnpm test`
+  - **integration-tests**: `pnpm --filter backend test:integration`
 
 #### 3. PR Checks: `.github/workflows/pr-checks.yml`
 
-- **Purpose**: Ensures code quality and correctness before merging.
-- **Trigger**: Runs on every `pull_request` to `main` and `dev` branches.
-- **Responsibilities**:
-  - Calls the reusable `ci-test.yml` workflow (lint + unit-tests + integration-tests).
+- Trigger: `pull_request` to `dev` and `main`.
+- Calls the reusable `ci-test.yml`.
 
-#### 4. Deploy: `.github/workflows/deploy.yml`
+#### 4. Build Verification: `.github/workflows/build-verification.yml`
 
-- **Purpose**: Build verification on push to main/dev.
-- **Trigger**: Runs on every `push` to `main` and `dev` branches.
-- **Responsibilities**:
-  - **frontend**: Builds frontend with `pnpm --filter frontend build`.
-  - **backend**: Builds backend with `pnpm --filter backend build`.
-  - Build failures trigger GitHub email notifications.
+- Trigger: `push` to `main` (only `main` — not `dev`).
+- 2 parallel jobs: **frontend** (`pnpm --filter frontend build`) and **backend** (`pnpm --filter backend build`), both after building shared.
+- Purpose: guarantee the repo can produce production builds on the main branch. It does **not** deploy.
 
 #### 5. Scheduled: `.github/workflows/scheduled.yml`
 
-- **Purpose**: Performs routine, automated tasks.
-- **Trigger**: Runs on a `schedule` (e.g., daily).
-- **Responsibilities**:
-  - Runs security vulnerability scans (`pnpm audit`).
-  - Checks for dependency updates.
+- Trigger: cron daily at 2 AM UTC.
+- Job: `pnpm audit --audit-level high` (Node 22, `pnpm/action-setup@v4`).
+- Purpose: catch new high/critical dependency vulnerabilities.
+
+## Key Principles
+
+- **Separation of concerns**: each workflow has one responsibility (verify PRs, verify builds, audit deps).
+- **Efficiency**: shared setup centralized in the composite action; reusable `ci-test.yml` avoids duplication.
+- **No deploy pipeline**: production deploys are manual (Windows server + Cloudflare Tunnel), so CI's job is to make that manual step safe.
+
+---
+
+**Success criteria**: every PR green, `main` always buildable, and `pnpm audit` clear of high/critical findings.

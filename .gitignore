@@ -94,3 +94,9 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # =========================
 .agents/
 .skills/
+
+# =========================
+# Backups & Session Dumps
+# =========================
+**/backups/
+raw_session.txt

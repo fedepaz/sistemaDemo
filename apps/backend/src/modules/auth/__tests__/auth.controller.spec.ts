@@ -53,7 +53,7 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    it('should call authService.login with dto', async () => {
+    it('should call authService.login with ip and dto', async () => {
       const dto = { username: 'testuser', password: 'Password123' };
       const expected = {
         user: { id: 'user-1' },
@@ -62,9 +62,9 @@ describe('AuthController', () => {
       };
       authService.login.mockResolvedValue(expected);
 
-      const result = await controller.login(dto);
+      const result = await controller.login('127.0.0.1', dto);
 
-      expect(authService.login).toHaveBeenCalledWith(dto);
+      expect(authService.login).toHaveBeenCalledWith('127.0.0.1', dto);
       expect(result).toEqual(expected);
     });
   });

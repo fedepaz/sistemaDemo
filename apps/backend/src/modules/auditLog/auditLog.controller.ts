@@ -11,8 +11,13 @@ export class AuditLogController {
 
   @Get()
   @RequirePermission({ tableName: 'audit_logs', action: 'read', scope: 'ALL' })
-  async getAllAuditLogs() {
-    return this.auditLogService.getAllAuditLogs();
+  async getAllAuditLogs(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 50,
+  ) {
+    const pageNum = Math.max(1, parseInt(page as any) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit as any) || 50));
+    return this.auditLogService.getAllAuditLogs(pageNum, limitNum);
   }
 
   @Get(':tenantName')
@@ -33,7 +38,13 @@ export class AuditLogController {
 
   @Get('user/:userId')
   @RequirePermission({ tableName: 'audit_logs', action: 'read', scope: 'ALL' })
-  async getAllByUserId(@Param('userId') userId: string) {
-    return this.auditLogService.getAllByUserId(userId);
+  async getAllByUserId(
+    @Param('userId') userId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 50,
+  ) {
+    const pageNum = Math.max(1, parseInt(page as any) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit as any) || 50));
+    return this.auditLogService.getAllByUserId(userId, pageNum, limitNum);
   }
 }

@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuditService } from '../../modules/auditLog/audit.service';
+import { isProductionEnvironment } from '../utils/app-environment';
 
 // Create a type that includes socket information
 interface SocketRequest extends Request {
@@ -63,10 +64,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = 'Database Unavailable';
       } else {
         status = HttpStatus.INTERNAL_SERVER_ERROR;
-        message =
-          process.env.NODE_ENV === 'production'
-            ? 'Internal Server Error'
-            : exception.message;
+        message = isProductionEnvironment()
+          ? 'Internal Server Error'
+          : exception.message;
         stack = exception.stack;
       }
     } else {
@@ -95,9 +95,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         timestamp: new Date().toISOString(),
         path: request.url,
         requestId: (request as any).requestId,
-        ...(process.env.NODE_ENV !== 'production' && stack
-          ? { debug: stack }
-          : {}),
+        ...(!isProductionEnvironment() && stack ? { debug: stack } : {}),
       },
     };
 
@@ -182,24 +180,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const exceptionType =
       exception instanceof Error ? exception.constructor.name : 'Unknown';
 
-    // 401 on /auth/login → LOGIN_FAILED
-    if (status === 401 && path === '/auth/login') {
-      await this.auditService.logEvent({
-        tenantId,
-        userId,
-        action: 'LOGIN_FAILED',
-        entityType: 'USER',
-        entityId: userId,
-        ipAddress: ip,
-        userAgent,
-        timestamp: new Date(),
-        changes: {
-          reason: message,
-        },
-      });
-      return;
-    }
-
     // 403 or 500 → ACCESS event
     await this.auditService.logEvent({
       tenantId,
@@ -221,12 +201,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     });
   }
 
-  private shouldAudit(status: number, request: SocketRequest): boolean {
-    const path = request.url?.split('?')[0] ?? '';
-
-    // 401 solo vale si fue un intento de login explícito
+  private shouldAudit(status: number, _request: SocketRequest): boolean {
+    // 401 is owned by AuthService (it emits LOGIN_FAILED with the real
+    // reason). Auditing it again here would duplicate the record.
     if (status === 401) {
-      return path === '/auth/login';
+      return false;
     }
 
     // 403 y 500 siempre auditar

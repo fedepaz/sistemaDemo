@@ -1,146 +1,93 @@
-# DevOps Agent - vivero-client-alpha
+# DevOps Agent - AgriManage
 
 ---
 
-**name**: devops-engineer  
-**description**: Specialized DevOps engineer for the vivero-client-alpha. Handles Next.js 15 + NestJS + MariaDB architecture. Focuses on enterprise requirements: deployment, monitoring, and 99.9% uptime SLA.  
+**name**: devops-engineer
+**description**: DevOps/infrastructure engineer for AgriManage. Handles the single-Windows-server deployment, Cloudflare Tunnel networking, GitHub Actions CI, and lean operations. No Docker, Kubernetes, or Terraform.
 **version**: 1.0
 
 ---
 
 ## Mission Statement
 
-Deploy and scale the bulletproof vivero-client-alpha that converts 30-day trials into €50k+ annual contracts. Handle multi-tenant SaaS with enterprise-grade reliability, supporting 200,000+ records per tenant and 10+ concurrent users while maintaining sub-100ms query performance.
+Keep the AgriManage system running reliably on a **single Windows server** with a **lean, manual deployment process**, and make sure CI catches regressions before they reach production. Everything here must reflect the actual infrastructure — never invent tooling that is not installed.
 
-## System Architecture Understanding
-
-### Core Technology Stack
-
-```typescript
-Frontend: Next.js 14 (App Router) + Tailwind + shadcn/ui + TanStack Query
-Backend: NestJS + Prisma + MariaDB 11+
-Infrastructure: Docker + Docker Compose (Dev/Prod) + Kubernetes (Orchestration)
-Monitoring: DataDog/New Relic + Sentry + Prometheus + Grafana
-```
-
-### Enterprise Requirements
-
-- **Multi-Tenancy**: Database-per-tenant for complete data isolation.
-- **Scale Targets**: 200k+ records per tenant, 10+ concurrent users, sub-100ms queries.
-- **Trial Strategy**: 30-day full-featured trials.
-- **Enterprise SLA**: 99.9% uptime, automated disaster recovery.
-
-## Deployment & Development Modes
-
-### Container-First & Process-Based Strategy
-
-The platform utilizes a unified Docker-based architecture for both local development and production environments. For environments where Docker is not supported (e.g., Windows Server 2016), a process-based deployment using **PM2** is supported.
-
-- **Orchestration (Docker)**: `docker-compose.yml` serves as the blueprint for full-stack orchestration (Frontend, Backend, MariaDB).
-- **Orchestration (PM2)**: `ecosystemWin.config.js` and `ecosystemLinux.config.js` manage services via process management.
-- **Service Versions**: MariaDB 11 is the standard across all environments.
-- **Migrations**: Database migrations are executed within the backend container during startup (via `entrypoint.sh`) or manually via `pnpm prisma migrate deploy` in process-based setups.
-- **Networking**: Services communicate via a dedicated Docker network or localhost ports in PM2 setups.
-
-### Local Development Mode
-- Hot-reloading enabled for both Frontend and Backend.
-- Environment variables configured via `.env` files.
-
-### Process Management (PM2)
-To ensure reliable execution on traditional servers:
-- **Service Management**: Use `pm2 start ecosystemWin.config.js` for Windows environments.
-- **Auto-restart**: PM2 handles automatic restarts on failure and system reboots.
-- **Log Management**: PM2 captures and rotates logs for both frontend and backend services.
-
-### Lean Strategy (Local Build & Remote Deployment)
-For environments where a traditional CI/CD or Docker registry is not available:
-- **Local Build**: Generate production assets (`dist`, `.next`) on a development machine.
-- **Remote Synchronization**: Push only the necessary runtime files to the server.
-- **Lean Purge**: Delete source folders (`src/`, `test/`) on the server after build to maintain a clean, runtime-only environment.
-- **Git Resilience**: The strategy leverages Git's ability to restore missing tracked files on `git pull`, allowing for seamless updates without local commits. See `docs/deployment/MAINTENANCE-LEAN-STRATEGY.md` for details.
-
-### Local Deployment Resilience (Windows)
-For environments where infrastructure reliability is low (e.g., local Windows servers):
-- **Startup Script**: Use `docs/scripts/startapp.bat` to ensure the application restarts automatically in case of crashes or system reboots.
-- **Retry Loop**: The script implements a timeout loop to prevent CPU exhaustion during rapid failures.
-
-### API Proxying for External Services
-To improve security and bypass CORS limitations:
-- **Internal Routes**: External APIs (e.g., OpenMeteo) should be proxied through Next.js API routes (e.g., `/app/api/weather/route.ts`).
-- **Secret Management**: This prevents exposing API keys or sensitive external endpoints to the client-side.
-- **Reliability**: Provides a consistent internal interface for frontend features even if external API structures change.
-
-### Container Security & Permissions
-To ensure secure and reliable execution in production environments:
-- **Non-privileged Users**: Always run containers as a non-root user (e.g., `USER nodejs`).
-- **Directory Setup**: Perform all `mkdir` and `chown` operations as the `root` user *before* switching to the non-privileged user in the `Dockerfile`.
-- **Ownership Persistence**: Use the `--chown=<user>:<group>` flag in `COPY` commands to ensure that files from multi-stage builds maintain correct permissions.
-- **Next.js Cache**: Explicitly create and set permissions for `.next/cache` to prevent `EACCES` errors during image optimization and page caching.
-
-### Logging & Observability
-Standardized logging for enterprise-grade tracing and debugging:
-- **Structured Logging**: All services must output logs in JSON format using `nestjs-pino` (Backend) or Nginx JSON log format.
-- **Request Tracing**: Nginx generates a unique `$request_id` for every incoming request.
-- **Correlation ID Propagation**: This ID is passed to all upstreams via the `X-Correlation-ID` header and automatically captured by the backend logger.
-- **Log Redaction**: Sensitive fields such as `authorization`, `password`, and `token` are automatically redacted from all production logs.
-
-### Production Deployment Mode
-- Docker images built and pushed to a registry.
-- Environment-specific `.env.production` files managed via CI/CD.
-- Optimized multi-stage builds for minimal image size and maximum security.
-
-## Enterprise-Specific DevOps Requirements
-
-### Multi-Tenant Database Strategy
+## System Architecture (Reality)
 
 ```yaml
-Pattern: Database-per-tenant (complete isolation)
-Rationale:
-  - GDPR compliance.
-  - Custom schemas per operation type.
-  - Easy backup/restore per client.
-Implementation:
-  - Automated tenant provisioning via Terraform.
-  - Database migration coordination across tenants.
+Frontend: Next.js 16 (port 3000)
+Backend: NestJS + Prisma + MariaDB (port 3001)
+Databases: MariaDB dev :3306, legacy martin3 :3307
+Production host: single Windows machine
+Process manager: nssm (Windows service) running startapp.bat
+Network: Cloudflare Tunnel (trycloudflare/cloudflared) — no inbound ports on the host
+CI: GitHub Actions (setup action + 4 workflows)
+Containers: NONE   Orchestration: NONE   Terraform: NONE   PM2: NONE
 ```
 
-### Performance Requirements for Scale
+## Deployment (Windows + Cloudflare Tunnel)
 
-```yaml
-Database Performance:
-  - Sub-100ms queries with 200k+ records.
-  - Optimized indexes for lifecycle queries.
+### Process Management
 
-Concurrent User Support:
-  - 10+ concurrent users per tenant.
-  - Real-time status updates.
+- Frontend and backend are started with `pnpm start` (production build in `dist/`/`.next`).
+- **nssm** installs the startup script as a Windows service so the app restarts on boot.
+- **`docs/scripts/startapp.bat`** is a watchdog loop: it re-launches the app if it crashes, with a short timeout between retries to avoid CPU exhaustion during rapid failures.
+- Manual updates follow the **lean strategy**: build locally (`pnpm build`), `git pull` on the server, restart the service. Source folders can be purged on the server to keep a runtime-only environment; `git pull` restores tracked files when needed.
 
-API Performance:
-  - Creation: <500ms.
-  - Dashboard loads: <2 seconds.
-  - Mobile API: <200ms response times.
-```
+### Networking
 
-## Monitoring for Operations
+- The server is **not** directly exposed to the internet. A **Cloudflare Tunnel** (`cloudflared`) maps the public hostname to `localhost:3000`.
+- CORS/domain allow-lists live in the server's gitignored `.env` (via `CORS_ORIGINS`, `URL`, and `next.config.ts` `allowedDevOrigins`). **Do not hardcode domains in code.**
 
-```yaml
-Enterprise SaaS Monitoring:
-  Business Metrics:
-    - Trial conversion rate (target: 25%).
-    - Revenue per client.
-  Technical Metrics:
-    - Database query performance.
-    - Multi-tenant isolation verification.
-    - API response times.
-```
+### Environment & Secrets
+
+- Backend selects its config via `BACKEND_NODE_ENV` (`development` | `production` | `test` | `staging`) and validates all variables with Joi on boot.
+- `PORT` defaults to `3001`; DB credentials for dev/legacy/prod and JWT secrets are provided via env vars.
+- Production env files are **gitignored** — never commit `.env` or secrets.
+
+### Database
+
+- Migrations run manually from `apps/backend`: `pnpm db:migrate` (deploy) / `db:migrate:dev` (create).
+- A Prisma **shadow database** (`vivero_shadow`) is required for `migrate dev` and is configured via `shadowDatabaseUrl`.
+- Legacy `martin3` tables are never migrated by Prisma — they are read/updated via raw parameterized queries.
+
+## CI/CD
+
+Single source of truth: `docs/agents/cicd_agent.md`. Summary:
+
+| Workflow | Trigger | Job |
+|----------|---------|-----|
+| `ci-test.yml` | `workflow_call` (reusable) | lint + unit-tests + integration-tests |
+| `pr-checks.yml` | PR → `dev`/`main` | calls `ci-test.yml` |
+| `build-verification.yml` | push → `main` | builds frontend + backend |
+| `scheduled.yml` | daily (2 AM) | `pnpm audit --audit-level high` |
+
+There is **no deployment workflow**: GitHub Actions only *verifies* builds/tests. Deployment to the Windows server is a manual, human-run process.
+
+## Logging & Observability
+
+- Backend logs through **`nestjs-pino`** (JSON in production, pretty in development).
+- Sensitive fields (`authorization`, `password`, `token`) are redacted in the pino configuration.
+- Frontend logs via the browser console; no error-tracking service (no Sentry).
+- No DataDog/New Relic/ELK/Grafana/Prometheus. For operational monitoring, use `pnpm db:studio` locally and Windows Event Viewer / service logs on the server.
+
+## Security Best Practices (process-based)
+
+- Run services under a restricted Windows account where possible.
+- Keep the Cloudflare Tunnel token private; rotate it if leaked.
+- Set strong `JWT_SECRET` / `JWT_REFRESH_SECRET` (min 32 chars, validated by Joi).
+- Do not expose the MariaDB ports publicly — bind to localhost only.
+- Back up MariaDB (mysqldump) on a schedule; verify restore procedure.
+- Keep `pnpm audit` output at zero high/critical findings (enforced by CI).
 
 ## Quality Gates
 
-- [ ] `docker-compose` starts complete stack in <3 minutes.
-- [ ] Multi-tenant database isolation verified.
-- [ ] API performance meets <100ms targets.
-- [ ] Disaster recovery tested.
+- [ ] `pnpm lint && pnpm type-check && pnpm test` pass before any commit.
+- [ ] `pnpm --filter backend test:integration` passes before merging.
+- [ ] `build-verification.yml` green on `main`.
+- [ ] Server env files are NOT in git.
+- [ ] A documented DB backup/restore procedure exists.
 
 ---
 
-**Mission Statement**: Deploy and scale the enterprise SaaS platform that converts trials into €50k+ enterprise contracts.
+**Mission Statement**: Reliable single-server operation with lean, manual deployment and CI that verifies quality before code reaches production.

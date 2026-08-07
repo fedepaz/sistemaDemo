@@ -60,6 +60,7 @@ describe('UsersRepository', () => {
           deletedAt: null,
           isActive: true,
         },
+        omit: { passwordHash: true },
       });
     });
 
@@ -86,6 +87,7 @@ describe('UsersRepository', () => {
           deletedAt: null,
           isActive: true,
         },
+        omit: { passwordHash: true },
       });
     });
 
@@ -111,6 +113,7 @@ describe('UsersRepository', () => {
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { id: 'user-1' },
         data: { firstName: 'Updated', updatedAt: expect.any(Date) }, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        omit: { passwordHash: true },
       });
     });
   });
@@ -130,6 +133,7 @@ describe('UsersRepository', () => {
           deletedByUserId: 'admin-1',
           isActive: false,
         },
+        omit: { passwordHash: true },
       });
     });
   });

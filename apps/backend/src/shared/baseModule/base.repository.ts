@@ -24,7 +24,7 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
   ) {}
 
   private devAccounts: string[] | null = null;
-  private async getDevAccounts(): Promise<string[]> {
+  protected async getDevAccounts(): Promise<string[]> {
     if (this.devAccounts) return this.devAccounts;
     const records = await this.prisma.devAccount.findMany({
       select: {

@@ -354,14 +354,10 @@ export class PermissionsService {
       }
     }
 
-    // 6. Execution: Clean and Update
-    await this.permissionsRepo.deleteAllForUser(targetUserId);
-
-    // Batch upsert the new finalized list
-    await Promise.all(
-      finalizedToUpsert.map((p) =>
-        this.permissionsRepo.upsert(targetUserId, p.entityId, p),
-      ),
+    // 6. Execution: atomic clean-and-replace inside a single transaction
+    await this.permissionsRepo.replaceAllForUser(
+      targetUserId,
+      finalizedToUpsert,
     );
   }
 }

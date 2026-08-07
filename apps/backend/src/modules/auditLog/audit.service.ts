@@ -47,9 +47,12 @@ export class AuditService {
 
       const changes = this.buildChanges(event);
 
+      // Coerce placeholder identities to null. AuditLog.tenantId/userId are
+      // nullable: anonymous events (e.g. LOGIN_FAILED for an unknown username)
+      // must not try to write fake values that violate the foreign keys.
       await this.auditLogRepository.createAuditLog({
-        tenantId: event.tenantId,
-        userId: event.userId,
+        tenantId: this.nullIfPlaceholder(event.tenantId),
+        userId: this.nullIfPlaceholder(event.userId),
         action,
         entityType,
         entityId: event.entityId,
@@ -67,8 +70,15 @@ export class AuditService {
     }
   }
 
+  private nullIfPlaceholder(value: string): string | null {
+    const placeholders = new Set(['unknown', 'anonymous', '']);
+    return placeholders.has(value) ? null : value;
+  }
+
   private resolveEntityType(event: AuditEvent): EntityType {
-    const typeMap: Record<string, EntityType> = {
+    const key = event.entityType.toLowerCase();
+
+    const domainMap: Record<string, EntityType> = {
       user: EntityType.USER,
       tenant: EntityType.TENANT,
       role: EntityType.ROLE,
@@ -76,9 +86,14 @@ export class AuditService {
       message: EntityType.MESSAGE,
       preference: EntityType.USER_PREFERENCE,
     };
+    if (domainMap[key]) return domainMap[key];
 
-    const key = event.entityType.toLowerCase();
-    return typeMap[key] ?? EntityType.UNKNOWN;
+    // Also accept raw EntityType enum values (e.g. "AUDIT_LOG", "USER_PREFERENCE")
+    // so types resolved in the interceptor are not lost on their way here.
+    const enumMatch = Object.values(EntityType).find(
+      (value) => value.toLowerCase() === key,
+    );
+    return enumMatch ?? EntityType.UNKNOWN;
   }
 
   private buildChanges(event: AuditEvent): Record<string, unknown> {
@@ -144,8 +159,8 @@ export class AuditService {
     };
   }
 
-  async findAll() {
-    return this.auditLogRepository.findAll();
+  async findAll(skip: number = 0, take: number = 50) {
+    return this.auditLogRepository.findAllPaginated(skip, take);
   }
 
   async findAllByTenantName(
@@ -156,7 +171,7 @@ export class AuditService {
     return this.auditLogRepository.findAllByTenantName(tenantName, skip, take);
   }
 
-  async findAllByUserId(userId: string) {
-    return this.auditLogRepository.findAllByUserId(userId);
+  async findAllByUserId(userId: string, skip: number = 0, take: number = 50) {
+    return this.auditLogRepository.findAllByUserId(userId, skip, take);
   }
 }

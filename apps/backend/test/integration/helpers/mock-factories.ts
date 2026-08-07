@@ -13,6 +13,7 @@ export function createAuthMock() {
     refreshTokens: jest.fn(),
     changePassword: jest.fn(),
     restorePassword: jest.fn(),
+    logout: jest.fn(),
     validateUser: jest.fn(),
   };
 }

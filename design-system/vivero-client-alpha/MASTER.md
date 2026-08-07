@@ -1,14 +1,11 @@
-# Design System Master File
+# Design System - AgriManage (vivero-client-alpha)
 
-> **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
+> **LOGIC:** When building a specific page, first check `design-system/vivero-client-alpha/pages/[page-name].md`.
 > If that file exists, its rules **override** this Master file.
 > If not, strictly follow the rules below.
 
----
-
-**Project:** vivero-client-alpha
-**Generated:** 2026-05-12 21:52:54
-**Category:** Analytics Dashboard
+**Project:** vivero-client-alpha (AgriManage)
+**Source of truth:** `apps/frontend/src/app/globals.css` — **this file describes the tokens actually used.**
 
 ---
 
@@ -16,48 +13,43 @@
 
 ### Color Palette
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#1E40AF` | `--color-primary` |
-| Secondary | `#3B82F6` | `--color-secondary` |
-| CTA/Accent | `#F59E0B` | `--color-cta` |
-| Background | `#F8FAFC` | `--color-background` |
-| Text | `#1E3A8A` | `--color-text` |
+The theme uses **OKLCH CSS variables** defined in `apps/frontend/src/app/globals.css` (Tailwind v4 `@theme inline`). Always use the tokens — never hardcoded hex values.
 
-**Color Notes:** Blue data + amber highlights
+| Role | Token | Notes |
+|------|-------|-------|
+| Background | `--background` | near-white (light) / dark (`.dark`) |
+| Foreground | `--foreground` | main text |
+| Primary | `--primary` | violet family (OKLCH ~277 hue) |
+| Secondary | `--secondary` | neutral slate |
+| Accent | `--accent` | subtle violet |
+| Muted | `--muted` / `--muted-foreground` | secondary text/surfaces |
+| Destructive | `--destructive` | red for errors/destructive actions |
+| Chart 1–5 | `--chart-1` … `--chart-5` | data visualization (violet scale) |
+| Sidebar | `--sidebar-*` | sidebar-specific tokens |
+| Border/Input/Ring | `--border`, `--input`, `--ring` | controls & focus rings |
+| Success | `--color-success` | success feedback |
+
+Dark mode is implemented via a `.dark` class (Tailwind `@custom-variant dark`). Both palettes are defined — never assume only light mode.
 
 ### Typography
 
-- **Heading Font:** Fira Code
-- **Body Font:** Fira Sans
-- **Mood:** dashboard, data, analytics, code, technical, precise
-- **Google Fonts:** [Fira Code + Fira Sans](https://fonts.google.com/share?selection.family=Fira+Code:wght@400;500;600;700|Fira+Sans:wght@300;400;500;600;700)
+Fonts are loaded from Google Fonts in `globals.css`:
 
-**CSS Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
-```
+- **Sans (light mode):** Poppins (`--font-sans`)
+- **Sans (dark mode):** Inter (`--font-sans`)
+- **Serif:** Open Sans (light) / Merriweather (dark) (`--font-serif`)
+- **Mono:** JetBrains Mono (`--font-mono`)
 
-### Spacing Variables
+Use Tailwind's font utilities (`font-sans`, `font-mono`, etc.). Respect the established scale; do not add ad-hoc font sizes.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--space-xs` | `4px` / `0.25rem` | Tight gaps |
-| `--space-sm` | `8px` / `0.5rem` | Icon gaps, inline spacing |
-| `--space-md` | `16px` / `1rem` | Standard padding |
-| `--space-lg` | `24px` / `1.5rem` | Section padding |
-| `--space-xl` | `32px` / `2rem` | Large gaps |
-| `--space-2xl` | `48px` / `3rem` | Section margins |
-| `--space-3xl` | `64px` / `4rem` | Hero padding |
+### Radius & Shadows
 
-### Shadow Depths
+- Radius: `--radius: 0.5rem`.
+- Shadow scale is defined as `--shadow-2xs` … `--shadow-2xl`, plus `--shadow-premium` for premium cards. Use `shadow-sm/md/lg/xl` utilities.
 
-| Level | Value | Usage |
-|-------|-------|-------|
-| `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)` | Subtle lift |
-| `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)` | Cards, buttons |
-| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)` | Modals, dropdowns |
-| `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |
+### Spacing
+
+Use the Tailwind spacing scale (`p-2`…`p-4`, `gap-2`/`gap-3`). The UI is **compact by design** (Zero-Scroll standard, see below) — prefer tight gaps and padding.
 
 ---
 
@@ -65,139 +57,75 @@
 
 ### Buttons
 
-```css
-/* Primary Button */
-.btn-primary {
-  background: #F59E0B;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background: transparent;
-  color: #1E40AF;
-  border: 2px solid #1E40AF;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-```
+Use shadcn/ui `Button` (variants: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`, `success`). Do **not** write custom `.btn-*` CSS.
 
 ### Cards
 
-```css
-.card {
-  background: #F8FAFC;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+Use shadcn/ui `Card` (`CardHeader`, `CardTitle`, `CardContent`, …). Premium data tables use `bg-card/40` + `border-border/40` + `shadow-premium` + `rounded-none`.
 
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-```
+### Inputs & Forms
 
-### Inputs
+- shadcn/ui `Input`, `Textarea`, `Select`, `Checkbox`, `Label`, `Form` (React Hook Form + Zod).
+- Use the `SlideOverForm` pattern for all create/edit forms (slide-over panel, not a centered modal).
 
-```css
-.input {
-  padding: 12px 16px;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 200ms ease;
-}
+### Modals / Dialogs
 
-.input:focus {
-  border-color: #1E40AF;
-  outline: none;
-  box-shadow: 0 0 0 3px #1E40AF20;
-}
-```
+- shadcn/ui `Dialog` via the **context + portal** pattern: one provider per modal (`alert-modal-provider.tsx`, `wizard-modal-provider.tsx`), dialog shell mounted once in the layout, content components fetch their own data.
 
-### Modals
+### Tables
 
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
+- Central `DataTable` (`src/components/data-display/data-table/data-table.tsx`, TanStack Table v8).
+- Features export columns with `exportColumns` (CSV/Excel/PDF) — see `frontend-agent.md`.
+- Skeleton rows via `data-table-skeleton.tsx`.
 
-.modal {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  max-width: 500px;
-  width: 90%;
-}
-```
+### Loading (Skeleton Strategy)
+
+- **Level 1:** route-level `loading.tsx` (required on every route segment).
+- **Level 2:** colocated `*Skeleton.tsx` wrapped in `<Suspense>` for every data-fetching component.
+- Respect `prefers-reduced-motion`; use `aria-busy="true"`.
 
 ---
 
-## Style Guidelines
+## Layout Standards
 
-**Style:** Data-Dense Dashboard
+- **Zero-Scroll / Shrink-to-Fit:** main views fit within `100dvh` — use `flex-1 overflow-hidden` + `ScrollArea` for internal scrolling, `dvh` for full-height layouts, compact gaps (`gap-2`/`gap-3`) and padding (`p-2`…`p-4`).
+- **Sidebar navigation:** grouped, collapsible; expanded/collapsed state managed locally; chevron indicators.
+- Responsive breakpoints: 375px, 768px, 1024px, 1440px.
 
-**Keywords:** Multiple charts/widgets, data tables, KPI cards, minimal padding, grid layout, space-efficient, maximum data visibility
+## UI Language
 
-**Best For:** Business intelligence dashboards, financial analytics, enterprise reporting, operational dashboards, data warehousing
+**Spanish-only.** All user-facing strings are written directly in Spanish.
 
-**Key Effects:** Hover tooltips, chart zoom on click, row highlighting on hover, smooth filter animations, data loading spinners
+## Icons
 
-### Page Pattern
-
-**Pattern Name:** Enterprise Gateway
-
-- **Conversion Strategy:**  logo carousel,  tab switching for industries, Path selection (I am a...). Mega menu navigation. Trust signals prominent.
-- **CTA Placement:** Contact Sales (Primary) + Login (Secondary)
-- **Section Order:** 1. Hero (Video/Mission), 2. Solutions by Industry, 3. Solutions by Role, 4. Client Logos, 5. Contact Sales
+Lucide React. Never use emojis as icons.
 
 ---
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Ornate design
-- ❌ No filtering
-
-### Additional Forbidden Patterns
-
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
-- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
-- ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
-- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
-- ❌ **Instant state changes** — Always use transitions (150-300ms)
-- ❌ **Invisible focus states** — Focus states must be visible for a11y
+- ❌ Hardcoded hex/OKLCH colors outside `globals.css`
+- ❌ Custom `.btn-*` / `.card` CSS instead of shadcn/ui components
+- ❌ Centered modals for CRUD forms (use `SlideOverForm`)
+- ❌ Emojis as icons
+- ❌ Missing `cursor-pointer` on clickable elements
+- ❌ Layout-shifting hover transforms
+- ❌ Low contrast text (4.5:1 minimum)
+- ❌ Instant state changes without transitions (150–300ms)
+- ❌ Invisible focus states
+- ❌ Excessive vertical spacing that pushes content off-screen
 
 ---
 
 ## Pre-Delivery Checklist
 
-Before delivering any UI code, verify:
-
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
-- [ ] `cursor-pointer` on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard navigation
-- [ ] `prefers-reduced-motion` respected
-- [ ] Responsive: 375px, 768px, 1024px, 1440px
-- [ ] No content hidden behind fixed navbars
-- [ ] No horizontal scroll on mobile
+- [ ] Tokens from `globals.css` only (no raw hex)
+- [ ] shadcn/ui components, not hand-rolled CSS classes
+- [ ] `loading.tsx` present for the route
+- [ ] `*Skeleton.tsx` colocated for every data-fetching component
+- [ ] No emojis as icons (Lucide only)
+- [ ] `cursor-pointer` on clickable elements
+- [ ] Focus states visible; `prefers-reduced-motion` respected
+- [ ] Responsive: 375px / 768px / 1024px / 1440px
+- [ ] Main view fits within `100dvh` (no vertical scroll unless intended)
+- [ ] Spanish-only UI strings
