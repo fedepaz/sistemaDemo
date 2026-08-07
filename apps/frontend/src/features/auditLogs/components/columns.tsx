@@ -20,10 +20,10 @@ import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatShortDate } from "@/lib/date-utils";
+import { isMobileDevice } from "@/lib/utils";
 
 // Helper para formatear cambios
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,23 +109,21 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
     ),
     cell: ({ row }) => {
       const user =
-        row.original.user !== null ? row.original.user.username : "No user";
+        row.original.user != null ? row.original.user.username : "No user";
       return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center space-x-2 min-w-[160px]">
-                <User className="h-4 w-4 text-muted-foreground flex-shrink-0" aria-hidden="true" />
-                <span className="text-sm font-medium truncate max-w-[140px]">
-                  {user}
-                </span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="bg-popover border-border shadow-xl">
-              <p className="text-xs">{user}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center space-x-2 min-w-[160px]">
+              <User className="h-4 w-4 text-muted-foreground flex-shrink-0" aria-hidden="true" />
+              <span className="text-sm font-medium truncate max-w-[140px]">
+                {user}
+              </span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="bg-popover border-border shadow-xl">
+            <p className="text-xs">{user}</p>
+          </TooltipContent>
+        </Tooltip>
       );
     },
   },
@@ -170,19 +168,17 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
     cell: ({ row }) => {
       const ip = row.original.ipAddress;
       return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[120px]">
-                <Globe className="h-3 w-3" aria-hidden="true" />
-                <span className="truncate max-w-[100px]">{ip || "N/A"}</span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="bg-popover border-border shadow-xl">
-              <p className="text-xs">{ip || "Sin dirección IP registrada"}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[120px]">
+              <Globe className="h-3 w-3" aria-hidden="true" />
+              <span className="truncate max-w-[100px]">{ip || "N/A"}</span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="bg-popover border-border shadow-xl">
+            <p className="text-xs">{ip || "Sin dirección IP registrada"}</p>
+          </TooltipContent>
+        </Tooltip>
       );
     },
   },
@@ -193,28 +189,26 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
     ),
     cell: ({ row }) => {
       const ua = row.original.userAgent || "";
-      const isMobile = /mobile|android|iphone|ipad/i.test(ua.toLowerCase());
+      const isMobile = isMobileDevice(ua);
 
       return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[140px]">
-                {isMobile ? (
-                  <Smartphone className="h-3 w-3 text-info" aria-hidden="true" />
-                ) : (
-                  <Globe className="h-3 w-3 text-muted-foreground" aria-hidden="true" />
-                )}
-                <span className="truncate max-w-[120px]">
-                  {isMobile ? "Móvil" : "Escritorio"}
-                </span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="bg-popover border-border shadow-xl">
-              <p className="text-xs">{ua || "User agent no disponible"}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[140px]">
+              {isMobile ? (
+                <Smartphone className="h-3 w-3 text-info" aria-hidden="true" />
+              ) : (
+                <Globe className="h-3 w-3 text-muted-foreground" aria-hidden="true" />
+              )}
+              <span className="truncate max-w-[120px]">
+                {isMobile ? "Móvil" : "Escritorio"}
+              </span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="bg-popover border-border shadow-xl">
+            <p className="text-xs">{ua || "User agent no disponible"}</p>
+          </TooltipContent>
+        </Tooltip>
       );
     },
   },

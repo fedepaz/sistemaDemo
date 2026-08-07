@@ -68,7 +68,6 @@ describe('AuthService', () => {
     configService = {
       get: jest.fn().mockImplementation((key: string) => {
         const values: Record<string, string> = {
-          'config.defaultPassword': '123456',
           'config.jwt.expiresIn': '15m',
           'config.jwt.refreshExpiresIn': '7d',
         };
@@ -76,6 +75,7 @@ describe('AuthService', () => {
       }),
       getOrThrow: jest.fn().mockImplementation((key: string) => {
         const values: Record<string, string> = {
+          'config.defaultPassword': '123456',
           'config.jwt.secret': 'access-secret',
           'config.jwt.refreshSecret': 'refresh-secret',
           'config.environment': 'development',
@@ -133,7 +133,7 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(true) // password check
         .mockResolvedValueOnce(false); // default password check
 
-      const result = await service.login('127.0.0.1', {
+      const result = await service.login('127.0.0.1', 'test-agent', {
         username: 'testuser',
         password: 'Password123',
       });
@@ -150,7 +150,7 @@ describe('AuthService', () => {
       userAuthRepo.findByUsername.mockResolvedValue(null);
 
       await expect(
-        service.login('127.0.0.1', {
+        service.login('127.0.0.1', 'test-agent', {
           username: 'wronguser',
           password: 'Password123',
         }),
@@ -161,7 +161,7 @@ describe('AuthService', () => {
       rateLimiter.isBlocked.mockReturnValue(true);
 
       await expect(
-        service.login('127.0.0.1', {
+        service.login('127.0.0.1', 'test-agent', {
           username: 'testuser',
           password: 'Password123',
         }),
@@ -185,7 +185,7 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(true) // password check
         .mockResolvedValueOnce(false); // default password check
 
-      await service.login('127.0.0.1', {
+      await service.login('127.0.0.1', 'test-agent', {
         username: 'testuser',
         password: 'Password123',
       });
@@ -205,7 +205,7 @@ describe('AuthService', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       await expect(
-        service.login('127.0.0.1', {
+        service.login('127.0.0.1', 'test-agent', {
           username: 'testuser',
           password: 'WrongPassword',
         }),
@@ -224,7 +224,7 @@ describe('AuthService', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       await expect(
-        service.login('127.0.0.1', {
+        service.login('127.0.0.1', 'test-agent', {
           username: 'testuser',
           password: 'Password123',
         }),
@@ -249,12 +249,12 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(true) // password check
         .mockResolvedValueOnce(true); // default password check
 
-      configService.get.mockImplementation((key: string) => {
+      configService.getOrThrow.mockImplementation((key: string) => {
         if (key === 'config.defaultPassword') return 'Default123';
         return undefined;
       });
 
-      const result = await service.login('127.0.0.1', {
+      const result = await service.login('127.0.0.1', 'test-agent', {
         username: 'testuser',
         password: 'Default123',
       });
@@ -475,7 +475,7 @@ describe('AuthService', () => {
       userAuthRepo.findById.mockResolvedValue(user);
       (bcrypt.hash as jest.Mock).mockResolvedValue('custom-hash');
 
-      configService.get.mockImplementation((key: string) => {
+      configService.getOrThrow.mockImplementation((key: string) => {
         if (key === 'config.defaultPassword') return 'CustomPass1';
         return undefined;
       });

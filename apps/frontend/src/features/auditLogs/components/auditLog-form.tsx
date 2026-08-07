@@ -20,8 +20,9 @@ import {
   FileText,
   Shield,
   Route,
+  type LucideIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, isMobileDevice } from "@/lib/utils";
 
 // Action badge color mapping using theme tokens
 const getActionBadge = (action: string): string => {
@@ -55,7 +56,6 @@ const getActionIcon = (action: string) => {
 };
 
 // Reusable InfoRow component matching extendido pattern
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const InfoRow = ({
   icon: Icon,
   label,
@@ -63,8 +63,7 @@ const InfoRow = ({
   badge,
   className,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  icon: any;
+  icon: LucideIcon;
   label: string;
   value?: string | number | null;
   badge?: React.ReactNode;
@@ -118,8 +117,9 @@ interface AuditLogFormProps {
 }
 
 export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
-  const isMobile = selectedAuditLog.userAgent?.includes("Mobile");
+  const isMobile = isMobileDevice(selectedAuditLog.userAgent);
   const actionIcon = getActionIcon(selectedAuditLog.action);
+  const timestamp = new Date(selectedAuditLog.timestamp);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const changes = selectedAuditLog.changes as any;
 
@@ -165,12 +165,12 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
           {[
             {
               label: "Fecha",
-              value: new Date(selectedAuditLog.timestamp).toLocaleDateString("es-ES"),
+              value: timestamp.toLocaleDateString("es-AR"),
               icon: Clock,
             },
             {
               label: "Hora",
-              value: new Date(selectedAuditLog.timestamp).toLocaleTimeString("es-ES", {
+              value: timestamp.toLocaleTimeString("es-AR", {
                 hour: "2-digit",
                 minute: "2-digit",
               }),
@@ -350,7 +350,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                   <InfoRow
                     icon={Clock}
                     label="Timestamp"
-                    value={`${new Date(selectedAuditLog.timestamp).toLocaleDateString("es-ES")} ${new Date(selectedAuditLog.timestamp).toLocaleTimeString("es-ES")}`}
+                    value={`${timestamp.toLocaleDateString("es-AR")} ${timestamp.toLocaleTimeString("es-AR")}`}
                     className="border-primary/5"
                   />
                   <InfoRow

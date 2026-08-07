@@ -1,4 +1,4 @@
-// src/features/users/components/users-dashboard-skeleton.tsx
+// src/features/auditLogs/components/auditLog-dashboard-skeleton.tsx
 "use client";
 
 import { DataTableSkeleton } from "@/components/data-display/data-table";

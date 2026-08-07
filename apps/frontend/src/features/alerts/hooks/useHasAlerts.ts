@@ -39,10 +39,10 @@ export function useHasAlerts(canRead: boolean) {
   });
 
   const isLoading =
-    siembra.isLoading ||
-    germinacion.isLoading ||
-    faltante.isLoading ||
-    preExpedicion.isLoading;
+    siembra.isPending ||
+    germinacion.isPending ||
+    faltante.isPending ||
+    preExpedicion.isPending;
 
   const hasAlerts =
     (siembra.data?.length ?? 0) > 0 ||

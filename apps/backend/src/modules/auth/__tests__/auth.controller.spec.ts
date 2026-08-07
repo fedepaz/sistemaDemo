@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from '../auth.controller';
+import { Request } from 'express';
 import { AuthService } from '../auth.service';
 
 describe('AuthController', () => {
@@ -53,18 +54,29 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    it('should call authService.login with ip and dto', async () => {
+    it('should call authService.login with ip, userAgent, and dto', async () => {
       const dto = { username: 'testuser', password: 'Password123' };
       const expected = {
         user: { id: 'user-1' },
         accessToken: 'token',
         refreshToken: 'token',
       };
+      const mockReq = {
+        headers: { 'user-agent': 'test-agent' },
+      } as Partial<Request>;
       authService.login.mockResolvedValue(expected);
 
-      const result = await controller.login('127.0.0.1', dto);
+      const result = await controller.login(
+        '127.0.0.1',
+        mockReq as Request,
+        dto,
+      );
 
-      expect(authService.login).toHaveBeenCalledWith('127.0.0.1', dto);
+      expect(authService.login).toHaveBeenCalledWith(
+        '127.0.0.1',
+        'test-agent',
+        dto,
+      );
       expect(result).toEqual(expected);
     });
   });
@@ -120,11 +132,23 @@ describe('AuthController', () => {
   describe('logout', () => {
     it('should return success message', async () => {
       const user = { id: 'user-1', username: 'testuser', tenantId: 'tenant-1' };
+      const mockReq = {
+        headers: { 'user-agent': 'test-agent' },
+      } as Partial<Request>;
       authService.logout.mockResolvedValue(undefined);
 
-      const result = await controller.logout(user);
+      const result = await controller.logout(
+        user,
+        '127.0.0.1',
+        mockReq as Request,
+      );
 
-      expect(authService.logout).toHaveBeenCalledWith('user-1', 'tenant-1');
+      expect(authService.logout).toHaveBeenCalledWith(
+        'user-1',
+        'tenant-1',
+        '127.0.0.1',
+        'test-agent',
+      );
       expect(result).toEqual({ message: 'Logged out successfully' });
     });
   });

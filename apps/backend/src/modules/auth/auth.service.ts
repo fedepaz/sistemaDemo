@@ -64,7 +64,7 @@ export class AuthService {
     // hash password
     // Admin-setup flow: users receive a default password and must change it on first login
     const passwordHash = await bcrypt.hash(
-      this.config.get('config.defaultPassword') || '123456',
+      this.config.getOrThrow<string>('config.defaultPassword'),
       this.BCRYPT_ROUNDS,
     );
 
@@ -89,7 +89,7 @@ export class AuthService {
     // generate tokens
     const tokens = await this.generateTokens(userPayload);
     const isDefaultPassword = await bcrypt.compare(
-      this.config.get('config.defaultPassword') || '',
+      this.config.getOrThrow<string>('config.defaultPassword'),
       user.passwordHash,
     );
 
@@ -107,7 +107,11 @@ export class AuthService {
     };
   }
 
-  async login(ipAddress: string, dto: LoginAuthDto): Promise<AuthResponseDto> {
+  async login(
+    ipAddress: string,
+    userAgent: string,
+    dto: LoginAuthDto,
+  ): Promise<AuthResponseDto> {
     const rateKey = `${ipAddress}:${dto.username}`;
 
     if (this.rateLimiter.isBlocked(rateKey)) {
@@ -117,6 +121,8 @@ export class AuthService {
         action: 'LOGIN_FAILED',
         entityType: 'user',
         entityId: 'unknown',
+        ipAddress,
+        userAgent,
         timestamp: new Date(),
         changes: { reason: 'Rate limited' },
       });
@@ -136,6 +142,8 @@ export class AuthService {
         action: 'LOGIN_FAILED',
         entityType: 'user',
         entityId: 'unknown',
+        ipAddress,
+        userAgent,
         timestamp: new Date(),
         changes: { reason: 'User not found' },
       });
@@ -155,6 +163,8 @@ export class AuthService {
         action: 'LOGIN_FAILED',
         entityType: 'user',
         entityId: user.id,
+        ipAddress,
+        userAgent,
         timestamp: new Date(),
         changes: { reason: 'Invalid password' },
       });
@@ -170,6 +180,8 @@ export class AuthService {
         action: 'LOGIN_FAILED',
         entityType: 'user',
         entityId: user.id,
+        ipAddress,
+        userAgent,
         timestamp: new Date(),
         changes: { reason: 'User is inactive' },
       });
@@ -187,7 +199,7 @@ export class AuthService {
     });
 
     const isDefaultPassword = await bcrypt.compare(
-      this.config.get('config.defaultPassword') || '',
+      this.config.getOrThrow<string>('config.defaultPassword'),
       user.passwordHash,
     );
 
@@ -199,6 +211,8 @@ export class AuthService {
       action: 'LOGIN',
       entityType: 'user',
       entityId: user.id,
+      ipAddress,
+      userAgent,
       timestamp: new Date(),
       changes: {},
     });
@@ -288,8 +302,9 @@ export class AuthService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    const defaultPassword: string =
-      this.config.get<string>('config.defaultPassword') || '123456';
+    const defaultPassword = this.config.getOrThrow<string>(
+      'config.defaultPassword',
+    );
     const passwordHash = await bcrypt.hash(defaultPassword, this.BCRYPT_ROUNDS);
     await this.userAuthRepo.updatePassword(dto.userId, passwordHash);
 
@@ -309,13 +324,20 @@ export class AuthService {
     };
   }
 
-  async logout(userId: string, tenantId: string): Promise<void> {
+  async logout(
+    userId: string,
+    tenantId: string,
+    ipAddress?: string,
+    userAgent?: string,
+  ): Promise<void> {
     this.auditEventEmitter.emitAuth({
       tenantId,
       userId,
       action: 'LOGOUT',
       entityType: 'user',
       entityId: userId,
+      ipAddress,
+      userAgent,
       timestamp: new Date(),
       changes: {},
     });

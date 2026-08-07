@@ -9,7 +9,9 @@ import {
   Logger,
   Patch,
   Ip,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
 import {
   RegisterAuthDto,
@@ -60,9 +62,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(
     @Ip() ip: string,
+    @Req() req: Request,
     @Body(new ZodValidationPipe(LoginAuthSchema)) dto: LoginAuthDto,
   ): Promise<AuthResponseDto> {
-    return this.authService.login(ip, dto);
+    const userAgent = req.headers['user-agent'] || 'Unknown';
+    return this.authService.login(ip, userAgent, dto);
   }
 
   /**
@@ -93,9 +97,14 @@ export class AuthController {
     action: 'read',
     scope: 'OWN',
   })
-  async logout(@CurrentUser() user: AuthUser) {
+  async logout(
+    @CurrentUser() user: AuthUser,
+    @Ip() ip: string,
+    @Req() req: Request,
+  ) {
+    const userAgent = req.headers['user-agent'] || 'Unknown';
     this.logger.log(`Logout: ${user.username}`);
-    await this.authService.logout(user.id, user.tenantId);
+    await this.authService.logout(user.id, user.tenantId, ip, userAgent);
     return { message: 'Logged out successfully' };
   }
   /**
