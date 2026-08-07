@@ -24,6 +24,7 @@ DB_NAME="$DATABASE_LEGACY_NAME"
 DB_USER="$DATABASE_LEGACY_USERNAME"
 DB_PASS="$DATABASE_LEGACY_PASSWORD"
 YEAR_FROM=2025
+MYSQLDUMP_REMOTE='"C:/Program Files/MariaDB 10.11/bin/mysqldump.exe"'
 
 OUTPUT_DIR="./legacy_update_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$OUTPUT_DIR"
@@ -42,7 +43,7 @@ echo "→ Dumpeando ${#TABLES[@]} tablas, ano >= $YEAR_FROM, desde $SSH_HOST ...
 for TABLE in "${TABLES[@]}"; do
   OUT_FILE="$OUTPUT_DIR/${TABLE}_${YEAR_FROM}plus.sql"
   echo "  - $TABLE ..."
-  ssh "$SSH_HOST" "mysqldump -u $DB_USER -p$DB_PASS --no-create-info --single-transaction --where=\"ano >= $YEAR_FROM\" $DB_NAME $TABLE" > "$OUT_FILE" 2>"$OUTPUT_DIR/${TABLE}.err" \
+  ssh "$SSH_HOST" "$MYSQLDUMP_REMOTE -u $DB_USER -p$DB_PASS --no-create-info --single-transaction --where=\"ano >= $YEAR_FROM\" $DB_NAME $TABLE" > "$OUT_FILE" 2>"$OUTPUT_DIR/${TABLE}.err" \
     || echo "    ⚠ falló $TABLE, ver $OUTPUT_DIR/${TABLE}.err"
 done
 
