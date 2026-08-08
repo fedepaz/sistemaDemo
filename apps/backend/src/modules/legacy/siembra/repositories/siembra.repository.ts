@@ -21,15 +21,10 @@ export class SiembraRepository {
       e.nombre AS especieNombre, p.injerto, p.contenedor,
       p.f_siem,
       p.f_siembra
-    FROM partidas p
+    FROM partidas p  
     LEFT JOIN especie e ON e.codigo = p.espvar
-    LEFT JOIN partidas1 p1 
-    ON p.ano = p1.ano AND p.partida = p1.partida AND p.indice = p1.indice
-    LEFT JOIN partidas2 p2 
-    ON p.ano = p2.ano AND p.partida = p2.partida AND p.indice = p2.indice
-    AND p1.camara IS NULL
-    AND p2.ubicacion IS NULL
-    WHERE (p.f_siembra IS NULL OR p.f_siembra = '0000-00-00')
+    WHERE estado <> 'ANULADA' AND f_siembra=0
+	    AND p.sem_siem=WEEK(CURRENT_DATE())
     ORDER BY p.partida, p.indice
   `;
     return this.legacyDb.query<LegacySiembra[]>(sql);
