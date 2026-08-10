@@ -31,13 +31,13 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
       return this.prisma.taskShift.findMany({
         include: { employees: { select: { userId: true } } },
         orderBy: { startTime: 'desc' },
-      }) as Promise<TaskShiftWithEmployees[]>;
+      });
     }
     return this.prisma.taskShift.findMany({
       where: { deletedAt: null, isActive: true },
       include: { employees: { select: { userId: true } } },
       orderBy: { startTime: 'desc' },
-    }) as Promise<TaskShiftWithEmployees[]>;
+    });
   }
 
   async findById(
@@ -49,12 +49,12 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
       return this.prisma.taskShift.findFirst({
         where: { id },
         include: { employees: { select: { userId: true } } },
-      }) as Promise<TaskShiftWithEmployees | null>;
+      });
     }
     return this.prisma.taskShift.findFirst({
       where: { id, deletedAt: null, isActive: true },
       include: { employees: { select: { userId: true } } },
-    }) as Promise<TaskShiftWithEmployees | null>;
+    });
   }
 
   async createWithEmployees(
@@ -84,10 +84,10 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
         })),
       });
 
-      return tx.taskShift.findUnique({
+      return (await tx.taskShift.findUnique({
         where: { id: taskShift.id },
         include: { employees: { select: { userId: true } } },
-      }) as Promise<TaskShiftWithEmployees>;
+      }))!;
     });
   }
 
@@ -121,10 +121,10 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
         });
       }
 
-      return tx.taskShift.findUnique({
+      return (await tx.taskShift.findUnique({
         where: { id },
         include: { employees: { select: { userId: true } } },
-      }) as Promise<TaskShiftWithEmployees>;
+      }))!;
     });
   }
 }
