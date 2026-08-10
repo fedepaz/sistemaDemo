@@ -1,14 +1,6 @@
 // src/modules/taskShifts/taskShifts.controller.ts
 
-import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Param,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body } from '@nestjs/common';
 import { TaskShiftsService } from './taskShifts.service';
 import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
@@ -18,6 +10,7 @@ import {
   CreateTaskShiftDto,
   UpdateTaskShiftSchema,
   UpdateTaskShiftDto,
+  TaskShiftDto,
 } from '@vivero/shared';
 
 @Controller('task-shifts')
@@ -25,12 +18,15 @@ export class TaskShiftsController {
   constructor(private readonly taskShiftsService: TaskShiftsService) {}
 
   @Get()
-  getAllTaskShifts(@CurrentUser() user: AuthUser) {
+  getAllTaskShifts(@CurrentUser() user: AuthUser): Promise<TaskShiftDto[]> {
     return this.taskShiftsService.getAllTaskShifts(user.id);
   }
 
   @Get(':id')
-  getTaskShiftById(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+  getTaskShiftById(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthUser,
+  ): Promise<TaskShiftDto> {
     return this.taskShiftsService.getTaskShiftById(id, user.id);
   }
 
@@ -39,7 +35,7 @@ export class TaskShiftsController {
     @Body(new ZodValidationPipe(CreateTaskShiftSchema))
     dto: CreateTaskShiftDto,
     @CurrentUser() user: AuthUser,
-  ) {
+  ): Promise<TaskShiftDto> {
     return this.taskShiftsService.createTaskShift(dto, user.id);
   }
 
@@ -49,12 +45,7 @@ export class TaskShiftsController {
     @Body(new ZodValidationPipe(UpdateTaskShiftSchema))
     dto: UpdateTaskShiftDto,
     @CurrentUser() user: AuthUser,
-  ) {
+  ): Promise<TaskShiftDto> {
     return this.taskShiftsService.updateTaskShift(id, dto, user.id);
-  }
-
-  @Delete(':id')
-  softDeleteTaskShift(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    return this.taskShiftsService.softDeleteTaskShift(id, user.id);
   }
 }

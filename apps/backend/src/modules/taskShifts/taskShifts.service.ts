@@ -6,23 +6,58 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { TaskShiftsRepository } from './repositories/taskShifts.repository';
-import { CreateTaskShiftDto, UpdateTaskShiftDto } from '@vivero/shared';
+import {
+  CreateTaskShiftDto,
+  TaskShiftDto,
+  UpdateTaskShiftDto,
+} from '@vivero/shared';
 
 @Injectable()
 export class TaskShiftsService {
   constructor(private readonly repo: TaskShiftsRepository) {}
 
-  async getAllTaskShifts(requesterId: string) {
-    return this.repo.findAll(requesterId);
+  async getAllTaskShifts(requesterId: string): Promise<TaskShiftDto[]> {
+    const taskShifts = await this.repo.findAll(requesterId);
+    return taskShifts.map((ts) => ({
+      id: ts.id,
+      createdByUserId: ts.createdByUserId,
+      entityId: ts.entityId,
+      startTime: ts.startTime.toISOString(),
+      endTime: ts.endTime.toISOString(),
+      isActive: ts.isActive,
+      createdAt: ts.createdAt.toISOString(),
+      updatedAt: ts.updatedAt.toISOString(),
+      employees: ts.employees.map((e) => ({
+        userId: e.userId,
+      })),
+    }));
   }
 
-  async getTaskShiftById(id: string, requesterId: string) {
+  async getTaskShiftById(
+    id: string,
+    requesterId: string,
+  ): Promise<TaskShiftDto> {
     const taskShift = await this.repo.findById(id, requesterId);
     if (!taskShift) throw new NotFoundException('Task shift not found');
-    return taskShift;
+    return {
+      id: taskShift.id,
+      createdByUserId: taskShift.createdByUserId,
+      entityId: taskShift.entityId,
+      startTime: taskShift.startTime.toISOString(),
+      endTime: taskShift.endTime.toISOString(),
+      isActive: taskShift.isActive,
+      createdAt: taskShift.createdAt.toISOString(),
+      updatedAt: taskShift.updatedAt.toISOString(),
+      employees: taskShift.employees.map((e) => ({
+        userId: e.userId,
+      })),
+    };
   }
 
-  async createTaskShift(dto: CreateTaskShiftDto, createdByUserId: string) {
+  async createTaskShift(
+    dto: CreateTaskShiftDto,
+    createdByUserId: string,
+  ): Promise<TaskShiftDto> {
     const startTime = new Date(dto.startTime);
     const endTime = new Date(dto.endTime);
 
@@ -30,7 +65,7 @@ export class TaskShiftsService {
       throw new BadRequestException('endTime must be after startTime');
     }
 
-    return this.repo.createWithEmployees(
+    const taskShift = await this.repo.createWithEmployees(
       {
         createdByUserId,
         entityId: dto.entityId,
@@ -40,13 +75,26 @@ export class TaskShiftsService {
       },
       createdByUserId,
     );
+    return {
+      id: taskShift.id,
+      createdByUserId: taskShift.createdByUserId,
+      entityId: taskShift.entityId,
+      startTime: taskShift.startTime.toISOString(),
+      endTime: taskShift.endTime.toISOString(),
+      isActive: taskShift.isActive,
+      createdAt: taskShift.createdAt.toISOString(),
+      updatedAt: taskShift.updatedAt.toISOString(),
+      employees: taskShift.employees.map((e) => ({
+        userId: e.userId,
+      })),
+    };
   }
 
   async updateTaskShift(
     id: string,
     dto: UpdateTaskShiftDto,
     requesterId: string,
-  ) {
+  ): Promise<TaskShiftDto> {
     const existing = await this.repo.findById(id, requesterId);
     if (!existing) throw new NotFoundException('Task shift not found');
 
@@ -70,12 +118,23 @@ export class TaskShiftsService {
       }
     }
 
-    return this.repo.updateWithEmployees(id, updateData, requesterId);
-  }
-
-  async softDeleteTaskShift(id: string, deletedByUserId: string) {
-    const existing = await this.repo.findById(id, deletedByUserId);
-    if (!existing) throw new NotFoundException('Task shift not found');
-    return this.repo.softDelete(id, deletedByUserId);
+    const taskShift = await this.repo.updateWithEmployees(
+      id,
+      updateData,
+      requesterId,
+    );
+    return {
+      id: taskShift.id,
+      createdByUserId: taskShift.createdByUserId,
+      entityId: taskShift.entityId,
+      startTime: taskShift.startTime.toISOString(),
+      endTime: taskShift.endTime.toISOString(),
+      isActive: taskShift.isActive,
+      createdAt: taskShift.createdAt.toISOString(),
+      updatedAt: taskShift.updatedAt.toISOString(),
+      employees: taskShift.employees.map((e) => ({
+        userId: e.userId,
+      })),
+    };
   }
 }
