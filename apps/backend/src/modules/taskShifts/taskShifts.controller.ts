@@ -12,17 +12,20 @@ import {
   UpdateTaskShiftDto,
   TaskShiftDto,
 } from '@vivero/shared';
+import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 
 @Controller('task-shifts')
 export class TaskShiftsController {
   constructor(private readonly taskShiftsService: TaskShiftsService) {}
 
   @Get()
+  @RequirePermission({ tableName: 'users', action: 'read' })
   getAllTaskShifts(@CurrentUser() user: AuthUser): Promise<TaskShiftDto[]> {
     return this.taskShiftsService.getAllTaskShifts(user.id);
   }
 
   @Get(':id')
+  @RequirePermission({ tableName: 'users', action: 'read' })
   getTaskShiftById(
     @Param('id') id: string,
     @CurrentUser() user: AuthUser,
@@ -31,6 +34,7 @@ export class TaskShiftsController {
   }
 
   @Post()
+  @RequirePermission({ tableName: 'users', action: 'read' })
   createTaskShift(
     @Body(new ZodValidationPipe(CreateTaskShiftSchema))
     dto: CreateTaskShiftDto,
@@ -40,6 +44,7 @@ export class TaskShiftsController {
   }
 
   @Patch(':id')
+  @RequirePermission({ tableName: 'users', action: 'read' })
   updateTaskShift(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(UpdateTaskShiftSchema))

@@ -44,9 +44,9 @@ export class AuthController {
    * Public endpoint - register a new user
    */
 
+  @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  @RequirePermission({ tableName: 'users', action: 'create', scope: 'ALL' })
   async register(
     @Body(new ZodValidationPipe(RegisterAuthSchema)) dto: RegisterAuthDto,
   ): Promise<AuthResponseDto> {
