@@ -1,0 +1,113 @@
+// src/modules/taskShifts/repositories/taskShifts.repository.ts
+
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../../infra/prisma/prisma.service';
+import { BaseRepository } from '../../../shared/baseModule/base.repository';
+import { TaskShift } from '../../../generated/prisma/client';
+
+@Injectable()
+export class TaskShiftsRepository extends BaseRepository<TaskShift> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.taskShift);
+  }
+
+  async findAll(requesterId: string): Promise<TaskShift[]> {
+    const devIds = await this.getDevAccounts();
+    if (devIds.includes(requesterId)) {
+      return this.model.findMany({
+        include: { employees: { select: { userId: true } } },
+        orderBy: { startTime: 'desc' },
+      });
+    }
+    return this.model.findMany({
+      where: { deletedAt: null, isActive: true },
+      include: { employees: { select: { userId: true } } },
+      orderBy: { startTime: 'desc' },
+    });
+  }
+
+  async findById(id: string, requesterId: string): Promise<TaskShift | null> {
+    const devIds = await this.getDevAccounts();
+    if (devIds.includes(requesterId)) {
+      return await this.model.findFirst({
+        where: { id },
+        include: { employees: { select: { userId: true } } },
+      });
+    }
+    return this.model.findFirst({
+      where: { id, deletedAt: null, isActive: true },
+      include: { employees: { select: { userId: true } } },
+    });
+  }
+
+  async createWithEmployees(
+    data: {
+      createdByUserId: string;
+      entityId: string;
+      startTime: Date;
+      endTime: Date;
+      employeeUserIds: string[];
+    },
+    _requesterId: string,
+  ): Promise<TaskShift> {
+    return this.prisma.$transaction(async (tx) => {
+      const taskShift = await tx.taskShift.create({
+        data: {
+          createdByUserId: data.createdByUserId,
+          entityId: data.entityId,
+          startTime: data.startTime,
+          endTime: data.endTime,
+        },
+      });
+
+      await tx.taskShiftEmployee.createMany({
+        data: data.employeeUserIds.map((userId) => ({
+          taskShiftId: taskShift.id,
+          userId,
+        })),
+      });
+
+      return tx.taskShift.findUnique({
+        where: { id: taskShift.id },
+        include: { employees: { select: { userId: true } } },
+      }) as Promise<TaskShift>;
+    });
+  }
+
+  async updateWithEmployees(
+    id: string,
+    data: {
+      entityId?: string;
+      startTime?: Date;
+      endTime?: Date;
+      employeeUserIds?: string[];
+    },
+    _requesterId: string,
+  ): Promise<TaskShift> {
+    return this.prisma.$transaction(async (tx) => {
+      const updateData: Record<string, unknown> = {};
+      if (data.entityId !== undefined) updateData.entityId = data.entityId;
+      if (data.startTime !== undefined) updateData.startTime = data.startTime;
+      if (data.endTime !== undefined) updateData.endTime = data.endTime;
+
+      if (Object.keys(updateData).length > 0) {
+        await tx.taskShift.update({ where: { id }, data: updateData });
+      }
+
+      if (data.employeeUserIds !== undefined) {
+        await tx.taskShiftEmployee.deleteMany({ where: { taskShiftId: id } });
+        await tx.taskShiftEmployee.createMany({
+          data: data.employeeUserIds.map((userId) => ({
+            taskShiftId: id,
+            userId,
+          })),
+        });
+      }
+
+      return tx.taskShift.findUnique({
+        where: { id },
+        include: { employees: { select: { userId: true } } },
+      }) as Promise<TaskShift>;
+    });
+  }
+}

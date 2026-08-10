@@ -18,12 +18,17 @@ model User {
 
   userPermissions UserPermission[]
 
+  taskShiftEmployee TaskShiftEmployee[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   deletedByUserId String? 
+
+  createdTasksShift TaskShift[] @relation("created_task_shifts")
+
+  deletedTasksShift TaskShift[] @relation("deleted_task_shifts")
   deletedByUser User? @relation("deleted_users", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
   deletedPermissions UserPermission[] @relation("deleted_user_permissions")
   deletedEntities Entity[] @relation("deleted_entities")
   deletedUsers User[] @relation("deleted_users")

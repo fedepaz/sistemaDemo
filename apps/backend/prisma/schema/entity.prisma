@@ -11,6 +11,8 @@ model Entity {
 
     userPermissions UserPermission[]
 
+    taskShifts TaskShift[]
+
     deletedByUserId String?
     deletedByUser User? @relation("deleted_entities", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
