@@ -105,35 +105,25 @@ export function UsersDataTable() {
         onDelete={handleDelete}
         exportColumns={userExportColumns}
       />
-      {slideOverOpen && (
+      {slideOverOpen && selectedUser && (
         <SlideOverForm
-          formId={selectedUser ? `edit-${selectedUser.username}` : "create"}
+          formId={`edit-${selectedUser.username}`}
           open={slideOverOpen}
           onOpenChange={setSlideOverOpen}
-          title={selectedUser ? `Editar usuario` : "Crear nuevo usuario"}
-          description={
-            selectedUser
-              ? `Edita los detalles del usuario ${selectedUser.username}.`
-              : "Rellena los campos para crear un nuevo usuario."
-          }
+          title="Editar usuario"
+          description={`Edita los detalles del usuario ${selectedUser.username}.`}
           onCancel={() => setSlideOverOpen(false)}
-          saveLabel={selectedUser ? "Actualizar Usuario" : "Crear Usuario"}
-          form={selectedUser ? formEditUser : null}
+          saveLabel="Actualizar Usuario"
+          form={formEditUser}
         >
           <div className="space-y-2">
-            {selectedUser ? (
-              <UserEditForm
-                form={formEditUser}
-                onSubmit={handleUpdate}
-                onCancel={() => setSlideOverOpen(false)}
-                formId={
-                  selectedUser ? `edit-${selectedUser.username}` : "create"
-                }
-              />
-            ) : null}
-            {selectedUser &&
-              canUpdate &&
-              selectedUser.id !== currentUser?.id && (
+            <UserEditForm
+              form={formEditUser}
+              onSubmit={handleUpdate}
+              onCancel={() => setSlideOverOpen(false)}
+              formId={`edit-${selectedUser.username}`}
+            />
+            {canUpdate && selectedUser.id !== currentUser?.id && (
                 <div className="pt-4 border-t">
                   <Button
                     variant="outline"

@@ -4,8 +4,9 @@
 import { useRegister } from "@/features/users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterAuthDto, RegisterAuthSchema } from "@vivero/shared";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Loader2, User } from "lucide-react";
+import { Loader2, User, CheckCircle2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,15 +18,15 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function RegisterForm() {
   const { mutateAsync: createUser, isPending: isCreatingUser } = useRegister();
-
+  const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
   const form = useForm<RegisterAuthDto>({
     resolver: zodResolver(RegisterAuthSchema),
-
     defaultValues: {
       username: "",
       firstName: "",
@@ -38,9 +39,48 @@ export function RegisterForm() {
   async function onSubmit(values: RegisterAuthDto) {
     try {
       await createUser(values);
-    } catch {}
-    router.push("/");
+      setIsSuccess(true);
+    } catch {
+      toast.error("Error al crear la cuenta. Intenta de nuevo.", {
+        duration: 4000,
+      });
+    }
   }
+
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col items-center gap-4 md:gap-6 text-center font-serif">
+        <CheckCircle2 className="h-12 w-12 md:h-16 md:w-16 text-primary" />
+        <h1 className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">
+          Cuenta creada correctamente
+        </h1>
+        <div className="space-y-2 text-[9px] md:text-[10px] font-medium leading-tight md:leading-relaxed">
+          <p>
+            Ingresa a{" "}
+            <b>Iniciar sesión</b> con tu usuario y la contraseña por defecto:{" "}
+            <b>123456</b>
+          </p>
+          <p>
+            En tu primer inicio de sesión se te pedirá cambiar la contraseña.
+          </p>
+          <p>
+            Una vez finalizado,{" "}
+            <b>avísale a tu encargado</b> para que te asigne los permisos
+            necesarios.
+          </p>
+        </div>
+        <Button
+          className="w-full h-10 md:h-12 bg-primary rounded p-2 cursor-pointer mt-2 gap-2"
+          onClick={() => router.push("/auth/login")}
+          tabIndex={0}
+        >
+          Ir a login
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
       <form
@@ -49,12 +89,13 @@ export function RegisterForm() {
       >
         {/* Title */}
         <h1 className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">
-          Crear nuevo usuario
+          Registrar cuenta
         </h1>
         <p className="text-[9px] md:text-[10px] font-medium leading-tight md:leading-relaxed">
-          Rellena los campos para crear un nuevo usuario.
+          Completa los campos para crear tu cuenta.
           <br className="hidden md:block" />
-          El usuario se creará con contraseña por defecto: <b>123456</b>.
+          Se generará una contraseña por defecto que deberás cambiar en tu primer
+          inicio de sesión.
         </p>
         {/* Username Field */}
         <FormField
@@ -99,7 +140,6 @@ export function RegisterForm() {
                   placeholder="Nombre"
                   disabled={isCreatingUser}
                   className="pl-12 md:pl-14 h-10 md:h-12 text-sm md:text-base"
-                  autoFocus
                   tabIndex={0}
                 />
               </FormControl>
@@ -122,7 +162,6 @@ export function RegisterForm() {
                   placeholder="Apellido"
                   disabled={isCreatingUser}
                   className="pl-12 md:pl-14 h-10 md:h-12 text-sm md:text-base"
-                  autoFocus
                   tabIndex={0}
                 />
               </FormControl>
@@ -145,7 +184,6 @@ export function RegisterForm() {
                   placeholder="Correo electrónico"
                   disabled={isCreatingUser}
                   className="pl-12 md:pl-14 h-10 md:h-12 text-sm md:text-base"
-                  autoFocus
                   tabIndex={0}
                 />
               </FormControl>
@@ -166,7 +204,7 @@ export function RegisterForm() {
           {isCreatingUser ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            "Crear usuario"
+            "Crear cuenta"
           )}
         </Button>
       </form>
