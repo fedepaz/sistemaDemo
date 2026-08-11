@@ -54,6 +54,7 @@ describe('Auth (integration)', () => {
       ).toHaveProperty('username');
       expect(authMock.login).toHaveBeenCalledWith(
         expect.any(String),
+        expect.any(String),
         expect.objectContaining({ username: 'testuser' }),
       );
     });

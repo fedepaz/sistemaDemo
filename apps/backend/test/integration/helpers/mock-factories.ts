@@ -78,3 +78,12 @@ export function createAlertsMock() {
     getFaltaPreExpedicion: jest.fn(),
   };
 }
+
+export function createTaskShiftsMock() {
+  return {
+    getAllTaskShifts: jest.fn(),
+    getTaskShiftById: jest.fn(),
+    createTaskShift: jest.fn(),
+    updateTaskShift: jest.fn(),
+  };
+}
