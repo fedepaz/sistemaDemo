@@ -1,12 +1,12 @@
-// apps/frontend/src/features/auth/api/authService.ts
+// src/features/auth/api/authService.ts
 
 import { clientFetch } from "@/lib/api/client-fetch";
-import { 
-  AuthResponseDto, 
-  ChangePasswordDto, 
-  LoginAuthDto, 
-  UserPermissions, 
-  UserProfileDto 
+import {
+  AuthResponseDto,
+  ChangePasswordDto,
+  LoginAuthDto,
+  UserPermissions,
+  UserProfileDto,
 } from "@vivero/shared";
 
 export const authService = {
@@ -31,8 +31,8 @@ export const authService = {
   },
 
   getProfileMe: () => {
-    return clientFetch<UserProfileDto>("users/me", { 
-      method: "GET" 
+    return clientFetch<UserProfileDto>("users/me", {
+      method: "GET",
     });
   },
 

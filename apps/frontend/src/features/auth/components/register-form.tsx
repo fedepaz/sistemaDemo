@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterAuthDto, RegisterAuthSchema } from "@vivero/shared";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Loader2, User, Mail, CheckCircle2, ArrowRight } from "lucide-react";
+import { Loader2, User, CheckCircle2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,9 +16,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { useAuthContext } from "../providers/AuthProvider";
 
 export function RegisterForm() {
@@ -40,7 +40,6 @@ export function RegisterForm() {
       username: "",
       firstName: "",
       lastName: "",
-      email: "",
     },
     mode: "onChange",
   });
@@ -49,11 +48,7 @@ export function RegisterForm() {
     try {
       await createUser(values);
       setIsSuccess(true);
-    } catch {
-      toast.error("Error al crear la cuenta. Intenta de nuevo.", {
-        duration: 4000,
-      });
-    }
+    } catch {}
   }
 
   if (isSuccess) {
@@ -128,6 +123,14 @@ export function RegisterForm() {
                   />
                 </div>
               </FormControl>
+              <FormMessage className="text-[10px] font-bold font-sans text-xs md:text-sm leading-tight md:leading-relaxed opacity-70" />
+              <FormDescription className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+                El nombre de usuario debe ser único. Va a ser usado para
+                identificarte en el sistema.
+                <br className="hidden md:block" />
+                Los caracteres permitidos son: minúsculas, mayúsculas, números y
+                guiones.
+              </FormDescription>
             </FormItem>
           )}
         />
@@ -155,6 +158,11 @@ export function RegisterForm() {
                   />
                 </div>
               </FormControl>
+              <FormMessage className="text-[10px] font-bold font-sans text-xs md:text-sm leading-tight md:leading-relaxed opacity-70" />
+
+              <FormDescription className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+                Admite nombre o nombres hasta 50 caracteres.
+              </FormDescription>
             </FormItem>
           )}
         />
@@ -182,35 +190,10 @@ export function RegisterForm() {
                   />
                 </div>
               </FormControl>
-            </FormItem>
-          )}
-        />
+              <FormMessage className="text-[10px] font-bold font-sans text-xs md:text-sm leading-tight md:leading-relaxed opacity-70" />
 
-        {/* Email Field */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="space-y-1 md:space-y-2">
-              <FormLabel className="font-sans text-sm md:text-sm uppercase tracking-widest opacity-70">
-                Correo electrónico
-              </FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Mail className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                  </div>
-                  <Input
-                    {...field}
-                    placeholder="Correo electrónico"
-                    disabled={isCreatingUser}
-                    className="pl-12 md:pl-14 h-10 md:h-12 text-sm md:text-base"
-                    tabIndex={0}
-                  />
-                </div>
-              </FormControl>
-              <FormDescription className="text-xs md:text-sm font-medium italic opacity-60">
-                Opcional. Se utiliza para notificaciones del sistema.
+              <FormDescription className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+                Admite apellidos o apellidos hasta 50 caracteres.
               </FormDescription>
             </FormItem>
           )}

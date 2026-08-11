@@ -22,15 +22,18 @@ export const passwordRules = z
   });
 
 export const RegisterAuthSchema = z.object({
-  username: z.string().min(1, { message: "Nombre de usuario es obligatorio" }),
+  username: z
+    .string()
+    .min(1, { message: "Nombre de usuario es obligatorio" })
+    .max(50, { message: "Nombre de usuario máximo 50 caracteres" }),
   firstName: z
     .string()
-    .min(1)
-    .max(50, { message: "Nombre de usuario máximo 50 caracteres" })
+    .min(1, { message: "Es necesario al menos un nombre" })
+    .max(50, { message: "Nombre máximo 50 caracteres" })
     .optional(),
   lastName: z
     .string()
-    .min(1)
+    .min(1, { message: "Es necesario al menos un apellido" })
     .max(50, { message: "Apellido máximo 50 caracteres" })
     .optional(),
   email: z.string().email({ message: "Email no válido" }).optional(),

@@ -47,7 +47,10 @@ export class UsersController {
   }
 
   @Patch('me')
-  @RequirePermission({ tableName: 'users', action: 'update', scope: 'OWN' })
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+  })
   updateProfile(
     @CurrentUser() user: AuthUser,
     @Body(new ZodValidationPipe(UpdateUserProfileSchema))
