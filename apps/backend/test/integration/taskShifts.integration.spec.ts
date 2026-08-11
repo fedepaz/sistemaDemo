@@ -32,8 +32,12 @@ describe('TaskShifts (integration)', () => {
 
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body).toHaveLength(1);
-      expect((response.body as Record<string, unknown>[])[0]).toHaveProperty('id');
-      expect((response.body as Record<string, unknown>[])[0]).toHaveProperty('employees');
+      expect((response.body as Record<string, unknown>[])[0]).toHaveProperty(
+        'id',
+      );
+      expect((response.body as Record<string, unknown>[])[0]).toHaveProperty(
+        'employees',
+      );
       expect(taskShiftsMock.getAllTaskShifts).toHaveBeenCalled();
     });
 
