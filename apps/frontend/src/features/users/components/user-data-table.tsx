@@ -18,16 +18,12 @@ import { userColumns, userExportColumns } from "./columns";
 import { UserEditForm } from "./user-edit-form";
 import { useEffect, useState } from "react";
 import {
-  RegisterAuthDto,
-  RegisterAuthSchema,
   UpdateUserProfileDto,
   UpdateUserProfileSchema,
   UserProfileDto,
 } from "@vivero/shared";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserCreateForm } from "./user-create-form";
-import { useRegister } from "../hooks/useRegister";
 
 export function UsersDataTable() {
   const { data: users = [] } = useUsers();
@@ -39,7 +35,6 @@ export function UsersDataTable() {
     useUpdateUser();
   const { mutateAsync: deleteUser } = useDeleteUser();
 
-  const { mutateAsync: createUser, isPending: isCreatingUser } = useRegister();
   const { mutateAsync: restorePassword, isPending: isRestoring } =
     useRestorePassword();
   const { canUpdate } = usePermission("users");
@@ -47,16 +42,6 @@ export function UsersDataTable() {
 
   const formEditUser = useForm<UpdateUserProfileDto>({
     resolver: zodResolver(UpdateUserProfileSchema),
-  });
-
-  const formCreateUser = useForm<RegisterAuthDto>({
-    resolver: zodResolver(RegisterAuthSchema),
-    defaultValues: {
-      username: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-    },
   });
 
   useEffect(() => {
@@ -79,11 +64,6 @@ export function UsersDataTable() {
     setSlideOverOpen(true);
   };
 
-  const handleNewUser = () => {
-    setSelectedUser(undefined);
-    setSlideOverOpen(true);
-  };
-
   const handleDelete = async (row: UserProfileDto) => {
     if (row.username) {
       await deleteUser(row.username);
@@ -101,14 +81,6 @@ export function UsersDataTable() {
 
       if (!isUpdatingUser) setSlideOverOpen(false);
     }
-  };
-
-  const handleCreate = async (formData: RegisterAuthDto) => {
-    try {
-      await createUser(formData);
-    } catch {}
-
-    if (!isCreatingUser) setSlideOverOpen(false);
   };
 
   const handleRestorePassword = async () => {
@@ -129,8 +101,6 @@ export function UsersDataTable() {
         description="Gestión de los usuarios del sistema"
         tableName="users"
         totalCount={users.length}
-        onCreate={handleNewUser}
-        createLabel="Nuevo Usuario"
         onEdit={handleEdit}
         onDelete={handleDelete}
         exportColumns={userExportColumns}
@@ -148,7 +118,7 @@ export function UsersDataTable() {
           }
           onCancel={() => setSlideOverOpen(false)}
           saveLabel={selectedUser ? "Actualizar Usuario" : "Crear Usuario"}
-          form={selectedUser ? formEditUser : formCreateUser}
+          form={selectedUser ? formEditUser : null}
         >
           <div className="space-y-2">
             {selectedUser ? (
@@ -160,14 +130,7 @@ export function UsersDataTable() {
                   selectedUser ? `edit-${selectedUser.username}` : "create"
                 }
               />
-            ) : (
-              <UserCreateForm
-                form={formCreateUser}
-                onSubmit={handleCreate}
-                onCancel={() => setSlideOverOpen(false)}
-                formId="create"
-              />
-            )}
+            ) : null}
             {selectedUser &&
               canUpdate &&
               selectedUser.id !== currentUser?.id && (
