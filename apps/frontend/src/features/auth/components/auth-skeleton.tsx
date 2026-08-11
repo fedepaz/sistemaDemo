@@ -3,12 +3,6 @@
 import type React from "react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 
 interface AuthSkeletonProps extends React.ComponentProps<"div"> {
   /**
@@ -25,60 +19,63 @@ export function AuthSkeleton({
 }: AuthSkeletonProps) {
   return (
     <div
-      className={cn("flex flex-col gap-6", className)}
+      className={cn("space-y-4 sm:space-y-6", className)}
       role="status"
       aria-label="Cargando formulario de autenticación"
       {...props}
     >
-      <Card className="shadow-lg">
-        <CardHeader className="text-center">
-          {/* Title skeleton */}
-          <Skeleton className="mx-auto h-7 w-40" />
-          {/* Description skeleton */}
-          <Skeleton className="mx-auto mt-2 h-4 w-56" />
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-5">
-            {/* Name field (register only) */}
-            {type === "register" && (
-              <div className="grid gap-2">
-                <Skeleton className="h-4 w-20" />
-                <Skeleton className="h-9 w-full" />
-              </div>
-            )}
+      {/* Logo skeleton */}
+      <div className="flex justify-center">
+        <Skeleton className="h-20 sm:h-24 w-48" />
+      </div>
 
-            {/* Email field */}
-            <div className="grid gap-2">
-              <Skeleton className="h-4 w-12" />
-              <Skeleton className="h-9 w-full" />
-            </div>
+      {/* Form Card skeleton */}
+      <div className="rounded-xl border bg-card p-4 sm:p-6 shadow-sm space-y-4">
+        {/* Title skeleton */}
+        <Skeleton className="h-5 w-40" />
+        {/* Description skeleton */}
+        <Skeleton className="h-4 w-56" />
 
-            {/* Password field */}
-            <div className="grid gap-2">
-              <div className="flex items-center justify-between">
-                <Skeleton className="h-4 w-16" />
-                {type === "login" && <Skeleton className="h-4 w-24" />}
-              </div>
-              <Skeleton className="h-9 w-full" />
-            </div>
-
-            {/* Confirm password field (register only) */}
-            {type === "register" && (
-              <div className="grid gap-2">
-                <Skeleton className="h-4 w-28" />
-                <Skeleton className="h-9 w-full" />
-              </div>
-            )}
-
-            {/* Submit button skeleton */}
-            <Skeleton className="h-10 w-full" />
+        {/* Name field (register only) */}
+        {type === "register" && (
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="relative h-10 md:h-12 w-full">
+              <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 rounded-lg" />
+            </Skeleton>
           </div>
-        </CardContent>
-        <CardFooter className="flex-col gap-4 border-t pt-6">
-          {/* Footer link skeleton */}
-          <Skeleton className="mx-auto h-4 w-48" />
-        </CardFooter>
-      </Card>
+        )}
+
+        {/* Email field */}
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-12" />
+          <Skeleton className="relative h-10 md:h-12 w-full">
+            <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 rounded-lg" />
+          </Skeleton>
+        </div>
+
+        {/* Password field */}
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="relative h-10 md:h-12 w-full">
+            <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 rounded-lg" />
+          </Skeleton>
+        </div>
+
+        {/* Confirm password field (register only) */}
+        {type === "register" && (
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="relative h-10 md:h-12 w-full">
+              <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 rounded-lg" />
+            </Skeleton>
+          </div>
+        )}
+
+        {/* Submit button skeleton */}
+        <Skeleton className="h-10 md:h-12 w-full" />
+      </div>
+
       <span className="sr-only">Loading...</span>
     </div>
   );
