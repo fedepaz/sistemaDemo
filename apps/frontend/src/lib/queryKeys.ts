@@ -141,3 +141,13 @@ export const alertCommentsQueryKeys = {
     indice: number,
   ) => [...alertCommentsQueryKeys.all(), alertType, partidaId, anio, indice] as const,
 };
+
+// ============================================================================
+// TASK SHIFTS
+// ============================================================================
+
+export const taskShiftQueryKeys = {
+  all: () => ["taskShifts"] as const,
+  byEntityId: (entityId: string) =>
+    [...taskShiftQueryKeys.all(), "byEntityId", entityId] as const,
+};

@@ -14,6 +14,7 @@ import {
   siembraQueryKeys,
   alertCommentsQueryKeys,
   alertsQueryKeys,
+  taskShiftQueryKeys,
 } from "./queryKeys";
 
 // ============================================================================
@@ -82,10 +83,11 @@ export const mutationInvalidationMap = {
 
   // --- Alert Comments ---
   createAlertComment: {
-    queries: () => [
-      alertCommentsQueryKeys.all(),
-      alertsQueryKeys.all(),
-    ],
+    queries: () => [alertCommentsQueryKeys.all(), alertsQueryKeys.all()],
+  },
+
+  createTaskShift: {
+    queries: () => [taskShiftQueryKeys.all()],
   },
 } as const;
 
@@ -115,7 +117,11 @@ export function invalidateQueries(
   if (!entry) return;
 
   const queryKeys = variables
-    ? (entry as { queries: (v: Record<string, unknown>) => readonly unknown[][] }).queries(variables)
+    ? (
+        entry as {
+          queries: (v: Record<string, unknown>) => readonly unknown[][];
+        }
+      ).queries(variables)
     : (entry as { queries: () => readonly unknown[][] }).queries();
 
   for (const key of queryKeys) {

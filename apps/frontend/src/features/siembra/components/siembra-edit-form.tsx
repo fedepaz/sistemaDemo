@@ -33,6 +33,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useDepositos } from "@/features/extendidos";
+import { TaskShift } from "@/features/taskshift";
 
 interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbiSiembraDto) => Promise<void>;
@@ -47,7 +48,7 @@ export function SiembraEditForm({
   selectedExtendido,
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
-  const depositos = depositosQuery.filter((d) => d.camara === "");
+  const depositos = depositosQuery.filter((d) => d.camara !== "");
 
   const originalStock = selectedExtendido.con;
   const watchedStockIni = form.watch("stock_ini");
@@ -244,6 +245,8 @@ export function SiembraEditForm({
           />
         </div>
       </form>
+      {/* TODO: entityId needs to be derived from siembra context */}
+      <TaskShift entityId={selectedExtendido.partidaId.toString()} />
     </Form>
   );
 }

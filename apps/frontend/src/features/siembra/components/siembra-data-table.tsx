@@ -28,8 +28,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
 
-  const { mutateAsync: asignarUbicacionSiembra } =
-    useSiembraPartidaMutation();
+  const { mutateAsync: asignarUbicacionSiembra } = useSiembraPartidaMutation();
 
   const formAsignarUbicacion = useForm<AsignarUbiSiembraDto>({
     resolver: zodResolver(AsignarUbiSiembraDtoSchema),
@@ -72,10 +71,6 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     setSelectedPartida(row);
     setMode("edit");
     setSlideOpen(true);
-  };
-
-  const handleExport = () => {
-    console.log("Exporting...");
   };
 
   const handleOpenChange = (open: boolean) => {
