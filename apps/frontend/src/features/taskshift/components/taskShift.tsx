@@ -10,7 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormField, FormItem, FormLabel, Form } from "@/components/ui/form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  Form,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 
 import { CreateTaskShiftDto } from "@vivero/shared";
 import { getLocalDateStr } from "@/lib/date-utils";
@@ -57,21 +64,30 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
 
   useEffect(() => {
     if (isStartComplete) {
-      form.setValue("startTime", startTime, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      form.setValue("startTime", startTime, { shouldDirty: true });
     }
   }, [isStartComplete, startTime, form]);
 
   useEffect(() => {
     if (isEndComplete) {
-      form.setValue("endTime", endTime, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      form.setValue("endTime", endTime, { shouldDirty: true });
     }
   }, [isEndComplete, endTime, form]);
+
+  useEffect(() => {
+    if (isStartComplete && isEndComplete) {
+      const end = new Date(endTime);
+      const start = new Date(startTime);
+      if (end <= start) {
+        form.setError("endTime", {
+          type: "manual",
+          message: "La hora de fin debe ser posterior a la hora de inicio",
+        });
+      } else {
+        form.clearErrors("endTime");
+      }
+    }
+  }, [startTime, endTime, isStartComplete, isEndComplete, form]);
 
   useEffect(() => {
     form.setValue(
@@ -107,41 +123,44 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
                     <FormLabel className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
                       Inicio
                     </FormLabel>
-                    <div className="flex gap-1">
-                      <Select onValueChange={setStartHour} value={startHour}>
-                        <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                          <SelectValue placeholder="HH" />
-                        </SelectTrigger>
-                        <SelectContent
-                          className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                          position="popper"
+                    <FormControl>
+                      <div className="flex gap-1">
+                        <Select onValueChange={setStartHour} value={startHour}>
+                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                            <SelectValue placeholder="HH" />
+                          </SelectTrigger>
+                          <SelectContent
+                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                            position="popper"
+                          >
+                            {HOURS.map((h) => (
+                              <SelectItem key={`sh-${h}`} value={h}>
+                                {h}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Select
+                          value={startMinute}
+                          onValueChange={setStartMinute}
                         >
-                          {HOURS.map((h) => (
-                            <SelectItem key={`sh-${h}`} value={h}>
-                              {h}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select
-                        value={startMinute}
-                        onValueChange={setStartMinute}
-                      >
-                        <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                          <SelectValue placeholder="MM" />
-                        </SelectTrigger>
-                        <SelectContent
-                          className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                          position="popper"
-                        >
-                          {MINUTES.map((m) => (
-                            <SelectItem key={`sm-${m}`} value={m}>
-                              {m}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                            <SelectValue placeholder="MM" />
+                          </SelectTrigger>
+                          <SelectContent
+                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                            position="popper"
+                          >
+                            {MINUTES.map((m) => (
+                              <SelectItem key={`sm-${m}`} value={m}>
+                                {m}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-[10px] font-bold font-sans text-xs md:text-sm leading-tight md:leading-relaxed opacity-70" />
                   </FormItem>
                 </div>
               )}
@@ -157,46 +176,49 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
                     <FormLabel className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
                       Fin
                     </FormLabel>
-                    <div className="flex gap-1">
-                      <Select
-                        disabled={!isStartComplete}
-                        onValueChange={setEndHour}
-                        value={endHour}
-                      >
-                        <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                          <SelectValue placeholder="HH" />
-                        </SelectTrigger>
-                        <SelectContent
-                          className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                          position="popper"
+                    <FormControl>
+                      <div className="flex gap-1">
+                        <Select
+                          disabled={!isStartComplete}
+                          onValueChange={setEndHour}
+                          value={endHour}
                         >
-                          {HOURS.map((h) => (
-                            <SelectItem key={`eh-${h}`} value={h}>
-                              {h}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select
-                        disabled={!isStartComplete}
-                        onValueChange={setEndMinute}
-                        value={endMinute}
-                      >
-                        <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                          <SelectValue placeholder="MM" />
-                        </SelectTrigger>
-                        <SelectContent
-                          className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                          position="popper"
+                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                            <SelectValue placeholder="HH" />
+                          </SelectTrigger>
+                          <SelectContent
+                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                            position="popper"
+                          >
+                            {HOURS.map((h) => (
+                              <SelectItem key={`eh-${h}`} value={h}>
+                                {h}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Select
+                          disabled={!isStartComplete}
+                          onValueChange={setEndMinute}
+                          value={endMinute}
                         >
-                          {MINUTES.map((m) => (
-                            <SelectItem key={`em-${m}`} value={m}>
-                              {m}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                            <SelectValue placeholder="MM" />
+                          </SelectTrigger>
+                          <SelectContent
+                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                            position="popper"
+                          >
+                            {MINUTES.map((m) => (
+                              <SelectItem key={`em-${m}`} value={m}>
+                                {m}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-[10px] font-bold font-sans text-xs md:text-sm leading-tight md:leading-relaxed opacity-70" />
                   </FormItem>
                 </div>
               )}
