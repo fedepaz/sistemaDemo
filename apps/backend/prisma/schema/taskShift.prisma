@@ -2,8 +2,13 @@ model TaskShift {
   id              String   @id @default(cuid())
   createdByUserId String
   createdByUser   User     @relation("created_task_shifts", fields: [createdByUserId], references: [id])
+ 
   entityId        String
   entity          Entity   @relation(fields: [entityId], references: [id])
+
+  partidaId       Int      
+  anio            Int
+  indice          Int
  
   startTime       DateTime
   endTime         DateTime

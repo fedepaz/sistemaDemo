@@ -108,6 +108,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           mode={mode}
           form={formAsignarUbicacion}
           saveLabel="Confirmar Ubicación"
+          requiresTaskShift={true}
         >
           <div className="space-y-2">
             {mode === "view" ? (

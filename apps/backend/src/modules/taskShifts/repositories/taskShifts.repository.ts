@@ -9,6 +9,9 @@ export type TaskShiftWithEmployees = {
   id: string;
   createdByUserId: string;
   entityId: string;
+  partidaId: number;
+  anio: number;
+  indice: number;
   startTime: Date;
   endTime: Date;
   isActive: boolean;
@@ -61,6 +64,9 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
     data: {
       createdByUserId: string;
       entityId: string;
+      partidaId: number;
+      anio: number;
+      indice: number;
       startTime: Date;
       endTime: Date;
       employeeUserIds: string[];
@@ -72,6 +78,9 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
         data: {
           createdByUserId: data.createdByUserId,
           entityId: data.entityId,
+          partidaId: data.partidaId,
+          anio: data.anio,
+          indice: data.indice,
           startTime: data.startTime,
           endTime: data.endTime,
         },
@@ -94,7 +103,6 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
   async updateWithEmployees(
     id: string,
     data: {
-      entityId?: string;
       startTime?: Date;
       endTime?: Date;
       employeeUserIds?: string[];
@@ -103,7 +111,7 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
   ): Promise<TaskShiftWithEmployees> {
     return this.prisma.$transaction(async (tx) => {
       const updateData: Record<string, unknown> = {};
-      if (data.entityId !== undefined) updateData.entityId = data.entityId;
+
       if (data.startTime !== undefined) updateData.startTime = data.startTime;
       if (data.endTime !== undefined) updateData.endTime = data.endTime;
 

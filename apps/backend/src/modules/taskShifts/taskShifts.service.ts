@@ -22,6 +22,9 @@ export class TaskShiftsService {
       id: ts.id,
       createdByUserId: ts.createdByUserId,
       entityId: ts.entityId,
+      partidaId: ts.partidaId,
+      anio: ts.anio,
+      indice: ts.indice,
       startTime: ts.startTime.toISOString(),
       endTime: ts.endTime.toISOString(),
       isActive: ts.isActive,
@@ -43,6 +46,9 @@ export class TaskShiftsService {
       id: taskShift.id,
       createdByUserId: taskShift.createdByUserId,
       entityId: taskShift.entityId,
+      partidaId: taskShift.partidaId,
+      anio: taskShift.anio,
+      indice: taskShift.indice,
       startTime: taskShift.startTime.toISOString(),
       endTime: taskShift.endTime.toISOString(),
       isActive: taskShift.isActive,
@@ -69,6 +75,9 @@ export class TaskShiftsService {
       {
         createdByUserId,
         entityId: dto.entityId,
+        partidaId: dto.partidaId,
+        anio: dto.anio,
+        indice: dto.indice,
         startTime,
         endTime,
         employeeUserIds: dto.employeeUserIds,
@@ -79,6 +88,9 @@ export class TaskShiftsService {
       id: taskShift.id,
       createdByUserId: taskShift.createdByUserId,
       entityId: taskShift.entityId,
+      partidaId: taskShift.partidaId,
+      anio: taskShift.anio,
+      indice: taskShift.indice,
       startTime: taskShift.startTime.toISOString(),
       endTime: taskShift.endTime.toISOString(),
       isActive: taskShift.isActive,
@@ -99,13 +111,11 @@ export class TaskShiftsService {
     if (!existing) throw new NotFoundException('Task shift not found');
 
     const updateData: {
-      entityId?: string;
       startTime?: Date;
       endTime?: Date;
       employeeUserIds?: string[];
     } = {};
 
-    if (dto.entityId !== undefined) updateData.entityId = dto.entityId;
     if (dto.startTime !== undefined)
       updateData.startTime = new Date(dto.startTime);
     if (dto.endTime !== undefined) updateData.endTime = new Date(dto.endTime);
@@ -127,6 +137,9 @@ export class TaskShiftsService {
       id: taskShift.id,
       createdByUserId: taskShift.createdByUserId,
       entityId: taskShift.entityId,
+      partidaId: taskShift.partidaId,
+      anio: taskShift.anio,
+      indice: taskShift.indice,
       startTime: taskShift.startTime.toISOString(),
       endTime: taskShift.endTime.toISOString(),
       isActive: taskShift.isActive,
