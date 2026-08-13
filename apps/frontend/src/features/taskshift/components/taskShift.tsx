@@ -3,6 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -19,11 +20,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { CreateTaskShiftDto } from "@vivero/shared";
+import { CreateTaskShiftDto, CreateTaskShiftSchema } from "@vivero/shared";
+import { Loader2, Pencil } from "lucide-react";
 import { getLocalDateStr } from "@/lib/date-utils";
 import { EmployeeSearch } from "./employee-search";
 import type { UserProfileDto } from "@vivero/shared";
-import { UseFormReturn } from "react-hook-form";
+import { useCreateTaskShift } from "../hooks/useTaskShift";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const HOURS = Array.from({ length: 24 }, (_, i) =>
   i.toString().padStart(2, "0"),
@@ -37,11 +41,14 @@ function toDateTimeString(date: string, time: string): string {
 }
 
 interface TaskShiftProps {
-  onSubmit: (data: CreateTaskShiftDto) => Promise<void>;
-  form: UseFormReturn<CreateTaskShiftDto>;
+  entityId: string;
+  partidaId: number;
+  anio: number;
+  indice: number;
+  onSuccess?: () => void;
 }
 
-export function TaskShift({ onSubmit, form }: TaskShiftProps) {
+export function TaskShift({ entityId, partidaId, anio, indice, onSuccess }: TaskShiftProps) {
   const today = getLocalDateStr(new Date());
 
   const [startHour, setStartHour] = useState("");
@@ -62,46 +69,56 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
     ? toDateTimeString(today, `${endHour}:${endMinute}`)
     : "";
 
+  const formTaskShift = useForm<CreateTaskShiftDto>({
+    resolver: zodResolver(CreateTaskShiftSchema),
+    mode: "onChange",
+  });
   useEffect(() => {
     if (isStartComplete) {
-      form.setValue("startTime", startTime, { shouldDirty: true });
+      formTaskShift.setValue("startTime", startTime, { shouldDirty: true });
     }
-  }, [isStartComplete, startTime, form]);
+  }, [isStartComplete, startTime, formTaskShift]);
 
   useEffect(() => {
     if (isEndComplete) {
-      form.setValue("endTime", endTime, { shouldDirty: true });
+      formTaskShift.setValue("endTime", endTime, { shouldDirty: true });
     }
-  }, [isEndComplete, endTime, form]);
+  }, [isEndComplete, endTime, formTaskShift]);
+
+  const { mutateAsync: createTaskShift } = useCreateTaskShift();
 
   useEffect(() => {
-    if (isStartComplete && isEndComplete) {
-      const end = new Date(endTime);
-      const start = new Date(startTime);
-      if (end <= start) {
-        form.setError("endTime", {
-          type: "manual",
-          message: "La hora de fin debe ser posterior a la hora de inicio",
-        });
-      } else {
-        form.clearErrors("endTime");
-      }
-    }
-  }, [startTime, endTime, isStartComplete, isEndComplete, form]);
-
-  useEffect(() => {
-    form.setValue(
+    formTaskShift.setValue(
       "employeeUserIds",
       selectedEmployees.map((e) => e.id),
       { shouldValidate: true, shouldDirty: true },
     );
-  }, [selectedEmployees, form]);
+  }, [selectedEmployees, formTaskShift]);
+
+  useEffect(() => {
+    formTaskShift.setValue("entityId", entityId, { shouldValidate: true, shouldDirty: true });
+  }, [entityId, formTaskShift]);
+
+  useEffect(() => {
+    formTaskShift.setValue("partidaId", partidaId, { shouldValidate: true, shouldDirty: true });
+  }, [partidaId, formTaskShift]);
+
+  useEffect(() => {
+    formTaskShift.setValue("anio", anio, { shouldValidate: true, shouldDirty: true });
+  }, [anio, formTaskShift]);
+
+  useEffect(() => {
+    formTaskShift.setValue("indice", indice, { shouldValidate: true, shouldDirty: true });
+  }, [indice, formTaskShift]);
 
   return (
-    <Form {...form}>
+    <Form {...formTaskShift}>
       <form
         id="task-shift-form"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={formTaskShift.handleSubmit(async (data) => {
+          await createTaskShift(data);
+          onSuccess?.();
+        })}
         className="flex flex-col gap-1 md:gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         <div className="flex flex-col gap-3 md:gap-4 font-serif">
@@ -115,7 +132,7 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
           {/* Start Time */}
           <div className="flex flex-col gap-3 md:gap-4">
             <FormField
-              control={form.control}
+              control={formTaskShift.control}
               name="startTime"
               render={() => (
                 <div className="grid grid-cols-2 gap-2">
@@ -168,7 +185,7 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
 
             {/* End Time */}
             <FormField
-              control={form.control}
+              control={formTaskShift.control}
               name="endTime"
               render={() => (
                 <div className="grid grid-cols-2 gap-2">
@@ -227,7 +244,7 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
 
           {/* Employee Search */}
           <FormField
-            control={form.control}
+            control={formTaskShift.control}
             name="employeeUserIds"
             render={() => (
               <FormItem className="space-y-1 md:space-y-2">
@@ -253,6 +270,27 @@ export function TaskShift({ onSubmit, form }: TaskShiftProps) {
             )}
           />
         </div>
+          {/* Submit Button */}
+          <div className="shrink-0 pt-2">
+            <Button
+              type="submit"
+              form="task-shift-form"
+              disabled={formTaskShift.formState.isSubmitting}
+              className="w-full h-9 text-sm"
+            >
+              {formTaskShift.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                  Guardando...
+                </>
+              ) : (
+                <>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Registrar Tiempo
+                </>
+              )}
+            </Button>
+          </div>
       </form>
     </Form>
   );

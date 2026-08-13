@@ -1,6 +1,7 @@
 // src/components/forms/slide-over-form.tsx
 "use client";
 
+import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -11,13 +12,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { Eye, Plus, Pencil, Loader2 } from "lucide-react";
-import { TaskShift, useCreateTaskShift } from "@/features/taskshift";
-import { CreateTaskShiftDto, CreateTaskShiftSchema } from "@vivero/shared";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { usePermission } from "@/hooks/usePermission";
-import { useEffect } from "react";
 
 type SlideOverMode = "create" | "edit" | "view";
 
@@ -36,7 +32,6 @@ interface SlideOverFormProps {
   form?: UseFormReturn<any>;
   mode?: SlideOverMode;
   disabled?: boolean;
-  requiresTaskShift?: boolean;
 }
 
 export function SlideOverForm({
@@ -53,13 +48,9 @@ export function SlideOverForm({
   form,
   mode = "edit",
   disabled,
-  requiresTaskShift = false,
 }: SlideOverFormProps) {
   const isViewMode = mode === "view";
   const isCreateMode = mode === "create";
-
-  const taskShiftPermission = usePermission("users");
-  const canUseTaskShift = requiresTaskShift && taskShiftPermission.canRead;
 
   const handleCancel = () => {
     if (onCancel) {
@@ -80,57 +71,6 @@ export function SlideOverForm({
     return <Pencil className="mr-2 h-4 w-4" />;
   };
 
-  const { mutateAsync: createTaskShift } = useCreateTaskShift();
-
-  const formTaskShift = useForm<CreateTaskShiftDto>({
-    resolver: zodResolver(CreateTaskShiftSchema),
-    mode: "onChange",
-  });
-
-  const watchedEntityId = form?.watch ? form.watch("entityId") : undefined;
-  const watchedPartidaId = form?.watch ? form.watch("partidaId") : undefined;
-  const watchedAnio = form?.watch ? form.watch("anio") : undefined;
-  const watchedIndice = form?.watch ? form.watch("indice") : undefined;
-  useEffect(() => {
-    if (!canUseTaskShift) return;
-
-    if (watchedEntityId !== undefined) {
-      formTaskShift.setValue("entityId", watchedEntityId, {
-        shouldValidate: true,
-      });
-    }
-    if (watchedPartidaId !== undefined) {
-      formTaskShift.setValue("partidaId", watchedPartidaId, {
-        shouldValidate: true,
-      });
-    }
-    if (watchedAnio !== undefined) {
-      formTaskShift.setValue("anio", watchedAnio, { shouldValidate: true });
-    }
-    if (watchedIndice !== undefined) {
-      formTaskShift.setValue("indice", watchedIndice, {
-        shouldValidate: true,
-      });
-    }
-  }, [
-    canUseTaskShift,
-    watchedEntityId,
-    watchedPartidaId,
-    watchedAnio,
-    watchedIndice,
-    formTaskShift,
-  ]);
-
-  const handleTaskShiftSubmit = async (data: CreateTaskShiftDto) => {
-    await createTaskShift(data);
-  };
-
-  // Both forms must clear validation before this is even reachable —
-  // the button is disabled until then (see disabled= below).
-  const isTaskShiftBlocking =
-    canUseTaskShift &&
-    (!formTaskShift.formState.isValid || formTaskShift.formState.isSubmitting);
-
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-xl flex flex-col h-dvh p-0">
@@ -150,10 +90,6 @@ export function SlideOverForm({
           <ScrollArea className="h-full px-6 py-4" tabIndex={-1}>
             <div className="space-y-4" tabIndex={-1}>
               {children}
-              <TaskShift
-                onSubmit={handleTaskShiftSubmit}
-                form={formTaskShift}
-              />
             </div>
           </ScrollArea>
         </div>
@@ -178,22 +114,10 @@ export function SlideOverForm({
               <Button
                 type={formId ? "submit" : "button"}
                 form={formId || undefined} // Only set if provided
-                onClick={
-                  canUseTaskShift
-                    ? () => {
-                        void formTaskShift.handleSubmit(
-                          handleTaskShiftSubmit,
-                        )();
-                        if (!formId) onSave?.();
-                      }
-                    : !formId
-                      ? () => onSave?.()
-                      : undefined
-                }
+                onClick={!formId ? () => onSave?.() : undefined}
                 className="w-full h-9 text-sm"
                 disabled={
                   disabled ||
-                  isTaskShiftBlocking ||
                   (form
                     ? !form.formState.isValid || form.formState.isSubmitting
                     : false)

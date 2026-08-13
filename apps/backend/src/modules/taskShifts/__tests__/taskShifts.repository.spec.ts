@@ -161,6 +161,9 @@ describe('TaskShiftsRepository', () => {
         {
           createdByUserId: 'user-1',
           entityId: 'entity-1',
+          partidaId: 1,
+          anio: 2026,
+          indice: 0,
           startTime: new Date('2026-08-11T08:00:00Z'),
           endTime: new Date('2026-08-11T16:00:00Z'),
           employeeUserIds: ['emp-1', 'emp-2'],

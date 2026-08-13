@@ -17,6 +17,9 @@ describe('TaskShiftsService', () => {
     id: 'task-1',
     createdByUserId: 'user-1',
     entityId: 'entity-1',
+    partidaId: 1,
+    anio: 2026,
+    indice: 0,
     startTime: new Date('2026-08-11T08:00:00.000Z'),
     endTime: new Date('2026-08-11T16:00:00.000Z'),
     isActive: true,
@@ -31,6 +34,9 @@ describe('TaskShiftsService', () => {
     id: 'task-1',
     createdByUserId: 'user-1',
     entityId: 'entity-1',
+    partidaId: 1,
+    anio: 2026,
+    indice: 0,
     startTime: '2026-08-11T08:00:00.000Z',
     endTime: '2026-08-11T16:00:00.000Z',
     isActive: true,
@@ -97,6 +103,9 @@ describe('TaskShiftsService', () => {
 
       const dto = {
         entityId: 'entity-1',
+        partidaId: 1,
+        anio: 2026,
+        indice: 0,
         startTime: '2026-08-11T08:00:00.000Z',
         endTime: '2026-08-11T16:00:00.000Z',
         employeeUserIds: ['emp-1', 'emp-2'],
@@ -109,6 +118,9 @@ describe('TaskShiftsService', () => {
         {
           createdByUserId: 'user-1',
           entityId: 'entity-1',
+          partidaId: 1,
+          anio: 2026,
+          indice: 0,
           startTime: new Date('2026-08-11T08:00:00.000Z'),
           endTime: new Date('2026-08-11T16:00:00.000Z'),
           employeeUserIds: ['emp-1', 'emp-2'],
@@ -120,6 +132,9 @@ describe('TaskShiftsService', () => {
     it('should throw BadRequestException if endTime is before startTime', async () => {
       const dto = {
         entityId: 'entity-1',
+        partidaId: 1,
+        anio: 2026,
+        indice: 0,
         startTime: '2026-08-11T16:00:00.000Z',
         endTime: '2026-08-11T08:00:00.000Z',
         employeeUserIds: ['emp-1'],
@@ -133,6 +148,9 @@ describe('TaskShiftsService', () => {
     it('should throw BadRequestException if endTime equals startTime', async () => {
       const dto = {
         entityId: 'entity-1',
+        partidaId: 1,
+        anio: 2026,
+        indice: 0,
         startTime: '2026-08-11T08:00:00.000Z',
         endTime: '2026-08-11T08:00:00.000Z',
         employeeUserIds: ['emp-1'],
@@ -147,17 +165,25 @@ describe('TaskShiftsService', () => {
   describe('updateTaskShift', () => {
     it('should update and return mapped DTO', async () => {
       repo.findById.mockResolvedValue(mockPrismaTaskShift);
-      const updatedPrisma = { ...mockPrismaTaskShift, entityId: 'entity-2' };
+      const updatedPrisma = {
+        ...mockPrismaTaskShift,
+        startTime: new Date('2026-08-11T09:00:00.000Z'),
+      };
       repo.updateWithEmployees.mockResolvedValue(updatedPrisma);
 
-      const dto = { entityId: 'entity-2' };
+      const dto = { startTime: '2026-08-11T09:00:00.000Z' };
 
       const result = await service.updateTaskShift('task-1', dto, 'user-1');
 
-      expect(result).toEqual({ ...expectedDto, entityId: 'entity-2' });
+      expect(result).toEqual({
+        ...expectedDto,
+        startTime: '2026-08-11T09:00:00.000Z',
+      });
       expect(repo.updateWithEmployees).toHaveBeenCalledWith(
         'task-1',
-        expect.objectContaining({ entityId: 'entity-2' }),
+        expect.objectContaining({
+          startTime: new Date('2026-08-11T09:00:00.000Z'),
+        }),
         'user-1',
       );
     });
@@ -168,7 +194,7 @@ describe('TaskShiftsService', () => {
       await expect(
         service.updateTaskShift(
           'nonexistent',
-          { entityId: 'entity-2' },
+          { startTime: '2026-08-11T09:00:00.000Z' },
           'user-1',
         ),
       ).rejects.toThrow(NotFoundException);

@@ -22,14 +22,9 @@ export const useCreateTaskShift = () => {
     mutationFn: taskShiftService.createTaskShift,
     onSuccess: () => {
       toast.success("Tarea creada exitosamente", {
-        duration: 3000,
+        duration: 10000,
       });
       invalidateQueries(queryClient, "createTaskShift");
-    },
-    onError: () => {
-      toast.error("Error al crear la tarea. Intenta de nuevo.", {
-        duration: 4000,
-      });
     },
   });
 };
