@@ -10,8 +10,11 @@ export class AlertSolvedService {
   private readonly logger = new Logger(AlertSolvedService.name);
   constructor(private readonly repo: AlertSolvedRepository) {}
 
-  async getSolvedAlerts(requesterId: string): Promise<AlertSolvedDto[]> {
-    const rows = await this.repo.findAllAlertsSolved(requesterId);
+  async getSolvedAlerts(
+    requesterId: string,
+    returnAll = false,
+  ): Promise<AlertSolvedDto[]> {
+    const rows = await this.repo.findAllAlertsSolved(requesterId, returnAll);
     return rows.map((r) => ({
       id: r.id,
       partidaId: r.partidaId,

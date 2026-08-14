@@ -91,7 +91,7 @@ export const mutationInvalidationMap = {
     queries: () => [taskShiftQueryKeys.all()],
   },
   createAlertSolved: {
-    queries: () => [alertsSolvedQueryKeys.all()],
+    queries: () => [alertsSolvedQueryKeys.all(), alertsQueryKeys.all()],
   },
 } as const;
 

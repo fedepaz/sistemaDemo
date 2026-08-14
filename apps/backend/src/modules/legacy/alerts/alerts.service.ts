@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AlertsRepository } from './repositories/alerts.repository';
 import { AlertCommentsRepository } from '../../alertComments/repositories/alertComments.repository';
+import { AlertSolvedService } from '../../alertSolved/alertSolved.service';
 import {
   LegacySiembraRetrasada,
   LegacyFaltaGerminacion,
@@ -19,6 +20,7 @@ export class AlertsService {
   constructor(
     private readonly alertsRepo: AlertsRepository,
     private readonly alertCommentsRepo: AlertCommentsRepository,
+    private readonly alertSolvedService: AlertSolvedService,
   ) {}
 
   private mapSiembraRetrasada(
@@ -112,27 +114,51 @@ export class AlertsService {
     }));
   }
 
+  private async getSolvedKeys(): Promise<Set<string>> {
+    const solved = await this.alertSolvedService.getSolvedAlerts('', true);
+    return new Set(solved.map((s) => `${s.partidaId}-${s.anio}-${s.indice}`));
+  }
+
+  private applySolvedFilter<
+    T extends { partidaId: number; anio: number; indice: number },
+  >(dtos: T[], solvedKeys: Set<string>): T[] {
+    return dtos.filter(
+      (d) => !solvedKeys.has(`${d.partidaId}-${d.anio}-${d.indice}`),
+    );
+  }
+
   async getSiembraRetrasada(): Promise<SiembraRetrasadaDto[]> {
     const rows = await this.alertsRepo.findSiembraRetrasada();
     const dtos = rows.map((row) => this.mapSiembraRetrasada(row));
-    return this.mergeCommentCounts(dtos, 'SIEMBRA_RETRASADA');
+    const withCounts = await this.mergeCommentCounts(dtos, 'SIEMBRA_RETRASADA');
+    const solvedKeys = await this.getSolvedKeys();
+    return this.applySolvedFilter(withCounts, solvedKeys);
   }
 
   async getFaltaGerminacion(): Promise<FaltaGerminacionDto[]> {
     const rows = await this.alertsRepo.findFaltaGerminacion();
     const dtos = rows.map((row) => this.mapFaltaGerminacion(row));
-    return this.mergeCommentCounts(dtos, 'FALTA_GERMINACION');
+    const withCounts = await this.mergeCommentCounts(dtos, 'FALTA_GERMINACION');
+    const solvedKeys = await this.getSolvedKeys();
+    return this.applySolvedFilter(withCounts, solvedKeys);
   }
 
   async getFaltantePlantas(): Promise<FaltantePlantasDto[]> {
     const rows = await this.alertsRepo.findFaltantePlantas();
     const dtos = rows.map((row) => this.mapFaltantePlantas(row));
-    return this.mergeCommentCounts(dtos, 'FALTANTE_PLANTAS');
+    const withCounts = await this.mergeCommentCounts(dtos, 'FALTANTE_PLANTAS');
+    const solvedKeys = await this.getSolvedKeys();
+    return this.applySolvedFilter(withCounts, solvedKeys);
   }
 
   async getFaltaPreExpedicion(): Promise<FaltaPreExpedicionDto[]> {
     const rows = await this.alertsRepo.findFaltaPreExpedicion();
     const dtos = rows.map((row) => this.mapFaltaPreExpedicion(row));
-    return this.mergeCommentCounts(dtos, 'FALTA_PRE_EXPEDICION');
+    const withCounts = await this.mergeCommentCounts(
+      dtos,
+      'FALTA_PRE_EXPEDICION',
+    );
+    const solvedKeys = await this.getSolvedKeys();
+    return this.applySolvedFilter(withCounts, solvedKeys);
   }
 }

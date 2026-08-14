@@ -23,7 +23,14 @@ export class AlertSolvedRepository extends BaseRepository<AlertsSolved> {
 
   async findAllAlertsSolved(
     requesterId: string,
+    returnAll = false,
   ): Promise<AlertSolvedWithUser[]> {
+    if (returnAll) {
+      return this.prisma.alertsSolved.findMany({
+        include: { user: { select: { username: true } } },
+      });
+    }
+
     const devIds = await this.getDevAccounts();
 
     if (devIds.includes(requesterId)) {
