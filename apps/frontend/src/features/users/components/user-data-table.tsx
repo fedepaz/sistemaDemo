@@ -2,16 +2,9 @@
 "use client";
 
 import { useDataTableActions } from "@/hooks/useDataTable";
-import {
-  useDeleteUser,
-  useUpdateUser,
-  useUsers,
-  useRestorePassword,
-} from "../hooks/usersHooks";
+import { useDeleteUser, useUpdateUser, useUsers } from "../hooks/usersHooks";
 import { usePermission } from "@/hooks/usePermission";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { Button } from "@/components/ui/button";
-import { Loader2, KeyRound } from "lucide-react";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { userColumns, userExportColumns } from "./columns";
@@ -24,6 +17,7 @@ import {
 } from "@vivero/shared";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { RestorePasswordButton } from "./restore-password-button";
 
 export function UsersDataTable() {
   const { data: users = [] } = useUsers();
@@ -35,8 +29,6 @@ export function UsersDataTable() {
     useUpdateUser();
   const { mutateAsync: deleteUser } = useDeleteUser();
 
-  const { mutateAsync: restorePassword, isPending: isRestoring } =
-    useRestorePassword();
   const { canUpdate } = usePermission("users");
   const { userProfile: currentUser } = useAuthContext();
 
@@ -83,15 +75,6 @@ export function UsersDataTable() {
     }
   };
 
-  const handleRestorePassword = async () => {
-    if (!selectedUser) return;
-    try {
-      await restorePassword({ userId: selectedUser.id });
-    } catch {}
-
-    if (!isRestoring) setSlideOverOpen(false);
-  };
-
   return (
     <>
       <DataTable
@@ -125,19 +108,10 @@ export function UsersDataTable() {
             />
             {canUpdate && selectedUser.id !== currentUser?.id && (
               <div className="pt-4 border-t">
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={handleRestorePassword}
-                  disabled={isRestoring}
-                >
-                  {isRestoring ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <KeyRound className="mr-2 h-4 w-4" />
-                  )}
-                  Restaurar contraseña
-                </Button>
+                <RestorePasswordButton
+                  selectedUser={selectedUser}
+                  onSuccess={() => setSlideOverOpen(false)}
+                />
               </div>
             )}
           </div>

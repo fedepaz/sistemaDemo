@@ -12,9 +12,7 @@ import { AlertEditForm } from "./alert-edit-form";
 import type { AlertType } from "@/features/alerts/types";
 import { useAlertCommentsMutation } from "@/features/alerts/hooks/useAlertCommentsMutation";
 import { usePermission } from "@/hooks/usePermission";
-import { Button } from "@/components/ui/button";
-import { useAlertSolvedMutation } from "../../hooks/useAlertSolvedMutation";
-import { Check, Loader2 } from "lucide-react";
+import { AlertSolvedButton } from "../shared/alert-solved-button";
 
 const ALERT_TYPE_SLUG_TO_ENUM: Record<string, AlertType> = {
   "siembra-retrasada": "SIEMBRA_RETRASADA",
@@ -50,9 +48,6 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
   });
 
   const { mutate: createComment } = useAlertCommentsMutation();
-
-  const { mutate: createSolvedAlert, isPending: isCreatingSolvedAlert } =
-    useAlertSolvedMutation();
 
   const handleCommentSubmit = (data: CreateAlertCommentDto) => {
     if (!selectedAlert) return;
@@ -96,19 +91,6 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
     }
   };
 
-  const handleAlertsSolved = async () => {
-    if (!selectedAlert) return;
-    try {
-      await createSolvedAlert({
-        partidaId: selectedAlert.partidaId,
-        anio: selectedAlert.anio,
-        indice: selectedAlert.indice,
-      });
-    } catch {}
-
-    if (!isCreatingSolvedAlert) setSlideOpen(false);
-  };
-
   return (
     <>
       <DataTable
@@ -149,19 +131,10 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
                 />
                 {canCreate && selectedAlert.partidaId && (
                   <div className="pt-4 border-t">
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={handleAlertsSolved}
-                      disabled={isCreatingSolvedAlert}
-                    >
-                      {isCreatingSolvedAlert ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <Check className="mr-2 h-4 w-4" />
-                      )}
-                      Marcar alerta como resuelta
-                    </Button>
+                    <AlertSolvedButton
+                      selectedAlert={selectedAlert}
+                      onSuccess={() => setSlideOpen(false)}
+                    />
                   </div>
                 )}
               </div>
