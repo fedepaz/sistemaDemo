@@ -46,7 +46,7 @@ export function RestorePasswordButton({ selectedUser, onSuccess }: Props) {
         <TooltipTrigger asChild>
           <Button
             variant="outline"
-            className="w-full cursor-pointer"
+            className="w-full cursor-pointer border-info/30 bg-info/10 text-info hover:bg-info/15 hover:text-info"
             onClick={() => setDialogOpen(true)}
             disabled={isRestoring}
             aria-label="Restaurar contraseña del usuario"
@@ -60,7 +60,7 @@ export function RestorePasswordButton({ selectedUser, onSuccess }: Props) {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="top" className="border border-border shadow-md">
-          <p>Genera una nueva contraseña para el usuario</p>
+          <p>Genera una contraseña por defecto para el usuario</p>
         </TooltipContent>
       </Tooltip>
 
@@ -68,15 +68,15 @@ export function RestorePasswordButton({ selectedUser, onSuccess }: Props) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <KeyRound className="h-6 w-6 text-primary" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-info/10">
+                <KeyRound className="h-6 w-6 text-info" />
               </div>
               <AlertDialogTitle className="text-xl">
                 Restaurar contraseña
               </AlertDialogTitle>
             </div>
             <AlertDialogDescription className="text-base pt-2">
-              Se generará una nueva contraseña para este usuario. ¿Deseas
+              Se generará una contraseña por defecto para el usuario. ¿Deseas
               continuar?
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -90,7 +90,7 @@ export function RestorePasswordButton({ selectedUser, onSuccess }: Props) {
             <AlertDialogAction
               onClick={handleConfirm}
               disabled={isRestoring}
-              className="min-h-[48px] min-w-[100px]"
+              className="min-h-[48px] min-w-[100px] bg-info text-info-foreground hover:bg-info/90"
             >
               {isRestoring ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

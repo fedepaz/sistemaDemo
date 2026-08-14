@@ -48,7 +48,7 @@ export function AlertSolvedButton({ selectedAlert, onSuccess }: Props) {
         <TooltipTrigger asChild>
           <Button
             variant="outline"
-            className="w-full cursor-pointer"
+            className="w-full cursor-pointer border-success/30 bg-success/10 text-success hover:bg-success/15 hover:text-success"
             onClick={() => setDialogOpen(true)}
             disabled={isCreatingSolvedAlert}
             aria-label="Marcar alerta como resuelta"
@@ -62,7 +62,7 @@ export function AlertSolvedButton({ selectedAlert, onSuccess }: Props) {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="top" className="border border-border shadow-md">
-          <p>Oculta esta alerta de la lista</p>
+          <p>Remueve esta alerta de la lista</p>
         </TooltipContent>
       </Tooltip>
 
@@ -70,15 +70,15 @@ export function AlertSolvedButton({ selectedAlert, onSuccess }: Props) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Check className="h-6 w-6 text-primary" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10">
+                <Check className="h-6 w-6 text-success" />
               </div>
               <AlertDialogTitle className="text-xl">
-                Marcar como resuelta
+                Marcar Alerta
               </AlertDialogTitle>
             </div>
             <AlertDialogDescription className="text-base pt-2">
-              Esta alerta se ocultará de la lista. ¿Deseas continuar?
+              Esta alerta se removerá de la lista. ¿Deseas continuar?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -91,7 +91,7 @@ export function AlertSolvedButton({ selectedAlert, onSuccess }: Props) {
             <AlertDialogAction
               onClick={handleConfirm}
               disabled={isCreatingSolvedAlert}
-              className="min-h-[48px] min-w-[100px]"
+              className="min-h-[48px] min-w-[100px] bg-success text-success-foreground hover:bg-success/90"
             >
               {isCreatingSolvedAlert ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
