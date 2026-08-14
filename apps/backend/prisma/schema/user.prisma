@@ -13,12 +13,10 @@ model User {
   tenant     Tenant          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   
   auditLogs  AuditLog[]
-
   alertComments AlertComment[]
-
   userPermissions UserPermission[]
-
   taskShiftEmployee TaskShiftEmployee[]
+  alertsSolved AlertsSolved[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,6 +31,7 @@ model User {
   deletedEntities Entity[] @relation("deleted_entities")
   deletedUsers User[] @relation("deleted_users")
   deletedAlertComments AlertComment[] @relation("deleted_alert_comments")
+  deletedAlertsSolved AlertsSolved[] @relation("deleted_solved_alerts")
   
   deletedAt DateTime? @db.Timestamp(0)
 

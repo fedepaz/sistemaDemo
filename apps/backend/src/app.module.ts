@@ -36,6 +36,7 @@ import { AlertCommentsModule } from './modules/alertComments/alertComments.modul
 import { TaskShiftsModule } from './modules/taskShifts/taskShifts.module';
 import { RequestIdMiddleware } from './shared/middleware/request-id.middleware';
 import { getPinoStream } from './config/logger';
+import { AlertSolvedModule } from './modules/alertSolved/alertSolved.module';
 
 @Module({
   imports: [
@@ -98,6 +99,7 @@ import { getPinoStream } from './config/logger';
     LegacyAlertsModule,
     AlertCommentsModule,
     TaskShiftsModule,
+    AlertSolvedModule,
     AuthModule,
     UsersModule,
     PermissionsModule,

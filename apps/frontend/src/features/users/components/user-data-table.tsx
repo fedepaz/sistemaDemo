@@ -105,7 +105,7 @@ export function UsersDataTable() {
         onDelete={handleDelete}
         exportColumns={userExportColumns}
       />
-      {slideOverOpen && selectedUser && (
+      {selectedUser && (
         <SlideOverForm
           formId={`edit-${selectedUser.username}`}
           open={slideOverOpen}
@@ -124,22 +124,22 @@ export function UsersDataTable() {
               formId={`edit-${selectedUser.username}`}
             />
             {canUpdate && selectedUser.id !== currentUser?.id && (
-                <div className="pt-4 border-t">
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={handleRestorePassword}
-                    disabled={isRestoring}
-                  >
-                    {isRestoring ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <KeyRound className="mr-2 h-4 w-4" />
-                    )}
-                    Restaurar contraseña
-                  </Button>
-                </div>
-              )}
+              <div className="pt-4 border-t">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleRestorePassword}
+                  disabled={isRestoring}
+                >
+                  {isRestoring ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <KeyRound className="mr-2 h-4 w-4" />
+                  )}
+                  Restaurar contraseña
+                </Button>
+              </div>
+            )}
           </div>
         </SlideOverForm>
       )}

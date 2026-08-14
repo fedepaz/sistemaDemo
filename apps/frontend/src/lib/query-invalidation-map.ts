@@ -15,6 +15,7 @@ import {
   alertCommentsQueryKeys,
   alertsQueryKeys,
   taskShiftQueryKeys,
+  alertsSolvedQueryKeys,
 } from "./queryKeys";
 
 // ============================================================================
@@ -88,6 +89,9 @@ export const mutationInvalidationMap = {
 
   createTaskShift: {
     queries: () => [taskShiftQueryKeys.all()],
+  },
+  createAlertSolved: {
+    queries: () => [alertsSolvedQueryKeys.all()],
   },
 } as const;
 

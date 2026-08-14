@@ -24,14 +24,14 @@ import {
 interface AlertEditFormProps {
   selectedAlert: AlertBaseDto;
   alertType: AlertType;
-  form: UseFormReturn<CreateAlertCommentDto>;
+  alertCommentsForm: UseFormReturn<CreateAlertCommentDto>;
   onSubmit: (data: CreateAlertCommentDto) => void;
 }
 
 export function AlertEditForm({
   selectedAlert,
   alertType,
-  form,
+  alertCommentsForm,
   onSubmit,
 }: AlertEditFormProps) {
   const { userProfile } = useAuthContext();
@@ -49,10 +49,10 @@ export function AlertEditForm({
   const TypeIcon = config.icon;
 
   return (
-    <Form {...form}>
+    <Form {...alertCommentsForm}>
       <form
         id="alert-comment-form"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={alertCommentsForm.handleSubmit(onSubmit)}
         className="flex flex-col gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* Type-specific header */}
@@ -171,7 +171,7 @@ export function AlertEditForm({
 
         {/* Form field for new comment */}
         <FormField
-          control={form.control}
+          control={alertCommentsForm.control}
           name="content"
           render={({ field }) => (
             <FormItem className="space-y-2 md:space-y-3">

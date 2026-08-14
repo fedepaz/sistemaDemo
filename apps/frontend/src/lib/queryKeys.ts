@@ -50,8 +50,7 @@ export const adminPermissionsQueryKeys = {
 
 export const entityQueryKeys = {
   all: () => ["entities"] as const,
-  byName: (name: string) =>
-    [...entityQueryKeys.all(), "byName", name] as const,
+  byName: (name: string) => [...entityQueryKeys.all(), "byName", name] as const,
   byLabel: (label: string) =>
     [...entityQueryKeys.all(), "byLabel", label] as const,
 };
@@ -64,8 +63,7 @@ export const auditLogQueryKeys = {
   all: () => ["auditLog"] as const,
   byTenantName: (tenantName: string, page?: number, limit?: number) =>
     ["auditLog", tenantName, page, limit] as const,
-  byUserId: (userId: string) =>
-    ["auditLog", "user", userId] as const,
+  byUserId: (userId: string) => ["auditLog", "user", userId] as const,
 };
 
 // ============================================================================
@@ -139,7 +137,14 @@ export const alertCommentsQueryKeys = {
     partidaId: number,
     anio: number,
     indice: number,
-  ) => [...alertCommentsQueryKeys.all(), alertType, partidaId, anio, indice] as const,
+  ) =>
+    [
+      ...alertCommentsQueryKeys.all(),
+      alertType,
+      partidaId,
+      anio,
+      indice,
+    ] as const,
 };
 
 // ============================================================================
@@ -150,4 +155,12 @@ export const taskShiftQueryKeys = {
   all: () => ["taskShifts"] as const,
   byEntityId: (entityId: string) =>
     [...taskShiftQueryKeys.all(), "byEntityId", entityId] as const,
+};
+
+// ============================================================================
+// ALERT SOLVED
+// ============================================================================
+
+export const alertsSolvedQueryKeys = {
+  all: () => ["alertsSolved"] as const,
 };

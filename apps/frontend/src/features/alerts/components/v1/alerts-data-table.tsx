@@ -11,6 +11,10 @@ import { AlertsViewForm } from "./alerts-view-form";
 import { AlertEditForm } from "./alert-edit-form";
 import type { AlertType } from "@/features/alerts/types";
 import { useAlertCommentsMutation } from "@/features/alerts/hooks/useAlertCommentsMutation";
+import { usePermission } from "@/hooks/usePermission";
+import { Button } from "@/components/ui/button";
+import { useAlertSolvedMutation } from "../../hooks/useAlertSolvedMutation";
+import { Check, Loader2 } from "lucide-react";
 
 const ALERT_TYPE_SLUG_TO_ENUM: Record<string, AlertType> = {
   "siembra-retrasada": "SIEMBRA_RETRASADA",
@@ -39,12 +43,16 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
   const [slideOverOpen, setSlideOpen] = useState(false);
   const [selectedAlert, setSelectedAlert] = useState<TData | null>(null);
   const [mode, setMode] = useState<"view" | "edit">("view");
+  const { canCreate } = usePermission("alerts");
 
   const form = useForm<CreateAlertCommentDto>({
     defaultValues: { content: "" },
   });
 
   const { mutate: createComment } = useAlertCommentsMutation();
+
+  const { mutate: createSolvedAlert, isPending: isCreatingSolvedAlert } =
+    useAlertSolvedMutation();
 
   const handleCommentSubmit = (data: CreateAlertCommentDto) => {
     if (!selectedAlert) return;
@@ -88,6 +96,19 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
     }
   };
 
+  const handleAlertsSolved = async () => {
+    if (!selectedAlert) return;
+    try {
+      await createSolvedAlert({
+        partidaId: selectedAlert.partidaId,
+        anio: selectedAlert.anio,
+        indice: selectedAlert.indice,
+      });
+    } catch {}
+
+    if (!isCreatingSolvedAlert) setSlideOpen(false);
+  };
+
   return (
     <>
       <DataTable
@@ -119,12 +140,31 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
                 alertType={resolvedAlertType}
               />
             ) : (
-              <AlertEditForm
-                selectedAlert={selectedAlert}
-                alertType={resolvedAlertType}
-                form={form}
-                onSubmit={handleCommentSubmit}
-              />
+              <div className="space-y-2">
+                <AlertEditForm
+                  selectedAlert={selectedAlert}
+                  alertType={resolvedAlertType}
+                  alertCommentsForm={form}
+                  onSubmit={handleCommentSubmit}
+                />
+                {canCreate && selectedAlert.partidaId && (
+                  <div className="pt-4 border-t">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={handleAlertsSolved}
+                      disabled={isCreatingSolvedAlert}
+                    >
+                      {isCreatingSolvedAlert ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Check className="mr-2 h-4 w-4" />
+                      )}
+                      Marcar alerta como resuelta
+                    </Button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </SlideOverForm>
