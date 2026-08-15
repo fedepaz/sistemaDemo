@@ -23,7 +23,7 @@ export class SiembraService {
     );
 
     if (missingFields.length > 0) {
-      this.logger.error('Header validation failed for extendidos', {
+      this.logger.error('Header validation failed for siembra', {
         missingFields,
         availableFields: Object.keys(row),
       });

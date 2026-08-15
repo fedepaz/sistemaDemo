@@ -93,9 +93,12 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
               <Package className="h-5 w-5 md:h-6 md:w-6" />
             </div>
             <div>
-              <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground">
-                {formatPartidaHeader(selectedExtendido)}
+              <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+                {selectedExtendido.codigoEspecie}
               </h2>
+              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                {formatPartidaHeader(selectedExtendido)}
+              </p>
             </div>
           </div>
           {selectedExtendido.stockInicial ? (

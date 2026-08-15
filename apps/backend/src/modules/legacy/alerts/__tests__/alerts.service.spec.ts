@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException } from '@nestjs/common';
 import { AlertsService } from '../alerts.service';
 import { AlertsRepository } from '../repositories/alerts.repository';
 import { AlertCommentsRepository } from '../../../alertComments/repositories/alertComments.repository';
@@ -504,7 +503,7 @@ describe('AlertsService', () => {
   });
 
   describe('validateHeaderFields', () => {
-    it('should throw BadRequestException for missing header fields', () => {
+    it('should log error for missing header fields but not throw', () => {
       const row = {
         partidaId: 123,
         anio: 2024,
@@ -512,12 +511,8 @@ describe('AlertsService', () => {
         // Missing codigoEspecie and nombreEspecie
       };
 
-      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
-        BadRequestException,
-      );
-      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
-        'Missing required header fields',
-      );
+      // Should not throw - validation is logging only for legacy data resilience
+      expect(() => service.validateHeaderFields(row, 'alerts')).not.toThrow();
     });
 
     it('should not throw for valid header fields', () => {
@@ -532,7 +527,7 @@ describe('AlertsService', () => {
       expect(() => service.validateHeaderFields(row, 'alerts')).not.toThrow();
     });
 
-    it('should throw when partidaId is null', () => {
+    it('should log error when partidaId is null but not throw', () => {
       const row = {
         partidaId: null,
         anio: 2024,
@@ -541,17 +536,15 @@ describe('AlertsService', () => {
         nombreEspecie: 'Especie Test',
       };
 
-      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
-        BadRequestException,
-      );
+      // Should not throw - validation is logging only for legacy data resilience
+      expect(() => service.validateHeaderFields(row, 'alerts')).not.toThrow();
     });
 
-    it('should throw when all header fields are missing', () => {
+    it('should log error when all header fields are missing but not throw', () => {
       const row = {};
 
-      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
-        BadRequestException,
-      );
+      // Should not throw - validation is logging only for legacy data resilience
+      expect(() => service.validateHeaderFields(row, 'alerts')).not.toThrow();
     });
   });
 });

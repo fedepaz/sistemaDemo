@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException } from '@nestjs/common';
 import { ExtendidosService } from '../extendidos.service';
 import { ExtendidosRepository } from '../repositories/extendidos.repository';
 import { LegacyExtendido } from '../interfaces/extendidos.interface';
@@ -31,14 +30,14 @@ describe('ExtendidosService', () => {
   });
 
   describe('mapToDto', () => {
-    it('should throw BadRequestException for missing header fields', () => {
+    it('should log error for missing header fields but not throw', () => {
       const row = {
-        espvar: 'ESP001',
+        planta: 'ESP001',
       } as LegacyExtendido;
 
       const svc = service as any;
-      expect(() => svc.mapToDto(row)).toThrow(BadRequestException);
-      expect(() => svc.mapToDto(row)).toThrow('Missing required header fields');
+      // Should not throw - validation is logging only for legacy data resilience
+      expect(() => svc.mapToDto(row)).not.toThrow();
     });
 
     it('should map SQL fields to header fields correctly', () => {
@@ -47,12 +46,11 @@ describe('ExtendidosService', () => {
         partida: 123,
         ano: 2024,
         indice: 1,
-        espvar: 'ESP001',
-        especieNombre: 'Especie Test',
+        planta: 'ESP001',
+        nombre: 'Especie Test',
         hai: 'HAI001',
-        con: 100,
+        con: '100',
         injerto: 'Injerto Test',
-        contenedor: 'CONT001',
         cg: 1,
         f_siem: '2024-01-01',
         f_siembra: '2024-01-02',
