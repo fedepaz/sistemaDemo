@@ -25,8 +25,7 @@ export class SiembraRepository {
     FROM partidas p  
     LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)
     LEFT JOIN especie e ON e.codigo = p.espvar
-    WHERE estado <> 'ANULADA' AND f_siembra=0
-	    AND p.sem_siem=WEEK(CURRENT_DATE())
+    WHERE estado <> 'ANULADA' AND f_siembra=0 AND p.hai<>'A' 
     ORDER BY p.partida, p.indice
   `;
     return this.legacyDb.query<LegacySiembra[]>(sql);
