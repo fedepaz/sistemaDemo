@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
-  allowedDevOrigins: ["proplanta-sistema.ar"],
+  allowedDevOrigins: ['sistemademo.cabecitanegra.dpdns.org'],
   async headers() {
     return [
       {
