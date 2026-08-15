@@ -1,23 +1,16 @@
 // src/features/siembra/components/siembra-view-form.tsx
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SiembraDto } from "@vivero/shared";
 import {
   Package,
   Calendar,
   Info,
-  AlertCircle,
   Hash,
-  Thermometer,
-  ChevronRight,
   ClipboardList,
   Activity,
-  History,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
 
 interface SiembraFormProps {
   selectedExtendido: SiembraDto;

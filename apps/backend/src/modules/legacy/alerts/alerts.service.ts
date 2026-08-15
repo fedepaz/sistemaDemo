@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AlertsRepository } from './repositories/alerts.repository';
 import { AlertCommentsRepository } from '../../alertComments/repositories/alertComments.repository';
 import { AlertSolvedService } from '../../alertSolved/alertSolved.service';
@@ -22,6 +22,28 @@ export class AlertsService {
     private readonly alertCommentsRepo: AlertCommentsRepository,
     private readonly alertSolvedService: AlertSolvedService,
   ) {}
+
+  private readonly logger = new Logger(AlertsService.name);
+
+  validateHeaderFields(row: Record<string, any>, moduleName: string): void {
+    const requiredFields = [
+      'partidaId',
+      'anio',
+      'indice',
+      'codigoEspecie',
+      'nombreEspecie',
+    ];
+    const missingFields = requiredFields.filter(
+      (field) => row[field] === undefined || row[field] === null,
+    );
+
+    if (missingFields.length > 0) {
+      this.logger.error(`Header validation failed for ${moduleName}`, {
+        missingFields,
+        availableFields: Object.keys(row),
+      });
+    }
+  }
 
   private mapSiembraRetrasada(
     row: LegacySiembraRetrasada,
@@ -130,6 +152,9 @@ export class AlertsService {
   async getSiembraRetrasada(): Promise<SiembraRetrasadaDto[]> {
     const rows = await this.alertsRepo.findSiembraRetrasada();
     const dtos = rows.map((row) => this.mapSiembraRetrasada(row));
+    for (const dto of dtos) {
+      this.validateHeaderFields(dto, 'siembraRetrasada');
+    }
     const withCounts = await this.mergeCommentCounts(dtos, 'SIEMBRA_RETRASADA');
     const solvedKeys = await this.getSolvedKeys();
     return this.applySolvedFilter(withCounts, solvedKeys);
@@ -138,6 +163,9 @@ export class AlertsService {
   async getFaltaGerminacion(): Promise<FaltaGerminacionDto[]> {
     const rows = await this.alertsRepo.findFaltaGerminacion();
     const dtos = rows.map((row) => this.mapFaltaGerminacion(row));
+    for (const dto of dtos) {
+      this.validateHeaderFields(dto, 'faltaGerminacion');
+    }
     const withCounts = await this.mergeCommentCounts(dtos, 'FALTA_GERMINACION');
     const solvedKeys = await this.getSolvedKeys();
     return this.applySolvedFilter(withCounts, solvedKeys);
@@ -146,6 +174,9 @@ export class AlertsService {
   async getFaltantePlantas(): Promise<FaltantePlantasDto[]> {
     const rows = await this.alertsRepo.findFaltantePlantas();
     const dtos = rows.map((row) => this.mapFaltantePlantas(row));
+    for (const dto of dtos) {
+      this.validateHeaderFields(dto, 'faltantePlantas');
+    }
     const withCounts = await this.mergeCommentCounts(dtos, 'FALTANTE_PLANTAS');
     const solvedKeys = await this.getSolvedKeys();
     return this.applySolvedFilter(withCounts, solvedKeys);
@@ -154,6 +185,9 @@ export class AlertsService {
   async getFaltaPreExpedicion(): Promise<FaltaPreExpedicionDto[]> {
     const rows = await this.alertsRepo.findFaltaPreExpedicion();
     const dtos = rows.map((row) => this.mapFaltaPreExpedicion(row));
+    for (const dto of dtos) {
+      this.validateHeaderFields(dto, 'faltaPreExpedicion');
+    }
     const withCounts = await this.mergeCommentCounts(
       dtos,
       'FALTA_PRE_EXPEDICION',

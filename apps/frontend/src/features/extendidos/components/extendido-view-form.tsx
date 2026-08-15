@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
+import { formatPartidaHeader } from "@/features/shared/utils/header";
 
 interface ExtendidosFormProps {
   selectedExtendido: ExtendidoDto;
@@ -93,13 +94,8 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
             </div>
             <div>
               <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground">
-                {selectedExtendido.codigoEspecie}
+                {formatPartidaHeader(selectedExtendido)}
               </h2>
-              <div className="flex items-center gap-2 mt-1 md:mt-1.5">
-                <span className="text-[9px] md:text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest bg-muted px-1 py-0.5 rounded border border-border/40">
-                  {selectedExtendido.nombreEspecie}
-                </span>
-              </div>
             </div>
           </div>
           {selectedExtendido.stockInicial ? (
@@ -124,7 +120,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
               value: getHaiLabel(selectedExtendido.hai),
               icon: Info,
             },
-            { label: "CON", value: selectedExtendido.con, icon: Activity },
+            { label: "CANT", value: selectedExtendido.nrocont, icon: Hash },
           ].map((item, idx) => (
             <div
               key={idx}

@@ -1,24 +1,59 @@
 // src/modules/legacy/extendidos/services/extendidos.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ExtendidosRepository } from './repositories/extendidos.repository';
 import { ExtendidoDto } from '@vivero/shared';
 import { LegacyExtendido } from './interfaces/extendidos.interface';
 
 @Injectable()
 export class ExtendidosService {
+  private readonly logger = new Logger(ExtendidosService.name);
+
   constructor(private readonly extendidosRepository: ExtendidosRepository) {}
+
+  private validateHeaderFields(row: Record<string, any>): void {
+    const requiredFields = [
+      'partidaId',
+      'anio',
+      'indice',
+      'codigoEspecie',
+      'nombreEspecie',
+    ];
+    const missingFields = requiredFields.filter(
+      (field) => row[field] === undefined || row[field] === null,
+    );
+
+    if (missingFields.length > 0) {
+      this.logger.error('Header validation failed for extendidos', {
+        missingFields,
+        availableFields: Object.keys(row),
+      });
+    }
+  }
+
   private mapToDto(row: LegacyExtendido): ExtendidoDto {
-    return {
+    // Map SQL fields to header fields
+    const mappedRow = {
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
+      codigoEspecie: row.planta,
+      nombreEspecie: row.nombre,
+    };
+
+    this.validateHeaderFields(mappedRow);
+
+    return {
+      // Header fields
+      partidaId: mappedRow.partidaId,
+      anio: mappedRow.anio,
+      indice: mappedRow.indice,
+      codigoEspecie: mappedRow.codigoEspecie,
+      nombreEspecie: mappedRow.nombreEspecie,
+      // Rest of fields
       hai: row.hai,
-      con: row.con,
-      codigoEspecie: row.espvar,
-      nombreEspecie: row.especieNombre,
+      nrocont: row.con,
       injerto: row.injerto,
-      contenedor: row.contenedor,
       codigoCamaraGerminacion: row.cg,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,

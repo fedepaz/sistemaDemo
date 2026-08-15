@@ -6,12 +6,11 @@ export interface LegacyExtendido extends RowDataPacket {
   partida: number;
   ano: number;
   indice: number;
+  planta: string;
+  nombre: string;
   hai: string;
-  con: number;
-  espvar: string;
-  especieNombre: string;
+  con: string;
   injerto: string;
-  contenedor: string;
   cg: number;
   f_siem: string;
   f_siembra: string;

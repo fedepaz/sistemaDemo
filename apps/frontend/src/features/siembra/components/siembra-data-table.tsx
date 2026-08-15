@@ -41,7 +41,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         ano: selectedPartida.anio,
         indice: selectedPartida.indice,
         ubicacion: undefined,
-        stock_ini: selectedPartida.con,
+        stock_ini: parseInt(selectedPartida.con),
         detalle: "",
         baja: 0,
         extendido: "",

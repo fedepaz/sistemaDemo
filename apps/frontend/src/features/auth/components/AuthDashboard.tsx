@@ -31,7 +31,7 @@ export function AuthDashboard() {
       <div className="max-w-md w-full space-y-4 sm:space-y-6">
         {/* Logo */}
         <div className="flex justify-center">
-          <Logo variant="full" className="h-20 sm:h-24" />
+          <Logo variant="full" className="h-20 sm:h-24 w-auto" />
         </div>
 
         {/* Form Card */}

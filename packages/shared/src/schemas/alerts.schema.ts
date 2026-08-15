@@ -1,20 +1,13 @@
 // shared/src/schemas/alerts.schema.ts
 
 import { z } from "zod";
+import { LegacyHeaderSchema } from "./legacy-header.schema";
 
 // ============================================================================
 // ALERT BASE (shared across all alert types)
 // ============================================================================
 
-export const AlertPartidaHeaderSchema = z.object({
-  partidaId: z.number(),
-  anio: z.number(),
-  indice: z.number(),
-  codigoEspecie: z.string(),
-  nombreEspecie: z.string(),
-});
-
-export const AlertBaseDtoSchema = AlertPartidaHeaderSchema.extend({
+export const AlertBaseDtoSchema = LegacyHeaderSchema.extend({
   commentCount: z.number().default(0),
 });
 

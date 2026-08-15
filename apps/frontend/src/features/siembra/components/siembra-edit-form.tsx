@@ -49,7 +49,7 @@ export function SiembraEditForm({
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
 
-  const originalStock = selectedExtendido.con;
+  const originalStock = parseInt(selectedExtendido.con);
   const watchedStockIni = form.watch("stock_ini");
   const watchedBaja = form.watch("baja");
 

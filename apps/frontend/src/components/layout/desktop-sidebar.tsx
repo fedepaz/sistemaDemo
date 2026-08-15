@@ -316,12 +316,15 @@ export function DesktopSidebar() {
         <div
           className={cn(
             "flex items-center",
-            isCollapsed ? "justify-center" : "justify-between pl-1",
+            isCollapsed ? "justify-between pr-2.5" : "justify-between pl-1",
           )}
         >
           <Logo
             variant="icon"
-            className={cn("h-6 w-auto", isCollapsed ? "h-7" : "h-6")}
+            className={cn(
+              "h-6 w-auto",
+              isCollapsed ? "h-7 w-auto" : "h-6 w-auto",
+            )}
           />
 
           <Tooltip>
@@ -338,7 +341,7 @@ export function DesktopSidebar() {
                 }
               >
                 {isCollapsed ? (
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <ChevronRight className="h-3.5 w-3.5 ml-1" />
                 ) : (
                   <ChevronLeft className="h-3.5 w-3.5" />
                 )}

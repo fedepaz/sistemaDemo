@@ -40,7 +40,7 @@ export function ExtendidosEditForm({
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara === "");
 
-  const originalStock = selectedExtendido.con;
+  const originalStock = selectedExtendido.nrocont;
 
   return (
     <Form {...form}>

@@ -12,6 +12,7 @@ import type { AlertBaseDto } from "@vivero/shared";
 import type { AlertType } from "@/features/alerts/types";
 import { ALERT_TYPE_CONFIGS } from "./alert-type-config";
 import { formatRelativeTime } from "../../utils/format-relative-time";
+import { formatPartidaHeader } from "@/features/shared/utils/header";
 
 interface AlertsViewFormProps {
   selectedAlert: AlertBaseDto;
@@ -55,11 +56,7 @@ export function AlertsViewForm({
                 {config.label}
               </h2>
               <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
-                Partida #{selectedAlert.partidaId}/{selectedAlert.indice} · Año{" "}
-                {selectedAlert.anio}
-              </p>
-              <p className="text-[9px] md:text-[10px] font-mono text-primary mt-0.5">
-                {selectedAlert.codigoEspecie} · {selectedAlert.nombreEspecie}
+                {formatPartidaHeader(selectedAlert)}
               </p>
             </div>
           </div>

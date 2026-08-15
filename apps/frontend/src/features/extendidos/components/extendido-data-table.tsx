@@ -73,7 +73,7 @@ export function ExtendidoDataTable({
         ano: selectedPartida.anio,
         indice: selectedPartida.indice,
         ubicacion: selectedPartida.codigoUbicacion ?? undefined,
-        stock_ini: selectedPartida.con,
+        stock_ini: parseInt(selectedPartida.nrocont),
         detalle: "", // Reset detalle (limit 30)
         baja: 0,
         extendido: selectedPartida.extendido || selectedPartida.detalle || "",

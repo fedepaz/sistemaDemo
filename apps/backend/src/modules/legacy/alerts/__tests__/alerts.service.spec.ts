@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { BadRequestException } from '@nestjs/common';
 import { AlertsService } from '../alerts.service';
 import { AlertsRepository } from '../repositories/alerts.repository';
 import { AlertCommentsRepository } from '../../../alertComments/repositories/alertComments.repository';
@@ -498,6 +499,58 @@ describe('AlertsService', () => {
       expect(mockAlertSolvedService.getSolvedAlerts).toHaveBeenCalledWith(
         '',
         true,
+      );
+    });
+  });
+
+  describe('validateHeaderFields', () => {
+    it('should throw BadRequestException for missing header fields', () => {
+      const row = {
+        partidaId: 123,
+        anio: 2024,
+        indice: 1,
+        // Missing codigoEspecie and nombreEspecie
+      };
+
+      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
+        BadRequestException,
+      );
+      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
+        'Missing required header fields',
+      );
+    });
+
+    it('should not throw for valid header fields', () => {
+      const row = {
+        partidaId: 123,
+        anio: 2024,
+        indice: 1,
+        codigoEspecie: 'ESP001',
+        nombreEspecie: 'Especie Test',
+      };
+
+      expect(() => service.validateHeaderFields(row, 'alerts')).not.toThrow();
+    });
+
+    it('should throw when partidaId is null', () => {
+      const row = {
+        partidaId: null,
+        anio: 2024,
+        indice: 1,
+        codigoEspecie: 'ESP001',
+        nombreEspecie: 'Especie Test',
+      };
+
+      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw when all header fields are missing', () => {
+      const row = {};
+
+      expect(() => service.validateHeaderFields(row, 'alerts')).toThrow(
+        BadRequestException,
       );
     });
   });

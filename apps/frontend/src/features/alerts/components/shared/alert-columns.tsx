@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
-import { Badge } from "@/components/ui/badge";
+
 import {
   SiembraRetrasadaDto,
   FaltaGerminacionDto,
