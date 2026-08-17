@@ -19,9 +19,9 @@ This document tracks all React components within the `apps/frontend/src` directo
 
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
-| `AuthLayout` | [ ] | [ ] | [ ] | [ ] |
-| `LoginPage` | [ ] | [ ] | [ ] | [ ] |
-| `RegisterPage` | [ ] | [ ] | [ ] | [ ] |
+| `AuthLayout` | [x] | [x] | [ ] | [x] |
+| `LoginPage` | [x] | [x] | [ ] | [x] |
+| `RegisterPage` | [x] | [x] | [ ] | [x] |
 | `CatchAllPage` | [ ] | [ ] | [ ] | [ ] |
 | `DashboardLayout` | [x] | [ ] | [ ] | [ ] |
 | `Loading` | [ ] | [ ] | [ ] | [ ] |
@@ -41,7 +41,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `NotFoundPage` | [ ] | [ ] | [ ] | [ ] |
 | `PendingPermissionsPage` | [ ] | [ ] | [ ] | [ ] |
 | `ThemeToggle` | [ ] | [ ] | [ ] | [ ] |
-| `Logo` | [ ] | [ ] | [ ] | [ ] |
+| `Logo` | [x] | [x] | [ ] | [x] |
 | `DeleteDialog` | [ ] | [ ] | [ ] | [ ] |
 | `EditDialog` | [ ] | [ ] | [ ] | [ ] |
 | `ExportDropdown` | [ ] | [ ] | [ ] | [ ] |
@@ -72,6 +72,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
+| `AuthHeader` | [x] | [x] | [x] | [x] |
 | `DashboardHeader` | [x] | [x] | [x] | [x] |
 | `DesktopSidebar` | [x] | [ ] | [ ] | [ ] |
 | `MobileNavigation` | [x] | [ ] | [ ] | [x] |
@@ -145,12 +146,12 @@ This document tracks all React components within the `apps/frontend/src` directo
 ### Auth
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
-| `AuthSkeleton` | [ ] | [ ] | [ ] | [ ] |
-| `AuthDashboard` | [ ] | [ ] | [ ] | [ ] |
-| `LoginForm` | [ ] | [ ] | [ ] | [ ] |
-| `RegisterForm` | [ ] | [ ] | [ ] | [ ] |
-| `RegisterLoading` | [ ] | [ ] | [ ] | [ ] |
-| `LoginLoading` | [ ] | [ ] | [ ] | [ ] |
+| `AuthSkeleton` | [x] | [x] | [x] | [x] |
+| `AuthDashboard` | [x] | [x] | [ ] | [x] |
+| `LoginForm` | [x] | [x] | [x] | [x] |
+| `RegisterForm` | [x] | [x] | [x] | [x] |
+| `RegisterLoading` | [x] | [x] | [x] | [x] |
+| `LoginLoading` | [x] | [x] | [x] | [x] |
 
 ### Entities
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
@@ -216,7 +217,7 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `FullNameCell` | [ ] | [ ] | [ ] | [ ] |
 | `StatusCell` | [ ] | [ ] | [ ] | [ ] |
 | `CreatedAtCell` | [ ] | [ ] | [ ] | [ ] |
-| `ChangePasswordForm` | [ ] | [ ] | [ ] | [ ] |
+| `ChangePasswordForm` | [x] | [x] | [x] | [x] |
 
 ## Modals
 

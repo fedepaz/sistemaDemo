@@ -31,7 +31,7 @@ export function AuthHeader() {
                   variant="ghost"
                   size="sm"
                   asChild
-                  className="text-[10px] font-black uppercase tracking-widest font-oxanium text-muted-foreground/60 hover:text-primary hover:bg-primary/5 rounded-none transition-premium"
+                  className="text-[11px] sm:text-xs font-black uppercase tracking-widest font-oxanium text-muted-foreground/60 hover:text-primary hover:bg-primary/5 rounded-none transition-colors duration-200"
                 >
                   <Link href={targetRoute}>{targetLabel}</Link>
                 </Button>

@@ -49,14 +49,14 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 font-serif"
+        className="space-y-4"
       >
         <FormField
           control={form.control}
           name="currentPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-sans">Contraseña actual</FormLabel>
+              <FormLabel className="font-sans text-xs sm:text-sm">Contraseña actual</FormLabel>
               <FormControl>
                 <div className="relative">
                   {/* Ícono de candado */}
@@ -70,14 +70,14 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
                     type={showCurrent ? "text" : "password"}
                     {...field}
                     disabled={isLoading}
-                    className="pl-9 pr-10" // Espacio para ícono + botón
+                    className="pl-9 pr-11 h-11 sm:h-12 text-sm sm:text-base"
                   />
 
                   {/* Botón toggle - SIN tabIndex={-1} para accesibilidad */}
                   <button
                     type="button"
                     onClick={() => setShowCurrent(!showCurrent)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg cursor-pointer"
                     aria-label={
                       showCurrent
                         ? "Ocultar contraseña actual"
@@ -102,7 +102,7 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
           name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-sans">Nueva contraseña</FormLabel>
+              <FormLabel className="font-sans text-xs sm:text-sm">Nueva contraseña</FormLabel>
               <FormControl>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -114,13 +114,13 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
                     type={showNew ? "text" : "password"}
                     {...field}
                     disabled={isLoading}
-                    className="pl-9 pr-10"
+                    className="pl-9 pr-11 h-11 sm:h-12 text-sm sm:text-base"
                   />
 
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg cursor-pointer"
                     aria-label={
                       showNew
                         ? "Ocultar nueva contraseña"
@@ -141,7 +141,7 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
         />
         <Button
           type="submit"
-          className="w-full bg-primary rounded p-2 cursor-pointer"
+          className="w-full h-11 sm:h-12 bg-primary rounded-lg p-2 cursor-pointer text-sm sm:text-base font-medium"
           disabled={isLoading || !form.formState.isDirty}
         >
           Actualizar

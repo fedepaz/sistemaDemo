@@ -21,7 +21,7 @@ export function AuthDashboard() {
   }, [isLoginComplete, router, isChangePasswordOpen]);
 
   return (
-    <div className="max-w-md w-full space-y-4 sm:space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       {/* Form Card */}
 
       {!isChangePasswordOpen ? (
