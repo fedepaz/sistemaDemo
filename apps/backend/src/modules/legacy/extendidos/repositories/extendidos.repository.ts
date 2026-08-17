@@ -96,7 +96,7 @@ export class ExtendidosRepository {
     LEFT JOIN especie e ON e.codigo = p.espvar
     WHERE p.f_siembra IS NOT NULL 
   AND p.f_siembra <> '0000-00-00' 
-  AND p.f_siembra >= DATE_SUB(CURDATE(), INTERVAL 1000 DAY)
+  AND p.f_siembra >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
       AND p1.camara IS NOT NULL
       AND p2.ubicacion IS NULL
     ORDER BY fechaEgresoCamara ASC, p.partida

@@ -23,6 +23,8 @@ export function createUsersMock() {
     getAllUsers: jest.fn(),
     getUserById: jest.fn(),
     getProfile: jest.fn(),
+    getToActivate: jest.fn(),
+    activateUserById: jest.fn(),
     updateProfile: jest.fn(),
     softRemoveUserByUsername: jest.fn(),
     getUserByUsername: jest.fn(),

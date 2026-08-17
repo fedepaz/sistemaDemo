@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users.service';
 import { UsersRepository } from '../repositories/users.repository';
 
@@ -10,6 +10,8 @@ describe('UsersService', () => {
     findById: jest.Mock;
     findByUsername: jest.Mock;
     findByTenantId: jest.Mock;
+    findToActivate: jest.Mock;
+    activateById: jest.Mock;
     softDelete: jest.Mock;
     softDeleteByUsername: jest.Mock;
     updateProfile: jest.Mock;
@@ -22,6 +24,8 @@ describe('UsersService', () => {
       findById: jest.fn(),
       findByUsername: jest.fn(),
       findByTenantId: jest.fn(),
+      findToActivate: jest.fn(),
+      activateById: jest.fn(),
       softDelete: jest.fn(),
       softDeleteByUsername: jest.fn(),
       updateProfile: jest.fn(),
@@ -185,6 +189,57 @@ describe('UsersService', () => {
       const result = await service.recoverUserById('user-1', 'dev-1');
 
       expect(result).toEqual(user);
+    });
+  });
+
+  describe('getToActivate', () => {
+    it('should return users pending activation', async () => {
+      const users = [{ id: 'user-1', username: 'pending', isActive: false }];
+      repo.findToActivate.mockResolvedValue(users);
+
+      const result = await service.getToActivate('requester-1');
+
+      expect(result).toEqual(users);
+      expect(repo.findToActivate).toHaveBeenCalledWith('requester-1');
+    });
+
+    it('should throw NotFoundException if users not found', async () => {
+      repo.findToActivate.mockResolvedValue(null);
+
+      await expect(service.getToActivate('requester-1')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('activateUserById', () => {
+    it('should activate user and return success', async () => {
+      repo.findById.mockResolvedValue(null);
+
+      const result = await service.activateUserById('user-1', 'admin-1');
+
+      expect(result).toEqual({
+        success: true,
+        message: 'Usuario activado exitosamente',
+      });
+      expect(repo.activateById).toHaveBeenCalledWith('user-1');
+    });
+
+    it('should throw BadRequestException if user is already active', async () => {
+      repo.findById.mockResolvedValue({ id: 'user-1', isActive: true });
+
+      await expect(
+        service.activateUserById('user-1', 'admin-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw InternalServerErrorException on DB error', async () => {
+      repo.findById.mockResolvedValue(null);
+      repo.activateById.mockRejectedValue(new Error('DB error'));
+
+      await expect(
+        service.activateUserById('user-1', 'admin-1'),
+      ).rejects.toThrow('Error activating user');
     });
   });
 });

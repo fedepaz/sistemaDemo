@@ -37,3 +37,60 @@ describe('userService.restorePassword', () => {
     ).rejects.toThrow('Network error');
   });
 });
+
+describe('userService.activateUser', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('calls correct URL with PATCH and returns data', async () => {
+    const mockResponse = {
+      success: true,
+      message: 'Usuario activado exitosamente',
+    };
+    mockClientFetch.mockResolvedValue(mockResponse as never);
+
+    const result = await userService.activateUser('user-123');
+
+    expect(mockClientFetch).toHaveBeenCalledWith('users/activate/user-123', {
+      method: 'PATCH',
+    });
+    expect(result).toEqual(mockResponse);
+  });
+
+  it('throws on network error', async () => {
+    mockClientFetch.mockRejectedValue(new Error('Network error'));
+
+    await expect(userService.activateUser('user-123')).rejects.toThrow(
+      'Network error',
+    );
+  });
+});
+
+describe('userService.fetchToActivate', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('calls correct URL with GET and returns data', async () => {
+    const mockResponse = [
+      { id: 'user-2', username: 'pending', isActive: false },
+    ];
+    mockClientFetch.mockResolvedValue(mockResponse as never);
+
+    const result = await userService.fetchToActivate();
+
+    expect(mockClientFetch).toHaveBeenCalledWith('users/to-activate', {
+      method: 'GET',
+    });
+    expect(result).toEqual(mockResponse);
+  });
+
+  it('throws on network error', async () => {
+    mockClientFetch.mockRejectedValue(new Error('Network error'));
+
+    await expect(userService.fetchToActivate()).rejects.toThrow(
+      'Network error',
+    );
+  });
+});
