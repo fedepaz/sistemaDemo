@@ -40,7 +40,7 @@ export function UsersDataTable() {
     useUpdateUser();
   const { mutateAsync: deleteUser } = useDeleteUser();
 
-  const { canUpdate } = usePermission("users");
+  const { canUpdate, canCreate } = usePermission("users");
   const { userProfile: currentUser } = useAuthContext();
 
   const formEditUser = useForm<UpdateUserProfileDto>({
@@ -100,19 +100,22 @@ export function UsersDataTable() {
           onDelete={handleDelete}
           exportColumns={userExportColumns}
           toolbarContent={
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 text-xs"
-              onClick={() => setShowActivate(true)}
-              aria-label="Activar usuarios"
-            >
-              <UserPlus className="mr-1.5 h-3.5 w-3.5" />
-              Activar usuarios
-            </Button>
+            canCreate ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs"
+                onClick={() => setShowActivate(true)}
+                aria-label="Activar usuarios"
+              >
+                <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+                Activar usuarios
+              </Button>
+            ) : null
           }
         />
-      ) : (
+      ) : null}
+      {showActivate && canCreate ? (
         <DataTable
           columns={userColumns}
           data={usersToActivate}
@@ -135,7 +138,7 @@ export function UsersDataTable() {
             </Button>
           }
         />
-      )}
+      ) : null}
 
       {selectedUser && (
         <SlideOverForm
@@ -155,19 +158,20 @@ export function UsersDataTable() {
               onCancel={() => setSlideOverOpen(false)}
               formId={`edit-${selectedUser.username}`}
             />
-            {canUpdate && selectedUser.id !== currentUser?.id && (
+            {selectedUser.id !== currentUser?.id && (
               <div className="pt-4 border-t">
                 {showActivate ? (
                   <ActivateUserButton
                     selectedUser={selectedUser}
                     onSuccess={() => setSlideOverOpen(false)}
                   />
-                ) : (
+                ) : null}
+                {!showActivate && canUpdate ? (
                   <RestorePasswordButton
                     selectedUser={selectedUser}
                     onSuccess={() => setSlideOverOpen(false)}
                   />
-                )}
+                ) : null}
               </div>
             )}
           </div>

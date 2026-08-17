@@ -62,7 +62,7 @@ export class UsersController {
   }
 
   @Get('to-activate')
-  @RequirePermission({ tableName: 'users', action: 'create' })
+  @RequirePermission({ tableName: 'users', action: 'read' })
   async getToActivate(@CurrentUser() user: AuthUser) {
     return this.userService.getToActivate(user.id);
   }
