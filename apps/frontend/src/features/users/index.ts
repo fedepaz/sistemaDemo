@@ -9,6 +9,7 @@ export {
   useUsers,
   useUsersByUserName,
   useUsersByTenantId,
+  useUsersToActivate,
   useUpdateUserProfile,
   useUpdateUser,
   useDeleteUser,

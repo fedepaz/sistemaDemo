@@ -2,7 +2,12 @@
 "use client";
 
 import { useDataTableActions } from "@/hooks/useDataTable";
-import { useDeleteUser, useUpdateUser, useUsers } from "../hooks/usersHooks";
+import {
+  useDeleteUser,
+  useUpdateUser,
+  useUsers,
+  useUsersToActivate,
+} from "../hooks/usersHooks";
 import { usePermission } from "@/hooks/usePermission";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 
@@ -18,12 +23,13 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RestorePasswordButton } from "./restore-password-button";
-import { UsersToActivate } from "./users-to-activate";
+
 import { Button } from "@/components/ui/button";
-import { UserPlus } from "lucide-react";
+import { UserCheck, UserPlus } from "lucide-react";
 
 export function UsersDataTable() {
   const { data: users = [] } = useUsers();
+  const { data: usersToActivate = [] } = useUsersToActivate();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfileDto>();
@@ -78,39 +84,58 @@ export function UsersDataTable() {
     }
   };
 
-  const handleOpenActivateUser = () => {
-    return (
-      <div className="flex flex-col items-center gap-4 md:gap-6 text-center font-serif">
-        <UsersToActivate />
-      </div>
-    );
-  };
+  const [showActivate, setShowActivate] = useState(false);
 
   return (
     <>
-      <DataTable
-        columns={userColumns}
-        data={users}
-        title="Usuarios"
-        description="Gestión de los usuarios del sistema"
-        tableName="users"
-        totalCount={users.length}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        exportColumns={userExportColumns}
-        toolbarContent={
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs"
-            onClick={handleOpenActivateUser}
-            aria-label="Activar usuarios"
-          >
-            <UserPlus className="mr-1.5 h-3.5 w-3.5" />
-            Activar usuarios
-          </Button>
-        }
-      />
+      {!showActivate ? (
+        <DataTable
+          columns={userColumns}
+          data={users}
+          title="Usuarios"
+          description="Gestión de los usuarios del sistema"
+          tableName="users"
+          totalCount={users.length}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          exportColumns={userExportColumns}
+          toolbarContent={
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setShowActivate(true)}
+              aria-label="Activar usuarios"
+            >
+              <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+              Activar usuarios
+            </Button>
+          }
+        />
+      ) : (
+        <DataTable
+          columns={userColumns}
+          data={usersToActivate}
+          title="Usuarios pendientes de activación"
+          description="Gestión a los usuarios que tienen una cuenta pero no han sido activadas."
+          tableName="users"
+          totalCount={usersToActivate.length}
+          exportColumns={userExportColumns}
+          toolbarContent={
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setShowActivate(false)}
+              aria-label="Usuarios Activos"
+            >
+              <UserCheck className="mr-1.5 h-3.5 w-3.5" />
+              Usuarios Activos
+            </Button>
+          }
+        />
+      )}
+
       {selectedUser && (
         <SlideOverForm
           formId={`edit-${selectedUser.username}`}

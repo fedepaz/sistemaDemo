@@ -110,7 +110,13 @@ export class UsersRepository extends BaseRepository<User> {
   async findToActivate(requesterId: string): Promise<User[]> {
     const devIds = await this.getDevAccounts();
     if (devIds.includes(requesterId)) {
-      return this.model.findMany({ omit: OMIT_PASSWORD_HASH });
+      return this.model.findMany({
+        where: {
+          deletedAt: null,
+          isActive: false,
+        },
+        omit: OMIT_PASSWORD_HASH,
+      });
     }
     return this.model.findMany({
       where: {

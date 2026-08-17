@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
 import { useAuthContext } from "../providers/AuthProvider";
 
 export function RegisterForm() {
@@ -69,7 +70,7 @@ export function RegisterForm() {
         </div>
         <Button
           className="w-full h-10 md:h-12 bg-primary rounded p-2 cursor-pointer mt-2 gap-2"
-          onClick={() => router.push("/auth/login")}
+          onClick={() => router.push(ROUTES.LOGIN)}
           tabIndex={0}
         >
           Ir a login
@@ -91,9 +92,6 @@ export function RegisterForm() {
         </h1>
         <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
           Completa los campos para crear tu cuenta.
-          <br className="hidden md:block" />
-          Se generará una contraseña por defecto que deberás cambiar en tu
-          primer inicio de sesión.
         </p>
         {/* Username Field */}
         <FormField
