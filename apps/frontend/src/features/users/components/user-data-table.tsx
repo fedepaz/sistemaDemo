@@ -18,6 +18,9 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RestorePasswordButton } from "./restore-password-button";
+import { UsersToActivate } from "./users-to-activate";
+import { Button } from "@/components/ui/button";
+import { UserPlus } from "lucide-react";
 
 export function UsersDataTable() {
   const { data: users = [] } = useUsers();
@@ -75,6 +78,14 @@ export function UsersDataTable() {
     }
   };
 
+  const handleOpenActivateUser = () => {
+    return (
+      <div className="flex flex-col items-center gap-4 md:gap-6 text-center font-serif">
+        <UsersToActivate />
+      </div>
+    );
+  };
+
   return (
     <>
       <DataTable
@@ -87,6 +98,18 @@ export function UsersDataTable() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         exportColumns={userExportColumns}
+        toolbarContent={
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 text-xs"
+            onClick={handleOpenActivateUser}
+            aria-label="Activar usuarios"
+          >
+            <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+            Activar usuarios
+          </Button>
+        }
       />
       {selectedUser && (
         <SlideOverForm

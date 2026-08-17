@@ -23,6 +23,14 @@ export const useUsers = () => {
   });
 };
 
+export const useUsersToActivate = () => {
+  return useSuspenseQuery<UserProfileDto[]>({
+    queryKey: usersQueryKeys.toActivate(),
+    queryFn: userService.fetchToActivate,
+    retry: 1, // Retry once to account for transient network issues
+  });
+};
+
 export const useUpdateUserProfile = () => {
   const queryClient = useQueryClient();
 

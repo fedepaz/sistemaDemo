@@ -58,17 +58,13 @@ export function RegisterForm() {
         <h1 className="font-sans text-sm md:text-sm font-black uppercase tracking-widest text-foreground opacity-90">
           Cuenta creada correctamente
         </h1>
+        {/* 
+        Debe aguardar a que el encargado la active y asigne los permisos
+        */}
         <div className="space-y-2 text-xs md:text-sm font-medium leading-tight md:leading-relaxed">
           <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-80">
-            Ingresa a <b>Iniciar sesión</b> con tu usuario y la contraseña por
-            defecto: <b>123456</b>
-          </p>
-          <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-80">
-            En tu primer inicio de sesión se te pedirá cambiar la contraseña.
-          </p>
-          <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-80">
-            Una vez finalizado, <b>avísale a tu encargado</b> para que te asigne
-            los permisos necesarios.
+            Ahora tiene que aguardar a que el encargado la active y asigne los
+            permisos
           </p>
         </div>
         <Button

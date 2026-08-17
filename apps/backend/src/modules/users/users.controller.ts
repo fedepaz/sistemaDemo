@@ -46,19 +46,6 @@ export class UsersController {
     };
   }
 
-  @Patch('me')
-  @RequirePermission({
-    tableName: 'user_profile',
-    action: 'read',
-  })
-  updateProfile(
-    @CurrentUser() user: AuthUser,
-    @Body(new ZodValidationPipe(UpdateUserProfileSchema))
-    body: UpdateUserProfileDto,
-  ) {
-    return this.userService.updateProfile(user.username, body);
-  }
-
   @Get('all')
   @RequirePermission({ tableName: 'users', action: 'read' })
   async getAllUsers(@CurrentUser() user: AuthUser) {
@@ -74,6 +61,12 @@ export class UsersController {
     }
   }
 
+  @Get('to-activate')
+  @RequirePermission({ tableName: 'users', action: 'create' })
+  async getToActivate(@CurrentUser() user: AuthUser) {
+    return this.userService.getToActivate(user.id);
+  }
+
   @Get('username/:username')
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
   getUserByUsername(@Param('username') username: string) {
@@ -84,6 +77,19 @@ export class UsersController {
   @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
   getUserByTenantId(@Param('tenantId') tenantId: string) {
     return this.userService.getUserByTenantId(tenantId);
+  }
+
+  @Patch('me')
+  @RequirePermission({
+    tableName: 'user_profile',
+    action: 'read',
+  })
+  updateProfile(
+    @CurrentUser() user: AuthUser,
+    @Body(new ZodValidationPipe(UpdateUserProfileSchema))
+    body: UpdateUserProfileDto,
+  ) {
+    return this.userService.updateProfile(user.username, body);
   }
 
   @Patch(':username')

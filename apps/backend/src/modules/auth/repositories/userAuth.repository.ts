@@ -74,7 +74,7 @@ export class UserAuthRepository {
         const user = await tx.user.create({
           data: {
             ...data,
-            isActive: true,
+            isActive: false,
           },
         });
 

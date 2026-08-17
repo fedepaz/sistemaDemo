@@ -28,6 +28,7 @@ export const usersQueryKeys = {
   byTenantId: (tenantId: string) =>
     [...usersQueryKeys.all(), "byTenantId", tenantId] as const,
   admin: () => [...usersQueryKeys.all(), "allAdmin"] as const,
+  toActivate: () => [...usersQueryKeys.all(), "toActivate"] as const,
 };
 
 // ============================================================================
