@@ -129,14 +129,16 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
                   alertCommentsForm={form}
                   onSubmit={handleCommentSubmit}
                 />
-                {canCreate && selectedAlert.partidaId && (
-                  <div className="pt-4 border-t">
-                    <AlertSolvedButton
-                      selectedAlert={selectedAlert}
-                      onSuccess={() => setSlideOpen(false)}
-                    />
-                  </div>
-                )}
+                {canCreate &&
+                  selectedAlert.partidaId &&
+                  resolvedAlertType === "FALTANTE_PLANTAS" && (
+                    <div className="pt-4 border-t">
+                      <AlertSolvedButton
+                        selectedAlert={selectedAlert}
+                        onSuccess={() => setSlideOpen(false)}
+                      />
+                    </div>
+                  )}
               </div>
             )}
           </div>

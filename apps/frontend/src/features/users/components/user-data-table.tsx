@@ -26,6 +26,7 @@ import { RestorePasswordButton } from "./restore-password-button";
 import { ActivateUserButton } from "./activate-user-button";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { UserCheck, UserPlus } from "lucide-react";
 
 export function UsersDataTable() {
@@ -100,16 +101,22 @@ export function UsersDataTable() {
           onDelete={handleDelete}
           exportColumns={userExportColumns}
           toolbarContent={
-            canCreate ? (
+            canCreate && usersToActivate.length ? (
               <Button
                 variant="outline"
                 size="sm"
                 className="h-8 text-xs"
                 onClick={() => setShowActivate(true)}
-                aria-label="Activar usuarios"
+                aria-label={`Activar usuarios (${usersToActivate.length})`}
               >
                 <UserPlus className="mr-1.5 h-3.5 w-3.5" />
                 Activar usuarios
+                <Badge
+                  variant="destructive"
+                  className="ml-1.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold justify-center rounded-full"
+                >
+                  {usersToActivate.length}
+                </Badge>
               </Button>
             ) : null
           }
