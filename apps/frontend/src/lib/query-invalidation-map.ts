@@ -48,6 +48,10 @@ export const mutationInvalidationMap = {
   updateUser: {
     queries: () => [usersQueryKeys.all()],
   },
+  activateUser: {
+    queries: () => [usersQueryKeys.all(), usersQueryKeys.toActivate()],
+  },
+
   deleteUser: {
     queries: () => [usersQueryKeys.all()],
   },

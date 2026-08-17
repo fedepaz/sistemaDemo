@@ -15,6 +15,7 @@ export {
   useDeleteUser,
   useGetAllUsersAdmin,
   useRestorePassword,
+  useActivateUser,
 } from "./hooks/usersHooks";
 export { useRegister } from "./hooks/useRegister";
 

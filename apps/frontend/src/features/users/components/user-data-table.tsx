@@ -23,6 +23,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RestorePasswordButton } from "./restore-password-button";
+import { ActivateUserButton } from "./activate-user-button";
 
 import { Button } from "@/components/ui/button";
 import { UserCheck, UserPlus } from "lucide-react";
@@ -33,6 +34,7 @@ export function UsersDataTable() {
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfileDto>();
+  const [showActivate, setShowActivate] = useState(false);
 
   const { mutateAsync: updateUser, isPending: isUpdatingUser } =
     useUpdateUser();
@@ -84,8 +86,6 @@ export function UsersDataTable() {
     }
   };
 
-  const [showActivate, setShowActivate] = useState(false);
-
   return (
     <>
       {!showActivate ? (
@@ -119,6 +119,7 @@ export function UsersDataTable() {
           title="Usuarios pendientes de activación"
           description="Gestión a los usuarios que tienen una cuenta pero no han sido activadas."
           tableName="users"
+          onEdit={handleEdit}
           totalCount={usersToActivate.length}
           exportColumns={userExportColumns}
           toolbarContent={
@@ -156,10 +157,17 @@ export function UsersDataTable() {
             />
             {canUpdate && selectedUser.id !== currentUser?.id && (
               <div className="pt-4 border-t">
-                <RestorePasswordButton
-                  selectedUser={selectedUser}
-                  onSuccess={() => setSlideOverOpen(false)}
-                />
+                {showActivate ? (
+                  <ActivateUserButton
+                    selectedUser={selectedUser}
+                    onSuccess={() => setSlideOverOpen(false)}
+                  />
+                ) : (
+                  <RestorePasswordButton
+                    selectedUser={selectedUser}
+                    onSuccess={() => setSlideOverOpen(false)}
+                  />
+                )}
               </div>
             )}
           </div>

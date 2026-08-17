@@ -1,6 +1,11 @@
 // app/modules/users/repositories/users.repository.ts
 
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { UpdateUserProfileDto } from '@vivero/shared';
 import { User } from '../../../generated/prisma/client';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
@@ -11,6 +16,7 @@ const OMIT_PASSWORD_HASH = { passwordHash: true } as const;
 
 @Injectable()
 export class UsersRepository extends BaseRepository<User> {
+  private readonly logger = new Logger(UsersRepository.name);
   constructor(prisma: PrismaService) {
     super(prisma, prisma.user);
   }
@@ -126,6 +132,24 @@ export class UsersRepository extends BaseRepository<User> {
       },
       omit: OMIT_PASSWORD_HASH,
     });
+  }
+
+  async activateById(id: string): Promise<void> {
+    try {
+      await this.model.update({
+        where: {
+          id,
+        },
+        data: {
+          isActive: true,
+          updatedAt: new Date(),
+        },
+        omit: OMIT_PASSWORD_HASH,
+      });
+    } catch (error) {
+      this.logger.error('Error activating user:', error);
+      throw new InternalServerErrorException('Error activating user');
+    }
   }
 
   softDeleteByUsername(

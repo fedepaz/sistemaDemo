@@ -34,6 +34,15 @@ export const userService = {
     });
   },
 
+  activateUser: (userId: string) => {
+    return clientFetch<{ success: boolean; message: string }>(
+      `users/activate/${userId}`,
+      {
+        method: "PATCH",
+      },
+    );
+  },
+
   updateMe: (userUpdate: UpdateUserProfileDto) => {
     return clientFetch<UserProfileDto>(`users/me`, {
       method: "PATCH",

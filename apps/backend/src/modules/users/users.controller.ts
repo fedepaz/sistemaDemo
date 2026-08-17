@@ -79,6 +79,15 @@ export class UsersController {
     return this.userService.getUserByTenantId(tenantId);
   }
 
+  @Patch('/activate/:userId')
+  @RequirePermission({ tableName: 'users', action: 'create' })
+  async activateUserById(
+    @CurrentUser() user: AuthUser,
+    @Param('userId') userId: string,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.userService.activateUserById(userId, user.id);
+  }
+
   @Patch('me')
   @RequirePermission({
     tableName: 'user_profile',
