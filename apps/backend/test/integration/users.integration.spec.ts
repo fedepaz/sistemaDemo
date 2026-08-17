@@ -1,5 +1,9 @@
 // apps/backend/test/integration/users.integration.spec.ts
-import { INestApplication, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  INestApplication,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import request from 'supertest';
 import { createTestApp } from './helpers/create-app';
 import {
