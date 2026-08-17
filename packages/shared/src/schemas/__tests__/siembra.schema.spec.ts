@@ -7,7 +7,7 @@ describe('SiembraDtoSchema', () => {
     anio: 2026,
     indice: 1,
     hai: 'H',
-    con: 50,
+    con: '50',
     codigoEspecie: 'ESP001',
     nombreEspecie: 'Ave del Paraíso',
     injerto: 'Injerto A',
@@ -28,9 +28,9 @@ describe('SiembraDtoSchema', () => {
     expect(() => SiembraDtoSchema.parse(withoutPartidaId)).toThrow();
   });
 
-  it('rejects missing contenedor', () => {
-    const { contenedor, ...withoutContenedor } = valid;
-    expect(() => SiembraDtoSchema.parse(withoutContenedor)).toThrow();
+  it('rejects missing hai', () => {
+    const { hai, ...withoutHai } = valid;
+    expect(() => SiembraDtoSchema.parse(withoutHai)).toThrow();
   });
 });
 

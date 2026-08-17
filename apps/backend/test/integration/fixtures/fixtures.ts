@@ -89,6 +89,9 @@ export const mockSiembra = () => ({
 
 export const validTaskShiftPayload = () => ({
   entityId: 'e1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  partidaId: 1,
+  anio: 2026,
+  indice: 1,
   startTime: '2026-08-11T08:00:00.000Z',
   endTime: '2026-08-11T17:00:00.000Z',
   employeeUserIds: ['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
