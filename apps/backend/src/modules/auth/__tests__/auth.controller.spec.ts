@@ -9,6 +9,7 @@ describe('AuthController', () => {
     login: jest.Mock;
     refreshTokens: jest.Mock;
     changePassword: jest.Mock;
+    restorePassword: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -17,6 +18,7 @@ describe('AuthController', () => {
       login: jest.fn(),
       refreshTokens: jest.fn(),
       changePassword: jest.fn(),
+      restorePassword: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -94,6 +96,22 @@ describe('AuthController', () => {
         success: true,
         message: 'Contraseña actualizada correctamente',
       });
+    });
+  });
+
+  describe('restorePassword', () => {
+    it('should call authService.restorePassword with dto', async () => {
+      const dto = { userId: 'user-1' };
+      const expected = {
+        success: true,
+        message: 'Contraseña de usuario testuser restaurada correctamente',
+      };
+      authService.restorePassword.mockResolvedValue(expected);
+
+      const result = await controller.restorePassword(dto);
+
+      expect(authService.restorePassword).toHaveBeenCalledWith(dto);
+      expect(result).toEqual(expected);
     });
   });
 

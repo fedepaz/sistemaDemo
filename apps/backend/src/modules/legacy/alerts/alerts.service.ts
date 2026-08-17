@@ -62,18 +62,16 @@ export class AlertsService {
 
   private mapFaltantePlantas(row: LegacyFaltantePlantas): FaltantePlantasDto {
     return {
-      hai: row.hai,
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
+      siembras: Number(row.siembras),
       codigoEspecie: row.planta,
       nombreEspecie: row.nombre,
       nrocont: row.nrocont,
-      solicito: row.solicito,
-      fPrimer: row.f_primer,
-      pr: row.pr,
-      stIniPr: row.st_ini_pr,
-      porPr: row.porPr,
+      solicito: Number(row.solicito),
+      producido: Number(row.producido),
+      diferencia: Number(row.diferencia),
       commentCount: 0,
     };
   }

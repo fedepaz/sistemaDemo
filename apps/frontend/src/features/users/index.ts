@@ -13,6 +13,7 @@ export {
   useUpdateUser,
   useDeleteUser,
   useGetAllUsersAdmin,
+  useRestorePassword,
 } from "./hooks/usersHooks";
 export { useRegister } from "./hooks/useRegister";
 

@@ -200,19 +200,17 @@ describe('AlertsService', () => {
   describe('getFaltantePlantas', () => {
     it('maps legacy fields to DTO correctly', async () => {
       const legacyRow: LegacyFaltantePlantas = {
-        hai: 'A',
         partida: 1048,
         ano: 2026,
         indice: 1,
+        siembras: 3,
         planta: 'EUC01',
         nombre: 'Eucalipto Grandis',
         nrocont: '500',
         solicito: 500,
-        f_primer: '2026-06-15',
-        pr: '85.5',
-        st_ini_pr: '4',
-        porPr: 171,
-      } as LegacyFaltantePlantas;
+        producido: 342,
+        diferencia: -158,
+      } as unknown as LegacyFaltantePlantas;
 
       repository.findFaltantePlantas.mockResolvedValue([legacyRow]);
 
@@ -220,46 +218,44 @@ describe('AlertsService', () => {
 
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
-        hai: 'A',
         partidaId: 1048,
         anio: 2026,
         indice: 1,
+        siembras: 3,
         codigoEspecie: 'EUC01',
         nombreEspecie: 'Eucalipto Grandis',
         nrocont: '500',
         solicito: 500,
-        fPrimer: '2026-06-15',
-        pr: '85.5',
-        stIniPr: '4',
-        porPr: 171,
+        producido: 342,
+        diferencia: -158,
         commentCount: 0,
       });
     });
 
-    it('keeps pr and stIniPr as strings', async () => {
+    it('converts aggregate numbers correctly', async () => {
       const legacyRow: LegacyFaltantePlantas = {
-        hai: 'A',
         partida: 1049,
         ano: 2026,
-        indice: 1,
+        indice: 2,
+        siembras: 5,
         planta: 'ROS01',
         nombre: 'Rosa',
         nrocont: '100',
         solicito: 200,
-        f_primer: '2026-06-15',
-        pr: '92.3',
-        st_ini_pr: '2',
-        porPr: 184,
-      } as LegacyFaltantePlantas;
+        producido: 120,
+        diferencia: -80,
+      } as unknown as LegacyFaltantePlantas;
 
       repository.findFaltantePlantas.mockResolvedValue([legacyRow]);
 
       const result = await service.getFaltantePlantas();
 
-      expect(result[0].pr).toBe('92.3');
-      expect(result[0].stIniPr).toBe('2');
-      expect(typeof result[0].pr).toBe('string');
-      expect(typeof result[0].stIniPr).toBe('string');
+      expect(typeof result[0].siembras).toBe('number');
+      expect(typeof result[0].solicito).toBe('number');
+      expect(typeof result[0].producido).toBe('number');
+      expect(typeof result[0].diferencia).toBe('number');
+      expect(result[0].siembras).toBe(5);
+      expect(result[0].diferencia).toBe(-80);
     });
   });
 

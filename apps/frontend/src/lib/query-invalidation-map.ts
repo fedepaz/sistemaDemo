@@ -49,6 +49,9 @@ export const mutationInvalidationMap = {
   deleteUser: {
     queries: () => [usersQueryKeys.all()],
   },
+  restorePassword: {
+    queries: () => [usersQueryKeys.all()],
+  },
 
   // --- Permissions ---
   setUserPermissions: {

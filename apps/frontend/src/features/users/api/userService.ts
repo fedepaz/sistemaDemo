@@ -1,9 +1,10 @@
 import { clientFetch } from "@/lib/api/client-fetch";
-import { 
-  AuthResponseDto, 
-  RegisterAuthDto, 
-  UpdateUserProfileDto, 
-  UserProfileDto 
+import {
+  AuthResponseDto,
+  RegisterAuthDto,
+  RestorePasswordDto,
+  UpdateUserProfileDto,
+  UserProfileDto,
 } from "@vivero/shared";
 
 export const userService = {
@@ -51,6 +52,13 @@ export const userService = {
     return clientFetch<AuthResponseDto>("auth/register", {
       method: "POST",
       body: JSON.stringify(userData),
+    });
+  },
+
+  restorePassword: (dto: RestorePasswordDto) => {
+    return clientFetch<{ success: boolean; message: string }>("auth/restore", {
+      method: "PATCH",
+      body: JSON.stringify(dto),
     });
   },
 };
