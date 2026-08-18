@@ -208,4 +208,49 @@ export class PermissionsRepository implements IPermissionRepository {
       where: { userId },
     });
   }
+
+  /**
+   * Replaces all permissions for a user inside a single transaction.
+   * Without the transaction, a crash between deleteMany and the upserts would
+   * leave the target user with zero permissions.
+   */
+  async replaceAllForUser(
+    userId: string,
+    rows: Array<{
+      entityId: string;
+      canCreate: boolean;
+      canRead: boolean;
+      canUpdate: boolean;
+      canDelete: boolean;
+      scope: 'NONE' | 'OWN' | 'ALL';
+      permissionType: 'CRUD' | 'PROCESS' | 'READ_ONLY';
+    }>,
+  ): Promise<void> {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.userPermission.deleteMany({ where: { userId } });
+      for (const r of rows) {
+        await tx.userPermission.upsert({
+          where: { userId_entityId: { userId, entityId: r.entityId } },
+          create: {
+            userId,
+            entityId: r.entityId,
+            canCreate: r.canCreate,
+            canRead: r.canRead,
+            canUpdate: r.canUpdate,
+            canDelete: r.canDelete,
+            scope: r.scope,
+            permissionType: r.permissionType,
+          },
+          update: {
+            canCreate: r.canCreate,
+            canRead: r.canRead,
+            canUpdate: r.canUpdate,
+            canDelete: r.canDelete,
+            scope: r.scope,
+            permissionType: r.permissionType,
+          },
+        });
+      }
+    });
+  }
 }

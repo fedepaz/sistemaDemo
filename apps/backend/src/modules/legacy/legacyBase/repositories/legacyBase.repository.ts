@@ -44,23 +44,20 @@ export class LegacyBaseRepository {
 
     // Build WHERE clause
     if (Object.keys(where).length > 0) {
-      const conditions = Object.keys(where)
-        .filter((key) => /^[a-zA-Z0-9_]+$/.test(key)) // Sanitize keys
-        .map((key) => `\`${key}\` = ?`);
-
-      if (conditions.length > 0) {
-        sql += ` WHERE ${conditions.join(' AND ')}`;
-        const validKeys = Object.keys(where).filter((key) =>
-          /^[a-zA-Z0-9_]+$/.test(key),
+      const keys = Object.keys(where);
+      // Validate keys FIRST so an invalid key can never silently drop the
+      // WHERE clause (which would make the query return the whole table).
+      const invalidKeys = keys.filter((key) => !/^[a-zA-Z0-9_]+$/.test(key));
+      if (invalidKeys.length > 0) {
+        throw new BadRequestException(
+          `Invalid WHERE clause: ${JSON.stringify(where)}`,
         );
-        if (validKeys.length !== Object.keys(where).length) {
-          throw new BadRequestException(
-            `Invalid WHERE clause: ${JSON.stringify(where)}`,
-          );
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-        params.push(...validKeys.map((k) => where[k]));
       }
+
+      const conditions = keys.map((key) => `\`${key}\` = ?`);
+      sql += ` WHERE ${conditions.join(' AND ')}`;
+      const whereValues = keys.map((k) => where[k] as unknown);
+      params.push(...whereValues);
     }
 
     // Build ORDER BY clause
@@ -86,18 +83,20 @@ export class LegacyBaseRepository {
 
     // Build WHERE clause
     if (Object.keys(where).length > 0) {
-      const conditions = Object.keys(where)
-        .filter((key) => /^[a-zA-Z0-9_]+$/.test(key)) // Sanitize keys
-        .map((key) => `\`${key}\` = ?`);
-
-      if (conditions.length > 0) {
-        sql += ` WHERE ${conditions.join(' AND ')}`;
-        const validKeys = Object.keys(where).filter((key) =>
-          /^[a-zA-Z0-9_]+$/.test(key),
+      const keys = Object.keys(where);
+      // Same guard as queryTable: reject invalid keys so the WHERE clause is
+      // never silently dropped (which would make count and data disagree).
+      const invalidKeys = keys.filter((key) => !/^[a-zA-Z0-9_]+$/.test(key));
+      if (invalidKeys.length > 0) {
+        throw new BadRequestException(
+          `Invalid WHERE clause: ${JSON.stringify(where)}`,
         );
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
-        params.push(...validKeys.map((k) => where[k]));
       }
+
+      const conditions = keys.map((key) => `\`${key}\` = ?`);
+      sql += ` WHERE ${conditions.join(' AND ')}`;
+      const whereValues = keys.map((k) => where[k] as unknown);
+      params.push(...whereValues);
     }
 
     // Execute query

@@ -13,8 +13,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { PrismaService } from '../../infra/prisma/prisma.service';
-import { AuditActionType, EntityType } from '../../generated/prisma/enums';
+import { AuditService } from '../../modules/auditLog/audit.service';
+import { isProductionEnvironment } from '../utils/app-environment';
 
 // Create a type that includes socket information
 interface SocketRequest extends Request {
@@ -31,7 +31,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
   constructor(
     @Optional()
-    private readonly prisma?: PrismaService,
+    private readonly auditService?: AuditService,
   ) {}
 
   catch(exception: any, host: ArgumentsHost) {
@@ -64,10 +64,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = 'Database Unavailable';
       } else {
         status = HttpStatus.INTERNAL_SERVER_ERROR;
-        message =
-          process.env.NODE_ENV === 'production'
-            ? 'Internal Server Error'
-            : exception.message;
+        message = isProductionEnvironment()
+          ? 'Internal Server Error'
+          : exception.message;
         stack = exception.stack;
       }
     } else {
@@ -96,9 +95,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         timestamp: new Date().toISOString(),
         path: request.url,
         requestId: (request as any).requestId,
-        ...(process.env.NODE_ENV !== 'production' && stack
-          ? { debug: stack }
-          : {}),
+        ...(!isProductionEnvironment() && stack ? { debug: stack } : {}),
       },
     };
 
@@ -167,83 +164,48 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     message: string,
     exception: unknown,
   ): Promise<void> {
-    if (!this.prisma) {
+    if (!this.auditService) {
       this.logger.warn(
-        'SECURITY EXCEPTION | No PrismaService found, skipping audit log',
+        'SECURITY EXCEPTION | No AuditService found, skipping audit log',
       );
       return;
     }
 
-    try {
-      const userId = (request as any)?.user?.id || 'unknown';
-      const tenantId = (request as any)?.user?.tenantId || 'unknown';
-      const ip = this.getClientIp(request);
-      const userAgent = request.headers['user-agent'] || 'Unknown User Agent';
+    const userId = (request as any)?.user?.id || 'unknown';
+    const tenantId = (request as any)?.user?.tenantId || 'unknown';
+    const ip = this.getClientIp(request);
+    const userAgent = request.headers['user-agent'] || 'Unknown User Agent';
+    const path = request.url;
+    const method = request.method;
+    const exceptionType =
+      exception instanceof Error ? exception.constructor.name : 'Unknown';
 
-      // Map status codes to enum values
-      let action: AuditActionType;
-      let entityType: EntityType;
-      let entityId: string;
-
-      if (status === 401) {
-        // Login attempt
-        action = AuditActionType.LOGIN;
-        entityType = EntityType.USER;
-        entityId = userId;
-      } else if (status === 403) {
-        // Access denied
-        action = AuditActionType.ACCESS;
-        entityType = EntityType.USER;
-        entityId = userId;
-      } else if (status >= 500) {
-        // Internal server error
-        action = AuditActionType.ACCESS;
-        entityType = EntityType.USER;
-        entityId = userId;
-      } else {
-        // Other errors
-        action = AuditActionType.ACCESS;
-        entityType = EntityType.USER;
-        entityId = userId;
-      }
-
-      const changes = {
+    // 403 or 500 → ACCESS event
+    await this.auditService.logEvent({
+      tenantId,
+      userId,
+      action: 'ACCESS',
+      entityType: 'USER',
+      entityId: userId,
+      ipAddress: ip,
+      userAgent,
+      timestamp: new Date(),
+      changes: {
+        requestId: (request as any).requestId || 'unknown',
+        endpoint: path,
+        method,
         status,
-        path: request.url,
-        method: request.method,
         message,
-        exceptionType:
-          exception instanceof Error ? exception.constructor.name : 'Unknown',
-        timestamp: new Date().toISOString(),
-      };
-
-      // Save to database
-      await this.prisma.auditLog.create({
-        data: {
-          tenantId,
-          userId,
-          action,
-          entityType,
-          entityId,
-          changes: changes as any,
-          ipAddress: ip,
-          userAgent,
-        },
-      });
-      this.logger.debug(
-        `AUDIT LOG | Saved audit log: ${action} ${entityType} | User: ${userId} | Tenant: ${tenantId}`,
-      );
-    } catch (error) {
-      this.logger.error('Error saving audit log:', error);
-    }
+        exceptionType,
+      },
+    });
   }
 
-  private shouldAudit(status: number, request: SocketRequest): boolean {
-    const path = request.url?.split('?')[0] ?? '';
-
-    // 401 solo vale si fue un intento de login explícito
+  private shouldAudit(status: number, _request: SocketRequest): boolean {
+    // 401 is owned by AuthService (it emits LOGIN_FAILED with the real
+    // reason). Auditing it again here would duplicate the record.
     if (status === 401) {
-      return path === '/auth/login';
+      return false;
     }
 
     // 403 y 500 siempre auditar

@@ -20,6 +20,7 @@ pnpm dev              # Starts frontend (port 3000) + backend
 | Lint | `pnpm lint` |
 | Test | `pnpm test` |
 | Type check | `pnpm type-check` |
+| Integration tests | `pnpm --filter backend test:integration` |
 | Format | `pnpm format` |
 
 ## Backend Commands
@@ -59,3 +60,7 @@ pnpm lint && pnpm type-check && pnpm test
 - Backend port is configured via `PORT` env var (default 3001)
 - `pnpm overrides` in root package.json patches security vulnerabilities - don't remove them
 - Agent profiles in `docs/agents/` are the source of truth for architecture decisions
+- `passwordHash` must NEVER appear in API responses or be updatable via profile schemas (passwords change only via `/auth/password` and `/auth/restore`)
+- Login 401s are uniformly `"Invalid credentials"` (anti-enumeration); specifics go only in audit `changes.reason`
+- The login rate limiter is in-memory (`LoginRateLimiter`, 10 attempts/15 min per IP:username) - single-instance server
+- Integration tests mock all DB operations - no MariaDB needed in CI

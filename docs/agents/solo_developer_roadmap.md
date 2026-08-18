@@ -1,81 +1,50 @@
-# SOLO-DEV-ROADMAP.md - Realistic Development Timeline
+# SOLO-DEV-ROADMAP.md - Development Roadmap
 
-## 🎯 Solo Developer Reality Check
+> Realistic plan for a solo developer working part-time on AgriManage. It reflects **what the system actually is** (internal agricultural management system) and **what is already built** — not a SaaS go-to-market fantasy.
 
-**Available Time**: 2 days/week × 8 hours = 16 hours/week
-**Target**: Enterprise-ready management system with trial conversion
-**Timeline**: 6-9 months to first paying customer
+## Reality Check
 
-> **Philosophy**: Build the minimum viable enterprise product that converts trials into €50k contracts. Perfect is the enemy of profitable.
+- **System**: internal nursery management web app replacing a legacy desktop system.
+- **Deployment**: single Windows server + Cloudflare Tunnel. No Docker/K8s/PM2.
+- **Mantra**: correctness, auditability, and operational fit beat feature volume.
 
----
+## What Exists Today
 
-## 📅 Phase-by-Phase Breakdown
+| Area | Status |
+|------|--------|
+| Monorepo (pnpm + Turborepo), frontend/backend/shared | Done |
+| Auth: login, JWT refresh, password change/restore | Done |
+| Login rate limiting, uniform 401s, no passwordHash leak | Done |
+| Users, permissions, entities, tenant, audit log (paginated) | Done |
+| Legacy integration (partidas, agentes, depositos, especie, programas, config, alerts) | Done |
+| Alerts + comment threads | Done |
+| Frontend: dashboard, users, permissions, entities, alerts, auditLogs, extendidos | Done |
+| Siembra (planting) | **WIP** — partial |
+| Extendidos full flow | In progress |
+| Dark mode + next-intl | Templates installed, intentionally kept |
+| E2E tests | Not started (no Playwright) |
+| Hardening: backups, DR runbook, monitoring | Outstanding |
 
-### 🚀 **Phase 1: Foundation (Weeks 1-4) - 64 hours**
-_Goal: Basic app running with authentication_
-- Project setup (workspace, Docker, database).
-- Core backend (NestJS modules, tenant isolation).
-- Frontend foundation (Next.js, Tailwind, shadcn/ui).
-- Basic entity management (CRUD).
+## Roadmap
 
-### 🏢 **Phase 2: Trial System (Weeks 5-8) - 64 hours**
-_Goal: Landing page → trial signup → basic dashboard_
-- Marketing site design.
-- Trial signup system (tenant provisioning, expiration logic).
-- Trial experience (demo data seeding, status indicators).
-- Email system (SendGrid integration).
+### Phase 1: Finish the Core Workflows (next)
+- Complete Siembra module (back + front).
+- Finish Extendidos full flow.
+- Close remaining Tier-1 security items and verify with `pnpm lint && pnpm type-check && pnpm test`.
 
-### 💼 **Phase 3: Enterprise Features (Weeks 9-12) - 64 hours**
-_Goal: Features that justify €50k price tag_
-- Advanced entity management (lifecycle stages, monitoring).
-- Multi-user support (granular permissions, invitations).
-- Reporting & Analytics (KPI dashboards, export functionality).
-- Enterprise polish (bulk operations, mobile responsiveness).
+### Phase 2: Operational Hardening
+- Documented DB backup/restore procedure (mysqldump schedule + tested restore).
+- Server restart/recovery runbook (nssm + startapp.bat verified).
+- Structured log review workflow; keep `pnpm audit` at zero high/critical.
 
-### 🚀 **Phase 4: Sales & Conversion (Weeks 13-16) - 64 hours**
-_Goal: Convert trials to paying customers_
-- Sales automation (lead scoring, admin dashboard).
-- Conversion optimization (onboarding, discovery prompts).
-- Pre-launch marketing (content creation).
-- Production setup (deployment, monitoring).
+### Phase 3: Quality & Confidence
+- Optional: add E2E for the two highest-value flows (login + location assignment).
+- Optional: coverage reporting; keep Jest coverage thresholds enforced.
 
-### 💰 **Phase 5: First Customers (Weeks 17-24) - 128 hours**
-_Goal: First paying enterprise customer_
-- Customer acquisition (market outreach).
-- Closing first deals (demos, negotiations).
+## Mindset
 
----
+- "Would this make the nursery team's day easier?" is the only question that matters.
+- Finish one module completely (tests, audit, permissions, docs) before starting the next.
+- Never commit new infrastructure that isn't installed and used.
 
-## 🎯 **Milestone Success Metrics**
-
-### Phase 1 Success
-- [ ] App runs locally without errors.
-- [ ] Basic authentication works.
-- [ ] Can create/edit entities.
-- [ ] Tests are passing.
-
-### Phase 2 Success
-- [ ] Landing page converts visitors to trials.
-- [ ] Trial signup flow works end-to-end.
-- [ ] Automated trial emails sent.
-
-### Phase 3 Success
-- [ ] Advanced management features.
-- [ ] Professional dashboards and reports.
-- [ ] Multi-user collaboration.
-
----
-
-## 🚀 **The Mindset**
-
-**Think like a customer, not a developer:**
-- "Would a business CTO pay €50k for this?"
-- "Does this solve a real €100k+ problem for them?"
-- "Can I demo this feature in 5 minutes?"
-
-**Embrace "good enough":**
-- Perfect code doesn't pay the bills.
-- Customers pay for working solutions, not beautiful architecture.
-
-**Target: First paying customer in 6 months with 384 hours of focused work.**
+**Target**: a complete, hardened, documented system the team depends on daily.

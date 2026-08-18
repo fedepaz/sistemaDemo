@@ -1,7 +1,7 @@
 // src/features/auditLogs/hooks/auditLogHooks.ts
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { AuditLogDto } from "@vivero/shared";
+import { AuditLogDto, PaginatedResponse } from "@vivero/shared";
 import { auditLogService } from "../api/auditLogService";
 import { auditLogQueryKeys } from "@/lib/queryKeys";
 
@@ -13,10 +13,15 @@ export const useAuditLogs = () => {
   });
 };
 
-export const useAuditLogsByTenantName = (tenantName?: string) => {
-  return useSuspenseQuery<AuditLogDto[]>({
-    queryKey: auditLogQueryKeys.byTenantName(tenantName || ""),
-    queryFn: () => auditLogService.fetchByTenantName(tenantName || ""),
+export const useAuditLogsByTenantName = (
+  tenantName?: string,
+  page?: number,
+  limit?: number,
+) => {
+  return useSuspenseQuery<PaginatedResponse<AuditLogDto>>({
+    queryKey: auditLogQueryKeys.byTenantName(tenantName || "", page, limit),
+    queryFn: () =>
+      auditLogService.fetchByTenantName(tenantName || "", page, limit),
     retry: 1, // Retry once to account for transient network issues
   });
 };

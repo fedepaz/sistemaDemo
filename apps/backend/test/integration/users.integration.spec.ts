@@ -1,5 +1,9 @@
 // apps/backend/test/integration/users.integration.spec.ts
-import { INestApplication, NotFoundException } from '@nestjs/common';
+import {
+  INestApplication,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import request from 'supertest';
 import { createTestApp } from './helpers/create-app';
 import {
@@ -134,6 +138,62 @@ describe('Users (integration)', () => {
         'testuser',
         'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
       );
+    });
+  });
+
+  describe('GET /users/to-activate', () => {
+    it('returns 200 + list of pending users', async () => {
+      usersMock.getToActivate.mockResolvedValue([
+        { id: 'user-2', username: 'pending', isActive: false },
+      ]);
+
+      const response = await request(app.getHttpServer())
+        .get('/users/to-activate')
+        .expect(200);
+
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body).toHaveLength(1);
+      expect(usersMock.getToActivate).toHaveBeenCalled();
+    });
+
+    it('returns 200 + empty array when no pending users', async () => {
+      usersMock.getToActivate.mockResolvedValue([]);
+
+      const response = await request(app.getHttpServer())
+        .get('/users/to-activate')
+        .expect(200);
+
+      expect(response.body).toHaveLength(0);
+    });
+  });
+
+  describe('PATCH /users/activate/:userId', () => {
+    it('returns 200 + success on activation', async () => {
+      usersMock.activateUserById.mockResolvedValue({
+        success: true,
+        message: 'Usuario activado exitosamente',
+      });
+
+      const response = await request(app.getHttpServer())
+        .patch('/users/activate/user-2')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('success', true);
+      expect(response.body).toHaveProperty('message');
+      expect(usersMock.activateUserById).toHaveBeenCalledWith(
+        'user-2',
+        'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      );
+    });
+
+    it('returns 400 when user is already active', async () => {
+      usersMock.activateUserById.mockRejectedValue(
+        new BadRequestException('User is already active'),
+      );
+
+      await request(app.getHttpServer())
+        .patch('/users/activate/user-1')
+        .expect(400);
     });
   });
 });

@@ -1,251 +1,104 @@
 # AgriManage
 
-[![Deploy](https://github.com/fedepaz/viveroApp/actions/workflows/deploy.yml/badge.svg)](https://github.com/fedepaz/viveroApp/actions/workflows/deploy.yml)
-[![PR Checks](https://github.com/fedepaz/viveroApp/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/fedepaz/viveroApp/actions/workflows/pr-checks.yml)
-[![Scheduled](https://github.com/fedepaz/viveroApp/actions/workflows/scheduled.yml/badge.svg)](https://github.com/fedepaz/viveroApp/actions/workflows/scheduled.yml)
+[![Build Verification](https://github.com/fedepaz/sistemaDemo/actions/workflows/build-verification.yml/badge.svg)](https://github.com/fedepaz/sistemaDemo/actions/workflows/build-verification.yml)
+[![PR Checks](https://github.com/fedepaz/sistemaDemo/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/fedepaz/sistemaDemo/actions/workflows/pr-checks.yml)
+[![CI Tests](https://github.com/fedepaz/sistemaDemo/actions/workflows/ci-test.yml/badge.svg)](https://github.com/fedepaz/sistemaDemo/actions/workflows/ci-test.yml)
+[![Scheduled](https://github.com/fedepaz/sistemaDemo/actions/workflows/scheduled.yml/badge.svg)](https://github.com/fedepaz/sistemaDemo/actions/workflows/scheduled.yml)
 
-Aplicación de gestión agrícola. Monorepo con Node.js + pnpm.
+Aplicación de gestión agrícola (vivero). Monorepo con pnpm + Turborepo:
+- **`apps/frontend`** — Next.js 16 (App Router) + Tailwind v4 + shadcn/ui
+- **`apps/backend`** — NestJS 11 + Prisma + MariaDB (incluye integración con la base legada `martin3`)
+- **`packages/shared`** — Schemas Zod y DTOs (`@vivero/shared`)
+
+> Despliegue de producción: **un servidor Windows**, aplicaciones por proceso (sin Docker/PM2/Nginx) y **Cloudflare Tunnel**. Ver `docs/deployment/production.md`.
 
 ## Requisitos
 
-- Node.js >= 16.0.0 - [descargar](https://nodejs.org/)
-- pnpm - [instalar](https://pnpm.io/installation)
+- Node.js >= 20
+- pnpm 10+
 
 ## Instalación inicial
 
-### 1. Clonar el repositorio
+```bash
+pnpm install     # instala dependencias de todo el monorepo
+pnpm dev         # frontend en :3000 + backend en :3001
+```
+
+### Configuración de entorno
+
+El backend requiere variables de entorno (validadas por Joi). Copia los ejemplos y complétalos:
 
 ```bash
-# HTTPS
-git clone https://github.com/fedepaz/viveroApp.git
-cd viveroApp
-
-# SSH
-git clone git@github.com:fedepaz/viveroApp.git
-cd viveroApp
+cp apps/backend/.env.example apps/backend/.env
+cp apps/frontend/.env.example apps/frontend/.env
 ```
 
-### 2. Instalar pnpm (si no lo tienes)
+Variables clave del backend: `BACKEND_NODE_ENV`, `PORT`, `DATABASE_DEV_*` (y `DATABASE_LEGACY_*` para la base legada), `DATABASE_PROD_*`, `JWT_SECRET`, `JWT_REFRESH_SECRET`.
 
-**PowerShell (Windows):**
-
-```powershell
-iwr https://get.pnpm.io/install.ps1 -useb | iex
-```
-
-**Bash/Zsh (Linux/Mac):**
+### Base de datos
 
 ```bash
-curl -fsSL https://get.pnpm.io/install.sh | sh -
+pnpm --filter backend db:migrate:dev   # crear/actualizar migraciones Prisma
+pnpm --filter backend db:seed:users    # sembrar usuarios de prueba
+pnpm --filter backend db:seed:admin    # sembrar usuario admin
+pnpm --filter backend db:studio        # abrir Prisma Studio
 ```
 
-**Alternativa con npm:**
+## Comandos
 
 ```bash
-npm install -g pnpm
+pnpm dev              # desarrollo (frontend + backend, hot-reload)
+pnpm dev:frontend     # solo frontend
+pnpm dev:backend      # solo backend
+pnpm build            # build de producción (shared + frontend + backend)
+pnpm lint             # linter
+pnpm type-check       # type-check de todos los paquetes
+pnpm test             # tests unitarios (shared 114, backend 105, frontend 104)
+pnpm --filter backend test:integration   # tests HTTP de integración (43)
+pnpm format           # formatear código
 ```
 
-### 3. Instalar dependencias
+## CI/CD
 
-```bash
-pnpm install
-```
+GitHub Actions **verifica calidad** (no despliega). Despliegue: manual (ver `docs/deployment/production.md`).
 
-### 4. Ejecutar en desarrollo
+| Workflow | Trigger | Qué hace |
+|----------|---------|----------|
+| `ci-test.yml` | reutilizable (`workflow_call`) | lint + tests unitarios + tests de integración |
+| `pr-checks.yml` | PR → `dev`/`main` | ejecuta `ci-test.yml` |
+| `build-verification.yml` | push → `main` | build de frontend y backend |
+| `scheduled.yml` | diario (2 AM) | `pnpm audit --audit-level high` |
 
-```bash
-pnpm dev
-```
-
-La app estará disponible en `http://localhost:3000` (o el puerto indicado en consola).
-
-## Desarrollo con Docker
-
-### 1. Iniciar el stack completo
-
-Para levantar el frontend, backend, MariaDB y Valkey:
-
-```bash
-docker-compose up --build
-```
-
-### 2. Comandos útiles de Docker
-
-```bash
-docker-compose down          # Detener y remover contenedores
-docker-compose logs -f       # Ver logs en tiempo real
-docker-compose exec backend sh # Entrar al contenedor del backend
-```
-
----
-
-## Actualizar el proyecto
-
-### Opción 1: Con Git (recomendado)
-
-Si clonaste el repo con git, para traer los últimos cambios:
-
-```bash
-# Guardar cambios locales (si los hay)
-git stash
-
-# Traer últimos cambios
-git pull origin main
-
-# Restaurar cambios locales
-git stash pop
-
-# Actualizar dependencias
-pnpm install
-
-# Iniciar
-pnpm dev
-```
-
-**¿Qué hace cada comando?**
-
-- `git stash` - Guarda temporalmente tus cambios sin hacer commit
-- `git pull` - Descarga los cambios del repositorio remoto
-- `git stash pop` - Restaura tus cambios guardados
-- `pnpm install` - Actualiza las dependencias si cambiaron
-
-### Opción 2: Sin Git (descarga manual)
-
-Si bajaste el ZIP originalmente:
-
-1. **Respaldar tus cambios**:
-   - Copia las carpetas/archivos que modificaste a otro lugar
-
-2. **Descargar el ZIP actualizado**:
-   - Ve a https://github.com/fedepaz/viveroApp
-   - Click en `Code` → `Download ZIP`
-   - Extrae en una carpeta temporal
-
-3. **Reemplazar archivos**:
-   - Borra tu carpeta vieja del proyecto
-   - Copia la nueva carpeta descargada
-   - Restaura tus cambios personalizados (si los hay)
-
-4. **Reinstalar dependencias**:
-   ```bash
-   cd viveroApp
-   pnpm install
-   pnpm dev
-   ```
-
----
-
-## CI/CD Workflows
-
-El proyecto usa GitHub Actions para automatización. Estos workflows se ejecutan automáticamente:
-
-### deploy.yml
-
-Despliega la aplicación a producción cuando se hace push a la rama main. Compila el código, ejecuta tests y sube los archivos al servidor.
-
-### pr-checks.yml
-
-Se ejecuta cuando abres un Pull Request. Verifica que el código compile, pase los tests y cumpla con las reglas de estilo (linting) antes de permitir el merge.
-
-### scheduled.yml
-
-Tareas programadas que se ejecutan automáticamente (por ejemplo, limpieza de caché, backups, actualizaciones de dependencias). Se ejecuta en horarios predefinidos usando cron.
-
-**Ver estado de los workflows:** [Actions tab](https://github.com/fedepaz/viveroApp/actions)
-
-Los badges en la parte superior muestran si cada workflow está pasando (verde) o fallando (rojo).
-
----
-
-## Scripts disponibles
-
-```bash
-pnpm dev          # Desarrollo con hot-reload
-pnpm build        # Build para producción
-pnpm test         # Ejecutar tests
-pnpm lint         # Linter
-pnpm format       # Formatear código
-```
-
----
-
-## Troubleshooting
-
-### Error de permisos en Windows PowerShell
-
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
-
-### Puerto ocupado
-
-**Linux/Mac:**
-
-```bash
-lsof -ti:3000 | xargs kill -9
-```
-
-**Windows PowerShell:**
-
-```powershell
-Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Process -Force
-```
-
-### Limpiar caché de pnpm
-
-Si algo no funciona después de actualizar:
-
-```bash
-pnpm store prune
-rm -rf node_modules
-pnpm install
-```
-
-**Windows (PowerShell):**
-
-```powershell
-pnpm store prune
-Remove-Item -Recurse -Force node_modules
-pnpm install
-```
-
----
-
-## Estructura del proyecto
+## Estructura
 
 ```
 viveroApp/
-├── apps/           # Aplicaciones del monorepo
-├── packages/       # Paquetes compartidos
-├── .agents/        # Agentes y skills (no versionado)
-├── .github/        # Configuración de GitHub Actions
-│   └── workflows/  # Archivos de CI/CD
-├── docs/           # Documentación
-└── package.json    # Configuración principal
+├── apps/
+│   ├── frontend/    # Next.js 16 (App Router), features colocalizadas en src/features/
+│   └── backend/     # NestJS 11, módulos en src/modules/, legacy MySQL en src/modules/legacy/
+├── packages/
+│   └── shared/      # @vivero/shared — schemas Zod y constantes
+├── docs/
+│   ├── agents/      # Perfiles de agentes (fuente de verdad de arquitectura)
+│   ├── deployment/  # Guía de despliegue de producción
+│   └── project-documentation/
+├── design-system/   # Tokens y patrones de UI
+├── .github/         # Workflows de GitHub Actions
+└── .agents/         # Skills de agentes (no versionado)
 ```
 
----
+## Documentación
 
-## Sistema de Skills
+- Arquitectura y estándares: `docs/agents/tech_stack_guide.md` (fuente de verdad).
+- Despliegue de producción: `docs/deployment/production.md`.
+- Convenciones de commits: `COMMIT_CONVENTIONS.md`.
 
-El proyecto utiliza un sistema de skills modulares para extender las capacidades de los agentes. Los skills se instalan en `.agents/skills/` y se rastrean via `skills-lock.json`.
+## Troubleshooting
 
-**Skills disponibles:**
-- Frontend: `frontend-design`, `shadcn`, `tailwind-css-patterns`
-- Backend: `nestjs-best-practices`, `prisma-client-api`
-- Quality: `accessibility`, `seo`, `vitest`
-- Workflow: `commit-workflow`, `review-code-changes`
-
-**Uso:** Activa un skill con `skill("nombre-del-skill")`
-
-**Documentación:** Ver `docs/agents/skills-guide.md`
-
----
+- **Puerto ocupado (3000/3001):** busca el proceso y termínalo (ver `README` del sistema operativo).
+- **Caché de pnpm corrupta:** `pnpm store prune` + borrar `node_modules` + `pnpm install`.
+- **Errores de base de datos:** verifica `apps/backend/.env` (`BACKEND_NODE_ENV` y hosts/puertos de MariaDB).
 
 ## Licencia
 
 MIT
-
----
-
-**¿Problemas?** [Abrir un issue](https://github.com/fedepaz/viveroApp/issues)

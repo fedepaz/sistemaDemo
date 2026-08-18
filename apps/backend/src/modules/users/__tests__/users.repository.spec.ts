@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { InternalServerErrorException } from '@nestjs/common';
 import { UsersRepository } from '../repositories/users.repository';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
 
@@ -60,6 +61,7 @@ describe('UsersRepository', () => {
           deletedAt: null,
           isActive: true,
         },
+        omit: { passwordHash: true },
       });
     });
 
@@ -86,6 +88,7 @@ describe('UsersRepository', () => {
           deletedAt: null,
           isActive: true,
         },
+        omit: { passwordHash: true },
       });
     });
 
@@ -111,6 +114,7 @@ describe('UsersRepository', () => {
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { id: 'user-1' },
         data: { firstName: 'Updated', updatedAt: expect.any(Date) }, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        omit: { passwordHash: true },
       });
     });
   });
@@ -130,7 +134,69 @@ describe('UsersRepository', () => {
           deletedByUserId: 'admin-1',
           isActive: false,
         },
+        omit: { passwordHash: true },
       });
+    });
+  });
+
+  describe('findToActivate', () => {
+    it('should return inactive users for non-dev requester', async () => {
+      const users = [{ id: 'user-1', username: 'pending', isActive: false }];
+      prisma.user.findMany.mockResolvedValue(users);
+
+      const result = await repository.findToActivate('requester-1');
+
+      expect(result).toEqual(users);
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        where: {
+          deletedAt: null,
+          isActive: false,
+          id: { notIn: [] },
+        },
+        omit: { passwordHash: true },
+      });
+    });
+
+    it('should return all users for dev requester', async () => {
+      const users = [{ id: 'user-1', username: 'dev', isActive: true }];
+      prisma.devAccount.findMany.mockResolvedValue([{ userId: 'dev-1' }]);
+      prisma.user.findMany.mockResolvedValue(users);
+
+      const result = await repository.findToActivate('dev-1');
+
+      expect(result).toEqual(users);
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        where: {
+          deletedAt: null,
+          isActive: false,
+        },
+        omit: { passwordHash: true },
+      });
+    });
+  });
+
+  describe('activateById', () => {
+    it('should set isActive to true', async () => {
+      prisma.user.update.mockResolvedValue({ id: 'user-1', isActive: true });
+
+      await repository.activateById('user-1');
+
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: 'user-1' },
+        data: {
+          isActive: true,
+          updatedAt: expect.any(Date), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        },
+        omit: { passwordHash: true },
+      });
+    });
+
+    it('should throw InternalServerErrorException on DB error', async () => {
+      prisma.user.update.mockRejectedValue(new Error('DB error'));
+
+      await expect(repository.activateById('user-1')).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });

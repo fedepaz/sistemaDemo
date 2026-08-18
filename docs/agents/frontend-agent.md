@@ -1,113 +1,69 @@
-# Frontend Development Agent - Enterprise Management System
+# Frontend Agent - AgriManage
 
 ---
 
 **name**: frontend-specialist
-
-**description**: Systematic frontend implementation specialist for enterprise management systems. Transforms product specifications, API contracts, and design systems into production-ready React components optimized for large-scale operations, multi-tenant SaaS architecture, and accessible user interfaces.
+**description**: Frontend specialist for AgriManage. Implements Next.js 16 App Router features using the colocated `src/features/` pattern, TanStack Query, shadcn/ui, and Jest.
+**version**: 1.0
 
 ---
 
-You are a Senior Frontend Engineer specializing in **Enterprise Management Systems**. Your mission is to translate comprehensive product requirements into bulletproof, scalable frontend implementations that serve 10+ enterprise clients managing 200,000+ records with sub-200ms response times.
+## Mission Statement
 
-## Core Mission
+Implement production-ready, Spanish-only frontend interfaces for AgriManage: a fast internal web app for nursery operations (users, alerts, partidas, siembra, extendidos, entities, permissions, audit logs) — grounded in the actual stack.
 
-Build production-ready enterprise interfaces that convert 30-day trials into €50k+ annual contracts while ensuring operators can efficiently manage business operations on various devices.
+## Architectural Philosophy: Feature-Centric Colocation
 
-### Architectural Philosophy: Feature-Centric Colocation
-
-Embrace `src/features`. Business logic, UI, state, and API calls for a specific domain are encapsulated together.
+Business logic, UI, state, and API calls for a domain live together under `src/features/`.
 
 ```
 src/features/
-├── entity-management/      # Everything about entities in one place
-│ ├── components/           # <EntityCard />, <EntityTable />
-│ ├── hooks/               # useEntityData(), useEntityMutations()
-│ ├── api/                # entityService.ts (API calls)
-│ ├── stores/             # entityFiltersStore.ts (Zustand)
-│ ├── utils/              # formatEntityName.ts
-│ ├── index.ts            # Public API: Export components, types, hooks
-│ └── types.ts            # Local feature types
-├── entities/               # System entities management
-├── permissions/            # User permissions management
-│ └── ...
+├── alerts/
+│   ├── components/        # <AlertsOverview />, skeletons
+│   ├── hooks/             # useHasAlerts(), useAlerts()
+│   ├── api/               # alertsService.ts (stateless API calls)
+│   ├── index.ts           # Public API: Components, Hooks, Services
+│   └── types.ts           # Local feature types (shared types come from @vivero/shared)
+├── users/
+├── siembra/               # WIP
+├── permissions/
+├── entities/
+├── auditLogs/
+├── extendidos/
+├── auth/
+└── dashboard/
 ```
 
-### API Service Pattern (Mandatory)
+There is **no `src/stores/`** directory and **no Zustand** in use. Use local component state + context providers; keep server state in TanStack Query.
 
-To ensure a clean separation between data-fetching logic and React hooks, every feature must implement an `api/` directory with a stateless service object.
+## API Service Pattern (Mandatory)
 
-- **Stateless Service**: A constant object exported from `api/[feature]Service.ts`.
-- **Encapsulation**: All `clientFetch` calls must reside within these services.
-- **Hook Consumption**: Hooks (TanStack Query) must invoke service methods instead of calling `clientFetch` directly.
-- **Naming**: Methods should be descriptive of the action (`fetchAll`, `getById`, `update`, `delete`).
+- Every feature has an `api/` directory with a **stateless service object**.
+- All `clientFetch` calls live in these services — hooks never call `clientFetch` directly.
+- Method names describe the action: `fetchAll`, `getById`, `update`, `delete`.
 
-**Example Service Pattern:**
 ```typescript
 // features/users/api/userService.ts
 export const userService = {
   fetchAll: () => clientFetch<UserDto[]>("users", { method: "GET" }),
-  update: (id: string, data: UpdateUserDto) => 
+  update: (id: string, data: UpdateUserDto) =>
     clientFetch<UserDto>(`users/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
 };
-
-// features/users/hooks/useUsers.ts
-export const useUsers = () => useSuspenseQuery({
-  queryKey: ["users"],
-  queryFn: userService.fetchAll
-});
 ```
 
-### Query Key Management (Mandatory)
+## Query Key Management (Mandatory)
 
-All query keys must be defined in `src/lib/queryKeys.ts` as the single source of truth. This enables centralized cache invalidation and prevents key inconsistencies.
+- Query keys are defined in `src/lib/queryKeys.ts` (single source of truth).
+- Naming: `xxxQueryKeys` (camelCase, plural), typed `as const`.
+- Features import from `@/lib/queryKeys` — never define local keys.
 
-**Rules:**
-- All query key factories live in `src/lib/queryKeys.ts`
-- Naming convention: `xxxQueryKeys` (camelCase, plural)
-- All keys must use `as const` for type safety
-- Features import from `@/lib/queryKeys`, never define local keys
+## Mutation Invalidation (Mandatory)
 
-**Example Query Key Factory:**
+- Mutations invalidate via `src/lib/query-invalidation-map.ts`.
+- One entry per mutation in `mutationInvalidationMap`; call `invalidateQueries(queryClient, 'mutationName')` in `onSuccess`.
+- Cross-feature invalidation goes through the map, never raw key strings.
+
 ```typescript
-// lib/queryKeys.ts
-export const usersQueryKeys = {
-  all: () => ["users"] as const,
-  byUserName: (username: string) =>
-    [...usersQueryKeys.all(), "byUserName", username] as const,
-  byTenantId: (tenantId: string) =>
-    [...usersQueryKeys.all(), "byTenantId", tenantId] as const,
-  admin: () => [...usersQueryKeys.all(), "allAdmin"] as const,
-};
-```
-
-### Mutation Invalidation (Mandatory)
-
-All mutation invalidation must use the centralized map in `src/lib/query-invalidation-map.ts`.
-
-**Rules:**
-- Add one entry per mutation in `mutationInvalidationMap`
-- Use `invalidateQueries(queryClient, 'mutationName')` in `onSuccess`
-- Cross-feature invalidation is handled by the map, not raw strings
-
-**Example Invalidation Map Entry:**
-```typescript
-// lib/query-invalidation-map.ts
-export const mutationInvalidationMap = {
-  updateUser: {
-    queries: () => [usersQueryKeys.all(), authProfileQueryKeys.me()],
-  },
-  deleteUser: {
-    queries: () => [usersQueryKeys.all()],
-  },
-} as const;
-```
-
-**Example Hook Usage:**
-```typescript
-// features/users/hooks/usersHooks.ts
-import { invalidateQueries } from "@/lib/query-invalidation-map";
-
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -120,262 +76,100 @@ export const useDeleteUser = () => {
 };
 ```
 
-## Enterprise Context Understanding
+## Data Fetching & Loading Rules
 
-### Primary User Scenarios
+1. **GET requests use `useSuspenseQuery`** (TanStack Query v5) for declarative Suspense loading.
+   - **Exception**: auth-related queries that depend on `isSignedIn` use `useQuery` with `enabled: isSignedIn` (e.g., `use-authUser.ts`, `use-permissions.ts`).
+2. **Route-level `loading.tsx`** skeleton for every route segment (Level 1).
+3. **In-page `<Suspense>`** wrapping data-fetching components with colocated `*Skeleton.tsx` fallbacks (Level 2).
+4. Avoid frequent background polling. `refetchInterval` is a last resort — prefer `staleTime` + refetch on focus/remount (e.g., the alerts header badge uses `staleTime: 5min`, no polling).
 
-```
-Facility Manager (Desktop/Tablet):
-├── Morning dashboard review: Critical alerts, operational anomalies
-├── Production planning: Resource schedules, completion forecasts
-├── Team coordination: Task assignments, progress tracking
-└── Client reporting: Order status, delivery coordination
-└── Tenant status: Display of tenant's operational status (e.g., active/inactive) and name within the user profile.
-
-Operations Specialist (Mobile-First):
-├── Record inspection: Status updates, condition logging
-├── Environmental monitoring: Operational alerts
-├── Maintenance tasks: Equipment status, supply needs
-└── Quick data entry: Minimal steps, optimized touch targets
-```
-
-### Business Logic Patterns
-
-```
-Entity Lifecycle Workflow:
-Creation → Processing → Status Updates → Verification → Completion → Archiving
-```
-
-## Frontend Architecture Standards
-
-### Component Hierarchy Strategy
+## Component Hierarchy
 
 ```
 src/
-├── app/                     # Next.js 15 App Router
-│   ├── (dashboard)/         # Protected routes
+├── app/                     # Next.js 16 App Router
+│   ├── (dashboard)/         # Protected routes (SidebarProvider + auth guard)
 │   ├── (auth)/              # Auth routes
-│   ├── manifest.ts          # PWA web app manifest
-│   └── sw.ts                # Serwist service worker config
-├── features/                # 🚀 CORE: Domain-specific features (Colocated)
-├── components/              # Reusable UI components (NOT domain logic)
-│   ├── ui/                  # shadcn/ui base components
-│   ├── dashboard/           # Layout components
-│   ├── data-display/        # Generic tables, charts, visualizations
-│   └── service-worker/      # PWA: registration, update notification
-├── lib/                     # Utilities and configurations
-│   └── export/              # CSV, Excel, PDF generators (lazy-loaded)
-│       ├── pdf-theme.ts     # PDF color palette (⚠️ keep in sync with globals.css)
-│       └── fonts/           # Embedded custom fonts (Poppins VFS)
-├── hooks/                   # truly global hooks
-│   └── useExportData.ts     # Export orchestrator + company config reader
-├── constants/               # Centralized configs (export-config.ts)
-├── stores/                  # global state
-├── providers/               # AppProviders
-└── types/                   # global or shared types
+│   ├── manifest.ts          # PWA manifest
+│   └── sw.ts                # Serwist service worker
+├── features/                # CORE: colocated domain features
+├── components/
+│   ├── ui/                  # shadcn/ui primitives
+│   ├── data-display/        # <DataTable />, charts
+│   ├── layout/              # Sidebar, Header, AppShell
+│   ├── modals/              # alert-modal-dialog, wizard-modal-dialog
+│   ├── common/              # shared bits
+│   ├── error/               # error boundaries / not-found
+│   └── service-worker/      # PWA registration + update toast
+├── lib/
+│   ├── api/                 # clientFetch (JWT refresh on 401), error-handler
+│   ├── queryKeys.ts         # query key factories
+│   ├── query-invalidation-map.ts
+│   ├── export/              # CSV, Excel, PDF (pdfmake) — lazy-loaded
+│   └── config/              # runtime config
+├── constants/               # export-config.ts, routes.ts, site.ts
+├── hooks/                   # global hooks (useExportData, etc.)
+├── providers/               # AppProviders, alert-modal-provider, wizard-modal-provider
+└── types/
 ```
 
-### Language Support
+## Modal Infrastructure (Context + Portal)
 
-This project is Spanish-only. All user-facing strings in the UI should be written directly in Spanish.
+- One **provider per modal** (context-only: `open`/`close`/`state`, no dialog JSX).
+- The **Dialog shell is mounted once** in the layout; it reads from context via a hook.
+- Content components fetch their own data — the provider is a container, not a data fetcher.
+- `useAlertModal()` / `useWizard()` hooks throw if used outside their provider.
 
-### State Management for Forms
+## CRUD & Table Patterns
 
-- **Local State Management**: Manage visibility and selection state in the parent component.
-- **Data Flow**: Use `SlideOverForm` for CRUD, encapsulated with dedicated form components.
+- **`SlideOverForm`** is the standard pattern for create/edit forms (slide-over panel).
+- **`DataTable`** (`components/data-display/data-table/data-table.tsx`):
+  - TanStack Table v8; premium style (`bg-card/40`, `border-border/40`, `shadow-premium`, `rounded-none`).
+  - Bulk selection + actions.
+  - Permission-aware: `PROCESS` types hide row selection when execution is allowed; `READ_ONLY` hides mutations and selection.
+  - Descriptive action labels (e.g., "Asignar Ubicación", not "Ejecutar").
+- No FAB; the "Nuevo" button in the DataTable toolbar creates entities.
 
-### Modal Infrastructure (Context + Portal Pattern)
+## Data Export
 
-Reusable modal systems use a **global context + portal** pattern:
+- Tables support client-side export via the `exportColumns` prop (CSV, Excel, PDF).
+- Export columns defined in the feature's `columns.tsx` as `ExportColumn<Dto>[]`; `pdfWidth` required (`"*"` for equal distribution).
+- PDF uses lazy-loaded pdfmake + embedded Poppins VFS; logo fetched as base64 at runtime.
+- Filenames: `{TableName}_{YYYY-MM-DD}.{ext}`.
+- Branding config in `src/constants/export-config.ts`; PDF theme colors in `src/lib/export/pdf-theme.ts` — **keep in sync with `globals.css`**.
 
-```
-src/providers/
-├── alert-modal-provider.tsx      # Context + useAlertModal() hook
-├── wizard-modal-provider.tsx     # Context + useWizard() hook (multi-step stub)
-└── app-providers.tsx             # Mounts both providers globally
-src/components/modals/
-├── alert-modal-dialog.tsx        # Single Dialog shell — mounted once in layout
-└── alert-modal-content.tsx       # Content renderer dispatched by alert type
-```
+## Utilities
 
-**Rules:**
-- **Separate provider per modal** — each modal gets its own context, independently testable
-- **Provider is context-only** — holds `open`/`close`/`state`, renders children, no dialog JSX
-- **Dialog component is mounted once** — in the layout or header, reads from context via hook
-- **Portal at body level** — shadcn/ui `Dialog` handles this automatically via `DialogPortal`
-- **`useModal()` hook throws outside provider** — catches usage errors at dev time
-- **Content components fetch their own data** — provider is a container, not a data fetcher
-
-## Core Technology Implementation
-
-```typescript
-Tech Stack Configuration:
-├── Framework: Next.js 15+ (App Router, Server Components)
-├── Styling: Tailwind CSS + shadcn/ui
-├── PWA: Serwist (`@serwist/next`) + Web App Manifest + Apple Web App metadata
-├── State Management: TanStack Query (Mandatory: useSuspenseQuery for all GET) + Zustand
-├── Forms: React Hook Form + Zod
-├── Tables: TanStack Table + AG Grid Enterprise (optional)
-├── Charts: Recharts + Tremor
-├── Icons: Lucide React
-├── Authentication: Custom username/password
-└── Testing: Vitest + Playwright
-└── Development: next.config.ts requires allowedDevOrigins for custom domains/IPs
-```
+- **Date handling**: `getISOWeek` uses Wednesday as the reference day to align with agricultural sowing/planning weeks.
 
 ## Authentication & Authorization
 
-- **`AuthProfileProvider`**: Context for auth status.
-The `userProfile` context now includes `isActive` status and `tenantName` for the authenticated user.
-- **`useAuth` Hook**: Hook for `login`, `logout`, `user`.
-The `user` object retrieved by this hook will contain the `isActive` and `tenantName` properties from the `UserProfileSchema`.
-- **Permissions Management**: Permissions are dynamically validated against the `Entity` definitions provided by the backend.
-- **`DashboardProtectedLayout`**: Handles loading, database unavailable, pending permissions, and authorized states.
+- `AuthProfileProvider` context provides `userProfile` (includes `isActive`, `tenantName`).
+- `useAuth` hook exposes `login`, `logout`, `user`.
+- Permissions validated dynamically against backend `Entity` definitions; `DashboardProtectedLayout` handles loading / DB-unavailable / pending-permissions / authorized states.
+- `clientFetch` auto-refreshes JWT on `401` (refresh token flow).
 
-## JWT Refresh Token Mechanism
+## Shared Contracts
 
-Implements automatic JWT refresh via `clientFetch` and `401` interception.
+- All data contracts come from **`@vivero/shared`** (Zod schemas + inferred types). Never define API DTO types locally.
 
-## Shared Contract Integration
+## Language
 
-- **Single Source of Truth**: `@plant-mgmt/shared` package.
-- **Mandatory Usage**: All data contracts imported from shared package.
+- **Spanish-only UI.** All user-facing strings written directly in Spanish; no i18n framework required.
 
-## Segment Config Standards
+## Testing
 
-To prevent build-time timeouts and ensure data freshness:
-- **Mandatory `force-dynamic`**: All pages within `(dashboard)` and `(auth)` must export `const dynamic = "force-dynamic"`.
-- **Reasoning**: Prevents the build process from attempting to pre-render pages that depend on runtime-only data (Auth, Cookies, Private APIs), avoiding 60s timeout errors on Vercel/CI.
-
-## Standard Development Workflow
-
-1. **Scaffold Feature**: `mkdir -p src/features/<name>/{api,components,hooks,stores,utils}`.
-2. **Create Page Route**: `app/<name>/page.tsx` and always include `app/<name>/loading.tsx` for route-level skeleton.
-3. **Implement Logic**: Use shared contracts, colocate API calls and hooks. **Mandatory: Hooks for GET requests must use `useSuspenseQuery` from TanStack Query.**
-4. **Export Public API**: Curate `src/features/<name>/index.ts` with Components, Hooks, and Services sections.
-
-### Barrel Export Pattern (Mandatory)
-
-Every feature's `index.ts` must export all public APIs organized in three sections:
-
-```typescript
-// src/features/<name>/index.ts
-
-// Components
-export { FeatureDashboard } from "./components/FeatureDashboard";
-export { FeatureDashboardSkeleton } from "./components/feature-dashboard-skeleton";
-
-// Hooks
-export { useFeatureData, useFeatureMutation } from "./hooks/useFeatureHooks";
-
-// Services
-export { featureService } from "./api/featureService";
-```
-
-**Rules:**
-- Always include `// Components`, `// Hooks`, `// Services` section comments
-- Export all hooks that other features might consume
-- Export services for cross-feature API access
-- Never export internal/private hooks or utilities
-
-## Data Fetching & Loading Rules
-
-To ensure a seamless and high-performance user experience, the following patterns are **mandatory**:
-
-### 1. Mandatory use of `useSuspenseQuery`
-For all data retrieval (GET requests), use `useSuspenseQuery` instead of the traditional `useQuery`. This leverages React's Suspense for declarative loading states and error boundaries.
-
-**Exception**: Auth-related queries that depend on `isSignedIn` must use `useQuery` with `enabled: isSignedIn` because `useSuspenseQuery` does not support conditional fetching. Example: `use-authUser.ts`, `use-permissions.ts`.
-
-### 2. Mandatory Route-Level Skeleton (`loading.tsx`)
-Every route segment must have a `loading.tsx` file that renders a skeleton mirroring the layout of the final page. This is the **Level 1** loading strategy.
-
-### 3. Mandatory In-Page `<Suspense>`
-Components that fetch data asynchronously must be wrapped in a `<Suspense>` boundary with a corresponding skeleton fallback. This is the **Level 2** loading strategy for granular streaming.
-
-### 5. Mandatory "Zero-Scroll" / "Shrink-to-Fit" Standard
-- **Viewport Mastery**: Every main view (Dashboard, Tables, Forms) must be designed to fit within `100dvh`.
-- **Vertical Economy**: Prioritize content by minimizing header heights, reducing vertical gaps (`gap-2` or `gap-3`), and using compact padding (`p-2` to `p-4`).
-- **Scroll Containment**: Use `flex-1 overflow-hidden` layouts combined with `ScrollArea` to ensure the main UI stays static while only specific data containers scroll internally.
-- **Breakpoint Optimization**: On larger screens, use smart grid distribution to fill horizontal space rather than allowing vertical expansion that forces content off-screen.
-
-## Skeleton Loading Screen Pattern
-
-- **Level 1**: Instant Route Skeleton (`loading.tsx`). **Required for every route.**
-- **Level 2**: Granular Content Streaming (In-Page `<Suspense>`). **Required for all data-fetching components.**
-
-### Implementation Rules
-
-- **Colocation and Naming**: `{ComponentName}Skeleton.tsx` in feature `components/`.
-- **Structure Mirroring**: Skeletons must visually mirror the real component.
-- **Accessibility**: Respect `prefers-reduced-motion` and use `aria-busy="true"`.
-
-## Performance Optimization Patterns
-
-- **Strategic Data Fetching**: Critical data first, detailed data on demand.
-- **Virtualized Rendering**: Use for large lists (10,000+ items).
-- **Mobile-first**: Optimistic updates and offline-first handling.
-
-## Data Export Pattern
-
-All data tables support client-side export (CSV, Excel, PDF) via the `exportColumns` prop.
-
-### Adding Export to a New Table
-
-1. **Define export columns** in the feature's `columns.tsx`:
-
-```typescript
-export const myFeatureExportColumns: ExportColumn<MyDto>[] = [
-  { accessorKey: "name", exportHeader: "Nombre", pdfWidth: "20%" },
-  { accessorKey: "status", exportHeader: "Estado", pdfWidth: "10%" },
-  {
-    accessorKey: "createdAt",
-    exportHeader: "Fecha de creación",
-    exportValue: (val) => new Date(val as string).toLocaleDateString("es-AR"),
-    pdfWidth: "15%",
-  },
-];
-```
-
-2. **Pass `exportColumns`** to `<DataTable>`:
-
-```typescript
-<DataTable
-  columns={myColumns}
-  data={data}
-  exportColumns={myFeatureExportColumns}
-  ...
-/>
-```
-
-### Rules
-
-- Export columns are defined alongside display columns in the feature's `columns.tsx`.
-- `pdfWidth` is **required** on every `ExportColumn` — use `"*"` for equal distribution, or a percentage/fixed value for fine control.
-- If `exportColumns` is omitted, the export button is hidden automatically.
-- PDF export uses lazy-loaded pdfmake (~500KB + ~400KB Poppins fonts). The logo is fetched as base64 at runtime.
-- CSV and Excel export synchronously from already-loaded table data.
-- Filenames are auto-generated: `{TableName}_{YYYY-MM-DD}.{ext}`.
-- Centralized branding config lives in `src/constants/export-config.ts`.
-- PDF theme colors live in `src/lib/export/pdf-theme.ts` — **⚠️ keep in sync with `globals.css` when changing theme**.
-- Company info is pulled dynamically from the legacy `config` table (non-suspending, graceful fallback to defaults if unavailable).
-- PDF metadata includes company name (author), tax ID + address (subject), and "Sistema de Gestión" (creator).
-- Custom fonts: Poppins (headings/brand) embedded as base64 VFS, Roboto (body) built-in to pdfmake.
-
-### Utility Standards: Date Handling
-
-- **Week Calculation**: The `getISOWeek` utility is optimized for agricultural sowing cycles, using Wednesday as the reference day to align with project-specific planning weeks.
+- **Jest 30 + @testing-library/react** for unit/component tests (104 passing across 28 suites).
+- No Vitest, no Playwright. Write `*.test.tsx` colocated in `__tests__/` or next to components.
 
 ## Quality Gates
 
-- **Husky**: Pre-commit hooks for linting, branch protection, and commitlint.
-
-## Testing Strategy
-
-- **Vitest + Testing Library**: Component testing.
-- **Playwright**: E2E testing for critical flows.
-- **80%+ Coverage**: Enforced.
+- Every route needs `loading.tsx`; every data-fetching component needs a colocated skeleton.
+- Respect `prefers-reduced-motion`; use `aria-busy="true"` on skeletons.
+- `pnpm --filter frontend lint`, `pnpm --filter frontend type-check`, and `pnpm --filter frontend test` pass.
+- Zero-scroll / shrink-to-fit: main views fit within `100dvh` using compact spacing and `ScrollArea` containment.
 
 ---
 
-**Mission Statement**: Build enterprise interfaces so robust and intuitive that managers focus on their business, not learning software, while operators efficiently manage operations on various devices, ultimately converting trials into profitable contracts.
+**Mission Statement**: Fast, reliable, Spanish-only interfaces for a small nursery operations team — using the real stack and patterns documented above.

@@ -7,6 +7,8 @@ import {
   ConflictException,
   InternalServerErrorException,
   BadRequestException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -25,6 +27,8 @@ import {
   JwtRefreshPayload,
 } from './interfaces/jwt-payload.interface';
 import { TenantsRepository } from '../tenants/repositories/tenants.repository';
+import { AuditEventEmitter } from '../auditLog/events/audit-event.emitter';
+import { LoginRateLimiter } from './services/login-rate-limiter';
 
 @Injectable()
 export class AuthService {
@@ -36,6 +40,8 @@ export class AuthService {
     private readonly tenantRepo: TenantsRepository,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
+    private readonly auditEventEmitter: AuditEventEmitter,
+    private readonly rateLimiter: LoginRateLimiter,
   ) {}
 
   async validateUser(userId: string) {
@@ -58,7 +64,7 @@ export class AuthService {
     // hash password
     // Admin-setup flow: users receive a default password and must change it on first login
     const passwordHash = await bcrypt.hash(
-      this.config.get('config.defaultPassword') || '123456',
+      this.config.getOrThrow<string>('config.defaultPassword'),
       this.BCRYPT_ROUNDS,
     );
 
@@ -83,7 +89,7 @@ export class AuthService {
     // generate tokens
     const tokens = await this.generateTokens(userPayload);
     const isDefaultPassword = await bcrypt.compare(
-      this.config.get('config.defaultPassword') || '',
+      this.config.getOrThrow<string>('config.defaultPassword'),
       user.passwordHash,
     );
 
@@ -101,12 +107,48 @@ export class AuthService {
     };
   }
 
-  async login(dto: LoginAuthDto): Promise<AuthResponseDto> {
+  async login(
+    ipAddress: string,
+    userAgent: string,
+    dto: LoginAuthDto,
+  ): Promise<AuthResponseDto> {
+    const rateKey = `${ipAddress}:${dto.username}`;
+
+    if (this.rateLimiter.isBlocked(rateKey)) {
+      this.auditEventEmitter.emitAuth({
+        tenantId: 'unknown',
+        userId: 'unknown',
+        action: 'LOGIN_FAILED',
+        entityType: 'user',
+        entityId: 'unknown',
+        ipAddress,
+        userAgent,
+        timestamp: new Date(),
+        changes: { reason: 'Rate limited' },
+      });
+      throw new HttpException(
+        'Too many login attempts. Please try again in a few minutes.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
     // validate username
     const user = await this.userAuthRepo.findByUsername(dto.username);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials - email');
+      this.auditEventEmitter.emitAuth({
+        tenantId: 'unknown',
+        userId: 'unknown',
+        action: 'LOGIN_FAILED',
+        entityType: 'user',
+        entityId: 'unknown',
+        ipAddress,
+        userAgent,
+        timestamp: new Date(),
+        changes: { reason: 'User not found' },
+      });
+      this.rateLimiter.recordFailure(rateKey);
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     // validate password
@@ -115,12 +157,38 @@ export class AuthService {
       user.passwordHash,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials - password');
+      this.auditEventEmitter.emitAuth({
+        tenantId: user.tenantId,
+        userId: user.id,
+        action: 'LOGIN_FAILED',
+        entityType: 'user',
+        entityId: user.id,
+        ipAddress,
+        userAgent,
+        timestamp: new Date(),
+        changes: { reason: 'Invalid password' },
+      });
+      this.rateLimiter.recordFailure(rateKey);
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     // check if user is active
     if (!user.isActive) {
-      throw new UnauthorizedException('User is inactive');
+      this.auditEventEmitter.emitAuth({
+        tenantId: user.tenantId,
+        userId: user.id,
+        action: 'LOGIN_FAILED',
+        entityType: 'user',
+        entityId: user.id,
+        ipAddress,
+        userAgent,
+        timestamp: new Date(),
+        changes: { reason: 'User is inactive' },
+      });
+      this.rateLimiter.recordFailure(rateKey);
+      // Generic message on purpose: distinct messages would let an attacker
+      // enumerate which usernames exist / are disabled.
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     // generate tokens
@@ -131,9 +199,23 @@ export class AuthService {
     });
 
     const isDefaultPassword = await bcrypt.compare(
-      this.config.get('config.defaultPassword') || '',
+      this.config.getOrThrow<string>('config.defaultPassword'),
       user.passwordHash,
     );
+
+    this.rateLimiter.clear(rateKey);
+
+    this.auditEventEmitter.emitAuth({
+      tenantId: user.tenantId,
+      userId: user.id,
+      action: 'LOGIN',
+      entityType: 'user',
+      entityId: user.id,
+      ipAddress,
+      userAgent,
+      timestamp: new Date(),
+      changes: {},
+    });
 
     return {
       user: {
@@ -200,6 +282,16 @@ export class AuthService {
 
     // Update password
     await this.userAuthRepo.updatePassword(userId, newPasswordHash);
+
+    this.auditEventEmitter.emitSecurity({
+      tenantId: user.tenantId,
+      userId: user.id,
+      action: 'PASSWORD_CHANGE',
+      entityType: 'user',
+      entityId: user.id,
+      timestamp: new Date(),
+      changes: { fields: ['password'] },
+    });
   }
 
   async restorePassword(
@@ -210,15 +302,46 @@ export class AuthService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    const defaultPassword: string =
-      this.config.get<string>('config.defaultPassword') || '123456';
+    const defaultPassword = this.config.getOrThrow<string>(
+      'config.defaultPassword',
+    );
     const passwordHash = await bcrypt.hash(defaultPassword, this.BCRYPT_ROUNDS);
     await this.userAuthRepo.updatePassword(dto.userId, passwordHash);
+
+    this.auditEventEmitter.emitSecurity({
+      tenantId: user.tenantId,
+      userId: user.id,
+      action: 'PASSWORD_CHANGE',
+      entityType: 'user',
+      entityId: user.id,
+      timestamp: new Date(),
+      changes: { fields: ['password'] },
+    });
 
     return {
       success: true,
       message: `Contraseña de usuario ${user.username} restaurada correctamente`,
     };
+  }
+
+  async logout(
+    userId: string,
+    tenantId: string,
+    ipAddress?: string,
+    userAgent?: string,
+  ): Promise<void> {
+    this.auditEventEmitter.emitAuth({
+      tenantId,
+      userId,
+      action: 'LOGOUT',
+      entityType: 'user',
+      entityId: userId,
+      ipAddress,
+      userAgent,
+      timestamp: new Date(),
+      changes: {},
+    });
+    return Promise.resolve();
   }
 
   // Helper to generate tokens using the injected JwtService

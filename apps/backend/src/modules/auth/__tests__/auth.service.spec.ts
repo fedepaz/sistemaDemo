@@ -4,12 +4,15 @@ import {
   NotFoundException,
   ConflictException,
   BadRequestException,
+  HttpException,
 } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { UserAuthRepository } from '../repositories/userAuth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TenantsRepository } from '../../tenants/repositories/tenants.repository';
+import { AuditEventEmitter } from '../../auditLog/events/audit-event.emitter';
+import { LoginRateLimiter } from '../services/login-rate-limiter';
 
 jest.mock('bcrypt');
 import * as bcrypt from 'bcrypt';
@@ -32,6 +35,15 @@ describe('AuthService', () => {
   let configService: {
     get: jest.Mock;
     getOrThrow: jest.Mock;
+  };
+  let auditEventEmitter: {
+    emitAuth: jest.Mock;
+    emitSecurity: jest.Mock;
+  };
+  let rateLimiter: {
+    isBlocked: jest.Mock;
+    recordFailure: jest.Mock;
+    clear: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -56,7 +68,6 @@ describe('AuthService', () => {
     configService = {
       get: jest.fn().mockImplementation((key: string) => {
         const values: Record<string, string> = {
-          'config.defaultPassword': '123456',
           'config.jwt.expiresIn': '15m',
           'config.jwt.refreshExpiresIn': '7d',
         };
@@ -64,12 +75,24 @@ describe('AuthService', () => {
       }),
       getOrThrow: jest.fn().mockImplementation((key: string) => {
         const values: Record<string, string> = {
+          'config.defaultPassword': '123456',
           'config.jwt.secret': 'access-secret',
           'config.jwt.refreshSecret': 'refresh-secret',
           'config.environment': 'development',
         };
         return values[key];
       }),
+    };
+
+    auditEventEmitter = {
+      emitAuth: jest.fn(),
+      emitSecurity: jest.fn(),
+    };
+
+    rateLimiter = {
+      isBlocked: jest.fn().mockReturnValue(false),
+      recordFailure: jest.fn(),
+      clear: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -79,6 +102,8 @@ describe('AuthService', () => {
         { provide: TenantsRepository, useValue: tenantRepo },
         { provide: JwtService, useValue: jwtService },
         { provide: ConfigService, useValue: configService },
+        { provide: AuditEventEmitter, useValue: auditEventEmitter },
+        { provide: LoginRateLimiter, useValue: rateLimiter },
       ],
     }).compile();
 
@@ -108,7 +133,7 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(true) // password check
         .mockResolvedValueOnce(false); // default password check
 
-      const result = await service.login({
+      const result = await service.login('127.0.0.1', 'test-agent', {
         username: 'testuser',
         password: 'Password123',
       });
@@ -125,8 +150,47 @@ describe('AuthService', () => {
       userAuthRepo.findByUsername.mockResolvedValue(null);
 
       await expect(
-        service.login({ username: 'wronguser', password: 'Password123' }),
+        service.login('127.0.0.1', 'test-agent', {
+          username: 'wronguser',
+          password: 'Password123',
+        }),
       ).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('should throw TooManyRequests when the rate limit is hit', async () => {
+      rateLimiter.isBlocked.mockReturnValue(true);
+
+      await expect(
+        service.login('127.0.0.1', 'test-agent', {
+          username: 'testuser',
+          password: 'Password123',
+        }),
+      ).rejects.toThrow(HttpException);
+
+      expect(userAuthRepo.findByUsername).not.toHaveBeenCalled();
+      expect(rateLimiter.clear).not.toHaveBeenCalled();
+    });
+
+    it('should clear the rate limit on successful login', async () => {
+      const user = {
+        id: 'user-1',
+        username: 'testuser',
+        passwordHash: 'hashed-password',
+        isActive: true,
+        tenantId: 'tenant-1',
+        deletedAt: null,
+      };
+      userAuthRepo.findByUsername.mockResolvedValue(user);
+      (bcrypt.compare as jest.Mock)
+        .mockResolvedValueOnce(true) // password check
+        .mockResolvedValueOnce(false); // default password check
+
+      await service.login('127.0.0.1', 'test-agent', {
+        username: 'testuser',
+        password: 'Password123',
+      });
+
+      expect(rateLimiter.clear).toHaveBeenCalledWith('127.0.0.1:testuser');
     });
 
     it('should throw UnauthorizedException for invalid password', async () => {
@@ -141,7 +205,10 @@ describe('AuthService', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       await expect(
-        service.login({ username: 'testuser', password: 'WrongPassword' }),
+        service.login('127.0.0.1', 'test-agent', {
+          username: 'testuser',
+          password: 'WrongPassword',
+        }),
       ).rejects.toThrow(UnauthorizedException);
     });
 
@@ -157,7 +224,10 @@ describe('AuthService', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       await expect(
-        service.login({ username: 'testuser', password: 'Password123' }),
+        service.login('127.0.0.1', 'test-agent', {
+          username: 'testuser',
+          password: 'Password123',
+        }),
       ).rejects.toThrow(UnauthorizedException);
     });
 
@@ -179,12 +249,12 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(true) // password check
         .mockResolvedValueOnce(true); // default password check
 
-      configService.get.mockImplementation((key: string) => {
+      configService.getOrThrow.mockImplementation((key: string) => {
         if (key === 'config.defaultPassword') return 'Default123';
         return undefined;
       });
 
-      const result = await service.login({
+      const result = await service.login('127.0.0.1', 'test-agent', {
         username: 'testuser',
         password: 'Default123',
       });
@@ -308,6 +378,12 @@ describe('AuthService', () => {
         'user-1',
         'new-hash',
       );
+      expect(auditEventEmitter.emitSecurity).toHaveBeenCalledWith(
+        expect.objectContaining({
+          action: 'PASSWORD_CHANGE',
+          userId: 'user-1',
+        }),
+      );
     });
 
     it('should throw NotFoundException if user not found', async () => {
@@ -377,6 +453,9 @@ describe('AuthService', () => {
         'default-hash',
       );
       expect(bcrypt.hash).toHaveBeenCalledWith('123456', 12);
+      expect(auditEventEmitter.emitSecurity).toHaveBeenCalledWith(
+        expect.objectContaining({ action: 'PASSWORD_CHANGE' }),
+      );
     });
 
     it('should throw NotFoundException if user not found', async () => {
@@ -396,7 +475,7 @@ describe('AuthService', () => {
       userAuthRepo.findById.mockResolvedValue(user);
       (bcrypt.hash as jest.Mock).mockResolvedValue('custom-hash');
 
-      configService.get.mockImplementation((key: string) => {
+      configService.getOrThrow.mockImplementation((key: string) => {
         if (key === 'config.defaultPassword') return 'CustomPass1';
         return undefined;
       });

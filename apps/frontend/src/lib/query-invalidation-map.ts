@@ -14,6 +14,8 @@ import {
   siembraQueryKeys,
   alertCommentsQueryKeys,
   alertsQueryKeys,
+  taskShiftQueryKeys,
+  alertsSolvedQueryKeys,
 } from "./queryKeys";
 
 // ============================================================================
@@ -46,6 +48,10 @@ export const mutationInvalidationMap = {
   updateUser: {
     queries: () => [usersQueryKeys.all()],
   },
+  activateUser: {
+    queries: () => [usersQueryKeys.all(), usersQueryKeys.toActivate()],
+  },
+
   deleteUser: {
     queries: () => [usersQueryKeys.all()],
   },
@@ -82,10 +88,14 @@ export const mutationInvalidationMap = {
 
   // --- Alert Comments ---
   createAlertComment: {
-    queries: () => [
-      alertCommentsQueryKeys.all(),
-      alertsQueryKeys.all(),
-    ],
+    queries: () => [alertCommentsQueryKeys.all(), alertsQueryKeys.all()],
+  },
+
+  createTaskShift: {
+    queries: () => [taskShiftQueryKeys.all()],
+  },
+  createAlertSolved: {
+    queries: () => [alertsSolvedQueryKeys.all(), alertsQueryKeys.all()],
   },
 } as const;
 
@@ -115,7 +125,11 @@ export function invalidateQueries(
   if (!entry) return;
 
   const queryKeys = variables
-    ? (entry as { queries: (v: Record<string, unknown>) => readonly unknown[][] }).queries(variables)
+    ? (
+        entry as {
+          queries: (v: Record<string, unknown>) => readonly unknown[][];
+        }
+      ).queries(variables)
     : (entry as { queries: () => readonly unknown[][] }).queries();
 
   for (const key of queryKeys) {

@@ -1,9 +1,0 @@
-docs: add skills system documentation
-
-- Update GEMINI.md with skills system overview and usage
-- Create comprehensive skills guide in docs/agents/skills-guide.md
-- Add skills system section to README.md
-
-This commit adds documentation for the modular skills system that extends
-agent capabilities. The documentation covers available skills, usage patterns,
-and management guidelines.

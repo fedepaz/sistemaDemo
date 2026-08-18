@@ -1,0 +1,42 @@
+model TaskShift {
+  id              String   @id @default(cuid())
+  createdByUserId String
+  createdByUser   User     @relation("created_task_shifts", fields: [createdByUserId], references: [id])
+ 
+  entityId        String
+  entity          Entity   @relation(fields: [entityId], references: [id])
+
+  partidaId       Int      
+  anio            Int
+  indice          Int
+ 
+  startTime       DateTime
+  endTime         DateTime
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime? @db.Timestamp(0)
+  deletedByUserId String?
+  deletedByUser   User?    @relation("deleted_task_shifts", fields: [deletedByUserId], references: [id])
+  employees       TaskShiftEmployee[]
+  @@map("taskShifts")
+
+  @@index([createdByUserId])
+  @@index([entityId])
+  @@index([startTime])
+  @@index([deletedAt])
+}
+
+model TaskShiftEmployee {
+  id          String    @id @default(cuid())
+  taskShiftId String
+  taskShift   TaskShift @relation(fields: [taskShiftId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  @@unique([taskShiftId, userId])
+  @@map("taskShiftEmployees")
+
+  @@index([taskShiftId])
+  @@index([userId])
+}

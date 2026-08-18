@@ -9,11 +9,13 @@ export {
   useUsers,
   useUsersByUserName,
   useUsersByTenantId,
+  useUsersToActivate,
   useUpdateUserProfile,
   useUpdateUser,
   useDeleteUser,
   useGetAllUsersAdmin,
   useRestorePassword,
+  useActivateUser,
 } from "./hooks/usersHooks";
 export { useRegister } from "./hooks/useRegister";
 

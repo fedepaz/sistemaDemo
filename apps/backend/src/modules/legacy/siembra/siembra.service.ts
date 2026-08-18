@@ -1,24 +1,54 @@
 // src/modules/legacy/siembra/services/siembra.service.ts
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { LegacySiembra } from './interfaces/siembra.interface';
 import { AsignarUbiSiembraDto, SiembraDto } from '@vivero/shared';
 import { SiembraRepository } from './repositories/siembra.repository';
 
 @Injectable()
 export class SiembraService {
+  private readonly logger = new Logger(SiembraService.name);
   constructor(private readonly siembraRepo: SiembraRepository) {}
+
+  private validateHeaderFields(row: Record<string, any>): void {
+    const requiredFields = [
+      'partidaId',
+      'anio',
+      'indice',
+      'codigoEspecie',
+      'nombreEspecie',
+    ];
+    const missingFields = requiredFields.filter(
+      (field) => row[field] === undefined || row[field] === null,
+    );
+
+    if (missingFields.length > 0) {
+      this.logger.error('Header validation failed for siembra', {
+        missingFields,
+        availableFields: Object.keys(row),
+      });
+    }
+  }
   private mapToDto(row: LegacySiembra): SiembraDto {
-    return {
+    const mappedRow = {
       partidaId: row.partida,
       anio: row.ano,
       indice: row.indice,
+      codigoEspecie: row.planta,
+      nombreEspecie: row.nombre,
+    };
+
+    this.validateHeaderFields(mappedRow);
+
+    return {
+      partidaId: mappedRow.partidaId,
+      anio: mappedRow.anio,
+      indice: mappedRow.indice,
+      codigoEspecie: mappedRow.codigoEspecie,
+      nombreEspecie: mappedRow.nombreEspecie,
       hai: row.hai,
-      con: row.con,
-      codigoEspecie: row.espvar,
-      nombreEspecie: row.especieNombre,
       injerto: row.injerto,
-      contenedor: row.contenedor,
+      con: row.con,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,
     };

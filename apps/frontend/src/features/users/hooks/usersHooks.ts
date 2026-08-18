@@ -23,6 +23,29 @@ export const useUsers = () => {
   });
 };
 
+export const useUsersToActivate = () => {
+  return useSuspenseQuery<UserProfileDto[]>({
+    queryKey: usersQueryKeys.toActivate(),
+    queryFn: userService.fetchToActivate,
+    retry: 1, // Retry once to account for transient network issues
+  });
+};
+
+export const useActivateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<{ success: boolean; message: string }, Error, { userId: string }>({
+    mutationFn: async ({ userId }) => userService.activateUser(userId),
+    onSuccess: () => {
+      const toastMessage = `Usuario activado exitosamente`;
+      toast.success(toastMessage, {
+        duration: 3000,
+      });
+      invalidateQueries(queryClient, "activateUser");
+    },
+  });
+};
+
 export const useUpdateUserProfile = () => {
   const queryClient = useQueryClient();
 

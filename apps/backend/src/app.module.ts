@@ -33,8 +33,10 @@ import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.intercept
 import { LegacySiembraModule } from './modules/legacy/siembra/siembra.module';
 import { LegacyAlertsModule } from './modules/legacy/alerts/alerts.module';
 import { AlertCommentsModule } from './modules/alertComments/alertComments.module';
+import { TaskShiftsModule } from './modules/taskShifts/taskShifts.module';
 import { RequestIdMiddleware } from './shared/middleware/request-id.middleware';
 import { getPinoStream } from './config/logger';
+import { AlertSolvedModule } from './modules/alertSolved/alertSolved.module';
 
 @Module({
   imports: [
@@ -49,7 +51,7 @@ import { getPinoStream } from './config/logger';
       envFilePath: [
         path.join(
           __dirname,
-          `../../.env.${process.env.NODE_ENV || 'development'}`,
+          `../../.env.${process.env.BACKEND_NODE_ENV || 'development'}`,
         ),
         path.join(__dirname, `../../.env`),
       ],
@@ -96,6 +98,8 @@ import { getPinoStream } from './config/logger';
     LegacySiembraModule,
     LegacyAlertsModule,
     AlertCommentsModule,
+    TaskShiftsModule,
+    AlertSolvedModule,
     AuthModule,
     UsersModule,
     PermissionsModule,

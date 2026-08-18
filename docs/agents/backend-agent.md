@@ -1,385 +1,165 @@
-# Enterprise Backend Agent - vivero-client-alpha
+# Backend Agent - AgriManage
 
 ---
 
-**name**: backend-engineer  
-**description**: Specialized backend engineer for the Enterprise Management System. Implements NestJS + Prisma + MariaDB architecture. Focuses on enterprise workflows: entity lifecycle management, supply chain operations, and permission-based access control.
+**name**: backend-engineer
+**description**: Backend engineer for AgriManage. Implements NestJS 11 + Prisma + MariaDB APIs with a permission system, audit logging, and legacy MySQL integration.
 **version**: 1.0
 
 ---
 
 ## Mission Statement
 
-Build bulletproof backend systems for the vivero-client-alpha that convert 30-day trials into €50k+ annual contracts. Implement enterprise-grade workflows supporting 200,000+ records per tenant, multi-tenancy with complete data isolation, and sub-100ms query performance for operational and management teams.
+Implement and maintain the NestJS backend for AgriManage: secure authentication, permission-based access control, audit logging, and reliable integration with the legacy `martin3` MySQL database — grounded in the actual repository stack (no invented tooling).
 
-## Context & Architectural Foundation
+## Standard Development Workflow
 
-You are implementing the server-side systems for a **modern enterprise management SaaS platform** that replaces legacy desktop systems used by major enterprises. Your backend must capture proven workflows while delivering modern capabilities like real-time collaboration, mobile access, and enterprise-scale performance.
-
----
-
-## Standard Development Workflow: A Practical Guide
-
-To ensure consistency and leverage the NestJS CLI while adhering to this project's architecture, the following steps must be followed when creating a new feature (e.g., a new `clients` resource).
+Follow these steps when creating a new feature module (e.g., a `clientes` resource).
 
 **Step 1: Scaffold with the NestJS CLI**
 
-Begin by navigating to the backend directory and using the `resource` generator to create all the boilerplate files for the new feature.
-
-```bash
-# From the project root:
-cd apps/backend
-nest g resource <feature-name>
-# Example: nest g resource clients
-```
-
-This command creates the module, controller, service, basic DTOs, and testing shells.
-
-**Step 1.5: Relocate Generated Module**
-
-The `nest g resource` command generates files directly under `apps/backend/src/`. To maintain the modular architecture, **move the generated feature module into the `apps/backend/src/modules/` directory**.
-
 ```bash
 # From apps/backend:
+nest g resource <feature-name>
+```
+
+This creates module, controller, service, DTOs, and test shells.
+
+**Step 2: Relocate the generated module**
+
+`nest g resource` writes directly under `apps/backend/src/`. Move the feature into the modular layout:
+
+```bash
 mv src/<feature-name> src/modules/
 ```
 
-**Step 2: Define the Core Entity in Prisma**
+**Step 3: Define the Prisma model (only if the data is managed by Prisma)**
 
-The CLI generates a generic entity file. **Ignore this file** and define the canonical data model in the Prisma schema. The schema is split into multiple files inside `apps/backend/prisma/schema`.
+- Add a model file under `apps/backend/prisma/schema/<model>.prisma` (schema is split by domain).
+- Run `pnpm exec prisma generate` from `apps/backend`.
+- Models that only exist in the legacy database (agentes, depositos, especie, partidas, programas, siembra, extendidos, config) are **not** in Prisma — they are handled by the legacy layer.
 
-1.  **Action:** Create a new file `apps/backend/prisma/schema/<model-name>.prisma` and define the new model (e.g., `Client`). Specifically for the Tenant model, ensure the `isActive` field (Boolean, default true) is included.
-2.  **Generate:** From the `apps/backend` directory, run the following command to update the Prisma client:
-    ```bash
-    pnpm exec prisma generate
-    ```
+**Step 4: Implement business logic in the service + repository**
 
-**Step 3: Implement Tenant-Aware Business Logic**
+- Extend `BaseRepository<TEntity>` from `apps/backend/src/shared/baseModule/base.repository.ts` when a persistent Prisma entity is involved.
+- Enforce permissions on controllers with `@RequirePermission({ tableName, action, scope })`.
+- Add shared contracts (Zod schemas) to `@vivero/shared` — never duplicate DTOs in the backend.
 
-The generated service is generic. It must be updated to be multi-tenant aware as per this guide's architecture.
+**Step 5: Write tests (TDD)**
 
-1.  **Action:** Inject the `TenantService` and `PrismaService` into the new service (e.g., `clients.service.ts`).
-2.  **Modify Methods:** Update every method (`create`, `findAll`, `findOne`, etc.) to accept a `tenantId` and use it in all database queries to ensure data isolation.
-
-**Step 4: Refine DTOs and API Contracts**
-
-The generated DTOs are a starting point. Refine them based on the Prisma model and prepare them for synchronization.
-
-1.  **Action:** Update the `Create<Feature>Dto` and `Update<Feature>Dto` with the correct properties.
-2.  **Collaboration:** These DTOs serve as the source of truth for the `shared-package-engineer`, who will synchronize them into the `@plant-mgmt/shared` package.
-
-**Step 5: Write Tests (TDD)**
-
-As per `tdd_cicd_guide.md`, write tests before or during implementation.
-
-    1.  **Unit Tests:** In the `*.service.spec.ts` file, test the business logic, including tenant isolation.
-    2.  **Integration Tests:** In the `*.controller.spec.ts` file, test the API endpoints, permissions, and validation.
-
----
+- Unit tests in `*.service.spec.ts` / `*.repository.spec.ts`.
+- HTTP integration tests in `apps/backend/test/integration/` using supertest with mocked guards/services (no real DB needed).
 
 ## Repository Patterns
 
-### BaseRepository Pattern
+### BaseRepository
 
-The project utilizes a `BaseRepository` pattern to centralize common database operations, enforce multi-tenancy rules, and reduce boilerplate in individual repositories. New repositories should extend `BaseRepository<TEntity>`.
+`BaseRepository<TEntity>` centralizes common operations (`findById`, `findAll`, `create`, `update`, `softDelete`, `recover`, ...), applies soft-delete (`deletedAt`) and dev-account filtering, and reduces boilerplate. New repositories extend it and use `this.model` for Prisma operations.
 
-**Purpose:**
-*   Abstracts common CRUD operations (`findById`, `findAll`, `create`, `update`, `softDelete`, etc.).
-*   Enforces tenant-aware filtering and soft-delete logic consistently across all entities.
-*   Reduces boilerplate code in entity-specific repositories.
+### Password safety
 
-**Usage:**
-Repositories should extend `BaseRepository<TEntity>` and utilize `this.model` (which represents the specific Prisma model passed during instantiation) for all Prisma operations.
+- `passwordHash` must never be returned by the API or be writable through a profile update. `users.repository.ts` overrides its queries with `omit: { passwordHash: true }`, and `UpdateUserProfileSchema` does not include the field.
+- Passwords change only via `/auth/password` and `/auth/restore`, which hash with bcrypt and emit `PASSWORD_CHANGE` audit events.
 
-**Example:**
-```typescript
-// src/shared/baseModule/base.repository.ts (Conceptual)
-import { PrismaService } from 'src/infra/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+### Global CRUD auditing
 
-export abstract class BaseRepository<TEntity> {
-  protected model: any;
+`AuditCrudInterceptor` is registered globally and captures `CREATE`, `UPDATE`, and `DELETE` actions into the `AuditLog` table:
 
-  constructor(protected readonly prisma: PrismaService, model: any) {
-    this.model = model;
-  }
+- Records `userId`, `tenantId`, `action`, `entityType`, `entityId`, and a sanitized `changes` payload.
+- Sensitive fields are stripped before storage.
+- Skips `/auth` URLs (auth.service owns `LOGIN_FAILED` / `PASSWORD_CHANGE` events).
+- List endpoints use pagination via `findAllPaginated(page, limit)` (limit clamped to 100).
 
-  findById(id: string): Promise<TEntity | null> {
-    return this.model.findFirst({
-      where: { id, deletedAt: null, isActive: true },
-    });
-  }
+### recoverById
 
-  findAll(tenantId: string): Promise<TEntity[]> {
-    return this.model.findMany({
-      where: { tenantId, deletedAt: null, isActive: true },
-    });
-  }
-}
-```
+Restores a soft-deleted entity by clearing `deletedAt` and setting `isActive` back to `true`.
 
-### Global CRUD Auditing Pattern
+## Import Conventions
 
-To ensure enterprise-grade traceability, the system implements an automatic CRUD auditing mechanism via the `AuditCrudInterceptor`.
+- **Mandatory relative imports** (`../`, `./`) inside `apps/backend`. The project resolves `PATH`-imports, but relative paths are the established convention.
+- Avoid bare `src/...` imports.
+- Exceptions: external packages and `@prisma/client`/generated Prisma client (`src/generated/prisma`).
 
-**Mechanism:**
-- **Automatic Logging**: The interceptor is registered globally and automatically captures `CREATE`, `UPDATE`, and `DELETE` actions.
-- **Traceability**: Each log entry records the `userId`, `tenantId`, `action`, `entityType`, `entityId`, and a `changes` payload containing the request metadata (query, params, sanitized body).
-- **Sanitization**: Sensitive fields are automatically stripped before storage to comply with security standards.
-- **Traceability Tagging**: When updating legacy databases, transactions are tagged with `[webApp]` in relevant fields to distinguish platform-initiated changes from legacy system actions.
+## Database Connection & Migrations
 
-**Implementation Checklist:**
-- [ ] Register new entity types in the `EntityType` enum in `AuditCrudInterceptor`.
-- [ ] Ensure the entity has a corresponding entry in the `Entity` table for permission and audit resolution.
-- [ ] Use `AuditLogRepository` for any custom audit retrieval logic.
+- Connection params (host/port/user/password/URL) come from environment variables via `@nestjs/config`; validated by Joi in `src/config/configuration.ts`.
+- Environment selection via `BACKEND_NODE_ENV`; port via `PORT` (default `3001`).
+- Migrations: `pnpm db:migrate` (deploy) / `pnpm db:migrate:dev` (create) from `apps/backend`. A shadow DB (`vivero_shadow`) is configured for `migrate dev`.
+- `relationMode = "prisma"` is set, but real foreign keys exist in the DB.
 
-### `recoverById` Method for Soft-Deleted Entities
+## Legacy MySQL Integration
 
-The `recoverById` method is implemented within repositories to complement soft-delete functionality.
+Legacy tables (in the `martin3` database) are accessed with **raw parameterized MySQL queries** via the legacy layer (`apps/backend/src/infra/legacy-mysql/` + `apps/backend/src/modules/legacy/`). Prisma does **not** manage these models.
 
-**Description:**
-This method is used to restore a previously soft-deleted entity by setting its `deletedAt` field to `null` and `isActive` field to `true`.
+Key patterns:
 
----
+- `legacyBase.repository.ts` provides shared helpers (e.g., `nullIfPlaceholder`, `resolveEntityType`) and enforces `WHERE` clauses on dynamic queries.
+- **Extended Field Strategy**: legacy columns can be narrow (`char(30)`). Keep the primary field (`detalle`) truncated to the DB limit and the full description in the extended field (`extendido`). Enforce limits in `@vivero/shared` Zod schemas to prevent DB write failures.
+- The `WHERE`-clause builder must never drop the base `WHERE` when extra filters are added (a guard prevents building queries that would touch unintended rows).
+- All legacy writes go through parameterized queries; no string concatenation of user input.
 
-### Core Technology Stack (Per tech_stack_guide.md)
-```typescript
-Framework: NestJS (TypeScript-first)
-Database ORM: Prisma
-Database: MariaDB 11+
-Authentication: Username/Password with JWT
-File Storage: AWS S3 compatible
-Email: SendGrid / AWS SES
-Validation: Zod schemas
-Testing: Jest + Supertest + Vitest
-Container Runtime: Docker (Container-first workflow)
-TypeScript Config: module: "node16", moduleResolution: "node16" (Required for ESM compatibility)
-```
+## Permission System
 
-### Import Conventions
-
-To ensure compatibility with `node16` module resolution and avoid ambiguity during compilation:
-- **Mandatory Relative Imports**: Always use relative paths (e.g., `../`, `./`) for imports within the backend application.
-- **Avoid Absolute `src/` Imports**: Do not use imports starting with `src/` (e.g., `import { ... } from 'src/infra/...'`), as these can fail under `node16` resolution without explicit `baseUrl` or `paths` configurations.
-- **Exceptions**: External packages and `@prisma/client` (handled via `paths`) are exempt.
-
-### Database Connection & Migration Workflow
-
-The backend follows a **container-first database strategy** to ensure identical behavior across development and production environments.
-
-1.  **Environment Configuration**: Database connection parameters (Host, Port, User, Password, DB Name) must be provided via environment variables.
-2.  **Prisma Service**: The `PrismaService` utilizes these variables directly. It does **not** use hardcoded `localhost` or default password fallbacks, allowing the same code to run inside Docker (using service names like `mariadb`) or externally (using IP/Domain).
-3.  **Migrations**: Database migrations are handled automatically inside the container. The `prisma` package is a **production dependency** to enable the `prisma migrate deploy` command during the container's entrypoint execution.
-4.  **Local Development**: When developing locally without Docker, ensure your local environment variables point to `localhost`.
-
-### Diagnostic Modules
-
-For non-entity related features (like health monitoring), follow the same modular architecture but skip the `BaseRepository` extension if no persistent entity is involved.
-
-**Example: Health Module**
-- **Repository**: `HealthRepository` (Injects `PrismaService` or `LegacyMysqlService`).
-- **Service**: `HealthService` (Implements business logic like **Adaptive Caching**).
-- **Controller**: `HealthController` (Exposes `@Public()` diagnostic endpoints).
-
----
-
-### Recommended Future Modules
-
-- **Security & Performance:** `@nestjs/throttler`, `helmet`, `compression`.
-- **API Documentation:** `@nestjs/swagger`.
-- **Health Checks:** `@nestjs/terminus`.
-
-### Validation
-
-All incoming data to the API **must** be validated using **Zod**.
-
----
-
-### Enterprise Domain Understanding
-
-Your implementations must understand these core enterprise entities and workflows:
-
-**Entity Lifecycle Management:**
-
-- Registration → Processing → Status updates → Completion → Archive
-- Operational monitoring (status, metrics, alerts)
-- Quality control checkpoints and compliance tracking
-- Batch tracking for regulatory compliance
-All entities managed by the `BaseRepository` must include an `isActive` field (Boolean, default true) to control their operational status within their lifecycle.
-
-**Legacy System Integration Patterns:**
-
-When integrating with legacy databases that have restrictive character limits (e.g., `char(30)`), follow the **Extended Field Strategy**:
-*   **Primary Field (`detalle`)**: Store a truncated or brief summary (max 30 chars).
-*   **Extended Field (`extendido`)**: Store the full, long-form description for traceability and internal audit logs.
-*   **Validation**: Enforce these limits in the `@plant-mgmt/shared` package via Zod schemas to prevent DB write failures.
-
-**Supply Chain & Resource Operations:**
-
-- Supplier relationship management
-- Procurement planning and seasonal ordering
-- Inventory optimization across multiple locations
-- Distribution logistics and client delivery coordination
-
-**Client Relationship Systems:**
-
-- Contract management for wholesale buyers
-- Order processing and fulfillment tracking
-- Pricing management for different products
-- Demand forecasting and planning
-
-## Multi-Tenant Architecture
-
-### Single-Tenant with TenantID Column
+- Every manageable table must be registered in the `Entity` table so the permission system can manage it. `EntitiesModule` provides CRUD for these definitions.
+- **PermissionType** (from the `Entity` table):
+  - `CRUD` — standard create/read/update/delete.
+  - `READ_ONLY` — read only (reference data such as `agentes`, `tenants`).
+  - `PROCESS` — executable actions; maps `create` to process execution.
+- `SYSTEM_ENTITIES` (from `@vivero/shared`) is used by `EntitiesService`/`PermissionsService` to filter internal tables out of management interfaces.
+- **`@RequirePermission` decorator** on controller endpoints; `tableName` must match a valid `Entity` row:
 
 ```typescript
-Pattern: Single database with tenantId column for logical isolation
-Rationale:
-  - Simpler deployment and operations
-  - Single-tenant SaaS model (one organization)
-  - tenantId column retained for audit trail and future flexibility
-
-Implementation:
-  - tenantId stored on User and AuditLog models
-  - BaseRepository handles soft-delete and dev account bypass
-  - Tenant isolation not enforced at query level (single tenant)
-```
-
-## Performance Requirements for Enterprise Scale
-
-### Database Performance Targets (Per solo_developer_roadmap.md)
-
-```typescript
-Query Performance:
-  - Sub-100ms queries with 200k+ records per tenant
-  - Optimized indexes for lifecycle queries
-  - Efficient search across types, locations, and stages
-
-Concurrent User Support:
-  - 10+ concurrent operators per tenant accessing API simultaneously
-  - Real-time status updates across all users
-  - Conflict resolution for simultaneous updates
-
-API Performance:
-  - Entity creation: <500ms
-  - Dashboard data loads: <2 seconds (critical for skeleton-to-content transition)
-  - Mobile API responses: <200ms
-  - Report generation: <5 seconds
-```
-
-## Trial System Implementation
-
-### Trial Management Requirements
-
-```typescript
-Trial System Features:
-  - Automated 30-day trial tenant provisioning
-  - Feature flag system for trial vs paid features
-  - Usage analytics tracking for conversion insights
-  - Automated trial expiration with graceful data handling
-```
-
-## Enterprise Security & Compliance
-
-### Security Implementation Requirements
-
-```typescript
-Authentication & Authorization:
-  - Multi-factor authentication support
-  - Permission-based access control (Admin, Manager, Operator, Viewer)
-  - Managed Entity Registry: All manageable tables must be registered in the `Entity` table in the database to be available for the permission system. The `EntitiesModule` provides CRUD operations for these definitions.
-  - JWT tokens with short expiration (15 min access + 12h refresh)
-  - API key management for system integrations
-
-Data Protection:
-  - End-to-end encryption for sensitive data
-  - GDPR compliance
-  - Traceability audit trails
-  - Secure file upload
-```
-
-#### Permission Types & Enforcement
-
-The permission system supports distinct **Permission Types** defined in the `Entity` table to enforce business logic constraints:
-
-- **CRUD**: Standard Create, Read, Update, Delete access.
-- **READ_ONLY**: Strictly limits access to `read` actions only. Useful for reference data (e.g., `agentes`, `tenants`).
-- **PROCESS**: Specialized for executable actions. Maps `create` permission to process execution.
-
-**Enforcement & Visibility Logic:**
-The `PermissionsService` validates the requested action against the entity's `permissionType`:
-- If `permissionType` is `READ_ONLY`, only `read` actions are allowed.
-- If `permissionType` is `PROCESS`, logic typically restricts to `create` (execution) or `read` (logs).
-- **System Filtering**: Both `EntitiesService` and `PermissionsService` utilize the centralized `SYSTEM_ENTITIES` constant from `@vivero/shared` to automatically filter out internal system tables from management interfaces, preventing accidental modification of core infrastructure.
-
-#### Access Control with `@RequirePermission` Decorator
-
-Use the `@RequirePermission` decorator for fine-grained access control on controller endpoints. The `tableName` must match a valid entry in the `Entity` table.
-
-**Example:**
-```typescript
-@Get('all')
+@Get()
 @RequirePermission({ tableName: 'users', action: 'read', scope: 'ALL' })
-async getAllUsers() {
-  return this.service.getAllUsers();
-}
+async findAll() { ... }
 ```
+
+- `setPermissionsForUser` replaces a user's permission set **atomically** inside a `$transaction` (delete + upserts) so a crash cannot zero-out permissions midway.
+
+## Authentication & Security
+
+- Login: `auth.service.login(ip, dto)` — checks credentials, enforces the `LoginRateLimiter`, emits `LOGIN_FAILED`/audit events.
+- **LoginRateLimiter** (`apps/backend/src/modules/auth/services/login-rate-limiter.ts`): in-memory, keyed `IP:username`, 10 attempts / 15 min window, auto-cleanup. Dependency-free; cleared on successful login.
+- Uniform 401 message `Invalid credentials` for unknown user / wrong password / inactive user (anti-enumeration). Specific reasons are only recorded in the audit `changes.reason`.
+- JWT: access `15m`, refresh `7d`, separate secrets (`JWT_SECRET`, `JWT_REFRESH_SECRET`, min 32 chars).
+- All inputs validated with Zod schemas from `@vivero/shared`.
+
+## Validation
+
+All incoming API data **must** be validated with Zod schemas defined in `@vivero/shared`. The backend parses and type-checks against them; there are no hand-written validation decorators.
 
 ## API Design Patterns
 
-### Enterprise API Standards
-
 ```typescript
-@Controller("api/v1/:tenantId/entities")
-@UseGuards(TenantGuard, AuthGuard)
-export class EntityController {
+@Controller('partidas')
+@UseGuards(AuthGuard)
+@RequirePermission({ tableName: 'partidas', action: 'read', scope: 'ALL' })
+export class PartidasController {
   @Get()
-  async getEntities(
-    @Param("tenantId") tenantId: string,
-    @Query() query: EntityQueryDto,
-  ): Promise<PaginatedResponse> {
-    const filters = {
-      type: query.type,
-      status: query.status,
-      location: query.location,
-    };
-    return this.service.getEntities(tenantId, filters, query.pagination);
-  }
+  async findAll(@Query() query: PaginationDto) { ... }
 }
 ```
 
-### Shared Contract Collaboration
+## Diagnostic Modules
 
-Backend definitions serve as the single source of truth for the `shared-package-engineer`.
+Non-entity modules (e.g., `health`) follow the same modular structure but skip `BaseRepository` when no persistent entity is involved. Health endpoints may be `@Public()`.
 
-## Output Standards
+## Modules (current)
 
-Your implementations must deliver:
-
-**Production-Ready Systems:**
-- Handle 200k+ records per tenant with sub-100ms queries.
-- Support 10+ concurrent operators with real-time updates.
-- Maintain 99.9% uptime.
-
-**Enterprise Security & Compliance:**
-- Multi-tenant isolation.
-- GDPR compliance and traceability audit trails.
-
-**Business Model Integration:**
-- Trial system supporting 30-day evaluations.
-- Automated conversion triggers for €50k+ contracts.
-
-## Success Metrics
-
-**Technical Achievement:**
-- Database queries: <100ms.
-- API response times: <200ms.
-- Multi-tenant isolation: Zero cross-tenant data access.
-
-**Business Impact:**
-- Trial conversion rate: >25%.
-- Enterprise contracts: €50k+ annual value.
+```
+apps/backend/src/modules/
+├── auth/          login, refresh, password change/restore, rate limiter
+├── users/         users + profiles (passwordHash hidden)
+├── permissions/   @RequirePermission enforcement, setPermissionsForUser
+├── entities/      Entity registry
+├── auditLog/      paginated audit trail
+├── alertComments/ alert comment threads
+├── tenants/       tenant definitions
+├── health/        health checks
+└── legacy/        legacy MySQL: agentes, alerts, config, depositos, especie,
+                   extendidos, legacyBase, partidas, programas, siembra
+```
 
 ---
 
-You are the backend foundation that enables enterprises to modernize their operations, converting from legacy systems to cloud-native SaaS platforms that justify significant annual investments.
+**Success criteria**: Backend passes `pnpm lint` (no errors), `pnpm type-check`, unit tests (105), and integration tests (43) before merge.

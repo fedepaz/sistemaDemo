@@ -1,86 +1,61 @@
-# Enterprise TDD & CI/CD Guide - vivero-client-alpha
+# TDD & CI/CD Guide - AgriManage
 
-Philosophy: Write tests so good that you sleep peacefully knowing your enterprise clients are happy and your app won't wake you up at 3 AM.
-
----
+Philosophy: tests are the safety net for a solo developer deploying to a production server with no rollback theater — write them first, keep them green, and let CI verify before anything reaches `main`.
 
 ## Testing Strategy
 
-### Collaboration Model
+- **Backend / shared / frontend specialists** write unit and component tests as part of feature work (TDD).
+- **QA engineer** maintains the backend HTTP integration suite and CI gates.
 
-- **Frontend Specialist**: Responsible for writing **unit and component tests**.
-- **QA & Test Automation Engineer**: Responsible for building and maintaining the comprehensive **E2E test suite**.
-
----
-
-## The "Sleep Well" Testing Pyramid
+## The Testing Pyramid (Actual)
 
 | Layer | Count | What | How |
 |-------|-------|------|-----|
-| **Unit (85)** | Backend services/repos + Shared schemas + Frontend utils | `pnpm test` (pre-commit) |
-| **Integration (36)** | Backend HTTP endpoints with mocked DB/guards | `pnpm test:integration` |
-| **E2E (0)** | Critical user flows | Playwright (planned) |
+| Unit / component | 114 shared + 105 backend + 104 frontend | schemas, services, repositories, guards, interceptors, components, hooks | `pnpm test` |
+| Integration (HTTP) | 43 | backend endpoints via supertest, mocked guards/services | `pnpm --filter backend test:integration` |
+| E2E | 0 | not installed | — |
 
-- **E2E (5% - Critical user flows)**: Owned by the QA Engineer. Covers critical paths like trial signup and entity lifecycle management.
-- **Integration (15% - API contracts & component interactions)**: 36 tests covering auth, users, entities, siembra, permissions modules. Full HTTP cycle via supertest with mocked guards and services.
-- **Unit (80% - Business logic & components)**: 85 tests. Every piece of business logic and every UI component must have unit tests.
+## Testing Rules
 
-## Testing Philosophy
+1. **TDD**: write the failing test before the implementation.
+2. If it's business logic → unit test. If it's an API contract / auth / permission boundary → integration test. If it's UI behavior → component test.
+3. Follow existing patterns and existing test files — do not introduce a new test framework.
 
-Rule #1: If it can break at 3 AM and wake you up, it needs a test.
-Rule #2: If a client can lose money because of it, it needs integration tests.
-Rule #3: If it's business logic, it needs unit tests.
+## CI/CD Pipeline (Actual)
 
----
+Source of truth: `docs/agents/cicd_agent.md`.
 
-## CI/CD Pipeline Configuration
-
-The canonical CI/CD workflow structure is defined in `docs/agents/cicd_agent.md`.
-
-1.  `.github/actions/setup/action.yml`: Composite action for shared setup (pnpm, Node, deps, Prisma).
-2.  `.github/workflows/ci-test.yml`: Reusable workflow with 3 parallel jobs (lint, unit-tests, integration-tests).
-3.  `.github/workflows/pr-checks.yml`: PR gate — calls `ci-test.yml` on PRs to main/dev.
-4.  `.github/workflows/deploy.yml`: Build verification — frontend + backend builds on push to main/dev.
-5.  `.github/workflows/scheduled.yml`: Maintenance — security scans, dependency updates.
-
----
+1. `.github/actions/setup/action.yml` — composite setup (pnpm, Node, deps, `prisma generate`).
+2. `.github/workflows/ci-test.yml` — reusable; 3 parallel jobs: `lint`, `unit-tests`, `integration-tests`.
+3. `.github/workflows/pr-checks.yml` — PR gate → `ci-test.yml` on PRs to `dev`/`main`.
+4. `.github/workflows/build-verification.yml` — **builds** frontend + backend on push to `main` (it does NOT deploy).
+5. `.github/workflows/scheduled.yml` — daily `pnpm audit --audit-level high`.
 
 ## Testing Commands
 
 | Command | Scope | When |
 |---------|-------|------|
-| `pnpm test` | Unit tests only (85) | Pre-commit hook |
-| `pnpm test:integration` | Integration tests only (36) | Manual / CI |
-| `pnpm test:unit` | Unit tests only (85) | Manual |
+| `pnpm lint && pnpm type-check && pnpm test` | full quality gate | pre-commit + CI |
+| `pnpm --filter backend test:integration` | backend HTTP integration (43) | CI / before merge |
+| `pnpm --filter @vivero/shared test` | shared schema tests (114) | CI |
 
-**Important:** Integration tests are backend-only (`apps/backend/test/integration/`). They mock all DB operations — no MariaDB required.
-
----
+Integration tests mock all DB operations — **no MariaDB required** in CI.
 
 ## Quality Gates & Metrics
 
-### Code Coverage Requirements
-- **Global Threshold**: branches 60%, functions 80%, lines 70%, statements 70% (per-package in `jest.config.ts`).
-- **Unit tests**: 85 passing — enforced by pre-commit hook.
-- **Integration tests**: 36 passing — mocked DB, no infrastructure needed.
+- Per-package Jest coverage thresholds: branches 60%, functions 80%, lines 70%, statements 70%.
+- No high/critical `pnpm audit` findings (enforced by `scheduled.yml`).
+- `build-verification.yml` must be green on `main`.
+
+## Deployment Verification (Manual)
+
+GitHub Actions verifies quality but does **not** deploy. After a manual deploy to the Windows server:
+
+1. Health check on frontend (`:3000`) and backend (`:3001`).
+2. Login as a real user; confirm dashboard loads.
+3. Check backend logs (pino) for startup errors.
+4. Confirm Cloudflare Tunnel is up and the public hostname serves the app.
 
 ---
 
-## Monitoring & Alerting Integration
-
-### Health Check Endpoints
-Implement endpoints to monitor database connectivity, cache health, and critical system services.
-
----
-
-## Deployment Verification
-
-1.  **Health Check**: Verify health endpoint.
-2.  **Database connectivity**: Ensure DB is reachable.
-3.  **Cache connectivity**: Ensure cache is reachable.
-4.  **Smoke tests**: Run basic post-deployment checks.
-
----
-
-The goal is to build it once, test it thoroughly, and then just monitor the money coming in while your enterprise clients are happy. 💰😎
-This setup gives you the confidence to sleep well knowing your system is bulletproof and your clients are getting enterprise-grade reliability.
+Goal: ship to a single production server with confidence — tests catch regressions, CI verifies builds, and the manual deploy is a known, documented procedure.

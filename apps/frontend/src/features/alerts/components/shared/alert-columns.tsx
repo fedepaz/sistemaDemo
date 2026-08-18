@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
-import { Badge } from "@/components/ui/badge";
+
 import {
   SiembraRetrasadaDto,
   FaltaGerminacionDto,
@@ -77,14 +77,14 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
       const today = new Date();
       const todayStr = getLocalDateStr(today);
       const targetDate = row.original.fechaSugeridaSiembra;
-      const isToday = targetDate === todayStr;
+      const isPastDue = targetDate < todayStr;
 
       return (
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-bold font-mono text-muted-foreground">
             {formatShortDate(targetDate)}
           </span>
-          {isToday && (
+          {isPastDue && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="relative flex h-2 w-2 cursor-help">
@@ -93,7 +93,7 @@ export const siembraRetrasadaColumns: ColumnDef<SiembraRetrasadaDto>[] = [
                 </div>
               </TooltipTrigger>
               <TooltipContent side="top">
-                <p>Siembra sugerida hoy</p>
+                <p>Siembra sugerida atrasada</p>
               </TooltipContent>
             </Tooltip>
           )}
@@ -182,14 +182,14 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
       const today = new Date();
       const todayStr = getLocalDateStr(today);
       const targetDate = row.original.fPrimer;
-      const isToday = targetDate === todayStr;
+      const isPastDue = targetDate < todayStr;
 
       return (
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-bold font-mono text-muted-foreground">
             {formatShortDate(targetDate)}
           </span>
-          {isToday && (
+          {isPastDue && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="relative flex h-2 w-2 cursor-help">
@@ -198,7 +198,7 @@ export const faltaGerminacionColumns: ColumnDef<FaltaGerminacionDto>[] = [
                 </div>
               </TooltipTrigger>
               <TooltipContent side="top">
-                <p>Fecha primer hoy</p>
+                <p>Fecha atrasada</p>
               </TooltipContent>
             </Tooltip>
           )}
@@ -356,14 +356,14 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
       const today = new Date();
       const todayStr = getLocalDateStr(today);
       const targetDate = row.original.fPreexp;
-      const isToday = targetDate === todayStr;
+      const isPastDue = targetDate < todayStr;
 
       return (
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-bold font-mono text-muted-foreground">
             {formatShortDate(targetDate)}
           </span>
-          {isToday && (
+          {isPastDue && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="relative flex h-2 w-2 cursor-help">
@@ -372,7 +372,7 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
                 </div>
               </TooltipTrigger>
               <TooltipContent side="top">
-                <p>Fecha pre-expedición hoy</p>
+                <p>Fecha pre-expedición atrasada</p>
               </TooltipContent>
             </Tooltip>
           )}

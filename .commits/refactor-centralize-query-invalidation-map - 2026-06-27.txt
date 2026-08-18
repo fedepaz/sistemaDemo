@@ -1,9 +1,0 @@
-refactor(frontend): centralize query keys and mutation invalidation
-
-- Add lib/queryKeys.ts as single source of truth for all query key factories
-- Add lib/query-invalidation-map.ts for centralized cache invalidation
-- Refactor 15 hook files to use centralized query keys and invalidation
-- Fix missing invalidations in useRegister and useCreateEntity
-- Remove dead setQueryData call for non-existent ["userPermissions"] key
-- Standardize naming convention to xxxQueryKeys (camelCase, plural)
-- Update frontend-agent.md with query key and invalidation patterns

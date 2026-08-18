@@ -11,6 +11,8 @@ import { AlertsViewForm } from "./alerts-view-form";
 import { AlertEditForm } from "./alert-edit-form";
 import type { AlertType } from "@/features/alerts/types";
 import { useAlertCommentsMutation } from "@/features/alerts/hooks/useAlertCommentsMutation";
+import { usePermission } from "@/hooks/usePermission";
+import { AlertSolvedButton } from "../shared/alert-solved-button";
 
 const ALERT_TYPE_SLUG_TO_ENUM: Record<string, AlertType> = {
   "siembra-retrasada": "SIEMBRA_RETRASADA",
@@ -39,6 +41,7 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
   const [slideOverOpen, setSlideOpen] = useState(false);
   const [selectedAlert, setSelectedAlert] = useState<TData | null>(null);
   const [mode, setMode] = useState<"view" | "edit">("view");
+  const { canCreate } = usePermission("alerts");
 
   const form = useForm<CreateAlertCommentDto>({
     defaultValues: { content: "" },
@@ -119,12 +122,24 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
                 alertType={resolvedAlertType}
               />
             ) : (
-              <AlertEditForm
-                selectedAlert={selectedAlert}
-                alertType={resolvedAlertType}
-                form={form}
-                onSubmit={handleCommentSubmit}
-              />
+              <div className="space-y-2">
+                <AlertEditForm
+                  selectedAlert={selectedAlert}
+                  alertType={resolvedAlertType}
+                  alertCommentsForm={form}
+                  onSubmit={handleCommentSubmit}
+                />
+                {canCreate &&
+                  selectedAlert.partidaId &&
+                  resolvedAlertType === "FALTANTE_PLANTAS" && (
+                    <div className="pt-4 border-t">
+                      <AlertSolvedButton
+                        selectedAlert={selectedAlert}
+                        onSuccess={() => setSlideOpen(false)}
+                      />
+                    </div>
+                  )}
+              </div>
             )}
           </div>
         </SlideOverForm>

@@ -286,11 +286,19 @@ export class PermissionsService {
       currentTargetPermsMapByEntityId.set(r.entityId, r);
     }
 
+    // 4. Batch-resolve all entity names to avoid N+1 queries
+    const tableNames = permissions
+      .filter((p) => requesterPerms[p.tableName])
+      .map((p) => p.tableName);
+    const entities = await this.entitiesRepo.findManyByNames(tableNames);
+    const entityByName = new Map(entities.map((e) => [e.name, e]));
+
     for (const p of permissions) {
       const rP = requesterPerms[p.tableName];
       if (!rP) continue; // Skip if requester doesn't even have this entity in their list
 
-      const entity = await this.entitiesRepo.findByName(p.tableName);
+      const entity = entityByName.get(p.tableName);
+      if (!entity) continue; // Entity not found or inactive
 
       // RULE 2 - Permission seniority check
       const existingTargetPerm = currentTargetPermsMapByEntityId.get(entity.id);
@@ -354,14 +362,10 @@ export class PermissionsService {
       }
     }
 
-    // 6. Execution: Clean and Update
-    await this.permissionsRepo.deleteAllForUser(targetUserId);
-
-    // Batch upsert the new finalized list
-    await Promise.all(
-      finalizedToUpsert.map((p) =>
-        this.permissionsRepo.upsert(targetUserId, p.entityId, p),
-      ),
+    // 6. Execution: atomic clean-and-replace inside a single transaction
+    await this.permissionsRepo.replaceAllForUser(
+      targetUserId,
+      finalizedToUpsert,
     );
   }
 }

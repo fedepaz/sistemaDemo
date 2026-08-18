@@ -13,6 +13,7 @@ export function createAuthMock() {
     refreshTokens: jest.fn(),
     changePassword: jest.fn(),
     restorePassword: jest.fn(),
+    logout: jest.fn(),
     validateUser: jest.fn(),
   };
 }
@@ -22,6 +23,8 @@ export function createUsersMock() {
     getAllUsers: jest.fn(),
     getUserById: jest.fn(),
     getProfile: jest.fn(),
+    getToActivate: jest.fn(),
+    activateUserById: jest.fn(),
     updateProfile: jest.fn(),
     softRemoveUserByUsername: jest.fn(),
     getUserByUsername: jest.fn(),
@@ -75,5 +78,14 @@ export function createAlertsMock() {
     getFaltaGerminacion: jest.fn(),
     getFaltantePlantas: jest.fn(),
     getFaltaPreExpedicion: jest.fn(),
+  };
+}
+
+export function createTaskShiftsMock() {
+  return {
+    getAllTaskShifts: jest.fn(),
+    getTaskShiftById: jest.fn(),
+    createTaskShift: jest.fn(),
+    updateTaskShift: jest.fn(),
   };
 }

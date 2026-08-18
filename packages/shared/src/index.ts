@@ -19,3 +19,5 @@ export * from "./schemas/siembra.schema";
 export * from "./schemas/alerts.schema";
 export * from "./schemas/pagination.schema";
 export * from "./constants/managed-entities";
+export * from "./schemas/taskShift.schema";
+export * from "./schemas/legacy-header.schema";

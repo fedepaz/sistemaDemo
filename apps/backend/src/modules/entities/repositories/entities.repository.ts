@@ -57,4 +57,15 @@ export class EntitiesRepository extends BaseRepository<Entity> {
     }
     return response;
   }
+
+  async findManyByNames(names: string[]): Promise<Entity[]> {
+    if (names.length === 0) return [];
+    return this.model.findMany({
+      where: {
+        name: { in: names },
+        deletedAt: null,
+        isActive: true,
+      },
+    });
+  }
 }

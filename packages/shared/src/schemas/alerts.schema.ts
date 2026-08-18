@@ -1,20 +1,13 @@
 // shared/src/schemas/alerts.schema.ts
 
 import { z } from "zod";
+import { LegacyHeaderSchema } from "./legacy-header.schema";
 
 // ============================================================================
 // ALERT BASE (shared across all alert types)
 // ============================================================================
 
-export const AlertPartidaHeaderSchema = z.object({
-  partidaId: z.number(),
-  anio: z.number(),
-  indice: z.number(),
-  codigoEspecie: z.string(),
-  nombreEspecie: z.string(),
-});
-
-export const AlertBaseDtoSchema = AlertPartidaHeaderSchema.extend({
+export const AlertBaseDtoSchema = LegacyHeaderSchema.extend({
   commentCount: z.number().default(0),
 });
 
@@ -113,3 +106,27 @@ export const CreateAlertCommentSchema = z.object({
 });
 
 export type CreateAlertCommentDto = z.infer<typeof CreateAlertCommentSchema>;
+
+// ============================================================================
+// ALERT SOLVED
+// ============================================================================
+
+export const AlertSolvedSchema = z.object({
+  id: z.string(),
+  partidaId: z.number(),
+  anio: z.number(),
+  indice: z.number(),
+  userId: z.string(),
+  userName: z.string(),
+  createdAt: z.string(),
+});
+
+export type AlertSolvedDto = z.infer<typeof AlertSolvedSchema>;
+
+export const CreateAlertSolvedSchema = z.object({
+  partidaId: z.number(),
+  anio: z.number(),
+  indice: z.number(),
+});
+
+export type CreateAlertSolvedDto = z.infer<typeof CreateAlertSolvedSchema>;

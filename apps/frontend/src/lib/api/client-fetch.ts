@@ -1,7 +1,8 @@
 // src/lib/api/client-fetch.ts
+
 "use client";
 
-const backendUrl = process.env.NEXT_PUBLIC_API_URL; // instead of BACKEND_URL
+const backendUrl = process.env.NEXT_PUBLIC_API_URL;
 
 if (!backendUrl) {
   console.warn("NEXT_PUBLIC_API_URL is not set");
@@ -102,13 +103,31 @@ export async function clientFetch<T>(
     // Handle non 2xx responses
     if (!res.ok) {
       if (res.status === 401) {
-        // Try to refresh the token
+        // 🛡️ NEW: Check if this is an auth endpoint or if we lack a refresh token.
+        // In these cases, a 401 means "Invalid credentials", NOT "Token expired".
+        // We should NOT try to refresh, we should just throw the error for the UI.
+        const isAuthEndpoint =
+          endpoint.startsWith("login/") || endpoint.startsWith("/login/");
+        const refreshToken =
+          typeof window !== "undefined"
+            ? localStorage.getItem("refreshToken")
+            : null;
+
+        if (isAuthEndpoint || !refreshToken) {
+          const errorData = await res.json().catch(() => ({}));
+          const errorInfo = errorData.error || errorData;
+          throw new ApiError(
+            errorInfo.message || res.statusText,
+            res.status,
+            errorInfo,
+          );
+        }
+
+        // ✅ We have a refresh token and it's NOT an auth endpoint. Try to refresh.
         if (isRefreshing) {
-          // If already refreshing, queue this request
           return new Promise<T>((resolve, reject) => {
             failedQueue.push({
               resolve: (newToken: string) => {
-                // Retry the original request with new token
                 clientFetch<T>(endpoint, {
                   ...options,
                   headers: {
@@ -145,10 +164,12 @@ export async function clientFetch<T>(
           processQueue(new Error("Token refresh failed"), null);
           console.warn(refreshError, "Token refresh failed");
           logout();
-          // Redirect to login on token refresh failure
+
           if (typeof window !== "undefined") {
             window.location.href = "/login";
           }
+          // Throw to ensure the promise rejects properly after redirect
+          throw new ApiError("Session expired. Please log in again.", 401);
         } finally {
           isRefreshing = false;
         }
@@ -170,11 +191,9 @@ export async function clientFetch<T>(
 
     return res.json() as Promise<T>;
   } catch (error) {
-    // Si es un error de red (DNS, timeout, etc.)
     if (error instanceof TypeError) {
       throw new ApiError("Network error: unable to reach server", 0);
     }
-    // Re-lanzar otros errores (como ApiError)
     throw error;
   }
 }
