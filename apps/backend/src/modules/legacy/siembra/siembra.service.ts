@@ -46,11 +46,14 @@ export class SiembraService {
       indice: mappedRow.indice,
       codigoEspecie: mappedRow.codigoEspecie,
       nombreEspecie: mappedRow.nombreEspecie,
+
       hai: row.hai,
       injerto: row.injerto,
-      con: row.con,
+
       fechaSugeridaSiembra: row.f_siem,
-      fechaSiembraReal: row.f_siembra,
+      propiedad: row.propiedad,
+      solicito: row.solicito,
+      nrocont: row.nrocont,
     };
   }
 

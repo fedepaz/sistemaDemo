@@ -1,7 +1,7 @@
 // packages/shared/src/schemas/__tests__/partidas.schema.spec.ts
-import { AsignarUbicacionDtoSchema } from '../partidas.schema';
+import { AsignarUbiExtendidoDtoSchema } from '../partidas.schema';
 
-describe('AsignarUbicacionDtoSchema', () => {
+describe('AsignarUbiExtendidoDtoSchema', () => {
   const valid = {
     partida: 1,
     ano: 2026,
@@ -11,20 +11,20 @@ describe('AsignarUbicacionDtoSchema', () => {
   };
 
   it('accepts valid assignment', () => {
-    const result = AsignarUbicacionDtoSchema.parse(valid);
+    const result = AsignarUbiExtendidoDtoSchema.parse(valid);
     expect(result.partida).toBe(1);
     expect(result.ubicacion).toBe(100);
   });
 
   it('applies default values for optional fields', () => {
-    const result = AsignarUbicacionDtoSchema.parse(valid);
+    const result = AsignarUbiExtendidoDtoSchema.parse(valid);
     expect(result.detalle).toBe('');
     expect(result.baja).toBe(0);
     expect(result.extendido).toBe('');
   });
 
   it('accepts valid optional fields', () => {
-    const result = AsignarUbicacionDtoSchema.parse({
+    const result = AsignarUbiExtendidoDtoSchema.parse({
       ...valid,
       detalle: 'Test detail',
       baja: 5,
@@ -39,41 +39,41 @@ describe('AsignarUbicacionDtoSchema', () => {
 
   it('rejects negative ubicacion', () => {
     expect(() =>
-      AsignarUbicacionDtoSchema.parse({ ...valid, ubicacion: -1 })
+      AsignarUbiExtendidoDtoSchema.parse({ ...valid, ubicacion: -1 })
     ).toThrow();
   });
 
   it('rejects zero ubicacion', () => {
     expect(() =>
-      AsignarUbicacionDtoSchema.parse({ ...valid, ubicacion: 0 })
+      AsignarUbiExtendidoDtoSchema.parse({ ...valid, ubicacion: 0 })
     ).toThrow();
   });
 
   it('rejects non-integer ubicacion', () => {
     expect(() =>
-      AsignarUbicacionDtoSchema.parse({ ...valid, ubicacion: 1.5 })
+      AsignarUbiExtendidoDtoSchema.parse({ ...valid, ubicacion: 1.5 })
     ).toThrow();
   });
 
   it('rejects negative stock_ini', () => {
     expect(() =>
-      AsignarUbicacionDtoSchema.parse({ ...valid, stock_ini: -1 })
+      AsignarUbiExtendidoDtoSchema.parse({ ...valid, stock_ini: -1 })
     ).toThrow();
   });
 
   it('accepts zero stock_ini', () => {
-    const result = AsignarUbicacionDtoSchema.parse({ ...valid, stock_ini: 0 });
+    const result = AsignarUbiExtendidoDtoSchema.parse({ ...valid, stock_ini: 0 });
     expect(result.stock_ini).toBe(0);
   });
 
   it('rejects detalle longer than 30 characters', () => {
     expect(() =>
-      AsignarUbicacionDtoSchema.parse({ ...valid, detalle: 'a'.repeat(31) })
+      AsignarUbiExtendidoDtoSchema.parse({ ...valid, detalle: 'a'.repeat(31) })
     ).toThrow();
   });
 
   it('accepts detalle with exactly 30 characters', () => {
-    const result = AsignarUbicacionDtoSchema.parse({ ...valid, detalle: 'a'.repeat(30) });
+    const result = AsignarUbiExtendidoDtoSchema.parse({ ...valid, detalle: 'a'.repeat(30) });
     expect(result.detalle).toHaveLength(30);
   });
 });

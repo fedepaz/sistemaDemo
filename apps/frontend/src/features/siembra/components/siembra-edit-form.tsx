@@ -7,10 +7,8 @@ import {
   FileText,
   TrendingDown,
   Warehouse,
-  AlertTriangle,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useMemo } from "react";
 
 import {
   Select,
@@ -49,20 +47,6 @@ export function SiembraEditForm({
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
 
-  const originalStock = parseInt(selectedExtendido.con);
-  const watchedStockIni = form.watch("stock_ini");
-  const watchedBaja = form.watch("baja");
-
-  // Logic to calculate expected values but NOT override them
-  const expectedBaja = useMemo(() => {
-    const stockOk = Number(watchedStockIni) || 0;
-    return Math.max(0, originalStock - stockOk);
-  }, [watchedStockIni, originalStock]);
-
-  const hasDiscrepancy = useMemo(() => {
-    return Number(watchedBaja) !== expectedBaja;
-  }, [watchedBaja, expectedBaja]);
-
   return (
     <Form {...form}>
       <form
@@ -91,7 +75,7 @@ export function SiembraEditForm({
                 Bandejas
               </p>
               <p className="text-xl md:text-2xl font-black text-primary leading-none">
-                {originalStock}
+                {selectedExtendido.nrocont}
               </p>
             </div>
           </div>
@@ -178,20 +162,13 @@ export function SiembraEditForm({
                 <FormItem className="space-y-2 md:space-y-3">
                   <div className="flex items-center gap-2">
                     <div
-                      className={`p-1.5 md:p-2 rounded-lg transition-colors duration-300 ${
-                        hasDiscrepancy ? "bg-warning/10" : "bg-destructive/10"
-                      }`}
+                      className={`p-1.5 md:p-2 rounded-lg transition-colors duration-300 `}
                     >
-                      {hasDiscrepancy ? (
-                        <AlertTriangle className="h-3.5 w-3.5 md:h-4 md:w-4 text-warning animate-pulse" />
-                      ) : (
-                        <TrendingDown className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
-                      )}
+                      <TrendingDown className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
                     </div>
                     <FormLabel
-                      className={`text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors ${
-                        hasDiscrepancy ? "text-warning" : "text-destructive"
-                      }`}
+                      className={`text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors 
+                      `}
                     >
                       Baja
                     </FormLabel>
@@ -203,11 +180,7 @@ export function SiembraEditForm({
                         inputMode="numeric"
                         {...field}
                         onChange={(e) => field.onChange(Number(e.target.value))}
-                        className={`h-12 md:h-16 rounded-xl shadow-sm text-xl md:text-3xl font-black px-4 transition-all duration-300 ${
-                          hasDiscrepancy
-                            ? "border-warning bg-warning/5 text-warning focus-visible:ring-warning/20"
-                            : "border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
-                        }`}
+                        className={`h-12 md:h-16 rounded-xl shadow-sm text-xl md:text-3xl font-black px-4 transition-all duration-300 `}
                       />
                     </div>
                   </FormControl>

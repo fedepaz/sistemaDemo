@@ -6,8 +6,8 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { ExtendidosViewForm } from "./extendido-view-form";
 import { partidaColumns, partidaExportColumns } from "./columns";
 import {
-  AsignarUbicacionDto,
-  AsignarUbicacionDtoSchema,
+  AsignarUbiExtendidoDto,
+  AsignarUbiExtendidoDtoSchema,
   ExtendidoDto,
 } from "@vivero/shared";
 import { useCamaras } from "../hooks/useDepositos";
@@ -62,8 +62,8 @@ export function ExtendidoDataTable({
     return partidas.filter((p) => p.fechaEgresoCamara === todayStr);
   }, [partidas, filterToday]);
 
-  const formAsignarUbicacion = useForm<AsignarUbicacionDto>({
-    resolver: zodResolver(AsignarUbicacionDtoSchema),
+  const formAsignarUbicacion = useForm<AsignarUbiExtendidoDto>({
+    resolver: zodResolver(AsignarUbiExtendidoDtoSchema),
   });
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export function ExtendidoDataTable({
     }
   }, [selectedPartida, formAsignarUbicacion]);
 
-  const handleAsignarUbicacion = async (formData: AsignarUbicacionDto) => {
+  const handleAsignarUbicacion = async (formData: AsignarUbiExtendidoDto) => {
     if (selectedPartida) {
       try {
         await asignarUbicacion(formData);

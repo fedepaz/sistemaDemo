@@ -8,12 +8,14 @@ export interface LegacySiembra extends RowDataPacket {
   indice: number;
   planta: string;
   nombre: string;
+
   hai: string;
   injerto: string;
-  con: string;
 
   f_siem: string;
-  f_siembra: string;
+  propiedad: string;
+  solicito: string;
+  nrocont: string;
 }
 
 export interface LegacySiembraFecha extends RowDataPacket {

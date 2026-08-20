@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
-import { useSiembraPartidaMutation } from "../hooks/useSiembraPartidaMutation";
+import { useSiembraMutation } from "../hooks/useSiembraPartidaMutation";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
@@ -28,7 +28,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
 
-  const { mutateAsync: asignarUbicacionSiembra } = useSiembraPartidaMutation();
+  const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
 
   const formAsignarUbicacion = useForm<AsignarUbiSiembraDto>({
     resolver: zodResolver(AsignarUbiSiembraDtoSchema),
@@ -41,7 +41,6 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         ano: selectedPartida.anio,
         indice: selectedPartida.indice,
         ubicacion: undefined,
-        stock_ini: parseInt(selectedPartida.con),
         detalle: "",
         baja: 0,
         extendido: "",

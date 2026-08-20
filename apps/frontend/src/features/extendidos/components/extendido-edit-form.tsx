@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { AsignarUbicacionDto, ExtendidoDto } from "@vivero/shared";
+import { AsignarUbiExtendidoDto, ExtendidoDto } from "@vivero/shared";
 
 import { UseFormReturn } from "react-hook-form";
 import {
@@ -26,9 +26,9 @@ import {
 } from "@/components/ui/form";
 
 interface ExtendidosEditFormProps {
-  onSubmit: (data: AsignarUbicacionDto) => Promise<void>;
+  onSubmit: (data: AsignarUbiExtendidoDto) => Promise<void>;
   onCancel: () => void;
-  form: UseFormReturn<AsignarUbicacionDto>;
+  form: UseFormReturn<AsignarUbiExtendidoDto>;
   selectedExtendido: ExtendidoDto;
 }
 

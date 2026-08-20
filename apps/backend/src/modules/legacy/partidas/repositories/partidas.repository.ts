@@ -61,9 +61,8 @@ export class PartidasRepository {
     );
     return rows;
   }
-  // partidas.repository.ts (agrega este método)
 
-  async asignarUbicacion(data: {
+  async asignarExtendido(data: {
     partida: number;
     ano: number;
     indice: number;
@@ -112,6 +111,67 @@ export class PartidasRepository {
       await conn.query(
         `UPDATE partidas SET extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`,
         [data.extendido, data.partida, data.ano, data.indice],
+      );
+    });
+  }
+  async asignarSiembra(data: {
+    partida: number;
+    ano: number;
+    indice: number;
+    ubicacion: number;
+    stock_ini: number;
+    detalle?: string;
+    baja?: number;
+    extendido: string; // valor para partidas.extendido
+  }): Promise<void> {
+    await this.legacyDb.transaction(async (conn) => {
+      const now = new Date().toISOString().slice(0, 10);
+      const baja = data.baja ?? 0;
+      const saldo = data.stock_ini - baja; // stock (saldo)
+
+      await conn.query(
+        `INSERT INTO partidas1 (
+        partida, 
+        ano, 
+        indice, 
+        fecha, 
+        lote,
+        ano_lote,
+        item,
+        semxgr,
+        camara,
+        germin,
+        ajuste,
+        cantidad,
+        gramos,
+        c,
+        g,
+        detalle,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          data.partida,
+          data.ano,
+          data.indice,
+          now,
+          data.ubicacion,
+          data.stock_ini,
+          0,
+          0,
+          '',
+          0,
+          '0000-00-00',
+          '0.00',
+          0,
+          0,
+          saldo,
+          0,
+          '',
+        ],
+      );
+
+      await conn.query(
+        `UPDATE partidas SET f_siembra = ? WHERE partida = ? AND ano = ? AND indice = ?`,
+        [now, data.partida, data.ano, data.indice],
       );
     });
   }

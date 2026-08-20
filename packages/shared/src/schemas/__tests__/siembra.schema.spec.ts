@@ -1,5 +1,6 @@
 // packages/shared/src/schemas/__tests__/siembra.schema.spec.ts
-import { SiembraDtoSchema, AsignarUbiSiembraDtoSchema } from '../siembra.schema';
+import { SiembraDtoSchema } from '../siembra.schema';
+import { AsignarUbiSiembraDtoSchema } from '../partidas.schema';
 
 describe('SiembraDtoSchema', () => {
   const valid = {
@@ -7,13 +8,14 @@ describe('SiembraDtoSchema', () => {
     anio: 2026,
     indice: 1,
     hai: 'H',
-    con: '50',
     codigoEspecie: 'ESP001',
     nombreEspecie: 'Ave del Paraíso',
     injerto: 'Injerto A',
     contenedor: 'Bandeja 288',
     fechaSugeridaSiembra: '2026-07-15',
-    fechaSiembraReal: '2026-07-16',
+    propiedad: 'Propiedad A',
+    solicito: 'Juan Perez',
+    nrocont: '100',
   };
 
   it('accepts valid siembra dto', () => {
