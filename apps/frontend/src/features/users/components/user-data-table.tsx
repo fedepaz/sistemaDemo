@@ -14,7 +14,7 @@ import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { userColumns, userExportColumns } from "./columns";
 import { UserEditForm } from "./user-edit-form";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   UpdateUserProfileDto,
   UpdateUserProfileSchema,
@@ -63,16 +63,16 @@ export function UsersDataTable() {
     onDelete: (id) => deleteUser(id),
   });
 
-  const handleEdit = (row: UserProfileDto) => {
+  const handleEdit = useCallback((row: UserProfileDto) => {
     setSelectedUser(row);
     setSlideOverOpen(true);
-  };
+  }, []);
 
-  const handleDelete = async (row: UserProfileDto) => {
+  const handleDelete = useCallback(async (row: UserProfileDto) => {
     if (row.username) {
       await deleteUser(row.username);
     }
-  };
+  }, [deleteUser]);
 
   const handleUpdate = async (formData: UpdateUserProfileDto) => {
     if (selectedUser) {

@@ -91,33 +91,36 @@ export function ExtendidoDataTable({
     }
   };
 
-  const handleExtendidoView = (row: ExtendidoDto) => {
+  const handleExtendidoView = useCallback((row: ExtendidoDto) => {
     setSelectedPartida(row);
     setMode("view");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleEdit = (row: ExtendidoDto) => {
+  const handleEdit = useCallback((row: ExtendidoDto) => {
     setSelectedPartida(row);
     setMode("edit");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleCamaraChange = (value: string) => {
-    onCamaraChange?.(value);
-  };
+  const handleCamaraChange = useCallback(
+    (value: string) => {
+      onCamaraChange?.(value);
+    },
+    [onCamaraChange],
+  );
 
   const handleClear = useCallback(() => {
     onCamaraChange?.("all");
     setFilterToday(false);
   }, [onCamaraChange]);
 
-  const handleOpenChange = (open: boolean) => {
+  const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
     if (!open) {
       setSelectedPartida(null);
     }
-  };
+  }, []);
 
   const hasActiveFilters = currentCamaraId !== "all" || filterToday;
 

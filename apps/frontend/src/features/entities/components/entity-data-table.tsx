@@ -1,7 +1,7 @@
 // src/features/entities/components/entity-data-table.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   useCreateEntity,
   useDeleteEntity,
@@ -33,9 +33,9 @@ export function EntityDataTable() {
     },
   });
 
-  const handleNewEntity = () => {
+  const handleNewEntity = useCallback(() => {
     setSlideOverOpen(true);
-  };
+  }, []);
 
   const handleCreate = async (formData: CreateEntityDto) => {
     try {
@@ -45,11 +45,11 @@ export function EntityDataTable() {
     if (!isCreatingEntity) setSlideOverOpen(false);
   };
 
-  const handleDelete = async (row: Entity) => {
+  const handleDelete = useCallback(async (row: Entity) => {
     if (row.name) {
       await deleteEntity(row.name);
     }
-  };
+  }, [deleteEntity]);
 
   return (
     <>

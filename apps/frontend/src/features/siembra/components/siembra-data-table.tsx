@@ -2,7 +2,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import {
   AsignarUbiSiembraDto,
@@ -61,24 +61,24 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     }
   };
 
-  const handleView = (row: SiembraDto) => {
+  const handleView = useCallback((row: SiembraDto) => {
     setSelectedPartida(row);
     setMode("view");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleEdit = (row: SiembraDto) => {
+  const handleEdit = useCallback((row: SiembraDto) => {
     setSelectedPartida(row);
     setMode("edit");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleOpenChange = (open: boolean) => {
+  const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
     if (!open) {
       setSelectedPartida(null);
     }
-  };
+  }, []);
 
   return (
     <>
