@@ -1,7 +1,8 @@
 // src/features/siembra/components/siembra-edit-form.tsx
 "use client";
 
-import { Package, Activity, FileText, Warehouse } from "lucide-react";
+import { useState } from "react";
+import { Package, Activity, FileText, Warehouse, Pencil, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -40,17 +41,25 @@ export function SiembraEditForm({
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
+  const [isEditingQuantity, setIsEditingQuantity] = useState(false);
+
+  const originalNrocont = parseInt(selectedExtendido.nrocont);
+
+  const handleCancelEdit = () => {
+    setIsEditingQuantity(false);
+    form.setValue("cantidaNroCont", originalNrocont);
+  };
 
   return (
     <Form {...form}>
       <form
-        id="extendido-form"
+        id="siembra-form"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-1 md:gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
+        className="flex flex-col gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
-        {/* 🚀 PRODUCT HEADER (Context) */}
+        {/* PRODUCT HEADER (Context) */}
         <div className="space-y-3 md:space-y-4 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-2 md:p-3 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
+          <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-3 md:gap-4">
               <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Package className="h-5 w-5 md:h-6 md:w-6" />
@@ -64,18 +73,10 @@ export function SiembraEditForm({
                 </p>
               </div>
             </div>
-            <div className="text-right pr-1 md:pr-2">
-              <p className="text-[8px] md:text-[9px] font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-0.5 md:mb-1">
-                Bandejas
-              </p>
-              <p className="text-xl md:text-2xl font-black text-primary leading-none">
-                {selectedExtendido.nrocont}
-              </p>
-            </div>
           </div>
         </div>
 
-        {/* 📍 UBICACION SELECTION */}
+        {/* CAMARA DE DESTINO */}
         <div className="flex flex-col gap-4 md:gap-8">
           <FormField
             control={form.control}
@@ -96,7 +97,7 @@ export function SiembraEditForm({
                 >
                   <FormControl>
                     <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
-                      <SelectValue placeholder="Seleccione depósito" />
+                      <SelectValue placeholder="Seleccione cámara" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent
@@ -119,66 +120,66 @@ export function SiembraEditForm({
             )}
           />
 
-          <div className="grid grid-cols-2 gap-4 md:gap-8">
-            {/* 📦 STOCK INICIAL */}
-            <FormField
-              control={form.control}
-              name="cantidaNroCont"
-              render={({ field }) => (
-                <FormItem className="space-y-2 md:space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                      <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                    </div>
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                      Bandejas Ok
-                    </FormLabel>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      inputMode="numeric"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+          {/* CANTIDAD DE BANDEJAS — Toggle Read-Only / Edit */}
+          <div className="space-y-2 md:space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                  <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                </div>
+                <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  Bandejas Confirmadas
+                </p>
+              </div>
+              {!isEditingQuantity ? (
+                <button
+                  type="button"
+                  onClick={() => setIsEditingQuantity(true)}
+                  className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                >
+                  <Pencil className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                  Editar
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                  Cancelar
+                </button>
               )}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4 md:gap-8">
-            {/* 📦 Germinación ??? */}
-            <FormField
-              control={form.control}
-              name="germin"
-              render={({ field }) => (
-                <FormItem className="space-y-2 md:space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                      <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                    </div>
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                      Germinación
-                    </FormLabel>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      inputMode="numeric"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            </div>
+
+            {isEditingQuantity ? (
+              <FormField
+                control={form.control}
+                name="cantidaNroCont"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        inputMode="numeric"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
+                        autoFocus
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <p className="h-12 md:h-16 rounded-xl border border-border/60 bg-muted/50 shadow-sm text-xl md:text-3xl font-black px-4 flex items-center text-foreground/80">
+                {originalNrocont}
+              </p>
+            )}
           </div>
 
-          {/* 📝 OBSERVACIONES (EXTENDIDO) */}
+          {/* OBSERVACIONES */}
           <FormField
             control={form.control}
             name="detalle"
