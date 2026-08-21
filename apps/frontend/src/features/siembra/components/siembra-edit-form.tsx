@@ -13,6 +13,11 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import {
   Select,
@@ -157,7 +162,20 @@ export function SiembraEditForm({
                   {isMaquina ? "Máquina" : "Manual"}
                 </span>
               </div>
-              <Switch checked={isMaquina} onCheckedChange={setIsMaquina} />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Switch
+                    checked={isMaquina}
+                    onCheckedChange={setIsMaquina}
+                  />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="border border-border shadow-md"
+                >
+                  <p>{isMaquina ? "Siembra mecánica" : "Siembra manual"}</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
 
@@ -173,23 +191,43 @@ export function SiembraEditForm({
                 </p>
               </div>
               {!isEditingQuantity ? (
-                <button
-                  type="button"
-                  onClick={() => setIsEditingQuantity(true)}
-                  className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-primary hover:text-primary/80 transition-colors"
-                >
-                  <Pencil className="h-3 w-3 md:h-3.5 md:w-3.5" />
-                  Editar
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingQuantity(true)}
+                      className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                    >
+                      <Pencil className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                      Editar
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-border shadow-md"
+                  >
+                    <p>Modificar cantidad de bandejas</p>
+                  </TooltipContent>
+                </Tooltip>
               ) : (
-                <button
-                  type="button"
-                  onClick={handleCancelEdit}
-                  className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <X className="h-3 w-3 md:h-3.5 md:w-3.5" />
-                  Cancelar
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={handleCancelEdit}
+                      className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                      Cancelar
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-border shadow-md"
+                  >
+                    <p>Revertir al valor original</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
             </div>
 
