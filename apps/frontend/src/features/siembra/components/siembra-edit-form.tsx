@@ -2,8 +2,17 @@
 "use client";
 
 import { useState } from "react";
-import { Package, Activity, FileText, Warehouse, Pencil, X } from "lucide-react";
+import {
+  Package,
+  Activity,
+  FileText,
+  Warehouse,
+  Pencil,
+  X,
+  Wrench,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 
 import {
   Select,
@@ -31,30 +40,38 @@ interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbiSiembraDto) => Promise<void>;
   onCancel: () => void;
   form: UseFormReturn<AsignarUbiSiembraDto>;
-  selectedExtendido: SiembraDto;
+  selectedSiembra: SiembraDto;
 }
 
 export function SiembraEditForm({
   onSubmit,
   form,
-  selectedExtendido,
+  selectedSiembra,
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
   const [isEditingQuantity, setIsEditingQuantity] = useState(false);
+  const [isMaquina, setIsMaquina] = useState(true);
 
-  const originalNrocont = parseInt(selectedExtendido.nrocont);
+  const originalNrocont = parseInt(selectedSiembra.nrocont);
 
   const handleCancelEdit = () => {
     setIsEditingQuantity(false);
     form.setValue("cantidaNroCont", originalNrocont);
   };
 
+  const handleSubmit = (data: AsignarUbiSiembraDto) => {
+    const prefix = isMaquina ? "maq" : "man";
+    const detalle = data.detalle || "";
+    const prefixed = detalle ? `${prefix}: ${detalle}` : prefix;
+    return onSubmit({ ...data, detalle: prefixed });
+  };
+
   return (
     <Form {...form}>
       <form
         id="siembra-form"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* PRODUCT HEADER (Context) */}
@@ -66,10 +83,10 @@ export function SiembraEditForm({
               </div>
               <div>
                 <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
-                  {selectedExtendido.codigoEspecie}
+                  {selectedSiembra.codigoEspecie}
                 </h2>
                 <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
-                  {selectedExtendido.nombreEspecie}
+                  {selectedSiembra.nombreEspecie}
                 </p>
               </div>
             </div>
@@ -120,8 +137,32 @@ export function SiembraEditForm({
             )}
           />
 
-          {/* CANTIDAD DE BANDEJAS — Toggle Read-Only / Edit */}
           <div className="space-y-2 md:space-y-3">
+            {/* MÉTODO DE SIEMBRA — Máquina / Manual */}
+            <div className="flex items-center justify-between py-1">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                  <Wrench className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                </div>
+                <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  Método
+                </p>
+                <span
+                  className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
+                    isMaquina
+                      ? "text-primary border-primary/20 bg-primary/10"
+                      : "text-muted-foreground border-border/40 bg-muted/50"
+                  }`}
+                >
+                  {isMaquina ? "Máquina" : "Manual"}
+                </span>
+              </div>
+              <Switch checked={isMaquina} onCheckedChange={setIsMaquina} />
+            </div>
+          </div>
+
+          <div className="space-y-2 md:space-y-3">
+            {/* CANTIDAD DE BANDEJAS — Toggle Read-Only / Edit */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">

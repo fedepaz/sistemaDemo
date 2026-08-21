@@ -151,13 +151,13 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
                 <div className="grid grid-cols-1 gap-0.5 md:gap-1">
                   <InfoRow
                     icon={ClipboardList}
-                    label="Propiedad"
+                    label="Semilla"
                     value={selectedExtendido.propiedad}
                     className="border-primary/5"
                   />
                   <InfoRow
                     icon={Calendar}
-                    label="Solicitó"
+                    label="Solicitadas"
                     value={selectedExtendido.solicito}
                     className="border-primary/5"
                   />
@@ -197,8 +197,6 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
                     </p>
                   </div>
                 </div>
-
-
               </CardContent>
             </Card>
           </TabsContent>

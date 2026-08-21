@@ -155,7 +155,7 @@ export class PartidasRepository {
       );
 
       await conn.query(
-        `UPDATE partidas SET f_siembra = ?, cg = ?, nrocont = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`,
+        `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`,
         [
           now,
           data.cg,

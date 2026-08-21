@@ -115,7 +115,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
                 form={formAsignarUbicacion}
                 onSubmit={handleAsignarUbicacionSiembra}
                 onCancel={() => setSlideOpen(false)}
-                selectedExtendido={selectedPartida}
+                selectedSiembra={selectedPartida}
               />
             )}
           </div>
