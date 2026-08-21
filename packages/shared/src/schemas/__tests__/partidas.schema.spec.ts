@@ -105,8 +105,9 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     expect(result.cantidaNroCont).toBe(120);
   });
 
-  it("applies default values", () => {
-    const result = AsignarUbiSiembraDtoSchema.parse(valid);
+  it("applies default values for omitted fields", () => {
+    const { detalle: _, ...validWithoutDetalle } = valid;
+    const result = AsignarUbiSiembraDtoSchema.parse(validWithoutDetalle);
     expect(result.detalle).toBe("");
   });
 
