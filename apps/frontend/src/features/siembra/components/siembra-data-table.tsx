@@ -106,6 +106,11 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           mode={mode}
           form={formAsignarUbicacion}
           saveLabel="Confirmar Ubicación"
+          confirm={{
+            title: "Confirmar ubicación",
+            description: "¿Deseas confirmar la asignación de esta ubicación de siembra?",
+            label: "Confirmar Ubicación",
+          }}
         >
           <div className="space-y-2">
             {mode === "view" ? (

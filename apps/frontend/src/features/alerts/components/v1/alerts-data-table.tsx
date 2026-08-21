@@ -114,6 +114,11 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
           mode={mode}
           form={form}
           saveLabel="Agregar Comentario"
+          confirm={{
+            title: "Agregar comentario",
+            description: "¿Deseas agregar este comentario a la alerta?",
+            label: "Agregar Comentario",
+          }}
         >
           <div className="space-y-2">
             {mode === "view" ? (

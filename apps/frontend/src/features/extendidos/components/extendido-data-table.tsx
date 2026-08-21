@@ -213,6 +213,11 @@ export function ExtendidoDataTable({
           form={formAsignarUbicacion}
           isLoading={isAsignandoUbicacion}
           saveLabel="Confirmar Extendido"
+          confirm={{
+            title: "Confirmar extendido",
+            description: "¿Deseas confirmar la asignación de ubicación para este extendido?",
+            label: "Confirmar Extendido",
+          }}
         >
           <div className="space-y-2">
             {mode === "view" ? (

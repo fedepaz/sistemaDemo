@@ -74,6 +74,11 @@ export function EntityDataTable() {
           onCancel={() => setSlideOverOpen(false)}
           saveLabel="Crear Entidad"
           form={formCreateEntity}
+          confirm={{
+            title: "Crear entidad",
+            description: "¿Deseas crear esta nueva entidad?",
+            label: "Crear",
+          }}
         >
           <div className="space-y-2">
             <EntityCreateForm

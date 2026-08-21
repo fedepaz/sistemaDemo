@@ -157,6 +157,11 @@ export function UsersDataTable() {
           onCancel={() => setSlideOverOpen(false)}
           saveLabel="Actualizar Usuario"
           form={formEditUser}
+          confirm={{
+            title: "Actualizar usuario",
+            description: `¿Deseas guardar los cambios en ${selectedUser.username}?`,
+            label: "Actualizar",
+          }}
         >
           <div className="space-y-2">
             <UserEditForm
