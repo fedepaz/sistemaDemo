@@ -3,7 +3,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
 import { LegacySiembra } from '../interfaces/siembra.interface';
-import { AsignarUbiSiembraDto } from '@vivero/shared';
 
 @Injectable()
 export class SiembraRepository {
@@ -24,7 +23,9 @@ export class SiembraRepository {
       p.f_siembra,
       p.propiedad,
       p.solicito,
-      p.nrocont 
+      p.nrocont,
+      p.extendido,
+      p.germin
 	FROM partidas p
 	LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)
 	LEFT JOIN partidas1 p1 
@@ -40,11 +41,5 @@ export class SiembraRepository {
     ORDER BY p.partida, p.indice
   `;
     return this.legacyDb.query<LegacySiembra[]>(sql);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async asignarUbicacionSiembra(_data: AsignarUbiSiembraDto): Promise<void> {
-    // TODO: Implement legacy MySQL write
-    this.logger.warn('asignarUbicacionSiembra not yet implemented');
   }
 }

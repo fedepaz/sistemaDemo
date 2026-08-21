@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException } from '@nestjs/common';
 import { SiembraService } from '../siembra.service';
 import { SiembraRepository } from '../repositories/siembra.repository';
 
@@ -7,13 +6,11 @@ describe('SiembraService', () => {
   let service: SiembraService;
   let siembraRepo: {
     findAllSiembra: jest.Mock;
-    asignarUbicacionSiembra: jest.Mock;
   };
 
   beforeEach(async () => {
     siembraRepo = {
       findAllSiembra: jest.fn(),
-      asignarUbicacionSiembra: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -37,13 +34,16 @@ describe('SiembraService', () => {
           partida: 1,
           ano: 2024,
           indice: 1,
-          hai: 'HAI-1',
-          con: '100',
           planta: 'PIN',
           nombre: 'Pino',
+          hai: 'H',
           injerto: 'No',
           f_siem: '2024-01-15',
-          f_siembra: '',
+          propiedad: 'Propiedad A',
+          solicito: 'Juan',
+          nrocont: '100',
+          extendido: 'Notas',
+          germin: '85',
         },
       ];
       siembraRepo.findAllSiembra.mockResolvedValue(rows);
@@ -55,13 +55,16 @@ describe('SiembraService', () => {
         partidaId: 1,
         anio: 2024,
         indice: 1,
-        hai: 'HAI-1',
-        con: '100',
         codigoEspecie: 'PIN',
         nombreEspecie: 'Pino',
+        hai: 'H',
         injerto: 'No',
         fechaSugeridaSiembra: '2024-01-15',
-        fechaSiembraReal: '',
+        propiedad: 'Propiedad A',
+        solicito: 'Juan',
+        nrocont: '100',
+        extendido: 'Notas',
+        germin: '85',
       });
     });
 
@@ -71,74 +74,6 @@ describe('SiembraService', () => {
       const result = await service.getAllSiembra();
 
       expect(result).toEqual([]);
-    });
-  });
-
-  describe('asignarUbicacionSiembra', () => {
-    it('should assign location successfully', async () => {
-      siembraRepo.asignarUbicacionSiembra.mockResolvedValue(undefined);
-
-      await service.asignarUbicacionSiembra({
-        partida: 1,
-        ano: 2024,
-        indice: 1,
-        edita: 'S',
-        ubicacion: 100,
-        stock_ini: 50,
-        baja: 0,
-        detalle: '',
-        extendido: '',
-      });
-
-      expect(siembraRepo.asignarUbicacionSiembra).toHaveBeenCalled();
-    });
-
-    it('should throw BadRequestException when edita is N', async () => {
-      await expect(
-        service.asignarUbicacionSiembra({
-          partida: 1,
-          ano: 2024,
-          indice: 1,
-          edita: 'N',
-          ubicacion: 100,
-          stock_ini: 50,
-          baja: 0,
-          detalle: '',
-          extendido: '',
-        }),
-      ).rejects.toThrow(BadRequestException);
-    });
-
-    it('should throw BadRequestException when ubicacion is 0', async () => {
-      await expect(
-        service.asignarUbicacionSiembra({
-          partida: 1,
-          ano: 2024,
-          indice: 1,
-          edita: 'S',
-          ubicacion: 0,
-          stock_ini: 50,
-          baja: 0,
-          detalle: '',
-          extendido: '',
-        }),
-      ).rejects.toThrow(BadRequestException);
-    });
-
-    it('should throw BadRequestException when ubicacion is null', async () => {
-      await expect(
-        service.asignarUbicacionSiembra({
-          partida: 1,
-          ano: 2024,
-          indice: 1,
-          edita: 'S',
-          ubicacion: null as unknown as number,
-          stock_ini: 50,
-          baja: 0,
-          detalle: '',
-          extendido: '',
-        }),
-      ).rejects.toThrow(BadRequestException);
     });
   });
 });

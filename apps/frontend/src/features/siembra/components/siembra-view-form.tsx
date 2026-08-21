@@ -2,14 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { SiembraDto } from "@vivero/shared";
-import {
-  Package,
-  Calendar,
-  Info,
-  Hash,
-  ClipboardList,
-  Activity,
-} from "lucide-react";
+import { Package, Calendar, Info, Hash, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SiembraFormProps {
@@ -96,7 +89,7 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
               value: getHaiLabel(selectedExtendido.hai),
               icon: Info,
             },
-            { label: "CON", value: selectedExtendido.con, icon: Activity },
+            { label: "CANT", value: selectedExtendido.nrocont, icon: Activity },
           ].map((item, idx) => (
             <div
               key={idx}
@@ -125,12 +118,6 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
               icon={Calendar}
               label="Fecha Sugerida"
               value={selectedExtendido.fechaSugeridaSiembra}
-              className="border-primary/5"
-            />
-            <InfoRow
-              icon={ClipboardList}
-              label="Fecha Real Siembra"
-              value={selectedExtendido.fechaSiembraReal}
               className="border-primary/5"
             />
           </div>

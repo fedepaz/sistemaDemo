@@ -1,13 +1,7 @@
 // src/features/siembra/components/siembra-edit-form.tsx
 "use client";
 
-import {
-  Package,
-  Activity,
-  FileText,
-  TrendingDown,
-  Warehouse,
-} from "lucide-react";
+import { Package, Activity, FileText, Warehouse } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -85,7 +79,7 @@ export function SiembraEditForm({
         <div className="flex flex-col gap-4 md:gap-8">
           <FormField
             control={form.control}
-            name="ubicacion"
+            name="cg"
             render={({ field }) => (
               <FormItem className="space-y-2 md:space-y-3">
                 <div className="flex items-center gap-2">
@@ -93,7 +87,7 @@ export function SiembraEditForm({
                     <Warehouse className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
                   <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                    Depósito de Destino
+                    Cámara de Destino
                   </FormLabel>
                 </div>
                 <Select
@@ -129,7 +123,7 @@ export function SiembraEditForm({
             {/* 📦 STOCK INICIAL */}
             <FormField
               control={form.control}
-              name="stock_ini"
+              name="cantidaNroCont"
               render={({ field }) => (
                 <FormItem className="space-y-2 md:space-y-3">
                   <div className="flex items-center gap-2">
@@ -153,36 +147,30 @@ export function SiembraEditForm({
                 </FormItem>
               )}
             />
-
-            {/* 📉 BAJA (Manual with Advisory) */}
+          </div>
+          <div className="grid grid-cols-2 gap-4 md:gap-8">
+            {/* 📦 Germinación ??? */}
             <FormField
               control={form.control}
-              name="baja"
+              name="germin"
               render={({ field }) => (
                 <FormItem className="space-y-2 md:space-y-3">
                   <div className="flex items-center gap-2">
-                    <div
-                      className={`p-1.5 md:p-2 rounded-lg transition-colors duration-300 `}
-                    >
-                      <TrendingDown className="h-3.5 w-3.5 md:h-4 md:w-4 text-destructive" />
+                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                      <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                     </div>
-                    <FormLabel
-                      className={`text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors 
-                      `}
-                    >
-                      Baja
+                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                      Germinación
                     </FormLabel>
                   </div>
                   <FormControl>
-                    <div className="relative">
-                      <Input
-                        type="number"
-                        inputMode="numeric"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                        className={`h-12 md:h-16 rounded-xl shadow-sm text-xl md:text-3xl font-black px-4 transition-all duration-300 `}
-                      />
-                    </div>
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -193,7 +181,7 @@ export function SiembraEditForm({
           {/* 📝 OBSERVACIONES (EXTENDIDO) */}
           <FormField
             control={form.control}
-            name="extendido"
+            name="detalle"
             render={({ field }) => (
               <FormItem className="space-y-2 md:space-y-3">
                 <div className="flex items-center gap-2">

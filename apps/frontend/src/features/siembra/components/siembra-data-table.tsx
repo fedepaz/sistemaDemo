@@ -40,10 +40,9 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         partida: selectedPartida.partidaId,
         ano: selectedPartida.anio,
         indice: selectedPartida.indice,
-        ubicacion: undefined,
-        detalle: "",
-        baja: 0,
-        extendido: "",
+        cantidaNroCont: parseInt(selectedPartida.nrocont),
+        detalle: selectedPartida.extendido,
+        germin: parseInt(selectedPartida.germin),
         edita: "S",
       });
     }

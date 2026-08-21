@@ -12,6 +12,8 @@ export const SiembraDtoSchema = LegacyHeaderSchema.extend({
   propiedad: z.string(), // propiedad
   solicito: z.string(), // solicito
   nrocont: z.string(), // nrocont
+  extendido: z.string(), // extendido
+  germin: z.string(), // germin
 });
 
 export type SiembraDto = z.infer<typeof SiembraDtoSchema>;

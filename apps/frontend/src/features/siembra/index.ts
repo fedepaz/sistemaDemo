@@ -6,7 +6,7 @@ export { SiembraDashboardSkeleton } from "./components/siembra-dashboard-skeleto
 
 // Hooks
 export { useSiembraPartidas } from "./hooks/useSiembraPartidas";
-export { useSiembraPartidaMutation } from "./hooks/useSiembraPartidaMutation";
+export { useSiembraMutation } from "./hooks/useSiembraPartidaMutation";
 
 // Services
 export { siembraService } from "./api/siembraService";
