@@ -340,7 +340,6 @@
           "UsersDashboard": { "path": "features/users/components/UsersDashboard" },
           "UsersDashboardSkeleton": { "path": "features/users/components/user-dashboard-skeleton" },
           "UsersDataTable": { "path": "features/users/components/user-data-table" },
-          "UserCreateForm": { "path": "features/users/components/user-create-form" },
           "UserEditForm": { "path": "features/users/components/user-edit-form" },
           "UserKPIs": { "path": "features/users/components/user-kpi" },
           "UserProfileEdit": { "path": "components/user-profile/user-edit" },

@@ -5,7 +5,7 @@ npx --no -- commitlint --edit "$1"
 EXIT_CODE=$?
 
 # Si commitlint falla (código de salida no es 0), mostrar un mensaje de ayuda en español
-if [ $? -ne 0 ]; then
+if [ $EXIT_CODE -ne 0 ]; then
   echo "------------------------------------------------------------------"
   echo "❌ Error: Tu mensaje de commit no sigue el formato de Conventional Commits."
   echo ""

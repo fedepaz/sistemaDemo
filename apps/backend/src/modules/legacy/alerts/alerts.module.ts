@@ -5,9 +5,10 @@ import { AlertsController } from './alerts.controller';
 import { AlertsService } from './alerts.service';
 import { AlertsRepository } from './repositories/alerts.repository';
 import { AlertCommentsModule } from '../../alertComments/alertComments.module';
+import { AlertSolvedModule } from '../../alertSolved/alertSolved.module';
 
 @Module({
-  imports: [AlertCommentsModule],
+  imports: [AlertCommentsModule, AlertSolvedModule],
   controllers: [AlertsController],
   providers: [AlertsService, AlertsRepository],
 })

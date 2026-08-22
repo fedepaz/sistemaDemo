@@ -28,6 +28,7 @@ export const usersQueryKeys = {
   byTenantId: (tenantId: string) =>
     [...usersQueryKeys.all(), "byTenantId", tenantId] as const,
   admin: () => [...usersQueryKeys.all(), "allAdmin"] as const,
+  toActivate: () => [...usersQueryKeys.all(), "toActivate"] as const,
 };
 
 // ============================================================================
@@ -50,8 +51,7 @@ export const adminPermissionsQueryKeys = {
 
 export const entityQueryKeys = {
   all: () => ["entities"] as const,
-  byName: (name: string) =>
-    [...entityQueryKeys.all(), "byName", name] as const,
+  byName: (name: string) => [...entityQueryKeys.all(), "byName", name] as const,
   byLabel: (label: string) =>
     [...entityQueryKeys.all(), "byLabel", label] as const,
 };
@@ -62,10 +62,9 @@ export const entityQueryKeys = {
 
 export const auditLogQueryKeys = {
   all: () => ["auditLog"] as const,
-  byTenantName: (tenantName: string) =>
-    ["auditLog", tenantName] as const,
-  byUserId: (userId: string) =>
-    ["auditLog", "user", userId] as const,
+  byTenantName: (tenantName: string, page?: number, limit?: number) =>
+    ["auditLog", tenantName, page, limit] as const,
+  byUserId: (userId: string) => ["auditLog", "user", userId] as const,
 };
 
 // ============================================================================
@@ -139,5 +138,30 @@ export const alertCommentsQueryKeys = {
     partidaId: number,
     anio: number,
     indice: number,
-  ) => [...alertCommentsQueryKeys.all(), alertType, partidaId, anio, indice] as const,
+  ) =>
+    [
+      ...alertCommentsQueryKeys.all(),
+      alertType,
+      partidaId,
+      anio,
+      indice,
+    ] as const,
+};
+
+// ============================================================================
+// TASK SHIFTS
+// ============================================================================
+
+export const taskShiftQueryKeys = {
+  all: () => ["taskShifts"] as const,
+  byEntityId: (entityId: string) =>
+    [...taskShiftQueryKeys.all(), "byEntityId", entityId] as const,
+};
+
+// ============================================================================
+// ALERT SOLVED
+// ============================================================================
+
+export const alertsSolvedQueryKeys = {
+  all: () => ["alertsSolved"] as const,
 };

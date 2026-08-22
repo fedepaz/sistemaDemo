@@ -10,9 +10,20 @@ import {
   Globe,
   Smartphone,
   User,
+  LogIn,
+  LogOut,
+  ShieldCheck,
+  Lock,
+  AlertTriangle,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { formatShortDate } from "@/lib/date-utils";
+import { isMobileDevice } from "@/lib/utils";
 
 // Helper para formatear cambios
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,13 +49,23 @@ const formatChanges = (changes: Record<string, any> | null): string => {
 const getActionIcon = (action: string) => {
   switch (action) {
     case "CREATE":
-      return <Plus className="h-4 w-4 text-primary" />;
+      return <Plus className="h-4 w-4 text-primary" aria-hidden="true" />;
     case "UPDATE":
-      return <Pencil className="h-4 w-4 text-secondary" />;
+      return <Pencil className="h-4 w-4 text-secondary" aria-hidden="true" />;
     case "DELETE":
-      return <Trash2 className="h-4 w-4 text-destructive" />;
+      return <Trash2 className="h-4 w-4 text-destructive" aria-hidden="true" />;
+    case "LOGIN":
+      return <LogIn className="h-4 w-4 text-primary" aria-hidden="true" />;
+    case "LOGOUT":
+      return <LogOut className="h-4 w-4 text-muted-foreground" aria-hidden="true" />;
+    case "ACCESS":
+      return <ShieldCheck className="h-4 w-4 text-info" aria-hidden="true" />;
+    case "LOGIN_FAILED":
+      return <AlertTriangle className="h-4 w-4 text-destructive" aria-hidden="true" />;
+    case "PASSWORD_CHANGE":
+      return <Lock className="h-4 w-4 text-secondary" aria-hidden="true" />;
     default:
-      return <FileText className="h-4 w-4 text-muted-foreground" />;
+      return <FileText className="h-4 w-4 text-muted-foreground" aria-hidden="true" />;
   }
 };
 
@@ -58,11 +79,16 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
       const action = row.getValue("action") as string;
       const variantMap: Record<
         string,
-        "default" | "destructive" | "secondary"
+        "default" | "destructive" | "secondary" | "outline"
       > = {
         CREATE: "default",
         UPDATE: "secondary",
         DELETE: "destructive",
+        LOGIN: "default",
+        LOGOUT: "outline",
+        ACCESS: "outline",
+        LOGIN_FAILED: "destructive",
+        PASSWORD_CHANGE: "secondary",
       };
 
       return (
@@ -83,14 +109,21 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
     ),
     cell: ({ row }) => {
       const user =
-        row.original.user !== null ? row.original.user.username : "No user";
+        row.original.user != null ? row.original.user.username : "No user";
       return (
-        <div className="flex items-center space-x-2 min-w-[160px]">
-          <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-          <span className="text-sm font-medium truncate max-w-[140px]">
-            {user}
-          </span>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center space-x-2 min-w-[160px]">
+              <User className="h-4 w-4 text-muted-foreground flex-shrink-0" aria-hidden="true" />
+              <span className="text-sm font-medium truncate max-w-[140px]">
+                {user}
+              </span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="bg-popover border-border shadow-xl">
+            <p className="text-xs">{user}</p>
+          </TooltipContent>
+        </Tooltip>
       );
     },
   },
@@ -135,10 +168,17 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
     cell: ({ row }) => {
       const ip = row.original.ipAddress;
       return (
-        <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[120px]">
-          <Globe className="h-3 w-3" />
-          <span className="truncate max-w-[100px]">{ip || "N/A"}</span>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[120px]">
+              <Globe className="h-3 w-3" aria-hidden="true" />
+              <span className="truncate max-w-[100px]">{ip || "N/A"}</span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="bg-popover border-border shadow-xl">
+            <p className="text-xs">{ip || "Sin dirección IP registrada"}</p>
+          </TooltipContent>
+        </Tooltip>
       );
     },
   },
@@ -149,19 +189,26 @@ export const auditLogColumns: ColumnDef<AuditLogDto>[] = [
     ),
     cell: ({ row }) => {
       const ua = row.original.userAgent || "";
-      const isMobile = /mobile|android|iphone|ipad/i.test(ua.toLowerCase());
+      const isMobile = isMobileDevice(ua);
 
       return (
-        <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[140px]">
-          {isMobile ? (
-            <Smartphone className="h-3 w-3 text-info" />
-          ) : (
-            <Globe className="h-3 w-3 text-muted-foreground" />
-          )}
-          <span className="truncate max-w-[120px]">
-            {isMobile ? "Móvil" : "Escritorio"}
-          </span>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center space-x-1 text-xs text-muted-foreground min-w-[140px]">
+              {isMobile ? (
+                <Smartphone className="h-3 w-3 text-info" aria-hidden="true" />
+              ) : (
+                <Globe className="h-3 w-3 text-muted-foreground" aria-hidden="true" />
+              )}
+              <span className="truncate max-w-[120px]">
+                {isMobile ? "Móvil" : "Escritorio"}
+              </span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="bg-popover border-border shadow-xl">
+            <p className="text-xs">{ua || "User agent no disponible"}</p>
+          </TooltipContent>
+        </Tooltip>
       );
     },
   },

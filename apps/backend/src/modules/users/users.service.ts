@@ -1,6 +1,7 @@
 // app/modules/users/users.service.ts
 
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -50,6 +51,32 @@ export class UsersService {
     const users = await this.repo.findByTenantId(tenantId);
     if (!users) throw new NotFoundException('Users not found');
     return users;
+  }
+
+  async getToActivate(requesterId: string) {
+    const users = await this.repo.findToActivate(requesterId);
+    if (!users) throw new NotFoundException('Users not found');
+    return users;
+  }
+
+  async activateUserById(
+    id: string,
+    requesterId: string,
+  ): Promise<{ success: boolean; message: string }> {
+    const user = await this.repo.findById(id, requesterId);
+    if (user) throw new BadRequestException('User is already active');
+
+    try {
+      await this.repo.activateById(id);
+    } catch (error) {
+      this.logger.error('Error activating user:', error);
+      throw new InternalServerErrorException('Error activating user');
+    }
+
+    return {
+      success: true,
+      message: `Usuario activado exitosamente`,
+    };
   }
 
   async softRemoveUserByUsername(username: string, deletedByUserId: string) {

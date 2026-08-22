@@ -14,6 +14,8 @@ import { PermissionsService } from '../../../src/modules/permissions/permissions
 import { TenantsService } from '../../../src/modules/tenants/tenants.service';
 import { AlertsController } from '../../../src/modules/legacy/alerts/alerts.controller';
 import { AlertsService } from '../../../src/modules/legacy/alerts/alerts.service';
+import { TaskShiftsController } from '../../../src/modules/taskShifts/taskShifts.controller';
+import { TaskShiftsService } from '../../../src/modules/taskShifts/taskShifts.service';
 import { MockAuthGuard, MockPermissionsGuard } from './mock-guards';
 import {
   createAuthMock,
@@ -23,6 +25,7 @@ import {
   createPermissionsMock,
   createTenantsMock,
   createAlertsMock,
+  createTaskShiftsMock,
 } from './mock-factories';
 
 export interface ServiceOverrides {
@@ -33,6 +36,7 @@ export interface ServiceOverrides {
   permissions?: ReturnType<typeof createPermissionsMock>;
   tenants?: ReturnType<typeof createTenantsMock>;
   alerts?: ReturnType<typeof createAlertsMock>;
+  taskShifts?: ReturnType<typeof createTaskShiftsMock>;
 }
 
 export async function createTestApp(
@@ -45,6 +49,7 @@ export async function createTestApp(
   const permissionsMock = overrides?.permissions ?? createPermissionsMock();
   const tenantsMock = overrides?.tenants ?? createTenantsMock();
   const alertsMock = overrides?.alerts ?? createAlertsMock();
+  const taskShiftsMock = overrides?.taskShifts ?? createTaskShiftsMock();
 
   const module: TestingModule = await Test.createTestingModule({
     controllers: [
@@ -54,6 +59,7 @@ export async function createTestApp(
       SiembraController,
       PermissionsController,
       AlertsController,
+      TaskShiftsController,
     ],
     providers: [
       { provide: APP_GUARD, useClass: MockAuthGuard },
@@ -65,6 +71,7 @@ export async function createTestApp(
       { provide: PermissionsService, useValue: permissionsMock },
       { provide: TenantsService, useValue: tenantsMock },
       { provide: AlertsService, useValue: alertsMock },
+      { provide: TaskShiftsService, useValue: taskShiftsMock },
     ],
   }).compile();
 

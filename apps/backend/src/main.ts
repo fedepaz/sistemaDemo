@@ -12,7 +12,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const logger = app.get(Logger);
 
-  const port = Number(process.env.PORT);
+  const port = Number(process.env.PORT) || 3001;
 
   const isProd =
     configService.get<string>('config.environment') === 'production';

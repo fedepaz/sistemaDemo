@@ -20,20 +20,20 @@ export type UserProfileDto = z.infer<typeof UserProfileSchema>;
 export const UpdateUserProfileSchema = z.object({
   firstName: z
     .string()
-    .min(1)
+    .min(1, { message: "Es necesario al menos un nombre" })
     .max(50, { message: "Nombre de usuario máximo 50 caracteres" })
     .optional(),
   lastName: z
     .string()
-    .min(1)
+    .min(1, { message: "Es necesario al menos un apellido" })
     .max(50, { message: "Apellido máximo 50 caracteres" })
     .optional(),
-  passwordHash: z
-    .string()
-    .min(1, { message: "Contraseña es obligatoria, mínimo 4 caracteres" })
-    .max(12, { message: "Contraseña es obligatoria, máximo 12 caracteres" })
-    .optional(),
   email: z.string().email({ message: "Email no válido" }).optional(),
+  // NOTA: passwordHash está deliberadamente excluido de la actualización de
+  // perfil. Las contraseñas solo se cambian vía /auth/password
+  // (ChangePasswordSchema, aplica la política de 6-20 + complejidad) o se
+  // restauran por un admin vía /auth/restore. Permitir passwordHash aquí
+  // escribiría la contraseña en texto plano directamente en la columna.
 });
 
 export type UpdateUserProfileDto = z.infer<typeof UpdateUserProfileSchema>;

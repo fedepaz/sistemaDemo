@@ -28,6 +28,21 @@ export const userService = {
     return clientFetch<UserProfileDto[]>("users/allAdmin", { method: "GET" });
   },
 
+  fetchToActivate: () => {
+    return clientFetch<UserProfileDto[]>("users/to-activate", {
+      method: "GET",
+    });
+  },
+
+  activateUser: (userId: string) => {
+    return clientFetch<{ success: boolean; message: string }>(
+      `users/activate/${userId}`,
+      {
+        method: "PATCH",
+      },
+    );
+  },
+
   updateMe: (userUpdate: UpdateUserProfileDto) => {
     return clientFetch<UserProfileDto>(`users/me`, {
       method: "PATCH",

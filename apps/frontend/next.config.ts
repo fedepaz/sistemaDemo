@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
-  allowedDevOrigins: ["proplanta-sistema.ar"],
+  allowedDevOrigins: ['sistemademo.cabecitanegra.dpdns.org'],
   async headers() {
     return [
       {
@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
+    // TODO(research): These rewrites point /api/* at localhost:3001, but the
+    // API client (src/lib/api/client-fetch.ts) never calls /api/* — it hits
+    // NEXT_PUBLIC_API_URL directly. Works in the current local+tunnel setup;
+    // needs investigation before it can be cleaned up.
     return [
       {
         source: "/api/:path*",

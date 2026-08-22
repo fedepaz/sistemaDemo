@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuditLogService } from '../auditLog.service';
-import { AuditLogRepository } from '../repositories/auditLog.repository';
+import { AuditService } from '../audit.service';
 
 describe('AuditLogService', () => {
   let service: AuditLogService;
-  let auditLogRepository: {
+  let auditService: {
     findAll: jest.Mock;
     findAllByTenantName: jest.Mock;
     findAllByUserId: jest.Mock;
   };
 
   beforeEach(async () => {
-    auditLogRepository = {
+    auditService = {
       findAll: jest.fn(),
       findAllByTenantName: jest.fn(),
       findAllByUserId: jest.fn(),
@@ -20,7 +20,7 @@ describe('AuditLogService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuditLogService,
-        { provide: AuditLogRepository, useValue: auditLogRepository },
+        { provide: AuditService, useValue: auditService },
       ],
     }).compile();
 
@@ -34,24 +34,24 @@ describe('AuditLogService', () => {
   describe('getAllAuditLogs', () => {
     it('should return all audit logs', async () => {
       const logs = [{ id: '1', action: 'CREATE' }];
-      auditLogRepository.findAll.mockResolvedValue(logs);
+      auditService.findAll.mockResolvedValue(logs);
 
       const result = await service.getAllAuditLogs();
 
       expect(result).toEqual(logs);
-      expect(auditLogRepository.findAll).toHaveBeenCalled();
+      expect(auditService.findAll).toHaveBeenCalled();
     });
   });
 
   describe('getAllByTenantName', () => {
     it('should return paginated audit logs by tenant', async () => {
       const logs = [{ id: '1', action: 'CREATE' }];
-      auditLogRepository.findAllByTenantName.mockResolvedValue(logs);
+      auditService.findAllByTenantName.mockResolvedValue(logs);
 
       const result = await service.getAllByTenantName('Default', 1, 10);
 
       expect(result).toEqual(logs);
-      expect(auditLogRepository.findAllByTenantName).toHaveBeenCalledWith(
+      expect(auditService.findAllByTenantName).toHaveBeenCalledWith(
         'Default',
         0,
         10,
@@ -59,11 +59,11 @@ describe('AuditLogService', () => {
     });
 
     it('should use default pagination', async () => {
-      auditLogRepository.findAllByTenantName.mockResolvedValue([]);
+      auditService.findAllByTenantName.mockResolvedValue([]);
 
       await service.getAllByTenantName('Default');
 
-      expect(auditLogRepository.findAllByTenantName).toHaveBeenCalledWith(
+      expect(auditService.findAllByTenantName).toHaveBeenCalledWith(
         'Default',
         0,
         50,
@@ -74,12 +74,16 @@ describe('AuditLogService', () => {
   describe('getAllByUserId', () => {
     it('should return audit logs by user id', async () => {
       const logs = [{ id: '1', userId: 'user-1' }];
-      auditLogRepository.findAllByUserId.mockResolvedValue(logs);
+      auditService.findAllByUserId.mockResolvedValue(logs);
 
       const result = await service.getAllByUserId('user-1');
 
       expect(result).toEqual(logs);
-      expect(auditLogRepository.findAllByUserId).toHaveBeenCalledWith('user-1');
+      expect(auditService.findAllByUserId).toHaveBeenCalledWith(
+        'user-1',
+        0,
+        50,
+      );
     });
   });
 });

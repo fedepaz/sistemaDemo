@@ -8,6 +8,7 @@ import { AuditLogDto } from "@vivero/shared";
 import { useAuditLogs } from "../hooks/auditLogHooks";
 import { useState } from "react";
 import { AuditLogForm } from "./auditLog-form";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export function AuditLogDataTable() {
   const { data: auditLogs } = useAuditLogs();
@@ -21,30 +22,32 @@ export function AuditLogDataTable() {
   };
 
   return (
-    <>
-      <DataTable
-        columns={auditLogColumns}
-        data={auditLogs}
-        title="Auditoría"
-        description="Log de auditoría del sistema"
-        tableName="audit_logs"
-        totalCount={auditLogs.length}
-        onView={handleViewAuditLog}
-        exportColumns={auditLogExportColumns}
-      />
-      {selectedAuditLog && (
-        <SlideOverForm
-          formId={`view-${selectedAuditLog.id}`}
-          open={slideOverOpen}
-          onOpenChange={setSlideOverOpen}
-          title={`Log`}
-          description={`Detalles del log de auditoría: ${selectedAuditLog.id}`}
-          onCancel={() => setSlideOverOpen(false)}
-          mode="view"
-        >
-          <AuditLogForm selectedAuditLog={selectedAuditLog} />
-        </SlideOverForm>
-      )}
-    </>
+    <TooltipProvider>
+      <>
+        <DataTable
+          columns={auditLogColumns}
+          data={auditLogs}
+          title="Auditoría"
+          description="Log de auditoría del sistema"
+          tableName="audit_logs"
+          totalCount={auditLogs.length}
+          onView={handleViewAuditLog}
+          exportColumns={auditLogExportColumns}
+        />
+        {selectedAuditLog && (
+          <SlideOverForm
+            formId={`view-${selectedAuditLog.id}`}
+            open={slideOverOpen}
+            onOpenChange={setSlideOverOpen}
+            title={`Log`}
+            description={`Detalles del log de auditoría: ${selectedAuditLog.id}`}
+            onCancel={() => setSlideOverOpen(false)}
+            mode="view"
+          >
+            <AuditLogForm selectedAuditLog={selectedAuditLog} />
+          </SlideOverForm>
+        )}
+      </>
+    </TooltipProvider>
   );
 }

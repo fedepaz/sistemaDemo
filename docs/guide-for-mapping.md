@@ -1,5 +1,5 @@
 Legacy (MySQL/MariaDB) to Prisma Mapping Guide
-This table ensures data integrity and storage optimization for your 200k+ records migration.
+This table ensures data integrity and storage optimization when migrating legacy tables.
 Legacy SQL Type Prisma Type Native Attribute (Recommended) TypeScript Type
 char(X) String @db.Char(X) string
 varchar(X) String @db.VarChar(X) string

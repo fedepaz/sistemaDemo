@@ -47,9 +47,9 @@ export function SiembraEditForm({
   selectedExtendido,
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
-  const depositos = depositosQuery.filter((d) => d.camara === "");
+  const depositos = depositosQuery.filter((d) => d.camara !== "");
 
-  const originalStock = selectedExtendido.con;
+  const originalStock = parseInt(selectedExtendido.con);
   const watchedStockIni = form.watch("stock_ini");
   const watchedBaja = form.watch("baja");
 
@@ -68,11 +68,11 @@ export function SiembraEditForm({
       <form
         id="extendido-form"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
+        className="flex flex-col gap-1 md:gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* 🚀 PRODUCT HEADER (Context) */}
         <div className="space-y-3 md:space-y-4 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
+          <div className="flex items-center justify-between bg-primary/5 p-2 md:p-3 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-3 md:gap-4">
               <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Package className="h-5 w-5 md:h-6 md:w-6" />

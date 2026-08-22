@@ -1,8 +1,13 @@
-// src/components/layout/user-menu.tsx
+// src/components/user-profile/user-menu.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "../ui/dialog";
 import { User } from "lucide-react";
 import { UserProfileInfo } from "./user-info";
 import { UserProfileEdit } from "./user-edit";

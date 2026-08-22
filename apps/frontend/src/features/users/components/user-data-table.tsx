@@ -6,57 +6,46 @@ import {
   useDeleteUser,
   useUpdateUser,
   useUsers,
-  useRestorePassword,
+  useUsersToActivate,
 } from "../hooks/usersHooks";
 import { usePermission } from "@/hooks/usePermission";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { Button } from "@/components/ui/button";
-import { Loader2, KeyRound } from "lucide-react";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { userColumns, userExportColumns } from "./columns";
 import { UserEditForm } from "./user-edit-form";
 import { useEffect, useState } from "react";
 import {
-  RegisterAuthDto,
-  RegisterAuthSchema,
   UpdateUserProfileDto,
   UpdateUserProfileSchema,
   UserProfileDto,
 } from "@vivero/shared";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserCreateForm } from "./user-create-form";
-import { useRegister } from "../hooks/useRegister";
+import { RestorePasswordButton } from "./restore-password-button";
+import { ActivateUserButton } from "./activate-user-button";
+
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { UserCheck, UserPlus } from "lucide-react";
 
 export function UsersDataTable() {
   const { data: users = [] } = useUsers();
+  const { data: usersToActivate = [] } = useUsersToActivate();
 
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfileDto>();
+  const [showActivate, setShowActivate] = useState(false);
 
   const { mutateAsync: updateUser, isPending: isUpdatingUser } =
     useUpdateUser();
   const { mutateAsync: deleteUser } = useDeleteUser();
 
-  const { mutateAsync: createUser, isPending: isCreatingUser } = useRegister();
-  const { mutateAsync: restorePassword, isPending: isRestoring } =
-    useRestorePassword();
-  const { canUpdate } = usePermission("users");
+  const { canUpdate, canCreate } = usePermission("users");
   const { userProfile: currentUser } = useAuthContext();
 
   const formEditUser = useForm<UpdateUserProfileDto>({
     resolver: zodResolver(UpdateUserProfileSchema),
-  });
-
-  const formCreateUser = useForm<RegisterAuthDto>({
-    resolver: zodResolver(RegisterAuthSchema),
-    defaultValues: {
-      username: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-    },
   });
 
   useEffect(() => {
@@ -79,11 +68,6 @@ export function UsersDataTable() {
     setSlideOverOpen(true);
   };
 
-  const handleNewUser = () => {
-    setSelectedUser(undefined);
-    setSlideOverOpen(true);
-  };
-
   const handleDelete = async (row: UserProfileDto) => {
     if (row.username) {
       await deleteUser(row.username);
@@ -103,90 +87,100 @@ export function UsersDataTable() {
     }
   };
 
-  const handleCreate = async (formData: RegisterAuthDto) => {
-    try {
-      await createUser(formData);
-    } catch {}
-
-    if (!isCreatingUser) setSlideOverOpen(false);
-  };
-
-  const handleRestorePassword = async () => {
-    if (!selectedUser) return;
-    try {
-      await restorePassword({ userId: selectedUser.id });
-    } catch {}
-
-    if (!isRestoring) setSlideOverOpen(false);
-  };
-
   return (
     <>
-      <DataTable
-        columns={userColumns}
-        data={users}
-        title="Usuarios"
-        description="Gestión de los usuarios del sistema"
-        tableName="users"
-        totalCount={users.length}
-        onCreate={handleNewUser}
-        createLabel="Nuevo Usuario"
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        exportColumns={userExportColumns}
-      />
-      {slideOverOpen && (
+      {!showActivate ? (
+        <DataTable
+          columns={userColumns}
+          data={users}
+          title="Usuarios"
+          description="Gestión de los usuarios del sistema"
+          tableName="users"
+          totalCount={users.length}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          exportColumns={userExportColumns}
+          toolbarContent={
+            canCreate && usersToActivate.length ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs"
+                onClick={() => setShowActivate(true)}
+                aria-label={`Activar usuarios (${usersToActivate.length})`}
+              >
+                <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+                Activar usuarios
+                <Badge
+                  variant="destructive"
+                  className="ml-1.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold justify-center rounded-full"
+                >
+                  {usersToActivate.length}
+                </Badge>
+              </Button>
+            ) : null
+          }
+        />
+      ) : null}
+      {showActivate && canCreate ? (
+        <DataTable
+          columns={userColumns}
+          data={usersToActivate}
+          title="Usuarios pendientes de activación"
+          description="Gestión a los usuarios que tienen una cuenta pero no han sido activadas."
+          tableName="users"
+          onEdit={handleEdit}
+          totalCount={usersToActivate.length}
+          exportColumns={userExportColumns}
+          toolbarContent={
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setShowActivate(false)}
+              aria-label="Usuarios Activos"
+            >
+              <UserCheck className="mr-1.5 h-3.5 w-3.5" />
+              Usuarios Activos
+            </Button>
+          }
+        />
+      ) : null}
+
+      {selectedUser && (
         <SlideOverForm
-          formId={selectedUser ? `edit-${selectedUser.username}` : "create"}
+          formId={`edit-${selectedUser.username}`}
           open={slideOverOpen}
           onOpenChange={setSlideOverOpen}
-          title={selectedUser ? `Editar usuario` : "Crear nuevo usuario"}
-          description={
-            selectedUser
-              ? `Edita los detalles del usuario ${selectedUser.username}.`
-              : "Rellena los campos para crear un nuevo usuario."
-          }
+          title="Editar usuario"
+          description={`Edita los detalles del usuario ${selectedUser.username}.`}
           onCancel={() => setSlideOverOpen(false)}
-          saveLabel={selectedUser ? "Actualizar Usuario" : "Crear Usuario"}
-          form={selectedUser ? formEditUser : formCreateUser}
+          saveLabel="Actualizar Usuario"
+          form={formEditUser}
         >
           <div className="space-y-2">
-            {selectedUser ? (
-              <UserEditForm
-                form={formEditUser}
-                onSubmit={handleUpdate}
-                onCancel={() => setSlideOverOpen(false)}
-                formId={
-                  selectedUser ? `edit-${selectedUser.username}` : "create"
-                }
-              />
-            ) : (
-              <UserCreateForm
-                form={formCreateUser}
-                onSubmit={handleCreate}
-                onCancel={() => setSlideOverOpen(false)}
-                formId="create"
-              />
+            <UserEditForm
+              form={formEditUser}
+              onSubmit={handleUpdate}
+              onCancel={() => setSlideOverOpen(false)}
+              formId={`edit-${selectedUser.username}`}
+            />
+            {selectedUser.id !== currentUser?.id && (
+              <div className="pt-4 border-t">
+                {showActivate ? (
+                  <ActivateUserButton
+                    selectedUser={selectedUser}
+                    onSuccess={() => setSlideOverOpen(false)}
+                  />
+                ) : null}
+                {!showActivate && canUpdate ? (
+                  <RestorePasswordButton
+                    selectedUser={selectedUser}
+                    onSuccess={() => setSlideOverOpen(false)}
+                  />
+                ) : null}
+              </div>
             )}
-            {selectedUser &&
-              canUpdate &&
-              selectedUser.id !== currentUser?.id && (
-                <div className="pt-4 border-t">
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={handleRestorePassword}
-                    disabled={isRestoring}
-                  >
-                    {isRestoring ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <KeyRound className="mr-2 h-4 w-4" />
-                    )}
-                    Restaurar contraseña
-                  </Button>
-                </div>
-              )}
           </div>
         </SlideOverForm>
       )}

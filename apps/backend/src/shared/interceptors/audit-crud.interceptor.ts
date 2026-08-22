@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // src/shared/interceptors/audit-crud.interceptor.ts
 import {
   Injectable,
@@ -13,9 +9,11 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { PrismaService } from '../../infra/prisma/prisma.service';
 import { Request } from 'express';
 import { AuditActionType, EntityType } from '../../generated/prisma/enums';
+import { AuditService } from '../../modules/auditLog/audit.service';
+import { AuditEventEmitter } from '../../modules/auditLog/events/audit-event.emitter';
+import { AuditCrudEvent } from '../../modules/auditLog/events/audit.events';
 
 const METHOD_TO_ACTION: Record<string, AuditActionType> = {
   POST: AuditActionType.CREATE,
@@ -24,31 +22,29 @@ const METHOD_TO_ACTION: Record<string, AuditActionType> = {
   DELETE: AuditActionType.DELETE,
 };
 
-// Map URL path segments to EntityType
-const PATH_TO_ENTITY: Record<string, EntityType> = {
-  users: EntityType.USER,
-  tenants: EntityType.TENANT,
-  roles: EntityType.ROLE,
-  locales: EntityType.LOCALE,
-  messages: EntityType.MESSAGE,
-  preferences: EntityType.USER_PREFERENCE,
-};
-
 @Injectable()
 export class AuditCrudInterceptor implements NestInterceptor {
   private readonly logger = new Logger(AuditCrudInterceptor.name);
 
   constructor(
     @Optional()
-    private readonly prisma?: PrismaService,
+    private readonly auditService?: AuditService,
+    @Optional()
+    private readonly auditEventEmitter?: AuditEventEmitter,
   ) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest<Request>();
     const action = METHOD_TO_ACTION[request.method];
 
-    // Only audit C/U/D — let reads pass through untouched
     if (!action) {
+      return next.handle();
+    }
+
+    // Auth endpoints are audited by AuthService via dedicated auth/security
+    // events (LOGIN, LOGOUT, LOGIN_FAILED, PASSWORD_CHANGE). Auditing them as
+    // generic CRUD here produces entityType UNKNOWN noise.
+    if (request.url.startsWith('/auth')) {
       return next.handle();
     }
 
@@ -57,27 +53,17 @@ export class AuditCrudInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap({
         next: (responseBody) => {
-          this.logger.debug(
-            {
-              user: request.user,
-              requestId: (request as any).requestId,
-              // Redact header for logs
-              headers: request.headers.authorization ? '[REDACTED]' : undefined,
-            },
-            'Auditing CRUD',
-          );
-          // Fire-and-forget — never block the response
           this.saveAuditLog({
             request,
             action,
             responseBody,
             durationMs: Date.now() - startedAt,
-          }).catch((err) =>
+          }).catch((err: unknown) =>
             this.logger.error({ err }, 'Failed to save CRUD audit log'),
           );
         },
         error: () => {
-          // Errors are already handled by GlobalExceptionFilter — skip
+          // Errors are already handled by GlobalExceptionFilter
         },
       }),
     );
@@ -89,105 +75,112 @@ export class AuditCrudInterceptor implements NestInterceptor {
     responseBody,
     durationMs,
   }: {
-    request: any;
+    request: Request;
     action: AuditActionType;
-    responseBody: any;
+    responseBody: unknown;
     durationMs: number;
   }): Promise<void> {
-    if (!this.prisma) {
-      this.logger.warn('No PrismaService, skipping CRUD audit log');
+    if (!this.auditService) {
+      this.logger.warn('No AuditService, skipping CRUD audit log');
       return;
     }
 
-    const userId = request?.user?.id ?? 'anonymous';
-    const tenantId = request?.user?.tenantId ?? 'unknown';
+    const userId =
+      (request as unknown as { user?: { id?: string } }).user?.id ??
+      'anonymous';
+    const tenantId =
+      (request as unknown as { user?: { tenantId?: string } }).user?.tenantId ??
+      'unknown';
     const ip = this.getClientIp(request);
     const userAgent = request.headers?.['user-agent'] ?? 'unknown';
-
-    const entityType = this.resolveEntityType(request.url as string);
+    const entityType = this.resolveEntityType(request.url);
     const entityId = this.resolveEntityId(request, responseBody);
-    const requestId = request?.requestId ?? 'unknown';
+    const requestId =
+      (request as unknown as { requestId?: string }).requestId ?? 'unknown';
 
-    // Sanitize body before storing — strip sensitive fields
     const sanitizedBody = this.sanitizeBody(request.body);
 
-    const changes = {
-      requestId,
-      endpoint: request.url,
-      method: request.method,
-      params: request.params,
-      query: request.query,
-      body: sanitizedBody,
-      // Capture the id(s) affected from the response when available
-      affected: this.extractAffected(responseBody),
-      durationMs,
-      timestamp: new Date().toISOString(),
+    const event: AuditCrudEvent = {
+      tenantId,
+      userId,
+      action: action as 'CREATE' | 'UPDATE' | 'DELETE',
+      entityType,
+      entityId,
+      timestamp: new Date(),
+      ipAddress: ip,
+      userAgent,
+      changes: {
+        requestId,
+        endpoint: request.url,
+        method: request.method,
+        params: request.params,
+        query: request.query,
+        body: sanitizedBody as Record<string, unknown>,
+        affected: this.extractAffected(responseBody),
+        durationMs,
+      },
     };
 
-    try {
-      await this.prisma.auditLog.create({
-        data: {
-          tenantId,
-          userId,
-          action,
-          entityType,
-          entityId,
-          changes: changes as any,
-          ipAddress: ip,
-          userAgent,
-        },
-      });
-
-      this.logger.debug(
-        `CRUD AUDIT | ${action} ${entityType} (${entityId}) | ` +
-          `User: ${userId} | ${durationMs}ms`,
-      );
-    } catch (err) {
-      this.logger.error({ err }, 'Prisma error saving CRUD audit log');
+    if (this.auditEventEmitter) {
+      this.auditEventEmitter.emitCrud(event);
+    } else {
+      await this.auditService.logEvent(event);
     }
   }
 
-  // Derive EntityType from the URL path, e.g. /api/v1/users/123 → USER
   private resolveEntityType(url: string): EntityType {
     const segments = url.split('/').filter(Boolean);
     for (const segment of segments) {
       const clean = segment.split('?')[0].toLowerCase();
-      if (PATH_TO_ENTITY[clean]) return PATH_TO_ENTITY[clean];
+      if (clean === 'auditlog') return EntityType.AUDIT_LOG;
+      const singular = clean.endsWith('s') ? clean.slice(0, -1) : clean;
+      const enumKey = singular.toUpperCase();
+      if (Object.values(EntityType).includes(enumKey as EntityType)) {
+        return enumKey as EntityType;
+      }
     }
-    return EntityType.USER; // fallback — adjust to your needs
+    return EntityType.UNKNOWN;
   }
 
-  // Best-effort entity ID: prefer response.id, then route param, then 'unknown'
-  private resolveEntityId(request: any, responseBody: any): string {
+  private resolveEntityId(request: Request, responseBody: unknown): string {
+    const body = responseBody as Record<string, unknown> | undefined;
     return (
-      responseBody?.id?.toString() ??
-      responseBody?.data?.id?.toString() ??
+      body?.id?.toString() ??
+      (body?.data as Record<string, unknown>)?.id?.toString() ??
       request.params?.id?.toString() ??
       this.resolveEntityIdFromBody(request.body)
     );
   }
-  private resolveEntityIdFromBody(body: any): string {
-    if (!body) return 'unknown';
 
-    // Explicit id field
-    if (body.id) return body.id.toString();
+  private resolveEntityIdFromBody(body: unknown): string {
+    if (!body || typeof body !== 'object') return 'unknown';
 
-    // Composite keys — build a readable compound id
+    const record = body as Record<string, unknown>;
+    if (record.id !== undefined && typeof record.id === 'string')
+      return record.id;
+
     const compositeParts: string[] = [];
     for (const key of ['partida', 'ano', 'indice', 'userId', 'tenantId']) {
-      if (body[key] !== undefined) compositeParts.push(`${key}:${body[key]}`);
+      if (record[key] !== undefined && typeof record[key] === 'string')
+        compositeParts.push(`${key}:${record[key]}`);
     }
     if (compositeParts.length) return compositeParts.join('|');
 
     return 'unknown';
   }
 
-  // Pull out ids/counts from the response for the audit record
-  private extractAffected(body: any): unknown {
+  private extractAffected(
+    body: unknown,
+  ): { id: string } | { count: number } | null {
     if (!body) return null;
-    if (body.id) return { id: body.id };
-    if (body.data?.id) return { id: body.data.id };
-    if (body.count) return { count: body.count };
+    const record = body as Record<string, unknown>;
+    if (record.id !== undefined && typeof record.id === 'string')
+      return { id: record.id };
+    const data = record.data as Record<string, unknown> | undefined;
+    if (data?.id !== undefined && typeof data.id === 'string')
+      return { id: data.id };
+    if (record.count !== undefined && typeof record.count === 'number')
+      return { count: record.count };
     return null;
   }
 
@@ -197,33 +190,43 @@ export class AuditCrudInterceptor implements NestInterceptor {
     const REDACTED_KEYS = new Set([
       'password',
       'passwordhash',
+      'currentpassword',
+      'newpassword',
       'secret',
       'token',
-      'accessToken',
-      'refreshToken',
+      'accesstoken',
+      'refreshtoken',
       'authorization',
-      'apiKey',
+      'apikey',
     ]);
 
-    return Object.fromEntries(
-      Object.entries(body as Record<string, unknown>).map(([k, v]) => [
-        k,
-        REDACTED_KEYS.has(k.toLowerCase()) ? '[REDACTED]' : v,
-      ]),
-    );
+    const sanitize = (value: unknown): unknown => {
+      if (Array.isArray(value)) return value.map(sanitize);
+      if (value && typeof value === 'object') {
+        return Object.fromEntries(
+          Object.entries(value as Record<string, unknown>).map(([k, v]) => [
+            k,
+            REDACTED_KEYS.has(k.toLowerCase()) ? '[REDACTED]' : sanitize(v),
+          ]),
+        );
+      }
+      return value;
+    };
+
+    return sanitize(body);
   }
 
-  private getClientIp(request: any): string {
+  private getClientIp(request: Request): string {
     const forwarded = request.headers?.['x-forwarded-for'];
     if (forwarded) {
       return Array.isArray(forwarded)
         ? forwarded[0]
         : forwarded.split(',')[0].trim();
     }
-    return (
-      request.socket?.remoteAddress ??
-      request.connection?.remoteAddress ??
-      'unknown'
-    );
+    const socket = request.socket as { remoteAddress?: string } | undefined;
+    const connection = (
+      request as unknown as { connection?: { remoteAddress?: string } }
+    ).connection;
+    return socket?.remoteAddress ?? connection?.remoteAddress ?? 'unknown';
   }
 }

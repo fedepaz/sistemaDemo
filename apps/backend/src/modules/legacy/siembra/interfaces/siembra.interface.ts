@@ -6,13 +6,11 @@ export interface LegacySiembra extends RowDataPacket {
   partida: number;
   ano: number;
   indice: number;
-
+  planta: string;
+  nombre: string;
   hai: string;
-  con: number;
-  espvar: string;
-  especieNombre: string;
   injerto: string;
-  contenedor: string;
+  con: string;
 
   f_siem: string;
   f_siembra: string;

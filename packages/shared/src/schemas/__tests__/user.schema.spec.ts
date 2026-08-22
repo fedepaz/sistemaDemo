@@ -71,4 +71,13 @@ describe('UpdateUserProfileSchema', () => {
       UpdateUserProfileSchema.parse({ email: 'invalid-email' })
     ).toThrow();
   });
+
+  it('does not allow setting passwordHash via profile update', () => {
+    const result = UpdateUserProfileSchema.parse({
+      firstName: 'John',
+      passwordHash: 'secret123',
+    });
+    expect(result).toEqual({ firstName: 'John' });
+    expect('passwordHash' in result).toBe(false);
+  });
 });

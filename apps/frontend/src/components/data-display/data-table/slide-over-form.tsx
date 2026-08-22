@@ -77,7 +77,9 @@ export function SlideOverForm({
         <SheetHeader className="px-6 py-4 border-b shrink-0">
           <SheetTitle className="text-xl">{title}</SheetTitle>
           {description ? (
-            <SheetDescription className="text-xs">{description}</SheetDescription>
+            <SheetDescription className="text-xs">
+              {description}
+            </SheetDescription>
           ) : (
             <SheetDescription className="sr-only">
               Formulario para {title}
@@ -93,7 +95,11 @@ export function SlideOverForm({
         </div>
         <SheetFooter className="px-6 py-3 border-t shrink-0">
           {isViewMode ? (
-            <Button onClick={handleCancel} className="w-full h-9 text-sm" variant="outline">
+            <Button
+              onClick={handleCancel}
+              className="w-full h-9 text-sm"
+              variant="outline"
+            >
               {getActionLabel()}
             </Button>
           ) : (

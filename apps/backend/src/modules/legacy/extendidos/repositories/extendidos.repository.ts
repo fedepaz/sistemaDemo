@@ -79,14 +79,16 @@ export class ExtendidosRepository {
   async findExtendidosEnCamara(): Promise<LegacyExtendido[]> {
     const sql = `
    SELECT 
-      p.partida, p.ano, p.indice, p.hai, p.con,
-      p.espvar, e.nombre AS especieNombre,
+      p.partida, p.ano, p.indice, 
+      CONCAT(p.espvar,p.contenedor) AS planta, articulo.nombre,
+      p.hai, p.con,
       p.injerto, p.contenedor, p.cg, p.f_siembra,p.f_siem,
       p1.camara AS diasCamara,
       DATE_ADD(p.f_siembra, INTERVAL p1.camara DAY) AS fechaEgresoCamara,
       p.extendido,
       p2.ubicacion, p2.stock_ini, p2.detalle, p2.baja
     FROM partidas p
+    LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)
     LEFT JOIN partidas1 p1 
       ON p.ano = p1.ano AND p.partida = p1.partida AND p.indice = p1.indice
     LEFT JOIN partidas2 p2 
