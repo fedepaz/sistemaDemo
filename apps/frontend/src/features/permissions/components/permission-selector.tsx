@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 
-import { UserAvatar } from "@/components/common/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { useTables } from "../hooks/permsHooks";
 import { useCallback, useState, useMemo } from "react";

@@ -2,11 +2,13 @@
 "use client";
 
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { LoadingSpinner } from "./loading-spinner";
 import { DatabaseUnavailablePage } from "./database-unavailable";
 import { PendingPermissionsPage } from "./pending-permissions";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { RootDashboardSkeleton } from "@/features/dashboard";
+import { AuthLayoutSkeleton } from "./skeleton/auth-layout-skeleton";
+import { useHydration } from "@/hooks/useHydration";
 
 interface DashboardProtectedLayoutProps {
   children: React.ReactNode;
@@ -16,6 +18,7 @@ export function DashboardProtectedLayout({
   children,
 }: DashboardProtectedLayoutProps) {
   const router = useRouter();
+  const mounted = useHydration();
 
   const {
     isSignedIn,
@@ -27,22 +30,21 @@ export function DashboardProtectedLayout({
   } = useAuthContext();
 
   useEffect(() => {
-    if (!authLoading && !isSignedIn) {
+    if (mounted && !authLoading && !isSignedIn) {
       router.replace("/login");
     }
-  }, [authLoading, isSignedIn, router]);
+  }, [authLoading, isSignedIn, router, mounted]);
 
-  useEffect(() => {
-    if (isSignedIn && userProfile) {
-    }
-  }, [isSignedIn, userProfile]);
-
-  if (profileLoading || authLoading) {
-    return <LoadingSpinner />;
+  if (!mounted || authLoading) {
+    return <AuthLayoutSkeleton />;
   }
 
   if (!isSignedIn) {
-    return <LoadingSpinner />;
+    return <AuthLayoutSkeleton />;
+  }
+
+  if (profileLoading) {
+    return <RootDashboardSkeleton />;
   }
 
   if (isDatabaseUnavailable) {
@@ -54,7 +56,7 @@ export function DashboardProtectedLayout({
   }
 
   if (!userProfile) {
-    return <LoadingSpinner />;
+    return <RootDashboardSkeleton />;
   }
   return <>{children}</>;
 }

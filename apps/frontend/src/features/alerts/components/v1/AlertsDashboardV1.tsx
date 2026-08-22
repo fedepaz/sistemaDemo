@@ -1,7 +1,7 @@
 // src/features/alerts/components/v1/AlertsDashboardV1.tsx
 "use client";
 
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import { AlertTriangle } from "lucide-react";
 import { AlertSummaryCards } from "../shared/alert-summary-cards";
 import { AlertsDataTable } from "./alerts-data-table";

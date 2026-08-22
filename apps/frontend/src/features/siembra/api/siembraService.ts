@@ -9,7 +9,7 @@ export const siembraService = {
   },
 
   asignarUbicacionSiembra: (data: AsignarUbiSiembraDto) => {
-    return clientFetch<void>("l-siembra/asignar-ubicacion-siembra", {
+    return clientFetch<void>("l-partidas/asignar-siembra", {
       method: "POST",
       body: JSON.stringify(data),
     });

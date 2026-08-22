@@ -4,7 +4,7 @@
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { ExportColumn } from "@/lib/export/types";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import type { AlertBaseDto, CreateAlertCommentDto } from "@vivero/shared";
 import { AlertsViewForm } from "./alerts-view-form";
@@ -71,25 +71,25 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
   const resolvedAlertType: AlertType =
     ALERT_TYPE_SLUG_TO_ENUM[alertType] ?? (alertType as AlertType);
 
-  const handleAlertView = (row: TData) => {
+  const handleAlertView = useCallback((row: TData) => {
     setSelectedAlert(row);
     setMode("view");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleAlertComment = (row: TData) => {
+  const handleAlertComment = useCallback((row: TData) => {
     setSelectedAlert(row);
     setMode("edit");
     form.reset({ content: "" });
     setSlideOpen(true);
-  };
+  }, [form]);
 
-  const handleOpenChange = (open: boolean) => {
+  const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
     if (!open) {
       setSelectedAlert(null);
     }
-  };
+  }, []);
 
   return (
     <>
@@ -114,6 +114,11 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
           mode={mode}
           form={form}
           saveLabel="Agregar Comentario"
+          confirm={{
+            title: "Agregar comentario",
+            description: "¿Deseas agregar este comentario a la alerta?",
+            label: "Agregar Comentario",
+          }}
         >
           <div className="space-y-2">
             {mode === "view" ? (

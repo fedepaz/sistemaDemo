@@ -29,16 +29,11 @@ function ExtendidoList({
   }
 
   return (
-    <>
-      <ExtendidoDataTable
-        partidas={extendidos || []}
-        onCamaraChange={onCamaraChange}
-        currentCamaraId={camaraId}
-      />
-
-      {/* Visual indicator for background fetching */}
-      {isFetching && <DataTableSkeleton columnCount={partidaColumns.length} />}
-    </>
+    <ExtendidoDataTable
+      partidas={extendidos || []}
+      onCamaraChange={onCamaraChange}
+      currentCamaraId={camaraId}
+    />
   );
 }
 

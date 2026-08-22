@@ -45,6 +45,7 @@ pnpm --filter backend db:studio         # Open Prisma Studio
 2. **Conventional Commits**: Enforced by commitlint (feat, fix, docs, etc.)
 3. **TDD**: Tests before feature code
 4. **Feature-based frontend**: Each feature in `src/features/` with api/, hooks/, components/
+5. **Loading strategy:** See `docs/agents/loading-strategy.md` for skeleton and loading state patterns
 
 ## Verification Order
 

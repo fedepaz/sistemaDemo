@@ -2,7 +2,7 @@
 
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PartidasRepository } from './repositories/partidas.repository';
-import { AsignarUbicacionDto } from '@vivero/shared';
+import { AsignarUbiExtendidoDto, AsignarUbiSiembraDto } from '@vivero/shared';
 
 @Injectable()
 export class PartidasService {
@@ -14,7 +14,7 @@ export class PartidasService {
     return partidas;
   }
 
-  async asignarUbicacion(data: AsignarUbicacionDto): Promise<void> {
+  async asignarExtendido(data: AsignarUbiExtendidoDto): Promise<void> {
     if (data.edita === 'N') {
       throw new BadRequestException('La partida no se puede editar');
     }
@@ -40,6 +40,28 @@ export class PartidasService {
       extendido: data.extendido,
     };
 
-    await this.partidasRepository.asignarUbicacion(repoData);
+    await this.partidasRepository.asignarExtendido(repoData);
+  }
+
+  async asignarSiembra(data: AsignarUbiSiembraDto): Promise<void> {
+    if (data.edita === 'N') {
+      throw new BadRequestException('La partida no se puede editar');
+    }
+
+    if (!data.cg || data.cg === 0) {
+      throw new BadRequestException('Debe seleccionar una ubicación válida');
+    }
+
+    const repoData = {
+      partida: data.partida,
+      ano: data.ano,
+      indice: data.indice,
+      cg: data.cg,
+      cantidaNroCont: data.cantidaNroCont,
+      germin: data.germin,
+      detalle: data.detalle,
+    };
+
+    await this.partidasRepository.asignarSiembra(repoData);
   }
 }

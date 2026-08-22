@@ -54,6 +54,20 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `DataTableFacetedFilter` | [ ] | [ ] | [ ] | [ ] |
 | `DataTableSkeleton` | [ ] | [ ] | [ ] | [ ] |
 | `DataTable` | [x] | [x] | [x] | [x] |
+
+### DataTable Memoization
+
+`DataTable` is wrapped in `React.memo` — it skips re-renders when props
+haven't changed. Feature data-tables must memoize callbacks with
+`useCallback` to take advantage of this:
+
+- `onView` — wrap with `useCallback`
+- `onEdit` — wrap with `useCallback`
+- `handleOpenChange` — wrap with `useCallback`
+- `toolbarContent` — consider `useMemo` if complex
+
+Without memoized callbacks, `React.memo` cannot prevent re-renders.
+
 | `SortableHeader` | [ ] | [ ] | [ ] | [ ] |
 | `StatusBadge` | [ ] | [ ] | [ ] | [ ] |
 | `FeatureCardSkeleton` | [ ] | [ ] | [ ] | [ ] |

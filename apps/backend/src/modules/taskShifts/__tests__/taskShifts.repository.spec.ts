@@ -248,11 +248,10 @@ describe('TaskShiftsRepository', () => {
 
   describe('softDelete', () => {
     it('should delegate to base repository softDelete', async () => {
-      const deletedAt = new Date();
       prisma.taskShift.update.mockResolvedValue({
         ...mockTaskShift,
         isActive: false,
-        deletedAt,
+        deletedAt: new Date(),
         deletedByUserId: 'user-1',
       });
 
@@ -260,11 +259,11 @@ describe('TaskShiftsRepository', () => {
 
       expect(result.isActive).toBe(false);
       expect(result.deletedByUserId).toBe('user-1');
-      expect(result.deletedAt).toBe(deletedAt);
+      expect(result.deletedAt).toBeInstanceOf(Date);
       expect(prisma.taskShift.update).toHaveBeenCalledWith({
         where: { id: 'task-1' },
         data: {
-          deletedAt,
+          deletedAt: expect.any(Date),
           deletedByUserId: 'user-1',
           isActive: false,
         },

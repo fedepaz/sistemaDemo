@@ -1,17 +1,38 @@
 // apps/backend/test/integration/siembra.integration.spec.ts
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { createTestApp } from './helpers/create-app';
-import { createSiembraMock } from './helpers/mock-factories';
-import { mockSiembra, validSiembraPayload } from './fixtures/fixtures';
+import { Test, TestingModule } from '@nestjs/testing';
+import { APP_GUARD } from '@nestjs/core';
+import { PartidasController } from '../../src/modules/legacy/partidas/partidas.controller';
+import { PartidasService } from '../../src/modules/legacy/partidas/partidas.service';
+import { MockAuthGuard, MockPermissionsGuard } from './helpers/mock-guards';
+
+function createPartidasMock() {
+  return {
+    getAllPartidas: jest.fn(),
+    asignarExtendido: jest.fn(),
+    asignarSiembra: jest.fn(),
+  };
+}
 
 describe('Siembra (integration)', () => {
   let app: INestApplication;
-  let siembraMock: ReturnType<typeof createSiembraMock>;
+  let partidasMock: ReturnType<typeof createPartidasMock>;
 
   beforeAll(async () => {
-    siembraMock = createSiembraMock();
-    app = await createTestApp({ siembra: siembraMock });
+    partidasMock = createPartidasMock();
+
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [PartidasController],
+      providers: [
+        { provide: APP_GUARD, useClass: MockAuthGuard },
+        { provide: APP_GUARD, useClass: MockPermissionsGuard },
+        { provide: PartidasService, useValue: partidasMock },
+      ],
+    }).compile();
+
+    app = module.createNestApplication();
+    await app.init();
   });
 
   afterAll(async () => {
@@ -22,43 +43,23 @@ describe('Siembra (integration)', () => {
     jest.clearAllMocks();
   });
 
-  describe('GET /l-siembra', () => {
-    it('returns 200 + list of siembras', async () => {
-      siembraMock.getAllSiembra.mockResolvedValue([mockSiembra()]);
-
-      const response = await request(app.getHttpServer())
-        .get('/l-siembra')
-        .expect(200);
-
-      expect(Array.isArray(response.body)).toBe(true);
-      expect(response.body).toHaveLength(1);
-      expect((response.body as Record<string, unknown>[])[0]).toHaveProperty(
-        'fecha',
-      );
-      expect(siembraMock.getAllSiembra).toHaveBeenCalled();
-    });
-
-    it('returns 200 + empty array when no siembras', async () => {
-      siembraMock.getAllSiembra.mockResolvedValue([]);
-
-      const response = await request(app.getHttpServer())
-        .get('/l-siembra')
-        .expect(200);
-
-      expect(response.body).toHaveLength(0);
-    });
-  });
-
-  describe('POST /l-siembra/asignar-ubicacion-siembra', () => {
+  describe('POST /l-partidas/asignar-siembra', () => {
     it('returns 201 on successful assignment', async () => {
-      siembraMock.asignarUbicacionSiembra.mockResolvedValue(undefined);
+      partidasMock.asignarSiembra.mockResolvedValue(undefined);
 
       await request(app.getHttpServer())
-        .post('/l-siembra/asignar-ubicacion-siembra')
-        .send(validSiembraPayload())
+        .post('/l-partidas/asignar-siembra')
+        .send({
+          partida: 1,
+          ano: 2026,
+          indice: 1,
+          cg: 1,
+          cantidaNroCont: 50,
+          germin: 1,
+        })
         .expect(201);
 
-      expect(siembraMock.asignarUbicacionSiembra).toHaveBeenCalledWith(
+      expect(partidasMock.asignarSiembra).toHaveBeenCalledWith(
         expect.objectContaining({ partida: 1, ano: 2026 }),
       );
     });

@@ -61,9 +61,8 @@ export class PartidasRepository {
     );
     return rows;
   }
-  // partidas.repository.ts (agrega este método)
 
-  async asignarUbicacion(data: {
+  async asignarExtendido(data: {
     partida: number;
     ano: number;
     indice: number;
@@ -112,6 +111,60 @@ export class PartidasRepository {
       await conn.query(
         `UPDATE partidas SET extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`,
         [data.extendido, data.partida, data.ano, data.indice],
+      );
+    });
+  }
+
+  async asignarSiembra(data: {
+    partida: number;
+    ano: number;
+    indice: number;
+    cg: number;
+    cantidaNroCont: number;
+    germin: number;
+    detalle?: string;
+  }): Promise<void> {
+    await this.legacyDb.transaction(async (conn) => {
+      const now = new Date().toISOString().slice(0, 10);
+
+      await conn.query(
+        `INSERT INTO partidas1 (
+        partida, ano, indice, fecha, lote, ano_lote, item,
+        semxgr, camara, germin, ajuste, cantidad, gramos,
+        c, g, detalle, id_unico
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          data.partida,
+          data.ano,
+          data.indice,
+          now,
+          0, // lote smallint(6)
+          0, // ano_lote smallint(6)
+          0, // item smallint(6)
+          '0.0', // semxgr decimal(6,1)
+          '0.0', // camara decimal(6,1)
+          data.germin,
+          '0.00', // ajuste decimal(5,2)
+          0, // cantidad int(11)
+          '0.00', // gramos decimal(12,2)
+          0, // c int(11)
+          '0.00', // g decimal(12,2)
+          'app', // detalle char(30)
+          'id_unico', // id_unico char(10)
+        ],
+      );
+
+      await conn.query(
+        `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`,
+        [
+          now,
+          data.cg,
+          data.cantidaNroCont,
+          data.detalle,
+          data.partida,
+          data.ano,
+          data.indice,
+        ],
       );
     });
   }

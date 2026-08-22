@@ -24,16 +24,7 @@ function SiembraList({ camaraId }: { camaraId: string }) {
     );
   }
 
-  return (
-    <>
-      <SiembraDataTable partidas={siembraPartidas || []} />
-
-      {/* Visual indicator for background fetching */}
-      {isFetching && (
-        <DataTableSkeleton columnCount={partidaSiembraColumns.length} />
-      )}
-    </>
-  );
+  return <SiembraDataTable partidas={siembraPartidas || []} />;
 }
 
 export function SiembraView() {
