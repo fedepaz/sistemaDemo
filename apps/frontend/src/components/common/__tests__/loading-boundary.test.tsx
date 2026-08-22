@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { Suspense } from "react";
 import { LoadingBoundary } from "../loading-boundary";
 
 function AsyncComponent() {
@@ -15,7 +14,7 @@ describe("LoadingBoundary", () => {
     render(
       <LoadingBoundary skeleton={<div data-testid="skeleton" />}>
         <AsyncComponent />
-      </LoadingBoundary>
+      </LoadingBoundary>,
     );
     expect(screen.getByTestId("real-content")).toBeInTheDocument();
     expect(screen.queryByTestId("skeleton")).not.toBeInTheDocument();
@@ -25,7 +24,7 @@ describe("LoadingBoundary", () => {
     render(
       <LoadingBoundary skeleton={<div data-testid="skeleton" />}>
         <ThrowingComponent />
-      </LoadingBoundary>
+      </LoadingBoundary>,
     );
     expect(screen.getByTestId("skeleton")).toBeInTheDocument();
     expect(screen.queryByTestId("real-content")).not.toBeInTheDocument();
@@ -35,7 +34,7 @@ describe("LoadingBoundary", () => {
     render(
       <LoadingBoundary skeleton={<div data-testid="skeleton" />}>
         <ThrowingComponent />
-      </LoadingBoundary>
+      </LoadingBoundary>,
     );
     const wrapper = screen.getByTestId("skeleton").parentElement;
     expect(wrapper).toHaveAttribute("aria-busy", "true");
@@ -46,7 +45,7 @@ describe("LoadingBoundary", () => {
     render(
       <LoadingBoundary skeleton={<div />}>
         <div />
-      </LoadingBoundary>
+      </LoadingBoundary>,
     );
   });
 });

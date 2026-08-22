@@ -5,7 +5,7 @@ import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { DatabaseUnavailablePage } from "./database-unavailable";
 import { PendingPermissionsPage } from "./pending-permissions";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { RootDashboardSkeleton } from "@/features/dashboard";
 import { AuthLayoutSkeleton } from "./skeleton/auth-layout-skeleton";
 import { useHydration } from "@/hooks/useHydration";

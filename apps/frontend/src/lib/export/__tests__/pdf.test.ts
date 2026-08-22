@@ -29,6 +29,7 @@ Object.defineProperty(globalThis, "fetch", {
 class MockFileReader {
   result: string | null = null;
   onloadend: (() => void) | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   readAsDataURL(_blob: Blob) {
     this.result = "data:image/png;base64,mockBase64Data";
     this.onloadend?.();
@@ -69,7 +70,7 @@ describe("exportToPDF", () => {
     ];
 
     await expect(
-      exportToPDF({ data, columns, title: "Usuarios", format: "pdf" })
+      exportToPDF({ data, columns, title: "Usuarios", format: "pdf" }),
     ).resolves.toBeUndefined();
   });
 
@@ -85,7 +86,7 @@ describe("exportToPDF", () => {
     ];
 
     await expect(
-      exportToPDF({ data, columns, title: "Test", format: "pdf" })
+      exportToPDF({ data, columns, title: "Test", format: "pdf" }),
     ).resolves.toBeUndefined();
   });
 
@@ -101,7 +102,7 @@ describe("exportToPDF", () => {
     ];
 
     await expect(
-      exportToPDF({ data, columns, title: "Test", format: "pdf" })
+      exportToPDF({ data, columns, title: "Test", format: "pdf" }),
     ).resolves.toBeUndefined();
   });
 
@@ -132,7 +133,7 @@ describe("exportToPDF", () => {
         title: "Usuarios",
         format: "pdf",
         companyConfig,
-      })
+      }),
     ).resolves.toBeUndefined();
   });
 
@@ -146,7 +147,7 @@ describe("exportToPDF", () => {
     ];
 
     await expect(
-      exportToPDF({ data, columns, title: "Test", format: "pdf" })
+      exportToPDF({ data, columns, title: "Test", format: "pdf" }),
     ).resolves.toBeUndefined();
   });
 });
