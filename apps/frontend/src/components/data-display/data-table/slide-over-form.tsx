@@ -183,11 +183,11 @@ export function SlideOverForm({
 
       {confirm && (
         <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-          <AlertDialogContent>
+          <AlertDialogContent className="border-primary/80">
             <AlertDialogHeader>
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-info/10">
-                  <HelpCircle className="h-6 w-6 text-info" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20">
+                  <HelpCircle className="h-6 w-6 text-primary" />
                 </div>
                 <AlertDialogTitle className="text-xl">
                   {confirm.title}
@@ -207,7 +207,7 @@ export function SlideOverForm({
               <AlertDialogAction
                 onClick={handleConfirmSubmit}
                 disabled={isSubmitDisabled || isLoading}
-                className="min-h-[48px] min-w-[100px] bg-info text-info-foreground hover:bg-info/90"
+                className="min-h-[48px] min-w-[100px] bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {isLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

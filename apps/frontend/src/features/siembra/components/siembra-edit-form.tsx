@@ -182,18 +182,13 @@ export function SiembraEditForm({
               <span
                 className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
                   isMaquina
-                    ? "text-primary border-primary/30 bg-primary/20"
-                    : "text-secondary border-primary/90 bg-primary/80"
+                    ? "text-primary border-primary/20 bg-primary/10"
+                    : "text-muted-foreground border-border/40 bg-muted/50"
                 }`}
               >
-                {isMaquina ? (
-                  <p>Por defecto, se utiliza el método de siembra mecánica.</p>
-                ) : (
-                  <p>
-                    Presione el botón para cambiar al método de siembra
-                    <br /> a máquina
-                  </p>
-                )}
+                {isMaquina
+                  ? "Por defecto, se utiliza el método de siembra mecánica."
+                  : "Presione el botón para cambiar al método de siembra a máquina"}
               </span>
             </div>
           </div>
@@ -215,7 +210,7 @@ export function SiembraEditForm({
                     <button
                       type="button"
                       onClick={() => setIsEditingQuantity(true)}
-                      className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                      className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-bold text-primary hover:text-primary/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
                     >
                       <Pencil className="h-3 w-3 md:h-3.5 md:w-3.5" />
                       Editar
@@ -234,7 +229,7 @@ export function SiembraEditForm({
                     <button
                       type="button"
                       onClick={handleCancelEdit}
-                      className="flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
+                      className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-bold text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
                     >
                       <X className="h-3 w-3 md:h-3.5 md:w-3.5" />
                       Cancelar
