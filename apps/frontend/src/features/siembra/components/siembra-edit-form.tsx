@@ -167,15 +167,34 @@ export function SiembraEditForm({
                   <Switch
                     checked={isMaquina}
                     onCheckedChange={setIsMaquina}
+                    className="transition-colors border-primary/80 bg-primary/40"
                   />
                 </TooltipTrigger>
                 <TooltipContent
                   side="top"
                   className="border border-border shadow-md"
                 >
-                  <p>{isMaquina ? "Siembra mecánica" : "Siembra manual"}</p>
+                  <p>{isMaquina ? "Siembra manual" : "Siembra mecánica"}</p>
                 </TooltipContent>
               </Tooltip>
+            </div>
+            <div className="flex items-center justify-between py-1">
+              <span
+                className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
+                  isMaquina
+                    ? "text-primary border-primary/30 bg-primary/20"
+                    : "text-secondary border-primary/90 bg-primary/80"
+                }`}
+              >
+                {isMaquina ? (
+                  <p>Por defecto, se utiliza el método de siembra mecánica.</p>
+                ) : (
+                  <p>
+                    Presione el botón para cambiar al método de siembra
+                    <br /> a máquina
+                  </p>
+                )}
+              </span>
             </div>
           </div>
 
