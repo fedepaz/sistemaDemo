@@ -42,7 +42,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         indice: selectedPartida.indice,
         cantidaNroCont: parseInt(selectedPartida.nrocont),
         detalle: selectedPartida.extendido,
-        germin: parseInt(selectedPartida.germin),
+        f_siembra: new Date(),
         edita: "S",
       });
     }

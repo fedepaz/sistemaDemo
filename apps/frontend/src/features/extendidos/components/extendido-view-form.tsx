@@ -184,13 +184,15 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                   <InfoRow
                     icon={Calendar}
                     label="Fecha Sugerida"
-                    value={selectedExtendido.fechaSugeridaSiembra}
+                    value={formatShortDate(
+                      selectedExtendido.fechaSugeridaSiembra,
+                    )}
                     className="border-primary/5"
                   />
                   <InfoRow
                     icon={ClipboardList}
                     label="Fecha Real Siembra"
-                    value={selectedExtendido.fechaSiembraReal}
+                    value={formatShortDate(selectedExtendido.fechaSiembraReal)}
                     className="border-primary/5"
                   />
                   <InfoRow

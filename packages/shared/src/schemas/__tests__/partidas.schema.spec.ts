@@ -94,7 +94,7 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     indice: 1,
     cg: 92,
     cantidaNroCont: 120,
-    germin: 80,
+    f_siembra: new Date("2026-01-15"),
     detalle: "Test",
   };
 

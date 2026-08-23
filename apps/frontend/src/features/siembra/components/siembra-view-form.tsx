@@ -12,6 +12,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatShortDate } from "@/lib/date-utils";
 
 interface SiembraFormProps {
   selectedExtendido: SiembraDto;
@@ -164,13 +165,39 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
                   <InfoRow
                     icon={Calendar}
                     label="Fecha Sugerida"
-                    value={selectedExtendido.fechaSugeridaSiembra}
+                    value={formatShortDate(
+                      selectedExtendido.fechaSugeridaSiembra,
+                    )}
+                    className="border-primary/5"
+                  />
+                  <InfoRow
+                    icon={Calendar}
+                    label="Fecha Siembra"
+                    value={formatShortDate(selectedExtendido.fechaSiembraReal)}
                     className="border-primary/5"
                   />
                   <InfoRow
                     icon={Activity}
                     label="Germinación"
                     value={selectedExtendido.germin}
+                    className="border-primary/5"
+                  />
+                  <InfoRow
+                    icon={Hash}
+                    label="Lote"
+                    value={selectedExtendido.lote}
+                    className="border-primary/5"
+                  />
+                  <InfoRow
+                    icon={Calendar}
+                    label="Año Lote"
+                    value={selectedExtendido.anoLote}
+                    className="border-primary/5"
+                  />
+                  <InfoRow
+                    icon={Info}
+                    label="Ajuste"
+                    value={selectedExtendido.ajuste}
                     className="border-primary/5"
                   />
                 </div>

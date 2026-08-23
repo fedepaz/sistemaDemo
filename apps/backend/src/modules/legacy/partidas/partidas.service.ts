@@ -58,7 +58,7 @@ export class PartidasService {
       indice: data.indice,
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
-      germin: data.germin,
+      f_siembra: data.f_siembra,
       detalle: data.detalle,
     };
 

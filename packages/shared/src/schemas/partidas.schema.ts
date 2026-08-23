@@ -26,7 +26,7 @@ export const AsignarUbiSiembraDtoSchema = z.object({
   indice: z.number(),
   cg: z.number().int().positive(),
   cantidaNroCont: z.number().int().positive(),
-  germin: z.number().int().positive(),
+  f_siembra: z.coerce.date(),
   detalle: z
     .string()
     .max(30, "El detalle no puede superar los 30 caracteres")
