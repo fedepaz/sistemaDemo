@@ -35,9 +35,7 @@ export class SiembraRepository {
     	ON e.codigo = p.espvar
     WHERE estado <> 'ANULADA' 
     	
-    	AND p.hai<>'A'
-    	AND p.con=0
-    	
+    	AND p.hai<>'A'    	
       AND p.ano=2026
     ORDER BY p.partida, p.indice
   `;

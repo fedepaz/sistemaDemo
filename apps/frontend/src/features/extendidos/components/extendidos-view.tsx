@@ -41,7 +41,7 @@ export function ExtendidoView() {
   const [camaraId, setCamaraId] = useState<string>("all");
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <Suspense
         fallback={<DataTableSkeleton columnCount={partidaColumns.length} />}
       >

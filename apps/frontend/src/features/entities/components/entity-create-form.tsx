@@ -48,7 +48,6 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
                   className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4 font-mono"
                   autoFocus
                   required
-                  tabIndex={0}
                 />
               </FormControl>
               <FormDescription className="text-[9px] md:text-[10px] font-medium leading-tight">
@@ -70,7 +69,6 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
                   placeholder="ej: Gestión de Usuarios"
                   className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
                   required
-                  tabIndex={0}
                 />
               </FormControl>
               <FormDescription className="text-[9px] md:text-[10px] font-medium leading-tight">
@@ -88,7 +86,7 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
               <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">Tipo de Permiso</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4" tabIndex={0}>
+                  <SelectTrigger className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
                     <SelectValue placeholder="Selecciona tipo" />
                   </SelectTrigger>
                 </FormControl>

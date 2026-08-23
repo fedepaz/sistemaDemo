@@ -169,6 +169,7 @@ export function UsersDataTable() {
               onSubmit={handleUpdate}
               onCancel={() => setSlideOverOpen(false)}
               formId={`edit-${selectedUser.username}`}
+              user={selectedUser}
             />
             {selectedUser.id !== currentUser?.id && (
               <div className="pt-4 border-t">

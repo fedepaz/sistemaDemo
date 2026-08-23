@@ -114,7 +114,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
         </div>
 
         {/* BASIC SPECS GRID */}
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {[
             { label: "Año", value: selectedExtendido.anio, icon: Calendar },
             { label: "Índice", value: selectedExtendido.indice, icon: Hash },

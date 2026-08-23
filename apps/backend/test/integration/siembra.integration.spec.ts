@@ -55,7 +55,7 @@ describe('Siembra (integration)', () => {
           indice: 1,
           cg: 1,
           cantidaNroCont: 50,
-          f_siembra: new Date("2026-01-15"),
+          f_siembra: new Date('2026-01-15'),
         })
         .expect(201);
 

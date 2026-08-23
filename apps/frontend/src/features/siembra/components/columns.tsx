@@ -169,4 +169,11 @@ export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
     exportValue: (value) => formatShortDate(value as string),
     pdfWidth: "13%",
   },
+  {
+    accessorKey: "fechaSiembraReal",
+    exportHeader: "Siembra Real",
+    exportValue: (value) =>
+      value === "0000-00-00" ? "-Sin Siembra-" : formatShortDate(value as string),
+    pdfWidth: "13%",
+  },
 ];

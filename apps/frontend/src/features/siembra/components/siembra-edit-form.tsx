@@ -99,80 +99,82 @@ export function SiembraEditForm({
           </div>
         </div>
 
-        {/* CAMARA DE DESTINO */}
+        {/* CAMARA DE DESTINO + FECHA */}
         <div className="flex flex-col gap-4 md:gap-8">
-          <FormField
-            control={form.control}
-            name="cg"
-            render={({ field }) => (
-              <FormItem className="space-y-2 md:space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                    <Warehouse className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <FormField
+              control={form.control}
+              name="cg"
+              render={({ field }) => (
+                <FormItem className="space-y-2 md:space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                      <Warehouse className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                    </div>
+                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                      Cámara de Destino
+                    </FormLabel>
                   </div>
-                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                    Cámara de Destino
-                  </FormLabel>
-                </div>
-                <Select
-                  onValueChange={(val) => field.onChange(Number(val))}
-                  value={field.value?.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
-                      <SelectValue placeholder="Seleccione cámara" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent
-                    className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                    position="popper"
+                  <Select
+                    onValueChange={(val) => field.onChange(Number(val))}
+                    value={field.value?.toString()}
                   >
-                    {depositos?.map((dep) => (
-                      <SelectItem
-                        key={dep.codigo}
-                        value={dep.codigo.toString()}
-                        className="font-bold py-2 md:py-3 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm md:text-base"
-                      >
-                        {dep.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                    <FormControl>
+                      <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+                        <SelectValue placeholder="Seleccione cámara" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent
+                      className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                      position="popper"
+                    >
+                      {depositos?.map((dep) => (
+                        <SelectItem
+                          key={dep.codigo}
+                          value={dep.codigo.toString()}
+                          className="font-bold py-2 md:py-3 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm md:text-base"
+                        >
+                          {dep.nombre}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="f_siembra"
-            render={({ field }) => (
-              <FormItem className="space-y-2 md:space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                    <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+            <FormField
+              control={form.control}
+              name="f_siembra"
+              render={({ field }) => (
+                <FormItem className="space-y-2 md:space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                      <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                    </div>
+                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                      Fecha de Siembra
+                    </FormLabel>
                   </div>
-                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                    Fecha de Siembra
-                  </FormLabel>
-                </div>
-                <FormControl>
-                  <Input
-                    type="date"
-                    {...field}
-                    value={
-                      field.value instanceof Date
-                        ? field.value.toISOString().split("T")[0]
-                        : ""
-                    }
-                    onChange={(e) => field.onChange(new Date(e.target.value))}
-                    className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormControl>
+                    <Input
+                      type="date"
+                      {...field}
+                      value={
+                        field.value instanceof Date
+                          ? field.value.toISOString().split("T")[0]
+                          : ""
+                      }
+                      onChange={(e) => field.onChange(new Date(e.target.value))}
+                      className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <div className="space-y-2 md:space-y-3">
             {/* MÉTODO DE SIEMBRA — Máquina / Manual */}
@@ -219,8 +221,8 @@ export function SiembraEditForm({
                 }`}
               >
                 {isMaquina
-                  ? "Por defecto, se utiliza el método de siembra mecánica."
-                  : "Presione el botón para cambiar al método de siembra a máquina"}
+                  ? "Mecánica (por defecto)"
+                  : "Manual — presione para cambiar a máquina"}
               </span>
             </div>
           </div>
@@ -321,7 +323,7 @@ export function SiembraEditForm({
                 <FormControl>
                   <Textarea
                     placeholder="Notas de ubicación..."
-                    className="min-h-[80px] md:min-h-[120px] rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base p-4 leading-relaxed focus:ring-primary/20"
+                    className="min-h-[60px] md:min-h-[120px] rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base p-4 leading-relaxed focus:ring-primary/20"
                     {...field}
                   />
                 </FormControl>

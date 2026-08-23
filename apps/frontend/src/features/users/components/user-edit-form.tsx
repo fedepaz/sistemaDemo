@@ -1,6 +1,7 @@
 // src/features/users/components/user-form.tsx
 
 import { UseFormReturn } from "react-hook-form";
+import { User } from "lucide-react";
 
 import {
   Form,
@@ -13,16 +14,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { UpdateUserProfileDto } from "@vivero/shared";
+import { UpdateUserProfileDto, UserProfileDto } from "@vivero/shared";
 
 interface FormProps {
   onSubmit: (data: UpdateUserProfileDto) => Promise<void>;
   onCancel: () => void;
   formId: string;
   form: UseFormReturn<UpdateUserProfileDto>;
+  user?: UserProfileDto;
 }
 
-export function UserEditForm({ onSubmit, formId, form }: FormProps) {
+export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
   return (
     <Form {...form}>
       <form
@@ -30,6 +32,17 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-3 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4 md:pb-6"
       >
+        {user && (
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10 mb-2">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <User className="h-5 w-5 text-primary" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-foreground truncate">{user.firstName} {user.lastName}</p>
+              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+            </div>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
           <FormField
             control={form.control}
@@ -43,7 +56,6 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
                     placeholder="Nombre" 
                     autoFocus 
                     className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base px-4 font-bold"
-                    tabIndex={0} 
                   />
                 </FormControl>
                 <FormMessage className="text-[10px]" />
@@ -62,7 +74,6 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
                     {...field} 
                     placeholder="Apellido" 
                     className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base px-4 font-bold"
-                    tabIndex={0} 
                   />
                 </FormControl>
                 <FormMessage className="text-[10px]" />
@@ -82,7 +93,6 @@ export function UserEditForm({ onSubmit, formId, form }: FormProps) {
                   {...field}
                   placeholder="Correo electrónico"
                   className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base px-4 font-bold"
-                  tabIndex={0}
                 />
               </FormControl>
               <FormDescription className="text-[9px] md:text-[10px] font-medium italic opacity-60">Email oficial para notificaciones.</FormDescription>
