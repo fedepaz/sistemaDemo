@@ -246,7 +246,7 @@ describe("SiembraEditForm", () => {
     );
 
     expect(
-      screen.getByText(/Por defecto, se utiliza el método de siembra mecánica/),
+      screen.getByText(/Mecánica \(por defecto\)/),
     ).toBeInTheDocument();
   });
 

@@ -12,6 +12,7 @@ describe("SiembraDtoSchema", () => {
     injerto: "Injerto A",
     contenedor: "Bandeja 288",
     fechaSugeridaSiembra: "2026-07-15",
+    fechaSiembraReal: "2026-07-16",
     propiedad: "Propiedad A",
     solicito: "1000",
     lote: "L001",
