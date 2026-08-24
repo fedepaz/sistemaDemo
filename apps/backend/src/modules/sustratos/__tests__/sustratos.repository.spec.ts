@@ -152,9 +152,7 @@ describe('SustratosRepository', () => {
     });
 
     it('propagates errors from prisma', async () => {
-      prisma.sustratos.update.mockRejectedValue(
-        new Error('Record not found'),
-      );
+      prisma.sustratos.update.mockRejectedValue(new Error('Record not found'));
 
       await expect(
         repository.update('nonexistent', { nombre: 'Test' }),

@@ -46,7 +46,7 @@ describe('MezclaController', () => {
     it('delegates to service with user id', async () => {
       service.getAllMezcla.mockResolvedValue([mockDto]);
 
-      const result = await controller.getAllMezcla(mockUser as any);
+      const result = await controller.getAllMezcla(mockUser);
 
       expect(result).toEqual([mockDto]);
       expect(service.getAllMezcla).toHaveBeenCalledWith('user-1');
@@ -57,7 +57,7 @@ describe('MezclaController', () => {
     it('delegates to service with id and user id', async () => {
       service.getMezclaById.mockResolvedValue(mockDto);
 
-      const result = await controller.getMezcla(mockUser as any, 'mezcla-1');
+      const result = await controller.getMezcla(mockUser, 'mezcla-1');
 
       expect(result).toEqual(mockDto);
       expect(service.getMezclaById).toHaveBeenCalledWith('user-1', 'mezcla-1');

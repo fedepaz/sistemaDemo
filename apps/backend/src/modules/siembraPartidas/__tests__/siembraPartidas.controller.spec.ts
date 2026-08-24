@@ -35,7 +35,9 @@ describe('SiembraPartidasController', () => {
       providers: [{ provide: SiembraPartidasService, useValue: service }],
     }).compile();
 
-    controller = module.get<SiembraPartidasController>(SiembraPartidasController);
+    controller = module.get<SiembraPartidasController>(
+      SiembraPartidasController,
+    );
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -44,7 +46,7 @@ describe('SiembraPartidasController', () => {
     it('delegates to service with user id', async () => {
       service.getAllSiembraPartidas.mockResolvedValue([mockDto]);
 
-      const result = await controller.getAllSiembraPartidas(mockUser as any);
+      const result = await controller.getAllSiembraPartidas(mockUser);
 
       expect(result).toEqual([mockDto]);
       expect(service.getAllSiembraPartidas).toHaveBeenCalledWith('user-1');
@@ -55,10 +57,13 @@ describe('SiembraPartidasController', () => {
     it('delegates to service with id and user id', async () => {
       service.getSiembraPartidaById.mockResolvedValue(mockDto);
 
-      const result = await controller.getSiembraPartida(mockUser as any, 'sp-1');
+      const result = await controller.getSiembraPartida(mockUser, 'sp-1');
 
       expect(result).toEqual(mockDto);
-      expect(service.getSiembraPartidaById).toHaveBeenCalledWith('sp-1', 'user-1');
+      expect(service.getSiembraPartidaById).toHaveBeenCalledWith(
+        'sp-1',
+        'user-1',
+      );
     });
   });
 

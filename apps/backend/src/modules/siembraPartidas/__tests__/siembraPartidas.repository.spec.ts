@@ -51,7 +51,9 @@ describe('SiembraPartidasRepository', () => {
       ],
     }).compile();
 
-    repository = module.get<SiembraPartidasRepository>(SiembraPartidasRepository);
+    repository = module.get<SiembraPartidasRepository>(
+      SiembraPartidasRepository,
+    );
   });
 
   afterEach(() => jest.clearAllMocks());

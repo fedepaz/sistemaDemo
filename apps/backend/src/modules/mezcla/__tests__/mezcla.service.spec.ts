@@ -37,10 +37,7 @@ describe('MezclaService', () => {
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        MezclaService,
-        { provide: MezclaRepository, useValue: repo },
-      ],
+      providers: [MezclaService, { provide: MezclaRepository, useValue: repo }],
     }).compile();
 
     service = module.get<MezclaService>(MezclaService);
