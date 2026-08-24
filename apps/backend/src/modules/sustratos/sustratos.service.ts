@@ -1,6 +1,6 @@
 // src/modules/sustratos/sustratos.service.ts
 
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { SustratosRepository } from './repositories/sustratos.repository';
 import {
@@ -11,7 +11,6 @@ import {
 
 @Injectable()
 export class SustratosService {
-  private readonly logger = new Logger(SustratosService.name);
   constructor(private readonly repo: SustratosRepository) {}
 
   async getAllSustratos(requesterId: string): Promise<SustratoDto[]> {
@@ -37,7 +36,7 @@ export class SustratosService {
   }
 
   async createSustrato(data: CreateSustratoDto) {
-    return this.repo.create({
+    return await this.repo.create({
       nombre: data.nombre,
     });
   }
@@ -47,7 +46,11 @@ export class SustratosService {
     id: string,
     data: UpdateSustratoDto,
   ) {
-    return this.repo.update(id, {
+    if (!data.nombre) {
+      throw new BadRequestException('nombre is required');
+    }
+
+    return await this.repo.update(id, {
       nombre: data.nombre,
     });
   }

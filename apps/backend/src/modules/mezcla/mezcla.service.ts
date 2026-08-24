@@ -1,7 +1,8 @@
 // src/modules/mezcla/mezcla.service.ts
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { MezclaRepository } from './repositories/mezcla.repository';
+import { CreateMezclaDto, MezclaDto } from '@vivero/shared';
 
 export type Mezcla = {
   id: string;
@@ -18,10 +19,19 @@ export type Mezcla = {
 
 @Injectable()
 export class MezclaService {
-  private readonly logger = new Logger(MezclaService.name);
   constructor(private readonly repo: MezclaRepository) {}
 
-  async getAllMezcla(requesterId: string) {
+  async getAllMezcla(requesterId: string): Promise<MezclaDto[]> {
     return this.repo.findAll(requesterId);
+  }
+
+  async getMezclaById(id: string, requesterId: string): Promise<MezclaDto> {
+    const mezcla = await this.repo.findById(id, requesterId);
+    if (!mezcla) throw new NotFoundException('Mezcla not found');
+    return mezcla;
+  }
+
+  async createMezcla(data: CreateMezclaDto) {
+    return this.repo.create(data);
   }
 }

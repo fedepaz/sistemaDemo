@@ -22,3 +22,4 @@ export * from "./constants/managed-entities";
 export * from "./schemas/taskShift.schema";
 export * from "./schemas/legacy-header.schema";
 export * from "./schemas/sustratos.schema";
+export * from "./schemas/mezcla.schema";
