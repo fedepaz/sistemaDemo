@@ -25,7 +25,7 @@ export class AlertsRepository {
 	FROM partidas
 	LEFT JOIN articulo ON articulo.codigo=CONCAT(partidas.espvar,partidas.contenedor)
 	WHERE estado <> 'ANULADA' AND f_siembra=0 AND partidas.hai<>'A' 
-	AND partidas.sem_siem=WEEK(CURRENT_DATE()) AND partidas.ano>2025
+	AND partidas.sem_siem<=WEEK(CURRENT_DATE()) AND partidas.ano>2025
 	ORDER BY partidas.ano, partidas.partida`,
     );
   }
