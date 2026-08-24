@@ -14,7 +14,7 @@ export class SustratosRepository extends BaseRepository<Sustratos> {
   async update(
     id: string,
     data: {
-      name: string;
+      nombre: string;
     },
   ) {
     return this.model.update({
