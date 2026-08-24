@@ -4,7 +4,6 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import {
@@ -24,9 +23,6 @@ type ActionKey = 'canCreate' | 'canRead' | 'canUpdate' | 'canDelete';
 
 @Injectable()
 export class PermissionsService {
-  // Allowed table names = SQL table names from @@map
-  private readonly logger = new Logger(PermissionsService.name);
-
   constructor(
     private permissionsRepo: PermissionsRepository,
     private entitiesRepo: EntitiesRepository,

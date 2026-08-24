@@ -1,6 +1,6 @@
 // src/modules/siembraPartidas/siembraPartidas.service.ts
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SiembraPartidasRepository } from './repositories/siembraPartidas.repository';
 
 export type SiembraPartidas = {
@@ -17,7 +17,6 @@ export type SiembraPartidas = {
 
 @Injectable()
 export class SiembraPartidasService {
-  private readonly logger = new Logger(SiembraPartidasService.name);
   constructor(private readonly repo: SiembraPartidasRepository) {}
 
   async getAllSiembraPartidas(requesterId: string) {

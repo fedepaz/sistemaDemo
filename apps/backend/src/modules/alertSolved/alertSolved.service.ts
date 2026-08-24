@@ -1,13 +1,12 @@
 // src/modules/alertSolved/alertSolved.service.ts
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { AlertSolvedRepository } from './repositories/alertSolved.repository';
 import { AlertSolvedDto, CreateAlertSolvedDto } from '@vivero/shared';
 
 @Injectable()
 export class AlertSolvedService {
-  private readonly logger = new Logger(AlertSolvedService.name);
   constructor(private readonly repo: AlertSolvedRepository) {}
 
   async getSolvedAlerts(

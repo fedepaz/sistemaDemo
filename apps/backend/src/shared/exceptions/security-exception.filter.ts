@@ -155,6 +155,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else if (status >= 500) {
       // acá sí querés el stack porque es un bug inesperado
       this.logger.error(logData, 'INTERNAL SERVER ERROR');
+    } else if (status >= 400) {
+      // 400, 404, 409, 422, etc. — log for traceability
+      this.logger.warn(logData, 'CLIENT ERROR');
     }
   }
 
