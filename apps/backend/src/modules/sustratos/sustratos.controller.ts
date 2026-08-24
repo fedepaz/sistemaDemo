@@ -45,10 +45,11 @@ export class SustratosController {
   @Patch(':id')
   @RequirePermission({ tableName: 'sustratos', action: 'update', scope: 'ALL' })
   async updateSustrato(
+    @CurrentUser() user: AuthUser,
     @Param('id') id: string,
     @Body(new ZodValidationPipe(UpdateSustratoSchema))
     data: UpdateSustratoDto,
   ) {
-    return this.service.updateSustrato(id, data);
+    return this.service.updateSustrato(user.id, id, data);
   }
 }

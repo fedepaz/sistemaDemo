@@ -17,7 +17,7 @@ export const CreateSustratoSchema = z.object({
 export type CreateSustratoDto = z.infer<typeof CreateSustratoSchema>;
 
 export const UpdateSustratoSchema = z.object({
-  nombre: z.string(),
+  nombre: z.string().optional(),
 });
 
 export type UpdateSustratoDto = z.infer<typeof UpdateSustratoSchema>;

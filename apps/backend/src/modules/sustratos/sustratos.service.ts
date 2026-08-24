@@ -9,12 +9,6 @@ import {
   UpdateSustratoDto,
 } from '@vivero/shared';
 
-export type Sustratos = {
-  id: string;
-  nombre: string;
-  createdAt: Date;
-};
-
 @Injectable()
 export class SustratosService {
   private readonly logger = new Logger(SustratosService.name);
@@ -48,7 +42,11 @@ export class SustratosService {
     });
   }
 
-  async updateSustrato(id: string, data: UpdateSustratoDto) {
+  async updateSustrato(
+    requesterId: string,
+    id: string,
+    data: UpdateSustratoDto,
+  ) {
     return this.repo.update(id, {
       nombre: data.nombre,
     });
