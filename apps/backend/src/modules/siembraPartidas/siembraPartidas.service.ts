@@ -1,4 +1,4 @@
-// src/modules/alertSolved/siembraPartidas.service.ts
+// src/modules/siembraPartidas/siembraPartidas.service.ts
 
 import { Injectable, Logger } from '@nestjs/common';
 import { SiembraPartidasRepository } from './repositories/siembraPartidas.repository';
