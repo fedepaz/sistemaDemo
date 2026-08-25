@@ -45,7 +45,7 @@ export function SustratoCreateForm({ onSubmit, formId, form }: FormProps) {
                 />
               </FormControl>
               <FormDescription className="text-[9px] md:text-[10px] font-medium leading-tight">
-                Nombre descriptivo del sustrato. Ej: &quot;Sustrato Turba&quot;, &quot;Mix Vermiculita&quot;.
+                Nombre descriptivo del sustrato. Ej: &quot;Sustrato Turba&quot;.
               </FormDescription>
               <FormMessage className="text-[10px]" />
             </FormItem>
