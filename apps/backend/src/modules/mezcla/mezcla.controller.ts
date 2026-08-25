@@ -13,13 +13,13 @@ export class MezclaController {
   constructor(private readonly service: MezclaService) {}
 
   @Get()
-  @RequirePermission({ tableName: 'sustratos', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'siembra', action: 'create', scope: 'ALL' })
   async getAllMezcla(@CurrentUser() user: AuthUser): Promise<MezclaDto[]> {
     return this.service.getAllMezcla(user.id);
   }
 
   @Post()
-  @RequirePermission({ tableName: 'sustratos', action: 'create', scope: 'ALL' })
+  @RequirePermission({ tableName: 'mezcla', action: 'create', scope: 'ALL' })
   async createMezcla(
     @Body(new ZodValidationPipe(CreateMezclaSchema))
     data: CreateMezclaDto,
@@ -28,7 +28,7 @@ export class MezclaController {
   }
 
   @Get(':id')
-  @RequirePermission({ tableName: 'sustratos', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'mezcla', action: 'read', scope: 'ALL' })
   async getMezcla(
     @CurrentUser() user: AuthUser,
     @Param('id') id: string,

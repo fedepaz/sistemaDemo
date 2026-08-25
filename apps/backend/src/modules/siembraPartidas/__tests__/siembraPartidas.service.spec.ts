@@ -19,6 +19,9 @@ describe('SiembraPartidasService', () => {
     anio: 2026,
     indice: 1,
     metodoMaquina: true,
+    presionSemilla: 25,
+    profundidadSemilla: { toString: () => '1.525' },
+    tratamientoSemilla: false,
     mezclaId: 'mezcla-1',
     userId: 'user-1',
     createdAt: new Date('2026-08-01'),
@@ -93,10 +96,13 @@ describe('SiembraPartidasService', () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
+        presionSemilla: 25,
+        profundidadSemilla: '1.525',
+        tratamientoSemilla: false,
         mezclaId: 'mezcla-1',
         userId: 'user-1',
       };
-      const result = await service.createSiembraPartida(data);
+      const result = await service.createSiembraPartida(data, 'user-1');
 
       expect(result).toEqual(mockSiembraPartida);
       expect(repo.create).toHaveBeenCalledWith(data);

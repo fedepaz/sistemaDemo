@@ -27,10 +27,11 @@ export class SiembraPartidasController {
   @Post()
   @RequirePermission({ tableName: 'siembra', action: 'create', scope: 'ALL' })
   async createSiembraPartida(
+    @CurrentUser() user: AuthUser,
     @Body(new ZodValidationPipe(CreateSiembraPartidaSchema))
     data: CreateSiembraPartidaDto,
   ) {
-    return this.service.createSiembraPartida(data);
+    return this.service.createSiembraPartida(data, user.id);
   }
 
   @Get(':id')

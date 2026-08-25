@@ -1,5 +1,9 @@
 // packages/shared/src/schemas/__tests__/siembraPartida.schema.spec.ts
-import { SiembraPartidaSchema, CreateSiembraPartidaSchema } from "../siembraPartida.schema";
+import {
+  SiembraPartidaSchema,
+  CreateSiembraPartidaSchema,
+  ProfundidadSemillaSchema,
+} from "../siembraPartida.schema";
 
 describe("SiembraPartidaSchema", () => {
   const valid = {
@@ -8,6 +12,9 @@ describe("SiembraPartidaSchema", () => {
     anio: 2026,
     indice: 1,
     metodoMaquina: true,
+    presionSemilla: 25,
+    profundidadSemilla: "1.525",
+    tratamientoSemilla: false,
     mezclaId: "mezcla-1",
     userId: "user-1",
   };
@@ -17,6 +24,9 @@ describe("SiembraPartidaSchema", () => {
     expect(result.id).toBe("sp-1");
     expect(result.partidaId).toBe(100);
     expect(result.metodoMaquina).toBe(true);
+    expect(result.presionSemilla).toBe(25);
+    expect(result.profundidadSemilla).toBe("1.525");
+    expect(result.tratamientoSemilla).toBe(false);
   });
 
   it("rejects missing id", () => {
@@ -34,6 +44,18 @@ describe("SiembraPartidaSchema", () => {
       SiembraPartidaSchema.parse({ ...valid, metodoMaquina: "yes" }),
     ).toThrow();
   });
+
+  it("rejects non-integer presionSemilla", () => {
+    expect(() =>
+      SiembraPartidaSchema.parse({ ...valid, presionSemilla: 25.5 }),
+    ).toThrow();
+  });
+
+  it("rejects non-boolean tratamientoSemilla", () => {
+    expect(() =>
+      SiembraPartidaSchema.parse({ ...valid, tratamientoSemilla: "yes" }),
+    ).toThrow();
+  });
 });
 
 describe("CreateSiembraPartidaSchema", () => {
@@ -43,11 +65,15 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
+      presionSemilla: 30,
+      profundidadSemilla: "2.000",
+      tratamientoSemilla: true,
       mezclaId: "mezcla-2",
       userId: "user-2",
     });
     expect(result.partidaId).toBe(200);
     expect(result.metodoMaquina).toBe(false);
+    expect(result.profundidadSemilla).toBe("2.000");
   });
 
   it("rejects missing partidaId", () => {
@@ -56,6 +82,9 @@ describe("CreateSiembraPartidaSchema", () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
+        presionSemilla: 20,
+        profundidadSemilla: "1.5",
+        tratamientoSemilla: false,
         mezclaId: "mezcla-1",
         userId: "user-1",
       }),
@@ -69,8 +98,49 @@ describe("CreateSiembraPartidaSchema", () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
+        presionSemilla: 20,
+        profundidadSemilla: "1.5",
+        tratamientoSemilla: false,
         userId: "user-1",
       }),
     ).toThrow();
+  });
+});
+
+describe("ProfundidadSemillaSchema", () => {
+  it("accepts decimal string", () => {
+    expect(ProfundidadSemillaSchema.parse("1.525")).toBe("1.525");
+  });
+
+  it("accepts whole number string", () => {
+    expect(ProfundidadSemillaSchema.parse("2")).toBe("2");
+  });
+
+  it("accepts single decimal", () => {
+    expect(ProfundidadSemillaSchema.parse("0.5")).toBe("0.5");
+  });
+
+  it("accepts two-digit integer", () => {
+    expect(ProfundidadSemillaSchema.parse("10")).toBe("10");
+  });
+
+  it("rejects too many decimals", () => {
+    expect(() => ProfundidadSemillaSchema.parse("1.5256")).toThrow();
+  });
+
+  it("rejects non-numeric string", () => {
+    expect(() => ProfundidadSemillaSchema.parse("abc")).toThrow();
+  });
+
+  it("rejects empty string", () => {
+    expect(() => ProfundidadSemillaSchema.parse("")).toThrow();
+  });
+
+  it("rejects string with leading dot", () => {
+    expect(() => ProfundidadSemillaSchema.parse(".5")).toThrow();
+  });
+
+  it("rejects three-digit integer", () => {
+    expect(() => ProfundidadSemillaSchema.parse("100")).toThrow();
   });
 });

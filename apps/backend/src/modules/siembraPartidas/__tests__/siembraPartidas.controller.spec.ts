@@ -19,6 +19,9 @@ describe('SiembraPartidasController', () => {
     anio: 2026,
     indice: 1,
     metodoMaquina: true,
+    presionSemilla: 25,
+    profundidadSemilla: '1.525',
+    tratamientoSemilla: false,
     mezclaId: 'mezcla-1',
     userId: 'user-1',
   };
@@ -76,10 +79,13 @@ describe('SiembraPartidasController', () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
+        presionSemilla: 25,
+        profundidadSemilla: '1.525',
+        tratamientoSemilla: false,
         mezclaId: 'mezcla-1',
         userId: 'user-1',
       };
-      const result = await controller.createSiembraPartida(data);
+      const result = await controller.createSiembraPartida(mockUser, data);
 
       expect(result).toEqual(mockDto);
       expect(service.createSiembraPartida).toHaveBeenCalledWith(data);
