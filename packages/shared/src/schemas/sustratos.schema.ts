@@ -5,7 +5,7 @@ import { z } from "zod";
 export const SustratoSchema = z.object({
   id: z.string(),
   nombre: z.string(),
-  createdAt: z.string(),
+  createdAt: z.date(),
 });
 
 export type SustratoDto = z.infer<typeof SustratoSchema>;

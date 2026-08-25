@@ -18,6 +18,11 @@ describe("SustratoViewForm", () => {
 
   it("should display formatted creation date", () => {
     render(<SustratoViewForm selectedSustrato={mockSustrato} />);
-    expect(screen.getByText("14/3/2024")).toBeInTheDocument();
+    expect(screen.getByText(/de marzo de 2024/i)).toBeInTheDocument();
+  });
+
+  it("should display active badge", () => {
+    render(<SustratoViewForm selectedSustrato={mockSustrato} />);
+    expect(screen.getByText("Activo")).toBeInTheDocument();
   });
 });

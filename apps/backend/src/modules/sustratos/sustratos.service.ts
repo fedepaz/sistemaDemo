@@ -18,7 +18,7 @@ export class SustratosService {
     return rows.map((r) => ({
       id: r.id,
       nombre: r.nombre,
-      createdAt: r.createdAt.toISOString(),
+      createdAt: r.createdAt,
     }));
   }
 
@@ -31,7 +31,7 @@ export class SustratosService {
     return {
       id: row.id,
       nombre: row.nombre,
-      createdAt: row.createdAt.toISOString(),
+      createdAt: row.createdAt,
     };
   }
 
