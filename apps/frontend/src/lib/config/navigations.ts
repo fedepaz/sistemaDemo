@@ -11,6 +11,7 @@ import {
   Briefcase,
   Expand,
   Shield,
+  Package,
 } from "lucide-react";
 import type { NavigationConfig } from "./navigation.types";
 
@@ -44,6 +45,22 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
         description: "Gestión de partidas a extender",
         dashboard: { statsLabel: "Partidas a extender" },
         requiredPermission: { table: "extendidos", action: "read" },
+      },
+      {
+        kind: "subGroup",
+        id: "sustratos",
+        title: "Sustratos",
+        icon: Package,
+        items: [
+          {
+            title: "Lista",
+            href: ROUTES.SUSTRATOS,
+            icon: Package,
+            description: "Gestión de sustratos",
+            dashboard: { statsLabel: "Sustratos" },
+            requiredPermission: { table: "sustratos", action: "read" },
+          },
+        ],
       },
     ],
   },

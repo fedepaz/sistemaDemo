@@ -12,6 +12,7 @@ import {
   entityQueryKeys,
   extendidosQueryKeys,
   siembraQueryKeys,
+  sustratoQueryKeys,
   alertCommentsQueryKeys,
   alertsQueryKeys,
   taskShiftQueryKeys,
@@ -92,6 +93,11 @@ export const mutationInvalidationMap = {
       extendidosQueryKeys.enCamara(),
       alertsQueryKeys.all(),
     ],
+  },
+
+  // --- Sustratos ---
+  createSustrato: {
+    queries: () => [sustratoQueryKeys.all()],
   },
 
   // --- Alert Comments ---
