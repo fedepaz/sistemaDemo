@@ -88,7 +88,10 @@ describe('SiembraPartidasController', () => {
       const result = await controller.createSiembraPartida(mockUser, data);
 
       expect(result).toEqual(mockDto);
-      expect(service.createSiembraPartida).toHaveBeenCalledWith(data);
+      expect(service.createSiembraPartida).toHaveBeenCalledWith(
+        data,
+        'user-1',
+      );
     });
   });
 });

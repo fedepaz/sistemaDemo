@@ -44,8 +44,8 @@ export class SiembraPartidasService {
   async createSiembraPartida(
     data: CreateSiembraPartidaDto,
     requesterId: string,
-  ) {
-    return this.repo.createSiembraPartida({
+  ): Promise<SiembraPartidaDto> {
+    const row = await this.repo.createSiembraPartida({
       partidaId: data.partidaId,
       anio: data.anio,
       indice: data.indice,
@@ -64,5 +64,6 @@ export class SiembraPartidasService {
         },
       },
     });
+    return this.mapToDto(row);
   }
 }

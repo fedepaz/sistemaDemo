@@ -10,10 +10,10 @@ describe('SiembraPartidasService', () => {
   let repo: {
     findAll: jest.Mock;
     findById: jest.Mock;
-    create: jest.Mock;
+    createSiembraPartida: jest.Mock;
   };
 
-  const mockSiembraPartida = {
+  const mockRow = {
     id: 'sp-1',
     partidaId: 100,
     anio: 2026,
@@ -30,11 +30,24 @@ describe('SiembraPartidasService', () => {
     deletedByUserId: null,
   };
 
+  const mockDto = {
+    id: 'sp-1',
+    partidaId: 100,
+    anio: 2026,
+    indice: 1,
+    metodoMaquina: true,
+    presionSemilla: 25,
+    profundidadSemilla: '1.525',
+    tratamientoSemilla: false,
+    mezclaId: 'mezcla-1',
+    userId: 'user-1',
+  };
+
   beforeEach(async () => {
     repo = {
       findAll: jest.fn(),
       findById: jest.fn(),
-      create: jest.fn(),
+      createSiembraPartida: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -50,12 +63,12 @@ describe('SiembraPartidasService', () => {
   afterEach(() => jest.clearAllMocks());
 
   describe('getAllSiembraPartidas', () => {
-    it('returns results from repository', async () => {
-      repo.findAll.mockResolvedValue([mockSiembraPartida]);
+    it('returns mapped DTOs from repository', async () => {
+      repo.findAll.mockResolvedValue([mockRow]);
 
       const result = await service.getAllSiembraPartidas('user-1');
 
-      expect(result).toEqual([mockSiembraPartida]);
+      expect(result).toEqual([mockDto]);
       expect(repo.findAll).toHaveBeenCalledWith('user-1');
     });
 
@@ -69,12 +82,12 @@ describe('SiembraPartidasService', () => {
   });
 
   describe('getSiembraPartidaById', () => {
-    it('returns entity when found', async () => {
-      repo.findById.mockResolvedValue(mockSiembraPartida);
+    it('returns mapped DTO when found', async () => {
+      repo.findById.mockResolvedValue(mockRow);
 
       const result = await service.getSiembraPartidaById('sp-1', 'user-1');
 
-      expect(result).toEqual(mockSiembraPartida);
+      expect(result).toEqual(mockDto);
       expect(repo.findById).toHaveBeenCalledWith('sp-1', 'user-1');
     });
 
@@ -88,8 +101,8 @@ describe('SiembraPartidasService', () => {
   });
 
   describe('createSiembraPartida', () => {
-    it('delegates to repository create', async () => {
-      repo.create.mockResolvedValue(mockSiembraPartida);
+    it('delegates to repository createSiembraPartida', async () => {
+      repo.createSiembraPartida.mockResolvedValue(mockRow);
 
       const data = {
         partidaId: 100,
@@ -104,8 +117,18 @@ describe('SiembraPartidasService', () => {
       };
       const result = await service.createSiembraPartida(data, 'user-1');
 
-      expect(result).toEqual(mockSiembraPartida);
-      expect(repo.create).toHaveBeenCalledWith(data);
+      expect(result).toEqual(mockDto);
+      expect(repo.createSiembraPartida).toHaveBeenCalledWith({
+        partidaId: 100,
+        anio: 2026,
+        indice: 1,
+        metodoMaquina: true,
+        presionSemilla: 25,
+        profundidadSemilla: '1.525',
+        tratamientoSemilla: false,
+        mezcla: { connect: { id: 'mezcla-1' } },
+        user: { connect: { id: 'user-1' } },
+      });
     });
   });
 });
