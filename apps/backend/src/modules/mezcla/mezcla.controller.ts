@@ -19,7 +19,7 @@ export class MezclaController {
   }
 
   @Post()
-  @RequirePermission({ tableName: 'mezcla', action: 'create', scope: 'ALL' })
+  @RequirePermission({ tableName: 'mezclas', action: 'create', scope: 'ALL' })
   async createMezcla(
     @Body(new ZodValidationPipe(CreateMezclaSchema))
     data: CreateMezclaDto,
@@ -28,7 +28,7 @@ export class MezclaController {
   }
 
   @Get(':id')
-  @RequirePermission({ tableName: 'mezcla', action: 'read', scope: 'ALL' })
+  @RequirePermission({ tableName: 'mezclas', action: 'read', scope: 'ALL' })
   async getMezcla(
     @CurrentUser() user: AuthUser,
     @Param('id') id: string,
