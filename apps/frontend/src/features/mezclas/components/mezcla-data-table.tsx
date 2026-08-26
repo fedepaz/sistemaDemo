@@ -5,7 +5,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useCreateMezcla, useMezclas } from "../hooks/useMezclas";
 import { useSustratos } from "@/features/sustratos/hooks/useSustratos";
 import { CreateMezclaDto, CreateMezclaSchema, MezclaDto } from "@vivero/shared";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { mezclaColumns, mezclaExportColumns } from "./columns";
@@ -36,7 +36,7 @@ export function MezclaDataTable() {
     },
   });
 
-  const watchedValues = formCreateMezcla.watch();
+  const watchedValues = useWatch({ control: formCreateMezcla.control });
   const totalPorcentaje = useMemo(() => {
     return (
       (watchedValues.porcentaje1 ?? 0) +
