@@ -37,8 +37,8 @@ export class PartidasService {
       throw new BadRequestException('baja no puede ser mayor al stock inicial');
     }
     const repoData = {
-      partida: data.partida,
-      ano: data.ano,
+      partida: data.partidaId,
+      ano: data.anio,
       indice: data.indice,
       ubicacion: data.ubicacion,
       stock_ini: data.stock_ini,

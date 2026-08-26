@@ -1,11 +1,9 @@
-// shared/src/schemas/partidas.dto.ts
+// shared/src/schemas/partidas.schema.ts
 import { z } from "zod";
-import { SiembraCompletaHeaderSchema } from "./legacy-header.schema";
+import { PartidaHeaderSchema } from "./legacy-header.schema";
+import { CreateSiembraPartidaSchema } from "./siembraPartida.schema";
 
-export const AsignarUbiExtendidoDtoSchema = z.object({
-  partida: z.number(),
-  ano: z.number(),
-  indice: z.number(),
+export const AsignarUbiExtendidoDtoSchema = PartidaHeaderSchema.extend({
   ubicacion: z.number().int().positive(),
   stock_ini: z.number().int().nonnegative(),
   detalle: z
@@ -21,10 +19,7 @@ export type AsignarUbiExtendidoDto = z.infer<
   typeof AsignarUbiExtendidoDtoSchema
 >;
 
-export const AsignarUbiSiembraDtoSchema = z.object({
-  partida: z.number(),
-  ano: z.number(),
-  indice: z.number(),
+export const AsignarUbiSiembraDtoSchema = PartidaHeaderSchema.extend({
   cg: z.number().int().positive(),
   cantidaNroCont: z.number().int().positive(),
   f_siembra: z.coerce.date(),
@@ -38,8 +33,11 @@ export const AsignarUbiSiembraDtoSchema = z.object({
 
 export type AsignarUbiSiembraDto = z.infer<typeof AsignarUbiSiembraDtoSchema>;
 
-export const AsignarUbiSiembraCompletaDtoSchema = SiembraCompletaHeaderSchema.merge(
-  AsignarUbiSiembraDtoSchema.omit({ partida: true, ano: true, indice: true })
-);
+export const AsignarUbiSiembraCompletaDtoSchema =
+  AsignarUbiSiembraDtoSchema.merge(
+    CreateSiembraPartidaSchema,
+  );
 
-export type AsignarUbiSiembraCompletaDto = z.infer<typeof AsignarUbiSiembraCompletaDtoSchema>;
+export type AsignarUbiSiembraCompletaDto = z.infer<
+  typeof AsignarUbiSiembraCompletaDtoSchema
+>;

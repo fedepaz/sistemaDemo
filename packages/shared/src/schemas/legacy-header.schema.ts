@@ -1,5 +1,4 @@
-import { z } from 'zod';
-import { CreateSiembraPartidaSchema } from './siembraPartida.schema';
+import { z } from "zod";
 
 export const LegacyHeaderSchema = z.object({
   partidaId: z.number(),
@@ -11,8 +10,10 @@ export const LegacyHeaderSchema = z.object({
 
 export type LegacyHeader = z.infer<typeof LegacyHeaderSchema>;
 
-export const SiembraCompletaHeaderSchema = LegacyHeaderSchema.merge(
-  CreateSiembraPartidaSchema.omit({ partidaId: true, anio: true, indice: true })
-);
+export const PartidaHeaderSchema = z.object({
+  partidaId: z.number(),
+  anio: z.number(),
+  indice: z.number(),
+});
 
-export type SiembraCompletaHeader = z.infer<typeof SiembraCompletaHeaderSchema>;
+export type PartidaHeader = z.infer<typeof PartidaHeaderSchema>;
