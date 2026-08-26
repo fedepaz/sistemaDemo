@@ -2,27 +2,27 @@
 
 import z from "zod";
 import { PartidaHeaderSchema } from "./legacy-header.schema";
-import { cuidSchema } from "./cuid.schema";
+import { requiredCuid } from "./cuid.schema";
 
 export const TaskShiftSchema = PartidaHeaderSchema.extend({
-  id: cuidSchema,
-  createdByUserId: cuidSchema,
-  entityId: cuidSchema,
+  id: requiredCuid("El turno"),
+  createdByUserId: requiredCuid("El usuario creador"),
+  entityId: requiredCuid("La entidad"),
   startTime: z.string(),
   endTime: z.string(),
   isActive: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  employees: z.array(z.object({ userId: cuidSchema })),
+  employees: z.array(z.object({ userId: requiredCuid("El empleado") })),
 });
 
 export type TaskShiftDto = z.infer<typeof TaskShiftSchema>;
 
 export const CreateTaskShiftBaseSchema = PartidaHeaderSchema.extend({
-  entityId: cuidSchema,
-  startTime: z.string().min(1, "La hora de inicio es requerida"),
-  endTime: z.string().min(1, "La hora de fin es requerida"),
-  employeeUserIds: z.array(cuidSchema).min(0).default([]),
+  entityId: requiredCuid("La entidad"),
+  startTime: z.string().min(1, { message: "La hora de inicio es requerida" }),
+  endTime: z.string().min(1, { message: "La hora de fin es requerida" }),
+  employeeUserIds: z.array(requiredCuid("El empleado")).min(0).default([]),
 });
 
 export const CreateTaskShiftSchema = CreateTaskShiftBaseSchema.refine(
@@ -38,7 +38,7 @@ export type CreateTaskShiftDto = z.infer<typeof CreateTaskShiftSchema>;
 export const UpdateTaskShiftSchema = z.object({
   startTime: z.string().datetime().optional(),
   endTime: z.string().datetime().optional(),
-  employeeUserIds: z.array(cuidSchema).optional(),
+  employeeUserIds: z.array(requiredCuid("El empleado")).optional(),
 });
 
 export type UpdateTaskShiftDto = z.infer<typeof UpdateTaskShiftSchema>;

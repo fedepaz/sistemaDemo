@@ -1,10 +1,10 @@
 // shared/src/schemas/sustratos.schema.ts
 
 import { z } from "zod";
-import { cuidSchema } from "./cuid.schema";
+import { requiredCuid } from "./cuid.schema";
 
 export const SustratoSchema = z.object({
-  id: cuidSchema,
+  id: requiredCuid("El sustrato"),
   nombre: z.string(),
   createdAt: z.date(),
 });
@@ -12,13 +12,13 @@ export const SustratoSchema = z.object({
 export type SustratoDto = z.infer<typeof SustratoSchema>;
 
 export const CreateSustratoSchema = z.object({
-  nombre: z.string(),
+  nombre: z.string().min(1, { message: "El nombre del sustrato es requerido" }),
 });
 
 export type CreateSustratoDto = z.infer<typeof CreateSustratoSchema>;
 
 export const UpdateSustratoSchema = z.object({
-  nombre: z.string().optional(),
+  nombre: z.string().min(1, { message: "El nombre del sustrato es requerido" }).optional(),
 });
 
 export type UpdateSustratoDto = z.infer<typeof UpdateSustratoSchema>;

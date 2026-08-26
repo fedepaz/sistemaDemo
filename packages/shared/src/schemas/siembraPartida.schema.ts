@@ -2,35 +2,36 @@
 
 import { z } from "zod";
 import { PartidaHeaderSchema } from "./legacy-header.schema";
-import { cuidSchema } from "./cuid.schema";
+import { requiredCuid } from "./cuid.schema";
 
 const profundidadSemillaRegex = /^\d{1,2}(\.\d{1,3})?$/;
 
 export const ProfundidadSemillaSchema = z
   .string()
+  .min(1, { message: "La profundidad de semilla es requerida" })
   .regex(
     profundidadSemillaRegex,
-    "Format: 1.525 (1-2 digits, optional 1-3 decimals)",
+    { message: "La profundidad debe tener el formato: 1.525 (1-2 dígitos, hasta 3 decimales)" },
   );
 
 export const SiembraPartidaSchema = PartidaHeaderSchema.extend({
-  id: cuidSchema,
-  metodoMaquina: z.boolean(),
-  presionSemilla: z.number().int(),
+  id: requiredCuid("El registro de siembra"),
+  metodoMaquina: z.boolean({ required_error: "El método/máquina es requerido" }),
+  presionSemilla: z.number().int({ message: "La presión de semilla debe ser un número entero" }),
   profundidadSemilla: ProfundidadSemillaSchema,
-  tratamientoSemilla: z.boolean(),
-  mezclaId: cuidSchema,
-  userId: cuidSchema,
+  tratamientoSemilla: z.boolean({ required_error: "El tratamiento de semilla es requerido" }),
+  mezclaId: requiredCuid("La mezcla"),
+  userId: requiredCuid("El usuario"),
 });
 
 export type SiembraPartidaDto = z.infer<typeof SiembraPartidaSchema>;
 
 export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
-  metodoMaquina: z.boolean(),
-  presionSemilla: z.number().int(),
+  metodoMaquina: z.boolean({ required_error: "El método/máquina es requerido" }),
+  presionSemilla: z.number().int({ message: "La presión de semilla debe ser un número entero" }),
   profundidadSemilla: ProfundidadSemillaSchema,
-  tratamientoSemilla: z.boolean(),
-  mezclaId: cuidSchema,
+  tratamientoSemilla: z.boolean({ required_error: "El tratamiento de semilla es requerido" }),
+  mezclaId: requiredCuid("La mezcla"),
 });
 
 export type CreateSiembraPartidaDto = z.infer<

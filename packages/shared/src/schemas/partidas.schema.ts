@@ -5,15 +5,15 @@ import { CreateSiembraPartidaSchema } from "./siembraPartida.schema";
 import { CreateTaskShiftBaseSchema } from "./taskShift.schema";
 
 export const AsignarUbiExtendidoDtoSchema = PartidaHeaderSchema.extend({
-  ubicacion: z.number().int().positive(),
-  stock_ini: z.number().int().nonnegative(),
+  ubicacion: z.number().int({ message: "La ubicación debe ser un número entero" }).positive({ message: "Debe seleccionar una ubicación válida" }),
+  stock_ini: z.number().int({ message: "El stock inicial debe ser un número entero" }).nonnegative({ message: "El stock inicial no puede ser negativo" }),
   detalle: z
     .string()
-    .max(30, "El detalle no puede superar los 30 caracteres")
+    .max(30, { message: "El detalle no puede superar los 30 caracteres" })
     .optional()
     .default(""),
   baja: z.number().int().nonnegative().optional().default(0),
-  extendido: z.string().default(""), // For long notes
+  extendido: z.string().default(""),
   edita: z.string().optional(),
 });
 export type AsignarUbiExtendidoDto = z.infer<
@@ -21,12 +21,12 @@ export type AsignarUbiExtendidoDto = z.infer<
 >;
 
 export const AsignarUbiSiembraDtoSchema = PartidaHeaderSchema.extend({
-  cg: z.number().int().positive(),
-  cantidaNroCont: z.number().int().positive(),
-  f_siembra: z.coerce.date(),
+  cg: z.number().int({ message: "La ubicación (CG) debe ser un número entero" }).positive({ message: "Debe seleccionar una ubicación válida" }),
+  cantidaNroCont: z.number().int({ message: "La cantidad de nro. de contenedor debe ser un número entero" }).positive({ message: "La cantidad debe ser mayor a 0" }),
+  f_siembra: z.coerce.date({ message: "La fecha de siembra es requerida" }),
   detalle: z
     .string()
-    .max(30, "El detalle no puede superar los 30 caracteres")
+    .max(30, { message: "El detalle no puede superar los 30 caracteres" })
     .optional()
     .default(""),
   edita: z.string().optional(),

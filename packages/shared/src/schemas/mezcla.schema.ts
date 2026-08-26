@@ -1,20 +1,20 @@
 // shared/src/schemas/mezcla.schema.ts
 
 import { z } from "zod";
-import { cuidSchema, nullableCuidSchema } from "./cuid.schema";
+import { requiredCuid } from "./cuid.schema";
 
 export const MezclaSchema = z.object({
-  id: cuidSchema,
-  sustrato1Id: cuidSchema,
+  id: requiredCuid("La mezcla"),
+  sustrato1Id: requiredCuid("El sustrato 1"),
   sustrato1Nombre: z.string(),
   porcentaje1: z.number(),
-  sustrato2Id: nullableCuidSchema,
+  sustrato2Id: requiredCuid("El sustrato 2").nullable(),
   sustrato2Nombre: z.string().nullable(),
   porcentaje2: z.number().nullable(),
-  sustrato3Id: nullableCuidSchema,
+  sustrato3Id: requiredCuid("El sustrato 3").nullable(),
   sustrato3Nombre: z.string().nullable(),
   porcentaje3: z.number().nullable(),
-  sustrato4Id: nullableCuidSchema,
+  sustrato4Id: requiredCuid("El sustrato 4").nullable(),
   sustrato4Nombre: z.string().nullable(),
   porcentaje4: z.number().nullable(),
   isActive: z.boolean(),
@@ -25,13 +25,13 @@ export type MezclaDto = z.infer<typeof MezclaSchema>;
 
 export const CreateMezclaSchema = z
   .object({
-    sustrato1Id: cuidSchema,
-    porcentaje1: z.number(),
-    sustrato2Id: nullableCuidSchema,
+    sustrato1Id: requiredCuid("El sustrato 1"),
+    porcentaje1: z.number({ required_error: "El porcentaje 1 es requerido" }),
+    sustrato2Id: requiredCuid("El sustrato 2").nullable(),
     porcentaje2: z.number().nullable(),
-    sustrato3Id: nullableCuidSchema,
+    sustrato3Id: requiredCuid("El sustrato 3").nullable(),
     porcentaje3: z.number().nullable(),
-    sustrato4Id: nullableCuidSchema,
+    sustrato4Id: requiredCuid("El sustrato 4").nullable(),
     porcentaje4: z.number().nullable(),
   })
   .refine(
