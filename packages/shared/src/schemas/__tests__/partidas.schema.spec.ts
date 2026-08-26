@@ -6,8 +6,8 @@ import {
 
 describe("AsignarUbiExtendidoDtoSchema", () => {
   const valid = {
-    partida: 1,
-    ano: 2026,
+    partidaId: 1,
+    anio: 2026,
     indice: 1,
     ubicacion: 100,
     stock_ini: 50,
@@ -15,7 +15,7 @@ describe("AsignarUbiExtendidoDtoSchema", () => {
 
   it("accepts valid assignment", () => {
     const result = AsignarUbiExtendidoDtoSchema.parse(valid);
-    expect(result.partida).toBe(1);
+    expect(result.partidaId).toBe(1);
     expect(result.ubicacion).toBe(100);
   });
 
@@ -89,8 +89,8 @@ describe("AsignarUbiExtendidoDtoSchema", () => {
 
 describe("AsignarUbiSiembraDtoSchema", () => {
   const valid = {
-    partida: 1,
-    ano: 2026,
+    partidaId: 1,
+    anio: 2026,
     indice: 1,
     cg: 92,
     cantidaNroCont: 120,
@@ -100,7 +100,7 @@ describe("AsignarUbiSiembraDtoSchema", () => {
 
   it("accepts valid assignment", () => {
     const result = AsignarUbiSiembraDtoSchema.parse(valid);
-    expect(result.partida).toBe(1);
+    expect(result.partidaId).toBe(1);
     expect(result.cg).toBe(92);
     expect(result.cantidaNroCont).toBe(120);
   });
