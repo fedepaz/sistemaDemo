@@ -46,6 +46,8 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         detalleExtendido: selectedPartida.extendido,
         f_siembra: new Date(),
         edita: "S",
+        presionSemilla: 0,
+        profundidadSemilla: "",
         metodoMaquina: true,
         tratamientoSemilla: false,
         entityId: entity.id,

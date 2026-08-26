@@ -5,7 +5,7 @@ import { cuidSchema } from "./cuid.schema";
 
 // Reusable password validation rules
 export const passwordRules = z
-  .string()
+  .string({ message: "La contraseña es obligatoria" })
   .min(6, {
     message: "La contraseña debe tener al menos 6 caracteres",
   })
@@ -24,7 +24,7 @@ export const passwordRules = z
 
 export const RegisterAuthSchema = z.object({
   username: z
-    .string()
+    .string({ message: "Nombre de usuario es obligatorio" })
     .min(1, { message: "Nombre de usuario es obligatorio" })
     .max(50, { message: "Nombre de usuario máximo 50 caracteres" }),
   firstName: z

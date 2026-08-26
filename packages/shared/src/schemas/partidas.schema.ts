@@ -6,11 +6,11 @@ import { CreateTaskShiftBaseSchema } from "./taskShift.schema";
 
 export const AsignarUbiExtendidoDtoSchema = PartidaHeaderSchema.extend({
   ubicacion: z
-    .number()
+    .number({ message: "Debe seleccionar una ubicación válida" })
     .int({ message: "La ubicación debe ser un número entero" })
     .positive({ message: "Debe seleccionar una ubicación válida" }),
   stock_ini: z
-    .number()
+    .number({ message: "El stock inicial debe ser un número entero" })
     .int({ message: "El stock inicial debe ser un número entero" })
     .nonnegative({ message: "El stock inicial no puede ser negativo" }),
   detalle: z
@@ -18,7 +18,14 @@ export const AsignarUbiExtendidoDtoSchema = PartidaHeaderSchema.extend({
     .max(30, { message: "El detalle no puede superar los 30 caracteres" })
     .optional()
     .default(""),
-  baja: z.number().int().nonnegative().optional().default(0),
+  baja: z
+    .number()
+    .int()
+    .nonnegative({
+      message: "El número de bajas debe ser un número entero positivo",
+    })
+    .optional()
+    .default(0),
   extendido: z.string().default(""),
   edita: z.string().optional(),
 });
@@ -28,11 +35,13 @@ export type AsignarUbiExtendidoDto = z.infer<
 
 export const AsignarUbiSiembraDtoSchema = PartidaHeaderSchema.extend({
   cg: z
-    .number()
+    .number({ message: "Debe seleccionar una ubicación válida" })
     .int({ message: "La ubicación (CG) debe ser un número entero" })
     .positive({ message: "Debe seleccionar una ubicación válida" }),
   cantidaNroCont: z
-    .number()
+    .number({
+      message: "La cantidad de nro. de contenedor debe ser un número entero",
+    })
     .int({
       message: "La cantidad de nro. de contenedor debe ser un número entero",
     })

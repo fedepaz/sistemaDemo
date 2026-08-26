@@ -23,7 +23,7 @@ export const nullableCuidSchema = cuidSchema.nullable();
  */
 export function requiredCuid(label: string) {
   return z
-    .string()
+    .string({ message: `${label} es requerido` })
     .min(1, { message: `${label} es requerido` })
     .regex(CUID_REGEX, { message: `${label} no tiene un formato válido` });
 }

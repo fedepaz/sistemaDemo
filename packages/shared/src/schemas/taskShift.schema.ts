@@ -20,8 +20,12 @@ export type TaskShiftDto = z.infer<typeof TaskShiftSchema>;
 
 export const CreateTaskShiftBaseSchema = PartidaHeaderSchema.extend({
   entityId: requiredCuid("La entidad"),
-  startTime: z.string().min(1, { message: "La hora de inicio es requerida" }),
-  endTime: z.string().min(1, { message: "La hora de fin es requerida" }),
+  startTime: z
+    .string({ message: "La hora de inicio es requerida" })
+    .min(1, { message: "La hora de inicio es requerida" }),
+  endTime: z
+    .string({ message: "La hora de fin es requerida" })
+    .min(1, { message: "La hora de fin es requerida" }),
   employeeUserIds: z.array(requiredCuid("El empleado")).min(0).default([]),
 });
 

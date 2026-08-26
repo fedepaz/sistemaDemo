@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Select,
   SelectContent,
@@ -14,12 +14,12 @@ import { Label } from "@/components/ui/label";
 import { getLocalDateStr } from "@/lib/date-utils";
 import { EmployeeSearch } from "./employee-search";
 import type { UserProfileDto } from "@vivero/shared";
-import { Clock, User2 } from "lucide-react";
+import { Clock, User2, AlertTriangle } from "lucide-react";
 
-const HOURS = Array.from({ length: 24 }, (_, i) =>
+const ALL_HOURS = Array.from({ length: 24 }, (_, i) =>
   i.toString().padStart(2, "0"),
 );
-const MINUTES = Array.from({ length: 12 }, (_, i) =>
+const ALL_MINUTES = Array.from({ length: 12 }, (_, i) =>
   (i * 5).toString().padStart(2, "0"),
 );
 
@@ -60,18 +60,80 @@ export function TaskShift({
   );
 
   const isStartComplete = startHour !== "" && startMinute !== "";
+  const isEndComplete = endHour !== "" && endMinute !== "";
+
+  const validEndHours = useMemo(() => {
+    if (!isStartComplete) return ALL_HOURS;
+    const sh = parseInt(startHour, 10);
+    return ALL_HOURS.filter((h) => parseInt(h, 10) >= sh);
+  }, [startHour, isStartComplete]);
+
+  const validEndMinutes = useMemo(() => {
+    if (!isStartComplete || endHour === "") return ALL_MINUTES;
+    const sh = parseInt(startHour, 10);
+    const sm = parseInt(startMinute, 10);
+    const eh = parseInt(endHour, 10);
+    if (eh > sh) return ALL_MINUTES;
+    return ALL_MINUTES.filter((m) => parseInt(m, 10) > sm);
+  }, [startHour, startMinute, endHour, isStartComplete]);
+
+  const timeError = useMemo(() => {
+    if (!isStartComplete || !isEndComplete) return null;
+    const end = new Date(toDateTimeString(today, `${endHour}:${endMinute}`));
+    const start = new Date(
+      toDateTimeString(today, `${startHour}:${startMinute}`),
+    );
+    if (end <= start) {
+      return "La hora de fin debe ser posterior a la hora de inicio";
+    }
+    return null;
+  }, [
+    today,
+    startHour,
+    startMinute,
+    endHour,
+    endMinute,
+    isStartComplete,
+    isEndComplete,
+  ]);
 
   function handleStartHourChange(hour: string) {
     setStartHour(hour);
     if (startMinute) {
-      onStartTimeChange(toDateTimeString(today, `${hour}:${startMinute}`));
+      const newStart = toDateTimeString(today, `${hour}:${startMinute}`);
+      onStartTimeChange(newStart);
+
+      if (isEndComplete) {
+        const newStartD = new Date(newStart);
+        const currentEnd = new Date(
+          toDateTimeString(today, `${endHour}:${endMinute}`),
+        );
+        if (currentEnd <= newStartD) {
+          setEndHour("");
+          setEndMinute("");
+          onEndTimeChange("");
+        }
+      }
     }
   }
 
   function handleStartMinuteChange(minute: string) {
     setStartMinute(minute);
     if (startHour) {
-      onStartTimeChange(toDateTimeString(today, `${startHour}:${minute}`));
+      const newStart = toDateTimeString(today, `${startHour}:${minute}`);
+      onStartTimeChange(newStart);
+
+      if (isEndComplete) {
+        const newStartD = new Date(newStart);
+        const currentEnd = new Date(
+          toDateTimeString(today, `${endHour}:${endMinute}`),
+        );
+        if (currentEnd <= newStartD) {
+          setEndHour("");
+          setEndMinute("");
+          onEndTimeChange("");
+        }
+      }
     }
   }
 
@@ -123,7 +185,7 @@ export function TaskShift({
                   className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
                   position="popper"
                 >
-                  {HOURS.map((h) => (
+                  {ALL_HOURS.map((h) => (
                     <SelectItem key={`sh-${h}`} value={h}>
                       {h}
                     </SelectItem>
@@ -141,7 +203,7 @@ export function TaskShift({
                   className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
                   position="popper"
                 >
-                  {MINUTES.map((m) => (
+                  {ALL_MINUTES.map((m) => (
                     <SelectItem key={`sm-${m}`} value={m}>
                       {m}
                     </SelectItem>
@@ -167,18 +229,30 @@ export function TaskShift({
                 onValueChange={handleEndHourChange}
                 value={endHour}
               >
-                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+                <SelectTrigger
+                  className={`h-10 md:h-14 rounded-xl shadow-sm text-sm md:text-base font-bold px-4 ${
+                    timeError
+                      ? "border-destructive bg-destructive/5"
+                      : "border-border/60 bg-background"
+                  }`}
+                >
                   <SelectValue placeholder="HH" />
                 </SelectTrigger>
                 <SelectContent
                   className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
                   position="popper"
                 >
-                  {HOURS.map((h) => (
-                    <SelectItem key={`eh-${h}`} value={h}>
-                      {h}
-                    </SelectItem>
-                  ))}
+                  {validEndHours.length === 0 ? (
+                    <div className="px-3 py-2 text-xs text-muted-foreground">
+                      Sin horas disponibles
+                    </div>
+                  ) : (
+                    validEndHours.map((h) => (
+                      <SelectItem key={`eh-${h}`} value={h}>
+                        {h}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
               <Select
@@ -186,22 +260,41 @@ export function TaskShift({
                 onValueChange={handleEndMinuteChange}
                 value={endMinute}
               >
-                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+                <SelectTrigger
+                  className={`h-10 md:h-14 rounded-xl shadow-sm text-sm md:text-base font-bold px-4 ${
+                    timeError
+                      ? "border-destructive bg-destructive/5"
+                      : "border-border/60 bg-background"
+                  }`}
+                >
                   <SelectValue placeholder="MM" />
                 </SelectTrigger>
                 <SelectContent
                   className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
                   position="popper"
                 >
-                  {MINUTES.map((m) => (
-                    <SelectItem key={`em-${m}`} value={m}>
-                      {m}
-                    </SelectItem>
-                  ))}
+                  {validEndMinutes.length === 0 ? (
+                    <div className="px-3 py-2 text-xs text-muted-foreground">
+                      Sin minutos disponibles
+                    </div>
+                  ) : (
+                    validEndMinutes.map((m) => (
+                      <SelectItem key={`em-${m}`} value={m}>
+                        {m}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             </div>
           </div>
+
+          {timeError && (
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-destructive/10 border border-destructive/20">
+              <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0" />
+              <span className="text-xs text-destructive">{timeError}</span>
+            </div>
+          )}
         </div>
       </div>
 

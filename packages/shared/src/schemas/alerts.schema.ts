@@ -101,7 +101,7 @@ export const CreateAlertCommentSchema = z.object({
   anio: z.number(),
   indice: z.number(),
   content: z
-    .string()
+    .string({ message: "El comentario no puede estar vacío" })
     .min(1, { message: "El comentario no puede estar vacío" })
     .max(500, { message: "Máximo 500 caracteres" }),
 });
