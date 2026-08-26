@@ -26,7 +26,7 @@ describe('SustratosService', () => {
   const mockDto = {
     id: 'sust-1',
     nombre: 'Turba',
-    createdAt: '2026-01-15T00:00:00.000Z',
+    createdAt: new Date('2026-01-15'),
   };
 
   beforeEach(async () => {

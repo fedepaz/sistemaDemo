@@ -12,6 +12,7 @@ import {
   Expand,
   Shield,
   Package,
+  Blend,
 } from "lucide-react";
 import type { NavigationConfig } from "./navigation.types";
 
@@ -59,6 +60,14 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
             description: "Gestión de sustratos",
             dashboard: { statsLabel: "Sustratos" },
             requiredPermission: { table: "sustratos", action: "read" },
+          },
+          {
+            title: "Mezclas",
+            href: ROUTES.MEZCLAS,
+            icon: Blend,
+            description: "Gestión de mezclas de sustratos",
+            dashboard: { statsLabel: "Mezclas" },
+            requiredPermission: { table: "siembra", action: "read" },
           },
         ],
       },

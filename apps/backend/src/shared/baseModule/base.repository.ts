@@ -102,8 +102,6 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
     return this.model.create({
       data: {
         ...data,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     });
   }

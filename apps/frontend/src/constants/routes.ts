@@ -10,6 +10,7 @@ export const ROUTES = {
   EXTENDIDOS: "/extendidos",
   SIEMBRA: "/siembra",
   SUSTRATOS: "/sustratos",
+  MEZCLAS: "/mezclas",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

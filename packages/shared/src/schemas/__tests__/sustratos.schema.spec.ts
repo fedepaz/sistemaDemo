@@ -2,7 +2,7 @@
 import { SustratoSchema, CreateSustratoSchema, UpdateSustratoSchema } from "../sustratos.schema";
 
 describe("SustratoSchema", () => {
-  const valid = { id: "sust-1", nombre: "Turba", createdAt: "2026-01-15T00:00:00.000Z" };
+  const valid = { id: "sust-1", nombre: "Turba", createdAt: new Date("2026-01-15") };
 
   it("accepts valid sustrato", () => {
     const result = SustratoSchema.parse(valid);
