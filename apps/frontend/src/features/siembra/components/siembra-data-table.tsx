@@ -5,8 +5,8 @@ import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { useState, useEffect, useCallback } from "react";
 
 import {
-  AsignarUbiSiembraDto,
-  AsignarUbiSiembraDtoSchema,
+  AsignarUbiSiembraCompletaDto,
+  AsignarUbiSiembraCompletaDtoSchema,
   SiembraDto,
 } from "@vivero/shared";
 
@@ -30,26 +30,34 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
 
   const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
 
-  const formAsignarUbicacion = useForm<AsignarUbiSiembraDto>({
-    resolver: zodResolver(AsignarUbiSiembraDtoSchema),
+  const formAsignarUbicacion = useForm<AsignarUbiSiembraCompletaDto>({
+    resolver: zodResolver(AsignarUbiSiembraCompletaDtoSchema),
   });
 
   useEffect(() => {
     if (selectedPartida) {
       formAsignarUbicacion.reset({
-        partida: selectedPartida.partidaId,
-        ano: selectedPartida.anio,
+        partidaId: selectedPartida.partidaId,
+        anio: selectedPartida.anio,
         indice: selectedPartida.indice,
+        codigoEspecie: selectedPartida.codigoEspecie,
+        nombreEspecie: selectedPartida.nombreEspecie,
         cantidaNroCont: parseInt(selectedPartida.nrocont),
         detalle: selectedPartida.extendido,
         f_siembra: new Date(),
         edita: "S",
+        cg: 0,
+        metodoMaquina: true,
+        presionSemilla: 0,
+        profundidadSemilla: "",
+        tratamientoSemilla: false,
+        mezclaId: "",
       });
     }
   }, [selectedPartida, formAsignarUbicacion]);
 
   const handleAsignarUbicacionSiembra = async (
-    formData: AsignarUbiSiembraDto,
+    formData: AsignarUbiSiembraCompletaDto,
   ) => {
     if (selectedPartida) {
       try {
@@ -108,7 +116,8 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           saveLabel="Confirmar Ubicación"
           confirm={{
             title: "Confirmar ubicación",
-            description: "¿Deseas confirmar la asignación de esta ubicación de siembra?",
+            description:
+              "¿Deseas confirmar la asignación de esta ubicación de siembra?",
             label: "Confirmar Ubicación",
           }}
         >

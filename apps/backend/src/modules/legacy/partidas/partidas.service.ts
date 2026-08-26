@@ -2,11 +2,18 @@
 
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PartidasRepository } from './repositories/partidas.repository';
-import { AsignarUbiExtendidoDto, AsignarUbiSiembraDto } from '@vivero/shared';
+import {
+  AsignarUbiExtendidoDto,
+  AsignarUbiSiembraCompletaDto,
+} from '@vivero/shared';
+import { PrismaService } from '../../../infra/prisma/prisma.service';
 
 @Injectable()
 export class PartidasService {
-  constructor(private readonly partidasRepository: PartidasRepository) {}
+  constructor(
+    private readonly partidasRepository: PartidasRepository,
+    private readonly prisma: PrismaService,
+  ) {}
 
   async getAllPartidas() {
     const partidas = await this.partidasRepository.findAll();
@@ -43,7 +50,10 @@ export class PartidasService {
     await this.partidasRepository.asignarExtendido(repoData);
   }
 
-  async asignarSiembra(data: AsignarUbiSiembraDto): Promise<void> {
+  async asignarSiembra(
+    data: AsignarUbiSiembraCompletaDto,
+    requesterId: string,
+  ): Promise<void> {
     if (data.edita === 'N') {
       throw new BadRequestException('La partida no se puede editar');
     }
@@ -52,9 +62,9 @@ export class PartidasService {
       throw new BadRequestException('Debe seleccionar una ubicación válida');
     }
 
-    const repoData = {
-      partida: data.partida,
-      ano: data.ano,
+    const legacyData = {
+      partida: data.partidaId,
+      ano: data.anio,
       indice: data.indice,
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
@@ -62,6 +72,21 @@ export class PartidasService {
       detalle: data.detalle,
     };
 
-    await this.partidasRepository.asignarSiembra(repoData);
+    const newSiembraData = {
+      partidaId: data.partidaId,
+      anio: data.anio,
+      indice: data.indice,
+      metodoMaquina: data.metodoMaquina,
+      presionSemilla: data.presionSemilla,
+      profundidadSemilla: data.profundidadSemilla,
+      tratamientoSemilla: data.tratamientoSemilla,
+      mezcla: { connect: { id: data.mezclaId } },
+      user: { connect: { id: requesterId } },
+    };
+
+    await this.prisma.$transaction(async () => {
+      await this.prisma.siembraPartidas.create({ data: newSiembraData });
+      await this.partidasRepository.asignarSiembra(legacyData);
+    });
   }
 }

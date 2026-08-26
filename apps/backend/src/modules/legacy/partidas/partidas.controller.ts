@@ -5,11 +5,13 @@ import { PartidasService } from './partidas.service';
 import {
   AsignarUbiExtendidoDto,
   AsignarUbiExtendidoDtoSchema,
-  AsignarUbiSiembraDto,
-  AsignarUbiSiembraDtoSchema,
+  AsignarUbiSiembraCompletaDto,
+  AsignarUbiSiembraCompletaDtoSchema,
 } from '@vivero/shared';
 import { ZodValidationPipe } from '../../../shared/pipes/zod-validation-pipe';
 import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorators';
+import { AuthUser } from '../../auth/types/auth-user.type';
 
 @Controller('l-partidas')
 export class PartidasController {
@@ -49,10 +51,11 @@ export class PartidasController {
     scope: 'ALL',
   })
   async asignarSiembra(
-    @Body(new ZodValidationPipe(AsignarUbiSiembraDtoSchema))
-    data: AsignarUbiSiembraDto,
+    @Body(new ZodValidationPipe(AsignarUbiSiembraCompletaDtoSchema))
+    data: AsignarUbiSiembraCompletaDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    await this.service.asignarSiembra(data);
+    await this.service.asignarSiembra(data, user.id);
     return {
       success: true,
       message: 'Ubicación asignada correctamente',

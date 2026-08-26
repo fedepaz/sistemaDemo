@@ -53,6 +53,14 @@ jest.mock("@/features/extendidos", () => ({
   }),
 }));
 
+jest.mock("@/features/mezclas", () => ({
+  useMezclas: () => ({
+    data: [
+      { id: "m1", sustrato1Nombre: "Sustrato A", sustrato2Nombre: "Sustrato B", sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
+    ],
+  }),
+}));
+
 jest.mock("@/components/ui/tooltip", () => ({
   Tooltip: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
@@ -87,6 +95,9 @@ jest.mock("@/components/ui/form", () => ({
     <label>{children}</label>
   ),
   FormControl: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  FormDescription: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
   FormMessage: () => null,

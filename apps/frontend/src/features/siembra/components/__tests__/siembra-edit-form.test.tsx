@@ -1,3 +1,8 @@
+jest.mock("react-hook-form", () => ({
+  ...jest.requireActual("react-hook-form"),
+  useWatch: jest.fn().mockReturnValue(true),
+}));
+
 import { render, screen } from "@testing-library/react";
 
 beforeAll(() => {
@@ -16,6 +21,15 @@ jest.mock("@/features/extendidos", () => ({
     data: [
       { codigo: 1, nombre: "Cámara 1", camara: "CAM01" },
       { codigo: 2, nombre: "Cámara 2", camara: "CAM02" },
+    ],
+  }),
+}));
+
+jest.mock("@/features/mezclas", () => ({
+  useMezclas: () => ({
+    data: [
+      { id: "m1", sustrato1Nombre: "Sustrato A", sustrato2Nombre: "Sustrato B", sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
+      { id: "m2", sustrato1Nombre: "Sustrato C", sustrato2Nombre: null, sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
     ],
   }),
 }));
@@ -56,6 +70,9 @@ jest.mock("@/components/ui/form", () => ({
   FormControl: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
+  FormDescription: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   FormMessage: () => null,
 }));
 
@@ -77,17 +94,28 @@ const mockSelectedSiembra: SiembraDto = {
 };
 
 const mockForm = {
-  control: {},
+  control: {
+    _getWatch: jest.fn().mockReturnValue(true),
+    _formValues: {},
+    _subjects: {
+      watch: { next: jest.fn() },
+    },
+  },
   handleSubmit: (fn: (data: Record<string, unknown>) => void) => (e: Event) => {
     e.preventDefault();
     fn({
-      partida: 1,
-      ano: 2024,
+      partidaId: 1,
+      anio: 2024,
       indice: 1,
       cg: 1,
       cantidaNroCont: 100,
       germin: 85,
       detalle: "",
+      metodoMaquina: true,
+      presionSemilla: 40,
+      profundidadSemilla: "1.525",
+      tratamientoSemilla: false,
+      mezclaId: "m1",
     });
   },
   formState: {

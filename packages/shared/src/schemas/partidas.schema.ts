@@ -1,5 +1,6 @@
 // shared/src/schemas/partidas.dto.ts
 import { z } from "zod";
+import { SiembraCompletaHeaderSchema } from "./legacy-header.schema";
 
 export const AsignarUbiExtendidoDtoSchema = z.object({
   partida: z.number(),
@@ -36,3 +37,9 @@ export const AsignarUbiSiembraDtoSchema = z.object({
 });
 
 export type AsignarUbiSiembraDto = z.infer<typeof AsignarUbiSiembraDtoSchema>;
+
+export const AsignarUbiSiembraCompletaDtoSchema = SiembraCompletaHeaderSchema.merge(
+  AsignarUbiSiembraDtoSchema.omit({ partida: true, ano: true, indice: true })
+);
+
+export type AsignarUbiSiembraCompletaDto = z.infer<typeof AsignarUbiSiembraCompletaDtoSchema>;
