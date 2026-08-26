@@ -3,7 +3,7 @@ import { UserProfileSchema, UpdateUserProfileSchema } from '../user.schema';
 
 describe('UserProfileSchema', () => {
   const validUser = {
-    id: 'clx1234567890abcdef12345',
+    id: 'clx1234567890abcdef123456',
     username: 'john_doe',
     email: 'john@example.com',
     firstName: 'John',

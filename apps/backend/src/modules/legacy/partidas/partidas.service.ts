@@ -69,7 +69,7 @@ export class PartidasService {
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
       f_siembra: data.f_siembra,
-      detalle: data.detalle,
+      detalle: data.detalleExtendido,
     };
 
     const newSiembraData = {
@@ -96,8 +96,8 @@ export class PartidasService {
             partidaId: data.partidaId,
             anio: data.anio,
             indice: data.indice,
-            startTime: new Date(data.startTime),
-            endTime: new Date(data.endTime),
+            startTime: data.startTime,
+            endTime: data.endTime,
           },
         });
 

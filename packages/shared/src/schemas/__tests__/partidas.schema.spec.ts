@@ -95,7 +95,7 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     cg: 92,
     cantidaNroCont: 120,
     f_siembra: new Date("2026-01-15"),
-    detalle: "Test",
+    detalleExtendido: "Test",
   };
 
   it("accepts valid assignment", () => {
@@ -106,16 +106,16 @@ describe("AsignarUbiSiembraDtoSchema", () => {
   });
 
   it("applies default values for omitted fields", () => {
-    const { detalle: _, ...validWithoutDetalle } = valid;
+    const { detalleExtendido: _, ...validWithoutDetalle } = valid;
     const result = AsignarUbiSiembraDtoSchema.parse(validWithoutDetalle);
-    expect(result.detalle).toBe("");
+    expect(result.detalleExtendido).toBe("");
   });
 
   it("accepts with optional fields", () => {
     const result = AsignarUbiSiembraDtoSchema.parse({
       ...valid,
       baja: 5,
-      detalle: "Test",
+      detalleExtendido: "Test",
       extendido: "Notes",
       edita: "admin",
     });
@@ -135,9 +135,9 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     ).toThrow();
   });
 
-  it("rejects detalle longer than 30 characters", () => {
+  it("rejects detalleExtendido longer than 5000 characters", () => {
     expect(() =>
-      AsignarUbiSiembraDtoSchema.parse({ ...valid, detalle: "a".repeat(31) }),
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, detalleExtendido: "a".repeat(5001) }),
     ).toThrow();
   });
 });

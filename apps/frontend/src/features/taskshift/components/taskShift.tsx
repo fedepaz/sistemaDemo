@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { getLocalDateStr } from "@/lib/date-utils";
 import { EmployeeSearch } from "./employee-search";
 import type { UserProfileDto } from "@vivero/shared";
+import { Beaker, FlaskConical } from "lucide-react";
 
 const HOURS = Array.from({ length: 24 }, (_, i) =>
   i.toString().padStart(2, "0"),
@@ -89,24 +90,33 @@ export function TaskShift({
   }
 
   return (
-    <div className="flex flex-col gap-3 md:gap-4 font-serif">
-      <h1 className="font-sans text-sm md:text-sm font-black uppercase tracking-widest text-foreground opacity-80">
-        Tiempo de tarea
-      </h1>
-      <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
-        Selecciona el horario de la tarea para hoy ({today}).
-      </p>
+    <div className="space-y-3 md:space-y-4 shrink-0">
+      <div className="flex items-center gap-2">
+        <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+          <FlaskConical className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+        </div>
+        <h3 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+          Tiempo de tarea
+        </h3>
+        <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+          Selecciona el horario de la tarea para hoy
+          <br />({today}).
+        </p>
+      </div>
 
       {/* Start Time */}
-      <div className="flex flex-col gap-3 md:gap-4">
+      <div className="flex flex-col gap-3 md:gap-4 font-serif">
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-1 md:space-y-2">
-            <Label className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
-              Inicio
-            </Label>
+            <div className="flex items-center gap-2">
+              <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                Inicio
+              </Label>
+            </div>
+
             <div className="flex gap-1">
               <Select onValueChange={handleStartHourChange} value={startHour}>
-                <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
                   <SelectValue placeholder="HH" />
                 </SelectTrigger>
                 <SelectContent
@@ -124,7 +134,7 @@ export function TaskShift({
                 value={startMinute}
                 onValueChange={handleStartMinuteChange}
               >
-                <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
                   <SelectValue placeholder="MM" />
                 </SelectTrigger>
                 <SelectContent
@@ -145,16 +155,19 @@ export function TaskShift({
         {/* End Time */}
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-1 md:space-y-2">
-            <Label className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
-              Fin
-            </Label>
+            <div className="flex items-center gap-2">
+              <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                Fin
+              </Label>
+            </div>
+
             <div className="flex gap-1">
               <Select
                 disabled={!isStartComplete}
                 onValueChange={handleEndHourChange}
                 value={endHour}
               >
-                <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
                   <SelectValue placeholder="HH" />
                 </SelectTrigger>
                 <SelectContent
@@ -173,7 +186,7 @@ export function TaskShift({
                 onValueChange={handleEndMinuteChange}
                 value={endMinute}
               >
-                <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
+                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
                   <SelectValue placeholder="MM" />
                 </SelectTrigger>
                 <SelectContent
@@ -193,10 +206,16 @@ export function TaskShift({
       </div>
 
       {/* Employee Search */}
-      <div className="space-y-1 md:space-y-2">
-        <Label className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
-          Empleados
-        </Label>
+      <div className="space-y-2 md:space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+            <Beaker className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+          </div>
+          <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+            Empleados
+          </Label>
+        </div>
+
         <div className="relative">
           <div className="pl-12 md:pl-14">
             <EmployeeSearch

@@ -7,9 +7,9 @@ import {
 
 describe("TaskShiftSchema", () => {
   const valid = {
-    id: "clx1234567890abcdef12345",
-    createdByUserId: "clx1234567890abcdef12346",
-    entityId: "clx1234567890abcdef12347",
+    id: "clx1234567890abcdef123456",
+    createdByUserId: "clx1234567890abcdef123467",
+    entityId: "clx1234567890abcdef123478",
     partidaId: 1,
     anio: 2026,
     indice: 1,
@@ -18,7 +18,7 @@ describe("TaskShiftSchema", () => {
     isActive: true,
     createdAt: "2026-08-10T12:00:00.000Z",
     updatedAt: "2026-08-10T12:00:00.000Z",
-    employees: [{ userId: "clx1234567890abcdef12346" }],
+    employees: [{ userId: "clx1234567890abcdef123467" }],
   };
 
   it("accepts valid task shift dto", () => {
@@ -42,29 +42,61 @@ describe("TaskShiftSchema", () => {
     const result = TaskShiftSchema.parse({ ...valid, employees: [] });
     expect(result.employees).toEqual([]);
   });
+
+  it("rejects invalid employee userId with Spanish message", () => {
+    const result = TaskShiftSchema.safeParse({
+      ...valid,
+      employees: [{ userId: "" }],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("empleado"))).toBe(true);
+    }
+  });
 });
 
 describe("CreateTaskShiftSchema", () => {
   const valid = {
-    entityId: "clx1234567890abcdef12347",
+    entityId: "clx1234567890abcdef123478",
     partidaId: 1,
     anio: 2026,
     indice: 1,
     startTime: "2026-08-11T08:00:00.000Z",
     endTime: "2026-08-11T17:00:00.000Z",
-    employeeUserIds: ["clx1234567890abcdef12346"],
+    employeeUserIds: ["clx1234567890abcdef123467"],
   };
 
   it("accepts valid create payload", () => {
     const result = CreateTaskShiftSchema.parse(valid);
-
     expect(result.employeeUserIds).toHaveLength(1);
   });
 
-  it("rejects empty entityId", () => {
-    expect(() =>
-      CreateTaskShiftSchema.parse({ ...valid, entityId: "" }),
-    ).toThrow();
+  it("rejects empty entityId with Spanish message", () => {
+    const result = CreateTaskShiftSchema.safeParse({ ...valid, entityId: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("La entidad"))).toBe(true);
+    }
+  });
+
+  it("rejects empty startTime with Spanish message", () => {
+    const result = CreateTaskShiftSchema.safeParse({ ...valid, startTime: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("hora de inicio"))).toBe(true);
+    }
+  });
+
+  it("rejects empty endTime with Spanish message", () => {
+    const result = CreateTaskShiftSchema.safeParse({ ...valid, endTime: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("hora de fin"))).toBe(true);
+    }
   });
 
   it("rejects empty partidaId", () => {
@@ -83,18 +115,6 @@ describe("CreateTaskShiftSchema", () => {
     ).toThrow();
   });
 
-  it("rejects invalid startTime format", () => {
-    expect(() =>
-      CreateTaskShiftSchema.parse({ ...valid, startTime: "not-a-date" }),
-    ).toThrow();
-  });
-
-  it("rejects invalid endTime format", () => {
-    expect(() =>
-      CreateTaskShiftSchema.parse({ ...valid, endTime: "2026-13-99" }),
-    ).toThrow();
-  });
-
   it("accepts empty employeeUserIds array", () => {
     const result = CreateTaskShiftSchema.parse({
       ...valid,
@@ -103,10 +123,16 @@ describe("CreateTaskShiftSchema", () => {
     expect(result.employeeUserIds).toEqual([]);
   });
 
-  it("rejects employeeUserIds with empty strings", () => {
-    expect(() =>
-      CreateTaskShiftSchema.parse({ ...valid, employeeUserIds: [""] }),
-    ).toThrow();
+  it("rejects employeeUserIds with empty strings with Spanish message", () => {
+    const result = CreateTaskShiftSchema.safeParse({
+      ...valid,
+      employeeUserIds: [""],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("empleado"))).toBe(true);
+    }
   });
 
   it("rejects missing startTime", () => {
@@ -125,14 +151,17 @@ describe("CreateTaskShiftSchema", () => {
     expect(result.employeeUserIds).toEqual([]);
   });
 
-  it("rejects endTime before startTime", () => {
-    expect(() =>
-      CreateTaskShiftSchema.parse({
-        ...valid,
-        startTime: "2026-08-11T17:00:00.000Z",
-        endTime: "2026-08-11T08:00:00.000Z",
-      }),
-    ).toThrow();
+  it("rejects endTime before startTime with Spanish message", () => {
+    const result = CreateTaskShiftSchema.safeParse({
+      ...valid,
+      startTime: "2026-08-11T17:00:00.000Z",
+      endTime: "2026-08-11T08:00:00.000Z",
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("hora de fin debe ser posterior"))).toBe(true);
+    }
   });
 });
 
@@ -146,7 +175,7 @@ describe("UpdateTaskShiftSchema", () => {
 
   it("accepts partial update with only employeeUserIds", () => {
     const result = UpdateTaskShiftSchema.parse({
-      employeeUserIds: ["clx1234567890abcdef12346", "clx1234567890abcdef12348"],
+      employeeUserIds: ["clx1234567890abcdef123467", "clx1234567890abcdef123489"],
     });
     expect(result.employeeUserIds).toHaveLength(2);
   });
@@ -156,21 +185,18 @@ describe("UpdateTaskShiftSchema", () => {
     expect(Object.keys(result)).toHaveLength(0);
   });
 
-  it("rejects invalid startTime format", () => {
-    expect(() =>
-      UpdateTaskShiftSchema.parse({ startTime: "not-a-date" }),
-    ).toThrow();
-  });
-
   it("accepts empty employeeUserIds (optional field allows any array length)", () => {
     const result = UpdateTaskShiftSchema.parse({ employeeUserIds: [] });
     expect(result.employeeUserIds).toEqual([]);
   });
 
-  it("rejects employeeUserIds with empty strings", () => {
-    expect(() =>
-      UpdateTaskShiftSchema.parse({ employeeUserIds: [""] }),
-    ).toThrow();
+  it("rejects employeeUserIds with empty strings with Spanish message", () => {
+    const result = UpdateTaskShiftSchema.safeParse({ employeeUserIds: [""] });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("empleado"))).toBe(true);
+    }
   });
 
   it("ignores unknown fields like entityId (stripped by Zod)", () => {

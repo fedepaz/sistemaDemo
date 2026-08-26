@@ -64,13 +64,18 @@ export function EmployeeSearch({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Buscar empleados..."
-            className="pl-9"
+            className="pl-9 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
           />
         </div>
-        <Button type="button" variant="secondary" onClick={handleSearch}>
+        <Button
+          type="button"
+          variant="secondary"
+          className="h-9 text-sm"
+          onClick={handleSearch}
+        >
           Buscar
         </Button>
       </div>
@@ -123,7 +128,11 @@ export function EmployeeSearch({
               </span>
               <div className="flex flex-wrap gap-2">
                 {selectedEmployees.map((user) => (
-                  <Badge key={user.id} variant="secondary" className="gap-1 pr-1">
+                  <Badge
+                    key={user.id}
+                    variant="secondary"
+                    className="gap-1 pr-1"
+                  >
                     {user.firstName} {user.lastName}
                     <button
                       type="button"

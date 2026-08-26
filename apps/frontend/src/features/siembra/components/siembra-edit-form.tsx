@@ -90,11 +90,17 @@ export function SiembraEditForm({
   };
 
   useEffect(() => {
-    form.setValue("startTime", startTime, { shouldValidate: true, shouldDirty: true });
+    form.setValue("startTime", startTime, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   }, [startTime, form]);
 
   useEffect(() => {
-    form.setValue("endTime", endTime, { shouldValidate: true, shouldDirty: true });
+    form.setValue("endTime", endTime, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   }, [endTime, form]);
 
   useEffect(() => {
@@ -519,7 +525,7 @@ export function SiembraEditForm({
           {/* OBSERVACIONES */}
           <FormField
             control={form.control}
-            name="detalle"
+            name="detalleExtendido"
             render={({ field }) => (
               <FormItem className="space-y-2 md:space-y-3">
                 <div className="flex items-center gap-2">

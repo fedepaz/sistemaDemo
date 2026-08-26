@@ -7,7 +7,7 @@ import {
 
 describe("SiembraPartidaSchema", () => {
   const valid = {
-    id: "clx1234567890abcdef12345",
+    id: "clx1234567890abcdef123456",
     partidaId: 100,
     anio: 2026,
     indice: 1,
@@ -15,13 +15,13 @@ describe("SiembraPartidaSchema", () => {
     presionSemilla: 25,
     profundidadSemilla: "1.525",
     tratamientoSemilla: false,
-    mezclaId: "clx1234567890abcdef12346",
-    userId: "clx1234567890abcdef12347",
+    mezclaId: "clx1234567890abcdef123467",
+    userId: "clx1234567890abcdef123478",
   };
 
   it("accepts valid siembra partida", () => {
     const result = SiembraPartidaSchema.parse(valid);
-    expect(result.id).toBe("clx1234567890abcdef12345");
+    expect(result.id).toBe("clx1234567890abcdef123456");
     expect(result.partidaId).toBe(100);
     expect(result.metodoMaquina).toBe(true);
     expect(result.presionSemilla).toBe(25);
@@ -34,9 +34,27 @@ describe("SiembraPartidaSchema", () => {
     expect(() => SiembraPartidaSchema.parse(withoutId)).toThrow();
   });
 
-  it("rejects missing partidaId", () => {
-    const { partidaId, ...withoutPartidaId } = valid;
-    expect(() => SiembraPartidaSchema.parse(withoutPartidaId)).toThrow();
+  it("rejects invalid id with Spanish message", () => {
+    const result = SiembraPartidaSchema.safeParse({ ...valid, id: "bad-id" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("registro de siembra"))).toBe(true);
+    }
+  });
+
+  it("rejects missing mezclaId", () => {
+    const { mezclaId, ...withoutMezcla } = valid;
+    expect(() => SiembraPartidaSchema.parse(withoutMezcla)).toThrow();
+  });
+
+  it("rejects invalid mezclaId with Spanish message", () => {
+    const result = SiembraPartidaSchema.safeParse({ ...valid, mezclaId: "bad" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("La mezcla"))).toBe(true);
+    }
   });
 
   it("rejects non-boolean metodoMaquina", () => {
@@ -68,8 +86,7 @@ describe("CreateSiembraPartidaSchema", () => {
       presionSemilla: 30,
       profundidadSemilla: "2.000",
       tratamientoSemilla: true,
-      mezclaId: "clx1234567890abcdef12348",
-      userId: "clx1234567890abcdef12349",
+      mezclaId: "clx1234567890abcdef123489",
     });
     expect(result.partidaId).toBe(200);
     expect(result.metodoMaquina).toBe(false);
@@ -85,8 +102,7 @@ describe("CreateSiembraPartidaSchema", () => {
         presionSemilla: 20,
         profundidadSemilla: "1.5",
         tratamientoSemilla: false,
-        mezclaId: "clx1234567890abcdef12346",
-        userId: "clx1234567890abcdef12347",
+        mezclaId: "clx1234567890abcdef123467",
       }),
     ).toThrow();
   });
@@ -101,9 +117,26 @@ describe("CreateSiembraPartidaSchema", () => {
         presionSemilla: 20,
         profundidadSemilla: "1.5",
         tratamientoSemilla: false,
-        userId: "clx1234567890abcdef12347",
       }),
     ).toThrow();
+  });
+
+  it("rejects invalid mezclaId with Spanish message", () => {
+    const result = CreateSiembraPartidaSchema.safeParse({
+      partidaId: 100,
+      anio: 2026,
+      indice: 1,
+      metodoMaquina: true,
+      presionSemilla: 20,
+      profundidadSemilla: "1.5",
+      tratamientoSemilla: false,
+      mezclaId: "bad",
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("La mezcla"))).toBe(true);
+    }
   });
 });
 
@@ -132,8 +165,12 @@ describe("ProfundidadSemillaSchema", () => {
     expect(() => ProfundidadSemillaSchema.parse("abc")).toThrow();
   });
 
-  it("rejects empty string", () => {
-    expect(() => ProfundidadSemillaSchema.parse("")).toThrow();
+  it("rejects empty string with Spanish message", () => {
+    const result = ProfundidadSemillaSchema.safeParse("");
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].message).toContain("profundidad");
+    }
   });
 
   it("rejects string with leading dot", () => {

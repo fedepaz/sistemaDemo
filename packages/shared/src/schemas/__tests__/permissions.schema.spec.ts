@@ -125,7 +125,7 @@ describe('PermissionCheckSchema', () => {
 describe('EntitySchema', () => {
   it('accepts valid entity', () => {
     const result = EntitySchema.parse({
-      id: 'clx1234567890abcdef12345',
+      id: 'clx1234567890abcdef123456',
       name: 'usuarios',
       label: 'Usuarios',
       permissionType: 'CRUD',
@@ -135,7 +135,7 @@ describe('EntitySchema', () => {
 
   it('accepts entity without optional isActive', () => {
     const result = EntitySchema.parse({
-      id: 'clx1234567890abcdef12345',
+      id: 'clx1234567890abcdef123456',
       name: 'usuarios',
       label: 'Usuarios',
       permissionType: 'CRUD',
@@ -147,7 +147,7 @@ describe('EntitySchema', () => {
 describe('UserEntityPermissionSchema', () => {
   it('accepts valid user entity permission', () => {
     const result = UserEntityPermissionSchema.parse({
-      userId: 'clx1234567890abcdef12346',
+      userId: 'clx1234567890abcdef123467',
       username: 'admin',
       firstName: 'Admin',
       lastName: 'User',
@@ -159,7 +159,7 @@ describe('UserEntityPermissionSchema', () => {
 
   it('accepts with nullable name fields', () => {
     const result = UserEntityPermissionSchema.parse({
-      userId: 'clx1234567890abcdef12346',
+      userId: 'clx1234567890abcdef123467',
       username: 'admin',
       firstName: null,
       lastName: null,
