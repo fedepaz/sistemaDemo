@@ -87,6 +87,29 @@ export class PartidasService {
     await this.prisma.$transaction(async () => {
       await this.prisma.siembraPartidas.create({ data: newSiembraData });
       await this.partidasRepository.asignarSiembra(legacyData);
+
+      if (data.startTime && data.endTime) {
+        const taskShift = await this.prisma.taskShift.create({
+          data: {
+            createdByUserId: requesterId,
+            entityId: data.entityId,
+            partidaId: data.partidaId,
+            anio: data.anio,
+            indice: data.indice,
+            startTime: new Date(data.startTime),
+            endTime: new Date(data.endTime),
+          },
+        });
+
+        if (data.employeeUserIds && data.employeeUserIds.length > 0) {
+          await this.prisma.taskShiftEmployee.createMany({
+            data: data.employeeUserIds.map((userId) => ({
+              taskShiftId: taskShift.id,
+              userId,
+            })),
+          });
+        }
+      }
     });
   }
 }
