@@ -106,7 +106,11 @@ export function EmployeeSearch({
                       key={user.id}
                       type="button"
                       className="flex items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors text-left cursor-pointer"
-                      onClick={() => onSelect(user)}
+                      onClick={() => {
+                        onSelect(user);
+                        setShowResults(false);
+                        setSearchQuery("");
+                      }}
                     >
                       <span className="font-medium">
                         {user.firstName} {user.lastName}
