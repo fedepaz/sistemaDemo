@@ -18,15 +18,20 @@ export const TaskShiftSchema = PartidaHeaderSchema.extend({
 
 export type TaskShiftDto = z.infer<typeof TaskShiftSchema>;
 
-export const CreateTaskShiftSchema = PartidaHeaderSchema.extend({
+export const CreateTaskShiftBaseSchema = PartidaHeaderSchema.extend({
   entityId: cuidSchema,
   startTime: z.string().min(1, "La hora de inicio es requerida"),
   endTime: z.string().min(1, "La hora de fin es requerida"),
   employeeUserIds: z.array(cuidSchema).min(0).default([]),
-}).refine((data) => new Date(data.endTime) > new Date(data.startTime), {
-  message: "La hora de fin debe ser posterior a la hora de inicio",
-  path: ["endTime"],
 });
+
+export const CreateTaskShiftSchema = CreateTaskShiftBaseSchema.refine(
+  (data) => new Date(data.endTime) > new Date(data.startTime),
+  {
+    message: "La hora de fin debe ser posterior a la hora de inicio",
+    path: ["endTime"],
+  },
+);
 
 export type CreateTaskShiftDto = z.infer<typeof CreateTaskShiftSchema>;
 

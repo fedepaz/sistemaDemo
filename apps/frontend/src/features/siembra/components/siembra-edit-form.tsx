@@ -99,8 +99,8 @@ export function SiembraEditForm({
 
   useEffect(() => {
     form.setValue(
-      "employees",
-      selectedEmployees.map((e) => ({ userId: e.id })),
+      "employeeUserIds",
+      selectedEmployees.map((e) => e.id),
       { shouldValidate: true, shouldDirty: true },
     );
   }, [selectedEmployees, form]);

@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { PartidaHeaderSchema } from "./legacy-header.schema";
 import { CreateSiembraPartidaSchema } from "./siembraPartida.schema";
-import { TaskShiftSchema } from "./taskShift.schema";
+import { CreateTaskShiftBaseSchema } from "./taskShift.schema";
 
 export const AsignarUbiExtendidoDtoSchema = PartidaHeaderSchema.extend({
   ubicacion: z.number().int().positive(),
@@ -41,7 +41,7 @@ export type AsignarUbiSiembraPartialDto = z.infer<
   typeof AsignarUbiSiembraPartialDtoSchema
 >;
 export const AsignarUbiSiembraCompletaDtoSchema =
-  AsignarUbiSiembraPartialDtoSchema.merge(TaskShiftSchema);
+  AsignarUbiSiembraPartialDtoSchema.merge(CreateTaskShiftBaseSchema);
 
 export type AsignarUbiSiembraCompletaDto = z.infer<
   typeof AsignarUbiSiembraCompletaDtoSchema

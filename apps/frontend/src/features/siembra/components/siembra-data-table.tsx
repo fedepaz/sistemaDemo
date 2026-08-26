@@ -16,6 +16,7 @@ import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
 import { useSiembraMutation } from "../hooks/useSiembraPartidaMutation";
+import { useTableByName } from "@/features/permissions";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
@@ -29,6 +30,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const [mode, setMode] = useState<"view" | "edit">("view");
 
   const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
+  const { data: entity } = useTableByName("siembra");
 
   const formAsignarUbicacion = useForm<AsignarUbiSiembraCompletaDto>({
     resolver: zodResolver(AsignarUbiSiembraCompletaDtoSchema),
@@ -49,9 +51,10 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         presionSemilla: 0,
         profundidadSemilla: "",
         tratamientoSemilla: false,
+        entityId: entity.id,
       });
     }
-  }, [selectedPartida, formAsignarUbicacion]);
+  }, [selectedPartida, formAsignarUbicacion, entity]);
 
   const handleAsignarUbicacionSiembra = async (
     formData: AsignarUbiSiembraCompletaDto,
