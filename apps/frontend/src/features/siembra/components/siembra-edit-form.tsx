@@ -15,7 +15,6 @@ import {
   Beaker,
   Gauge,
   Ruler,
-  FlaskConical,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
