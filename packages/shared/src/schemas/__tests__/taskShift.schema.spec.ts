@@ -7,9 +7,9 @@ import {
 
 describe("TaskShiftSchema", () => {
   const valid = {
-    id: "ts1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    createdByUserId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    entityId: "e1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    id: "clx1234567890abcdef12345",
+    createdByUserId: "clx1234567890abcdef12346",
+    entityId: "clx1234567890abcdef12347",
     partidaId: 1,
     anio: 2026,
     indice: 1,
@@ -18,7 +18,7 @@ describe("TaskShiftSchema", () => {
     isActive: true,
     createdAt: "2026-08-10T12:00:00.000Z",
     updatedAt: "2026-08-10T12:00:00.000Z",
-    employees: [{ userId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890" }],
+    employees: [{ userId: "clx1234567890abcdef12346" }],
   };
 
   it("accepts valid task shift dto", () => {
@@ -46,13 +46,13 @@ describe("TaskShiftSchema", () => {
 
 describe("CreateTaskShiftSchema", () => {
   const valid = {
-    entityId: "e1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    entityId: "clx1234567890abcdef12347",
     partidaId: 1,
     anio: 2026,
     indice: 1,
     startTime: "2026-08-11T08:00:00.000Z",
     endTime: "2026-08-11T17:00:00.000Z",
-    employeeUserIds: ["a1b2c3d4-e5f6-7890-abcd-ef1234567890"],
+    employeeUserIds: ["clx1234567890abcdef12346"],
   };
 
   it("accepts valid create payload", () => {
@@ -146,7 +146,7 @@ describe("UpdateTaskShiftSchema", () => {
 
   it("accepts partial update with only employeeUserIds", () => {
     const result = UpdateTaskShiftSchema.parse({
-      employeeUserIds: ["user-1", "user-2"],
+      employeeUserIds: ["clx1234567890abcdef12346", "clx1234567890abcdef12348"],
     });
     expect(result.employeeUserIds).toHaveLength(2);
   });

@@ -1,19 +1,20 @@
 // shared/src/schemas/mezcla.schema.ts
 
 import { z } from "zod";
+import { cuidSchema, nullableCuidSchema } from "./cuid.schema";
 
 export const MezclaSchema = z.object({
-  id: z.string(),
-  sustrato1Id: z.string(),
+  id: cuidSchema,
+  sustrato1Id: cuidSchema,
   sustrato1Nombre: z.string(),
   porcentaje1: z.number(),
-  sustrato2Id: z.string().nullable(),
+  sustrato2Id: nullableCuidSchema,
   sustrato2Nombre: z.string().nullable(),
   porcentaje2: z.number().nullable(),
-  sustrato3Id: z.string().nullable(),
+  sustrato3Id: nullableCuidSchema,
   sustrato3Nombre: z.string().nullable(),
   porcentaje3: z.number().nullable(),
-  sustrato4Id: z.string().nullable(),
+  sustrato4Id: nullableCuidSchema,
   sustrato4Nombre: z.string().nullable(),
   porcentaje4: z.number().nullable(),
   isActive: z.boolean(),
@@ -24,13 +25,13 @@ export type MezclaDto = z.infer<typeof MezclaSchema>;
 
 export const CreateMezclaSchema = z
   .object({
-    sustrato1Id: z.string(),
+    sustrato1Id: cuidSchema,
     porcentaje1: z.number(),
-    sustrato2Id: z.string().nullable(),
+    sustrato2Id: nullableCuidSchema,
     porcentaje2: z.number().nullable(),
-    sustrato3Id: z.string().nullable(),
+    sustrato3Id: nullableCuidSchema,
     porcentaje3: z.number().nullable(),
-    sustrato4Id: z.string().nullable(),
+    sustrato4Id: nullableCuidSchema,
     porcentaje4: z.number().nullable(),
   })
   .refine(

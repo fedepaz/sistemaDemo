@@ -40,8 +40,6 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         partidaId: selectedPartida.partidaId,
         anio: selectedPartida.anio,
         indice: selectedPartida.indice,
-        codigoEspecie: selectedPartida.codigoEspecie,
-        nombreEspecie: selectedPartida.nombreEspecie,
         cantidaNroCont: parseInt(selectedPartida.nrocont),
         detalle: selectedPartida.extendido,
         f_siembra: new Date(),
@@ -51,7 +49,6 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         presionSemilla: 0,
         profundidadSemilla: "",
         tratamientoSemilla: false,
-        mezclaId: "",
       });
     }
   }, [selectedPartida, formAsignarUbicacion]);

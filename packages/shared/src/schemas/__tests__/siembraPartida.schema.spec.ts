@@ -7,7 +7,7 @@ import {
 
 describe("SiembraPartidaSchema", () => {
   const valid = {
-    id: "sp-1",
+    id: "clx1234567890abcdef12345",
     partidaId: 100,
     anio: 2026,
     indice: 1,
@@ -15,13 +15,13 @@ describe("SiembraPartidaSchema", () => {
     presionSemilla: 25,
     profundidadSemilla: "1.525",
     tratamientoSemilla: false,
-    mezclaId: "mezcla-1",
-    userId: "user-1",
+    mezclaId: "clx1234567890abcdef12346",
+    userId: "clx1234567890abcdef12347",
   };
 
   it("accepts valid siembra partida", () => {
     const result = SiembraPartidaSchema.parse(valid);
-    expect(result.id).toBe("sp-1");
+    expect(result.id).toBe("clx1234567890abcdef12345");
     expect(result.partidaId).toBe(100);
     expect(result.metodoMaquina).toBe(true);
     expect(result.presionSemilla).toBe(25);
@@ -68,8 +68,8 @@ describe("CreateSiembraPartidaSchema", () => {
       presionSemilla: 30,
       profundidadSemilla: "2.000",
       tratamientoSemilla: true,
-      mezclaId: "mezcla-2",
-      userId: "user-2",
+      mezclaId: "clx1234567890abcdef12348",
+      userId: "clx1234567890abcdef12349",
     });
     expect(result.partidaId).toBe(200);
     expect(result.metodoMaquina).toBe(false);
@@ -85,8 +85,8 @@ describe("CreateSiembraPartidaSchema", () => {
         presionSemilla: 20,
         profundidadSemilla: "1.5",
         tratamientoSemilla: false,
-        mezclaId: "mezcla-1",
-        userId: "user-1",
+        mezclaId: "clx1234567890abcdef12346",
+        userId: "clx1234567890abcdef12347",
       }),
     ).toThrow();
   });
@@ -101,7 +101,7 @@ describe("CreateSiembraPartidaSchema", () => {
         presionSemilla: 20,
         profundidadSemilla: "1.5",
         tratamientoSemilla: false,
-        userId: "user-1",
+        userId: "clx1234567890abcdef12347",
       }),
     ).toThrow();
   });

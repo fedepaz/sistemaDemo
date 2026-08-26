@@ -1,6 +1,7 @@
 // shared/src/schemas/auth.schema.ts
 
 import { z } from "zod";
+import { cuidSchema } from "./cuid.schema";
 
 // Reusable password validation rules
 export const passwordRules = z
@@ -77,12 +78,12 @@ export type TokensDto = z.infer<typeof Tokens>;
 // Response types
 export const AuthResponseSchema = z.object({
   user: z.object({
-    id: z.string().uuid(),
+    id: cuidSchema,
     username: z.string().min(1),
     email: z.string().email().nullable(),
     firstName: z.string().nullable(),
     lastName: z.string().nullable(),
-    tenantId: z.string().uuid(),
+    tenantId: cuidSchema,
   }),
   accessToken: z.string(),
   refreshToken: z.string(),
@@ -107,7 +108,7 @@ export type ChangePasswordDto = z.infer<typeof ChangePasswordSchema>;
 
 // Restore Password
 export const RestorePasswordSchema = z.object({
-  userId: z.string().min(1, { message: "ID de usuario es obligatorio" }),
+  userId: cuidSchema,
 });
 
 export type RestorePasswordDto = z.infer<typeof RestorePasswordSchema>;

@@ -121,13 +121,13 @@ describe("FaltaPreExpedicionDtoSchema", () => {
 
 describe("AlertCommentSchema", () => {
   const valid = {
-    id: "cuid123",
+    id: "clx1234567890abcdef12345",
     alertType: "SIEMBRA_RETRASADA",
     partidaId: 1045,
     anio: 2026,
     indice: 1,
     content: "Sembrada el lunes",
-    userId: "user-cuid",
+    userId: "clx1234567890abcdef12346",
     userName: "Juan Perez",
     createdAt: "2026-07-28T10:30:00.000Z",
   };

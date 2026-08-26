@@ -1,9 +1,10 @@
 // shared/src/schemas/sustratos.schema.ts
 
 import { z } from "zod";
+import { cuidSchema } from "./cuid.schema";
 
 export const SustratoSchema = z.object({
-  id: z.string(),
+  id: cuidSchema,
   nombre: z.string(),
   createdAt: z.date(),
 });

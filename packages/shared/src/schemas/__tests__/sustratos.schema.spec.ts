@@ -2,11 +2,11 @@
 import { SustratoSchema, CreateSustratoSchema, UpdateSustratoSchema } from "../sustratos.schema";
 
 describe("SustratoSchema", () => {
-  const valid = { id: "sust-1", nombre: "Turba", createdAt: new Date("2026-01-15") };
+  const valid = { id: "clx1234567890abcdef12345", nombre: "Turba", createdAt: new Date("2026-01-15") };
 
   it("accepts valid sustrato", () => {
     const result = SustratoSchema.parse(valid);
-    expect(result.id).toBe("sust-1");
+    expect(result.id).toBe("clx1234567890abcdef12345");
     expect(result.nombre).toBe("Turba");
   });
 

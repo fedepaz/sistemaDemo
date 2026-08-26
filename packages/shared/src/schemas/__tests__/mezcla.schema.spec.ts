@@ -3,11 +3,11 @@ import { MezclaSchema, CreateMezclaSchema } from "../mezcla.schema";
 
 describe("MezclaSchema", () => {
   const valid = {
-    id: "mezcla-1",
-    sustrato1Id: "sust-1",
+    id: "clx1234567890abcdef12345",
+    sustrato1Id: "clx1234567890abcdef12346",
     sustrato1Nombre: "Turba",
     porcentaje1: 60,
-    sustrato2Id: "sust-2",
+    sustrato2Id: "clx1234567890abcdef12347",
     sustrato2Nombre: "Perlita",
     porcentaje2: 40,
     sustrato3Id: null,
@@ -22,7 +22,7 @@ describe("MezclaSchema", () => {
 
   it("accepts valid mezcla with all fields", () => {
     const result = MezclaSchema.parse(valid);
-    expect(result.id).toBe("mezcla-1");
+    expect(result.id).toBe("clx1234567890abcdef12345");
     expect(result.porcentaje1).toBe(60);
     expect(result.sustrato1Nombre).toBe("Turba");
     expect(result.isActive).toBe(true);
@@ -30,8 +30,8 @@ describe("MezclaSchema", () => {
 
   it("accepts mezcla with only required sustrato", () => {
     const minimal = {
-      id: "mezcla-2",
-      sustrato1Id: "sust-1",
+      id: "clx1234567890abcdef12350",
+      sustrato1Id: "clx1234567890abcdef12346",
       sustrato1Nombre: "Turba",
       porcentaje1: 100,
       sustrato2Id: null,
@@ -47,7 +47,7 @@ describe("MezclaSchema", () => {
       createdAt: new Date("2024-03-14"),
     };
     const result = MezclaSchema.parse(minimal);
-    expect(result.sustrato1Id).toBe("sust-1");
+    expect(result.sustrato1Id).toBe("clx1234567890abcdef12346");
   });
 
   it("rejects missing id", () => {
@@ -68,21 +68,21 @@ describe("MezclaSchema", () => {
 describe("CreateMezclaSchema", () => {
   it("accepts valid create data with percentages summing to 100", () => {
     const result = CreateMezclaSchema.parse({
-      sustrato1Id: "sust-1",
+      sustrato1Id: "clx1234567890abcdef12346",
       porcentaje1: 70,
-      sustrato2Id: "sust-2",
+      sustrato2Id: "clx1234567890abcdef12347",
       porcentaje2: 30,
       sustrato3Id: null,
       porcentaje3: null,
       sustrato4Id: null,
       porcentaje4: null,
     });
-    expect(result.sustrato1Id).toBe("sust-1");
+    expect(result.sustrato1Id).toBe("clx1234567890abcdef12346");
   });
 
   it("accepts single sustrato with 100%", () => {
     const result = CreateMezclaSchema.parse({
-      sustrato1Id: "sust-1",
+      sustrato1Id: "clx1234567890abcdef12346",
       porcentaje1: 100,
       sustrato2Id: null,
       porcentaje2: null,
@@ -97,9 +97,9 @@ describe("CreateMezclaSchema", () => {
   it("rejects percentages not summing to 100", () => {
     expect(() =>
       CreateMezclaSchema.parse({
-        sustrato1Id: "sust-1",
+        sustrato1Id: "clx1234567890abcdef12346",
         porcentaje1: 60,
-        sustrato2Id: "sust-2",
+        sustrato2Id: "clx1234567890abcdef12347",
         porcentaje2: 30,
         sustrato3Id: null,
         porcentaje3: null,
@@ -126,7 +126,7 @@ describe("CreateMezclaSchema", () => {
   it("rejects missing porcentaje1", () => {
     expect(() =>
       CreateMezclaSchema.parse({
-        sustrato1Id: "sust-1",
+        sustrato1Id: "clx1234567890abcdef12346",
         sustrato2Id: null,
         porcentaje2: null,
         sustrato3Id: null,
