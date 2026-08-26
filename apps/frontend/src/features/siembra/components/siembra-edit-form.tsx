@@ -1,7 +1,7 @@
 // src/features/siembra/components/siembra-edit-form.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import {
   Package,
@@ -34,7 +34,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { AsignarUbiSiembraCompletaDto, SiembraDto } from "@vivero/shared";
+import {
+  AsignarUbiSiembraCompletaDto,
+  SiembraDto,
+  UserProfileDto,
+} from "@vivero/shared";
 
 import { UseFormReturn } from "react-hook-form";
 import {
@@ -48,6 +52,7 @@ import {
 } from "@/components/ui/form";
 import { useDepositos } from "@/features/extendidos";
 import { useMezclas } from "@/features/mezclas";
+import { TaskShift } from "@/features/taskshift/components/taskShift";
 
 interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -66,6 +71,12 @@ export function SiembraEditForm({
   const { data: mezclas } = useMezclas();
   const [isEditingQuantity, setIsEditingQuantity] = useState(false);
 
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [selectedEmployees, setSelectedEmployees] = useState<UserProfileDto[]>(
+    [],
+  );
+
   const metodoMaquina = useWatch({
     name: "metodoMaquina",
     control: form.control,
@@ -77,6 +88,22 @@ export function SiembraEditForm({
     setIsEditingQuantity(false);
     form.setValue("cantidaNroCont", originalNrocont);
   };
+
+  useEffect(() => {
+    form.setValue("startTime", startTime, { shouldValidate: true, shouldDirty: true });
+  }, [startTime, form]);
+
+  useEffect(() => {
+    form.setValue("endTime", endTime, { shouldValidate: true, shouldDirty: true });
+  }, [endTime, form]);
+
+  useEffect(() => {
+    form.setValue(
+      "employees",
+      selectedEmployees.map((e) => ({ userId: e.id })),
+      { shouldValidate: true, shouldDirty: true },
+    );
+  }, [selectedEmployees, form]);
 
   return (
     <Form {...form}>
@@ -478,6 +505,16 @@ export function SiembraEditForm({
               </div>
             </div>
           </div>
+
+          {/* TASK SHIFT */}
+          <TaskShift
+            startTime={startTime}
+            endTime={endTime}
+            employees={selectedEmployees}
+            onStartTimeChange={setStartTime}
+            onEndTimeChange={setEndTime}
+            onEmployeesChange={setSelectedEmployees}
+          />
 
           {/* OBSERVACIONES */}
           <FormField
