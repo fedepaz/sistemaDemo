@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { getLocalDateStr } from "@/lib/date-utils";
 import { EmployeeSearch } from "./employee-search";
 import type { UserProfileDto } from "@vivero/shared";
-import { Beaker, FlaskConical } from "lucide-react";
+import { Clock, User2 } from "lucide-react";
 
 const HOURS = Array.from({ length: 24 }, (_, i) =>
   i.toString().padStart(2, "0"),
@@ -93,7 +93,7 @@ export function TaskShift({
     <div className="space-y-3 md:space-y-4 shrink-0">
       <div className="flex items-center gap-2">
         <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-          <FlaskConical className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+          <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
         </div>
         <h3 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
           Tiempo de tarea
@@ -106,7 +106,7 @@ export function TaskShift({
 
       {/* Start Time */}
       <div className="flex flex-col gap-3 md:gap-4 font-serif">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid gap-2">
           <div className="space-y-1 md:space-y-2">
             <div className="flex items-center gap-2">
               <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
@@ -153,7 +153,7 @@ export function TaskShift({
         </div>
 
         {/* End Time */}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid gap-2">
           <div className="space-y-1 md:space-y-2">
             <div className="flex items-center gap-2">
               <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
@@ -209,24 +209,20 @@ export function TaskShift({
       <div className="space-y-2 md:space-y-3">
         <div className="flex items-center gap-2">
           <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-            <Beaker className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+            <User2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
           </div>
           <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
             Empleados
           </Label>
         </div>
 
-        <div className="relative">
-          <div className="pl-12 md:pl-14">
-            <EmployeeSearch
-              selectedEmployees={employees}
-              onSelect={(emp) => onEmployeesChange([...employees, emp])}
-              onRemove={(emp) =>
-                onEmployeesChange(employees.filter((e) => e.id !== emp.id))
-              }
-            />
-          </div>
-        </div>
+        <EmployeeSearch
+          selectedEmployees={employees}
+          onSelect={(emp) => onEmployeesChange([...employees, emp])}
+          onRemove={(emp) =>
+            onEmployeesChange(employees.filter((e) => e.id !== emp.id))
+          }
+        />
       </div>
     </div>
   );

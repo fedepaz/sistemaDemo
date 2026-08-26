@@ -295,15 +295,6 @@ export function SiembraEditForm({
 
           {/* DATOS DE SIEMBRA */}
           <div className="space-y-3 md:space-y-4 shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                <FlaskConical className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-              </div>
-              <h3 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                Datos de Siembra
-              </h3>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {/* PRESIÓN DE SEMILLA */}
               <FormField
