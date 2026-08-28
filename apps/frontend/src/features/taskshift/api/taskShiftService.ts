@@ -1,7 +1,7 @@
 // src/features/taskshift/api/taskShiftService.ts
 
 import { clientFetch } from "@/lib/api/client-fetch";
-import { CreateTaskShiftDto, TaskShiftDto } from "@vivero/shared";
+import { TaskShiftDto } from "@vivero/shared";
 
 export const taskShiftService = {
   fetchByEntityId: (entityId: string) => {
@@ -9,12 +9,5 @@ export const taskShiftService = {
       `task-shifts?entityId=${encodeURIComponent(entityId)}`,
       { method: "GET" },
     );
-  },
-
-  createTaskShift: (data: CreateTaskShiftDto) => {
-    return clientFetch<TaskShiftDto>("task-shifts", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
   },
 };

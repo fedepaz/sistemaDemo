@@ -1,0 +1,30 @@
+model Mezcla {
+    id          String @id @default(cuid())
+    sustrato1Id String
+    porcentaje1  Int
+    sustrato1   Sustratos @relation("sustrato1", fields: [sustrato1Id], references: [id])
+
+    sustrato2Id String?
+    porcentaje2  Int?
+    sustrato2   Sustratos? @relation("sustrato2", fields: [sustrato2Id], references: [id])
+
+    sustrato3Id String?
+    porcentaje3  Int?
+    sustrato3   Sustratos? @relation("sustrato3", fields: [sustrato3Id], references: [id])
+
+    sustrato4Id String?
+    porcentaje4  Int?
+    sustrato4   Sustratos? @relation("sustrato4", fields: [sustrato4Id], references: [id])
+
+    siembraPartidas SiembraPartidas[]
+
+       
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  deletedByUserId String?
+    deletedByUser User? @relation("deleted_mezclas", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  deletedAt DateTime? @db.Timestamp(0)
+}

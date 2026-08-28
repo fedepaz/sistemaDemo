@@ -3,7 +3,7 @@ import { TenantSchema } from '../tenant.schema';
 
 describe('TenantSchema', () => {
   const validTenant = {
-    id: '123e4567-e89b-12d3-a456-426614174000',
+    id: 'clx1234567890abcdef123456',
     name: 'Default Tenant',
     users: ['user-1', 'user-2'],
     auditLogs: ['log-1'],

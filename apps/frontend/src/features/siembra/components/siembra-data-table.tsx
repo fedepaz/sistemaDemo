@@ -5,8 +5,8 @@ import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { useState, useEffect, useCallback } from "react";
 
 import {
-  AsignarUbiSiembraDto,
-  AsignarUbiSiembraDtoSchema,
+  AsignarUbiSiembraCompletaDto,
+  AsignarUbiSiembraCompletaDtoSchema,
   SiembraDto,
 } from "@vivero/shared";
 
@@ -16,6 +16,7 @@ import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
 import { useSiembraMutation } from "../hooks/useSiembraPartidaMutation";
+import { useTableByName } from "@/features/permissions";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
@@ -29,27 +30,33 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const [mode, setMode] = useState<"view" | "edit">("view");
 
   const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
+  const { data: entity } = useTableByName("siembra");
 
-  const formAsignarUbicacion = useForm<AsignarUbiSiembraDto>({
-    resolver: zodResolver(AsignarUbiSiembraDtoSchema),
+  const formAsignarUbicacion = useForm<AsignarUbiSiembraCompletaDto>({
+    resolver: zodResolver(AsignarUbiSiembraCompletaDtoSchema),
   });
 
   useEffect(() => {
     if (selectedPartida) {
       formAsignarUbicacion.reset({
-        partida: selectedPartida.partidaId,
-        ano: selectedPartida.anio,
+        partidaId: selectedPartida.partidaId,
+        anio: selectedPartida.anio,
         indice: selectedPartida.indice,
         cantidaNroCont: parseInt(selectedPartida.nrocont),
-        detalle: selectedPartida.extendido,
-        germin: parseInt(selectedPartida.germin),
+        detalleExtendido: selectedPartida.extendido,
+        f_siembra: new Date(),
         edita: "S",
+        presionSemilla: 0,
+        profundidadSemilla: "",
+        metodoMaquina: true,
+        tratamientoSemilla: false,
+        entityId: entity.id,
       });
     }
-  }, [selectedPartida, formAsignarUbicacion]);
+  }, [selectedPartida, formAsignarUbicacion, entity]);
 
   const handleAsignarUbicacionSiembra = async (
-    formData: AsignarUbiSiembraDto,
+    formData: AsignarUbiSiembraCompletaDto,
   ) => {
     if (selectedPartida) {
       try {
@@ -108,7 +115,8 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           saveLabel="Confirmar Ubicación"
           confirm={{
             title: "Confirmar ubicación",
-            description: "¿Deseas confirmar la asignación de esta ubicación de siembra?",
+            description:
+              "¿Deseas confirmar la asignación de esta ubicación de siembra?",
             label: "Confirmar Ubicación",
           }}
         >

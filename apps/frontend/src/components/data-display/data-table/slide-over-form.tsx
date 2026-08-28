@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { UseFormReturn } from "react-hook-form";
-import { Eye, Plus, Pencil, Loader2, HelpCircle } from "lucide-react";
+import { Eye, Plus, Pencil, Loader2, HelpCircle, AlertTriangle } from "lucide-react";
 
 type SlideOverMode = "create" | "edit" | "view";
 
@@ -69,6 +69,7 @@ export function SlideOverForm({
   confirm,
 }: SlideOverFormProps) {
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const isViewMode = mode === "view";
   const isCreateMode = mode === "create";
 
@@ -93,7 +94,7 @@ export function SlideOverForm({
 
   const isSubmitDisabled =
     disabled ||
-    (form ? !form.formState.isValid || form.formState.isSubmitting : false);
+    (form ? form.formState.isSubmitting : false);
 
   const submitForm = () => {
     if (formId) {
@@ -104,6 +105,21 @@ export function SlideOverForm({
   };
 
   const handleSubmitClick = () => {
+    if (form && !form.formState.isValid) {
+      form.trigger().then((isValid) => {
+        if (!isValid) {
+          const errors = Object.entries(form.formState.errors).map(
+            ([field, error]) => {
+              const label = field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+              return `${label}: ${error?.message || "Requerido"}`;
+            },
+          );
+          setValidationErrors(errors);
+        }
+      });
+      return;
+    }
+    setValidationErrors([]);
     if (confirm) {
       setConfirmOpen(true);
     } else {
@@ -112,6 +128,22 @@ export function SlideOverForm({
   };
 
   const handleConfirmSubmit = () => {
+    if (form && !form.formState.isValid) {
+      form.trigger().then((isValid) => {
+        if (!isValid) {
+          const errors = Object.entries(form.formState.errors).map(
+            ([field, error]) => {
+              const label = field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+              return `${label}: ${error?.message || "Requerido"}`;
+            },
+          );
+          setValidationErrors(errors);
+          setConfirmOpen(false);
+        }
+      });
+      return;
+    }
+    setValidationErrors([]);
     setConfirmOpen(false);
     submitForm();
   };
@@ -132,6 +164,21 @@ export function SlideOverForm({
               </SheetDescription>
             )}
           </SheetHeader>
+          {validationErrors.length > 0 && (
+            <div className="mx-6 mt-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle className="h-4 w-4 text-destructive" />
+                <span className="text-sm font-medium text-destructive">
+                  Corrige los siguientes errores:
+                </span>
+              </div>
+              <ul className="list-disc list-inside text-xs text-destructive/80 space-y-1">
+                {validationErrors.map((error, i) => (
+                  <li key={i}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="flex-1 overflow-hidden">
             <ScrollArea className="h-full px-6 py-4" tabIndex={-1}>
               <div className="space-y-4" tabIndex={-1}>
@@ -206,7 +253,7 @@ export function SlideOverForm({
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleConfirmSubmit}
-                disabled={isSubmitDisabled || isLoading}
+                disabled={isLoading}
                 className="min-h-[48px] min-w-[100px] bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {isLoading ? (

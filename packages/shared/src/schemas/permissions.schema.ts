@@ -1,5 +1,6 @@
 // shared/src/schemas/permissions.schema.ts
 import { z } from "zod";
+import { cuidSchema } from "./cuid.schema";
 
 export const PermissionScopeSchema = z.enum(["NONE", "OWN", "ALL"]);
 export type PermissionScope = z.infer<typeof PermissionScopeSchema>;
@@ -36,7 +37,7 @@ export const PermissionCheckSchema = z.object({
 export type PermissionCheck = z.infer<typeof PermissionCheckSchema>;
 
 export const EntitySchema = z.object({
-  id: z.string(),
+  id: cuidSchema,
   name: z.string(),
   label: z.string(),
   isActive: z.boolean().optional(),
@@ -46,7 +47,7 @@ export const EntitySchema = z.object({
 export type Entity = z.infer<typeof EntitySchema>;
 
 export const UserEntityPermissionSchema = z.object({
-  userId: z.string(),
+  userId: cuidSchema,
   username: z.string(),
   firstName: z.string().optional().nullable(),
   lastName: z.string().optional().nullable(),

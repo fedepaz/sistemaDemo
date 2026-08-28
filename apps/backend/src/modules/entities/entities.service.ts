@@ -3,7 +3,6 @@
 import {
   Injectable,
   InternalServerErrorException,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { EntitiesRepository } from './repositories/entities.repository';
@@ -12,7 +11,6 @@ import { PermissionsService } from '../permissions/permissions.service';
 
 @Injectable()
 export class EntitiesService {
-  private readonly logger = new Logger(EntitiesService.name);
   constructor(
     private readonly entitiesRepo: EntitiesRepository,
     private readonly permissionsService: PermissionsService,

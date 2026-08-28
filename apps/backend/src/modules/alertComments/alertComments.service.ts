@@ -1,13 +1,12 @@
 // src/modules/alertComments/alertComments.service.ts
 
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AlertCommentsRepository } from './repositories/alertComments.repository';
 import { PartidasRepository } from '../legacy/partidas/repositories/partidas.repository';
 import { CreateAlertCommentDto, AlertCommentDto } from '@vivero/shared';
 
 @Injectable()
 export class AlertCommentsService {
-  private readonly logger = new Logger(AlertCommentsService.name);
   constructor(
     private readonly repo: AlertCommentsRepository,
     private readonly partidaRepo: PartidasRepository,

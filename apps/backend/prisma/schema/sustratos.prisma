@@ -1,0 +1,20 @@
+model Sustratos {
+    id          String @id @default(cuid())
+    nombre      String
+
+    
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  mezclaSustrato1 Mezcla[] @relation("sustrato1")
+  mezclaSustrato2 Mezcla[] @relation("sustrato2")
+  mezclaSustrato3 Mezcla[] @relation("sustrato3")
+  mezclaSustrato4 Mezcla[] @relation("sustrato4")
+  
+
+  deletedByUserId String?
+    deletedByUser User? @relation("deleted_sustratos", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  deletedAt DateTime? @db.Timestamp(0)
+}

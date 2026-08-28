@@ -1,0 +1,30 @@
+model SiembraPartidas {
+    id          String @id @default(cuid())
+  partidaId   Int
+  anio        Int
+  indice      Int
+  metodoMaquina Boolean
+
+  presionSemilla     Int      @default(0) // psi — pneumatic seeder pressure
+  profundidadSemilla Decimal  @db.Decimal(5,3) @default(0) // cm — e.g., 1.525, 2.000
+  tratamientoSemilla Boolean  @default(false) // seed treatment applied
+  
+  mezclaId String
+    mezcla Mezcla @relation(fields: [mezclaId], references: [id])
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  deletedByUserId String?
+    deletedByUser User? @relation("deleted_siembra_partdas", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  deletedAt DateTime? @db.Timestamp(0)
+
+  @@index([partidaId, anio, indice])
+  @@index([deletedByUserId])
+  @@map("siembra_partdas")
+}

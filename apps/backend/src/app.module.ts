@@ -37,6 +37,9 @@ import { TaskShiftsModule } from './modules/taskShifts/taskShifts.module';
 import { RequestIdMiddleware } from './shared/middleware/request-id.middleware';
 import { getPinoStream } from './config/logger';
 import { AlertSolvedModule } from './modules/alertSolved/alertSolved.module';
+import { SiembraPartidasModule } from './modules/siembraPartidas/siembraPartidas.module';
+import { MezclaModule } from './modules/mezcla/mezcla.module';
+import { SustratosModule } from './modules/sustratos/sustratos.module';
 
 @Module({
   imports: [
@@ -100,6 +103,9 @@ import { AlertSolvedModule } from './modules/alertSolved/alertSolved.module';
     AlertCommentsModule,
     TaskShiftsModule,
     AlertSolvedModule,
+    SiembraPartidasModule,
+    MezclaModule,
+    SustratosModule,
     AuthModule,
     UsersModule,
     PermissionsModule,

@@ -3,12 +3,12 @@ import { AuditLogSchema } from '../auditLog.schema';
 
 describe('AuditLogSchema', () => {
   const validAuditLog = {
-    id: '123e4567-e89b-12d3-a456-426614174000',
-    tenantId: 'tenant-1',
+    id: 'clx1234567890abcdef123456',
+    tenantId: 'clx1234567890abcdef123467',
     tenant: {},
-    userId: 'user-1',
+    userId: 'clx1234567890abcdef123478',
     user: {
-      id: 'user-1',
+      id: 'clx1234567890abcdef123478',
       username: 'admin',
       email: 'admin@example.com',
       firstName: 'Admin',
@@ -19,7 +19,7 @@ describe('AuditLogSchema', () => {
       updatedAt: new Date(),
     },
     action: 'CREATE',
-    entityId: 'entity-1',
+    entityId: 'clx1234567890abcdef123489',
     entityType: 'USER_PROFILE',
     changes: { field: 'oldValue', newValue: 'test' },
     timestamp: new Date(),
@@ -27,7 +27,7 @@ describe('AuditLogSchema', () => {
 
   it('accepts valid audit log', () => {
     const result = AuditLogSchema.parse(validAuditLog);
-    expect(result.id).toBe('123e4567-e89b-12d3-a456-426614174000');
+    expect(result.id).toBe('clx1234567890abcdef123456');
     expect(result.action).toBe('CREATE');
     expect(result.entityType).toBe('USER_PROFILE');
   });
@@ -68,7 +68,7 @@ describe('AuditLogSchema', () => {
 
   it('rejects missing required fields', () => {
     expect(() =>
-      AuditLogSchema.parse({ id: '1', tenantId: 't1' })
+      AuditLogSchema.parse({ id: 'clx1234567890abcdef123456', tenantId: 'clx1234567890abcdef123467' })
     ).toThrow();
   });
 });

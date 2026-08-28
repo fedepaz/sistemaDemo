@@ -7,6 +7,7 @@ export * from "./enums";
 export * from "./utils";
 
 // Schemas
+export * from "./schemas/cuid.schema";
 export * from "./schemas/user.schema";
 export * from "./schemas/auth.schema";
 export * from "./schemas/permissions.schema";
@@ -21,3 +22,6 @@ export * from "./schemas/pagination.schema";
 export * from "./constants/managed-entities";
 export * from "./schemas/taskShift.schema";
 export * from "./schemas/legacy-header.schema";
+export * from "./schemas/sustratos.schema";
+export * from "./schemas/mezcla.schema";
+export * from "./schemas/siembraPartida.schema";

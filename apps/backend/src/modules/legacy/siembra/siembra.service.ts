@@ -51,8 +51,12 @@ export class SiembraService {
       injerto: row.injerto,
 
       fechaSugeridaSiembra: row.f_siem,
+      fechaSiembraReal: row.f_siembra,
       propiedad: row.propiedad,
       solicito: row.solicito,
+      lote: row.lote,
+      anoLote: row.ano_lote,
+      ajuste: row.ajuste,
       nrocont: row.nrocont,
       extendido: row.extendido,
       germin: row.germin,

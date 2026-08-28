@@ -6,8 +6,8 @@ import {
 
 describe("AsignarUbiExtendidoDtoSchema", () => {
   const valid = {
-    partida: 1,
-    ano: 2026,
+    partidaId: 1,
+    anio: 2026,
     indice: 1,
     ubicacion: 100,
     stock_ini: 50,
@@ -15,7 +15,7 @@ describe("AsignarUbiExtendidoDtoSchema", () => {
 
   it("accepts valid assignment", () => {
     const result = AsignarUbiExtendidoDtoSchema.parse(valid);
-    expect(result.partida).toBe(1);
+    expect(result.partidaId).toBe(1);
     expect(result.ubicacion).toBe(100);
   });
 
@@ -89,33 +89,33 @@ describe("AsignarUbiExtendidoDtoSchema", () => {
 
 describe("AsignarUbiSiembraDtoSchema", () => {
   const valid = {
-    partida: 1,
-    ano: 2026,
+    partidaId: 1,
+    anio: 2026,
     indice: 1,
     cg: 92,
     cantidaNroCont: 120,
-    germin: 80,
-    detalle: "Test",
+    f_siembra: new Date("2026-01-15"),
+    detalleExtendido: "Test",
   };
 
   it("accepts valid assignment", () => {
     const result = AsignarUbiSiembraDtoSchema.parse(valid);
-    expect(result.partida).toBe(1);
+    expect(result.partidaId).toBe(1);
     expect(result.cg).toBe(92);
     expect(result.cantidaNroCont).toBe(120);
   });
 
   it("applies default values for omitted fields", () => {
-    const { detalle: _, ...validWithoutDetalle } = valid;
+    const { detalleExtendido: _, ...validWithoutDetalle } = valid;
     const result = AsignarUbiSiembraDtoSchema.parse(validWithoutDetalle);
-    expect(result.detalle).toBe("");
+    expect(result.detalleExtendido).toBe("");
   });
 
   it("accepts with optional fields", () => {
     const result = AsignarUbiSiembraDtoSchema.parse({
       ...valid,
       baja: 5,
-      detalle: "Test",
+      detalleExtendido: "Test",
       extendido: "Notes",
       edita: "admin",
     });
@@ -135,9 +135,9 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     ).toThrow();
   });
 
-  it("rejects detalle longer than 30 characters", () => {
+  it("rejects detalleExtendido longer than 5000 characters", () => {
     expect(() =>
-      AsignarUbiSiembraDtoSchema.parse({ ...valid, detalle: "a".repeat(31) }),
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, detalleExtendido: "a".repeat(5001) }),
     ).toThrow();
   });
 });

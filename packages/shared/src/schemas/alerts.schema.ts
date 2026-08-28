@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { LegacyHeaderSchema } from "./legacy-header.schema";
+import { cuidSchema } from "./cuid.schema";
 
 // ============================================================================
 // ALERT BASE (shared across all alert types)
@@ -76,13 +77,13 @@ export type FaltaPreExpedicionDto = z.infer<typeof FaltaPreExpedicionDtoSchema>;
 // ============================================================================
 
 export const AlertCommentSchema = z.object({
-  id: z.string(),
+  id: cuidSchema,
   alertType: z.string(),
   partidaId: z.number(),
   anio: z.number(),
   indice: z.number(),
   content: z.string(),
-  userId: z.string(),
+  userId: cuidSchema,
   userName: z.string(),
   createdAt: z.string(),
 });
@@ -100,7 +101,7 @@ export const CreateAlertCommentSchema = z.object({
   anio: z.number(),
   indice: z.number(),
   content: z
-    .string()
+    .string({ message: "El comentario no puede estar vacío" })
     .min(1, { message: "El comentario no puede estar vacío" })
     .max(500, { message: "Máximo 500 caracteres" }),
 });
@@ -112,11 +113,11 @@ export type CreateAlertCommentDto = z.infer<typeof CreateAlertCommentSchema>;
 // ============================================================================
 
 export const AlertSolvedSchema = z.object({
-  id: z.string(),
+  id: cuidSchema,
   partidaId: z.number(),
   anio: z.number(),
   indice: z.number(),
-  userId: z.string(),
+  userId: cuidSchema,
   userName: z.string(),
   createdAt: z.string(),
 });
