@@ -67,7 +67,7 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
             icon: Blend,
             description: "Gestión de mezclas de sustratos",
             dashboard: { statsLabel: "Mezclas" },
-            requiredPermission: { table: "siembra", action: "read" },
+            requiredPermission: { table: "mezclas", action: "read" },
           },
         ],
       },
