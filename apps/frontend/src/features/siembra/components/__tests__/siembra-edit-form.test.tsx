@@ -4,6 +4,7 @@ jest.mock("react-hook-form", () => ({
 }));
 
 import { render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 beforeAll(() => {
   global.ResizeObserver = class {
@@ -12,9 +13,20 @@ beforeAll(() => {
     disconnect() {}
   };
 });
+
+jest.mock("@/features/permissions", () => ({
+  useTableByName: () => ({ data: { permissionType: "CRUD" } }),
+}));
 import userEvent from "@testing-library/user-event";
 import { SiembraEditForm } from "../siembra-edit-form";
 import type { SiembraDto } from "@vivero/shared";
+
+const QueryWrapper = ({ children }: { children: React.ReactNode }) => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+};
 
 jest.mock("@/features/extendidos", () => ({
   useDepositos: () => ({
@@ -132,88 +144,58 @@ describe("SiembraEditForm", () => {
   const mockOnSubmit = jest.fn().mockResolvedValue(undefined);
   const mockOnCancel = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("renders form with species header", () => {
+  const renderForm = (props = {}) =>
     render(
       <SiembraEditForm
         onSubmit={mockOnSubmit}
         onCancel={mockOnCancel}
         form={mockForm}
         selectedSiembra={mockSelectedSiembra}
+        {...props}
       />,
+      { wrapper: QueryWrapper },
     );
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("renders form with species header", () => {
+    renderForm();
 
     expect(screen.getByText("ESP001")).toBeInTheDocument();
     expect(screen.getByText("Especie Test")).toBeInTheDocument();
   });
 
   it("renders camera select field", () => {
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     expect(screen.getByText("Cámara de Destino")).toBeInTheDocument();
   });
 
   it("renders method toggle with default Máquina label", () => {
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     expect(screen.getByText("Método")).toBeInTheDocument();
     expect(screen.getByText("Máquina")).toBeInTheDocument();
   });
 
   it("renders quantity field with default read-only value", () => {
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     expect(screen.getByText("Bandejas Confirmadas")).toBeInTheDocument();
     expect(screen.getByText("100")).toBeInTheDocument();
   });
 
   it("renders observaciones textarea", () => {
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     expect(screen.getByText("Observaciones")).toBeInTheDocument();
   });
 
   it("toggles to edit mode when Edit button is clicked", async () => {
     const user = userEvent.setup();
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     const editButton = screen.getByText("Editar");
     await user.click(editButton);
@@ -224,14 +206,7 @@ describe("SiembraEditForm", () => {
 
   it("reverts to read-only when Cancel button is clicked", async () => {
     const user = userEvent.setup();
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     const editButton = screen.getByText("Editar");
     await user.click(editButton);
@@ -245,14 +220,7 @@ describe("SiembraEditForm", () => {
 
   it("calls form.setValue when canceling edit mode", async () => {
     const user = userEvent.setup();
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     const editButton = screen.getByText("Editar");
     await user.click(editButton);
@@ -264,14 +232,7 @@ describe("SiembraEditForm", () => {
   });
 
   it("displays method description badge", () => {
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     expect(
       screen.getByText(/Mecánica \(por defecto\)/),
@@ -279,14 +240,7 @@ describe("SiembraEditForm", () => {
   });
 
   it("renders all form sections", () => {
-    render(
-      <SiembraEditForm
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
-        form={mockForm}
-        selectedSiembra={mockSelectedSiembra}
-      />,
-    );
+    renderForm();
 
     expect(screen.getByText("Cámara de Destino")).toBeInTheDocument();
     expect(screen.getByText("Método")).toBeInTheDocument();

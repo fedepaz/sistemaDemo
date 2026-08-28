@@ -7,6 +7,33 @@ beforeAll(() => {
     disconnect() {}
   };
 });
+
+jest.mock("@/features/permissions", () => ({
+  useTableByName: () => ({ data: { permissionType: "CRUD", id: "cperm001entitysiembrat" } }),
+}));
+
+const mockReset = jest.fn();
+jest.mock("react-hook-form", () => ({
+  ...jest.requireActual("react-hook-form"),
+  useForm: () => ({
+    control: {
+      _getWatch: jest.fn().mockReturnValue(true),
+      _formValues: {},
+      _subjects: { watch: { next: jest.fn() } },
+    },
+    handleSubmit: (fn: (data: Record<string, unknown>) => void) => (e: Event) => {
+      e.preventDefault();
+      fn({});
+    },
+    formState: { isValid: true, isSubmitting: false },
+    reset: mockReset,
+    setValue: jest.fn(),
+    getValues: jest.fn().mockReturnValue({}),
+    watch: jest.fn(),
+  }),
+  useWatch: jest.fn().mockReturnValue(true),
+}));
+
 import { SiembraDataTable } from "../siembra-data-table";
 import type { SiembraDto } from "@vivero/shared";
 
@@ -59,6 +86,12 @@ jest.mock("@/features/mezclas", () => ({
       { id: "m1", sustrato1Nombre: "Sustrato A", sustrato2Nombre: "Sustrato B", sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
     ],
   }),
+}));
+
+jest.mock("@/features/taskshift/components/employee-search", () => ({
+  EmployeeSearch: ({ onSelect }: { onSelect: (users: { id: string; nombre: string }[]) => void }) => (
+    <button onClick={() => onSelect([{ id: "u1", nombre: "Test User" }])}>Search Employee</button>
+  ),
 }));
 
 jest.mock("@/components/ui/tooltip", () => ({
