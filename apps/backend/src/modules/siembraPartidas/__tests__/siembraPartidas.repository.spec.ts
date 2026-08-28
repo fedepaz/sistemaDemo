@@ -115,7 +115,7 @@ describe('SiembraPartidasRepository', () => {
   });
 
   describe('create', () => {
-    it('creates record with timestamps', async () => {
+    it('creates record with provided data', async () => {
       prisma.siembraPartidas.create.mockResolvedValue(mockRecord);
 
       const result = await repository.create({
@@ -136,8 +136,6 @@ describe('SiembraPartidasRepository', () => {
           metodoMaquina: true,
           mezclaId: 'mezcla-1',
           userId: 'user-1',
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
         },
       });
     });

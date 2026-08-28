@@ -50,17 +50,26 @@ describe('Siembra (integration)', () => {
       await request(app.getHttpServer())
         .post('/l-partidas/asignar-siembra')
         .send({
-          partida: 1,
-          ano: 2026,
+          partidaId: 1,
+          anio: 2026,
           indice: 1,
           cg: 1,
           cantidaNroCont: 50,
           f_siembra: new Date('2026-01-15'),
+          metodoMaquina: true,
+          presionSemilla: 1,
+          profundidadSemilla: '1.5',
+          tratamientoSemilla: false,
+          mezclaId: 'clmocksiembra0000000000000',
+          entityId: 'cltaskshiftpayload0000000',
+          startTime: '2026-01-15T08:00:00.000Z',
+          endTime: '2026-01-15T17:00:00.000Z',
         })
         .expect(201);
 
       expect(partidasMock.asignarSiembra).toHaveBeenCalledWith(
-        expect.objectContaining({ partida: 1, ano: 2026 }),
+        expect.objectContaining({ partidaId: 1, anio: 2026 }),
+        expect.any(String),
       );
     });
   });

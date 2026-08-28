@@ -127,8 +127,6 @@ describe('SustratosRepository', () => {
       expect(prisma.sustratos.create).toHaveBeenCalledWith({
         data: {
           nombre: 'Turba',
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
         },
       });
     });
