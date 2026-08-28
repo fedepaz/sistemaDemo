@@ -6,8 +6,8 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { ExtendidosViewForm } from "./extendido-view-form";
 import { partidaColumns, partidaExportColumns } from "./columns";
 import {
-  AsignarUbicacionDto,
-  AsignarUbicacionDtoSchema,
+  AsignarUbiExtendidoDto,
+  AsignarUbiExtendidoDtoSchema,
   ExtendidoDto,
 } from "@vivero/shared";
 import { useCamaras } from "../hooks/useDepositos";
@@ -62,8 +62,8 @@ export function ExtendidoDataTable({
     return partidas.filter((p) => p.fechaEgresoCamara === todayStr);
   }, [partidas, filterToday]);
 
-  const formAsignarUbicacion = useForm<AsignarUbicacionDto>({
-    resolver: zodResolver(AsignarUbicacionDtoSchema),
+  const formAsignarUbicacion = useForm<AsignarUbiExtendidoDto>({
+    resolver: zodResolver(AsignarUbiExtendidoDtoSchema),
   });
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export function ExtendidoDataTable({
     }
   }, [selectedPartida, formAsignarUbicacion]);
 
-  const handleAsignarUbicacion = async (formData: AsignarUbicacionDto) => {
+  const handleAsignarUbicacion = async (formData: AsignarUbiExtendidoDto) => {
     if (selectedPartida) {
       try {
         await asignarUbicacion(formData);
@@ -91,33 +91,36 @@ export function ExtendidoDataTable({
     }
   };
 
-  const handleExtendidoView = (row: ExtendidoDto) => {
+  const handleExtendidoView = useCallback((row: ExtendidoDto) => {
     setSelectedPartida(row);
     setMode("view");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleEdit = (row: ExtendidoDto) => {
+  const handleEdit = useCallback((row: ExtendidoDto) => {
     setSelectedPartida(row);
     setMode("edit");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleCamaraChange = (value: string) => {
-    onCamaraChange?.(value);
-  };
+  const handleCamaraChange = useCallback(
+    (value: string) => {
+      onCamaraChange?.(value);
+    },
+    [onCamaraChange],
+  );
 
   const handleClear = useCallback(() => {
     onCamaraChange?.("all");
     setFilterToday(false);
   }, [onCamaraChange]);
 
-  const handleOpenChange = (open: boolean) => {
+  const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
     if (!open) {
       setSelectedPartida(null);
     }
-  };
+  }, []);
 
   const hasActiveFilters = currentCamaraId !== "all" || filterToday;
 
@@ -210,6 +213,11 @@ export function ExtendidoDataTable({
           form={formAsignarUbicacion}
           isLoading={isAsignandoUbicacion}
           saveLabel="Confirmar Extendido"
+          confirm={{
+            title: "Confirmar extendido",
+            description: "¿Deseas confirmar la asignación de ubicación para este extendido?",
+            label: "Confirmar Extendido",
+          }}
         >
           <div className="space-y-2">
             {mode === "view" ? (

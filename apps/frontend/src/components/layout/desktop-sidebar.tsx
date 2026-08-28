@@ -112,8 +112,10 @@ function NavGroupSection({
   group,
   isCollapsed,
   expandedGroups,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   expandedSubGroups,
   toggleGroup,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toggleSubGroup,
 }: {
   group: NavigationGroup;

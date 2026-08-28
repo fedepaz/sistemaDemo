@@ -6,7 +6,7 @@ import { auditLogColumns, auditLogExportColumns } from "./columns";
 
 import { AuditLogDto } from "@vivero/shared";
 import { useAuditLogs } from "../hooks/auditLogHooks";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { AuditLogForm } from "./auditLog-form";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -16,10 +16,10 @@ export function AuditLogDataTable() {
   const [slideOverOpen, setSlideOverOpen] = useState(false);
   const [selectedAuditLog, setSelectedAuditLog] = useState<AuditLogDto>();
 
-  const handleViewAuditLog = (row: AuditLogDto) => {
+  const handleViewAuditLog = useCallback((row: AuditLogDto) => {
     setSelectedAuditLog(row);
     setSlideOverOpen(true);
-  };
+  }, []);
 
   return (
     <TooltipProvider>

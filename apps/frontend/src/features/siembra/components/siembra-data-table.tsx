@@ -2,7 +2,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import {
   AsignarUbiSiembraDto,
@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
-import { useSiembraPartidaMutation } from "../hooks/useSiembraPartidaMutation";
+import { useSiembraMutation } from "../hooks/useSiembraPartidaMutation";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
@@ -28,7 +28,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
 
-  const { mutateAsync: asignarUbicacionSiembra } = useSiembraPartidaMutation();
+  const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
 
   const formAsignarUbicacion = useForm<AsignarUbiSiembraDto>({
     resolver: zodResolver(AsignarUbiSiembraDtoSchema),
@@ -40,11 +40,9 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         partida: selectedPartida.partidaId,
         ano: selectedPartida.anio,
         indice: selectedPartida.indice,
-        ubicacion: undefined,
-        stock_ini: parseInt(selectedPartida.con),
-        detalle: "",
-        baja: 0,
-        extendido: "",
+        cantidaNroCont: parseInt(selectedPartida.nrocont),
+        detalle: selectedPartida.extendido,
+        germin: parseInt(selectedPartida.germin),
         edita: "S",
       });
     }
@@ -61,24 +59,24 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     }
   };
 
-  const handleView = (row: SiembraDto) => {
+  const handleView = useCallback((row: SiembraDto) => {
     setSelectedPartida(row);
     setMode("view");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleEdit = (row: SiembraDto) => {
+  const handleEdit = useCallback((row: SiembraDto) => {
     setSelectedPartida(row);
     setMode("edit");
     setSlideOpen(true);
-  };
+  }, []);
 
-  const handleOpenChange = (open: boolean) => {
+  const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
     if (!open) {
       setSelectedPartida(null);
     }
-  };
+  }, []);
 
   return (
     <>
@@ -108,6 +106,11 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           mode={mode}
           form={formAsignarUbicacion}
           saveLabel="Confirmar Ubicación"
+          confirm={{
+            title: "Confirmar ubicación",
+            description: "¿Deseas confirmar la asignación de esta ubicación de siembra?",
+            label: "Confirmar Ubicación",
+          }}
         >
           <div className="space-y-2">
             {mode === "view" ? (
@@ -117,7 +120,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
                 form={formAsignarUbicacion}
                 onSubmit={handleAsignarUbicacionSiembra}
                 onCancel={() => setSlideOpen(false)}
-                selectedExtendido={selectedPartida}
+                selectedSiembra={selectedPartida}
               />
             )}
           </div>

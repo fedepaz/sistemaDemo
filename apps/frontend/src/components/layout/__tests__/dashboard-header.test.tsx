@@ -32,10 +32,6 @@ jest.mock("@/components/common/logo", () => ({
   Logo: () => <div data-testid="logo" />,
 }));
 
-jest.mock("@/components/common/loading-spinner", () => ({
-  LoadingSpinner: () => <div data-testid="loading-spinner" />,
-}));
-
 jest.mock("@/components/ui/tooltip", () => ({
   Tooltip: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   TooltipTrigger: ({ children }: { children: ReactNode }) => <div>{children}</div>,

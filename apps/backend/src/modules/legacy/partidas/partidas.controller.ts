@@ -2,7 +2,12 @@
 
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PartidasService } from './partidas.service';
-import { AsignarUbicacionDto, AsignarUbicacionDtoSchema } from '@vivero/shared';
+import {
+  AsignarUbiExtendidoDto,
+  AsignarUbiExtendidoDtoSchema,
+  AsignarUbiSiembraDto,
+  AsignarUbiSiembraDtoSchema,
+} from '@vivero/shared';
 import { ZodValidationPipe } from '../../../shared/pipes/zod-validation-pipe';
 import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
 
@@ -20,17 +25,34 @@ export class PartidasController {
     return this.service.getAllPartidas();
   }
 
-  @Post('asignar-ubicacion')
+  @Post('asignar-extendido')
   @RequirePermission({
     tableName: 'extendidos',
     action: 'create',
     scope: 'ALL',
   })
-  async asignarUbicacion(
-    @Body(new ZodValidationPipe(AsignarUbicacionDtoSchema))
-    data: AsignarUbicacionDto,
+  async asignarExtendido(
+    @Body(new ZodValidationPipe(AsignarUbiExtendidoDtoSchema))
+    data: AsignarUbiExtendidoDto,
   ) {
-    await this.service.asignarUbicacion(data);
+    await this.service.asignarExtendido(data);
+    return {
+      success: true,
+      message: 'Ubicación asignada correctamente',
+    };
+  }
+
+  @Post('asignar-siembra')
+  @RequirePermission({
+    tableName: 'siembra',
+    action: 'create',
+    scope: 'ALL',
+  })
+  async asignarSiembra(
+    @Body(new ZodValidationPipe(AsignarUbiSiembraDtoSchema))
+    data: AsignarUbiSiembraDto,
+  ) {
+    await this.service.asignarSiembra(data);
     return {
       success: true,
       message: 'Ubicación asignada correctamente',

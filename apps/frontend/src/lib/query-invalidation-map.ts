@@ -78,12 +78,20 @@ export const mutationInvalidationMap = {
 
   // --- Extendidos ---
   partidaUbicacion: {
-    queries: () => [extendidosQueryKeys.enCamara()],
+    queries: () => [
+      extendidosQueryKeys.enCamara(),
+      siembraQueryKeys.partidas(),
+      alertsQueryKeys.all(),
+    ],
   },
 
   // --- Siembra ---
   siembraPartida: {
-    queries: () => [siembraQueryKeys.partidas()],
+    queries: () => [
+      siembraQueryKeys.partidas(),
+      extendidosQueryKeys.enCamara(),
+      alertsQueryKeys.all(),
+    ],
   },
 
   // --- Alert Comments ---

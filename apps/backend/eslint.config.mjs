@@ -36,4 +36,12 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ['test/**/*.ts', '**/__tests__/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+    },
+  },
 );

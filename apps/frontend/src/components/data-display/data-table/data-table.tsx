@@ -2,7 +2,7 @@
 // src/components/data-display/data-table/data-table.tsx
 "use client";
 
-import { Fragment, ReactNode, useEffect, useMemo, useState } from "react";
+import { Fragment, memo, ReactNode, useEffect, useMemo, useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -97,7 +97,7 @@ function HeaderComponent({ titulo }: { titulo: string }) {
     </div>
   );
 }
-export function DataTable<TData extends Record<string, unknown>, TValue>({
+function DataTableInner<TData extends Record<string, unknown>, TValue>({
   columns,
   data,
   title,
@@ -720,6 +720,8 @@ export function DataTable<TData extends Record<string, unknown>, TValue>({
     </>
   );
 }
+
+export const DataTable = memo(DataTableInner) as typeof DataTableInner;
 
 // Sortable header component
 export function SortableHeader({

@@ -78,8 +78,10 @@ function MobileNavItemLink({
 function MobileGroupSection({
   group,
   expandedGroups,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   expandedSubGroups,
   toggleGroup,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toggleSubGroup,
   onNavigate,
 }: {
@@ -178,9 +180,7 @@ function MobileNestedGroupSection({
                     className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/50 p-2 h-7"
                   >
                     <SubGroupIcon className="h-3.5 w-3.5 shrink-0" />
-                    <span className="flex-1 text-left pl-3">
-                      {item.title}
-                    </span>
+                    <span className="flex-1 text-left pl-3">{item.title}</span>
                     <ChevronDown
                       className={cn(
                         "h-3.5 w-3.5 transition-transform",
