@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { getLocalDateStr } from "@/lib/date-utils";
+import { getLocalDateStr, utcToLocalTime } from "@/lib/date-utils";
 import { EmployeeSearch } from "./employee-search";
 import type { UserProfileDto } from "@vivero/shared";
 import { Clock, User2, AlertTriangle } from "lucide-react";
@@ -51,18 +51,22 @@ export function TaskShift({
 }: TaskShiftProps) {
   const today = getLocalDateStr(new Date());
 
-  const [startHour, setStartHour] = useState(
-    startTime ? startTime.split("T")[1].split(":")[0] : "",
-  );
-  const [startMinute, setStartMinute] = useState(
-    startTime ? startTime.split("T")[1].split(":")[1] : "",
-  );
-  const [endHour, setEndHour] = useState(
-    endTime ? endTime.split("T")[1].split(":")[0] : "",
-  );
-  const [endMinute, setEndMinute] = useState(
-    endTime ? endTime.split("T")[1].split(":")[1] : "",
-  );
+  const [startHour, setStartHour] = useState(() => {
+    const local = utcToLocalTime(startTime);
+    return local ? local.split(":")[0] : "";
+  });
+  const [startMinute, setStartMinute] = useState(() => {
+    const local = utcToLocalTime(startTime);
+    return local ? local.split(":")[1] : "";
+  });
+  const [endHour, setEndHour] = useState(() => {
+    const local = utcToLocalTime(endTime);
+    return local ? local.split(":")[0] : "";
+  });
+  const [endMinute, setEndMinute] = useState(() => {
+    const local = utcToLocalTime(endTime);
+    return local ? local.split(":")[1] : "";
+  });
 
   const isStartComplete = startHour !== "" && startMinute !== "";
   const isEndComplete = endHour !== "" && endMinute !== "";

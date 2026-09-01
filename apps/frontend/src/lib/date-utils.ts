@@ -77,3 +77,18 @@ export function getLocalDateStr(date: Date): string {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
+
+/**
+ * Convert a UTC ISO string to a local time string "HH:MM".
+ * Backend stores UTC ("2026-09-01T17:00:00.000Z"), frontend displays local time.
+ * @param utcString UTC ISO string from the API
+ * @returns Local time string "HH:MM", or empty string if invalid
+ */
+export function utcToLocalTime(utcString: string | null | undefined): string {
+  if (!utcString) return "";
+  const date = new Date(utcString);
+  if (isNaN(date.getTime())) return "";
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
