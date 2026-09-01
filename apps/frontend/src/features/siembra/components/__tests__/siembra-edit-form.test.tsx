@@ -37,15 +37,6 @@ jest.mock("@/features/extendidos", () => ({
   }),
 }));
 
-jest.mock("@/features/mezclas", () => ({
-  useMezclas: () => ({
-    data: [
-      { id: "m1", sustrato1Nombre: "Sustrato A", sustrato2Nombre: "Sustrato B", sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
-      { id: "m2", sustrato1Nombre: "Sustrato C", sustrato2Nombre: null, sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
-    ],
-  }),
-}));
-
 jest.mock("@/components/ui/tooltip", () => ({
   Tooltip: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

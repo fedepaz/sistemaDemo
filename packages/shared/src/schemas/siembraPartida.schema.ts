@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { PartidaHeaderSchema } from "./legacy-header.schema";
-import { requiredCuid } from "./cuid.schema";
+import { cuidSchema, requiredCuid } from "./cuid.schema";
 
 const profundidadSemillaRegex = /^\d{1,2}(\.\d{1,3})?$/;
 
@@ -43,7 +43,7 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
   tratamientoSemilla: z.boolean({
     message: "El tratamiento de semilla es requerido",
   }),
-  mezclaId: requiredCuid("La mezcla"),
+  mezclaId: cuidSchema.optional(),
 });
 
 export type CreateSiembraPartidaDto = z.infer<

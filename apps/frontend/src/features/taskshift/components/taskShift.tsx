@@ -24,7 +24,12 @@ const ALL_MINUTES = Array.from({ length: 12 }, (_, i) =>
 );
 
 function toDateTimeString(date: string, time: string): string {
-  return `${date}T${time}:00.000Z`;
+  const localDate = new Date(`${date}T${time}:00`);
+  const offset = -localDate.getTimezoneOffset();
+  const sign = offset >= 0 ? "+" : "-";
+  const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
+  const minutes = String(Math.abs(offset) % 60).padStart(2, "0");
+  return `${date}T${time}:00.000${sign}${hours}:${minutes}`;
 }
 
 interface TaskShiftProps {

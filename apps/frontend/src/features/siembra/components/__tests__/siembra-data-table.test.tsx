@@ -80,14 +80,6 @@ jest.mock("@/features/extendidos", () => ({
   }),
 }));
 
-jest.mock("@/features/mezclas", () => ({
-  useMezclas: () => ({
-    data: [
-      { id: "m1", sustrato1Nombre: "Sustrato A", sustrato2Nombre: "Sustrato B", sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
-    ],
-  }),
-}));
-
 jest.mock("@/features/taskshift/components/employee-search", () => ({
   EmployeeSearch: ({ onSelect }: { onSelect: (users: { id: string; nombre: string }[]) => void }) => (
     <button onClick={() => onSelect([{ id: "u1", nombre: "Test User" }])}>Search Employee</button>

@@ -3,6 +3,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SiembraPartidasService } from '../siembraPartidas.service';
 import { SiembraPartidasRepository } from '../repositories/siembraPartidas.repository';
+import { PrismaService } from '../../../infra/prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 
 describe('SiembraPartidasService', () => {
@@ -11,6 +12,10 @@ describe('SiembraPartidasService', () => {
     findAll: jest.Mock;
     findById: jest.Mock;
     createSiembraPartida: jest.Mock;
+  };
+  let prismaMock: {
+    sustratos: { upsert: jest.Mock };
+    mezcla: { upsert: jest.Mock };
   };
 
   const mockRow = {
@@ -50,10 +55,16 @@ describe('SiembraPartidasService', () => {
       createSiembraPartida: jest.fn(),
     };
 
+    prismaMock = {
+      sustratos: { upsert: jest.fn() },
+      mezcla: { upsert: jest.fn() },
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SiembraPartidasService,
         { provide: SiembraPartidasRepository, useValue: repo },
+        { provide: PrismaService, useValue: prismaMock },
       ],
     }).compile();
 

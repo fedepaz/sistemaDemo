@@ -50,7 +50,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useDepositos } from "@/features/extendidos";
-import { useMezclas } from "@/features/mezclas";
 import { TaskShift } from "@/features/taskshift/components/taskShift";
 
 interface SiembraEditFormProps {
@@ -67,7 +66,6 @@ export function SiembraEditForm({
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
-  const { data: mezclas } = useMezclas();
   const [isEditingQuantity, setIsEditingQuantity] = useState(false);
 
   const [startTime, setStartTime] = useState("");
@@ -397,8 +395,8 @@ export function SiembraEditForm({
                 )}
               />
 
-              {/* MEZCLA */}
-              <FormField
+              {/* MEZCLA — hidden until client enables mezcla feature */}
+              {/* <FormField
                 control={form.control}
                 name="mezclaId"
                 render={({ field }) => (
@@ -443,7 +441,7 @@ export function SiembraEditForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
 
             <div className="space-y-2 md:space-y-3">

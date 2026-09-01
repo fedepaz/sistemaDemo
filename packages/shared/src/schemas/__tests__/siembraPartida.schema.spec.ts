@@ -93,6 +93,19 @@ describe("CreateSiembraPartidaSchema", () => {
     expect(result.profundidadSemilla).toBe("2.000");
   });
 
+  it("accepts creation without mezclaId", () => {
+    const result = CreateSiembraPartidaSchema.parse({
+      partidaId: 200,
+      anio: 2026,
+      indice: 2,
+      metodoMaquina: false,
+      presionSemilla: 30,
+      profundidadSemilla: "2.000",
+      tratamientoSemilla: true,
+    });
+    expect(result.mezclaId).toBeUndefined();
+  });
+
   it("rejects missing partidaId", () => {
     expect(() =>
       CreateSiembraPartidaSchema.parse({
@@ -103,20 +116,6 @@ describe("CreateSiembraPartidaSchema", () => {
         profundidadSemilla: "1.5",
         tratamientoSemilla: false,
         mezclaId: "clx1234567890abcdef123467",
-      }),
-    ).toThrow();
-  });
-
-  it("rejects missing mezclaId", () => {
-    expect(() =>
-      CreateSiembraPartidaSchema.parse({
-        partidaId: 100,
-        anio: 2026,
-        indice: 1,
-        metodoMaquina: true,
-        presionSemilla: 20,
-        profundidadSemilla: "1.5",
-        tratamientoSemilla: false,
       }),
     ).toThrow();
   });
@@ -135,7 +134,7 @@ describe("CreateSiembraPartidaSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages.some((m) => m.includes("La mezcla"))).toBe(true);
+      expect(messages.some((m) => m.includes("ID"))).toBe(true);
     }
   });
 });

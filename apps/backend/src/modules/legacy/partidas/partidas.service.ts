@@ -8,12 +8,39 @@ import {
 } from '@vivero/shared';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
 
+const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
+const GENERIC_MEZCLA_SUSTRATO1_ID = 'c00000000000000000000001';
+const GENERIC_MEZCLA_ID = 'c00000000000000000000002';
+
 @Injectable()
 export class PartidasService {
   constructor(
     private readonly partidasRepository: PartidasRepository,
     private readonly prisma: PrismaService,
   ) {}
+
+  private async getOrCreateGenericMezcla(): Promise<string> {
+    const sustrato = await this.prisma.sustratos.upsert({
+      where: { nombre: GENERIC_SUSTRATO_NAME },
+      update: {},
+      create: {
+        id: GENERIC_MEZCLA_SUSTRATO1_ID,
+        nombre: GENERIC_SUSTRATO_NAME,
+      },
+    });
+
+    const mezcla = await this.prisma.mezcla.upsert({
+      where: { id: GENERIC_MEZCLA_ID },
+      update: {},
+      create: {
+        id: GENERIC_MEZCLA_ID,
+        sustrato1Id: sustrato.id,
+        porcentaje1: 100,
+      },
+    });
+
+    return mezcla.id;
+  }
 
   async getAllPartidas() {
     const partidas = await this.partidasRepository.findAll();
@@ -72,6 +99,8 @@ export class PartidasService {
       detalle: data.detalleExtendido,
     };
 
+    const mezclaId = data.mezclaId ?? (await this.getOrCreateGenericMezcla());
+
     const newSiembraData = {
       partidaId: data.partidaId,
       anio: data.anio,
@@ -80,7 +109,7 @@ export class PartidasService {
       presionSemilla: data.presionSemilla,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
-      mezcla: { connect: { id: data.mezclaId } },
+      mezcla: { connect: { id: mezclaId } },
       user: { connect: { id: requesterId } },
     };
 
