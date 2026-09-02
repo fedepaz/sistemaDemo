@@ -6,7 +6,7 @@ import { Leaf } from "lucide-react";
 
 export default function CompanyWelcome() {
   return (
-    <Card className="h-full border-0 shadow-sm bg-card overflow-hidden group cursor-pointer transition-all hover:shadow-md">
+    <Card className="border-0 shadow-sm bg-card overflow-hidden group cursor-pointer transition-all hover:shadow-md">
       <CardContent className="p-0">
         {/* Main Welcome Section */}
         <div className="relative flex flex-col items-center justify-center py-6 sm:py-10 px-6 min-h-[140px] sm:min-h-[250px]">

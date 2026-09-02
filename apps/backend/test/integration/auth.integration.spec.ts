@@ -229,7 +229,7 @@ describe('Auth (integration)', () => {
       expect(response.body).toHaveProperty('message');
       expect(authMock.restorePassword).toHaveBeenCalledWith(
         expect.objectContaining({
-          userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          userId: 'clrestore0000000000000000',
         }),
       );
     });

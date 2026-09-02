@@ -12,6 +12,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatShortDate } from "@/lib/date-utils";
 
 interface SiembraFormProps {
   selectedExtendido: SiembraDto;
@@ -83,7 +84,7 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
         </div>
 
         {/* BASIC SPECS GRID */}
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {[
             { label: "Año", value: selectedExtendido.anio, icon: Calendar },
             { label: "Índice", value: selectedExtendido.indice, icon: Hash },
@@ -148,31 +149,39 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
-                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
-                  <InfoRow
-                    icon={ClipboardList}
-                    label="Semilla"
-                    value={selectedExtendido.propiedad}
-                    className="border-primary/5"
-                  />
-                  <InfoRow
-                    icon={Calendar}
-                    label="Solicitadas"
-                    value={selectedExtendido.solicito}
-                    className="border-primary/5"
-                  />
-                  <InfoRow
-                    icon={Calendar}
-                    label="Fecha Sugerida"
-                    value={selectedExtendido.fechaSugeridaSiembra}
-                    className="border-primary/5"
-                  />
-                  <InfoRow
-                    icon={Activity}
-                    label="Germinación"
-                    value={selectedExtendido.germin}
-                    className="border-primary/5"
-                  />
+                <InfoRow
+                  icon={ClipboardList}
+                  label="Semilla"
+                  value={selectedExtendido.propiedad}
+                  className="border-primary/5"
+                />
+                <div className="grid grid-cols-2 gap-3 md:gap-4">
+                  {[
+                    { icon: Calendar, label: "Solicitadas", value: selectedExtendido.solicito },
+                    { icon: Calendar, label: "Fecha Sugerida", value: formatShortDate(selectedExtendido.fechaSugeridaSiembra) },
+                    { icon: Calendar, label: "Fecha Siembra", value: formatShortDate(selectedExtendido.fechaSiembraReal) },
+                    { icon: Activity, label: "Germinación", value: selectedExtendido.germin },
+                    { icon: Hash, label: "Lote", value: selectedExtendido.lote },
+                    { icon: Calendar, label: "Año Lote", value: selectedExtendido.anoLote },
+                    { icon: Info, label: "Ajuste", value: selectedExtendido.ajuste },
+                  ].map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-2 md:gap-3 py-2 border-b border-border/40 last:border-0"
+                    >
+                      <div className="p-1 md:p-1.5 bg-primary/5 rounded-md border border-primary/10 shrink-0">
+                        <item.icon className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[7px] md:text-[8px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-0.5">
+                          {item.label}
+                        </p>
+                        <p className="text-[10px] md:text-xs font-bold truncate text-foreground">
+                          {item.value ?? "-"}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>

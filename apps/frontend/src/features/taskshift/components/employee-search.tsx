@@ -1,3 +1,5 @@
+// src/features/taskshift/components/employee-search.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -51,6 +53,10 @@ export function EmployeeSearch({
     setShowResults(true);
   }
 
+  function handleCloseSearch() {
+    setShowResults(false);
+  }
+
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Enter") {
       handleSearch();
@@ -64,19 +70,34 @@ export function EmployeeSearch({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Buscar empleados..."
-            className="pl-9"
+            className="pl-9 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
           />
         </div>
-        <Button type="button" variant="secondary" onClick={handleSearch}>
+        <Button
+          type="button"
+          variant="secondary"
+          className="h-9 text-sm"
+          onClick={handleSearch}
+        >
           Buscar
         </Button>
+        {showResults ? (
+          <Button
+            type="button"
+            variant="secondary"
+            className="h-9 text-sm"
+            onClick={handleCloseSearch}
+          >
+            <X />
+          </Button>
+        ) : null}
       </div>
 
-      {showResults && (
-        <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
+        {showResults && (
           <div className="flex flex-col gap-1">
             <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               Empleados disponibles
@@ -115,31 +136,33 @@ export function EmployeeSearch({
               </ScrollArea>
             )}
           </div>
+        )}
 
-          {selectedEmployees.length > 0 && (
-            <div className="flex flex-col gap-1">
+        {selectedEmployees.length > 0 && (
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
               <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Seleccionados ({selectedEmployees.length})
               </span>
-              <div className="flex flex-wrap gap-2">
-                {selectedEmployees.map((user) => (
-                  <Badge key={user.id} variant="secondary" className="gap-1 pr-1">
-                    {user.firstName} {user.lastName}
-                    <button
-                      type="button"
-                      className="ml-1 rounded-full p-0.5 hover:bg-muted cursor-pointer"
-                      onClick={() => onRemove(user)}
-                      aria-label={`Eliminar ${user.firstName} ${user.lastName}`}
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
             </div>
-          )}
-        </div>
-      )}
+            <div className="flex flex-wrap gap-2">
+              {selectedEmployees.map((user) => (
+                <Badge key={user.id} variant="secondary" className="gap-1 pr-1">
+                  {user.firstName} {user.lastName}
+                  <button
+                    type="button"
+                    className="ml-1 rounded-full p-0.5 hover:bg-muted cursor-pointer"
+                    onClick={() => onRemove(user)}
+                    aria-label={`Eliminar ${user.firstName} ${user.lastName}`}
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

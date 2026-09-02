@@ -13,8 +13,12 @@ export interface LegacySiembra extends RowDataPacket {
   injerto: string;
 
   f_siem: string;
+  f_siembra: string;
   propiedad: string;
   solicito: string;
+  lote: string;
+  ano_lote: string;
+  ajuste: string;
   nrocont: string;
   extendido: string;
   germin: string;

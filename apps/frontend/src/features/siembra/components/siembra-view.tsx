@@ -29,7 +29,7 @@ function SiembraList({ camaraId }: { camaraId: string }) {
 
 export function SiembraView() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <Suspense
         fallback={
           <DataTableSkeleton columnCount={partidaSiembraColumns.length} />

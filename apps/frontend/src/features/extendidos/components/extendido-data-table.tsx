@@ -69,8 +69,8 @@ export function ExtendidoDataTable({
   useEffect(() => {
     if (selectedPartida) {
       formAsignarUbicacion.reset({
-        partida: selectedPartida.partidaId,
-        ano: selectedPartida.anio,
+        partidaId: selectedPartida.partidaId,
+        anio: selectedPartida.anio,
         indice: selectedPartida.indice,
         ubicacion: selectedPartida.codigoUbicacion ?? undefined,
         stock_ini: parseInt(selectedPartida.nrocont),

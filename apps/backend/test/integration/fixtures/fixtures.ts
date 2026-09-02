@@ -16,7 +16,7 @@ export const validChangePasswordPayload = () => ({
 });
 
 export const validRestorePasswordPayload = () => ({
-  userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  userId: 'clrestore0000000000000000',
 });
 
 export const validRefreshPayload = () => ({
@@ -38,12 +38,12 @@ export const validSiembraPayload = () => ({
 
 export const mockAuthResponse = () => ({
   user: {
-    id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    id: 'clauthuser000000000000000',
     username: 'testuser',
     email: 'test@example.com',
     firstName: 'Test',
     lastName: 'User',
-    tenantId: '12345678-1234-1234-1234-123456789012',
+    tenantId: 'clauthtenant0000000000000',
   },
   accessToken: 'mock-access-token',
   refreshToken: 'mock-refresh-token',
@@ -56,19 +56,19 @@ export const mockTokens = () => ({
 });
 
 export const mockUser = () => ({
-  id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  id: 'clmockuser000000000000000',
   username: 'testuser',
   email: 'test@example.com',
   firstName: 'Test',
   lastName: 'User',
-  tenantId: '12345678-1234-1234-1234-123456789012',
+  tenantId: 'clmocktenant0000000000000',
   isActive: true,
   createdAt: new Date('2026-01-01'),
   updatedAt: new Date('2026-01-01'),
 });
 
 export const mockEntity = () => ({
-  id: 'e1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  id: 'clmockentity0000000000000',
   name: 'users',
   description: 'Users entity',
   permissionType: 'READ_ONLY',
@@ -77,7 +77,7 @@ export const mockEntity = () => ({
 });
 
 export const mockSiembra = () => ({
-  id: 's1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  id: 'clmocksiembra0000000000000',
   fecha: '2026-01-15',
   camara: 'C1',
   especie: 'Tomate',
@@ -88,23 +88,23 @@ export const mockSiembra = () => ({
 });
 
 export const validTaskShiftPayload = () => ({
-  entityId: 'e1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  entityId: 'cltaskshiftpayload0000000',
   partidaId: 1,
   anio: 2026,
   indice: 1,
   startTime: '2026-08-11T08:00:00.000Z',
   endTime: '2026-08-11T17:00:00.000Z',
-  employeeUserIds: ['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
+  employeeUserIds: ['clemployee000000000000000'],
 });
 
 export const mockTaskShift = () => ({
-  id: 'ts1b2c3d4-e5f6-7890-abcd-ef1234567890',
-  createdByUserId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-  entityId: 'e1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  id: 'cltaskshiftmock1000000000',
+  createdByUserId: 'cltaskshiftmock2000000000',
+  entityId: 'cltaskshiftmock3000000000',
   startTime: '2026-08-11T08:00:00.000Z',
   endTime: '2026-08-11T17:00:00.000Z',
   isActive: true,
   createdAt: '2026-08-10T12:00:00.000Z',
   updatedAt: '2026-08-10T12:00:00.000Z',
-  employees: [{ userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }],
+  employees: [{ userId: 'clemployee000000000000000' }],
 });

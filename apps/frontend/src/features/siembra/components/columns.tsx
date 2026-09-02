@@ -139,6 +139,21 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
       );
     },
   },
+  {
+    accessorKey: "fechaSiembraReal",
+    header: ({ column }) => {
+      return <SortableHeader column={column}>Siembra Real.</SortableHeader>;
+    },
+    cell: ({ row }) => {
+      const haveFechaSiembraReal =
+        row.original.fechaSiembraReal === "0000-00-00"
+          ? "-Sin Siembra-"
+          : formatShortDate(row.original.fechaSiembraReal);
+      return (
+        <span className="text-sm font-semibold">{haveFechaSiembraReal}</span>
+      );
+    },
+  },
 ];
 
 export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
@@ -152,6 +167,13 @@ export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
     accessorKey: "fechaSugeridaSiembra",
     exportHeader: "Siembra Sugerida",
     exportValue: (value) => formatShortDate(value as string),
+    pdfWidth: "13%",
+  },
+  {
+    accessorKey: "fechaSiembraReal",
+    exportHeader: "Siembra Real",
+    exportValue: (value) =>
+      value === "0000-00-00" ? "-Sin Siembra-" : formatShortDate(value as string),
     pdfWidth: "13%",
   },
 ];

@@ -243,7 +243,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                     <div className="flex items-center gap-2 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary/70">
                       <User className="h-3 w-3 md:h-4 md:w-4" /> Responsable
                     </div>
-                    <div className="grid grid-cols-1 gap-0.5 md:gap-1">
+                    <div className="grid grid-cols-2 gap-3 md:gap-4">
                       <InfoRow
                         icon={User}
                         label="Nombre Completo"
@@ -330,7 +330,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
-                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
+                <div className="grid grid-cols-2 gap-3 md:gap-4">
                   <InfoRow
                     icon={Route}
                     label="Ruta / Endpoint"

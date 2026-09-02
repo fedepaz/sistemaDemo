@@ -102,6 +102,7 @@ Without memoized callbacks, `React.memo` cannot prevent re-renders.
 | `SiembraDashboardSkeleton` | [x] | [x] | [ ] | [ ] |
 | `SiembraDataTable` | [x] | [x] | [x] | [x] |
 | `SiembraEditForm` | [x] | [x] | [x] | [x] |
+| `SiembraViewForm` | [x] | [x] | [x] | [x] |
 | `SiembraView` | [x] | [x] | [x] | [ ] |
 | `SiembraDashboard` | [x] | [x] | [x] | [x] |
 
@@ -222,7 +223,7 @@ Without memoized callbacks, `React.memo` cannot prevent re-renders.
 | :--- | :---: | :---: | :---: | :---: |
 | `UsersDashboardSkeleton` | [ ] | [ ] | [ ] | [ ] |
 | `UsersDataTable` | [ ] | [ ] | [ ] | [ ] |
-| `UserForm` | [ ] | [ ] | [ ] | [ ] |
+| `UserEditForm` | [ ] | [ ] | [ ] | [ ] |
 | `UserKPIs` | [x] | [ ] | [ ] | [ ] |
 | `UsersDashboard` | [x] | [ ] | [ ] | [ ] |
 | `UserProfileEdit` | [ ] | [ ] | [ ] | [ ] |

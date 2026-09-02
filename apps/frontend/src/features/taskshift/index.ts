@@ -4,7 +4,7 @@
 export { TaskShift } from "./components/taskShift";
 
 // Hooks
-export { useTaskShifts, useCreateTaskShift } from "./hooks/useTaskShift";
+export { useTaskShifts } from "./hooks/useTaskShift";
 
 // Services
 export { taskShiftService } from "./api/taskShiftService";

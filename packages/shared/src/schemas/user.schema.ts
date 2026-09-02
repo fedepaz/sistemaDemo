@@ -1,9 +1,10 @@
 // shared/src/schemas/user.schema.ts
 
 import { z } from "zod";
+import { cuidSchema } from "./cuid.schema";
 
 export const UserProfileSchema = z.object({
-  id: z.string(),
+  id: cuidSchema,
   username: z.string().min(1, { message: "Nombre de usuario es obligatorio" }),
   email: z.string().email().nullable(),
   firstName: z.string().nullable(),

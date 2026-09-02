@@ -2,8 +2,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useMemo } from "react";
 import {
   Select,
   SelectContent,
@@ -11,28 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  Form,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-
-import { CreateTaskShiftDto, CreateTaskShiftSchema } from "@vivero/shared";
-import { Loader2, Pencil } from "lucide-react";
+import { Label } from "@/components/ui/label";
 import { getLocalDateStr } from "@/lib/date-utils";
 import { EmployeeSearch } from "./employee-search";
 import type { UserProfileDto } from "@vivero/shared";
-import { useCreateTaskShift } from "../hooks/useTaskShift";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Clock, User2, AlertTriangle } from "lucide-react";
 
-const HOURS = Array.from({ length: 24 }, (_, i) =>
+const ALL_HOURS = Array.from({ length: 24 }, (_, i) =>
   i.toString().padStart(2, "0"),
 );
-const MINUTES = Array.from({ length: 12 }, (_, i) =>
+const ALL_MINUTES = Array.from({ length: 12 }, (_, i) =>
   (i * 5).toString().padStart(2, "0"),
 );
 
@@ -41,257 +28,295 @@ function toDateTimeString(date: string, time: string): string {
 }
 
 interface TaskShiftProps {
-  entityId: string;
-  partidaId: number;
-  anio: number;
-  indice: number;
-  onSuccess?: () => void;
+  startTime: string;
+  endTime: string;
+  employees: UserProfileDto[];
+  onStartTimeChange: (startTime: string) => void;
+  onEndTimeChange: (endTime: string) => void;
+  onEmployeesChange: (employees: UserProfileDto[]) => void;
 }
 
-export function TaskShift({ entityId, partidaId, anio, indice, onSuccess }: TaskShiftProps) {
+export function TaskShift({
+  startTime,
+  endTime,
+  employees,
+  onStartTimeChange,
+  onEndTimeChange,
+  onEmployeesChange,
+}: TaskShiftProps) {
   const today = getLocalDateStr(new Date());
 
-  const [startHour, setStartHour] = useState("");
-  const [startMinute, setStartMinute] = useState("");
-  const [endHour, setEndHour] = useState("");
-  const [endMinute, setEndMinute] = useState("");
-  const [selectedEmployees, setSelectedEmployees] = useState<UserProfileDto[]>(
-    [],
+  const [startHour, setStartHour] = useState(
+    startTime ? startTime.split("T")[1].split(":")[0] : "",
+  );
+  const [startMinute, setStartMinute] = useState(
+    startTime ? startTime.split("T")[1].split(":")[1] : "",
+  );
+  const [endHour, setEndHour] = useState(
+    endTime ? endTime.split("T")[1].split(":")[0] : "",
+  );
+  const [endMinute, setEndMinute] = useState(
+    endTime ? endTime.split("T")[1].split(":")[1] : "",
   );
 
   const isStartComplete = startHour !== "" && startMinute !== "";
   const isEndComplete = endHour !== "" && endMinute !== "";
 
-  const startTime = isStartComplete
-    ? toDateTimeString(today, `${startHour}:${startMinute}`)
-    : "";
-  const endTime = isEndComplete
-    ? toDateTimeString(today, `${endHour}:${endMinute}`)
-    : "";
+  const validEndHours = useMemo(() => {
+    if (!isStartComplete) return ALL_HOURS;
+    const sh = parseInt(startHour, 10);
+    return ALL_HOURS.filter((h) => parseInt(h, 10) >= sh);
+  }, [startHour, isStartComplete]);
 
-  const formTaskShift = useForm<CreateTaskShiftDto>({
-    resolver: zodResolver(CreateTaskShiftSchema),
-    mode: "onChange",
-  });
-  useEffect(() => {
-    if (isStartComplete) {
-      formTaskShift.setValue("startTime", startTime, { shouldDirty: true });
-    }
-  }, [isStartComplete, startTime, formTaskShift]);
+  const validEndMinutes = useMemo(() => {
+    if (!isStartComplete || endHour === "") return ALL_MINUTES;
+    const sh = parseInt(startHour, 10);
+    const sm = parseInt(startMinute, 10);
+    const eh = parseInt(endHour, 10);
+    if (eh > sh) return ALL_MINUTES;
+    return ALL_MINUTES.filter((m) => parseInt(m, 10) > sm);
+  }, [startHour, startMinute, endHour, isStartComplete]);
 
-  useEffect(() => {
-    if (isEndComplete) {
-      formTaskShift.setValue("endTime", endTime, { shouldDirty: true });
-    }
-  }, [isEndComplete, endTime, formTaskShift]);
-
-  const { mutateAsync: createTaskShift } = useCreateTaskShift();
-
-  useEffect(() => {
-    formTaskShift.setValue(
-      "employeeUserIds",
-      selectedEmployees.map((e) => e.id),
-      { shouldValidate: true, shouldDirty: true },
+  const timeError = useMemo(() => {
+    if (!isStartComplete || !isEndComplete) return null;
+    const end = new Date(toDateTimeString(today, `${endHour}:${endMinute}`));
+    const start = new Date(
+      toDateTimeString(today, `${startHour}:${startMinute}`),
     );
-  }, [selectedEmployees, formTaskShift]);
+    if (end <= start) {
+      return "La hora de fin debe ser posterior a la hora de inicio";
+    }
+    return null;
+  }, [
+    today,
+    startHour,
+    startMinute,
+    endHour,
+    endMinute,
+    isStartComplete,
+    isEndComplete,
+  ]);
 
-  useEffect(() => {
-    formTaskShift.setValue("entityId", entityId, { shouldValidate: true, shouldDirty: true });
-  }, [entityId, formTaskShift]);
+  function handleStartHourChange(hour: string) {
+    setStartHour(hour);
+    if (startMinute) {
+      const newStart = toDateTimeString(today, `${hour}:${startMinute}`);
+      onStartTimeChange(newStart);
 
-  useEffect(() => {
-    formTaskShift.setValue("partidaId", partidaId, { shouldValidate: true, shouldDirty: true });
-  }, [partidaId, formTaskShift]);
+      if (isEndComplete) {
+        const newStartD = new Date(newStart);
+        const currentEnd = new Date(
+          toDateTimeString(today, `${endHour}:${endMinute}`),
+        );
+        if (currentEnd <= newStartD) {
+          setEndHour("");
+          setEndMinute("");
+          onEndTimeChange("");
+        }
+      }
+    }
+  }
 
-  useEffect(() => {
-    formTaskShift.setValue("anio", anio, { shouldValidate: true, shouldDirty: true });
-  }, [anio, formTaskShift]);
+  function handleStartMinuteChange(minute: string) {
+    setStartMinute(minute);
+    if (startHour) {
+      const newStart = toDateTimeString(today, `${startHour}:${minute}`);
+      onStartTimeChange(newStart);
 
-  useEffect(() => {
-    formTaskShift.setValue("indice", indice, { shouldValidate: true, shouldDirty: true });
-  }, [indice, formTaskShift]);
+      if (isEndComplete) {
+        const newStartD = new Date(newStart);
+        const currentEnd = new Date(
+          toDateTimeString(today, `${endHour}:${endMinute}`),
+        );
+        if (currentEnd <= newStartD) {
+          setEndHour("");
+          setEndMinute("");
+          onEndTimeChange("");
+        }
+      }
+    }
+  }
+
+  function handleEndHourChange(hour: string) {
+    setEndHour(hour);
+    if (endMinute) {
+      onEndTimeChange(toDateTimeString(today, `${hour}:${endMinute}`));
+    }
+  }
+
+  function handleEndMinuteChange(minute: string) {
+    setEndMinute(minute);
+    if (endHour) {
+      onEndTimeChange(toDateTimeString(today, `${endHour}:${minute}`));
+    }
+  }
 
   return (
-    <Form {...formTaskShift}>
-      <form
-        id="task-shift-form"
-        onSubmit={formTaskShift.handleSubmit(async (data) => {
-          await createTaskShift(data);
-          onSuccess?.();
-        })}
-        className="flex flex-col gap-1 md:gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
-      >
-        <div className="flex flex-col gap-3 md:gap-4 font-serif">
-          <h1 className="font-sans text-sm md:text-sm font-black uppercase tracking-widest text-foreground opacity-80">
-            Tiempo de tarea
-          </h1>
-          <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
-            Selecciona el horario de la tarea para hoy ({today}).
-          </p>
-
-          {/* Start Time */}
-          <div className="flex flex-col gap-3 md:gap-4">
-            <FormField
-              control={formTaskShift.control}
-              name="startTime"
-              render={() => (
-                <div className="grid grid-cols-2 gap-2">
-                  <FormItem className="space-y-1 md:space-y-2">
-                    <FormLabel className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
-                      Inicio
-                    </FormLabel>
-                    <FormControl>
-                      <div className="flex gap-1">
-                        <Select onValueChange={setStartHour} value={startHour}>
-                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                            <SelectValue placeholder="HH" />
-                          </SelectTrigger>
-                          <SelectContent
-                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                            position="popper"
-                          >
-                            {HOURS.map((h) => (
-                              <SelectItem key={`sh-${h}`} value={h}>
-                                {h}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Select
-                          value={startMinute}
-                          onValueChange={setStartMinute}
-                        >
-                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                            <SelectValue placeholder="MM" />
-                          </SelectTrigger>
-                          <SelectContent
-                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                            position="popper"
-                          >
-                            {MINUTES.map((m) => (
-                              <SelectItem key={`sm-${m}`} value={m}>
-                                {m}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-[10px] font-bold font-sans text-xs md:text-sm leading-tight md:leading-relaxed opacity-70" />
-                  </FormItem>
-                </div>
-              )}
-            />
-
-            {/* End Time */}
-            <FormField
-              control={formTaskShift.control}
-              name="endTime"
-              render={() => (
-                <div className="grid grid-cols-2 gap-2">
-                  <FormItem className="space-y-1 md:space-y-2">
-                    <FormLabel className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
-                      Fin
-                    </FormLabel>
-                    <FormControl>
-                      <div className="flex gap-1">
-                        <Select
-                          disabled={!isStartComplete}
-                          onValueChange={setEndHour}
-                          value={endHour}
-                        >
-                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                            <SelectValue placeholder="HH" />
-                          </SelectTrigger>
-                          <SelectContent
-                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                            position="popper"
-                          >
-                            {HOURS.map((h) => (
-                              <SelectItem key={`eh-${h}`} value={h}>
-                                {h}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Select
-                          disabled={!isStartComplete}
-                          onValueChange={setEndMinute}
-                          value={endMinute}
-                        >
-                          <SelectTrigger className="h-10 md:h-12 text-sm md:text-base">
-                            <SelectValue placeholder="MM" />
-                          </SelectTrigger>
-                          <SelectContent
-                            className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                            position="popper"
-                          >
-                            {MINUTES.map((m) => (
-                              <SelectItem key={`em-${m}`} value={m}>
-                                {m}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-[10px] font-bold font-sans text-xs md:text-sm leading-tight md:leading-relaxed opacity-70" />
-                  </FormItem>
-                </div>
-              )}
-            />
-          </div>
-
-          {/* Employee Search */}
-          <FormField
-            control={formTaskShift.control}
-            name="employeeUserIds"
-            render={() => (
-              <FormItem className="space-y-1 md:space-y-2">
-                <FormLabel className="font-sans text-xs md:text-sm uppercase tracking-widest opacity-70">
-                  Empleados
-                </FormLabel>
-                <div className="relative">
-                  <div className="pl-12 md:pl-14">
-                    <EmployeeSearch
-                      selectedEmployees={selectedEmployees}
-                      onSelect={(emp) =>
-                        setSelectedEmployees((prev) => [...prev, emp])
-                      }
-                      onRemove={(emp) =>
-                        setSelectedEmployees((prev) =>
-                          prev.filter((e) => e.id !== emp.id),
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-              </FormItem>
-            )}
-          />
+    <div className="space-y-3 md:space-y-4 shrink-0">
+      <div className="flex items-center gap-2">
+        <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+          <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
         </div>
-          {/* Submit Button */}
-          <div className="shrink-0 pt-2">
-            <Button
-              type="submit"
-              form="task-shift-form"
-              disabled={formTaskShift.formState.isSubmitting}
-              className="w-full h-9 text-sm"
-            >
-              {formTaskShift.formState.isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-                  Guardando...
-                </>
-              ) : (
-                <>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Registrar Tiempo
-                </>
-              )}
-            </Button>
+        <h3 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+          Tiempo de tarea
+        </h3>
+        <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+          Selecciona el horario de la tarea para hoy
+          <br />({today}).
+        </p>
+      </div>
+
+      {/* Start Time */}
+      <div className="flex flex-col gap-3 md:gap-4 font-serif">
+        <div className="grid gap-2">
+          <div className="space-y-1 md:space-y-2">
+            <div className="flex items-center gap-2">
+              <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                Inicio
+              </Label>
+            </div>
+
+            <div className="flex gap-1">
+              <Select onValueChange={handleStartHourChange} value={startHour}>
+                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+                  <SelectValue placeholder="HH" />
+                </SelectTrigger>
+                <SelectContent
+                  className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                  position="popper"
+                >
+                  {ALL_HOURS.map((h) => (
+                    <SelectItem key={`sh-${h}`} value={h}>
+                      {h}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select
+                value={startMinute}
+                onValueChange={handleStartMinuteChange}
+              >
+                <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+                  <SelectValue placeholder="MM" />
+                </SelectTrigger>
+                <SelectContent
+                  className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                  position="popper"
+                >
+                  {ALL_MINUTES.map((m) => (
+                    <SelectItem key={`sm-${m}`} value={m}>
+                      {m}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-      </form>
-    </Form>
+        </div>
+
+        {/* End Time */}
+        <div className="grid gap-2">
+          <div className="space-y-1 md:space-y-2">
+            <div className="flex items-center gap-2">
+              <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                Fin
+              </Label>
+            </div>
+
+            <div className="flex gap-1">
+              <Select
+                disabled={!isStartComplete}
+                onValueChange={handleEndHourChange}
+                value={endHour}
+              >
+                <SelectTrigger
+                  className={`h-10 md:h-14 rounded-xl shadow-sm text-sm md:text-base font-bold px-4 ${
+                    timeError
+                      ? "border-destructive bg-destructive/5"
+                      : "border-border/60 bg-background"
+                  }`}
+                >
+                  <SelectValue placeholder="HH" />
+                </SelectTrigger>
+                <SelectContent
+                  className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                  position="popper"
+                >
+                  {validEndHours.length === 0 ? (
+                    <div className="px-3 py-2 text-xs text-muted-foreground">
+                      Sin horas disponibles
+                    </div>
+                  ) : (
+                    validEndHours.map((h) => (
+                      <SelectItem key={`eh-${h}`} value={h}>
+                        {h}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              <Select
+                disabled={!isStartComplete}
+                onValueChange={handleEndMinuteChange}
+                value={endMinute}
+              >
+                <SelectTrigger
+                  className={`h-10 md:h-14 rounded-xl shadow-sm text-sm md:text-base font-bold px-4 ${
+                    timeError
+                      ? "border-destructive bg-destructive/5"
+                      : "border-border/60 bg-background"
+                  }`}
+                >
+                  <SelectValue placeholder="MM" />
+                </SelectTrigger>
+                <SelectContent
+                  className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                  position="popper"
+                >
+                  {validEndMinutes.length === 0 ? (
+                    <div className="px-3 py-2 text-xs text-muted-foreground">
+                      Sin minutos disponibles
+                    </div>
+                  ) : (
+                    validEndMinutes.map((m) => (
+                      <SelectItem key={`em-${m}`} value={m}>
+                        {m}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {timeError && (
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-destructive/10 border border-destructive/20">
+              <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0" />
+              <span className="text-xs text-destructive">{timeError}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Employee Search */}
+      <div className="space-y-2 md:space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+            <User2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+          </div>
+          <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+            Empleados
+          </Label>
+        </div>
+
+        <EmployeeSearch
+          selectedEmployees={employees}
+          onSelect={(emp) => onEmployeesChange([...employees, emp])}
+          onRemove={(emp) =>
+            onEmployeesChange(employees.filter((e) => e.id !== emp.id))
+          }
+        />
+      </div>
+    </div>
   );
 }

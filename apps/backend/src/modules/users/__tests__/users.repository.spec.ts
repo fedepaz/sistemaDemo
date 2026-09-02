@@ -113,7 +113,7 @@ describe('UsersRepository', () => {
       expect(result).toEqual(user);
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { id: 'user-1' },
-        data: { firstName: 'Updated', updatedAt: expect.any(Date) }, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        data: { firstName: 'Updated', updatedAt: expect.any(Date) },
         omit: { passwordHash: true },
       });
     });
@@ -130,7 +130,7 @@ describe('UsersRepository', () => {
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { username: 'test' },
         data: {
-          deletedAt: expect.any(Date), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+          deletedAt: expect.any(Date),
           deletedByUserId: 'admin-1',
           isActive: false,
         },
@@ -185,7 +185,7 @@ describe('UsersRepository', () => {
         where: { id: 'user-1' },
         data: {
           isActive: true,
-          updatedAt: expect.any(Date), // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+          updatedAt: expect.any(Date),
         },
         omit: { passwordHash: true },
       });

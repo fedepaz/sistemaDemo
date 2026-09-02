@@ -114,7 +114,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
         </div>
 
         {/* BASIC SPECS GRID */}
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {[
             { label: "Año", value: selectedExtendido.anio, icon: Calendar },
             { label: "Índice", value: selectedExtendido.indice, icon: Hash },
@@ -184,13 +184,15 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                   <InfoRow
                     icon={Calendar}
                     label="Fecha Sugerida"
-                    value={selectedExtendido.fechaSugeridaSiembra}
+                    value={formatShortDate(
+                      selectedExtendido.fechaSugeridaSiembra,
+                    )}
                     className="border-primary/5"
                   />
                   <InfoRow
                     icon={ClipboardList}
                     label="Fecha Real Siembra"
-                    value={selectedExtendido.fechaSiembraReal}
+                    value={formatShortDate(selectedExtendido.fechaSiembraReal)}
                     className="border-primary/5"
                   />
                   <InfoRow
