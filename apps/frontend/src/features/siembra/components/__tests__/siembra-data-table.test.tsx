@@ -12,6 +12,10 @@ jest.mock("@/features/permissions", () => ({
   useTableByName: () => ({ data: { permissionType: "CRUD", id: "cperm001entitysiembrat" } }),
 }));
 
+jest.mock("../mezclaSelector", () => ({
+  MezclaSelector: () => <div data-testid="mezcla-selector" />,
+}));
+
 const mockReset = jest.fn();
 jest.mock("react-hook-form", () => ({
   ...jest.requireActual("react-hook-form"),

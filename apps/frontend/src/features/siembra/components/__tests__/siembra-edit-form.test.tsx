@@ -17,6 +17,11 @@ beforeAll(() => {
 jest.mock("@/features/permissions", () => ({
   useTableByName: () => ({ data: { permissionType: "CRUD" } }),
 }));
+
+jest.mock("../mezclaSelector", () => ({
+  MezclaSelector: () => <div data-testid="mezcla-selector" />,
+}));
+
 import userEvent from "@testing-library/user-event";
 import { SiembraEditForm } from "../siembra-edit-form";
 import type { SiembraDto } from "@vivero/shared";
