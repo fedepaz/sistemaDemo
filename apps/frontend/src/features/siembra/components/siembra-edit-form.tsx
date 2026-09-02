@@ -395,8 +395,10 @@ export function SiembraEditForm({
                   </FormItem>
                 )}
               />
-              {/* MEZCLA — hidden until client enables mezcla feature */}
+              {/*
+               MEZCLA — hidden until client enables mezcla feature 
               <MezclaSelector form={form} />
+              */}
             </div>
 
             <div className="space-y-2 md:space-y-3">
