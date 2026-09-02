@@ -12,7 +12,6 @@ import {
   X,
   Wrench,
   Calendar,
-  Beaker,
   Gauge,
   Ruler,
 } from "lucide-react";
@@ -51,7 +50,7 @@ import {
 } from "@/components/ui/form";
 import { useDepositos } from "@/features/extendidos";
 import { TaskShift } from "@/features/taskshift/components/taskShift";
-import { MezclaSelector } from "./mezclaSelector";
+
 import { TratamientoSearch } from "./tratamientoSearch";
 
 interface SiembraEditFormProps {
