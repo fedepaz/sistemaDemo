@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useMarkBillboardRead } from "../hooks/useMarkBillboardRead";
 import type { BillboardMessageDto } from "@vivero/shared";
+import { Megaphone } from "lucide-react";
 
 interface BillboardModalProps {
   open: boolean;
@@ -61,23 +62,40 @@ export function BillboardModal({
         open={open}
         onOpenChange={(isOpen) => !isOpen && handleCloseAttempt()}
       >
-        <DialogContent className="max-h-[90vh] sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Actualizaciones</DialogTitle>
-            <DialogDescription>
+        <DialogContent
+          // 🚀 Bumped to XL and 6XL for massive desktop presence
+          className="max-h-[90dvh] sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-6xl"
+          aria-label="Actualizaciones del sistema"
+        >
+          <DialogHeader className="border-b border-border/40 pb-4">
+            <div className="flex items-center justify-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Megaphone className="h-5 w-5 text-primary" />
+              </div>
+              <DialogTitle className="text-xl md:text-2xl font-black uppercase tracking-widest">
+                Actualizaciones
+              </DialogTitle>
+            </div>
+            <DialogDescription className="sr-only">
               Hay {messages.length}{" "}
               {messages.length === 1 ? "novedad" : "novedades"} para ti.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto space-y-4 py-2">
+          <div className="flex-1 overflow-y-auto space-y-4 py-2 mx-auto w-full">
             {messages.map((msg) => (
-              <div
+              <article
                 key={msg.id}
-                className="rounded-lg border bg-card p-4 space-y-2"
+                // 🚀 Added more padding for that spacious, premium feel
+                className="rounded-lg border bg-card p-4 sm:p-5 md:p-6 space-y-2"
               >
-                <h3 className="font-semibold text-sm">{msg.title}</h3>
-                <p className="text-sm text-muted-foreground">{msg.body}</p>
+                <h3 className="font-semibold text-base md:text-lg">
+                  {msg.title}
+                </h3>
+                {/* 🚀 Added leading-relaxed so wider text blocks breathe better */}
+                <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                  {msg.body}
+                </p>
                 <time className="text-xs text-muted-foreground">
                   {new Date(msg.createdAt).toLocaleDateString("es-AR", {
                     day: "numeric",
@@ -85,7 +103,7 @@ export function BillboardModal({
                     year: "numeric",
                   })}
                 </time>
-              </div>
+              </article>
             ))}
           </div>
 

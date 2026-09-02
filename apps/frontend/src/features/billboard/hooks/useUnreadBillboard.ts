@@ -1,12 +1,12 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import type { BillboardMessageDto } from "@vivero/shared";
 import { billboardService } from "../api/billboardService";
 import { billboardQueryKeys } from "@/lib/queryKeys";
 
 export const useUnreadBillboard = () => {
-  return useQuery<BillboardMessageDto[]>({
+  return useSuspenseQuery<BillboardMessageDto[]>({
     queryKey: billboardQueryKeys.unread(),
     queryFn: billboardService.fetchUnread,
     retry: 1,
