@@ -9,6 +9,7 @@ import {
   AsignarUbiExtendidoDto,
   AsignarUbiExtendidoDtoSchema,
   ExtendidoDto,
+  fieldLabels,
 } from "@vivero/shared";
 import { useCamaras } from "../hooks/useDepositos";
 import {
@@ -213,6 +214,7 @@ export function ExtendidoDataTable({
           form={formAsignarUbicacion}
           isLoading={isAsignandoUbicacion}
           saveLabel="Confirmar Extendido"
+          fieldLabels={fieldLabels.AsignarUbiExtendido}
           confirm={{
             title: "Confirmar extendido",
             description: "¿Deseas confirmar la asignación de ubicación para este extendido?",

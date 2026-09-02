@@ -7,7 +7,7 @@ import {
   useDeleteEntity,
   useEntities,
 } from "../hooks/useEntities";
-import { CreateEntityDto, CreateEntitySchema, Entity } from "@vivero/shared";
+import { CreateEntityDto, CreateEntitySchema, Entity, fieldLabels } from "@vivero/shared";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
@@ -74,6 +74,7 @@ export function EntityDataTable() {
           onCancel={() => setSlideOverOpen(false)}
           saveLabel="Crear Entidad"
           form={formCreateEntity}
+          fieldLabels={fieldLabels.CreateEntity}
           confirm={{
             title: "Crear entidad",
             description: "¿Deseas crear esta nueva entidad?",

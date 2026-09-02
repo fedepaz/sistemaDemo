@@ -12,6 +12,14 @@ jest.mock("@/features/permissions", () => ({
   useTableByName: () => ({ data: { permissionType: "CRUD", id: "cperm001entitysiembrat" } }),
 }));
 
+jest.mock("../mezclaSelector", () => ({
+  MezclaSelector: () => <div data-testid="mezcla-selector" />,
+}));
+
+jest.mock("../tratamientoSearch", () => ({
+  TratamientoSearch: () => <div data-testid="tratamiento-search" />,
+}));
+
 const mockReset = jest.fn();
 jest.mock("react-hook-form", () => ({
   ...jest.requireActual("react-hook-form"),
@@ -80,14 +88,6 @@ jest.mock("@/features/extendidos", () => ({
   }),
 }));
 
-jest.mock("@/features/mezclas", () => ({
-  useMezclas: () => ({
-    data: [
-      { id: "m1", sustrato1Nombre: "Sustrato A", sustrato2Nombre: "Sustrato B", sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
-    ],
-  }),
-}));
-
 jest.mock("@/features/taskshift/components/employee-search", () => ({
   EmployeeSearch: ({ onSelect }: { onSelect: (users: { id: string; nombre: string }[]) => void }) => (
     <button onClick={() => onSelect([{ id: "u1", nombre: "Test User" }])}>Search Employee</button>
@@ -145,10 +145,13 @@ const mockPartidas: SiembraDto[] = [
     codigoEspecie: "ESP001",
     nombreEspecie: "Especie Test",
     injerto: "N",
-    contenedor: "Bandeja 288",
     fechaSugeridaSiembra: "2024-03-15",
+    fechaSiembraReal: "2024-03-16",
     propiedad: "Propiedad A",
     solicito: "Juan",
+    lote: "L001",
+    anoLote: "2024",
+    ajuste: "Ninguno",
     nrocont: "100",
     extendido: "Notas de prueba",
     germin: "85",

@@ -40,6 +40,7 @@ import { AlertSolvedModule } from './modules/alertSolved/alertSolved.module';
 import { SiembraPartidasModule } from './modules/siembraPartidas/siembraPartidas.module';
 import { MezclaModule } from './modules/mezcla/mezcla.module';
 import { SustratosModule } from './modules/sustratos/sustratos.module';
+import { LegacyTratamientoModule } from './modules/legacy/tratamiento/tratamiento.module';
 
 @Module({
   imports: [
@@ -100,6 +101,7 @@ import { SustratosModule } from './modules/sustratos/sustratos.module';
     LegacyExtendidosModule,
     LegacySiembraModule,
     LegacyAlertsModule,
+    LegacyTratamientoModule,
     AlertCommentsModule,
     TaskShiftsModule,
     AlertSolvedModule,

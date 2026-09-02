@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { PartidaHeaderSchema } from "./legacy-header.schema";
-import { requiredCuid } from "./cuid.schema";
+import { cuidSchema, requiredCuid } from "./cuid.schema";
 
 const profundidadSemillaRegex = /^\d{1,2}(\.\d{1,3})?$/;
 
@@ -21,9 +21,9 @@ export const SiembraPartidaSchema = PartidaHeaderSchema.extend({
     .number({ message: "La presión de semilla es requerida" })
     .int({ message: "La presión de semilla debe ser un número entero" }),
   profundidadSemilla: ProfundidadSemillaSchema,
-  tratamientoSemilla: z.boolean({
+  tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
-  }),
+  }).min(1, { message: "El tratamiento de semilla es requerido" }),
   mezclaId: requiredCuid("La mezcla"),
   userId: requiredCuid("El usuario"),
 });
@@ -40,10 +40,10 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
     .min(1, { message: "La presión de semilla debe ser mayor a 0" }),
 
   profundidadSemilla: ProfundidadSemillaSchema,
-  tratamientoSemilla: z.boolean({
+  tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
-  }),
-  mezclaId: requiredCuid("La mezcla"),
+  }).min(1, { message: "El tratamiento de semilla es requerido" }),
+  mezclaId: cuidSchema.optional(),
 });
 
 export type CreateSiembraPartidaDto = z.infer<

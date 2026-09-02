@@ -1,6 +1,6 @@
 model Sustratos {
     id          String @id @default(cuid())
-    nombre      String
+    nombre      String @unique
 
     
   isActive    Boolean  @default(true)

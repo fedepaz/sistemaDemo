@@ -7,6 +7,7 @@ import {
   CreateSustratoDto,
   CreateSustratoSchema,
   SustratoDto,
+  fieldLabels,
 } from "@vivero/shared";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -87,6 +88,7 @@ export function SustratoDataTable() {
           saveLabel="Crear Sustrato"
           form={mode === "create" ? formCreateSustrato : undefined}
           mode={mode === "create" ? "create" : "view"}
+          fieldLabels={fieldLabels.CreateSustrato}
           confirm={
             mode === "create"
               ? {
