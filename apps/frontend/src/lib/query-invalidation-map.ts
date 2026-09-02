@@ -18,6 +18,7 @@ import {
   alertsQueryKeys,
   taskShiftQueryKeys,
   alertsSolvedQueryKeys,
+  billboardQueryKeys,
 } from "./queryKeys";
 
 // ============================================================================
@@ -116,6 +117,10 @@ export const mutationInvalidationMap = {
   },
   createAlertSolved: {
     queries: () => [alertsSolvedQueryKeys.all(), alertsQueryKeys.all()],
+  },
+
+  markBillboardRead: {
+    queries: () => [billboardQueryKeys.unread()],
   },
 } as const;
 

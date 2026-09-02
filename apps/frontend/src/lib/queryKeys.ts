@@ -182,3 +182,12 @@ export const taskShiftQueryKeys = {
 export const alertsSolvedQueryKeys = {
   all: () => ["alertsSolved"] as const,
 };
+
+// ============================================================================
+// BILLBOARD
+// ============================================================================
+
+export const billboardQueryKeys = {
+  all: () => ["billboard"] as const,
+  unread: () => [...billboardQueryKeys.all(), "unread"] as const,
+};

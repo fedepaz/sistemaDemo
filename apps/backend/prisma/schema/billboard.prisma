@@ -1,0 +1,44 @@
+// prisma/schema/billboard.prisma
+
+model BillboardMessage {
+  id              String    @id @default(cuid())
+  title           String    @db.VarChar(200)
+  body            String    @db.VarChar(500)
+  tag             String    @db.VarChar(50)
+  permissionTable String    @db.VarChar(50)
+  permissionAction String   @db.VarChar(20)
+  permissionScope String    @db.VarChar(10)
+  targetNewUsers  Boolean   @default(false)
+  effectiveFrom   DateTime?
+  reads           UserBillboardRead[]
+
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  deletedByUserId String?
+  deletedByUser   User?            @relation("deleted_billboard_messages", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
+  deletedAt       DateTime? @db.Timestamp(0)
+
+  @@index([tag])
+  @@index([isActive, deletedAt])
+  @@index([deletedByUserId])
+  @@map("billboard_messages")
+}
+
+model UserBillboardRead {
+  id                 String           @id @default(cuid())
+  userId             String
+  user               User             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  billboardMessageId String
+  billboardMessage   BillboardMessage @relation(fields: [billboardMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
+  readAt             DateTime         @default(now())
+
+  @@unique([userId, billboardMessageId])
+  @@index([userId])
+  @@index([billboardMessageId])
+  @@map("user_billboard_reads")
+}
