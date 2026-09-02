@@ -95,7 +95,9 @@ describe('BillboardService', () => {
     it('returns messages filtered by user permissions', async () => {
       (billboardRepo.findAll as jest.Mock).mockResolvedValue(mockMessages);
       (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(new Set());
-      (permissionsService.getUserPermissionsByUserId as jest.Mock).mockResolvedValue({
+      (
+        permissionsService.getUserPermissionsByUserId as jest.Mock
+      ).mockResolvedValue({
         alerts: {
           canCreate: false,
           canRead: true,
@@ -116,7 +118,9 @@ describe('BillboardService', () => {
     it('excludes messages user has no permission for', async () => {
       (billboardRepo.findAll as jest.Mock).mockResolvedValue(mockMessages);
       (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(new Set());
-      (permissionsService.getUserPermissionsByUserId as jest.Mock).mockResolvedValue({});
+      (
+        permissionsService.getUserPermissionsByUserId as jest.Mock
+      ).mockResolvedValue({});
       (usersRepo.findById as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await service.getUnreadMessages('user-1');
@@ -125,8 +129,12 @@ describe('BillboardService', () => {
 
     it('excludes already-read messages', async () => {
       (billboardRepo.findAll as jest.Mock).mockResolvedValue(mockMessages);
-      (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(new Set(['msg-1']));
-      (permissionsService.getUserPermissionsByUserId as jest.Mock).mockResolvedValue({
+      (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(
+        new Set(['msg-1']),
+      );
+      (
+        permissionsService.getUserPermissionsByUserId as jest.Mock
+      ).mockResolvedValue({
         alerts: {
           canCreate: false,
           canRead: true,
@@ -145,7 +153,9 @@ describe('BillboardService', () => {
     it('keeps only latest message per tag', async () => {
       (billboardRepo.findAll as jest.Mock).mockResolvedValue(mockMessages);
       (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(new Set());
-      (permissionsService.getUserPermissionsByUserId as jest.Mock).mockResolvedValue({
+      (
+        permissionsService.getUserPermissionsByUserId as jest.Mock
+      ).mockResolvedValue({
         alerts: {
           canCreate: false,
           canRead: true,
@@ -166,7 +176,9 @@ describe('BillboardService', () => {
       const msgWithAllScope = { ...mockMessages[0], permissionScope: 'ALL' };
       (billboardRepo.findAll as jest.Mock).mockResolvedValue([msgWithAllScope]);
       (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(new Set());
-      (permissionsService.getUserPermissionsByUserId as jest.Mock).mockResolvedValue({
+      (
+        permissionsService.getUserPermissionsByUserId as jest.Mock
+      ).mockResolvedValue({
         alerts: {
           canCreate: false,
           canRead: true,
@@ -185,7 +197,9 @@ describe('BillboardService', () => {
     it('returns empty array if user not found', async () => {
       (billboardRepo.findAll as jest.Mock).mockResolvedValue([]);
       (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(new Set());
-      (permissionsService.getUserPermissionsByUserId as jest.Mock).mockResolvedValue({});
+      (
+        permissionsService.getUserPermissionsByUserId as jest.Mock
+      ).mockResolvedValue({});
       (usersRepo.findById as jest.Mock).mockResolvedValue(null);
 
       const result = await service.getUnreadMessages('user-1');
@@ -208,7 +222,9 @@ describe('BillboardService', () => {
     it('marks all unread messages when no IDs provided', async () => {
       (billboardRepo.findAll as jest.Mock).mockResolvedValue(mockMessages);
       (billboardRepo.findReadIds as jest.Mock).mockResolvedValue(new Set());
-      (permissionsService.getUserPermissionsByUserId as jest.Mock).mockResolvedValue({
+      (
+        permissionsService.getUserPermissionsByUserId as jest.Mock
+      ).mockResolvedValue({
         alerts: {
           canCreate: false,
           canRead: true,
