@@ -8,6 +8,7 @@ import {
   AsignarUbiSiembraCompletaDto,
   AsignarUbiSiembraCompletaDtoSchema,
   SiembraDto,
+  fieldLabels,
 } from "@vivero/shared";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -113,6 +114,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           mode={mode}
           form={formAsignarUbicacion}
           saveLabel="Confirmar Ubicación"
+          fieldLabels={fieldLabels.AsignarUbiSiembraCompleta}
           confirm={{
             title: "Confirmar ubicación",
             description:

@@ -19,6 +19,7 @@ import {
   UpdateUserProfileDto,
   UpdateUserProfileSchema,
   UserProfileDto,
+  fieldLabels,
 } from "@vivero/shared";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -157,6 +158,7 @@ export function UsersDataTable() {
           onCancel={() => setSlideOverOpen(false)}
           saveLabel="Actualizar Usuario"
           form={formEditUser}
+          fieldLabels={fieldLabels.UpdateUserProfile}
           confirm={{
             title: "Actualizar usuario",
             description: `¿Deseas guardar los cambios en ${selectedUser.username}?`,

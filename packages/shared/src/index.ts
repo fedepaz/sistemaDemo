@@ -25,3 +25,4 @@ export * from "./schemas/legacy-header.schema";
 export * from "./schemas/sustratos.schema";
 export * from "./schemas/mezcla.schema";
 export * from "./schemas/siembraPartida.schema";
+export * from "./schemas/field-labels";
