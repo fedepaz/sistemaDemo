@@ -122,18 +122,20 @@ export class PartidasRepository {
     cg: number;
     cantidaNroCont: number;
     f_siembra: Date;
+    tratamientoSemilla: string;
     detalle?: string;
   }): Promise<void> {
     await this.legacyDb.transaction(async (conn) => {
       const parsedDate = new Date(data.f_siembra);
 
       await conn.query(
-        `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`,
+        `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ?, tratamien = ? WHERE partida = ? AND ano = ? AND indice = ?`,
         [
           parsedDate.toISOString().slice(0, 10),
           data.cg,
           data.cantidaNroCont,
           data.detalle,
+          data.tratamientoSemilla,
           data.partida,
           data.ano,
           data.indice,

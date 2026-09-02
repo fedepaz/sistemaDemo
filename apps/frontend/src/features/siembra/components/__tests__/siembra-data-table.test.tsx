@@ -16,6 +16,10 @@ jest.mock("../mezclaSelector", () => ({
   MezclaSelector: () => <div data-testid="mezcla-selector" />,
 }));
 
+jest.mock("../tratamientoSearch", () => ({
+  TratamientoSearch: () => <div data-testid="tratamiento-search" />,
+}));
+
 const mockReset = jest.fn();
 jest.mock("react-hook-form", () => ({
   ...jest.requireActual("react-hook-form"),

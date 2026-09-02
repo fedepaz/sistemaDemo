@@ -14,7 +14,7 @@ describe("SiembraPartidaSchema", () => {
     metodoMaquina: true,
     presionSemilla: 25,
     profundidadSemilla: "1.525",
-    tratamientoSemilla: false,
+    tratamientoSemilla: "1",
     mezclaId: "clx1234567890abcdef123467",
     userId: "clx1234567890abcdef123478",
   };
@@ -26,7 +26,7 @@ describe("SiembraPartidaSchema", () => {
     expect(result.metodoMaquina).toBe(true);
     expect(result.presionSemilla).toBe(25);
     expect(result.profundidadSemilla).toBe("1.525");
-    expect(result.tratamientoSemilla).toBe(false);
+    expect(result.tratamientoSemilla).toBe("1");
   });
 
   it("rejects missing id", () => {
@@ -69,9 +69,9 @@ describe("SiembraPartidaSchema", () => {
     ).toThrow();
   });
 
-  it("rejects non-boolean tratamientoSemilla", () => {
+  it("rejects empty string tratamientoSemilla", () => {
     expect(() =>
-      SiembraPartidaSchema.parse({ ...valid, tratamientoSemilla: "yes" }),
+      SiembraPartidaSchema.parse({ ...valid, tratamientoSemilla: "" }),
     ).toThrow();
   });
 });
@@ -85,7 +85,7 @@ describe("CreateSiembraPartidaSchema", () => {
       metodoMaquina: false,
       presionSemilla: 30,
       profundidadSemilla: "2.000",
-      tratamientoSemilla: true,
+      tratamientoSemilla: "1",
       mezclaId: "clx1234567890abcdef123489",
     });
     expect(result.partidaId).toBe(200);
@@ -101,7 +101,7 @@ describe("CreateSiembraPartidaSchema", () => {
       metodoMaquina: false,
       presionSemilla: 30,
       profundidadSemilla: "2.000",
-      tratamientoSemilla: true,
+      tratamientoSemilla: "1",
     });
     expect(result.mezclaId).toBeUndefined();
   });
@@ -114,7 +114,7 @@ describe("CreateSiembraPartidaSchema", () => {
         metodoMaquina: true,
         presionSemilla: 20,
         profundidadSemilla: "1.5",
-        tratamientoSemilla: false,
+    tratamientoSemilla: "1",
         mezclaId: "clx1234567890abcdef123467",
       }),
     ).toThrow();
@@ -128,7 +128,7 @@ describe("CreateSiembraPartidaSchema", () => {
       metodoMaquina: true,
       presionSemilla: 20,
       profundidadSemilla: "1.5",
-      tratamientoSemilla: false,
+      tratamientoSemilla: "1",
       mezclaId: "bad",
     });
     expect(result.success).toBe(false);

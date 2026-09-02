@@ -50,7 +50,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         presionSemilla: 0,
         profundidadSemilla: "",
         metodoMaquina: true,
-        tratamientoSemilla: false,
+        tratamientoSemilla: "",
         entityId: entity.id,
       });
     }

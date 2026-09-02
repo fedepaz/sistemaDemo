@@ -21,7 +21,7 @@ describe('SiembraPartidasController', () => {
     metodoMaquina: true,
     presionSemilla: 25,
     profundidadSemilla: '1.525',
-    tratamientoSemilla: false,
+    tratamientoSemilla: '',
     mezclaId: 'mezcla-1',
     userId: 'user-1',
   };
@@ -81,7 +81,7 @@ describe('SiembraPartidasController', () => {
         metodoMaquina: true,
         presionSemilla: 25,
         profundidadSemilla: '1.525',
-        tratamientoSemilla: false,
+        tratamientoSemilla: '',
         mezclaId: 'mezcla-1',
         userId: 'user-1',
       };

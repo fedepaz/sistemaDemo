@@ -96,6 +96,7 @@ export class PartidasService {
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
       f_siembra: data.f_siembra,
+      tratamientoSemilla: data.tratamientoSemilla,
       detalle: data.detalleExtendido,
     };
 

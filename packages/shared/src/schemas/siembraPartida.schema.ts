@@ -21,9 +21,9 @@ export const SiembraPartidaSchema = PartidaHeaderSchema.extend({
     .number({ message: "La presión de semilla es requerida" })
     .int({ message: "La presión de semilla debe ser un número entero" }),
   profundidadSemilla: ProfundidadSemillaSchema,
-  tratamientoSemilla: z.boolean({
+  tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
-  }),
+  }).min(1, { message: "El tratamiento de semilla es requerido" }),
   mezclaId: requiredCuid("La mezcla"),
   userId: requiredCuid("El usuario"),
 });
@@ -40,9 +40,9 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
     .min(1, { message: "La presión de semilla debe ser mayor a 0" }),
 
   profundidadSemilla: ProfundidadSemillaSchema,
-  tratamientoSemilla: z.boolean({
+  tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
-  }),
+  }).min(1, { message: "El tratamiento de semilla es requerido" }),
   mezclaId: cuidSchema.optional(),
 });
 

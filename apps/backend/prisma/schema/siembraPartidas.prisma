@@ -7,7 +7,7 @@ model SiembraPartidas {
 
   presionSemilla     Int      @default(0) // psi — pneumatic seeder pressure
   profundidadSemilla Decimal  @db.Decimal(5,3) @default(0) // cm — e.g., 1.525, 2.000
-  tratamientoSemilla Boolean  @default(false) // seed treatment applied
+  tratamientoSemilla String   @default("") // seed treatment code (CHAR(1))
   
   mezclaId String
     mezcla Mezcla @relation(fields: [mezclaId], references: [id])

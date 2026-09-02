@@ -26,7 +26,7 @@ describe('SiembraPartidasService', () => {
     metodoMaquina: true,
     presionSemilla: 25,
     profundidadSemilla: { toString: () => '1.525' },
-    tratamientoSemilla: false,
+    tratamientoSemilla: '',
     mezclaId: 'mezcla-1',
     userId: 'user-1',
     createdAt: new Date('2026-08-01'),
@@ -43,7 +43,7 @@ describe('SiembraPartidasService', () => {
     metodoMaquina: true,
     presionSemilla: 25,
     profundidadSemilla: '1.525',
-    tratamientoSemilla: false,
+    tratamientoSemilla: '',
     mezclaId: 'mezcla-1',
     userId: 'user-1',
   };
@@ -122,7 +122,7 @@ describe('SiembraPartidasService', () => {
         metodoMaquina: true,
         presionSemilla: 25,
         profundidadSemilla: '1.525',
-        tratamientoSemilla: false,
+        tratamientoSemilla: '',
         mezclaId: 'mezcla-1',
         userId: 'user-1',
       };
@@ -136,7 +136,7 @@ describe('SiembraPartidasService', () => {
         metodoMaquina: true,
         presionSemilla: 25,
         profundidadSemilla: '1.525',
-        tratamientoSemilla: false,
+        tratamientoSemilla: '',
         mezcla: { connect: { id: 'mezcla-1' } },
         user: { connect: { id: 'user-1' } },
       });

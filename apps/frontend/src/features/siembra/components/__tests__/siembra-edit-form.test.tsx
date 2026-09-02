@@ -22,6 +22,10 @@ jest.mock("../mezclaSelector", () => ({
   MezclaSelector: () => <div data-testid="mezcla-selector" />,
 }));
 
+jest.mock("../tratamientoSearch", () => ({
+  TratamientoSearch: () => <div data-testid="tratamiento-search" />,
+}));
+
 import userEvent from "@testing-library/user-event";
 import { SiembraEditForm } from "../siembra-edit-form";
 import type { SiembraDto } from "@vivero/shared";
@@ -125,7 +129,7 @@ const mockForm = {
       metodoMaquina: true,
       presionSemilla: 40,
       profundidadSemilla: "1.525",
-      tratamientoSemilla: false,
+      tratamientoSemilla: "",
       mezclaId: "m1",
     });
   },

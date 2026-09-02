@@ -136,6 +136,7 @@ export const depositosQueryKeys = {
 export const siembraQueryKeys = {
   all: () => ["siembra"] as const,
   partidas: () => [...siembraQueryKeys.all(), "partidas"] as const,
+  tratamientos: () => [...siembraQueryKeys.all(), "tratamientos"] as const,
 };
 
 // ============================================================================
