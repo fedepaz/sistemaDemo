@@ -63,8 +63,7 @@ export function BillboardModal({
         onOpenChange={(isOpen) => !isOpen && handleCloseAttempt()}
       >
         <DialogContent
-          // 🚀 Bumped to XL and 6XL for massive desktop presence
-          className="max-h-[90dvh] sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-6xl"
+          className="max-h-[90dvh] flex flex-col sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-6xl"
           aria-label="Actualizaciones del sistema"
         >
           <DialogHeader className="border-b border-border/40 pb-4">
