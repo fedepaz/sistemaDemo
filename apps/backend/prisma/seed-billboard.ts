@@ -33,23 +33,50 @@ const adapter = new PrismaMariaDb({
 
 const prisma = new PrismaClient({ adapter });
 
-const messageBody =
-  'A partir de ahora esta es la forma que se informarán nuevas actualizaciones del sistema, cuando se publiquen nuevos cambios, el usuario puede presionar el botón de "Marcar como leído", o puede salir del modal para leer la notificación en el próximo inicio de sesión. PS: Tenga en cuenta que hasta que no se marque como leído, seguirá apareciendo en la lista de notificaciones.';
+const messages = [
+  {
+    title: 'Actualizaciones del sistema',
+    body: 'A partir de ahora esta es la forma en que se informarán las actualizaciones del sistema. Cuando se publiquen nuevos cambios, verás una ventana emergente al iniciar sesión. Podés presionar "Entendido" para marcar todo como leído, o cerrar el modal para leerlo en el próximo inicio de sesión. Los mensajes no leídos seguirán apareciendo hasta que los marques como leídos.',
+    tag: 'actualizaciones-sistema',
+    permissionTable: 'user_profile',
+    permissionAction: 'read',
+    permissionScope: 'OWN',
+    targetNewUsers: true,
+  },
+  {
+    title: 'Alertas resueltas',
+    body: 'Las alertas del sistema se acceden desde el ícono de campana en el encabezado. Al hacer clic en una alerta, se abre un panel con los detalles. Para alertas de tipo "Faltante Plantas" verás el botón "Marcar alerta como resuelta". Al confirmar, la alerta se elimina de la lista para todos los usuarios. Esta acción no se puede deshacer.',
+    tag: 'alertas-resueltas',
+    permissionTable: 'alerts',
+    permissionAction: 'read',
+    permissionScope: 'ALL',
+    targetNewUsers: true,
+  },
+  {
+    title: 'Nuevo registro de usuarios',
+    body: 'El registro de usuarios ahora es público. Cualquier persona puede crear una cuenta desde la pantalla de login presionando "Registrar cuenta". Debe completar usuario, nombre y apellido. Tras registrarse, la cuenta queda pendiente de activación por un administrador, quien también asignará los permisos necesarios. Hasta que la cuenta sea activada, no será posible iniciar sesión.',
+    tag: 'registro-usuarios',
+    permissionTable: 'user_profile',
+    permissionAction: 'read',
+    permissionScope: 'OWN',
+    targetNewUsers: true,
+  },
+];
 
 async function main() {
-  const message = await prisma.billboardMessage.create({
-    data: {
-      title: 'Actualizaciones del sistema',
-      body: messageBody,
-      tag: 'all-users',
-      permissionTable: 'user_profile',
-      permissionAction: 'read',
-      permissionScope: 'OWN',
-      targetNewUsers: true,
-    },
-  });
-
-  console.log('Created billboard message:', message.id);
+  let created = 0;
+  for (const msg of messages) {
+    const existing = await prisma.billboardMessage.findFirst({
+      where: { title: msg.title, tag: msg.tag },
+    });
+    if (!existing) {
+      await prisma.billboardMessage.create({ data: msg });
+      created++;
+    }
+  }
+  console.log(
+    `Created ${created} new billboard messages (${messages.length - created} already existed)`,
+  );
 }
 
 main()
