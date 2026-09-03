@@ -52,7 +52,7 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
   {
     accessorKey: "propiedad",
     header: ({ column }) => (
-      <SortableHeader column={column}>Prop</SortableHeader>
+      <SortableHeader column={column}>P/L</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className="text-sm font-semibold">{row.original.propiedad}</span>

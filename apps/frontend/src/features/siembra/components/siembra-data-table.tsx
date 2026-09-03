@@ -105,11 +105,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={
-            mode === "view"
-              ? `Partida #${selectedPartida.partidaId}`
-              : `Asignar Ubicación #${selectedPartida.partidaId}`
-          }
+          title={`Partida Nº ${selectedPartida.partidaId}`}
           formId="siembra-form"
           mode={mode}
           form={formAsignarUbicacion}
