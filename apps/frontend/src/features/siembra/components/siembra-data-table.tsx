@@ -44,7 +44,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         anio: selectedPartida.anio,
         indice: selectedPartida.indice,
         cantidaNroCont: parseInt(selectedPartida.nrocont),
-        detalleExtendido: selectedPartida.extendido,
+        detalleExtendido: "",
         f_siembra: new Date(),
         edita: "S",
         presionSemilla: 0,

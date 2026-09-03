@@ -47,19 +47,17 @@ export class SiembraService {
       codigoEspecie: mappedRow.codigoEspecie,
       nombreEspecie: mappedRow.nombreEspecie,
 
-      hai: row.hai,
+      propiedad: row.propiedad,
       injerto: row.injerto,
-
+      nrocont: row.nrocont,
+      sem_siembra: row.sem_siembra,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,
-      propiedad: row.propiedad,
-      solicito: row.solicito,
       lote: row.lote,
       anoLote: row.ano_lote,
-      ajuste: row.ajuste,
-      nrocont: row.nrocont,
-      extendido: row.extendido,
-      germin: row.germin,
+      semxgr: row.semxgr,
+      c: row.c,
+      g: row.g,
     };
   }
 
