@@ -24,8 +24,10 @@ import {
   Filter,
   Play,
   Plus,
+  Search,
   SquarePen,
   Trash2,
+  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -88,6 +90,7 @@ interface DataTableProps<TData extends Record<string, unknown>, TValue> {
   toolbarContent?: ReactNode;
   canExecuteLabel?: string;
   exportColumns?: ExportColumn<TData>[];
+  enableSearch?: boolean;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -113,6 +116,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
   toolbarContent,
   canExecuteLabel = "Cambiar",
   exportColumns,
+  enableSearch = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -429,6 +433,32 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
           </div>
         </CardHeader>
         <CardContent className="p-0 flex-1 flex flex-col min-h-0 overflow-hidden">
+          {enableSearch && (
+            <div className="flex items-center gap-2 px-4 py-2 shrink-0 border-b">
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder={breakpoint === "sm" ? "Buscar..." : "Buscar en la tabla..."}
+                  value={globalFilter ?? ""}
+                  onChange={(e) => setGlobalFilter(e.target.value)}
+                  className="h-8 w-full rounded-md border border-input bg-background pl-8 pr-8 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+                {globalFilter && (
+                  <button
+                    onClick={() => setGlobalFilter("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
+                    aria-label="Limpiar búsqueda"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+              <Badge variant="secondary" className="text-[11px] shrink-0 hidden md:inline-flex">
+                {`${table.getFilteredRowModel().rows.length} de ${data.length}`}
+              </Badge>
+            </div>
+          )}
           {" "}
           <div className="flex items-center px-4 py-2 space-x-2 shrink-0">
             <DropdownMenu>
