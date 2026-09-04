@@ -50,6 +50,7 @@ interface SlideOverFormProps {
   mode?: SlideOverMode;
   disabled?: boolean;
   confirm?: ConfirmConfig;
+  fieldLabels?: Record<string, string>;
 }
 
 export function SlideOverForm({
@@ -67,6 +68,7 @@ export function SlideOverForm({
   mode = "edit",
   disabled,
   confirm,
+  fieldLabels,
 }: SlideOverFormProps) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -96,6 +98,10 @@ export function SlideOverForm({
     disabled ||
     (form ? form.formState.isSubmitting : false);
 
+  const getFieldLabel = (field: string) =>
+    fieldLabels?.[field] ??
+    field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+
   const submitForm = () => {
     if (formId) {
       (document.getElementById(formId) as HTMLFormElement)?.requestSubmit();
@@ -110,7 +116,7 @@ export function SlideOverForm({
         if (!isValid) {
           const errors = Object.entries(form.formState.errors).map(
             ([field, error]) => {
-              const label = field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+              const label = getFieldLabel(field);
               return `${label}: ${error?.message || "Requerido"}`;
             },
           );
@@ -133,7 +139,7 @@ export function SlideOverForm({
         if (!isValid) {
           const errors = Object.entries(form.formState.errors).map(
             ([field, error]) => {
-              const label = field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+              const label = getFieldLabel(field);
               return `${label}: ${error?.message || "Requerido"}`;
             },
           );

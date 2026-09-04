@@ -59,7 +59,7 @@ describe('Siembra (integration)', () => {
           metodoMaquina: true,
           presionSemilla: 1,
           profundidadSemilla: '1.5',
-          tratamientoSemilla: false,
+          tratamientoSemilla: '1',
           mezclaId: 'clmocksiembra0000000000000',
           entityId: 'cltaskshiftpayload0000000',
           startTime: '2026-01-15T08:00:00.000Z',

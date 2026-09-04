@@ -20,3 +20,11 @@ export const SiembraDtoSchema = LegacyHeaderSchema.extend({
 });
 
 export type SiembraDto = z.infer<typeof SiembraDtoSchema>;
+
+export const TratamientoDtoSchema = z.object({
+  codigo: z.string(),
+  nombre: z.string(),
+  precio: z.string(),
+});
+
+export type TratamientoDto = z.infer<typeof TratamientoDtoSchema>;

@@ -78,6 +78,48 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
   },
 
   {
+    id: "anoLoteLote",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Año/Lote</SortableHeader>
+    ),
+    accessorFn: (row) => `${row.anoLote} - ${row.lote}`,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-1.5">
+        <span className="font-mono font-bold text-sm text-foreground/80">
+          {row.original.anoLote}
+        </span>
+        <span className="text-muted-foreground/40 text-xs">-</span>
+        <span className="font-mono text-sm text-muted-foreground">
+          {row.original.lote}
+        </span>
+      </div>
+    ),
+    size: 110,
+  },
+  {
+    accessorKey: "ajuste",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Ajuste</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="text-xs font-medium text-muted-foreground">
+        {row.original.ajuste}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "germin",
+    header: ({ column }) => (
+      <SortableHeader column={column}>Germinación</SortableHeader>
+    ),
+    cell: ({ row }) => (
+      <span className="font-mono font-bold text-sm tabular-nums">
+        {row.original.germin}
+      </span>
+    ),
+  },
+
+  {
     accessorKey: "fechaSugeridaSiembra",
     header: ({ column }) => {
       return <SortableHeader column={column}>Siembra Sug.</SortableHeader>;
@@ -173,7 +215,25 @@ export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
     accessorKey: "fechaSiembraReal",
     exportHeader: "Siembra Real",
     exportValue: (value) =>
-      value === "0000-00-00" ? "-Sin Siembra-" : formatShortDate(value as string),
+      value === "0000-00-00"
+        ? "-Sin Siembra-"
+        : formatShortDate(value as string),
     pdfWidth: "13%",
+  },
+  {
+    accessorKey: "anoLote",
+    exportHeader: "Año/Lote",
+    exportValue: (_value, row) => `${row.anoLote} - ${row.lote}`,
+    pdfWidth: "10%",
+  },
+  {
+    accessorKey: "ajuste",
+    exportHeader: "Ajuste",
+    pdfWidth: "10%",
+  },
+  {
+    accessorKey: "germin",
+    exportHeader: "Germinación",
+    pdfWidth: "10%",
   },
 ];

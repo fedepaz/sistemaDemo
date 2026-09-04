@@ -4,7 +4,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useCreateMezcla, useMezclas } from "../hooks/useMezclas";
 import { useSustratos } from "@/features/sustratos/hooks/useSustratos";
-import { CreateMezclaDto, CreateMezclaSchema, MezclaDto } from "@vivero/shared";
+import { CreateMezclaDto, CreateMezclaSchema, MezclaDto, fieldLabels } from "@vivero/shared";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
@@ -100,6 +100,7 @@ export function MezclaDataTable() {
           saveLabel="Crear Mezcla"
           form={mode === "create" ? formCreateMezcla : undefined}
           mode={mode === "create" ? "create" : "view"}
+          fieldLabels={fieldLabels.CreateMezcla}
           confirm={
             mode === "create"
               ? {

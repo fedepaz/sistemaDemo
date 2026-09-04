@@ -17,6 +17,15 @@ beforeAll(() => {
 jest.mock("@/features/permissions", () => ({
   useTableByName: () => ({ data: { permissionType: "CRUD" } }),
 }));
+
+jest.mock("../mezclaSelector", () => ({
+  MezclaSelector: () => <div data-testid="mezcla-selector" />,
+}));
+
+jest.mock("../tratamientoSearch", () => ({
+  TratamientoSearch: () => <div data-testid="tratamiento-search" />,
+}));
+
 import userEvent from "@testing-library/user-event";
 import { SiembraEditForm } from "../siembra-edit-form";
 import type { SiembraDto } from "@vivero/shared";
@@ -33,15 +42,6 @@ jest.mock("@/features/extendidos", () => ({
     data: [
       { codigo: 1, nombre: "Cámara 1", camara: "CAM01" },
       { codigo: 2, nombre: "Cámara 2", camara: "CAM02" },
-    ],
-  }),
-}));
-
-jest.mock("@/features/mezclas", () => ({
-  useMezclas: () => ({
-    data: [
-      { id: "m1", sustrato1Nombre: "Sustrato A", sustrato2Nombre: "Sustrato B", sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
-      { id: "m2", sustrato1Nombre: "Sustrato C", sustrato2Nombre: null, sustrato3Nombre: null, sustrato4Nombre: null, isActive: true },
     ],
   }),
 }));
@@ -96,10 +96,13 @@ const mockSelectedSiembra: SiembraDto = {
   codigoEspecie: "ESP001",
   nombreEspecie: "Especie Test",
   injerto: "N",
-  contenedor: "Bandeja 288",
   fechaSugeridaSiembra: "2024-03-15",
+  fechaSiembraReal: "2024-03-16",
   propiedad: "Propiedad A",
   solicito: "Juan",
+  lote: "L001",
+  anoLote: "2024",
+  ajuste: "Ninguno",
   nrocont: "100",
   extendido: "Notas existentes",
   germin: "85",
@@ -126,7 +129,7 @@ const mockForm = {
       metodoMaquina: true,
       presionSemilla: 40,
       profundidadSemilla: "1.525",
-      tratamientoSemilla: false,
+      tratamientoSemilla: "",
       mezclaId: "m1",
     });
   },

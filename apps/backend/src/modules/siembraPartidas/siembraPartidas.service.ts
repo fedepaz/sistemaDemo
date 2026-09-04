@@ -4,10 +4,40 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { SiembraPartidasRepository } from './repositories/siembraPartidas.repository';
 import { CreateSiembraPartidaDto, SiembraPartidaDto } from '@vivero/shared';
 import { SiembraPartidas } from '../../generated/prisma/client';
+import { PrismaService } from '../../infra/prisma/prisma.service';
+
+const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
+const GENERIC_MEZCLA_SUSTRATO1_ID = 'c00000000000000000000001';
 
 @Injectable()
 export class SiembraPartidasService {
-  constructor(private readonly repo: SiembraPartidasRepository) {}
+  constructor(
+    private readonly repo: SiembraPartidasRepository,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  private async getOrCreateGenericMezcla(): Promise<string> {
+    const sustrato = await this.prisma.sustratos.upsert({
+      where: { nombre: GENERIC_SUSTRATO_NAME },
+      update: {},
+      create: {
+        id: GENERIC_MEZCLA_SUSTRATO1_ID,
+        nombre: GENERIC_SUSTRATO_NAME,
+      },
+    });
+
+    const mezcla = await this.prisma.mezcla.upsert({
+      where: { id: 'c00000000000000000000002' },
+      update: {},
+      create: {
+        id: 'c00000000000000000000002',
+        sustrato1Id: sustrato.id,
+        porcentaje1: 100,
+      },
+    });
+
+    return mezcla.id;
+  }
 
   private mapToDto(row: SiembraPartidas): SiembraPartidaDto {
     return {
@@ -45,6 +75,8 @@ export class SiembraPartidasService {
     data: CreateSiembraPartidaDto,
     requesterId: string,
   ): Promise<SiembraPartidaDto> {
+    const mezclaId = data.mezclaId ?? (await this.getOrCreateGenericMezcla());
+
     const row = await this.repo.createSiembraPartida({
       partidaId: data.partidaId,
       anio: data.anio,
@@ -55,7 +87,7 @@ export class SiembraPartidasService {
       tratamientoSemilla: data.tratamientoSemilla,
       mezcla: {
         connect: {
-          id: data.mezclaId,
+          id: mezclaId,
         },
       },
       user: {

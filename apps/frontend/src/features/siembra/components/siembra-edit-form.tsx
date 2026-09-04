@@ -12,7 +12,6 @@ import {
   X,
   Wrench,
   Calendar,
-  Beaker,
   Gauge,
   Ruler,
 } from "lucide-react";
@@ -50,8 +49,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useDepositos } from "@/features/extendidos";
-import { useMezclas } from "@/features/mezclas";
 import { TaskShift } from "@/features/taskshift/components/taskShift";
+
+import { TratamientoSearch } from "./tratamientoSearch";
 
 interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -67,7 +67,6 @@ export function SiembraEditForm({
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
-  const { data: mezclas } = useMezclas();
   const [isEditingQuantity, setIsEditingQuantity] = useState(false);
 
   const [startTime, setStartTime] = useState("");
@@ -78,6 +77,11 @@ export function SiembraEditForm({
 
   const metodoMaquina = useWatch({
     name: "metodoMaquina",
+    control: form.control,
+  });
+
+  const tratamientoSemilla = useWatch({
+    name: "tratamientoSemilla",
     control: form.control,
   });
 
@@ -367,83 +371,18 @@ export function SiembraEditForm({
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="grid grid-cols-1  gap-4 md:gap-6">
               {/* TRATAMIENTO DE SEMILLA */}
-              <FormField
-                control={form.control}
-                name="tratamientoSemilla"
-                render={({ field }) => (
-                  <FormItem className="space-y-2 md:space-y-3">
-                    <div className="flex items-center justify-between py-1">
-                      <div className="flex items-center gap-2">
-                        <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                          <Beaker className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                        </div>
-                        <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                          Tratamiento de Semilla
-                        </FormLabel>
-                      </div>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className="transition-colors border-primary/80 bg-primary/40"
-                      />
-                    </div>
-                    <FormDescription className="text-[9px] md:text-[10px] text-muted-foreground">
-                      {field.value ? "Tratamiento aplicado" : "Sin tratamiento"}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+              <TratamientoSearch
+                value={tratamientoSemilla ?? ""}
+                onChange={(codigo) =>
+                  form.setValue("tratamientoSemilla", codigo)
+                }
               />
-
-              {/* MEZCLA */}
-              <FormField
-                control={form.control}
-                name="mezclaId"
-                render={({ field }) => (
-                  <FormItem className="space-y-2 md:space-y-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                        <Beaker className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                      </div>
-                      <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                        Mezcla
-                      </FormLabel>
-                    </div>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
-                          <SelectValue placeholder="Seleccione mezcla" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent
-                        className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
-                        position="popper"
-                      >
-                        {mezclas
-                          ?.filter((m) => m.isActive)
-                          .map((mezcla) => (
-                            <SelectItem
-                              key={mezcla.id}
-                              value={mezcla.id}
-                              className="font-bold py-2 md:py-3 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm md:text-base"
-                            >
-                              {mezcla.sustrato1Nombre}
-                              {mezcla.sustrato2Nombre &&
-                                ` / ${mezcla.sustrato2Nombre}`}
-                              {mezcla.sustrato3Nombre &&
-                                ` / ${mezcla.sustrato3Nombre}`}
-                              {mezcla.sustrato4Nombre &&
-                                ` / ${mezcla.sustrato4Nombre}`}
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/*
+               MEZCLA — hidden until client enables mezcla feature 
+              <MezclaSelector form={form} />
+              */}
             </div>
 
             <div className="space-y-2 md:space-y-3">
