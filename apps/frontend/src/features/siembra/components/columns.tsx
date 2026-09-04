@@ -52,25 +52,25 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
   {
     accessorKey: "propiedad",
     header: ({ column }) => (
-      <SortableHeader column={column}>Propiedad</SortableHeader>
+      <SortableHeader column={column}>P/L</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className="text-sm font-semibold">{row.original.propiedad}</span>
     ),
   },
   {
-    accessorKey: "solicito",
+    accessorKey: "sem_siembra",
     header: ({ column }) => (
-      <SortableHeader column={column}>Solicitada</SortableHeader>
+      <SortableHeader column={column}>Sem Siem</SortableHeader>
     ),
     cell: ({ row }) => (
-      <span className="text-sm font-semibold">{row.original.solicito}</span>
+      <span className="text-sm font-semibold">{row.original.sem_siembra}</span>
     ),
   },
   {
     accessorKey: "nrocont",
     header: ({ column }) => (
-      <SortableHeader column={column}>Cantidad</SortableHeader>
+      <SortableHeader column={column}>Cant</SortableHeader>
     ),
     cell: ({ row }) => (
       <span className="text-sm font-semibold">{row.original.nrocont}</span>
@@ -97,24 +97,31 @@ export const partidaSiembraColumns: ColumnDef<SiembraDto>[] = [
     size: 110,
   },
   {
-    accessorKey: "ajuste",
+    accessorKey: "semxgr",
     header: ({ column }) => (
-      <SortableHeader column={column}>Ajuste</SortableHeader>
+      <SortableHeader column={column}>Gr Sem</SortableHeader>
     ),
     cell: ({ row }) => (
-      <span className="text-xs font-medium text-muted-foreground">
-        {row.original.ajuste}
+      <span className="font-mono font-bold text-sm tabular-nums">
+        {row.original.semxgr}
       </span>
     ),
   },
   {
-    accessorKey: "germin",
-    header: ({ column }) => (
-      <SortableHeader column={column}>Germinación</SortableHeader>
-    ),
+    accessorKey: "c",
+    header: ({ column }) => <SortableHeader column={column}>C</SortableHeader>,
     cell: ({ row }) => (
       <span className="font-mono font-bold text-sm tabular-nums">
-        {row.original.germin}
+        {row.original.c}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "g",
+    header: ({ column }) => <SortableHeader column={column}>G</SortableHeader>,
+    cell: ({ row }) => (
+      <span className="font-mono font-bold text-sm tabular-nums">
+        {row.original.g}
       </span>
     ),
   },
@@ -203,7 +210,7 @@ export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
   { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
   { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
   { accessorKey: "propiedad", exportHeader: "Propiedad", pdfWidth: "10%" },
-  { accessorKey: "solicito", exportHeader: "Solicitada", pdfWidth: "10%" },
+  { accessorKey: "sem_siembra", exportHeader: "Semilla", pdfWidth: "10%" },
   { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
   {
     accessorKey: "fechaSugeridaSiembra",
@@ -227,13 +234,18 @@ export const partidaSiembraExportColumns: ExportColumn<SiembraDto>[] = [
     pdfWidth: "10%",
   },
   {
-    accessorKey: "ajuste",
-    exportHeader: "Ajuste",
-    pdfWidth: "10%",
+    accessorKey: "semxgr",
+    exportHeader: "Sem/Gr",
+    pdfWidth: "8%",
   },
   {
-    accessorKey: "germin",
-    exportHeader: "Germinación",
-    pdfWidth: "10%",
+    accessorKey: "c",
+    exportHeader: "C",
+    pdfWidth: "5%",
+  },
+  {
+    accessorKey: "g",
+    exportHeader: "G",
+    pdfWidth: "5%",
   },
 ];

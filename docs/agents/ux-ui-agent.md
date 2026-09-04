@@ -100,6 +100,7 @@ Focus on these proven interface patterns:
     - For `PROCESS` types: Row selection is hidden by default, and bulk delete actions are disabled if execution (create) is allowed, prioritizing the operational process flow.
     - For `READ_ONLY` types: All mutation actions and selection are hidden.
 - **Descriptive Action Labels:** Always use specific, context-aware labels for action buttons (e.g., "Asignar Ubicación" instead of "Ejecutar") to improve operational clarity.
+- **Global Search Bar:** Real-time client-side filtering across all columns with clear button (X) and results count badge. Opt-out per table via `enableSearch={false}`.
 
 ## Feature Design Process
 

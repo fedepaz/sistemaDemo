@@ -26,7 +26,6 @@ jest.mock("../tratamientoSearch", () => ({
   TratamientoSearch: () => <div data-testid="tratamiento-search" />,
 }));
 
-import userEvent from "@testing-library/user-event";
 import { SiembraEditForm } from "../siembra-edit-form";
 import type { SiembraDto } from "@vivero/shared";
 
@@ -183,55 +182,17 @@ describe("SiembraEditForm", () => {
     expect(screen.getByText("Máquina")).toBeInTheDocument();
   });
 
-  it("renders quantity field with default read-only value", () => {
+  it("renders quantity field as editable input", () => {
     renderForm();
 
     expect(screen.getByText("Bandejas Confirmadas")).toBeInTheDocument();
-    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(screen.getByRole("spinbutton")).toBeInTheDocument();
   });
 
   it("renders observaciones textarea", () => {
     renderForm();
 
     expect(screen.getByText("Observaciones")).toBeInTheDocument();
-  });
-
-  it("toggles to edit mode when Edit button is clicked", async () => {
-    const user = userEvent.setup();
-    renderForm();
-
-    const editButton = screen.getByText("Editar");
-    await user.click(editButton);
-
-    expect(screen.getByText("Cancelar")).toBeInTheDocument();
-    expect(screen.getByRole("spinbutton")).toBeInTheDocument();
-  });
-
-  it("reverts to read-only when Cancel button is clicked", async () => {
-    const user = userEvent.setup();
-    renderForm();
-
-    const editButton = screen.getByText("Editar");
-    await user.click(editButton);
-
-    const cancelButton = screen.getByText("Cancelar");
-    await user.click(cancelButton);
-
-    expect(screen.getByText("Editar")).toBeInTheDocument();
-    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
-  });
-
-  it("calls form.setValue when canceling edit mode", async () => {
-    const user = userEvent.setup();
-    renderForm();
-
-    const editButton = screen.getByText("Editar");
-    await user.click(editButton);
-
-    const cancelButton = screen.getByText("Cancelar");
-    await user.click(cancelButton);
-
-    expect(mockForm.setValue).toHaveBeenCalledWith("cantidaNroCont", 100);
   });
 
   it("displays method description badge", () => {

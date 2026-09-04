@@ -26,3 +26,4 @@ export * from "./schemas/sustratos.schema";
 export * from "./schemas/mezcla.schema";
 export * from "./schemas/siembraPartida.schema";
 export * from "./schemas/field-labels";
+export * from "./schemas/billboard.schema";
