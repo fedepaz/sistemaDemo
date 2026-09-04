@@ -61,6 +61,15 @@ const messages = [
     permissionScope: 'OWN',
     targetNewUsers: true,
   },
+  {
+    title: 'Búsqueda en tablas',
+    body: 'Las tablas de datos ahora incluyen una barra de búsqueda en la parte superior. Podés escribir en el campo de búsqueda para filtrar en tiempo real las filas que coincidan con el texto ingresado. Se muestra la cantidad de resultados encontrados sobre el total. Para limpiar la búsqueda, hacé clic en el ícono de "X" que aparece a la derecha del campo.',
+    tag: 'busqueda-tablas',
+    permissionTable: 'user_profile',
+    permissionAction: 'read',
+    permissionScope: 'OWN',
+    targetNewUsers: true,
+  },
 ];
 
 async function main() {

@@ -82,7 +82,9 @@ export function BillboardModal({
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto space-y-4 py-2 mx-auto w-full">
-            {messages.map((msg) => (
+            {[...messages]
+              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+              .map((msg) => (
               <article
                 key={msg.id}
                 // 🚀 Added more padding for that spacious, premium feel
