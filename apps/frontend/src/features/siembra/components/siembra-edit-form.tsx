@@ -254,6 +254,71 @@ export function SiembraEditForm({
           {/* DATOS DE SIEMBRA */}
           <div className="space-y-3 md:space-y-4 shrink-0">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {/* CANTIDAD EN GRAMOS */}
+              <FormField
+                control={form.control}
+                name="cantidadGrs"
+                render={({ field }) => (
+                  <FormItem className="space-y-2 md:space-y-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                        <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                      </div>
+                      <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                        Cantidad (gr)
+                      </FormLabel>
+                    </div>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        inputMode="decimal"
+                        placeholder="0"
+                        value={field.value === 0 ? "" : field.value}
+                        onChange={(e) => {
+                          const raw = e.target.value;
+                          if (raw === "") {
+                            field.onChange(0);
+                            return;
+                          }
+                          field.onChange(Number(raw));
+                        }}
+                        className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* AJUSTE */}
+              <FormField
+                control={form.control}
+                name="ajuste"
+                render={({ field }) => (
+                  <FormItem className="space-y-2 md:space-y-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                        <Gauge className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                      </div>
+                      <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                        Ajuste
+                      </FormLabel>
+                    </div>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="0"
+                        {...field}
+                        className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {/* PRESIÓN DE SEMILLA */}
               <FormField
                 control={form.control}

@@ -55,6 +55,7 @@ export class SiembraService {
       fechaSiembraReal: row.f_siembra,
       lote: row.lote,
       anoLote: row.ano_lote,
+      item: row.item,
       semxgr: row.semxgr,
       c: row.c,
       g: row.g,

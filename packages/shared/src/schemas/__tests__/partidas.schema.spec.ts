@@ -96,6 +96,12 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     cantidaNroCont: 120,
     f_siembra: new Date("2026-01-15"),
     detalleExtendido: "Test",
+    lote: 1001,
+    anoLote: 2025,
+    item: 1,
+    semxgr: 2352,
+    ajuste: "86.00",
+    cantidadGrs: 500,
   };
 
   it("accepts valid assignment", () => {

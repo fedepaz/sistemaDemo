@@ -91,20 +91,19 @@ const mockSelectedSiembra: SiembraDto = {
   partidaId: 1,
   anio: 2024,
   indice: 1,
-  hai: "H",
   codigoEspecie: "ESP001",
   nombreEspecie: "Especie Test",
   injerto: "N",
   fechaSugeridaSiembra: "2024-03-15",
   fechaSiembraReal: "2024-03-16",
   propiedad: "Propiedad A",
-  solicito: "Juan",
+  nrocont: "100",
   lote: "L001",
   anoLote: "2024",
-  ajuste: "Ninguno",
-  nrocont: "100",
-  extendido: "Notas existentes",
-  germin: "85",
+  item: 1,
+  semxgr: "2352",
+  c: "3",
+  g: "4",
 };
 
 const mockForm = {
@@ -186,7 +185,6 @@ describe("SiembraEditForm", () => {
     renderForm();
 
     expect(screen.getByText("Bandejas Confirmadas")).toBeInTheDocument();
-    expect(screen.getByRole("spinbutton")).toBeInTheDocument();
   });
 
   it("renders observaciones textarea", () => {

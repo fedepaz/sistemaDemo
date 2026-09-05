@@ -8,6 +8,8 @@ import {
 } from '@vivero/shared';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
 import { SiembraPartidasService } from '../../siembraPartidas/siembraPartidas.service';
+import { TaskShiftsService } from '../../taskShifts/taskShifts.service';
+import { LegacyStockService } from '../stock/stock.service';
 
 @Injectable()
 export class PartidasService {
@@ -15,6 +17,8 @@ export class PartidasService {
     private readonly partidasRepository: PartidasRepository,
     private readonly prisma: PrismaService,
     private readonly siembraPartidaService: SiembraPartidasService,
+    private readonly taskShiftsService: TaskShiftsService,
+    private readonly legacyStockService: LegacyStockService,
   ) {}
 
   async getAllPartidas() {
@@ -68,10 +72,16 @@ export class PartidasService {
       partida: data.partidaId,
       ano: data.anio,
       indice: data.indice,
+      f_siembra: data.f_siembra,
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
-      f_siembra: data.f_siembra,
       tratamientoSemilla: data.tratamientoSemilla,
+      ajuste: data.ajuste,
+      cantidadGrs: data.cantidadGrs,
+      lote: data.lote,
+      anoLote: data.anoLote,
+      item: data.item,
+      semxgr: data.semxgr,
       detalle: data.detalleExtendido,
     };
 
@@ -87,6 +97,11 @@ export class PartidasService {
     };
 
     await this.prisma.$transaction(async () => {
+      await this.legacyStockService.updateStock(
+        data.lote,
+        data.anio,
+        data.item,
+      );
       await this.siembraPartidaService.createSiembraPartida(
         newSiembraData,
         requesterId,
@@ -94,26 +109,18 @@ export class PartidasService {
       await this.partidasRepository.asignarSiembra(legacyData);
 
       if (data.startTime && data.endTime) {
-        const taskShift = await this.prisma.taskShift.create({
-          data: {
-            createdByUserId: requesterId,
+        await this.taskShiftsService.createTaskShift(
+          {
             entityId: data.entityId,
             partidaId: data.partidaId,
             anio: data.anio,
             indice: data.indice,
             startTime: data.startTime,
             endTime: data.endTime,
+            employeeUserIds: data.employeeUserIds ?? [],
           },
-        });
-
-        if (data.employeeUserIds && data.employeeUserIds.length > 0) {
-          await this.prisma.taskShiftEmployee.createMany({
-            data: data.employeeUserIds.map((userId) => ({
-              taskShiftId: taskShift.id,
-              userId,
-            })),
-          });
-        }
+          requesterId,
+        );
       }
     });
   }

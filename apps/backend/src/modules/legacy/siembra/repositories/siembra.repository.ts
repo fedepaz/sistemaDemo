@@ -24,6 +24,7 @@ export class SiembraRepository {
     CONCAT(p.sem_siem,'-',p.ano_siem) AS sem_siembra, 
     p.f_siem,
     p.f_siembra,
+    p.item,
     l.lote,
     l.ano_lote,
     l.indice,
