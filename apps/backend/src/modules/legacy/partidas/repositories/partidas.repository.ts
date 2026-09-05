@@ -136,7 +136,7 @@ export class PartidasRepository {
       const resultC = data.cantidadGrs * data.semxgr;
 
       const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ?, tratamien = ?, ajuste = ?, cantidad = ? WHERE partida = ? AND ano = ? AND indice = ?`;
-      const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE lote=?lote AND ano_lote=?ano_lote AND item=?item`;
+      const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE lote = ? AND ano_lote= ? AND item= ?`;
 
       await conn.query(updatePartidasSql, [
         parsedDate.toISOString().slice(0, 10),

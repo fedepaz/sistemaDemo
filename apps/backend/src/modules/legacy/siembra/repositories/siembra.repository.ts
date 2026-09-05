@@ -27,7 +27,6 @@ export class SiembraRepository {
     p.item,
     l.lote,
     l.ano_lote,
-    l.indice,
     l.semxgr,
     l.c,
     l.g

@@ -56,7 +56,7 @@ export class StockRepository {
     const updateSemSql = `
           UPDATE st_sem 
           SET entrada = ?, salida = ? 
-          WHERE lote = ? AND ano = ? AND item = ? 
+          WHERE lote = ? AND ano = ?
         `;
     await this.legacyDb.transaction(async (conn) => {
       await conn.query(updateItemSql, [
@@ -66,13 +66,7 @@ export class StockRepository {
         anio,
         item,
       ]);
-      await conn.query(updateSemSql, [
-        totalEntradas,
-        totalSalidas,
-        lote,
-        anio,
-        item,
-      ]);
+      await conn.query(updateSemSql, [totalEntradas, totalSalidas, lote, anio]);
     });
   }
 }

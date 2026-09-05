@@ -1,6 +1,6 @@
 // src/modules/legacy/partidas/partidas.service.ts
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PartidasRepository } from './repositories/partidas.repository';
 import {
   AsignarUbiExtendidoDto,
@@ -10,15 +10,19 @@ import { PrismaService } from '../../../infra/prisma/prisma.service';
 import { SiembraPartidasService } from '../../siembraPartidas/siembraPartidas.service';
 import { TaskShiftsService } from '../../taskShifts/taskShifts.service';
 import { LegacyStockService } from '../stock/stock.service';
+import { AuditEventEmitter } from '../../auditLog/events/audit-event.emitter';
 
 @Injectable()
 export class PartidasService {
+  private readonly logger = new Logger(PartidasService.name);
+
   constructor(
     private readonly partidasRepository: PartidasRepository,
     private readonly prisma: PrismaService,
     private readonly siembraPartidaService: SiembraPartidasService,
     private readonly taskShiftsService: TaskShiftsService,
     private readonly legacyStockService: LegacyStockService,
+    private readonly auditEventEmitter: AuditEventEmitter,
   ) {}
 
   async getAllPartidas() {
@@ -95,6 +99,37 @@ export class PartidasService {
       tratamientoSemilla: data.tratamientoSemilla,
       mezclaId: data.mezclaId,
     };
+
+    if (data.lote === 0 || data.anoLote === 0) {
+      this.logger.warn(
+        `Stock update skipped: lote=${data.lote}, anoLote=${data.anoLote}, item=${data.item} — no matching rows in legacy stock tables`,
+      );
+      this.auditEventEmitter.emitCrud({
+        tenantId: 'unknown',
+        userId: requesterId,
+        action: 'UPDATE',
+        entityType: 'SIEMBRA',
+        entityId: `partida:${data.partidaId}|ano:${data.anio}|indice:${data.indice}`,
+        timestamp: new Date(),
+        changes: {
+          requestId: 'unknown',
+          endpoint: '/l-partidas/asignar-siembra',
+          method: 'POST',
+          params: {},
+          query: {},
+          body: {
+            anomaly: 'LOTE_OR_ANO_ZERO',
+            lote: data.lote,
+            anoLote: data.anoLote,
+            item: data.item,
+            message:
+              'Stock update will not match any rows — lote or anoLote is 0',
+          },
+          affected: null,
+          durationMs: 0,
+        },
+      });
+    }
 
     await this.prisma.$transaction(async () => {
       await this.legacyStockService.updateStock(
