@@ -44,44 +44,35 @@ export class StockRepository {
     ]);
   }
 
-  async updateStock(
-    lote: number,
-    anio: number,
-    item: number,
-    StockTotal: StockTotal,
-  ): Promise<void> {
+  async updateStock(lote: number, anio: number, item: number): Promise<void> {
+    const StockTotal = await this.stockTotal(lote, anio, item);
+    const totalEntradas = StockTotal[0].total_entradas;
+    const totalSalidas = StockTotal[0].total_salidas;
     const updateItemSql = `
         UPDATE st_sem_item 
         SET entrada = ?, salida = ? 
         WHERE lote = ? AND ano = ? AND item = ?
       `;
-
-    await this.legacyDb.query(updateItemSql, [
-      StockTotal.total_entradas,
-      StockTotal.total_salidas,
-      lote,
-      anio,
-      item,
-    ]);
-  }
-
-  async updateStockTotal(
-    lote: number,
-    anio: number,
-    item: number,
-    StockTotal: StockTotal,
-  ): Promise<void> {
     const updateSemSql = `
-        UPDATE st_sem 
-        SET entrada = ?, salida = ? 
-        WHERE lote = ? AND ano = ? AND item = ? 
-      `;
-    await this.legacyDb.query(updateSemSql, [
-      StockTotal.total_entradas,
-      StockTotal.total_salidas,
-      lote,
-      anio,
-      item,
-    ]);
+          UPDATE st_sem 
+          SET entrada = ?, salida = ? 
+          WHERE lote = ? AND ano = ? AND item = ? 
+        `;
+    await this.legacyDb.transaction(async (conn) => {
+      await conn.query(updateItemSql, [
+        totalEntradas,
+        totalSalidas,
+        lote,
+        anio,
+        item,
+      ]);
+      await conn.query(updateSemSql, [
+        totalEntradas,
+        totalSalidas,
+        lote,
+        anio,
+        item,
+      ]);
+    });
   }
 }
