@@ -14,8 +14,6 @@ export class SiembraPartidasRepository extends BaseRepository<SiembraPartidas> {
     return this.model.create({
       data: {
         ...data,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     });
   }
