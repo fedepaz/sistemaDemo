@@ -27,6 +27,19 @@ export class PartidasRepository {
     return rows[0];
   }
 
+  async findByComposite(
+    partida: number,
+    ano: number,
+    indice: number,
+  ): Promise<LegacyPartidas | null> {
+    const rows = await this.legacyDb.query<LegacyPartidas[]>(
+      'SELECT * FROM partidas WHERE partida = ? AND ano = ? AND indice = ?',
+      [partida, ano, indice],
+    );
+    if (!rows.length) return null;
+    return rows[0];
+  }
+
   async findByFecha(fecha: string): Promise<LegacyPartidas[]> {
     const rows = await this.legacyDb.query<LegacyPartidas[]>(
       'SELECT * FROM partidas WHERE fecha = ?',

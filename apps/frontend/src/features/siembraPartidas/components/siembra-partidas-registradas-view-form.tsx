@@ -1,12 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SiembraPartidaDto } from "@vivero/shared";
 import {
   Package,
   Hash,
   Activity,
   Cog,
-  User,
   FlaskConical,
+  Calendar,
+  Layers,
+  Clock,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -107,34 +111,174 @@ export function SiembraPartidasRegistradasViewForm({
         </div>
       </div>
 
-      {/* DATA CONTENT */}
-      <div className="flex-1 overflow-y-auto no-scrollbar pb-2">
-        <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-          <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
-            <InfoRow
-              icon={FlaskConical}
-              label="Mezcla"
-              value={selectedPartida.mezclaNombre}
-              className="border-primary/5"
-            />
-            <InfoRow
-              icon={Activity}
-              label="Profundidad"
-              value={`${selectedPartida.profundidadSemilla} cm`}
-            />
-            <InfoRow
-              icon={Package}
-              label="Tratamiento"
-              value={selectedPartida.tratamientoSemilla || "-"}
-            />
-            <InfoRow
-              icon={User}
-              label="Usuario"
-              value={selectedPartida.usuarioNombre}
-            />
-          </CardContent>
-        </Card>
-      </div>
+      {/* TABBED NAVIGATION */}
+      <Tabs
+        defaultValue="siembra"
+        className="flex-1 flex flex-col overflow-hidden min-h-0"
+      >
+        <TabsList className="grid grid-cols-3 bg-muted/80 p-1 rounded-xl md:rounded-2xl shrink-0 h-10 md:h-14 border border-border/40 gap-1 md:gap-2 shadow-inner">
+          <TabsTrigger
+            value="siembra"
+            className="rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
+                       data-[state=inactive]:text-muted-foreground"
+          >
+            <FlaskConical className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 md:mr-2 hidden sm:inline-block" />
+            Siembra
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="lote"
+            className="rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
+                       data-[state=inactive]:text-muted-foreground"
+          >
+            <Layers className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 md:mr-2 hidden sm:inline-block" />
+            Lote
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="turno"
+            className="rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+                       data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
+                       data-[state=inactive]:text-muted-foreground"
+          >
+            <Clock className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 md:mr-2 hidden sm:inline-block" />
+            Turno
+          </TabsTrigger>
+        </TabsList>
+
+        <div className="flex-1 overflow-y-auto no-scrollbar pt-3 md:pt-6 pb-2">
+          {/* TAB: SIEMBRA */}
+          <TabsContent
+            value="siembra"
+            className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
+              <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
+                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
+                  <InfoRow
+                    icon={FlaskConical}
+                    label="Mezcla"
+                    value={selectedPartida.mezclaNombre}
+                    className="border-primary/5"
+                  />
+                  <InfoRow
+                    icon={Activity}
+                    label="Profundidad"
+                    value={`${selectedPartida.profundidadSemilla} cm`}
+                  />
+                  <InfoRow
+                    icon={Package}
+                    label="Tratamiento"
+                    value={selectedPartida.tratamientoNombre || selectedPartida.tratamientoSemilla || "-"}
+                  />
+                  <InfoRow
+                    icon={Hash}
+                    label="Cámara Germinación"
+                    value={selectedPartida.cg}
+                  />
+                  <InfoRow
+                    icon={Hash}
+                    label="Cantidad Contenedor"
+                    value={selectedPartida.cantidaNroCont}
+                  />
+                  <InfoRow
+                    icon={Calendar}
+                    label="Fecha Siembra"
+                    value={selectedPartida.fSiembra}
+                  />
+                  <InfoRow
+                    icon={ClipboardList}
+                    label="Detalle Extendido"
+                    value={selectedPartida.detalleExtendido}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* TAB: LOTE */}
+          <TabsContent
+            value="lote"
+            className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
+              <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
+                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
+                  <InfoRow
+                    icon={Layers}
+                    label="Lote"
+                    value={selectedPartida.lote}
+                  />
+                  <InfoRow
+                    icon={Hash}
+                    label="Año Lote"
+                    value={selectedPartida.anoLote}
+                  />
+                  <InfoRow
+                    icon={Hash}
+                    label="Item"
+                    value={selectedPartida.item}
+                  />
+                  <InfoRow
+                    icon={Activity}
+                    label="Semillas/gr"
+                    value={selectedPartida.semxgr}
+                  />
+                  <InfoRow
+                    icon={ClipboardList}
+                    label="Ajuste"
+                    value={selectedPartida.ajuste}
+                  />
+                  <InfoRow
+                    icon={Package}
+                    label="Cantidad (gr)"
+                    value={selectedPartida.cantidadGrs}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* TAB: TURNO */}
+          <TabsContent
+            value="turno"
+            className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
+              <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
+                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
+                  <InfoRow
+                    icon={ClipboardList}
+                    label="Entidad"
+                    value={selectedPartida.entityNombre}
+                  />
+                  <InfoRow
+                    icon={Clock}
+                    label="Hora Inicio"
+                    value={selectedPartida.startTime}
+                  />
+                  <InfoRow
+                    icon={Clock}
+                    label="Hora Fin"
+                    value={selectedPartida.endTime}
+                  />
+                  <InfoRow
+                    icon={Package}
+                    label="Empleados"
+                    value={
+                      selectedPartida.empleados?.length
+                        ? selectedPartida.empleados.map((e) => e.username).join(", ")
+                        : "-"
+                    }
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </div>
+      </Tabs>
     </div>
   );
 }

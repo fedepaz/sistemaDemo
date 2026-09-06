@@ -28,6 +28,28 @@ export const SiembraPartidaSchema = PartidaHeaderSchema.extend({
   userId: requiredCuid("El usuario"),
   mezclaNombre: z.string(),
   usuarioNombre: z.string(),
+  // Legacy siembra fields
+  cg: z.number().optional(),
+  fSiembra: z.string().optional(),
+  lote: z.number().optional(),
+  anoLote: z.number().optional(),
+  item: z.number().optional(),
+  semxgr: z.number().optional(),
+  ajuste: z.string().optional(),
+  cantidadGrs: z.number().optional(),
+  cantidaNroCont: z.number().optional(),
+  detalleExtendido: z.string().optional(),
+  // Resolved names
+  tratamientoNombre: z.string().optional(),
+  // Task shift fields
+  entityId: z.string().optional(),
+  entityNombre: z.string().optional(),
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
+  empleados: z.array(z.object({
+    userId: z.string(),
+    username: z.string(),
+  })).optional(),
 });
 
 export type SiembraPartidaDto = z.infer<typeof SiembraPartidaSchema>;

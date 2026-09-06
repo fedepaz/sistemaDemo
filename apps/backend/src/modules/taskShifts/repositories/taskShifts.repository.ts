@@ -60,6 +60,23 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
     });
   }
 
+  async findByPartidaComposite(
+    partidaId: number,
+    anio: number,
+    indice: number,
+  ): Promise<TaskShiftWithEmployees | null> {
+    return this.prisma.taskShift.findFirst({
+      where: {
+        partidaId,
+        anio,
+        indice,
+        deletedAt: null,
+        isActive: true,
+      },
+      include: { employees: { select: { userId: true } } },
+    });
+  }
+
   async createWithEmployees(
     data: {
       createdByUserId: string;
