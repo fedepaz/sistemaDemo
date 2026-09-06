@@ -182,7 +182,7 @@ export class SiembraPartidasService {
     if (!siembraPartida)
       throw new NotFoundException('SiembraPartida not found');
 
-    const row = siembraPartida as SiembraPartidasWithRelations;
+    const row = siembraPartida;
     const [legacyData, taskShift] = await Promise.all([
       this.partidasRepo.findByComposite(row.partidaId, row.anio, row.indice),
       this.taskShiftsRepo.findByPartidaComposite(

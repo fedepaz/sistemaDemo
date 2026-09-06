@@ -55,4 +55,24 @@ export class SiembraPartidasRepository extends BaseRepository<SiembraPartidas> {
       },
     });
   }
+
+  override async findById(
+    id: string,
+    _requesterId: string,
+  ): Promise<SiembraPartidasWithRelations | null> {
+    return this.prisma.siembraPartidas.findFirst({
+      where: { id },
+      include: {
+        mezcla: {
+          include: {
+            sustrato1: { select: { nombre: true } },
+            sustrato2: { select: { nombre: true } },
+            sustrato3: { select: { nombre: true } },
+            sustrato4: { select: { nombre: true } },
+          },
+        },
+        user: { select: { username: true } },
+      },
+    });
+  }
 }
