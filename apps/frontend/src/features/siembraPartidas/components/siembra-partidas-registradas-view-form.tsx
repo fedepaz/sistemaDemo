@@ -13,6 +13,7 @@ import {
   ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatShortDate, utcToLocalTime } from "@/lib/date-utils";
 
 interface SiembraPartidasRegistradasViewFormProps {
   selectedPartida: SiembraPartidaDto;
@@ -186,7 +187,7 @@ export function SiembraPartidasRegistradasViewForm({
                   <InfoRow
                     icon={Calendar}
                     label="Fecha Siembra"
-                    value={selectedPartida.fSiembra}
+                    value={formatShortDate(selectedPartida.fSiembra)}
                   />
                   <InfoRow
                     icon={ClipboardList}
@@ -257,12 +258,12 @@ export function SiembraPartidasRegistradasViewForm({
                   <InfoRow
                     icon={Clock}
                     label="Hora Inicio"
-                    value={selectedPartida.startTime}
+                    value={utcToLocalTime(selectedPartida.startTime)}
                   />
                   <InfoRow
                     icon={Clock}
                     label="Hora Fin"
-                    value={selectedPartida.endTime}
+                    value={utcToLocalTime(selectedPartida.endTime)}
                   />
                   <InfoRow
                     icon={Package}

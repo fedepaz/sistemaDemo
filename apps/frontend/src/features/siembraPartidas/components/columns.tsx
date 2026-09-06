@@ -2,6 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { SortableHeader } from "@/components/data-display/data-table";
+import { Badge } from "@/components/ui/badge";
+import { formatShortDate } from "@/lib/date-utils";
 import { SiembraPartidaDto } from "@vivero/shared";
 import type { ExportColumn } from "@/lib/export/types";
 
@@ -13,57 +15,67 @@ export const siembraPartidasRegistradasColumns: ColumnDef<SiembraPartidaDto>[] =
         <SortableHeader column={column}>Partida</SortableHeader>
       ),
       cell: ({ row }) => (
-        <div className="font-black text-sm text-foreground/80 tracking-tight">
-          #{row.original.partidaId}
-          {row.original.indice !== 0 && `/ ${row.original.indice}`}
+        <div className="flex items-center gap-2">
+          <span className="font-black text-sm text-foreground/80 tracking-tight">
+            #{row.original.partidaId}
+          </span>
+          <span className="text-[9px] font-bold text-muted-foreground">
+            / {row.original.indice}
+          </span>
         </div>
+      ),
+      size: 80,
+    },
+    {
+      accessorKey: "lote",
+      header: ({ column }) => (
+        <SortableHeader column={column}>Lote</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <Badge
+          variant="secondary"
+          className="font-mono text-xs font-bold px-2 py-0.5"
+        >
+          {row.original.lote}
+        </Badge>
       ),
       size: 70,
     },
     {
-      accessorKey: "anio",
+      accessorKey: "cg",
       header: ({ column }) => (
-        <SortableHeader column={column}>Año</SortableHeader>
+        <SortableHeader column={column}>Cámara</SortableHeader>
       ),
       cell: ({ row }) => (
-        <span className="font-mono font-bold text-sm">{row.original.anio}</span>
+        <span className="font-mono font-bold text-sm text-muted-foreground">
+          {row.original.cg || "-"}
+        </span>
       ),
       size: 60,
     },
     {
-      accessorKey: "presionSemilla",
+      accessorKey: "cantidaNroCont",
       header: ({ column }) => (
-        <SortableHeader column={column}>Presión (PSI)</SortableHeader>
+        <SortableHeader column={column}>Cant.</SortableHeader>
       ),
       cell: ({ row }) => (
-        <span className="font-mono font-bold text-sm tabular-nums">
-          {row.original.presionSemilla}
+        <span className="font-mono font-bold text-sm text-muted-foreground">
+          {row.original.cantidaNroCont || "-"}
         </span>
       ),
       size: 90,
     },
     {
-      accessorKey: "profundidadSemilla",
+      accessorKey: "fSiembra",
       header: ({ column }) => (
-        <SortableHeader column={column}>Profundidad (cm)</SortableHeader>
+        <SortableHeader column={column}>F. Siembra</SortableHeader>
       ),
       cell: ({ row }) => (
-        <span className="font-mono font-bold text-sm tabular-nums">
-          {row.original.profundidadSemilla}
+        <span className="font-mono text-xs text-muted-foreground">
+          {formatShortDate(row.original.fSiembra)}
         </span>
       ),
-      size: 110,
-    },
-    {
-      accessorKey: "mezclaNombre",
-      header: ({ column }) => (
-        <SortableHeader column={column}>Mezcla</SortableHeader>
-      ),
-      cell: ({ row }) => (
-        <span className="text-sm font-semibold">
-          {row.original.mezclaNombre}
-        </span>
-      ),
+      size: 90,
     },
     {
       accessorKey: "usuarioNombre",
@@ -72,7 +84,7 @@ export const siembraPartidasRegistradasColumns: ColumnDef<SiembraPartidaDto>[] =
       ),
       cell: ({ row }) => (
         <span className="text-sm font-semibold">
-          {row.original.usuarioNombre}
+          {row.original.usuarioNombre || "-"}
         </span>
       ),
     },
@@ -84,23 +96,24 @@ export const siembraPartidasRegistradasExportColumns: ExportColumn<SiembraPartid
       accessorKey: "partidaId",
       exportHeader: "Partida",
       exportValue: (_value, row) => `${row.partidaId}/${row.indice}`,
+      pdfWidth: "15%",
+    },
+    { accessorKey: "lote", exportHeader: "Lote", pdfWidth: "12%" },
+    { accessorKey: "cg", exportHeader: "CG", pdfWidth: "10%" },
+    {
+      accessorKey: "cantidaNroCont",
+      exportHeader: "Cant. Cont.",
       pdfWidth: "12%",
     },
-    { accessorKey: "anio", exportHeader: "Año", pdfWidth: "8%" },
     {
-      accessorKey: "presionSemilla",
-      exportHeader: "Presión (PSI)",
-      pdfWidth: "12%",
+      accessorKey: "fSiembra",
+      exportHeader: "F. Siembra",
+      exportValue: (value) => formatShortDate(value as string),
+      pdfWidth: "18%",
     },
-    {
-      accessorKey: "profundidadSemilla",
-      exportHeader: "Profundidad (cm)",
-      pdfWidth: "14%",
-    },
-    { accessorKey: "mezclaNombre", exportHeader: "Mezcla", pdfWidth: "28%" },
     {
       accessorKey: "usuarioNombre",
       exportHeader: "Usuario",
-      pdfWidth: "16%",
+      pdfWidth: "25%",
     },
   ];
