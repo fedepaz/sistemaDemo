@@ -9,6 +9,7 @@ export const ROUTES = {
   ENTITIES: "/entities",
   EXTENDIDOS: "/extendidos",
   SIEMBRA: "/siembra",
+  SIEMBRA_PARTIDAS_REGISTRADAS: "/siembra/partidas-registradas",
   SUSTRATOS: "/sustratos",
   MEZCLAS: "/mezclas",
 } as const;

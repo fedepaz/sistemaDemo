@@ -1,9 +1,11 @@
 // src/modules/siembraPartidas/siembraPartidas.service.ts
 
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { SiembraPartidasRepository } from './repositories/siembraPartidas.repository';
+import {
+  SiembraPartidasRepository,
+  SiembraPartidasWithRelations,
+} from './repositories/siembraPartidas.repository';
 import { CreateSiembraPartidaDto, SiembraPartidaDto } from '@vivero/shared';
-import { SiembraPartidas } from '../../generated/prisma/client';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 
 const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
@@ -39,7 +41,26 @@ export class SiembraPartidasService {
     return mezcla.id;
   }
 
-  private mapToDto(row: SiembraPartidas): SiembraPartidaDto {
+  private buildMezclaNombre(
+    mezcla: SiembraPartidasWithRelations['mezcla'],
+  ): string {
+    const parts: string[] = [];
+    if (mezcla.sustrato1 && mezcla.porcentaje1 != null) {
+      parts.push(`${mezcla.sustrato1.nombre} (${mezcla.porcentaje1}%)`);
+    }
+    if (mezcla.sustrato2 && mezcla.porcentaje2 != null) {
+      parts.push(`${mezcla.sustrato2.nombre} (${mezcla.porcentaje2}%)`);
+    }
+    if (mezcla.sustrato3 && mezcla.porcentaje3 != null) {
+      parts.push(`${mezcla.sustrato3.nombre} (${mezcla.porcentaje3}%)`);
+    }
+    if (mezcla.sustrato4 && mezcla.porcentaje4 != null) {
+      parts.push(`${mezcla.sustrato4.nombre} (${mezcla.porcentaje4}%)`);
+    }
+    return parts.length > 0 ? parts.join(' + ') : 'Sin mezcla';
+  }
+
+  private mapToDto(row: SiembraPartidasWithRelations): SiembraPartidaDto {
     return {
       id: row.id,
       partidaId: row.partidaId,
@@ -51,6 +72,8 @@ export class SiembraPartidasService {
       tratamientoSemilla: row.tratamientoSemilla,
       mezclaId: row.mezclaId,
       userId: row.userId,
+      mezclaNombre: this.buildMezclaNombre(row.mezcla),
+      usuarioNombre: row.user.username,
     };
   }
 
@@ -68,7 +91,7 @@ export class SiembraPartidasService {
     const siembraPartida = await this.repo.findById(id, requesterId);
     if (!siembraPartida)
       throw new NotFoundException('SiembraPartida not found');
-    return this.mapToDto(siembraPartida);
+    return this.mapToDto(siembraPartida as SiembraPartidasWithRelations);
   }
 
   async createSiembraPartida(
@@ -96,6 +119,9 @@ export class SiembraPartidasService {
         },
       },
     });
-    return this.mapToDto(row);
+
+    // Re-fetch with relations for DTO mapping
+    const full = await this.repo.findById(row.id, requesterId);
+    return this.mapToDto(full as SiembraPartidasWithRelations);
   }
 }

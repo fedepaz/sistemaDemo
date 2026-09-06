@@ -26,6 +26,8 @@ export const SiembraPartidaSchema = PartidaHeaderSchema.extend({
   }).min(1, { message: "El tratamiento de semilla es requerido" }),
   mezclaId: requiredCuid("La mezcla"),
   userId: requiredCuid("El usuario"),
+  mezclaNombre: z.string(),
+  usuarioNombre: z.string(),
 });
 
 export type SiembraPartidaDto = z.infer<typeof SiembraPartidaSchema>;
