@@ -39,6 +39,13 @@ export const SiembraPartidaSchema = PartidaHeaderSchema.extend({
   cantidadGrs: z.number().optional(),
   cantidaNroCont: z.number().optional(),
   detalleExtendido: z.string().optional(),
+  // Stock traceability
+  stockLote: z.number().optional(),
+  stockAnio: z.number().optional(),
+  stockEntradasAntes: z.number().optional(),
+  stockSalidasAntes: z.number().optional(),
+  stockEntradasDespues: z.number().optional(),
+  stockSalidasDespues: z.number().optional(),
   // Resolved names
   tratamientoNombre: z.string().optional(),
   // Task shift fields
@@ -68,6 +75,13 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
     message: "El tratamiento de semilla es requerido",
   }).min(1, { message: "El tratamiento de semilla es requerido" }),
   mezclaId: cuidSchema.optional(),
+  // Stock traceability
+  stockLote: z.number().optional(),
+  stockAnio: z.number().optional(),
+  stockEntradasAntes: z.number().optional(),
+  stockSalidasAntes: z.number().optional(),
+  stockEntradasDespues: z.number().optional(),
+  stockSalidasDespues: z.number().optional(),
 });
 
 export type CreateSiembraPartidaDto = z.infer<

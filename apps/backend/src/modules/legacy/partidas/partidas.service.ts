@@ -132,15 +132,25 @@ export class PartidasService {
     }
 
     await this.prisma.$transaction(async () => {
-      await this.legacyStockService.updateStock(
+      const stockSnapshot = await this.legacyStockService.updateStock(
         data.lote,
         data.anio,
         data.item,
       );
+
       await this.siembraPartidaService.createSiembraPartida(
-        newSiembraData,
+        {
+          ...newSiembraData,
+          stockLote: data.lote,
+          stockAnio: data.anio,
+          stockEntradasAntes: stockSnapshot.entradasAntes,
+          stockSalidasAntes: stockSnapshot.salidasAntes,
+          stockEntradasDespues: stockSnapshot.entradasDespues,
+          stockSalidasDespues: stockSnapshot.salidasDespues,
+        },
         requesterId,
       );
+
       await this.partidasRepository.asignarSiembra(legacyData);
 
       if (data.startTime && data.endTime) {

@@ -137,6 +137,21 @@ export class SiembraPartidasService {
       cantidadGrs: legacyData?.cantidad,
       cantidaNroCont: legacyData?.con,
       detalleExtendido: legacyData?.extendido || undefined,
+      // Stock traceability
+      stockLote: row.stockLote ?? undefined,
+      stockAnio: row.stockAnio ?? undefined,
+      stockEntradasAntes: row.stockEntradasAntes
+        ? Number(row.stockEntradasAntes)
+        : undefined,
+      stockSalidasAntes: row.stockSalidasAntes
+        ? Number(row.stockSalidasAntes)
+        : undefined,
+      stockEntradasDespues: row.stockEntradasDespues
+        ? Number(row.stockEntradasDespues)
+        : undefined,
+      stockSalidasDespues: row.stockSalidasDespues
+        ? Number(row.stockSalidasDespues)
+        : undefined,
       // Resolved names
       tratamientoNombre,
       // Task shift fields
@@ -209,6 +224,12 @@ export class SiembraPartidasService {
       presionSemilla: data.presionSemilla,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
+      stockLote: data.stockLote,
+      stockAnio: data.stockAnio,
+      stockEntradasAntes: data.stockEntradasAntes,
+      stockSalidasAntes: data.stockSalidasAntes,
+      stockEntradasDespues: data.stockEntradasDespues,
+      stockSalidasDespues: data.stockSalidasDespues,
       mezcla: {
         connect: {
           id: mezclaId,

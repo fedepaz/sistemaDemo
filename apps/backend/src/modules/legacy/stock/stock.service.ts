@@ -2,7 +2,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { StockRepository } from './repositories/stock.repository';
-import { StockTotal } from './interfaces/stock.interface';
+import { StockSnapshot, StockTotal } from './interfaces/stock.interface';
 
 @Injectable()
 export class LegacyStockService {
@@ -16,7 +16,11 @@ export class LegacyStockService {
     return this.repository.stockTotal(lote, anio, item);
   }
 
-  async updateStock(lote: number, anio: number, item: number): Promise<void> {
+  async updateStock(
+    lote: number,
+    anio: number,
+    item: number,
+  ): Promise<StockSnapshot> {
     return this.repository.updateStock(lote, anio, item);
   }
 }

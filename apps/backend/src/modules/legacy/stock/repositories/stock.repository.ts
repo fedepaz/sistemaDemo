@@ -2,7 +2,7 @@
 
 import { Inject, Injectable } from '@nestjs/common';
 import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
-import { StockTotal } from '../interfaces/stock.interface';
+import { StockSnapshot, StockTotal } from '../interfaces/stock.interface';
 
 @Injectable()
 export class StockRepository {
@@ -44,29 +44,49 @@ export class StockRepository {
     ]);
   }
 
-  async updateStock(lote: number, anio: number, item: number): Promise<void> {
-    const StockTotal = await this.stockTotal(lote, anio, item);
-    const totalEntradas = StockTotal[0].total_entradas;
-    const totalSalidas = StockTotal[0].total_salidas;
+  async updateStock(
+    lote: number,
+    anio: number,
+    item: number,
+  ): Promise<StockSnapshot> {
+    const stockTotal = await this.stockTotal(lote, anio, item);
+    const entradasAntes = Number(stockTotal[0].total_entradas);
+    const salidasAntes = Number(stockTotal[0].total_salidas);
+
+    const entradasDespues = entradasAntes;
+    const salidasDespues = salidasAntes;
+
     const updateItemSql = `
-        UPDATE st_sem_item 
-        SET entrada = ?, salida = ? 
+        UPDATE st_sem_item
+        SET entrada = ?, salida = ?
         WHERE lote = ? AND ano = ? AND item = ?
       `;
     const updateSemSql = `
-          UPDATE st_sem 
-          SET entrada = ?, salida = ? 
+          UPDATE st_sem
+          SET entrada = ?, salida = ?
           WHERE lote = ? AND ano = ?
         `;
     await this.legacyDb.transaction(async (conn) => {
       await conn.query(updateItemSql, [
-        totalEntradas,
-        totalSalidas,
+        entradasDespues,
+        salidasDespues,
         lote,
         anio,
         item,
       ]);
-      await conn.query(updateSemSql, [totalEntradas, totalSalidas, lote, anio]);
+      await conn.query(updateSemSql, [
+        entradasDespues,
+        salidasDespues,
+        lote,
+        anio,
+      ]);
     });
+
+    return {
+      entradasAntes,
+      salidasAntes,
+      entradasDespues,
+      salidasDespues,
+    };
   }
 }
