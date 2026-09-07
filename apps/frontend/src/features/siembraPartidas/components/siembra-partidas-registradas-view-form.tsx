@@ -77,20 +77,10 @@ export function SiembraPartidasRegistradasViewForm({
         </div>
 
         {/* SPECS GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2  gap-2">
           {[
             { label: "Año", value: selectedPartida.anio, icon: Hash },
             { label: "Índice", value: selectedPartida.indice, icon: Hash },
-            {
-              label: "Método",
-              value: selectedPartida.metodoMaquina ? "Máquina" : "Manual",
-              icon: Cog,
-            },
-            {
-              label: "Presión",
-              value: `${selectedPartida.presionSemilla} PSI`,
-              icon: Activity,
-            },
           ].map((item, idx) => (
             <div
               key={idx}
@@ -157,12 +147,24 @@ export function SiembraPartidasRegistradasViewForm({
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
-                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
+                <div className="grid grid-cols-2 gap-0.5 md:gap-1">
+                  {/* until we implement mezcla
                   <InfoRow
                     icon={FlaskConical}
                     label="Mezcla"
                     value={selectedPartida.mezclaNombre}
                     className="border-primary/5"
+                  />
+                  */}
+                  <InfoRow
+                    icon={Activity}
+                    label="Método"
+                    value={`${selectedPartida.metodoMaquina ? "MÁQUINA" : "MANUAL"}`}
+                  />
+                  <InfoRow
+                    icon={Activity}
+                    label="Presion"
+                    value={`${selectedPartida.presionSemilla} PSI`}
                   />
                   <InfoRow
                     icon={Activity}
@@ -193,6 +195,8 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Fecha Siembra"
                     value={formatShortDate(selectedPartida.fSiembra)}
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-0.5 md:gap-1">
                   <InfoRow
                     icon={ClipboardList}
                     label="Detalle Extendido"

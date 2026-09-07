@@ -12,6 +12,7 @@ import {
   Calendar,
   Gauge,
   Ruler,
+  TestTubes,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -50,6 +51,7 @@ import { useDepositos } from "@/features/extendidos";
 import { TaskShift } from "@/features/taskshift/components/taskShift";
 
 import { TratamientoSearch } from "./tratamientoSearch";
+import { Label } from "@radix-ui/react-label";
 
 interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -391,7 +393,15 @@ export function SiembraEditForm({
               />
             </div>
 
-            <div className="grid grid-cols-1  gap-4 md:gap-6">
+            <div className="space-y-2 md:space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                  <TestTubes className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                </div>
+                <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  Tratamiento
+                </Label>
+              </div>
               {/* TRATAMIENTO DE SEMILLA */}
               <TratamientoSearch
                 value={tratamientoSemilla ?? ""}
