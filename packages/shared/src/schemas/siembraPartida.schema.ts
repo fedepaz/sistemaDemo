@@ -1,7 +1,7 @@
 // shared/src/schemas/siembraPartida.ts
 
 import { z } from "zod";
-import { PartidaHeaderSchema } from "./legacy-header.schema";
+import { LegacyHeaderSchema, PartidaHeaderSchema } from "./legacy-header.schema";
 import { cuidSchema, requiredCuid } from "./cuid.schema";
 
 const profundidadSemillaRegex = /^\d{1,2}(\.\d{1,3})?$/;
@@ -14,7 +14,7 @@ export const ProfundidadSemillaSchema = z
       "La profundidad debe tener el formato: 1.525 (1-2 dígitos, hasta 3 decimales)",
   });
 
-export const SiembraPartidaSchema = PartidaHeaderSchema.extend({
+export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   id: requiredCuid("El registro de siembra"),
   metodoMaquina: z.boolean({ message: "El método/máquina es requerido" }),
   presionSemilla: z

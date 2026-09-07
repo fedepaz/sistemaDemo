@@ -33,7 +33,10 @@ export class PartidasRepository {
     indice: number,
   ): Promise<LegacyPartidas | null> {
     const rows = await this.legacyDb.query<LegacyPartidas[]>(
-      'SELECT * FROM partidas WHERE partida = ? AND ano = ? AND indice = ?',
+      `SELECT p.*, articulo.nombre AS nombreEspecie
+       FROM partidas p
+       LEFT JOIN articulo ON articulo.codigo = CONCAT(p.espvar, p.contenedor)
+       WHERE p.partida = ? AND p.ano = ? AND p.indice = ?`,
       [partida, ano, indice],
     );
     if (!rows.length) return null;

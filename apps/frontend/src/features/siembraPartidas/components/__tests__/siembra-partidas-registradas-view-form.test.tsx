@@ -7,6 +7,8 @@ const mockPartida: SiembraPartidaDto = {
   partidaId: 456,
   anio: 2025,
   indice: 2,
+  codigoEspecie: "ABCOM",
+  nombreEspecie: "PLA.ALBAHACA COMPACTA M009",
   metodoMaquina: true,
   presionSemilla: 45,
   profundidadSemilla: "1.5",
@@ -47,16 +49,15 @@ describe("SiembraPartidasRegistradasViewForm", () => {
     render(<SiembraPartidasRegistradasViewForm selectedPartida={mockPartida} />);
 
     const matches = screen.getAllByText("Tierra (70%) + Perlita (30%)");
-    expect(matches.length).toBeGreaterThanOrEqual(2);
+    expect(matches.length).toBe(1);
   });
 
-  it("displays specs grid with year, index, method, and pressure", () => {
+  it("displays specs grid with year, index, and especie", () => {
     render(<SiembraPartidasRegistradasViewForm selectedPartida={mockPartida} />);
 
     expect(screen.getByText("2025")).toBeInTheDocument();
     expect(screen.getByText("2")).toBeInTheDocument();
-    expect(screen.getByText("Máquina")).toBeInTheDocument();
-    expect(screen.getByText("45 PSI")).toBeInTheDocument();
+    expect(screen.getByText("PLA.ALBAHACA COMPACTA M009")).toBeInTheDocument();
   });
 
   it("displays siembra tab content by default", () => {

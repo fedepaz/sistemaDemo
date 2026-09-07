@@ -5,12 +5,12 @@ import {
   Package,
   Hash,
   Activity,
-  Cog,
   FlaskConical,
   Calendar,
   Layers,
   Clock,
   ClipboardList,
+  Sprout,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatShortDate, utcToLocalTime } from "@/lib/date-utils";
@@ -81,6 +81,11 @@ export function SiembraPartidasRegistradasViewForm({
           {[
             { label: "Año", value: selectedPartida.anio, icon: Hash },
             { label: "Índice", value: selectedPartida.indice, icon: Hash },
+            {
+              label: "Especie",
+              value: selectedPartida.nombreEspecie,
+              icon: Sprout,
+            },
           ].map((item, idx) => (
             <div
               key={idx}

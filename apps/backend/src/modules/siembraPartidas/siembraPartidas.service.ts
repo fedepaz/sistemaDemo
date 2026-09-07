@@ -1,6 +1,6 @@
 // src/modules/siembraPartidas/siembraPartidas.service.ts
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import {
   SiembraPartidasRepository,
   SiembraPartidasWithRelations,
@@ -16,6 +16,7 @@ const GENERIC_MEZCLA_SUSTRATO1_ID = 'c00000000000000000000001';
 
 @Injectable()
 export class SiembraPartidasService {
+  private readonly logger = new Logger(SiembraPartidasService.name);
   constructor(
     private readonly repo: SiembraPartidasRepository,
     private readonly prisma: PrismaService,
@@ -113,11 +114,21 @@ export class SiembraPartidasService {
       entityNombre = entity?.label;
     }
 
+    // Resolve species info
+    const codigoEspecie = legacyData?.espvar ?? '';
+    let nombreEspecie = legacyData?.nombreEspecie ?? '';
+    if (!nombreEspecie && codigoEspecie) {
+      this.logger.warn(`Articulo not found for codigo: ${codigoEspecie}`);
+      nombreEspecie = 'Sin especificar';
+    }
+
     return {
       id: row.id,
       partidaId: row.partidaId,
       anio: row.anio,
       indice: row.indice,
+      codigoEspecie,
+      nombreEspecie,
       metodoMaquina: row.metodoMaquina,
       presionSemilla: row.presionSemilla,
       profundidadSemilla: row.profundidadSemilla.toString(),

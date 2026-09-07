@@ -63,6 +63,8 @@ describe('SiembraPartidasService', () => {
     partidaId: 100,
     anio: 2026,
     indice: 1,
+    codigoEspecie: '',
+    nombreEspecie: '',
     metodoMaquina: true,
     presionSemilla: 25,
     profundidadSemilla: '1.525',

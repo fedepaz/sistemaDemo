@@ -63,4 +63,5 @@ export interface LegacyPartidas extends RowDataPacket {
   ctr_fecha: string; // puede ser "1" o vacío
   ctr_visto: string;
   ctr_txt: string;
+  nombreEspecie?: string;
 }

@@ -11,6 +11,8 @@ describe("SiembraPartidaSchema", () => {
     partidaId: 100,
     anio: 2026,
     indice: 1,
+    codigoEspecie: "ABCOM",
+    nombreEspecie: "PLA.ALBAHACA COMPACTA M009",
     metodoMaquina: true,
     presionSemilla: 25,
     profundidadSemilla: "1.525",

@@ -15,16 +15,34 @@ export const siembraPartidasRegistradasColumns: ColumnDef<SiembraPartidaDto>[] =
         <SortableHeader column={column}>Partida</SortableHeader>
       ),
       cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <span className="font-black text-sm text-foreground/80 tracking-tight">
-            #{row.original.partidaId}
-          </span>
-          <span className="text-[9px] font-bold text-muted-foreground">
-            / {row.original.indice}
-          </span>
+        <div className="font-black text-sm text-foreground/80 tracking-tight">
+          #{row.original.partidaId}
+          {row.original.indice !== 0 && `/ ${row.original.indice}`}
         </div>
       ),
-      size: 80,
+      size: 70,
+    },
+    {
+      accessorKey: "codigoEspecie",
+      header: ({ column }) => (
+        <SortableHeader column={column}>Código</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <span className="font-mono font-bold text-sm">
+          {row.original.codigoEspecie}
+        </span>
+      ),
+    },
+    {
+      accessorKey: "nombreEspecie",
+      header: ({ column }) => (
+        <SortableHeader column={column}>Especie</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <span className="text-sm font-semibold">
+          {row.original.nombreEspecie}
+        </span>
+      ),
     },
     {
       accessorKey: "lote",
@@ -97,6 +115,13 @@ export const siembraPartidasRegistradasExportColumns: ExportColumn<SiembraPartid
       exportHeader: "Partida",
       exportValue: (_value, row) => `${row.partidaId}/${row.indice}`,
       pdfWidth: "15%",
+    },
+    {
+      accessorKey: "nombreEspecie",
+      exportHeader: "Especie",
+      exportValue: (_value, row) =>
+        `${row.nombreEspecie} (${row.codigoEspecie})`,
+      pdfWidth: "20%",
     },
     { accessorKey: "lote", exportHeader: "Lote", pdfWidth: "12%" },
     { accessorKey: "cg", exportHeader: "CG", pdfWidth: "10%" },
