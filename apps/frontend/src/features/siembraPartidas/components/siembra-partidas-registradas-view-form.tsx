@@ -210,7 +210,7 @@ export function SiembraPartidasRegistradasViewForm({
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
-                <div className="grid grid-cols-1 gap-0.5 md:gap-1">
+                <div className="grid grid-cols-2 gap-0.5 md:gap-1">
                   <InfoRow
                     icon={Layers}
                     label="Lote"
@@ -242,41 +242,26 @@ export function SiembraPartidasRegistradasViewForm({
                     value={selectedPartida.cantidadGrs}
                   />
 
-                  {/* Stock Traceability */}
-                  {selectedPartida.stockLote != null && (
-                    <>
-                      <InfoRow
-                        icon={Layers}
-                        label="Stock Lote"
-                        value={selectedPartida.stockLote}
-                      />
-                      <InfoRow
-                        icon={Hash}
-                        label="Stock Año"
-                        value={selectedPartida.stockAnio}
-                      />
-                      <InfoRow
-                        icon={Activity}
-                        label="Entradas Antes"
-                        value={selectedPartida.stockEntradasAntes}
-                      />
-                      <InfoRow
-                        icon={Activity}
-                        label="Salidas Antes"
-                        value={selectedPartida.stockSalidasAntes}
-                      />
-                      <InfoRow
-                        icon={Activity}
-                        label="Entradas Después"
-                        value={selectedPartida.stockEntradasDespues}
-                      />
-                      <InfoRow
-                        icon={Activity}
-                        label="Salidas Después"
-                        value={selectedPartida.stockSalidasDespues}
-                      />
-                    </>
-                  )}
+                  <InfoRow
+                    icon={Activity}
+                    label="Entradas Antes"
+                    value={selectedPartida.stockEntradasAntes}
+                  />
+                  <InfoRow
+                    icon={Activity}
+                    label="Salidas Antes"
+                    value={selectedPartida.stockSalidasAntes}
+                  />
+                  <InfoRow
+                    icon={Activity}
+                    label="Entradas Después"
+                    value={selectedPartida.stockEntradasDespues}
+                  />
+                  <InfoRow
+                    icon={Activity}
+                    label="Salidas Después"
+                    value={selectedPartida.stockSalidasDespues}
+                  />
                 </div>
               </CardContent>
             </Card>

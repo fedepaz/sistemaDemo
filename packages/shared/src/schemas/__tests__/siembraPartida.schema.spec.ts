@@ -17,6 +17,8 @@ describe("SiembraPartidaSchema", () => {
     tratamientoSemilla: "1",
     mezclaId: "clx1234567890abcdef123467",
     userId: "clx1234567890abcdef123478",
+    mezclaNombre: "Sustrato A (100%)",
+    usuarioNombre: "admin",
   };
 
   it("accepts valid siembra partida", () => {
@@ -27,6 +29,35 @@ describe("SiembraPartidaSchema", () => {
     expect(result.presionSemilla).toBe(25);
     expect(result.profundidadSemilla).toBe("1.525");
     expect(result.tratamientoSemilla).toBe("1");
+  });
+
+  it("accepts stock traceability fields", () => {
+    const withStock = {
+      ...valid,
+      stockLote: 42,
+      stockAnio: 2026,
+      stockEntradasAntes: 1000,
+      stockSalidasAntes: 200,
+      stockEntradasDespues: 1000,
+      stockSalidasDespues: 200,
+    };
+    const result = SiembraPartidaSchema.parse(withStock);
+    expect(result.stockLote).toBe(42);
+    expect(result.stockAnio).toBe(2026);
+    expect(result.stockEntradasAntes).toBe(1000);
+    expect(result.stockSalidasAntes).toBe(200);
+    expect(result.stockEntradasDespues).toBe(1000);
+    expect(result.stockSalidasDespues).toBe(200);
+  });
+
+  it("accepts missing stock traceability fields", () => {
+    const result = SiembraPartidaSchema.parse(valid);
+    expect(result.stockLote).toBeUndefined();
+    expect(result.stockAnio).toBeUndefined();
+    expect(result.stockEntradasAntes).toBeUndefined();
+    expect(result.stockSalidasAntes).toBeUndefined();
+    expect(result.stockEntradasDespues).toBeUndefined();
+    expect(result.stockSalidasDespues).toBeUndefined();
   });
 
   it("rejects missing id", () => {
@@ -104,6 +135,40 @@ describe("CreateSiembraPartidaSchema", () => {
       tratamientoSemilla: "1",
     });
     expect(result.mezclaId).toBeUndefined();
+  });
+
+  it("accepts stock traceability fields", () => {
+    const result = CreateSiembraPartidaSchema.parse({
+      partidaId: 200,
+      anio: 2026,
+      indice: 2,
+      metodoMaquina: false,
+      presionSemilla: 30,
+      profundidadSemilla: "2.000",
+      tratamientoSemilla: "1",
+      stockLote: 42,
+      stockAnio: 2026,
+      stockEntradasAntes: 500,
+      stockSalidasAntes: 100,
+      stockEntradasDespues: 500,
+      stockSalidasDespues: 100,
+    });
+    expect(result.stockLote).toBe(42);
+    expect(result.stockEntradasAntes).toBe(500);
+  });
+
+  it("accepts creation without stock traceability fields", () => {
+    const result = CreateSiembraPartidaSchema.parse({
+      partidaId: 200,
+      anio: 2026,
+      indice: 2,
+      metodoMaquina: false,
+      presionSemilla: 30,
+      profundidadSemilla: "2.000",
+      tratamientoSemilla: "1",
+    });
+    expect(result.stockLote).toBeUndefined();
+    expect(result.stockEntradasAntes).toBeUndefined();
   });
 
   it("rejects missing partidaId", () => {
