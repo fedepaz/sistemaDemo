@@ -172,7 +172,11 @@ export function SiembraPartidasRegistradasViewForm({
                   <InfoRow
                     icon={Package}
                     label="Tratamiento"
-                    value={selectedPartida.tratamientoNombre || selectedPartida.tratamientoSemilla || "-"}
+                    value={
+                      selectedPartida.tratamientoNombre ||
+                      selectedPartida.tratamientoSemilla ||
+                      "-"
+                    }
                   />
                   <InfoRow
                     icon={Hash}
@@ -237,6 +241,42 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Cantidad (gr)"
                     value={selectedPartida.cantidadGrs}
                   />
+
+                  {/* Stock Traceability */}
+                  {selectedPartida.stockLote != null && (
+                    <>
+                      <InfoRow
+                        icon={Layers}
+                        label="Stock Lote"
+                        value={selectedPartida.stockLote}
+                      />
+                      <InfoRow
+                        icon={Hash}
+                        label="Stock Año"
+                        value={selectedPartida.stockAnio}
+                      />
+                      <InfoRow
+                        icon={Activity}
+                        label="Entradas Antes"
+                        value={selectedPartida.stockEntradasAntes}
+                      />
+                      <InfoRow
+                        icon={Activity}
+                        label="Salidas Antes"
+                        value={selectedPartida.stockSalidasAntes}
+                      />
+                      <InfoRow
+                        icon={Activity}
+                        label="Entradas Después"
+                        value={selectedPartida.stockEntradasDespues}
+                      />
+                      <InfoRow
+                        icon={Activity}
+                        label="Salidas Después"
+                        value={selectedPartida.stockSalidasDespues}
+                      />
+                    </>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -270,7 +310,9 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Empleados"
                     value={
                       selectedPartida.empleados?.length
-                        ? selectedPartida.empleados.map((e) => e.username).join(", ")
+                        ? selectedPartida.empleados
+                            .map((e) => e.username)
+                            .join(", ")
                         : "-"
                     }
                   />
