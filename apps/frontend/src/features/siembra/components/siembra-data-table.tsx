@@ -105,6 +105,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         onView={handleView}
         onEdit={handleEdit}
         canExecuteLabel="Asignar Ubicación"
+        columnLabels={fieldLabels.SiembraLegacy}
       />
 
       {selectedPartida && (

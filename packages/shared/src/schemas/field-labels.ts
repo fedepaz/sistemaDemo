@@ -107,6 +107,126 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     employeeUserIds: "Empleados",
   },
 
+  // ── Siembra Partidas (data table columns) ─────────────────────────
+  SiembraPartida: {
+    partidaId: "Partida",
+    codigoEspecie: "Código",
+    nombreEspecie: "Especie",
+    lote: "Lote",
+    cg: "Cámara",
+    cantidaNroCont: "Cantidad",
+    fSiembra: "F.Siembra",
+    usuarioNombre: "Usuario",
+    metodoMaquina: "Método",
+    presionSemilla: "Presión",
+    profundidadSemilla: "Profundidad",
+    tratamientoSemilla: "Tratamiento",
+    tratamientoNombre: "Tratamiento",
+    mezclaNombre: "Mezcla",
+    detalleExtendido: "Detalle",
+    stockLote: "Stock Lote",
+    stockAnio: "Stock Año",
+    stockEntradasAntes: "Entradas Antes",
+    stockSalidasAntes: "Salidas Antes",
+    stockEntradasDespues: "Entradas Después",
+    stockSalidasDespues: "Salidas Después",
+    entityId: "Entidad",
+    entityNombre: "Entidad",
+    startTime: "Hora Inicio",
+    endTime: "Hora Fin",
+    empleados: "Empleados",
+  },
+
+  // ── Audit Log (data table columns) ────────────────────────────────
+  AuditLog: {
+    action: "Acción",
+    user: "Usuario",
+    changes: "Cambios",
+    timestamp: "Fecha",
+    ipAddress: "IP",
+    userAgent: "Dispositivo",
+  },
+
+  // ── User (data table columns) ─────────────────────────────────────
+  User: {
+    fullName: "Nombre Completo",
+    email: "Correo Electrónico",
+    status: "Estado",
+    createdAt: "Creado",
+  },
+
+  // ── Entity (data table columns) ───────────────────────────────────
+  Entity: {
+    name: "Nombre",
+    label: "Etiqueta",
+    status: "Estado",
+    permissionType: "Tipo de permiso",
+  },
+
+  // ── Extendidos (data table columns) ───────────────────────────────
+  Extendido: {
+    partidaId: "Partida",
+    codigoEspecie: "Código",
+    nombreEspecie: "Especie",
+    nrocont: "Cantidad",
+    codigoCamaraGerminacion: "Nº de Cámara",
+    fechaSugeridaSiembra: "Siembra Sugerida",
+    fechaSiembraReal: "Siembra Real",
+    fechaEgresoCamara: "Fecha a Extender",
+    diasEnCamara: "Días",
+  },
+
+  // ── Mezclas (data table columns) ──────────────────────────────────
+  Mezcla: {
+    sustrato1Nombre: "Sustrato 1",
+    porcentaje1: "% 1",
+    sustrato2Nombre: "Sustrato 2",
+    porcentaje2: "% 2",
+    sustrato3Nombre: "Sustrato 3",
+    porcentaje3: "% 3",
+    sustrato4Nombre: "Sustrato 4",
+    porcentaje4: "% 4",
+    createdAt: "Fecha de creación",
+  },
+
+  // ── Siembra (data table columns) ──────────────────────────────────
+  SiembraLegacy: {
+    partidaId: "Partida",
+    codigoEspecie: "Código",
+    nombreEspecie: "Especie",
+    propiedad: "P/L",
+    sem_siembra: "Sem Siem",
+    nrocont: "Cantidad",
+    anoLoteLote: "Año/Lote",
+    semxgr: "Gr ",
+    c: "C",
+    g: "G",
+    fechaSugeridaSiembra: "Siembra Sugerida",
+    fechaSiembraReal: "Siembra Real",
+  },
+
+  // ── Alert Columns (shared across alert types) ─────────────────────
+  AlertColumns: {
+    partidaId: "Partida",
+    codigoEspecie: "Código",
+    nombreEspecie: "Especie",
+    nrocont: "Cantidad",
+    propiedad: "Propiedad",
+    fechaSugeridaSiembra: "Siembra Sugerida",
+    semSiembra: "Sem. Siembra",
+    fPrimer: "F. Primer",
+    solicito: "Solicitó",
+    producido: "Producido",
+    diferencia: "Diferencia",
+    fPreexp: "Pre-exp.",
+  },
+
+  // ── Sustratos (data table columns) ────────────────────────────────
+  Sustrato: {
+    nombre: "Nombre",
+    createdAt: "Fecha de creación",
+  },
+
   // ── Task Shift ────────────────────────────────────────────────────
   CreateTaskShiftBase: {
     entityId: "Entidad",

@@ -43,6 +43,7 @@ export function SiembraPartidasRegistradasDataTable({
         totalCount={partidas.length}
         onView={handleView}
         exportColumns={siembraPartidasRegistradasExportColumns}
+        columnLabels={fieldLabels.SiembraPartida}
       />
 
       {selectedPartida && (
