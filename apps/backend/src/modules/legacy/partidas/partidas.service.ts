@@ -79,7 +79,6 @@ export class PartidasService {
       f_siembra: data.f_siembra,
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
-      tratamientoSemilla: data.tratamientoSemilla,
       ajuste: data.ajuste,
       cantidadGrs: data.cantidadGrs,
       lote: data.lote,

@@ -138,7 +138,6 @@ export class PartidasRepository {
     f_siembra: Date;
     cg: number;
     cantidaNroCont: number;
-    tratamientoSemilla: string;
     ajuste: string;
     cantidadGrs: number;
     lote: number;
@@ -151,7 +150,7 @@ export class PartidasRepository {
       const parsedDate = new Date(data.f_siembra);
       const resultC = data.cantidadGrs * data.semxgr;
 
-      const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ?, tratamien = ?, ajuste = ?, cantidad = ? WHERE partida = ? AND ano = ? AND indice = ?`;
+      const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ?, ajuste = ?, cantidad = ? WHERE partida = ? AND ano = ? AND indice = ?`;
       const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE lote = ? AND ano_lote= ? AND item= ?`;
 
       await conn.query(updatePartidasSql, [
@@ -159,7 +158,6 @@ export class PartidasRepository {
         data.cg,
         data.cantidaNroCont,
         data.detalle,
-        data.tratamientoSemilla,
         data.ajuste,
         data.cantidadGrs,
         data.partida,
