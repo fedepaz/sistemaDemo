@@ -131,27 +131,71 @@ export class PartidasService {
     }
 
     await this.prisma.$transaction(async () => {
-      const stockSnapshot = await this.legacyStockService.updateStock(
+      // 1. Read stock BEFORE consumption
+      const stockBefore = await this.legacyStockService.stockTotal(
         data.lote,
         data.anio,
         data.item,
-        requesterId,
+      );
+      const entradasAntes = Number(stockBefore[0]?.total_entradas ?? 0);
+      const salidasAntes = Number(stockBefore[0]?.total_salidas ?? 0);
+
+      // 2. Write consumption to partidas1
+      await this.partidasRepository.asignarSiembra(legacyData);
+
+      // 3. Sync stock summary tables (read AFTER consumption)
+      const stockAfter = await this.legacyStockService.updateStock(
+        data.lote,
+        data.anio,
+        data.item,
       );
 
+      // 4. Store snapshot with real before/after
       await this.siembraPartidaService.createSiembraPartida(
         {
           ...newSiembraData,
           stockLote: data.lote,
           stockAnio: data.anio,
-          stockEntradasAntes: stockSnapshot.entradasAntes,
-          stockSalidasAntes: stockSnapshot.salidasAntes,
-          stockEntradasDespues: stockSnapshot.entradasDespues,
-          stockSalidasDespues: stockSnapshot.salidasDespues,
+          stockEntradasAntes: entradasAntes,
+          stockSalidasAntes: salidasAntes,
+          stockEntradasDespues: stockAfter.entradas,
+          stockSalidasDespues: stockAfter.salidas,
         },
         requesterId,
       );
 
-      await this.partidasRepository.asignarSiembra(legacyData);
+      // 5. Audit stock sync
+      try {
+        this.auditEventEmitter.emitCrud({
+          tenantId: 'unknown',
+          userId: requesterId,
+          action: 'UPDATE',
+          entityType: 'STOCK',
+          entityId: `lote:${data.lote}|anio:${data.anio}|item:${data.item}`,
+          timestamp: new Date(),
+          changes: {
+            requestId: 'unknown',
+            endpoint: '/l-partidas/asignar-siembra',
+            method: 'POST',
+            params: {},
+            query: {},
+            body: {
+              lote: data.lote,
+              anio: data.anio,
+              item: data.item,
+              antes: { entradas: entradasAntes, salidas: salidasAntes },
+              despues: {
+                entradas: stockAfter.entradas,
+                salidas: stockAfter.salidas,
+              },
+            },
+            affected: { count: 1 },
+            durationMs: 0,
+          },
+        });
+      } catch (err: unknown) {
+        this.logger.error({ err }, 'Failed to emit stock audit event');
+      }
 
       if (data.startTime && data.endTime) {
         await this.taskShiftsService.createTaskShift(

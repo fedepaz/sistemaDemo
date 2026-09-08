@@ -2,7 +2,7 @@
 
 import { Inject, Injectable } from '@nestjs/common';
 import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
-import { StockSnapshot, StockTotal } from '../interfaces/stock.interface';
+import { StockTotal } from '../interfaces/stock.interface';
 
 @Injectable()
 export class StockRepository {
@@ -48,13 +48,10 @@ export class StockRepository {
     lote: number,
     anio: number,
     item: number,
-  ): Promise<StockSnapshot> {
+  ): Promise<{ entradas: number; salidas: number }> {
     const stockTotal = await this.stockTotal(lote, anio, item);
-    const entradasAntes = Number(stockTotal[0].total_entradas);
-    const salidasAntes = Number(stockTotal[0].total_salidas);
-
-    const entradasDespues = entradasAntes;
-    const salidasDespues = salidasAntes;
+    const entradas = Number(stockTotal[0].total_entradas);
+    const salidas = Number(stockTotal[0].total_salidas);
 
     const updateItemSql = `
         UPDATE st_sem_item
@@ -67,26 +64,10 @@ export class StockRepository {
           WHERE lote = ? AND ano = ?
         `;
     await this.legacyDb.transaction(async (conn) => {
-      await conn.query(updateItemSql, [
-        entradasDespues,
-        salidasDespues,
-        lote,
-        anio,
-        item,
-      ]);
-      await conn.query(updateSemSql, [
-        entradasDespues,
-        salidasDespues,
-        lote,
-        anio,
-      ]);
+      await conn.query(updateItemSql, [entradas, salidas, lote, anio, item]);
+      await conn.query(updateSemSql, [entradas, salidas, lote, anio]);
     });
 
-    return {
-      entradasAntes,
-      salidasAntes,
-      entradasDespues,
-      salidasDespues,
-    };
+    return { entradas, salidas };
   }
 }
