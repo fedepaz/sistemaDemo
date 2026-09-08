@@ -1,13 +1,14 @@
 // apps/frontend/src/features/extendidos/components/extendidos-view.tsx
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import { ExtendidoDataTable } from "./extendido-data-table";
 import { useExtendidos } from "../hooks/useExtendidosWithFilters";
 import { EmptyState } from "./empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { partidaColumns } from "./columns";
+import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 function ExtendidoList({
   camaraId,
@@ -43,8 +44,8 @@ export function ExtendidoView() {
 
   return (
     <div className="space-y-2">
-      <Suspense
-        fallback={
+      <LoadingBoundary
+        skeleton={
           <DataTableSkeleton
             columnCount={partidaColumns.length}
             toolbarContent={
@@ -57,7 +58,7 @@ export function ExtendidoView() {
         }
       >
         <ExtendidoList camaraId={camaraId} onCamaraChange={setCamaraId} />
-      </Suspense>
+      </LoadingBoundary>
     </div>
   );
 }

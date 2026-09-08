@@ -1,10 +1,10 @@
 "use client";
 
-import { Suspense } from "react";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { siembraPartidasRegistradasColumns } from "./columns";
 import { SiembraPartidasRegistradasDataTable } from "./siembra-partidas-registradas-data-table";
 import { useSiembraPartidasRegistradas } from "../hooks/useSiembraPartidasRegistradas";
+import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 function SiembraPartidasRegistradasList() {
   const { data: partidas } = useSiembraPartidasRegistradas();
@@ -14,15 +14,15 @@ function SiembraPartidasRegistradasList() {
 export function SiembraPartidasRegistradasView() {
   return (
     <div className="space-y-2">
-      <Suspense
-        fallback={
+      <LoadingBoundary
+        skeleton={
           <DataTableSkeleton
             columnCount={siembraPartidasRegistradasColumns.length}
           />
         }
       >
         <SiembraPartidasRegistradasList />
-      </Suspense>
+      </LoadingBoundary>
     </div>
   );
 }

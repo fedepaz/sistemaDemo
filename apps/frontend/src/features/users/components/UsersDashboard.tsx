@@ -2,15 +2,15 @@
 
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Suspense } from "react";
 import { userColumns } from "./columns";
 import { UsersDataTable } from "./user-data-table";
+import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 export function UsersDashboard() {
   return (
     <div className="flex flex-col gap-3">
-      <Suspense
-        fallback={
+      <LoadingBoundary
+        skeleton={
           <DataTableSkeleton
             columnCount={userColumns.length}
             toolbarContent={
@@ -22,7 +22,7 @@ export function UsersDashboard() {
         }
       >
         <UsersDataTable />
-      </Suspense>
+      </LoadingBoundary>
     </div>
   );
 }
