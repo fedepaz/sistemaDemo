@@ -135,6 +135,7 @@ export class PartidasService {
         data.lote,
         data.anio,
         data.item,
+        requesterId,
       );
 
       await this.siembraPartidaService.createSiembraPartida(
