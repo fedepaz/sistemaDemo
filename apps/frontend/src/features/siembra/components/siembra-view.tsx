@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import { EmptyState } from "./empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { partidaSiembraColumns } from "./columns";
 
 import { SiembraDataTable } from "./siembra-data-table";
@@ -32,7 +33,15 @@ export function SiembraView() {
     <div className="space-y-2">
       <Suspense
         fallback={
-          <DataTableSkeleton columnCount={partidaSiembraColumns.length} />
+          <DataTableSkeleton
+            columnCount={partidaSiembraColumns.length}
+            toolbarContent={
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
+                <Skeleton className="h-3 w-3 rounded-full" />
+                <Skeleton className="h-8 rounded-full w-[140px]" />
+              </div>
+            }
+          />
         }
       >
         <SiembraList camaraId="all" />

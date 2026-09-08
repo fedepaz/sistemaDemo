@@ -6,6 +6,7 @@ import { ExtendidoDataTable } from "./extendido-data-table";
 import { useExtendidos } from "../hooks/useExtendidosWithFilters";
 import { EmptyState } from "./empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { partidaColumns } from "./columns";
 
 function ExtendidoList({
@@ -43,7 +44,17 @@ export function ExtendidoView() {
   return (
     <div className="space-y-2">
       <Suspense
-        fallback={<DataTableSkeleton columnCount={partidaColumns.length} />}
+        fallback={
+          <DataTableSkeleton
+            columnCount={partidaColumns.length}
+            toolbarContent={
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
+                <Skeleton className="h-8 rounded-full px-3 w-[70px]" />
+                <Skeleton className="h-8 rounded-full w-[140px]" />
+              </div>
+            }
+          />
+        }
       >
         <ExtendidoList camaraId={camaraId} onCamaraChange={setCamaraId} />
       </Suspense>
