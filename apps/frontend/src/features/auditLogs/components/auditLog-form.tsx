@@ -34,7 +34,8 @@ const getActionBadge = (action: string): string => {
     LOGOUT: "bg-muted text-muted-foreground border-border/40",
     ACCESS: "bg-accent/20 text-accent-foreground border-accent/20",
     LOGIN_FAILED: "bg-destructive/10 text-destructive border-destructive/20",
-    PASSWORD_CHANGE: "bg-secondary/10 text-secondary-foreground border-secondary/20",
+    PASSWORD_CHANGE:
+      "bg-secondary/10 text-secondary-foreground border-secondary/20",
   };
   return colors[action] || "bg-muted text-muted-foreground border-border/40";
 };
@@ -269,7 +270,8 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                 {/* Changes */}
                 <div className="space-y-2 md:space-y-3">
                   <div className="flex items-center gap-2 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary/70">
-                    <Database className="h-3 w-3 md:h-4 md:w-4" /> Registro de Cambios
+                    <Database className="h-3 w-3 md:h-4 md:w-4" /> Registro de
+                    Cambios
                   </div>
                   <div className="p-3 md:p-5 rounded-xl md:rounded-2xl bg-muted/30 border border-border/40">
                     {(() => {
@@ -285,35 +287,42 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                       }
                       return (
                         <div className="space-y-2 md:space-y-3">
-                          {Object.entries(displayChanges).map(([key, value]) => (
-                            <div
-                              key={key}
-                              className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 py-1.5 border-b border-border/30 last:border-0"
-                            >
-                              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[80px] md:min-w-[100px]">
-                                {key}
-                              </span>
-                              <div className="flex-1">
-                                {typeof value === "object" && value !== null && "before" in value && "after" in value ? (
-                                  <div className="flex items-center gap-2 text-xs md:text-sm">
-                                    <span className="text-muted-foreground line-through">
-                                      {String(value.before)}
+                          {Object.entries(displayChanges).map(
+                            ([key, value]) => (
+                              <div
+                                key={key}
+                                className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 py-1.5 border-b border-border/30 last:border-0"
+                              >
+                                <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[80px] md:min-w-[100px]">
+                                  {key}
+                                </span>
+                                <div className="flex-1">
+                                  {typeof value === "object" &&
+                                  value !== null &&
+                                  "before" in value &&
+                                  "after" in value ? (
+                                    <div className="flex items-center gap-2 text-xs md:text-sm">
+                                      <span className="text-muted-foreground line-through">
+                                        {String(value.before)}
+                                      </span>
+                                      <span className="text-muted-foreground">
+                                        →
+                                      </span>
+                                      <span className="font-medium text-foreground">
+                                        {String(value.after)}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <span className="text-xs md:text-sm font-medium text-foreground">
+                                      {typeof value === "object"
+                                        ? JSON.stringify(value, null, 2)
+                                        : String(value)}
                                     </span>
-                                    <span className="text-muted-foreground">→</span>
-                                    <span className="font-medium text-foreground">
-                                      {String(value.after)}
-                                    </span>
-                                  </div>
-                                ) : (
-                                  <span className="text-xs md:text-sm font-medium text-foreground">
-                                    {typeof value === "object"
-                                      ? JSON.stringify(value, null, 2)
-                                      : String(value)}
-                                  </span>
-                                )}
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ),
+                          )}
                         </div>
                       );
                     })()}
@@ -330,7 +339,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6">
-                <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="grid gap-3 md:gap-4">
                   <InfoRow
                     icon={Route}
                     label="Ruta / Endpoint"

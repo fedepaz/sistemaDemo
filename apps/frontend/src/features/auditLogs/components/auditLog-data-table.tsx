@@ -4,7 +4,7 @@
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { auditLogColumns, auditLogExportColumns } from "./columns";
 
-import { AuditLogDto } from "@vivero/shared";
+import { AuditLogDto, fieldLabels } from "@vivero/shared";
 import { useAuditLogs } from "../hooks/auditLogHooks";
 import { useState, useCallback } from "react";
 import { AuditLogForm } from "./auditLog-form";
@@ -33,6 +33,7 @@ export function AuditLogDataTable() {
           totalCount={auditLogs.length}
           onView={handleViewAuditLog}
           exportColumns={auditLogExportColumns}
+          columnLabels={fieldLabels.AuditLog}
         />
         {selectedAuditLog && (
           <SlideOverForm

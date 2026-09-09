@@ -12,6 +12,7 @@ export const SiembraDtoSchema = LegacyHeaderSchema.extend({
   fechaSiembraReal: z.string(), // f_siembra
   lote: z.string(),
   anoLote: z.string(),
+  item: z.number(),
   semxgr: z.string(),
   c: z.string(),
   g: z.string(),

@@ -61,9 +61,16 @@ describe('Siembra (integration)', () => {
           profundidadSemilla: '1.5',
           tratamientoSemilla: '1',
           mezclaId: 'clmocksiembra0000000000000',
+          lote: 272,
+          anoLote: 2026,
+          item: 1,
+          semxgr: 421,
+          ajuste: 'N',
+          cantidadGrs: 22200,
           entityId: 'cltaskshiftpayload0000000',
           startTime: '2026-01-15T08:00:00.000Z',
           endTime: '2026-01-15T17:00:00.000Z',
+          employeeUserIds: [],
         })
         .expect(201);
 

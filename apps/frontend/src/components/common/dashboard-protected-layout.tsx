@@ -6,7 +6,6 @@ import { DatabaseUnavailablePage } from "./database-unavailable";
 import { PendingPermissionsPage } from "./pending-permissions";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { RootDashboardSkeleton } from "@/features/dashboard";
 import { AuthLayoutSkeleton } from "./skeleton/auth-layout-skeleton";
 import { useHydration } from "@/hooks/useHydration";
 
@@ -44,7 +43,7 @@ export function DashboardProtectedLayout({
   }
 
   if (profileLoading) {
-    return <RootDashboardSkeleton />;
+    return <>{children}</>;
   }
 
   if (isDatabaseUnavailable) {
@@ -56,7 +55,7 @@ export function DashboardProtectedLayout({
   }
 
   if (!userProfile) {
-    return <RootDashboardSkeleton />;
+    return <>{children}</>;
   }
   return <>{children}</>;
 }

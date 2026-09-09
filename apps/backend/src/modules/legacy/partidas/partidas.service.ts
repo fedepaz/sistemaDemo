@@ -1,46 +1,29 @@
 // src/modules/legacy/partidas/partidas.service.ts
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PartidasRepository } from './repositories/partidas.repository';
 import {
   AsignarUbiExtendidoDto,
   AsignarUbiSiembraCompletaDto,
 } from '@vivero/shared';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
-
-const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
-const GENERIC_MEZCLA_SUSTRATO1_ID = 'c00000000000000000000001';
-const GENERIC_MEZCLA_ID = 'c00000000000000000000002';
+import { SiembraPartidasService } from '../../siembraPartidas/siembraPartidas.service';
+import { TaskShiftsService } from '../../taskShifts/taskShifts.service';
+import { LegacyStockService } from '../stock/stock.service';
+import { AuditEventEmitter } from '../../auditLog/events/audit-event.emitter';
 
 @Injectable()
 export class PartidasService {
+  private readonly logger = new Logger(PartidasService.name);
+
   constructor(
     private readonly partidasRepository: PartidasRepository,
     private readonly prisma: PrismaService,
+    private readonly siembraPartidaService: SiembraPartidasService,
+    private readonly taskShiftsService: TaskShiftsService,
+    private readonly legacyStockService: LegacyStockService,
+    private readonly auditEventEmitter: AuditEventEmitter,
   ) {}
-
-  private async getOrCreateGenericMezcla(): Promise<string> {
-    const sustrato = await this.prisma.sustratos.upsert({
-      where: { nombre: GENERIC_SUSTRATO_NAME },
-      update: {},
-      create: {
-        id: GENERIC_MEZCLA_SUSTRATO1_ID,
-        nombre: GENERIC_SUSTRATO_NAME,
-      },
-    });
-
-    const mezcla = await this.prisma.mezcla.upsert({
-      where: { id: GENERIC_MEZCLA_ID },
-      update: {},
-      create: {
-        id: GENERIC_MEZCLA_ID,
-        sustrato1Id: sustrato.id,
-        porcentaje1: 100,
-      },
-    });
-
-    return mezcla.id;
-  }
 
   async getAllPartidas() {
     const partidas = await this.partidasRepository.findAll();
@@ -93,14 +76,17 @@ export class PartidasService {
       partida: data.partidaId,
       ano: data.anio,
       indice: data.indice,
+      f_siembra: data.f_siembra,
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
-      f_siembra: data.f_siembra,
-      tratamientoSemilla: data.tratamientoSemilla,
+      ajuste: data.ajuste,
+      cantidadGrs: data.cantidadGrs,
+      lote: data.lote,
+      anoLote: data.anoLote,
+      item: data.item,
+      semxgr: data.semxgr,
       detalle: data.detalleExtendido,
     };
-
-    const mezclaId = data.mezclaId ?? (await this.getOrCreateGenericMezcla());
 
     const newSiembraData = {
       partidaId: data.partidaId,
@@ -110,35 +96,120 @@ export class PartidasService {
       presionSemilla: data.presionSemilla,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
-      mezcla: { connect: { id: mezclaId } },
-      user: { connect: { id: requesterId } },
+      mezclaId: data.mezclaId,
     };
 
+    if (data.lote === 0 || data.anoLote === 0) {
+      this.logger.warn(
+        `Stock update skipped: lote=${data.lote}, anoLote=${data.anoLote}, item=${data.item} — no matching rows in legacy stock tables`,
+      );
+      this.auditEventEmitter.emitCrud({
+        tenantId: 'unknown',
+        userId: requesterId,
+        action: 'UPDATE',
+        entityType: 'SIEMBRA',
+        entityId: `partida:${data.partidaId}|ano:${data.anio}|indice:${data.indice}`,
+        timestamp: new Date(),
+        changes: {
+          requestId: 'unknown',
+          endpoint: '/l-partidas/asignar-siembra',
+          method: 'POST',
+          params: {},
+          query: {},
+          body: {
+            anomaly: 'LOTE_OR_ANO_ZERO',
+            lote: data.lote,
+            anoLote: data.anoLote,
+            item: data.item,
+            message:
+              'Stock update will not match any rows — lote or anoLote is 0',
+          },
+          affected: null,
+          durationMs: 0,
+        },
+      });
+    }
+
     await this.prisma.$transaction(async () => {
-      await this.prisma.siembraPartidas.create({ data: newSiembraData });
+      // 1. Read stock BEFORE consumption
+      const stockBefore = await this.legacyStockService.stockTotal(
+        data.lote,
+        data.anio,
+        data.item,
+      );
+      const entradasAntes = Number(stockBefore[0]?.total_entradas ?? 0);
+      const salidasAntes = Number(stockBefore[0]?.total_salidas ?? 0);
+
+      // 2. Write consumption to partidas1
       await this.partidasRepository.asignarSiembra(legacyData);
 
+      // 3. Sync stock summary tables (read AFTER consumption)
+      const stockAfter = await this.legacyStockService.updateStock(
+        data.lote,
+        data.anio,
+        data.item,
+      );
+
+      // 4. Store snapshot with real before/after
+      await this.siembraPartidaService.createSiembraPartida(
+        {
+          ...newSiembraData,
+          stockLote: data.lote,
+          stockAnio: data.anio,
+          stockEntradasAntes: entradasAntes,
+          stockSalidasAntes: salidasAntes,
+          stockEntradasDespues: stockAfter.entradas,
+          stockSalidasDespues: stockAfter.salidas,
+        },
+        requesterId,
+      );
+
+      // 5. Audit stock sync
+      try {
+        this.auditEventEmitter.emitCrud({
+          tenantId: 'unknown',
+          userId: requesterId,
+          action: 'UPDATE',
+          entityType: 'STOCK',
+          entityId: `lote:${data.lote}|anio:${data.anio}|item:${data.item}`,
+          timestamp: new Date(),
+          changes: {
+            requestId: 'unknown',
+            endpoint: '/l-partidas/asignar-siembra',
+            method: 'POST',
+            params: {},
+            query: {},
+            body: {
+              lote: data.lote,
+              anio: data.anio,
+              item: data.item,
+              antes: { entradas: entradasAntes, salidas: salidasAntes },
+              despues: {
+                entradas: stockAfter.entradas,
+                salidas: stockAfter.salidas,
+              },
+            },
+            affected: { count: 1 },
+            durationMs: 0,
+          },
+        });
+      } catch (err: unknown) {
+        this.logger.error({ err }, 'Failed to emit stock audit event');
+      }
+
       if (data.startTime && data.endTime) {
-        const taskShift = await this.prisma.taskShift.create({
-          data: {
-            createdByUserId: requesterId,
+        await this.taskShiftsService.createTaskShift(
+          {
             entityId: data.entityId,
             partidaId: data.partidaId,
             anio: data.anio,
             indice: data.indice,
             startTime: data.startTime,
             endTime: data.endTime,
+            employeeUserIds: data.employeeUserIds ?? [],
           },
-        });
-
-        if (data.employeeUserIds && data.employeeUserIds.length > 0) {
-          await this.prisma.taskShiftEmployee.createMany({
-            data: data.employeeUserIds.map((userId) => ({
-              taskShiftId: taskShift.id,
-              userId,
-            })),
-          });
-        }
+          requesterId,
+        );
       }
     });
   }

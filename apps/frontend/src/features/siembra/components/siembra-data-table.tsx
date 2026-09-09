@@ -2,7 +2,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 import {
   AsignarUbiSiembraCompletaDto,
@@ -18,6 +18,14 @@ import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
 import { useSiembraMutation } from "../hooks/useSiembraPartidaMutation";
 import { useTableByName } from "@/features/permissions";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CalendarDays } from "lucide-react";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
@@ -29,9 +37,23 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     null,
   );
   const [mode, setMode] = useState<"view" | "edit">("view");
+  const [selectedWeek, setSelectedWeek] = useState("all");
 
   const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
   const { data: entity } = useTableByName("siembra");
+
+  const availableWeeks = useMemo(
+    () => [...new Set(partidas.map((p) => p.sem_siembra))].sort().reverse(),
+    [partidas],
+  );
+
+  const filteredPartidas = useMemo(
+    () =>
+      selectedWeek === "all"
+        ? partidas
+        : partidas.filter((p) => p.sem_siembra === selectedWeek),
+    [partidas, selectedWeek],
+  );
 
   const formAsignarUbicacion = useForm<AsignarUbiSiembraCompletaDto>({
     resolver: zodResolver(AsignarUbiSiembraCompletaDtoSchema),
@@ -47,6 +69,12 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         detalleExtendido: "",
         f_siembra: new Date(),
         edita: "S",
+        lote: parseInt(selectedPartida.lote),
+        anoLote: parseInt(selectedPartida.anoLote),
+        item: selectedPartida.item,
+        semxgr: parseFloat(selectedPartida.semxgr),
+        ajuste: "",
+        cantidadGrs: 0,
         presionSemilla: 0,
         profundidadSemilla: "",
         metodoMaquina: true,
@@ -86,19 +114,42 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     }
   }, []);
 
+  const toolbarContent = (
+    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
+      <CalendarDays className="h-3 w-3 text-muted-foreground" />
+      <Select value={selectedWeek} onValueChange={setSelectedWeek}>
+        <SelectTrigger className="h-8 w-[140px] rounded-full bg-background border-border/40 focus:ring-primary/20 text-[10px] font-bold uppercase tracking-tight">
+          <SelectValue placeholder="Semana" />
+        </SelectTrigger>
+        <SelectContent className="rounded-xl border-border/60 shadow-2xl">
+          <SelectItem value="all" className="font-bold text-primary italic">
+            Todas
+          </SelectItem>
+          {availableWeeks.map((week) => (
+            <SelectItem key={week} value={week} className="font-medium">
+              {week}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+
   return (
     <>
       <DataTable
         columns={partidaSiembraColumns}
-        data={partidas}
+        data={filteredPartidas}
         title="Siembra"
         description="Gestión y monitoreo de bandejas en proceso de siembra"
         tableName="siembra"
-        totalCount={partidas.length}
+        totalCount={filteredPartidas.length}
         exportColumns={partidaSiembraExportColumns}
         onView={handleView}
         onEdit={handleEdit}
         canExecuteLabel="Asignar Ubicación"
+        columnLabels={fieldLabels.SiembraLegacy}
+        toolbarContent={toolbarContent}
       />
 
       {selectedPartida && (
