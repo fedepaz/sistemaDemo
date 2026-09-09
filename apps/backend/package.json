@@ -23,9 +23,10 @@
     "db:migrate": "pnpm prisma migrate deploy",
     "db:backup": "bash scripts/db-backup.sh",
     "db:migrate:dev": "pnpm prisma migrate dev",
-    "db:seed:users": "pnpm ts-node prisma/seed-users.ts",
+    "db:seed:users": "pnpm tsx prisma/seed-users.ts",
     "db:seed:admin": "pnpm tsx prisma/seed-admin.ts",
-    "db:seed:entity": "pnpm ts-node prisma/seed-entity.ts",
+    "db:seed:entity": "pnpm tsx prisma/seed-entity.ts",
+    "db:seed:billboard": "pnpm tsx prisma/seed-billboard.ts",
     "db:status": "pnpm prisma migrate status",
     "db:validate": "pnpm prisma validate",
     "db:studio": "pnpm prisma studio"

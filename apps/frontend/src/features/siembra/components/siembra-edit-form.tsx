@@ -8,8 +8,6 @@ import {
   Activity,
   FileText,
   Warehouse,
-  Pencil,
-  X,
   Wrench,
   Calendar,
   Gauge,
@@ -67,7 +65,6 @@ export function SiembraEditForm({
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
-  const [isEditingQuantity, setIsEditingQuantity] = useState(false);
 
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -84,13 +81,6 @@ export function SiembraEditForm({
     name: "tratamientoSemilla",
     control: form.control,
   });
-
-  const originalNrocont = parseInt(selectedSiembra.nrocont);
-
-  const handleCancelEdit = () => {
-    setIsEditingQuantity(false);
-    form.setValue("cantidaNroCont", originalNrocont);
-  };
 
   useEffect(() => {
     form.setValue("startTime", startTime, {
@@ -228,72 +218,37 @@ export function SiembraEditForm({
                   Bandejas Confirmadas
                 </p>
               </div>
-              {!isEditingQuantity ? (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      onClick={() => setIsEditingQuantity(true)}
-                      className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-bold text-primary hover:text-primary/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
-                    >
-                      <Pencil className="h-3 w-3 md:h-3.5 md:w-3.5" />
-                      Editar
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="top"
-                    className="border border-border shadow-md"
-                  >
-                    <p>Modificar cantidad de bandejas</p>
-                  </TooltipContent>
-                </Tooltip>
-              ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      onClick={handleCancelEdit}
-                      className="min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 text-[10px] md:text-xs font-bold text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md"
-                    >
-                      <X className="h-3 w-3 md:h-3.5 md:w-3.5" />
-                      Cancelar
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="top"
-                    className="border border-border shadow-md"
-                  >
-                    <p>Revertir al valor original</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
+
+              <Tooltip>
+                <TooltipTrigger asChild></TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="border border-border shadow-md"
+                >
+                  <p>Modificar cantidad de bandejas</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
 
-            {isEditingQuantity ? (
-              <FormField
-                control={form.control}
-                name="cantidaNroCont"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        inputMode="numeric"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                        className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
-                        autoFocus
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ) : (
-              <p className="h-12 md:h-16 rounded-xl border border-border/60 bg-muted/50 shadow-sm text-xl md:text-3xl font-black px-4 flex items-center text-foreground/80">
-                {originalNrocont}
-              </p>
-            )}
+            <FormField
+              control={form.control}
+              name="cantidaNroCont"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
+                      autoFocus
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           {/* DATOS DE SIEMBRA */}

@@ -129,6 +129,7 @@ src/
   - Bulk selection + actions.
   - Permission-aware: `PROCESS` types hide row selection when execution is allowed; `READ_ONLY` hides mutations and selection.
   - Descriptive action labels (e.g., "Asignar Ubicación", not "Ejecutar").
+  - Global search bar (optional via `enableSearch` prop, default `true`): real-time client-side filtering with clear button and results count badge.
 - No FAB; the "Nuevo" button in the DataTable toolbar creates entities.
 
 ## Data Export

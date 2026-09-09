@@ -6,27 +6,25 @@ describe("SiembraDtoSchema", () => {
     partidaId: 1,
     anio: 2026,
     indice: 1,
-    hai: "H",
     codigoEspecie: "ESP001",
     nombreEspecie: "Ave del Paraíso",
+    propiedad: "Propiedad A",
     injerto: "Injerto A",
-    contenedor: "Bandeja 288",
+    nrocont: "100",
+    sem_siembra: "S1-2026",
     fechaSugeridaSiembra: "2026-07-15",
     fechaSiembraReal: "2026-07-16",
-    propiedad: "Propiedad A",
-    solicito: "1000",
     lote: "L001",
     anoLote: "2026",
-    ajuste: "5.0",
-    nrocont: "100",
-    extendido: "Extendido",
-    germin: "Germinación A",
+    semxgr: "2",
+    c: "3",
+    g: "4",
   };
 
   it("accepts valid siembra dto", () => {
     const result = SiembraDtoSchema.parse(valid);
     expect(result.partidaId).toBe(1);
-    expect(result.hai).toBe("H");
+    expect(result.sem_siembra).toBe("S1-2026");
     expect(result.fechaSugeridaSiembra).toBe("2026-07-15");
   });
 
@@ -35,8 +33,8 @@ describe("SiembraDtoSchema", () => {
     expect(() => SiembraDtoSchema.parse(withoutPartidaId)).toThrow();
   });
 
-  it("rejects missing hai", () => {
-    const { hai, ...withoutHai } = valid;
-    expect(() => SiembraDtoSchema.parse(withoutHai)).toThrow();
+  it("rejects missing sem_siembra", () => {
+    const { sem_siembra, ...withoutSemSiembra } = valid;
+    expect(() => SiembraDtoSchema.parse(withoutSemSiembra)).toThrow();
   });
 });

@@ -204,11 +204,7 @@ export function ExtendidoDataTable({
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={
-            mode === "view"
-              ? `Partida #${selectedPartida.partidaId}`
-              : `Procesar Extendido #${selectedPartida.partidaId}`
-          }
+          title={`Partida Nº ${selectedPartida.partidaId}`}
           formId="extendido-form"
           mode={mode}
           form={formAsignarUbicacion}
@@ -217,7 +213,8 @@ export function ExtendidoDataTable({
           fieldLabels={fieldLabels.AsignarUbiExtendido}
           confirm={{
             title: "Confirmar extendido",
-            description: "¿Deseas confirmar la asignación de ubicación para este extendido?",
+            description:
+              "¿Deseas confirmar la asignación de ubicación para este extendido?",
             label: "Confirmar Extendido",
           }}
         >
