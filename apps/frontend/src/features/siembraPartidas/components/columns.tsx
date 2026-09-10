@@ -96,6 +96,18 @@ export const siembraPartidasRegistradasColumns: ColumnDef<SiembraPartidaDto>[] =
       size: 90,
     },
     {
+      accessorKey: "createdAt",
+      header: ({ column }) => (
+        <SortableHeader column={column}>Creado</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <span className="font-mono text-xs text-muted-foreground">
+          {formatShortDate(row.original.createdAt)}
+        </span>
+      ),
+      size: 90,
+    },
+    {
       accessorKey: "usuarioNombre",
       header: ({ column }) => (
         <SortableHeader column={column}>Usuario</SortableHeader>

@@ -11,7 +11,8 @@ import {
   fieldLabels,
 } from "@vivero/shared";
 
-import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
+import { ColumnDef } from "@tanstack/react-table";
+import { partidaSiembraExportColumns, getRowBg } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { AutorizarSiembraEditForm } from "./autorizar-siembra-edit-form";
 import { useSiembraAutorizacion } from "../hooks/useSiembraPartidaMutation";
@@ -28,9 +29,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
+  columns: ColumnDef<SiembraDto, unknown>[];
+  aSembrarKeys: Set<string>;
+  registradasKeys: Set<string>;
 }
 
-export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
+export function SiembraDataTable({
+  partidas,
+  columns,
+  aSembrarKeys,
+  registradasKeys,
+}: SiembraDataTableProps) {
   const [slideOverOpen, setSlideOpen] = useState(false);
   const [selectedPartida, setSelectedPartida] = useState<SiembraDto | null>(
     null,
@@ -61,10 +70,18 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
 
   const filteredPartidas = useMemo(
     () =>
-      selectedWeek === "all"
+      (selectedWeek === "all"
         ? partidas
-        : partidas.filter((p) => p.sem_siembra === selectedWeek),
+        : partidas.filter((p) => p.sem_siembra === selectedWeek)
+      ).sort((a, b) =>
+        b.fechaSugeridaSiembra.localeCompare(a.fechaSugeridaSiembra),
+      ),
     [partidas, selectedWeek],
+  );
+
+  const getRowClassName = useCallback(
+    (row: SiembraDto) => getRowBg(row, aSembrarKeys, registradasKeys),
+    [aSembrarKeys, registradasKeys],
   );
 
   const handleView = useCallback((row: SiembraDto) => {
@@ -118,7 +135,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   return (
     <>
       <DataTable
-        columns={partidaSiembraColumns}
+        columns={columns}
         data={filteredPartidas}
         title="Siembra"
         description="Gestión y monitoreo de bandejas en proceso de siembra"
@@ -134,6 +151,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         canExecuteLabel="Autorizar Siembra"
         columnLabels={fieldLabels.SiembraLegacy}
         toolbarContent={toolbarContent}
+        getRowClassName={getRowClassName}
       />
 
       {selectedPartida && (

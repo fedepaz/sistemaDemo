@@ -57,6 +57,7 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
     userId: z.string(),
     username: z.string(),
   })).optional(),
+  createdAt: z.string().optional(),
 });
 
 export type SiembraPartidaDto = z.infer<typeof SiembraPartidaSchema>;

@@ -3,6 +3,7 @@
 "use client";
 
 import { Fragment, memo, ReactNode, useEffect, useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -92,6 +93,7 @@ interface DataTableProps<TData extends Record<string, unknown>, TValue> {
   exportColumns?: ExportColumn<TData>[];
   enableSearch?: boolean;
   columnLabels?: Record<string, string>;
+  getRowClassName?: (row: TData) => string;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -119,6 +121,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
   exportColumns,
   enableSearch = true,
   columnLabels,
+  getRowClassName,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -592,7 +595,10 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                       <Fragment key={row.id}>
                         <TableRow
                           data-state={row.getIsSelected() && "selected"}
-                          className="hover:bg-accent/50 group"
+                          className={cn(
+                            "hover:bg-accent/50 group",
+                            getRowClassName?.(row.original),
+                          )}
                         >
                           {row.getVisibleCells().map((cell) => (
                             <TableCell

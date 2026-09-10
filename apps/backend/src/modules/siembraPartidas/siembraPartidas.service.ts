@@ -181,6 +181,7 @@ export class SiembraPartidasService {
       startTime: taskShift?.startTime?.toISOString(),
       endTime: taskShift?.endTime?.toISOString(),
       empleados,
+      createdAt: row.createdAt.toISOString(),
     };
   }
 

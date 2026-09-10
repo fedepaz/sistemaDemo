@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { SiembraPartidaDto, fieldLabels } from "@vivero/shared";
 import {
   siembraPartidasRegistradasColumns,
@@ -20,6 +20,15 @@ export function SiembraPartidasRegistradasDataTable({
   const [selectedPartida, setSelectedPartida] =
     useState<SiembraPartidaDto | null>(null);
 
+  const sortedPartidas = useMemo(
+    () =>
+      [...partidas].sort(
+        (a, b) =>
+          (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
+      ),
+    [partidas],
+  );
+
   const handleView = useCallback((row: SiembraPartidaDto) => {
     setSelectedPartida(row);
     setSlideOpen(true);
@@ -36,11 +45,11 @@ export function SiembraPartidasRegistradasDataTable({
     <>
       <DataTable
         columns={siembraPartidasRegistradasColumns}
-        data={partidas}
+        data={sortedPartidas}
         title="Partidas Registradas"
         description="Partidas con datos de siembra registrados en el sistema"
         tableName="siembra"
-        totalCount={partidas.length}
+        totalCount={sortedPartidas.length}
         onView={handleView}
         exportColumns={siembraPartidasRegistradasExportColumns}
         columnLabels={fieldLabels.SiembraPartida}

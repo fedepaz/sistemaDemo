@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import {
   AsignarUbiSiembraCompletaDto,
   AsignarUbiSiembraCompletaDtoSchema,
@@ -23,6 +23,14 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
   const [slideOverOpen, setSlideOpen] = useState(false);
   const [selectedPartida, setSelectedPartida] =
     useState<SiembraPartidaDto | null>(null);
+
+  const sortedPartidas = useMemo(
+    () =>
+      [...partidas].sort((a, b) =>
+        (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
+      ),
+    [partidas],
+  );
 
   const { mutateAsync: completarSiembra } = useASembrarMutation();
   const { data: entity } = useTableByName("a_sembrar");
@@ -60,9 +68,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
     [formCompletar, entity],
   );
 
-  const handleCompletar = async (
-    formData: AsignarUbiSiembraCompletaDto,
-  ) => {
+  const handleCompletar = async (formData: AsignarUbiSiembraCompletaDto) => {
     if (selectedPartida) {
       try {
         await completarSiembra({ id: selectedPartida.id, data: formData });
@@ -82,11 +88,11 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
     <>
       <DataTable
         columns={aSembrarColumns}
-        data={partidas}
+        data={sortedPartidas}
         title="A Sembrar"
         description="Partidas autorizadas pendientes de completar siembra"
         tableName="a_sembrar"
-        totalCount={partidas.length}
+        totalCount={sortedPartidas.length}
         exportColumns={aSembrarExportColumns}
         onEdit={handleEdit}
         canExecuteLabel="Completar Siembra"
@@ -105,8 +111,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
           fieldLabels={fieldLabels.ASembrar}
           confirm={{
             title: "Confirmar siembra",
-            description:
-              "¿Deseas confirmar la completación de esta siembra?",
+            description: "¿Deseas confirmar siembra?",
             label: "Completar Siembra",
           }}
         >
