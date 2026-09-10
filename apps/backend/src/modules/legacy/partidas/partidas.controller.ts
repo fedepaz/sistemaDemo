@@ -1,21 +1,27 @@
 // src/modules/legacy/partidas/partidas.controller.ts
 
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { PartidasService } from './partidas.service';
 import {
   AsignarUbiExtendidoDto,
   AsignarUbiExtendidoDtoSchema,
   AsignarUbiSiembraCompletaDto,
   AsignarUbiSiembraCompletaDtoSchema,
+  PartidaHeader,
+  PartidaHeaderSchema,
 } from '@vivero/shared';
 import { ZodValidationPipe } from '../../../shared/pipes/zod-validation-pipe';
 import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
 import { CurrentUser } from '../../auth/decorators/current-user.decorators';
 import { AuthUser } from '../../auth/types/auth-user.type';
+import { SiembraPartidasService } from '../../siembraPartidas/siembraPartidas.service';
 
 @Controller('l-partidas')
 export class PartidasController {
-  constructor(private readonly service: PartidasService) {}
+  constructor(
+    private readonly service: PartidasService,
+    private readonly siembraPartidasService: SiembraPartidasService,
+  ) {}
 
   @Get()
   @RequirePermission({
@@ -44,21 +50,51 @@ export class PartidasController {
     };
   }
 
-  @Post('asignar-siembra')
+  @Post('autorizar-siembra')
   @RequirePermission({
     tableName: 'siembra',
     action: 'create',
     scope: 'ALL',
   })
-  async asignarSiembra(
+  async autorizarSiembra(
+    @Body(new ZodValidationPipe(PartidaHeaderSchema))
+    data: PartidaHeader,
+    @CurrentUser() user: AuthUser,
+  ) {
+    const result = await this.siembraPartidasService.autorizarSiembra(
+      data,
+      user.id,
+    );
+    return {
+      success: true,
+      message: 'Partida autorizada para siembra',
+      data: result,
+    };
+  }
+
+  @Patch('asignar-siembra/:id')
+  @RequirePermission({
+    tableName: 'a_sembrar',
+    action: 'update',
+    scope: 'ALL',
+  })
+  async completarSiembra(
+    @Param('id') id: string,
     @Body(new ZodValidationPipe(AsignarUbiSiembraCompletaDtoSchema))
     data: AsignarUbiSiembraCompletaDto,
     @CurrentUser() user: AuthUser,
   ) {
-    await this.service.asignarSiembra(data, user.id);
+    // 1. Update technical fields on SiembraPartidas
+    await this.siembraPartidasService.completarSiembraPartida(
+      id,
+      data,
+      user.id,
+    );
+    // 2. Write legacy data + stock + TaskShift
+    await this.service.completarSiembraLegacy(data, user.id);
     return {
       success: true,
-      message: 'Ubicación asignada correctamente',
+      message: 'Siembra completada correctamente',
     };
   }
 }

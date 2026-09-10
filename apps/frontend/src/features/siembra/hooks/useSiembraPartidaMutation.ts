@@ -19,3 +19,15 @@ export const useSiembraMutation = () => {
     },
   });
 };
+
+export const useSiembraAutorizacion = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: siembraService.autorizarSiembra,
+    onSuccess: () => {
+      invalidateQueries(queryClient, "siembraPartida");
+      toast.success("Partida autorizada para siembra", { duration: 3000 });
+    },
+  });
+};

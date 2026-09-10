@@ -12,6 +12,7 @@ export const ROUTES = {
   SIEMBRA_PARTIDAS_REGISTRADAS: "/siembra/partidas-registradas",
   SUSTRATOS: "/sustratos",
   MEZCLAS: "/mezclas",
+  A_SEMBRAR: "/a-sembrar",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

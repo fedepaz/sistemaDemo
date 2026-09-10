@@ -1,26 +1,8 @@
 // src/features/siembra/components/siembra-edit-form.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import { useWatch } from "react-hook-form";
-import {
-  Package,
-  Activity,
-  FileText,
-  Warehouse,
-  Wrench,
-  Calendar,
-  Gauge,
-  Ruler,
-  TestTubes,
-} from "lucide-react";
+import { Package, Activity, Warehouse, Calendar } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import {
   Select,
@@ -29,29 +11,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 
 import {
   AsignarUbiSiembraCompletaDto,
   SiembraDto,
-  UserProfileDto,
 } from "@vivero/shared";
 
 import { UseFormReturn } from "react-hook-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { useDepositos } from "@/features/extendidos";
-import { TaskShift } from "@/features/taskshift/components/taskShift";
-
-import { TratamientoSearch } from "./tratamientoSearch";
-import { Label } from "@radix-ui/react-label";
 
 interface SiembraEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -67,44 +42,6 @@ export function SiembraEditForm({
 }: SiembraEditFormProps) {
   const { data: depositosQuery } = useDepositos();
   const depositos = depositosQuery.filter((d) => d.camara !== "");
-
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [selectedEmployees, setSelectedEmployees] = useState<UserProfileDto[]>(
-    [],
-  );
-
-  const metodoMaquina = useWatch({
-    name: "metodoMaquina",
-    control: form.control,
-  });
-
-  const tratamientoSemilla = useWatch({
-    name: "tratamientoSemilla",
-    control: form.control,
-  });
-
-  useEffect(() => {
-    form.setValue("startTime", startTime, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-  }, [startTime, form]);
-
-  useEffect(() => {
-    form.setValue("endTime", endTime, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-  }, [endTime, form]);
-
-  useEffect(() => {
-    form.setValue(
-      "employeeUserIds",
-      selectedEmployees.map((e) => e.id),
-      { shouldValidate: true, shouldDirty: true },
-    );
-  }, [selectedEmployees, form]);
 
   return (
     <Form {...form}>
@@ -210,7 +147,7 @@ export function SiembraEditForm({
           </div>
 
           <div className="space-y-2 md:space-y-3">
-            {/* CANTIDAD DE BANDEJAS — Toggle Read-Only / Edit */}
+            {/* CANTIDAD DE BANDEJAS */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
@@ -220,16 +157,6 @@ export function SiembraEditForm({
                   Bandejas Confirmadas
                 </p>
               </div>
-
-              <Tooltip>
-                <TooltipTrigger asChild></TooltipTrigger>
-                <TooltipContent
-                  side="top"
-                  className="border border-border shadow-md"
-                >
-                  <p>Modificar cantidad de bandejas</p>
-                </TooltipContent>
-              </Tooltip>
             </div>
 
             <FormField
@@ -252,260 +179,6 @@ export function SiembraEditForm({
               )}
             />
           </div>
-
-          {/* DATOS DE SIEMBRA */}
-          <div className="space-y-3 md:space-y-4 shrink-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {/* CANTIDAD EN GRAMOS */}
-              <FormField
-                control={form.control}
-                name="cantidadGrs"
-                render={({ field }) => (
-                  <FormItem className="space-y-2 md:space-y-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                        <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                      </div>
-                      <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                        Cantidad (gr)
-                      </FormLabel>
-                    </div>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        inputMode="decimal"
-                        placeholder="0"
-                        value={field.value === 0 ? "" : field.value}
-                        onChange={(e) => {
-                          const raw = e.target.value;
-                          if (raw === "") {
-                            field.onChange(0);
-                            return;
-                          }
-                          field.onChange(Number(raw));
-                        }}
-                        className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* AJUSTE */}
-              <FormField
-                control={form.control}
-                name="ajuste"
-                render={({ field }) => (
-                  <FormItem className="space-y-2 md:space-y-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                        <Gauge className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                      </div>
-                      <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                        Ajuste
-                      </FormLabel>
-                    </div>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="0"
-                        {...field}
-                        className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {/* PRESIÓN DE SEMILLA */}
-              <FormField
-                control={form.control}
-                name="presionSemilla"
-                render={({ field }) => (
-                  <FormItem className="space-y-2 md:space-y-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                        <Gauge className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                      </div>
-                      <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                        Presión de Semilla
-                      </FormLabel>
-                    </div>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="40"
-                        value={field.value === 0 ? "" : field.value}
-                        onChange={(e) => {
-                          const raw = e.target.value;
-                          if (raw === "") {
-                            field.onChange(0);
-                            return;
-                          }
-                          if (/^\d+$/.test(raw)) {
-                            field.onChange(Number(raw));
-                          }
-                        }}
-                        className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                      />
-                    </FormControl>
-                    <FormDescription className="text-[9px] md:text-[10px] text-muted-foreground">
-                      Solo números enteros - Por ej: 40
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* PROFUNDIDAD DE SEMILLA */}
-              <FormField
-                control={form.control}
-                name="profundidadSemilla"
-                render={({ field }) => (
-                  <FormItem className="space-y-2 md:space-y-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                        <Ruler className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                      </div>
-                      <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                        Profundidad de Semilla
-                      </FormLabel>
-                    </div>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="1.525"
-                        {...field}
-                        className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                      />
-                    </FormControl>
-                    <FormDescription className="text-[9px] md:text-[10px] text-muted-foreground">
-                      Valor en cm - Por ej: 1.3, 1.525, 2
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="space-y-2 md:space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                  <TestTubes className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                </div>
-                <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                  Tratamiento
-                </Label>
-              </div>
-              {/* TRATAMIENTO DE SEMILLA */}
-              <TratamientoSearch
-                value={tratamientoSemilla ?? ""}
-                onChange={(codigo) =>
-                  form.setValue("tratamientoSemilla", codigo)
-                }
-              />
-              {/*
-               MEZCLA — hidden until client enables mezcla feature 
-              <MezclaSelector form={form} />
-              */}
-            </div>
-
-            <div className="space-y-2 md:space-y-3">
-              {/* MÉTODO DE SIEMBRA — Máquina / Manual */}
-              <div className="flex items-center justify-between py-1">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                    <Wrench className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                  </div>
-                  <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                    Método
-                  </p>
-                  <span
-                    className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
-                      metodoMaquina
-                        ? "text-primary border-primary/20 bg-primary/10"
-                        : "text-muted-foreground border-border/40 bg-muted/50"
-                    }`}
-                  >
-                    {metodoMaquina ? "Máquina" : "Manual"}
-                  </span>
-                </div>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Switch
-                      checked={metodoMaquina}
-                      onCheckedChange={(checked) =>
-                        form.setValue("metodoMaquina", checked)
-                      }
-                      className="transition-colors border-primary/80 bg-primary/40"
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="top"
-                    className="border border-border shadow-md"
-                  >
-                    <p>
-                      {metodoMaquina ? "Siembra manual" : "Siembra mecánica"}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <div className="flex items-center justify-between py-1">
-                <span
-                  className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
-                    metodoMaquina
-                      ? "text-primary border-primary/20 bg-primary/10"
-                      : "text-muted-foreground border-border/40 bg-muted/50"
-                  }`}
-                >
-                  {metodoMaquina
-                    ? "Mecánica (por defecto)"
-                    : "Manual — presione para cambiar a máquina"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* TASK SHIFT */}
-          <TaskShift
-            startTime={startTime}
-            endTime={endTime}
-            employees={selectedEmployees}
-            onStartTimeChange={setStartTime}
-            onEndTimeChange={setEndTime}
-            onEmployeesChange={setSelectedEmployees}
-          />
-
-          {/* OBSERVACIONES */}
-          <FormField
-            control={form.control}
-            name="detalleExtendido"
-            render={({ field }) => (
-              <FormItem className="space-y-2 md:space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                    <FileText className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                  </div>
-                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                    Observaciones
-                  </FormLabel>
-                </div>
-                <FormControl>
-                  <Textarea
-                    placeholder="Notas de ubicación..."
-                    className="min-h-[60px] md:min-h-[120px] rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base p-4 leading-relaxed focus:ring-primary/20"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
       </form>
     </Form>

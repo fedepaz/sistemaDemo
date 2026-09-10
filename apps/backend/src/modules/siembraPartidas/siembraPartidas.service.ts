@@ -1,11 +1,21 @@
 // src/modules/siembraPartidas/siembraPartidas.service.ts
 
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import {
   SiembraPartidasRepository,
   SiembraPartidasWithRelations,
 } from './repositories/siembraPartidas.repository';
-import { CreateSiembraPartidaDto, SiembraPartidaDto } from '@vivero/shared';
+import {
+  CreateSiembraPartidaDto,
+  SiembraPartidaDto,
+  PartidaHeader,
+  AsignarUbiSiembraCompletaDto,
+} from '@vivero/shared';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { PartidasRepository } from '../legacy/partidas/repositories/partidas.repository';
 import { TaskShiftsRepository } from '../taskShifts/repositories/taskShifts.repository';
@@ -256,5 +266,109 @@ export class SiembraPartidasService {
     // Re-fetch with relations for DTO mapping
     const full = await this.repo.findById(row.id, requesterId);
     return this.mapToDto(full as SiembraPartidasWithRelations, null, null);
+  }
+
+  async autorizarSiembra(
+    data: PartidaHeader,
+    requesterId: string,
+  ): Promise<SiembraPartidaDto> {
+    const mezclaId = await this.getOrCreateGenericMezcla();
+
+    const row = await this.repo.createSiembraPartida({
+      partidaId: data.partidaId,
+      anio: data.anio,
+      indice: data.indice,
+      metodoMaquina: true,
+      presionSemilla: 0,
+      profundidadSemilla: 0,
+      tratamientoSemilla: '',
+      mezcla: { connect: { id: mezclaId } },
+      user: { connect: { id: requesterId } },
+    });
+
+    const full = await this.repo.findById(row.id, requesterId);
+    const [legacyData, taskShift] = await Promise.all([
+      this.partidasRepo.findByComposite(row.partidaId, row.anio, row.indice),
+      this.taskShiftsRepo.findByPartidaComposite(
+        row.partidaId,
+        row.anio,
+        row.indice,
+      ),
+    ]);
+
+    return this.mapToDto(
+      full as SiembraPartidasWithRelations,
+      legacyData,
+      taskShift,
+    );
+  }
+
+  async findPendingSiembraPartidas(
+    requesterId: string,
+  ): Promise<SiembraPartidaDto[]> {
+    const rows = await this.repo.findPendingSiembraPartidas(requesterId);
+
+    const dtos = await Promise.all(
+      rows.map(async (row) => {
+        const [legacyData, taskShift] = await Promise.all([
+          this.partidasRepo.findByComposite(
+            row.partidaId,
+            row.anio,
+            row.indice,
+          ),
+          this.taskShiftsRepo.findByPartidaComposite(
+            row.partidaId,
+            row.anio,
+            row.indice,
+          ),
+        ]);
+        return this.mapToDto(row, legacyData, taskShift);
+      }),
+    );
+
+    return dtos;
+  }
+
+  async completarSiembraPartida(
+    id: string,
+    data: AsignarUbiSiembraCompletaDto,
+    requesterId: string,
+  ): Promise<SiembraPartidaDto> {
+    const existing = await this.repo.findById(id, requesterId);
+    if (!existing) {
+      throw new NotFoundException('Registro de siembra no encontrado');
+    }
+
+    if (existing.profundidadSemilla.toNumber() !== 0) {
+      throw new ConflictException('Esta partida ya fue completada');
+    }
+
+    await this.repo.update(id, {
+      metodoMaquina: data.metodoMaquina,
+      presionSemilla: data.presionSemilla,
+      profundidadSemilla: data.profundidadSemilla,
+      tratamientoSemilla: data.tratamientoSemilla,
+      ...(data.mezclaId ? { mezcla: { connect: { id: data.mezclaId } } } : {}),
+    });
+
+    const full = await this.repo.findById(id, requesterId);
+    const [legacyData, taskShift] = await Promise.all([
+      this.partidasRepo.findByComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+      this.taskShiftsRepo.findByPartidaComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+    ]);
+
+    return this.mapToDto(
+      full as SiembraPartidasWithRelations,
+      legacyData,
+      taskShift,
+    );
   }
 }

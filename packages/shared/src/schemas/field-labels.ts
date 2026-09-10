@@ -205,6 +205,29 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     fechaSiembraReal: "Siembra Real",
   },
 
+  // ── ASembrar ──────────────────────────────────────────────────────
+  ASembrar: {
+    partidaId: "Partida",
+    codigoEspecie: "Código",
+    nombreEspecie: "Especie",
+    cantidaNroCont: "Cantidad",
+    fSiembra: "F. Siembra",
+    usuarioNombre: "Autorizado por",
+    metodoMaquina: "Método",
+    presionSemilla: "Presión",
+    profundidadSemilla: "Profundidad",
+    tratamientoSemilla: "Tratamiento",
+    tratamientoNombre: "Tratamiento",
+    mezclaId: "Mezcla",
+    mezclaNombre: "Mezcla",
+    entityId: "Entidad",
+    entityNombre: "Entidad",
+    startTime: "Hora Inicio",
+    endTime: "Hora Fin",
+    employeeUserIds: "Empleados",
+    empleados: "Empleados",
+  },
+
   // ── Alert Columns (shared across alert types) ─────────────────────
   AlertColumns: {
     partidaId: "Partida",

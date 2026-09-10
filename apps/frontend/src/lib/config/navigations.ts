@@ -56,6 +56,14 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
         requiredPermission: { table: "extendidos", action: "read" },
       },
       {
+        title: "A Sembrar",
+        href: ROUTES.A_SEMBRAR,
+        icon: Sprout,
+        description: "Partidas autorizadas para siembra",
+        dashboard: { statsLabel: "Partidas a sembrar" },
+        requiredPermission: { table: "a_sembrar", action: "read" },
+      },
+      {
         kind: "subGroup",
         id: "sustratos",
         title: "Sustratos",

@@ -75,4 +75,45 @@ export class SiembraPartidasRepository extends BaseRepository<SiembraPartidas> {
       },
     });
   }
+
+  async update(
+    id: string,
+    data: Prisma.SiembraPartidasUpdateInput,
+  ): Promise<SiembraPartidas> {
+    return this.model.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async findPendingSiembraPartidas(
+    requesterId: string,
+  ): Promise<SiembraPartidasWithRelations[]> {
+    const devIds = await this.getDevAccounts();
+
+    return this.prisma.siembraPartidas.findMany({
+      where: {
+        deletedAt: null,
+        isActive: true,
+        profundidadSemilla: 0,
+        ...(devIds.includes(requesterId)
+          ? {}
+          : {
+              id: { notIn: devIds },
+            }),
+      },
+      include: {
+        mezcla: {
+          include: {
+            sustrato1: { select: { nombre: true } },
+            sustrato2: { select: { nombre: true } },
+            sustrato3: { select: { nombre: true } },
+            sustrato4: { select: { nombre: true } },
+          },
+        },
+        user: { select: { username: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }

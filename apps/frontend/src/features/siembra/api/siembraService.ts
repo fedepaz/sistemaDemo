@@ -4,6 +4,7 @@ import { clientFetch } from "@/lib/api/client-fetch";
 import {
   AsignarUbiSiembraCompletaDto,
   SiembraDto,
+  SiembraPartidaDto,
   TratamientoDto,
 } from "@vivero/shared";
 
@@ -14,6 +15,13 @@ export const siembraService = {
 
   asignarUbicacionSiembra: (data: AsignarUbiSiembraCompletaDto) => {
     return clientFetch<void>("l-partidas/asignar-siembra", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  autorizarSiembra: (data: { partidaId: number; anio: number; indice: number }) => {
+    return clientFetch<SiembraPartidaDto>("l-partidas/autorizar-siembra", {
       method: "POST",
       body: JSON.stringify(data),
     });

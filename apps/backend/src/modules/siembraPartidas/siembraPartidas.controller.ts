@@ -19,6 +19,14 @@ export class SiembraPartidasController {
     return this.service.getAllSiembraPartidas(user.id);
   }
 
+  @Get('pending')
+  @RequirePermission({ tableName: 'a_sembrar', action: 'read', scope: 'ALL' })
+  async getPendingSiembraPartidas(
+    @CurrentUser() user: AuthUser,
+  ): Promise<SiembraPartidaDto[]> {
+    return this.service.findPendingSiembraPartidas(user.id);
+  }
+
   @Get(':id')
   @RequirePermission({ tableName: 'siembra', action: 'read', scope: 'ALL' })
   async getSiembraPartida(

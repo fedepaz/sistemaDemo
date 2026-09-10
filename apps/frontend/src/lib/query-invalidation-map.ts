@@ -19,6 +19,7 @@ import {
   taskShiftQueryKeys,
   alertsSolvedQueryKeys,
   billboardQueryKeys,
+  aSembrarQueryKeys,
 } from "./queryKeys";
 
 // ============================================================================
@@ -121,6 +122,11 @@ export const mutationInvalidationMap = {
 
   markBillboardRead: {
     queries: () => [billboardQueryKeys.unread()],
+  },
+
+  // --- A Sembrar ---
+  aSembrar: {
+    queries: () => [aSembrarQueryKeys.all()],
   },
 } as const;
 

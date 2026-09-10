@@ -16,7 +16,10 @@ import { useForm } from "react-hook-form";
 import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
 import { SiembraEditForm } from "./siembra-edit-form";
-import { useSiembraMutation } from "../hooks/useSiembraPartidaMutation";
+import {
+  useSiembraMutation,
+  useSiembraAutorizacion,
+} from "../hooks/useSiembraPartidaMutation";
 import { useTableByName } from "@/features/permissions";
 import {
   Select,
@@ -40,6 +43,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const [selectedWeek, setSelectedWeek] = useState("all");
 
   const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
+  const { mutateAsync: autorizarSiembra } = useSiembraAutorizacion();
   const { data: entity } = useTableByName("siembra");
 
   const availableWeeks = useMemo(
@@ -101,11 +105,15 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     setSlideOpen(true);
   }, []);
 
-  const handleEdit = useCallback((row: SiembraDto) => {
-    setSelectedPartida(row);
-    setMode("edit");
-    setSlideOpen(true);
-  }, []);
+  const handleAutorizar = useCallback(async (row: SiembraDto) => {
+    try {
+      await autorizarSiembra({
+        partidaId: row.partidaId,
+        anio: row.anio,
+        indice: row.indice,
+      });
+    } catch {}
+  }, [autorizarSiembra]);
 
   const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
@@ -146,8 +154,8 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         totalCount={filteredPartidas.length}
         exportColumns={partidaSiembraExportColumns}
         onView={handleView}
-        onEdit={handleEdit}
-        canExecuteLabel="Asignar Ubicación"
+        onEdit={handleAutorizar}
+        canExecuteLabel="Autorizar Siembra"
         columnLabels={fieldLabels.SiembraLegacy}
         toolbarContent={toolbarContent}
       />

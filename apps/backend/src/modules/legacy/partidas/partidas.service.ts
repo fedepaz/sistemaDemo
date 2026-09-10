@@ -213,4 +213,103 @@ export class PartidasService {
       }
     });
   }
+
+  async completarSiembraLegacy(
+    data: AsignarUbiSiembraCompletaDto,
+    requesterId: string,
+  ): Promise<void> {
+    if (data.edita === 'N') {
+      throw new BadRequestException('La partida no se puede editar');
+    }
+
+    if (!data.cg || data.cg === 0) {
+      throw new BadRequestException('Debe seleccionar una ubicación válida');
+    }
+
+    const legacyData = {
+      partida: data.partidaId,
+      ano: data.anio,
+      indice: data.indice,
+      f_siembra: data.f_siembra,
+      cg: data.cg,
+      cantidaNroCont: data.cantidaNroCont,
+      ajuste: data.ajuste,
+      cantidadGrs: data.cantidadGrs,
+      lote: data.lote,
+      anoLote: data.anoLote,
+      item: data.item,
+      semxgr: data.semxgr,
+      detalle: data.detalleExtendido,
+    };
+
+    await this.prisma.$transaction(async () => {
+      // 1. Read stock BEFORE consumption
+      const stockBefore = await this.legacyStockService.stockTotal(
+        data.lote,
+        data.anio,
+        data.item,
+      );
+      const entradasAntes = Number(stockBefore[0]?.total_entradas ?? 0);
+      const salidasAntes = Number(stockBefore[0]?.total_salidas ?? 0);
+
+      // 2. Write consumption to partidas1
+      await this.partidasRepository.asignarSiembra(legacyData);
+
+      // 3. Sync stock summary tables
+      const stockAfter = await this.legacyStockService.updateStock(
+        data.lote,
+        data.anio,
+        data.item,
+      );
+
+      // 4. Audit stock sync
+      try {
+        this.auditEventEmitter.emitCrud({
+          tenantId: 'unknown',
+          userId: requesterId,
+          action: 'UPDATE',
+          entityType: 'STOCK',
+          entityId: `lote:${data.lote}|anio:${data.anio}|item:${data.item}`,
+          timestamp: new Date(),
+          changes: {
+            requestId: 'unknown',
+            endpoint: '/l-partidas/asignar-siembra/:id',
+            method: 'PATCH',
+            params: {},
+            query: {},
+            body: {
+              lote: data.lote,
+              anio: data.anio,
+              item: data.item,
+              antes: { entradas: entradasAntes, salidas: salidasAntes },
+              despues: {
+                entradas: stockAfter.entradas,
+                salidas: stockAfter.salidas,
+              },
+            },
+            affected: { count: 1 },
+            durationMs: 0,
+          },
+        });
+      } catch (err: unknown) {
+        this.logger.error({ err }, 'Failed to emit stock audit event');
+      }
+
+      // 5. Create TaskShift
+      if (data.startTime && data.endTime) {
+        await this.taskShiftsService.createTaskShift(
+          {
+            entityId: data.entityId,
+            partidaId: data.partidaId,
+            anio: data.anio,
+            indice: data.indice,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            employeeUserIds: data.employeeUserIds ?? [],
+          },
+          requesterId,
+        );
+      }
+    });
+  }
 }
