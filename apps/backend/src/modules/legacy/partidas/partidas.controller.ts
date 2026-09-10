@@ -7,8 +7,8 @@ import {
   AsignarUbiExtendidoDtoSchema,
   AsignarUbiSiembraCompletaDto,
   AsignarUbiSiembraCompletaDtoSchema,
-  PartidaHeader,
-  PartidaHeaderSchema,
+  AutorizarSiembraDto,
+  AutorizarSiembraSchema,
 } from '@vivero/shared';
 import { ZodValidationPipe } from '../../../shared/pipes/zod-validation-pipe';
 import { RequirePermission } from '../../permissions/decorators/require-permission.decorator';
@@ -57,8 +57,8 @@ export class PartidasController {
     scope: 'ALL',
   })
   async autorizarSiembra(
-    @Body(new ZodValidationPipe(PartidaHeaderSchema))
-    data: PartidaHeader,
+    @Body(new ZodValidationPipe(AutorizarSiembraSchema))
+    data: AutorizarSiembraDto,
     @CurrentUser() user: AuthUser,
   ) {
     const result = await this.siembraPartidasService.autorizarSiembra(
@@ -75,7 +75,7 @@ export class PartidasController {
   @Patch('asignar-siembra/:id')
   @RequirePermission({
     tableName: 'a_sembrar',
-    action: 'update',
+    action: 'create',
     scope: 'ALL',
   })
   async completarSiembra(

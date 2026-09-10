@@ -73,15 +73,11 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
         </div>
 
         {/* BASIC SPECS GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {[
             { label: "Año", value: selectedExtendido.anio, icon: Calendar },
             { label: "Índice", value: selectedExtendido.indice, icon: Hash },
-            {
-              label: "Semilla",
-              value: selectedExtendido.sem_siembra,
-              icon: Info,
-            },
+
             { label: "CANT", value: selectedExtendido.nrocont, icon: Activity },
           ].map((item, idx) => (
             <div
@@ -116,11 +112,29 @@ export function SiembraViewForm({ selectedExtendido }: SiembraFormProps) {
             />
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               {[
-                { icon: Calendar, label: "Fecha Sugerida", value: formatShortDate(selectedExtendido.fechaSugeridaSiembra) },
-                { icon: Calendar, label: "Fecha Siembra", value: formatShortDate(selectedExtendido.fechaSiembraReal) },
+                {
+                  icon: Calendar,
+                  label: "Fecha Sugerida",
+                  value: formatShortDate(
+                    selectedExtendido.fechaSugeridaSiembra,
+                  ),
+                },
+                {
+                  icon: Calendar,
+                  label: "Fecha Siembra",
+                  value: formatShortDate(selectedExtendido.fechaSiembraReal),
+                },
                 { icon: Hash, label: "Lote", value: selectedExtendido.lote },
-                { icon: Calendar, label: "Año Lote", value: selectedExtendido.anoLote },
-                { icon: Activity, label: "Sem/Gr", value: selectedExtendido.semxgr },
+                {
+                  icon: Calendar,
+                  label: "Año Lote",
+                  value: selectedExtendido.anoLote,
+                },
+                {
+                  icon: Activity,
+                  label: "Sem/Gr",
+                  value: selectedExtendido.semxgr,
+                },
                 { icon: Hash, label: "C", value: selectedExtendido.c },
                 { icon: Hash, label: "G", value: selectedExtendido.g },
               ].map((item, idx) => (

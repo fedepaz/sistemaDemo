@@ -13,8 +13,8 @@ import {
 import {
   CreateSiembraPartidaDto,
   SiembraPartidaDto,
-  PartidaHeader,
   AsignarUbiSiembraCompletaDto,
+  AutorizarSiembraDto,
 } from '@vivero/shared';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { PartidasRepository } from '../legacy/partidas/repositories/partidas.repository';
@@ -269,7 +269,7 @@ export class SiembraPartidasService {
   }
 
   async autorizarSiembra(
-    data: PartidaHeader,
+    data: AutorizarSiembraDto,
     requesterId: string,
   ): Promise<SiembraPartidaDto> {
     const mezclaId = await this.getOrCreateGenericMezcla();

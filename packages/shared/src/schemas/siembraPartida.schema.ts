@@ -61,6 +61,10 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
 
 export type SiembraPartidaDto = z.infer<typeof SiembraPartidaSchema>;
 
+export const AutorizarSiembraSchema = PartidaHeaderSchema;
+
+export type AutorizarSiembraDto = z.infer<typeof AutorizarSiembraSchema>;
+
 export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
   metodoMaquina: z.boolean({
     message: "El método/máquina es requerido",

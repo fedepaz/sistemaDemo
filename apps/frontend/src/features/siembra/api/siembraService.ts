@@ -3,6 +3,7 @@
 import { clientFetch } from "@/lib/api/client-fetch";
 import {
   AsignarUbiSiembraCompletaDto,
+  AutorizarSiembraDto,
   SiembraDto,
   SiembraPartidaDto,
   TratamientoDto,
@@ -20,7 +21,7 @@ export const siembraService = {
     });
   },
 
-  autorizarSiembra: (data: { partidaId: number; anio: number; indice: number }) => {
+  autorizarSiembra: (data: AutorizarSiembraDto) => {
     return clientFetch<SiembraPartidaDto>("l-partidas/autorizar-siembra", {
       method: "POST",
       body: JSON.stringify(data),
