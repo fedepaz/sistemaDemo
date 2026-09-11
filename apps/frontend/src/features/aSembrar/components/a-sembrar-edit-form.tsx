@@ -10,6 +10,13 @@ import {
   Wrench,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import {
   Tooltip,
@@ -21,6 +28,7 @@ import {
   AsignarUbiSiembraCompletaDto,
   SiembraPartidaDto,
   UserProfileDto,
+  PrensadoSemillaValues,
 } from "@vivero/shared";
 import { UseFormReturn } from "react-hook-form";
 import {
@@ -213,10 +221,10 @@ export function ASembrarEditForm({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {/* PRESIÓN DE SEMILLA */}
+            {/* PRESNSADO DE SEMILLA */}
             <FormField
               control={form.control}
-              name="presionSemilla"
+              name="prensadoSemilla"
               render={({ field }) => (
                 <FormItem className="space-y-2 md:space-y-3">
                   <div className="flex items-center gap-2">
@@ -224,30 +232,28 @@ export function ASembrarEditForm({
                       <Gauge className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                     </div>
                     <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                      Presión de Semilla
+                      Prensado de Semilla
                     </FormLabel>
                   </div>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      inputMode="numeric"
-                      placeholder="40"
-                      value={field.value === 0 ? "" : field.value}
-                      onChange={(e) => {
-                        const raw = e.target.value;
-                        if (raw === "") {
-                          field.onChange(0);
-                          return;
-                        }
-                        if (/^\d+$/.test(raw)) {
-                          field.onChange(Number(raw));
-                        }
-                      }}
-                      className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                    />
-                  </FormControl>
+                  <Select
+                    onValueChange={(v) => field.onChange(Number(v))}
+                    value={String(field.value)}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+                        <SelectValue placeholder="Seleccionar prensado" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="rounded-xl border-border/60 shadow-2xl">
+                      {PrensadoSemillaValues.map((v) => (
+                        <SelectItem key={v} value={String(v)} className="font-medium">
+                          {v}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormDescription className="text-[9px] md:text-[10px] text-muted-foreground">
-                    Solo números enteros - Por ej: 40
+                    Seleccionar de 0 a 6 (incrementos de 0.5)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

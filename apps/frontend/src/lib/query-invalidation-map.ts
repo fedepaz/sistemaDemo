@@ -12,6 +12,7 @@ import {
   entityQueryKeys,
   extendidosQueryKeys,
   siembraQueryKeys,
+  siembraPartidasRegistradasQueryKeys,
   sustratoQueryKeys,
   mezclaQueryKeys,
   alertCommentsQueryKeys,
@@ -93,6 +94,8 @@ export const mutationInvalidationMap = {
   siembraPartida: {
     queries: () => [
       siembraQueryKeys.partidas(),
+      siembraPartidasRegistradasQueryKeys.all(),
+      aSembrarQueryKeys.all(),
       extendidosQueryKeys.enCamara(),
       alertsQueryKeys.all(),
     ],
@@ -126,7 +129,12 @@ export const mutationInvalidationMap = {
 
   // --- A Sembrar ---
   aSembrar: {
-    queries: () => [aSembrarQueryKeys.all()],
+    queries: () => [
+      aSembrarQueryKeys.all(),
+      siembraPartidasRegistradasQueryKeys.all(),
+      extendidosQueryKeys.enCamara(),
+      alertsQueryKeys.all(),
+    ],
   },
 } as const;
 

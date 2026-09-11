@@ -18,7 +18,7 @@ describe('SiembraPartidasController', () => {
     anio: 2026,
     indice: 1,
     metodoMaquina: true,
-    presionSemilla: 25,
+    prensadoSemilla: 25,
     profundidadSemilla: '1.525',
     tratamientoSemilla: '',
     mezclaId: 'mezcla-1',

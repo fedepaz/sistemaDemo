@@ -57,7 +57,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
         ajuste: row.ajuste ?? "",
         cantidadGrs: row.cantidadGrs ?? 0,
         cg: row.cg ?? 0,
-        presionSemilla: row.presionSemilla,
+        prensadoSemilla: row.prensadoSemilla,
         profundidadSemilla: row.profundidadSemilla,
         metodoMaquina: row.metodoMaquina,
         tratamientoSemilla: row.tratamientoSemilla,

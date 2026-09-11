@@ -12,14 +12,23 @@ export const ProfundidadSemillaSchema = z
   .regex(profundidadSemillaRegex, {
     message:
       "La profundidad debe tener el formato: 1.525 (1-2 dígitos, hasta 3 decimales)",
+  })
+  .refine((v) => v !== "0" && v !== "0.0" && v !== "0.00" && v !== "0.000", {
+    message: "La profundidad debe ser mayor a 0",
   });
+
+export const PrensadoSemillaValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] as const;
 
 export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   id: requiredCuid("El registro de siembra"),
   metodoMaquina: z.boolean({ message: "El método/máquina es requerido" }),
-  presionSemilla: z
-    .number({ message: "La presión de semilla es requerida" })
-    .int({ message: "La presión de semilla debe ser un número entero" }),
+  prensadoSemilla: z
+    .number({ message: "El prensado de semilla es requerido" })
+    .min(0, { message: "El prensado de semilla debe ser mayor o igual a 0" })
+    .max(6, { message: "El prensado de semilla debe ser menor o igual a 6" })
+    .refine((v) => PrensadoSemillaValues.includes(v as any), {
+      message: "El prensado de semilla debe ser un múltiplo de 0.5 (0, 0.5, 1, ... 6)",
+    }),
   profundidadSemilla: ProfundidadSemillaSchema,
   tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
@@ -70,10 +79,13 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
   metodoMaquina: z.boolean({
     message: "El método/máquina es requerido",
   }),
-  presionSemilla: z
-    .number({ message: "La presión de semilla es requerida" })
-    .int({ message: "La presión de semilla debe ser un número entero" })
-    .min(1, { message: "La presión de semilla debe ser mayor a 0" }),
+  prensadoSemilla: z
+    .number({ message: "El prensado de semilla es requerido" })
+    .min(0, { message: "El prensado de semilla debe ser mayor o igual a 0" })
+    .max(6, { message: "El prensado de semilla debe ser menor o igual a 6" })
+    .refine((v) => PrensadoSemillaValues.includes(v as any), {
+      message: "El prensado de semilla debe ser un múltiplo de 0.5 (0, 0.5, 1, ... 6)",
+    }),
 
   profundidadSemilla: ProfundidadSemillaSchema,
   tratamientoSemilla: z.string({

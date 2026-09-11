@@ -38,6 +38,7 @@ jest.mock("react-hook-form", () => ({
     setValue: jest.fn(),
     getValues: jest.fn().mockReturnValue({}),
     watch: jest.fn(),
+    register: jest.fn().mockReturnValue({ name: "", ref: jest.fn(), onChange: jest.fn(), onBlur: jest.fn() }),
   }),
   useWatch: jest.fn().mockReturnValue(true),
 }));
@@ -74,7 +75,7 @@ jest.mock("@/components/data-display/data-table", () => ({
 }));
 
 jest.mock("@/features/siembra/hooks/useSiembraPartidaMutation", () => ({
-  useSiembraMutation: () => ({
+  useSiembraAutorizacion: () => ({
     mutateAsync: jest.fn().mockResolvedValue(undefined),
   }),
 }));
@@ -155,25 +156,51 @@ const mockPartidas: SiembraDto[] = [
     nrocont: "100",
     extendido: "Notas de prueba",
     germin: "85",
+    sem_siembra: "S10-2024",
   },
+];
+
+const mockColumns = [
+  { id: "partidaId", header: "Partida", accessorFn: (row: SiembraDto) => row.partidaId },
 ];
 
 describe("SiembraDataTable", () => {
   it("renders DataTable with correct title", () => {
-    render(<SiembraDataTable partidas={mockPartidas} />);
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     expect(screen.getByTestId("data-table")).toBeInTheDocument();
     expect(screen.getByText("Siembra")).toBeInTheDocument();
   });
 
   it("renders without crashing with empty data", () => {
-    render(<SiembraDataTable partidas={[]} />);
+    render(
+      <SiembraDataTable
+        partidas={[]}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     expect(screen.getByTestId("data-table")).toBeInTheDocument();
   });
 
   it("opens slide-over in view mode when view is triggered", () => {
-    render(<SiembraDataTable partidas={mockPartidas} />);
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     act(() => {
       screen.getByText("View Row").click();
@@ -183,7 +210,14 @@ describe("SiembraDataTable", () => {
   });
 
   it("opens slide-over in edit mode when edit is triggered", () => {
-    render(<SiembraDataTable partidas={mockPartidas} />);
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     act(() => {
       screen.getByText("Edit Row").click();

@@ -5,7 +5,7 @@ model SiembraPartidas {
   indice      Int
   metodoMaquina Boolean
 
-  presionSemilla     Int      @default(0) // psi — pneumatic seeder pressure
+  prensadoSemilla    Decimal  @db.Decimal(3,1) @default(0) // 0-6 in 0.5 increments
   profundidadSemilla Decimal  @db.Decimal(5,3) @default(0) // cm — e.g., 1.525, 2.000
   tratamientoSemilla String   @default("") // seed treatment code (CHAR(1))
 

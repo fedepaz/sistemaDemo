@@ -73,7 +73,12 @@ describe('SiembraPartidasRepository', () => {
       expect(result).toEqual([mockRecord]);
       expect(prisma.siembraPartidas.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { deletedAt: null, isActive: true, id: { notIn: [] } },
+          where: {
+            deletedAt: null,
+            isActive: true,
+            id: { notIn: [] },
+            profundidadSemilla: { not: 0 },
+          },
         }),
       );
     });
@@ -87,7 +92,11 @@ describe('SiembraPartidasRepository', () => {
       expect(result).toEqual([mockRecord]);
       expect(prisma.siembraPartidas.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { deletedAt: null, isActive: true },
+          where: {
+            deletedAt: null,
+            isActive: true,
+            profundidadSemilla: { not: 0 },
+          },
         }),
       );
     });

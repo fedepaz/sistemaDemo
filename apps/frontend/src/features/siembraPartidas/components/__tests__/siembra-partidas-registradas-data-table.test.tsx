@@ -17,7 +17,7 @@ const mockPartidas: SiembraPartidaDto[] = [
     anio: 2025,
     indice: 2,
     metodoMaquina: true,
-    presionSemilla: 45,
+    prensadoSemilla: 45,
     profundidadSemilla: "1.5",
     tratamientoSemilla: "T",
     mezclaId: "mezcla-1",

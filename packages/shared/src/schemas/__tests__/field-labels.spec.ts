@@ -19,7 +19,7 @@ const DATA_TABLE_COLUMNS: Record<string, string[]> = {
     "fSiembra",
     "usuarioNombre",
     "metodoMaquina",
-    "presionSemilla",
+    "prensadoSemilla",
     "profundidadSemilla",
     "tratamientoSemilla",
     "tratamientoNombre",

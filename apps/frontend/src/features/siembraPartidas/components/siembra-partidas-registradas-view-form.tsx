@@ -169,7 +169,7 @@ export function SiembraPartidasRegistradasViewForm({
                   <InfoRow
                     icon={Activity}
                     label="Presion"
-                    value={`${selectedPartida.presionSemilla} PSI`}
+                    value={`${selectedPartida.prensadoSemilla}`}
                   />
                   <InfoRow
                     icon={Activity}

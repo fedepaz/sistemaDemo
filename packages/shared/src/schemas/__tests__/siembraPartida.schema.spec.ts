@@ -14,7 +14,7 @@ describe("SiembraPartidaSchema", () => {
     codigoEspecie: "ABCOM",
     nombreEspecie: "PLA.ALBAHACA COMPACTA M009",
     metodoMaquina: true,
-    presionSemilla: 25,
+    prensadoSemilla: 3,
     profundidadSemilla: "1.525",
     tratamientoSemilla: "1",
     mezclaId: "clx1234567890abcdef123467",
@@ -28,7 +28,7 @@ describe("SiembraPartidaSchema", () => {
     expect(result.id).toBe("clx1234567890abcdef123456");
     expect(result.partidaId).toBe(100);
     expect(result.metodoMaquina).toBe(true);
-    expect(result.presionSemilla).toBe(25);
+    expect(result.prensadoSemilla).toBe(3);
     expect(result.profundidadSemilla).toBe("1.525");
     expect(result.tratamientoSemilla).toBe("1");
   });
@@ -96,9 +96,20 @@ describe("SiembraPartidaSchema", () => {
     ).toThrow();
   });
 
-  it("rejects non-integer presionSemilla", () => {
+  it("rejects prensadoSemilla greater than 6", () => {
     expect(() =>
-      SiembraPartidaSchema.parse({ ...valid, presionSemilla: 25.5 }),
+      SiembraPartidaSchema.parse({ ...valid, prensadoSemilla: 25 }),
+    ).toThrow();
+  });
+
+  it("accepts prensadoSemilla with 0.5 increment", () => {
+    const result = SiembraPartidaSchema.parse({ ...valid, prensadoSemilla: 3.5 });
+    expect(result.prensadoSemilla).toBe(3.5);
+  });
+
+  it("rejects prensadoSemilla with invalid increment", () => {
+    expect(() =>
+      SiembraPartidaSchema.parse({ ...valid, prensadoSemilla: 1.3 }),
     ).toThrow();
   });
 
@@ -116,7 +127,7 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      presionSemilla: 30,
+      prensadoSemilla: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
       mezclaId: "clx1234567890abcdef123489",
@@ -132,7 +143,7 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      presionSemilla: 30,
+      prensadoSemilla: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
     });
@@ -145,7 +156,7 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      presionSemilla: 30,
+      prensadoSemilla: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
       stockLote: 42,
@@ -165,7 +176,7 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      presionSemilla: 30,
+      prensadoSemilla: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
     });
@@ -179,7 +190,7 @@ describe("CreateSiembraPartidaSchema", () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
-        presionSemilla: 20,
+        prensadoSemilla: 2,
         profundidadSemilla: "1.5",
     tratamientoSemilla: "1",
         mezclaId: "clx1234567890abcdef123467",
@@ -193,7 +204,7 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 1,
       metodoMaquina: true,
-      presionSemilla: 20,
+      prensadoSemilla: 20,
       profundidadSemilla: "1.5",
       tratamientoSemilla: "1",
       mezclaId: "bad",
