@@ -108,6 +108,7 @@ export function MezclaDataTable() {
                   title: "Crear mezcla",
                   description: "¿Deseas crear esta nueva mezcla?",
                   label: "Crear",
+                  summaryFields: ["sustrato1Id", "porcentaje1", "sustrato2Id", "porcentaje2", "sustrato3Id", "porcentaje3", "sustrato4Id", "porcentaje4"],
                 }
               : undefined
           }
