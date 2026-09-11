@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import {
   Activity,
+  Calendar,
   Gauge,
   Ruler,
   TestTubes,
+  Warehouse,
   Wrench,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -42,6 +44,7 @@ import {
 } from "@/components/ui/form";
 import { TaskShift } from "@/features/taskshift/components/taskShift";
 import { TratamientoSearch } from "@/features/siembra/components/tratamientoSearch";
+import { useDepositos } from "@/features/extendidos";
 
 interface ASembrarEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -55,6 +58,8 @@ export function ASembrarEditForm({
   form,
   selectedPartida,
 }: ASembrarEditFormProps) {
+  const { data: depositosQuery } = useDepositos();
+  const depositos = depositosQuery.filter((d) => d.camara !== "");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [selectedEmployees, setSelectedEmployees] = useState<UserProfileDto[]>(
@@ -117,6 +122,82 @@ export function ASembrarEditForm({
               </div>
             </div>
           </div>
+        </div>
+        {/* CAMARA DE DESTINO + FECHA */}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <FormField
+            control={form.control}
+            name="cg"
+            render={({ field }) => (
+              <FormItem className="space-y-2 md:space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                    <Warehouse className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                  </div>
+                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                    Cámara de Destino
+                  </FormLabel>
+                </div>
+                <Select
+                  onValueChange={(val) => field.onChange(Number(val))}
+                  value={field.value?.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+                      <SelectValue placeholder="Seleccione cámara" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent
+                    className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]"
+                    position="popper"
+                  >
+                    {depositos?.map((dep) => (
+                      <SelectItem
+                        key={dep.codigo}
+                        value={dep.codigo.toString()}
+                        className="font-bold py-2 md:py-3 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm md:text-base"
+                      >
+                        {dep.codigo} - {dep.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="f_siembra"
+            render={({ field }) => (
+              <FormItem className="space-y-2 md:space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                    <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                  </div>
+                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                    Fecha de Siembra
+                  </FormLabel>
+                </div>
+                <FormControl>
+                  <Input
+                    type="date"
+                    {...field}
+                    value={
+                      field.value instanceof Date
+                        ? field.value.toISOString().split("T")[0]
+                        : ""
+                    }
+                    onChange={(e) => field.onChange(new Date(e.target.value))}
+                    className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         {/* TECHNICAL FIELDS */}
@@ -246,7 +327,11 @@ export function ASembrarEditForm({
                     </FormControl>
                     <SelectContent className="rounded-xl border-border/60 shadow-2xl">
                       {PrensadoSemillaValues.map((v) => (
-                        <SelectItem key={v} value={String(v)} className="font-medium">
+                        <SelectItem
+                          key={v}
+                          value={String(v)}
+                          className="font-medium"
+                        >
                           {v}
                         </SelectItem>
                       ))}
@@ -303,9 +388,7 @@ export function ASembrarEditForm({
             </div>
             <TratamientoSearch
               value={tratamientoSemilla ?? ""}
-              onChange={(codigo) =>
-                form.setValue("tratamientoSemilla", codigo)
-              }
+              onChange={(codigo) => form.setValue("tratamientoSemilla", codigo)}
             />
           </div>
 
@@ -343,9 +426,7 @@ export function ASembrarEditForm({
                   side="top"
                   className="border border-border shadow-md"
                 >
-                  <p>
-                    {metodoMaquina ? "Siembra manual" : "Siembra mecánica"}
-                  </p>
+                  <p>{metodoMaquina ? "Siembra manual" : "Siembra mecánica"}</p>
                 </TooltipContent>
               </Tooltip>
             </div>

@@ -48,7 +48,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
         indice: row.indice,
         cantidaNroCont: row.cantidaNroCont ?? 0,
         detalleExtendido: row.detalleExtendido ?? "",
-        f_siembra: row.fSiembra ? new Date(row.fSiembra) : new Date(),
+        f_siembra: new Date(),
         edita: "S",
         lote: row.lote ?? 0,
         anoLote: row.anoLote ?? 0,
