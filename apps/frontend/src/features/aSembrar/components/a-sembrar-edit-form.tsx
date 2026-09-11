@@ -5,6 +5,7 @@ import { useWatch } from "react-hook-form";
 import {
   Activity,
   Calendar,
+  FileText,
   Gauge,
   Ruler,
   TestTubes,
@@ -45,6 +46,8 @@ import {
 import { TaskShift } from "@/features/taskshift/components/taskShift";
 import { TratamientoSearch } from "@/features/siembra/components/tratamientoSearch";
 import { useDepositos } from "@/features/extendidos";
+import { getLocalDateStr } from "@/lib/date-utils";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ASembrarEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -184,10 +187,11 @@ export function ASembrarEditForm({
                 <FormControl>
                   <Input
                     type="date"
+                    lang="es-AR"
                     {...field}
                     value={
                       field.value instanceof Date
-                        ? field.value.toISOString().split("T")[0]
+                        ? getLocalDateStr(field.value)
                         : ""
                     }
                     onChange={(e) => field.onChange(new Date(e.target.value))}
@@ -441,6 +445,31 @@ export function ASembrarEditForm({
           onStartTimeChange={setStartTime}
           onEndTimeChange={setEndTime}
           onEmployeesChange={setSelectedEmployees}
+        />
+        {/* OBSERVACIONES */}
+        <FormField
+          control={form.control}
+          name="detalleExtendido"
+          render={({ field }) => (
+            <FormItem className="space-y-2 md:space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                  <FileText className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                </div>
+                <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  Observaciones
+                </FormLabel>
+              </div>
+              <FormControl>
+                <Textarea
+                  placeholder="Notas de ubicación..."
+                  className="min-h-[60px] md:min-h-[120px] rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base p-4 leading-relaxed focus:ring-primary/20"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
       </form>
     </Form>

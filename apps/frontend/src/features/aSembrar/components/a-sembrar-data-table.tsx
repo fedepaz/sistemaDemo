@@ -108,7 +108,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
           mode="edit"
           form={formCompletar}
           saveLabel="Completar Siembra"
-          fieldLabels={fieldLabels.ASembrar}
+          fieldLabels={fieldLabels.AsignarUbiSiembraCompleta}
           confirm={{
             title: "Confirmar siembra",
             description: "¿Deseas confirmar siembra?",
