@@ -55,7 +55,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     partidaId: "Partida",
     anio: "Año",
     indice: "Índice",
-    ubicacion: "Cámara de germinación",
+    ubicacion: "Depósito de Destino",
     stock_ini: "Stock inicial",
     detalle: "Detalle",
     baja: "Bajas",

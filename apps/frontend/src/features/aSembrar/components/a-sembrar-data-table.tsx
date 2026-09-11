@@ -113,6 +113,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
             title: "Confirmar siembra",
             description: "¿Deseas confirmar siembra?",
             label: "Completar Siembra",
+            summaryFields: ["cg", "f_siembra", "cantidaNroCont", "cantidadGrs", "ajuste", "prensadoSemilla", "profundidadSemilla", "tratamientoSemilla", "metodoMaquina", "detalleExtendido"],
           }}
         >
           <div className="space-y-2">

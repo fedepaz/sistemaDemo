@@ -184,6 +184,7 @@ export function SiembraDataTable({
             title: "Autorizar siembra",
             description: "¿Deseas autorizar esta partida para siembra?",
             label: "Autorizar Siembra",
+            summaryFields: ["partidaId", "anio", "indice"],
           }}
         >
           <div className="space-y-2">

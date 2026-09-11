@@ -102,7 +102,7 @@ export function ExtendidosEditForm({
                         value={dep.codigo.toString()}
                         className="font-bold py-2 md:py-3 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm md:text-base"
                       >
-                        {dep.nombre}
+                        {dep.codigo} - {dep.nombre}
                       </SelectItem>
                     ))}
                   </SelectContent>

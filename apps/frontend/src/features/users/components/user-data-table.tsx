@@ -165,6 +165,7 @@ export function UsersDataTable() {
             title: "Actualizar usuario",
             description: `¿Deseas guardar los cambios en ${selectedUser.username}?`,
             label: "Actualizar",
+            summaryFields: ["firstName", "lastName", "email"],
           }}
         >
           <div className="space-y-2">

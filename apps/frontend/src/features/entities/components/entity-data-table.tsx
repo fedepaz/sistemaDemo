@@ -80,6 +80,7 @@ export function EntityDataTable() {
             title: "Crear entidad",
             description: "¿Deseas crear esta nueva entidad?",
             label: "Crear",
+            summaryFields: ["name", "label", "permissionType"],
           }}
         >
           <div className="space-y-2">
