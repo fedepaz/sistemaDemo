@@ -40,6 +40,7 @@ export class SiembraPartidasRepository extends BaseRepository<SiembraPartidas> {
       where: {
         deletedAt: null,
         isActive: true,
+        profundidadSemilla: { not: 0 },
         ...(devIds.includes(requesterId) ? {} : { id: { notIn: devIds } }),
       },
       include: {
