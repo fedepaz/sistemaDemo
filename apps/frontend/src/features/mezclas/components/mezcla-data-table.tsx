@@ -4,7 +4,12 @@
 import { useState, useCallback, useMemo } from "react";
 import { useCreateMezcla, useMezclas } from "../hooks/useMezclas";
 import { useSustratos } from "@/features/sustratos/hooks/useSustratos";
-import { CreateMezclaDto, CreateMezclaSchema, MezclaDto, fieldLabels } from "@vivero/shared";
+import {
+  CreateMezclaDto,
+  CreateMezclaSchema,
+  MezclaDto,
+  fieldLabels,
+} from "@vivero/shared";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
@@ -108,6 +113,7 @@ export function MezclaDataTable() {
                   title: "Crear mezcla",
                   description: "¿Deseas crear esta nueva mezcla?",
                   label: "Crear",
+                  summaryFields: ["partidaId", "anio", "indice"],
                 }
               : undefined
           }
