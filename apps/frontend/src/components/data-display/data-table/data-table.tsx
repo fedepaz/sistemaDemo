@@ -189,7 +189,8 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
       if (
         !allowedActions.canView &&
         !allowedActions.canEdit &&
-        !allowedActions.canDelete
+        !allowedActions.canDelete &&
+        !allowedActions.canExecute
       )
         return null;
       return <HeaderComponent titulo="Acciones" />;
@@ -198,7 +199,8 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
       if (
         !allowedActions.canEdit &&
         !allowedActions.canDelete &&
-        !allowedActions.canView
+        !allowedActions.canView &&
+        !allowedActions.canExecute
       )
         return null;
 
