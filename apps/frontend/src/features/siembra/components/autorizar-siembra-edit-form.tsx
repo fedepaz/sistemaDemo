@@ -1,7 +1,7 @@
 // src/features/siembra/components/autorizar-siembra-edit-form.tsx
 "use client";
 
-import { Package, Leaf } from "lucide-react";
+import { Package, Leaf, AlertTriangle } from "lucide-react";
 import { AutorizarSiembraDto, SiembraDto } from "@vivero/shared";
 import { UseFormReturn } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
@@ -11,6 +11,7 @@ interface AutorizarSiembraEditFormProps {
   onCancel: () => void;
   form: UseFormReturn<AutorizarSiembraDto>;
   selectedSiembra: SiembraDto;
+  isAlreadyAuthorized?: boolean;
 }
 
 function InfoRow({ label, value }: { label: string; value: string | number }) {
@@ -30,6 +31,7 @@ export function AutorizarSiembraEditForm({
   form,
   onSubmit,
   selectedSiembra,
+  isAlreadyAuthorized,
 }: AutorizarSiembraEditFormProps) {
   const loteLabel =
     selectedSiembra.lote !== null || selectedSiembra.anoLote !== null
@@ -58,6 +60,15 @@ export function AutorizarSiembraEditForm({
           name="indice"
           render={() => <input type="hidden" {...form.register("indice")} />}
         />
+
+        {isAlreadyAuthorized && (
+          <div className="flex items-center gap-2 bg-warning/10 border border-warning/30 rounded-xl p-3 md:p-4">
+            <AlertTriangle className="h-4 w-4 text-warning shrink-0" />
+            <p className="text-xs md:text-sm font-bold text-warning">
+              Esta partida ya fue autorizada para siembra
+            </p>
+          </div>
+        )}
 
         {/* PRODUCT HEADER */}
         <div className="space-y-3 md:space-y-4 shrink-0">

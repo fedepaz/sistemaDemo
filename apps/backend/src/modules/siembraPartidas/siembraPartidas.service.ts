@@ -273,6 +273,20 @@ export class SiembraPartidasService {
     data: AutorizarSiembraDto,
     requesterId: string,
   ): Promise<SiembraPartidaDto> {
+    const existing = await this.prisma.siembraPartidas.findFirst({
+      where: {
+        partidaId: data.partidaId,
+        anio: data.anio,
+        indice: data.indice,
+        deletedAt: null,
+      },
+    });
+    if (existing) {
+      throw new ConflictException(
+        'Esta partida ya fue autorizada para siembra',
+      );
+    }
+
     const mezclaId = await this.getOrCreateGenericMezcla();
 
     const row = await this.repo.createSiembraPartida({

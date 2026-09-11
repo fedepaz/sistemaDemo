@@ -68,20 +68,36 @@ export function SiembraDataTable({
     [partidas],
   );
 
-  const filteredPartidas = useMemo(
-    () =>
-      (selectedWeek === "all"
+  const filteredPartidas = useMemo(() => {
+    const rows =
+      selectedWeek === "all"
         ? partidas
-        : partidas.filter((p) => p.sem_siembra === selectedWeek)
-      ).sort((a, b) =>
-        b.fechaSugeridaSiembra.localeCompare(a.fechaSugeridaSiembra),
-      ),
-    [partidas, selectedWeek],
-  );
+        : partidas.filter((p) => p.sem_siembra === selectedWeek);
+
+    const catOrder = (c: string) =>
+      c === "bg-yellow-500/10" ? 0 : c === "bg-green-500/10" ? 1 : 2;
+
+    return [...rows].sort((a, b) => {
+      const catA = getRowBg(a, aSembrarKeys, registradasKeys);
+      const catB = getRowBg(b, aSembrarKeys, registradasKeys);
+      const catDiff = catOrder(catA) - catOrder(catB);
+      return catDiff !== 0
+        ? catDiff
+        : b.fechaSugeridaSiembra.localeCompare(a.fechaSugeridaSiembra);
+    });
+  }, [partidas, selectedWeek, aSembrarKeys, registradasKeys]);
 
   const getRowClassName = useCallback(
     (row: SiembraDto) => getRowBg(row, aSembrarKeys, registradasKeys),
     [aSembrarKeys, registradasKeys],
+  );
+
+  const isAlreadyAuthorized = useMemo(
+    () =>
+      selectedPartida
+        ? getRowBg(selectedPartida, aSembrarKeys, registradasKeys) !== ""
+        : false,
+    [selectedPartida, aSembrarKeys, registradasKeys],
   );
 
   const handleView = useCallback((row: SiembraDto) => {
@@ -179,6 +195,7 @@ export function SiembraDataTable({
                 onSubmit={handleAutorizar}
                 onCancel={() => setSlideOpen(false)}
                 selectedSiembra={selectedPartida}
+                isAlreadyAuthorized={isAlreadyAuthorized}
               />
             )}
           </div>
