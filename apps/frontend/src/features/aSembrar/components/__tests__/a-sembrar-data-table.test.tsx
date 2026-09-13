@@ -74,10 +74,7 @@ const mockPartidas: SiembraPartidaDto[] = [
     anio: 2024,
     indice: 1,
     cg: "5",
-    f_siembra: "2024-03-15",
     cantidaNroCont: "100",
-    cantidadGrs: "500",
-    ajuste: "Ninguno",
     prensadoSemilla: "Si",
     profundidadSemilla: "3cm",
     tratamientoSemilla: "Tratamiento A",
@@ -112,10 +109,7 @@ describe("ASembrarDataTable", () => {
     expect(capturedProps).not.toBeNull();
     expect(capturedProps.confirm.summaryFields).toEqual([
       "cg",
-      "f_siembra",
       "cantidaNroCont",
-      "cantidadGrs",
-      "ajuste",
       "prensadoSemilla",
       "profundidadSemilla",
       "tratamientoSemilla",
