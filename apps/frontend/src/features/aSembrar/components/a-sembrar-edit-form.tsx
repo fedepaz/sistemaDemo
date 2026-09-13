@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import {
   Activity,
-  Calendar,
   FileText,
   Gauge,
   Ruler,
@@ -46,7 +45,7 @@ import {
 import { TaskShift } from "@/features/taskshift/components/taskShift";
 import { TratamientoSearch } from "@/features/siembra/components/tratamientoSearch";
 import { useDepositos } from "@/features/extendidos";
-import { getLocalDateStr } from "@/lib/date-utils";
+
 import { Textarea } from "@/components/ui/textarea";
 
 interface ASembrarEditFormProps {
@@ -170,32 +169,29 @@ export function ASembrarEditForm({
               </FormItem>
             )}
           />
+          {/* CANTIDAD DE BANDEJAS */}
 
           <FormField
             control={form.control}
-            name="f_siembra"
+            name="cantidaNroCont"
             render={({ field }) => (
               <FormItem className="space-y-2 md:space-y-3">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                    <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                    <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
                   <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                    Fecha de Siembra
+                    Bandejas Confirmadas
                   </FormLabel>
                 </div>
                 <FormControl>
                   <Input
-                    type="date"
-                    lang="es-AR"
+                    type="number"
+                    inputMode="numeric"
                     {...field}
-                    value={
-                      field.value instanceof Date
-                        ? getLocalDateStr(field.value)
-                        : ""
-                    }
-                    onChange={(e) => field.onChange(new Date(e.target.value))}
-                    className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    className=" p-1 max-h-[250px] md:max-h-[300px] h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
+                    autoFocus
                   />
                 </FormControl>
                 <FormMessage />
@@ -206,105 +202,6 @@ export function ASembrarEditForm({
 
         {/* TECHNICAL FIELDS */}
         <div className="space-y-3 md:space-y-4 shrink-0">
-          {/* CANTIDAD DE BANDEJAS */}
-          <div className="space-y-2 md:space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                  <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                </div>
-                <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                  Bandejas Confirmadas
-                </p>
-              </div>
-            </div>
-            <FormField
-              control={form.control}
-              name="cantidaNroCont"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      inputMode="numeric"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      className="h-12 md:h-16 rounded-xl border-border/60 bg-background shadow-sm text-xl md:text-3xl font-black px-4"
-                      autoFocus
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* DATOS DE SIEMBRA */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {/* CANTIDAD EN GRAMOS */}
-            <FormField
-              control={form.control}
-              name="cantidadGrs"
-              render={({ field }) => (
-                <FormItem className="space-y-2 md:space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                      <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                    </div>
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                      Cantidad (gr)
-                    </FormLabel>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      inputMode="decimal"
-                      placeholder="0"
-                      value={field.value === 0 ? "" : field.value}
-                      onChange={(e) => {
-                        const raw = e.target.value;
-                        if (raw === "") {
-                          field.onChange(0);
-                          return;
-                        }
-                        field.onChange(Number(raw));
-                      }}
-                      className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* AJUSTE */}
-            <FormField
-              control={form.control}
-              name="ajuste"
-              render={({ field }) => (
-                <FormItem className="space-y-2 md:space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                      <Gauge className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
-                    </div>
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                      Ajuste
-                    </FormLabel>
-                  </div>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="0"
-                      {...field}
-                      className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {/* PRESNSADO DE SEMILLA */}
             <FormField
