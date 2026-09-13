@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, fireEvent } from "@testing-library/react";
 
 // Mock useForm with controllable getValues
@@ -97,11 +98,23 @@ describe("SlideOverForm - Confirmation Dialog Summary", () => {
     if (getValuesReturn) {
       mockGetValues.mockReturnValue(getValuesReturn);
     }
+    const mockForm = {
+      control: {},
+      handleSubmit: jest.fn(),
+      formState: mockFormState,
+      reset: jest.fn(),
+      setValue: jest.fn(),
+      getValues: mockGetValues,
+      watch: jest.fn(),
+      register: jest.fn(),
+      trigger: mockTrigger,
+    };
     return render(
       <SlideOverForm
         {...defaultProps}
         confirm={confirm}
         fieldLabels={fieldLabels}
+        form={mockForm as any}
       />
     );
   };

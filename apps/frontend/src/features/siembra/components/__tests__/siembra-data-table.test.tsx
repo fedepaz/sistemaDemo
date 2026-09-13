@@ -1,4 +1,5 @@
-import { render, screen, act } from "@testing-library/react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { render, screen, act, fireEvent } from "@testing-library/react";
 
 beforeAll(() => {
   global.ResizeObserver = class {
@@ -19,6 +20,8 @@ jest.mock("../mezclaSelector", () => ({
 jest.mock("../tratamientoSearch", () => ({
   TratamientoSearch: () => <div data-testid="tratamiento-search" />,
 }));
+
+let capturedProps: any = null;
 
 const mockReset = jest.fn();
 jest.mock("react-hook-form", () => ({
@@ -62,16 +65,12 @@ jest.mock("@/components/data-display/data-table", () => ({
       <button onClick={() => onEdit(mockPartidas[0])}>Edit Row</button>
     </div>
   ),
-  SlideOverForm: ({
-    open,
-    children,
-  }: {
-    open: boolean;
-    children: React.ReactNode;
-  }) =>
-    open ? (
-      <div data-testid="slide-over-form">{children}</div>
-    ) : null,
+  SlideOverForm: (props: any) => {
+    capturedProps = props;
+    return props.open ? (
+      <div data-testid="slide-over-form">{props.children}</div>
+    ) : null;
+  },
 }));
 
 jest.mock("@/features/siembra/hooks/useSiembraPartidaMutation", () => ({
@@ -165,6 +164,10 @@ const mockColumns = [
 ];
 
 describe("SiembraDataTable", () => {
+  beforeEach(() => {
+    capturedProps = null;
+  });
+
   it("renders DataTable with correct title", () => {
     render(
       <SiembraDataTable
@@ -224,5 +227,27 @@ describe("SiembraDataTable", () => {
     });
 
     expect(screen.getByTestId("slide-over-form")).toBeInTheDocument();
+  });
+
+  it("passes correct summaryFields to SlideOverForm", () => {
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
+
+    act(() => {
+      fireEvent.click(screen.getByText("Edit Row"));
+    });
+
+    expect(capturedProps).not.toBeNull();
+    expect(capturedProps.confirm.summaryFields).toEqual([
+      "partidaId",
+      "anio",
+      "indice",
+    ]);
   });
 });
