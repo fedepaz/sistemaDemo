@@ -40,14 +40,6 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
         requiredPermission: { table: "siembra", action: "read" },
       },
       {
-        title: "Partidas Registradas",
-        href: ROUTES.SIEMBRA_PARTIDAS_REGISTRADAS,
-        icon: ClipboardList,
-        description: "Partidas con siembra registrada en el sistema web",
-        dashboard: { statsLabel: "Partidas registradas" },
-        requiredPermission: { table: "siembra", action: "read" },
-      },
-      {
         title: "A Extender",
         href: ROUTES.EXTENDIDOS,
         icon: Expand,
@@ -62,6 +54,14 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
         description: "Partidas autorizadas para siembra",
         dashboard: { statsLabel: "Partidas a sembrar" },
         requiredPermission: { table: "a_sembrar", action: "read" },
+      },
+      {
+        title: "Partidas Registradas",
+        href: ROUTES.SIEMBRA_PARTIDAS_REGISTRADAS,
+        icon: ClipboardList,
+        description: "Partidas con siembra registrada en el sistema web",
+        dashboard: { statsLabel: "Partidas registradas" },
+        requiredPermission: { table: "siembra", action: "read" },
       },
       {
         kind: "subGroup",
