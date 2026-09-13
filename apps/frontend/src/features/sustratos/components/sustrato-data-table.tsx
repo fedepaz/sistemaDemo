@@ -96,7 +96,7 @@ export function SustratoDataTable() {
                   title: "Crear sustrato",
                   description: "¿Deseas crear este nuevo sustrato?",
                   label: "Crear",
-                  summaryFields: ["nombre"],
+                  summaryFields: ["partidaId", "anio", "indice"],
                 }
               : undefined
           }
