@@ -168,7 +168,7 @@ export function SiembraPartidasRegistradasViewForm({
                   />
                   <InfoRow
                     icon={Activity}
-                    label="Presion"
+                    label="Prensado"
                     value={`${selectedPartida.prensadoSemilla}`}
                   />
                   <InfoRow
@@ -298,6 +298,11 @@ export function SiembraPartidasRegistradasViewForm({
                     icon={Clock}
                     label="Hora Fin"
                     value={utcToLocalTime(selectedPartida.endTime)}
+                  />
+                  <InfoRow
+                    icon={ClipboardList}
+                    label="Encargado"
+                    value={selectedPartida.createdByNombre}
                   />
                   <InfoRow
                     icon={Package}

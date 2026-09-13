@@ -37,6 +37,7 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   userId: requiredCuid("El usuario"),
   mezclaNombre: z.string(),
   usuarioNombre: z.string(),
+  createdByNombre: z.string().optional(),
   // Legacy siembra fields
   cg: z.number().optional(),
   fSiembra: z.string().optional(),
