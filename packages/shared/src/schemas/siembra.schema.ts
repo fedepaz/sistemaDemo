@@ -28,3 +28,11 @@ export const TratamientoDtoSchema = z.object({
 });
 
 export type TratamientoDto = z.infer<typeof TratamientoDtoSchema>;
+
+export const LegacySustratoDtoSchema = z.object({
+  codigo: z.string(),
+  nombre: z.string(),
+  unidad: z.string(),
+});
+
+export type LegacySustratoDto = z.infer<typeof LegacySustratoDtoSchema>;

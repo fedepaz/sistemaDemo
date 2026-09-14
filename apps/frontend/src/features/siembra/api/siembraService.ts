@@ -4,6 +4,7 @@ import { clientFetch } from "@/lib/api/client-fetch";
 import {
   AsignarUbiSiembraCompletaDto,
   AutorizarSiembraDto,
+  LegacySustratoDto,
   SiembraDto,
   SiembraPartidaDto,
   TratamientoDto,
@@ -30,5 +31,9 @@ export const siembraService = {
 
   fetchTratamientos: () => {
     return clientFetch<TratamientoDto[]>("l-tratamiento", { method: "GET" });
+  },
+
+  fetchLegacySustratos: () => {
+    return clientFetch<LegacySustratoDto[]>("l-sustrato", { method: "GET" });
   },
 };

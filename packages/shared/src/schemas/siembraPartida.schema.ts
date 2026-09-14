@@ -33,6 +33,7 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
   }).min(1, { message: "El tratamiento de semilla es requerido" }),
+  sustrato: z.string().optional(),
   mezclaId: requiredCuid("La mezcla"),
   userId: requiredCuid("El usuario"),
   mezclaNombre: z.string(),
@@ -92,6 +93,7 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
   tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
   }).min(1, { message: "El tratamiento de semilla es requerido" }),
+  sustrato: z.string().optional(),
   mezclaId: cuidSchema.optional(),
   // Stock traceability
   stockLote: z.number().optional(),

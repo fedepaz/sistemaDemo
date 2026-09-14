@@ -47,6 +47,7 @@ import { TratamientoSearch } from "@/features/siembra/components/tratamientoSear
 import { useDepositos } from "@/features/extendidos";
 
 import { Textarea } from "@/components/ui/textarea";
+import { SustratoSearch } from "@/features/siembra/components/sustratoSearch";
 
 interface ASembrarEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -75,6 +76,11 @@ export function ASembrarEditForm({
 
   const tratamientoSemilla = useWatch({
     name: "tratamientoSemilla",
+    control: form.control,
+  });
+
+  const sustrato = useWatch({
+    name: "sustrato",
     control: form.control,
   });
 
@@ -290,6 +296,21 @@ export function ASembrarEditForm({
             <TratamientoSearch
               value={tratamientoSemilla ?? ""}
               onChange={(codigo) => form.setValue("tratamientoSemilla", codigo)}
+            />
+          </div>
+          {/* SUSTRATO */}
+          <div className="space-y-2 md:space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                <TestTubes className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+              </div>
+              <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                Sustrato
+              </Label>
+            </div>
+            <SustratoSearch
+              value={sustrato ?? ""}
+              onChange={(codigo) => form.setValue("sustrato", codigo)}
             />
           </div>
 
