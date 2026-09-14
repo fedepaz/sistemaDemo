@@ -143,6 +143,7 @@ export class SiembraPartidasService {
       prensadoSemilla: row.prensadoSemilla.toNumber(),
       profundidadSemilla: row.profundidadSemilla.toString(),
       tratamientoSemilla: row.tratamientoSemilla,
+      sustrato: row.sustrato ?? undefined,
       mezclaId: row.mezclaId,
       userId: row.userId,
       mezclaNombre: this.buildMezclaNombre(row.mezcla),
@@ -247,6 +248,7 @@ export class SiembraPartidasService {
       prensadoSemilla: data.prensadoSemilla,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
+      sustrato: data.sustrato,
       stockLote: data.stockLote,
       stockAnio: data.stockAnio,
       stockEntradasAntes: data.stockEntradasAntes,
@@ -364,6 +366,7 @@ export class SiembraPartidasService {
       prensadoSemilla: data.prensadoSemilla,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
+      sustrato: data.sustrato,
       ...(data.mezclaId ? { mezcla: { connect: { id: data.mezclaId } } } : {}),
     });
 
