@@ -7,6 +7,7 @@ import { PrismaService } from '../../../infra/prisma/prisma.service';
 import { PartidasRepository } from '../../legacy/partidas/repositories/partidas.repository';
 import { TaskShiftsRepository } from '../../taskShifts/repositories/taskShifts.repository';
 import { LegacyTratamientoService } from '../../legacy/tratamiento/tratamiento.service';
+import { LegacySustratoService } from '../../legacy/sustrato/sustrato.service';
 import { NotFoundException } from '@nestjs/common';
 
 describe('SiembraPartidasService', () => {
@@ -23,6 +24,7 @@ describe('SiembraPartidasService', () => {
   let partidasRepoMock: { findByComposite: jest.Mock };
   let taskShiftsRepoMock: { findByPartidaComposite: jest.Mock };
   let tratamientoServiceMock: { getByCodigo: jest.Mock };
+  let sustratoServiceMock: { getByCodigo: jest.Mock };
 
   const mockRow = {
     id: 'sp-1',
@@ -113,6 +115,7 @@ describe('SiembraPartidasService', () => {
     partidasRepoMock = { findByComposite: jest.fn() };
     taskShiftsRepoMock = { findByPartidaComposite: jest.fn() };
     tratamientoServiceMock = { getByCodigo: jest.fn() };
+    sustratoServiceMock = { getByCodigo: jest.fn() };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -122,6 +125,7 @@ describe('SiembraPartidasService', () => {
         { provide: PartidasRepository, useValue: partidasRepoMock },
         { provide: TaskShiftsRepository, useValue: taskShiftsRepoMock },
         { provide: LegacyTratamientoService, useValue: tratamientoServiceMock },
+        { provide: LegacySustratoService, useValue: sustratoServiceMock },
       ],
     }).compile();
 
