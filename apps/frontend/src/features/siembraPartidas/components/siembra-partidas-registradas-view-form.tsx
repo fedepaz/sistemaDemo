@@ -186,6 +186,15 @@ export function SiembraPartidasRegistradasViewForm({
                     }
                   />
                   <InfoRow
+                    icon={FlaskConical}
+                    label="Sustrato"
+                    value={
+                      selectedPartida.sustratoNombre ||
+                      selectedPartida.sustrato ||
+                      "-"
+                    }
+                  />
+                  <InfoRow
                     icon={Hash}
                     label="Cámara Germinación"
                     value={selectedPartida.cg}

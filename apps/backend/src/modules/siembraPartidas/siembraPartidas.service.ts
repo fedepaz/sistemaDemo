@@ -20,6 +20,7 @@ import { PrismaService } from '../../infra/prisma/prisma.service';
 import { PartidasRepository } from '../legacy/partidas/repositories/partidas.repository';
 import { TaskShiftsRepository } from '../taskShifts/repositories/taskShifts.repository';
 import { LegacyTratamientoService } from '../legacy/tratamiento/tratamiento.service';
+import { LegacySustratoService } from '../legacy/sustrato/sustrato.service';
 
 const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
 const GENERIC_MEZCLA_SUSTRATO1_ID = 'c00000000000000000000001';
@@ -33,6 +34,7 @@ export class SiembraPartidasService {
     private readonly partidasRepo: PartidasRepository,
     private readonly taskShiftsRepo: TaskShiftsRepository,
     private readonly tratamientoService: LegacyTratamientoService,
+    private readonly sustratoService: LegacySustratoService,
   ) {}
 
   private async getOrCreateGenericMezcla(): Promise<string> {
@@ -88,6 +90,17 @@ export class SiembraPartidasService {
     }
   }
 
+  private async buildSustratoNombre(
+    codigo: string,
+  ): Promise<string | undefined> {
+    try {
+      const sustrato = await this.sustratoService.getByCodigo(codigo);
+      return sustrato.nombre;
+    } catch {
+      return undefined;
+    }
+  }
+
   private async mapToDto(
     row: SiembraPartidasWithRelations,
     legacyData: Awaited<ReturnType<typeof this.partidasRepo.findByComposite>>,
@@ -112,6 +125,11 @@ export class SiembraPartidasService {
     // Resolve treatment name
     const tratamientoNombre = row.tratamientoSemilla
       ? await this.buildTratamientoNombre(row.tratamientoSemilla)
+      : undefined;
+
+    // Resolve sustrato name
+    const sustratoNombre = row.sustrato
+      ? await this.buildSustratoNombre(row.sustrato)
       : undefined;
 
     // Resolve entity name
@@ -144,6 +162,7 @@ export class SiembraPartidasService {
       profundidadSemilla: row.profundidadSemilla.toString(),
       tratamientoSemilla: row.tratamientoSemilla,
       sustrato: row.sustrato ?? undefined,
+      sustratoNombre,
       mezclaId: row.mezclaId,
       userId: row.userId,
       mezclaNombre: this.buildMezclaNombre(row.mezcla),
