@@ -5,13 +5,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { APP_GUARD } from '@nestjs/core';
 import { PartidasController } from '../../src/modules/legacy/partidas/partidas.controller';
 import { PartidasService } from '../../src/modules/legacy/partidas/partidas.service';
+import { SiembraPartidasService } from '../../src/modules/siembraPartidas/siembraPartidas.service';
 import { MockAuthGuard, MockPermissionsGuard } from './helpers/mock-guards';
 
 function createPartidasMock() {
   return {
     getAllPartidas: jest.fn(),
     asignarExtendido: jest.fn(),
-    asignarSiembra: jest.fn(),
+    completarSiembraLegacy: jest.fn(),
   };
 }
 
@@ -28,6 +29,12 @@ describe('Siembra (integration)', () => {
         { provide: APP_GUARD, useClass: MockAuthGuard },
         { provide: APP_GUARD, useClass: MockPermissionsGuard },
         { provide: PartidasService, useValue: partidasMock },
+        {
+          provide: SiembraPartidasService,
+          useValue: {
+            completarSiembraPartida: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
     }).compile();
 
@@ -43,12 +50,12 @@ describe('Siembra (integration)', () => {
     jest.clearAllMocks();
   });
 
-  describe('POST /l-partidas/asignar-siembra', () => {
+  describe('PATCH /l-partidas/asignar-siembra/:id', () => {
     it('returns 201 on successful assignment', async () => {
-      partidasMock.asignarSiembra.mockResolvedValue(undefined);
+      partidasMock.completarSiembraLegacy.mockResolvedValue(undefined);
 
       await request(app.getHttpServer())
-        .post('/l-partidas/asignar-siembra')
+        .patch('/l-partidas/asignar-siembra/sp-1')
         .send({
           partidaId: 1,
           anio: 2026,
@@ -65,16 +72,14 @@ describe('Siembra (integration)', () => {
           anoLote: 2026,
           item: 1,
           semxgr: 421,
-          ajuste: 'N',
-          cantidadGrs: 22200,
           entityId: 'cltaskshiftpayload0000000',
           startTime: '2026-01-15T08:00:00.000Z',
           endTime: '2026-01-15T17:00:00.000Z',
           employeeUserIds: [],
         })
-        .expect(201);
+        .expect(200);
 
-      expect(partidasMock.asignarSiembra).toHaveBeenCalledWith(
+      expect(partidasMock.completarSiembraLegacy).toHaveBeenCalledWith(
         expect.objectContaining({ partidaId: 1, anio: 2026 }),
         expect.any(String),
       );
