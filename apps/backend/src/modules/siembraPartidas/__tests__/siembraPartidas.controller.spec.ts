@@ -9,7 +9,6 @@ describe('SiembraPartidasController', () => {
   let service: {
     getAllSiembraPartidas: jest.Mock;
     getSiembraPartidaById: jest.Mock;
-    createSiembraPartida: jest.Mock;
   };
 
   const mockUser = { id: 'user-1', username: 'admin', tenantId: 'tenant-1' };
@@ -30,7 +29,6 @@ describe('SiembraPartidasController', () => {
     service = {
       getAllSiembraPartidas: jest.fn(),
       getSiembraPartidaById: jest.fn(),
-      createSiembraPartida: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -67,28 +65,6 @@ describe('SiembraPartidasController', () => {
         'sp-1',
         'user-1',
       );
-    });
-  });
-
-  describe('createSiembraPartida', () => {
-    it('delegates to service with data', async () => {
-      service.createSiembraPartida.mockResolvedValue(mockDto);
-
-      const data = {
-        partidaId: 100,
-        anio: 2026,
-        indice: 1,
-        metodoMaquina: true,
-        presionSemilla: 25,
-        profundidadSemilla: '1.525',
-        tratamientoSemilla: '',
-        mezclaId: 'mezcla-1',
-        userId: 'user-1',
-      };
-      const result = await controller.createSiembraPartida(mockUser, data);
-
-      expect(result).toEqual(mockDto);
-      expect(service.createSiembraPartida).toHaveBeenCalledWith(data, 'user-1');
     });
   });
 });

@@ -63,6 +63,7 @@ export function EntityDataTable() {
         onCreate={handleNewEntity}
         createLabel="Nueva Entidad"
         onDelete={handleDelete}
+        columnLabels={fieldLabels.Entity}
       />
       {slideOverOpen && (
         <SlideOverForm

@@ -11,31 +11,14 @@ initial app boot and button-level async feedback.
 
 ---
 
-## The Three Tiers
+## The Two Tiers
 
-### Tier 1: Route-Level (`loading.tsx`)
+### Tier 1: Section-Level (`<LoadingBoundary>`)
 
-Every route segment under `(dashboard)/` and `(auth)/` MUST have a
-`loading.tsx` file. This is the page-level skeleton that shows while
-the route's server components stream in.
-
-```tsx
-// app/(dashboard)/users/loading.tsx
-export default function Loading() {
-  return <UsersPageSkeleton />;
-}
-```
-
-**Rules:**
-- One `loading.tsx` per route segment
-- Skeleton mirrors the full page layout (header + content area)
-- No `<LoadingBoundary>` wrapper here — `loading.tsx` IS the Suspense boundary
-- Skeleton components live in the feature directory: `features/{name}/components/{name}-skeleton.tsx`
-
-### Tier 2: Section-Level (`<LoadingBoundary>`)
-
-Any data-fetching section within a page MUST use `<LoadingBoundary>`.
-This wraps `<Suspense>` with a required skeleton prop.
+Every data-fetching section within a page MUST use `<LoadingBoundary>`.
+This wraps `<Suspense>` with a required skeleton prop. There are NO
+route-level `loading.tsx` files — the auth gate in `DashboardProtectedLayout`
+renders children directly during `profileLoading`.
 
 ```tsx
 import { LoadingBoundary } from '@/components/common/loading-boundary';
@@ -58,8 +41,9 @@ export function UsersPage() {
 - Skeleton must mirror the real component's dimensions (prevent CLS)
 - Keep fast content (headers, nav) OUTSIDE the boundary
 - One boundary per independently-loading section
+- Skeleton components live in the feature directory: `features/{name}/components/{name}-skeleton.tsx`
 
-### Tier 3: Inline (Button States)
+### Tier 2: Inline (Button States)
 
 Async actions (form submissions, toggles, deletes) use a spinner
 inside the button. Never show a full-page skeleton for a button action.
@@ -126,7 +110,6 @@ export function LoadingBoundary({ skeleton, name, children }: LoadingBoundaryPro
 
 | Type | Naming Pattern | Location |
 |------|---------------|----------|
-| Route skeleton | `{Route}Skeleton` | `app/(dashboard)/loading.tsx` (inline or imported) |
 | Feature skeleton | `{Feature}Skeleton` | `features/{name}/components/{name}-skeleton.tsx` |
 | Shared skeleton | `{Element}Skeleton` | `components/common/skeletons/{element}-skeleton.tsx` |
 
@@ -171,7 +154,7 @@ When content loads, `aria-busy` is removed by React's Suspense swap.
 | Don't | Do |
 |-------|-----|
 | `<Suspense fallback={<LoadingSpinner />}>` | `<LoadingBoundary skeleton={<FeatureSkeleton />}>` |
-| Full-page spinner for auth gating | Content-area skeleton inside `<LoadingBoundary>` |
+| Full-page skeleton on page load | Content-area skeleton inside `<LoadingBoundary>` |
 | Skeleton with wrong dimensions | Skeleton that mirrors real component exactly |
 | Skeleton in a separate directory | Skeleton colocated with its feature |
 | `useEffect` fetch + manual loading state | Server component with `<LoadingBoundary>` |
@@ -202,10 +185,10 @@ already cached and displayed — a second skeleton is just visual noise.
 
 ## Pre-Merge Checklist
 
-- [ ] Every route has a `loading.tsx`
 - [ ] Every data-fetching section uses `<LoadingBoundary>`
 - [ ] Every skeleton mirrors its real component
 - [ ] No raw `<Suspense fallback={<LoadingSpinner />}>` in source
+- [ ] No `loading.tsx` route files
 - [ ] `LoadingSpinner` only appears in: root layout (boot) or button states
 - [ ] Skeleton file is colocated with its feature
 - [ ] Skeleton passes reduced-motion check

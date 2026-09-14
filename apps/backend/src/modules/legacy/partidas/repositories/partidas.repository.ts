@@ -27,6 +27,22 @@ export class PartidasRepository {
     return rows[0];
   }
 
+  async findByComposite(
+    partida: number,
+    ano: number,
+    indice: number,
+  ): Promise<LegacyPartidas | null> {
+    const rows = await this.legacyDb.query<LegacyPartidas[]>(
+      `SELECT p.*, articulo.nombre AS nombreEspecie
+       FROM partidas p
+       LEFT JOIN articulo ON articulo.codigo = CONCAT(p.espvar, p.contenedor)
+       WHERE p.partida = ? AND p.ano = ? AND p.indice = ?`,
+      [partida, ano, indice],
+    );
+    if (!rows.length) return null;
+    return rows[0];
+  }
+
   async findByFecha(fecha: string): Promise<LegacyPartidas[]> {
     const rows = await this.legacyDb.query<LegacyPartidas[]>(
       'SELECT * FROM partidas WHERE fecha = ?',
@@ -119,28 +135,42 @@ export class PartidasRepository {
     partida: number;
     ano: number;
     indice: number;
+    f_siembra: Date;
     cg: number;
     cantidaNroCont: number;
-    f_siembra: Date;
-    tratamientoSemilla: string;
+    ajuste: string;
+    cantidadGrs: number;
+    lote: number;
+    anoLote: number;
+    item: number;
+    semxgr: number;
     detalle?: string;
   }): Promise<void> {
     await this.legacyDb.transaction(async (conn) => {
       const parsedDate = new Date(data.f_siembra);
+      const resultC = data.cantidadGrs * data.semxgr;
 
-      await conn.query(
-        `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ?, tratamien = ? WHERE partida = ? AND ano = ? AND indice = ?`,
-        [
-          parsedDate.toISOString().slice(0, 10),
-          data.cg,
-          data.cantidaNroCont,
-          data.detalle,
-          data.tratamientoSemilla,
-          data.partida,
-          data.ano,
-          data.indice,
-        ],
-      );
+      const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ?, ajuste = ?, cantidad = ? WHERE partida = ? AND ano = ? AND indice = ?`;
+      const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE lote = ? AND ano_lote= ? AND item= ?`;
+
+      await conn.query(updatePartidasSql, [
+        parsedDate.toISOString().slice(0, 10),
+        data.cg,
+        data.cantidaNroCont,
+        data.detalle,
+        data.ajuste,
+        data.cantidadGrs,
+        data.partida,
+        data.ano,
+        data.indice,
+      ]);
+      await conn.query(updatePartidas1Sql, [
+        resultC,
+        data.semxgr,
+        data.lote,
+        data.anoLote,
+        data.item,
+      ]);
     });
   }
 }

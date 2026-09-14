@@ -198,6 +198,7 @@ export function ExtendidoDataTable({
         toolbarContent={toolbarContent}
         canExecuteLabel="Asignar Ubicación"
         exportColumns={partidaExportColumns}
+        columnLabels={fieldLabels.Extendido}
       />
 
       {selectedPartida && (

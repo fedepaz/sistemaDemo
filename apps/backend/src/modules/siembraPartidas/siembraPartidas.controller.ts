@@ -1,16 +1,11 @@
 // src/modules/siembraPartidas/siembraPartidas.controller.ts
 
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
 import { SiembraPartidasService } from './siembraPartidas.service';
-import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
-import {
-  CreateSiembraPartidaDto,
-  CreateSiembraPartidaSchema,
-  SiembraPartidaDto,
-} from '@vivero/shared';
+import { SiembraPartidaDto } from '@vivero/shared';
 
 @Controller('siembra-partidas')
 export class SiembraPartidasController {
@@ -22,16 +17,6 @@ export class SiembraPartidasController {
     @CurrentUser() user: AuthUser,
   ): Promise<SiembraPartidaDto[]> {
     return this.service.getAllSiembraPartidas(user.id);
-  }
-
-  @Post()
-  @RequirePermission({ tableName: 'siembra', action: 'create', scope: 'ALL' })
-  async createSiembraPartida(
-    @CurrentUser() user: AuthUser,
-    @Body(new ZodValidationPipe(CreateSiembraPartidaSchema))
-    data: CreateSiembraPartidaDto,
-  ) {
-    return this.service.createSiembraPartida(data, user.id);
   }
 
   @Get(':id')

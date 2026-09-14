@@ -13,13 +13,14 @@ import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "./empty-state";
 
 import { PermissionsUserManager } from "./permissions-user-manager";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { UserSelector } from "./user-selector";
 import { UserSelectorSkeleton } from "./user-selector-skeleton";
 import { PermissionsManagerSkeleton } from "./permission-manager-skeleton";
 import { PermissionSelectorSkeleton } from "./permission-selector-skeleton";
 import { PermissionSelector } from "./permission-selector";
 import { PermissionsEntityManager } from "./permissions-entity-manager";
+import { LoadingBoundary } from "@/components/common/loading-boundary";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
 
@@ -83,13 +84,13 @@ export function PermissionsDashboard() {
 
       {/* Selectores dinámicos según el modo */}
       {viewMode === "user" ? (
-        <Suspense fallback={<UserSelectorSkeleton />}>
+        <LoadingBoundary skeleton={<UserSelectorSkeleton />}>
           <UserSelector onSelectedUserId={setSelectedUserId} />
-        </Suspense>
+        </LoadingBoundary>
       ) : (
-        <Suspense fallback={<PermissionSelectorSkeleton />}>
+        <LoadingBoundary skeleton={<PermissionSelectorSkeleton />}>
           <PermissionSelector onSelectedEntityId={setSelectedTableId} />
-        </Suspense>
+        </LoadingBoundary>
       )}
 
       {/* Contenido principal */}
@@ -100,12 +101,12 @@ export function PermissionsDashboard() {
               <EmptyState hasUser={false} />
             </div>
           ) : (
-            <Suspense fallback={<PermissionsManagerSkeleton />}>
+            <LoadingBoundary skeleton={<PermissionsManagerSkeleton />}>
               <PermissionsUserManager
                 key={selectedUserId}
                 userId={selectedUserId}
               />
-            </Suspense>
+            </LoadingBoundary>
           )
         ) : (
           !selectedTableId ? (
@@ -113,12 +114,12 @@ export function PermissionsDashboard() {
               <EmptyState hasUser={false} />
             </div>
           ) : (
-            <Suspense fallback={<PermissionsManagerSkeleton />}>
+            <LoadingBoundary skeleton={<PermissionsManagerSkeleton />}>
               <PermissionsEntityManager
                 key={selectedTableId}
                 entityId={selectedTableId}
               />
-            </Suspense>
+            </LoadingBoundary>
           )
         )}
       </div>

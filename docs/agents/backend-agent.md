@@ -157,7 +157,7 @@ apps/backend/src/modules/
 ├── tenants/       tenant definitions
 ├── health/        health checks
 └── legacy/        legacy MySQL: agentes, alerts, config, depositos, especie,
-                   extendidos, legacyBase, partidas, programas, siembra
+                   extendidos, legacyBase, partidas, programas, siembra, stock
 ```
 
 ---

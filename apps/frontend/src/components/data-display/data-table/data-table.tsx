@@ -91,6 +91,7 @@ interface DataTableProps<TData extends Record<string, unknown>, TValue> {
   canExecuteLabel?: string;
   exportColumns?: ExportColumn<TData>[];
   enableSearch?: boolean;
+  columnLabels?: Record<string, string>;
 }
 
 function HeaderComponent({ titulo }: { titulo: string }) {
@@ -117,6 +118,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
   canExecuteLabel = "Cambiar",
   exportColumns,
   enableSearch = true,
+  columnLabels,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -484,7 +486,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                           column.toggleVisibility(!!value)
                         }
                       >
-                        {column.id}
+                        {columnLabels?.[column.id] ?? column.id}
                       </DropdownMenuCheckboxItem>
                     );
                   })}

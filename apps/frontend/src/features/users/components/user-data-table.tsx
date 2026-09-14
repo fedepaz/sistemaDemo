@@ -101,6 +101,7 @@ export function UsersDataTable() {
           onEdit={handleEdit}
           onDelete={handleDelete}
           exportColumns={userExportColumns}
+          columnLabels={fieldLabels.User}
           toolbarContent={
             canCreate && usersToActivate.length ? (
               <Button
@@ -133,6 +134,7 @@ export function UsersDataTable() {
           onEdit={handleEdit}
           totalCount={usersToActivate.length}
           exportColumns={userExportColumns}
+          columnLabels={fieldLabels.User}
           toolbarContent={
             <Button
               variant="outline"

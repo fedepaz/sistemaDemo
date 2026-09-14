@@ -139,6 +139,10 @@ export const siembraQueryKeys = {
   tratamientos: () => [...siembraQueryKeys.all(), "tratamientos"] as const,
 };
 
+export const siembraPartidasRegistradasQueryKeys = {
+  all: () => ["siembraPartidasRegistradas"] as const,
+};
+
 // ============================================================================
 // ALERTS
 // ============================================================================

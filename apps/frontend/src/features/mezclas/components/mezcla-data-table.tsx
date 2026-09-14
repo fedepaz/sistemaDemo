@@ -80,6 +80,7 @@ export function MezclaDataTable() {
         onCreate={handleNewMezcla}
         createLabel="Nueva Mezcla"
         onView={handleView}
+        columnLabels={fieldLabels.Mezcla}
       />
       {slideOverOpen && (
         <SlideOverForm

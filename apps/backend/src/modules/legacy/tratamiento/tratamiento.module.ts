@@ -8,5 +8,6 @@ import { TratamientoRepository } from './repositories/tratamiento.repository';
 @Module({
   controllers: [LegacyTratamientoController],
   providers: [LegacyTratamientoService, TratamientoRepository],
+  exports: [LegacyTratamientoService],
 })
 export class LegacyTratamientoModule {}

@@ -41,6 +41,7 @@ import { SiembraPartidasModule } from './modules/siembraPartidas/siembraPartidas
 import { MezclaModule } from './modules/mezcla/mezcla.module';
 import { SustratosModule } from './modules/sustratos/sustratos.module';
 import { LegacyTratamientoModule } from './modules/legacy/tratamiento/tratamiento.module';
+import { LegacyStockModule } from './modules/legacy/stock/stock.module';
 import { BillboardModule } from './modules/billboard/billboard.module';
 
 @Module({
@@ -103,6 +104,7 @@ import { BillboardModule } from './modules/billboard/billboard.module';
     LegacySiembraModule,
     LegacyAlertsModule,
     LegacyTratamientoModule,
+    LegacyStockModule,
     AlertCommentsModule,
     TaskShiftsModule,
     AlertSolvedModule,

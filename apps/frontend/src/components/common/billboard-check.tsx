@@ -8,11 +8,7 @@ import { LoadingBoundary } from "@/components/common/loading-boundary";
 import { useState } from "react";
 
 export function BillboardCheck() {
-  return (
-    <LoadingBoundary skeleton={<BillboardModalSkeleton />} name="billboard">
-      <BillboardCheckInner />
-    </LoadingBoundary>
-  );
+  return <BillboardCheckInner />;
 }
 
 function BillboardCheckInner() {
@@ -22,10 +18,12 @@ function BillboardCheckInner() {
   if (!messages?.length || dismissed) return null;
 
   return (
-    <BillboardModal
-      open={true}
-      messages={messages}
-      onClose={() => setDismissed(true)}
-    />
+    <LoadingBoundary skeleton={<BillboardModalSkeleton />} name="billboard">
+      <BillboardModal
+        open={true}
+        messages={messages}
+        onClose={() => setDismissed(true)}
+      />
+    </LoadingBoundary>
   );
 }

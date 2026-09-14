@@ -106,6 +106,14 @@ Without memoized callbacks, `React.memo` cannot prevent re-renders.
 | `SiembraView` | [x] | [x] | [x] | [ ] |
 | `SiembraDashboard` | [x] | [x] | [x] | [x] |
 
+### Siembra Partidas Registradas
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `SiembraPartidasRegistradasDashboard` | [x] | [x] | [x] | [x] |
+| `SiembraPartidasRegistradasDashboardSkeleton` | [x] | [x] | [ ] | [ ] |
+| `SiembraPartidasRegistradasDataTable` | [x] | [x] | [x] | [x] |
+| `SiembraPartidasRegistradasViewForm` | [x] | [x] | [x] | [x] |
+
 ### Alerts
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |

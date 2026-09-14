@@ -7,6 +7,7 @@ import type { ExportColumn } from "@/lib/export/types";
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import type { AlertBaseDto, CreateAlertCommentDto } from "@vivero/shared";
+import { fieldLabels } from "@vivero/shared";
 import { AlertsViewForm } from "./alerts-view-form";
 import { AlertEditForm } from "./alert-edit-form";
 import type { AlertType } from "@/features/alerts/types";
@@ -104,6 +105,7 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
         onEdit={handleAlertComment}
         canExecuteLabel="Agregar Comentario"
         exportColumns={exportColumns}
+        columnLabels={fieldLabels.AlertColumns}
       />
       {selectedAlert && (
         <SlideOverForm

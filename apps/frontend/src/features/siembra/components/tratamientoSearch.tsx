@@ -119,7 +119,10 @@ export function TratamientoSearch({
                       key={tratamiento.codigo}
                       type="button"
                       className="flex items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors text-left cursor-pointer"
-                      onClick={() => onChange(tratamiento.codigo)}
+                      onClick={() => {
+                        onChange(tratamiento.codigo);
+                        setShowResults(false);
+                      }}
                     >
                       <span className="font-medium">{tratamiento.nombre}</span>
                       <span className="text-muted-foreground text-xs">

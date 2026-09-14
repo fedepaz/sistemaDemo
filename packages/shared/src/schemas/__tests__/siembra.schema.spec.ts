@@ -16,6 +16,7 @@ describe("SiembraDtoSchema", () => {
     fechaSiembraReal: "2026-07-16",
     lote: "L001",
     anoLote: "2026",
+    item: 1,
     semxgr: "2",
     c: "3",
     g: "4",

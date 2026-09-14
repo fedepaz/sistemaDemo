@@ -17,6 +17,7 @@ export interface LegacySiembra extends RowDataPacket {
   f_siembra: string;
   lote: string;
   ano_lote: string;
+  item: number;
   semxgr: string;
   c: string;
   g: string;

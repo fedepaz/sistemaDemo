@@ -1,10 +1,10 @@
 // src/features/alerts/components/v1/AlertsDashboardV1.tsx
 "use client";
 
-import { Suspense } from "react";
 import { AlertTriangle } from "lucide-react";
 import { AlertSummaryCards } from "../shared/alert-summary-cards";
 import { AlertsDataTable } from "./alerts-data-table";
+import { LoadingBoundary } from "@/components/common/loading-boundary";
 import {
   siembraRetrasadaColumns,
   faltaGerminacionColumns,
@@ -158,8 +158,8 @@ function AlertsContent() {
 
 export function AlertsDashboardV1() {
   return (
-    <Suspense fallback={<AlertDashboardSkeleton />}>
+    <LoadingBoundary skeleton={<AlertDashboardSkeleton />}>
       <AlertsContent />
-    </Suspense>
+    </LoadingBoundary>
   );
 }

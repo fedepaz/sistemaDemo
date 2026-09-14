@@ -25,6 +25,12 @@ describe('SiembraPartidasRepository', () => {
     metodoMaquina: true,
     mezclaId: 'mezcla-1',
     userId: 'user-1',
+    stockLote: 42,
+    stockAnio: 2026,
+    stockEntradasAntes: 1000,
+    stockSalidasAntes: 200,
+    stockEntradasDespues: 1000,
+    stockSalidasDespues: 200,
     isActive: true,
     createdAt: new Date('2026-08-01'),
     updatedAt: new Date('2026-08-01'),
@@ -65,9 +71,11 @@ describe('SiembraPartidasRepository', () => {
       const result = await repository.findAll('user-1');
 
       expect(result).toEqual([mockRecord]);
-      expect(prisma.siembraPartidas.findMany).toHaveBeenCalledWith({
-        where: { deletedAt: null, isActive: true, id: { notIn: [] } },
-      });
+      expect(prisma.siembraPartidas.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { deletedAt: null, isActive: true, id: { notIn: [] } },
+        }),
+      );
     });
 
     it('returns all records for dev users', async () => {
@@ -77,20 +85,26 @@ describe('SiembraPartidasRepository', () => {
       const result = await repository.findAll('dev-1');
 
       expect(result).toEqual([mockRecord]);
-      expect(prisma.siembraPartidas.findMany).toHaveBeenCalledWith();
+      expect(prisma.siembraPartidas.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { deletedAt: null, isActive: true },
+        }),
+      );
     });
   });
 
   describe('findById', () => {
-    it('returns record by id for non-dev users', async () => {
+    it('returns record by id', async () => {
       prisma.siembraPartidas.findFirst.mockResolvedValue(mockRecord);
 
       const result = await repository.findById('sp-1', 'user-1');
 
       expect(result).toEqual(mockRecord);
-      expect(prisma.siembraPartidas.findFirst).toHaveBeenCalledWith({
-        where: { id: 'sp-1', deletedAt: null, isActive: true },
-      });
+      expect(prisma.siembraPartidas.findFirst).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: 'sp-1' },
+        }),
+      );
     });
 
     it('returns null when not found', async () => {
@@ -100,23 +114,57 @@ describe('SiembraPartidasRepository', () => {
 
       expect(result).toBeNull();
     });
-
-    it('returns record for dev users without filters', async () => {
-      prisma.devAccount.findMany.mockResolvedValue([{ userId: 'dev-1' }]);
-      prisma.siembraPartidas.findFirst.mockResolvedValue(mockRecord);
-
-      const result = await repository.findById('sp-1', 'dev-1');
-
-      expect(result).toEqual(mockRecord);
-      expect(prisma.siembraPartidas.findFirst).toHaveBeenCalledWith({
-        where: { id: 'sp-1' },
-      });
-    });
   });
 
   describe('create', () => {
-    it('creates record with provided data', async () => {
+    it('creates record with provided data including stock fields', async () => {
       prisma.siembraPartidas.create.mockResolvedValue(mockRecord);
+
+      const result = await repository.create({
+        partidaId: 100,
+        anio: 2026,
+        indice: 1,
+        metodoMaquina: true,
+        mezclaId: 'mezcla-1',
+        userId: 'user-1',
+        stockLote: 42,
+        stockAnio: 2026,
+        stockEntradasAntes: 1000 as never,
+        stockSalidasAntes: 200 as never,
+        stockEntradasDespues: 1000 as never,
+        stockSalidasDespues: 200 as never,
+      });
+
+      expect(result).toEqual(mockRecord);
+      expect(prisma.siembraPartidas.create).toHaveBeenCalledWith({
+        data: {
+          partidaId: 100,
+          anio: 2026,
+          indice: 1,
+          metodoMaquina: true,
+          mezclaId: 'mezcla-1',
+          userId: 'user-1',
+          stockLote: 42,
+          stockAnio: 2026,
+          stockEntradasAntes: 1000,
+          stockSalidasAntes: 200,
+          stockEntradasDespues: 1000,
+          stockSalidasDespues: 200,
+        },
+      });
+    });
+
+    it('creates record without stock fields when undefined', async () => {
+      const recordWithoutStock = {
+        ...mockRecord,
+        stockLote: null,
+        stockAnio: null,
+        stockEntradasAntes: null,
+        stockSalidasAntes: null,
+        stockEntradasDespues: null,
+        stockSalidasDespues: null,
+      };
+      prisma.siembraPartidas.create.mockResolvedValue(recordWithoutStock);
 
       const result = await repository.create({
         partidaId: 100,
@@ -127,7 +175,7 @@ describe('SiembraPartidasRepository', () => {
         userId: 'user-1',
       });
 
-      expect(result).toEqual(mockRecord);
+      expect(result).toEqual(recordWithoutStock);
       expect(prisma.siembraPartidas.create).toHaveBeenCalledWith({
         data: {
           partidaId: 100,

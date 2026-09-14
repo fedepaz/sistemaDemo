@@ -2,8 +2,6 @@
 
 import { Logo } from "@/components/common/logo";
 import { AuthHeader } from "@/components/layout/auth-header";
-import { AuthSkeleton } from "@/features/auth";
-import { Suspense } from "react";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -36,9 +34,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
           {/* Form Card */}
           <div className="bg-card/80 dark:bg-card/40 backdrop-blur-xl border border-border/40 p-5 sm:p-8 md:p-10 shadow-2xl rounded-xl relative overflow-hidden group">
-            <Suspense fallback={<AuthSkeleton />}>
-              {children}
-            </Suspense>
+            {children}
           </div>
         </div>
       </div>

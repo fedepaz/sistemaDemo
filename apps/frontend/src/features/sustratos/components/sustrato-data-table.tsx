@@ -68,6 +68,7 @@ export function SustratoDataTable() {
         onCreate={handleNewSustrato}
         createLabel="Nuevo Sustrato"
         onView={handleView}
+        columnLabels={fieldLabels.Sustrato}
       />
       {slideOverOpen && (
         <SlideOverForm

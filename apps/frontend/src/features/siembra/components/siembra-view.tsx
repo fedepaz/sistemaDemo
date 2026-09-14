@@ -1,14 +1,14 @@
 // apps/frontend/src/features/siembra/components/siembra-view.tsx
 "use client";
 
-import { Suspense } from "react";
-
 import { EmptyState } from "./empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { partidaSiembraColumns } from "./columns";
 
 import { SiembraDataTable } from "./siembra-data-table";
 import { useSiembraPartidas } from "../hooks/useSiembraPartidas";
+import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 function SiembraList({ camaraId }: { camaraId: string }) {
   const { data: siembraPartidas, isFetching } = useSiembraPartidas();
@@ -30,13 +30,21 @@ function SiembraList({ camaraId }: { camaraId: string }) {
 export function SiembraView() {
   return (
     <div className="space-y-2">
-      <Suspense
-        fallback={
-          <DataTableSkeleton columnCount={partidaSiembraColumns.length} />
+      <LoadingBoundary
+        skeleton={
+          <DataTableSkeleton
+            columnCount={partidaSiembraColumns.length}
+            toolbarContent={
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
+                <Skeleton className="h-3 w-3 rounded-full" />
+                <Skeleton className="h-8 rounded-full w-[140px]" />
+              </div>
+            }
+          />
         }
       >
         <SiembraList camaraId="all" />
-      </Suspense>
+      </LoadingBoundary>
     </div>
   );
 }

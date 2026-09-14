@@ -70,6 +70,15 @@ const messages = [
     permissionScope: 'OWN',
     targetNewUsers: true,
   },
+  {
+    title: 'Pantalla de siembra y siembras registradas',
+    body: 'Dos nuevas tablas de siembra: "Siembra" para ver y sembrar partidas pendientes, y "Siembras Registradas" para ver las partidas ya sembradas con todos sus datos.',
+    tag: 'siembra-tablas',
+    permissionTable: 'siembra',
+    permissionAction: 'read',
+    permissionScope: 'ALL',
+    targetNewUsers: true,
+  },
 ];
 
 async function main() {
