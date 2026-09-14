@@ -3,7 +3,10 @@
 import { clientFetch } from "@/lib/api/client-fetch";
 import {
   AsignarUbiSiembraCompletaDto,
+  AutorizarSiembraDto,
+  LegacySustratoDto,
   SiembraDto,
+  SiembraPartidaDto,
   TratamientoDto,
 } from "@vivero/shared";
 
@@ -19,7 +22,18 @@ export const siembraService = {
     });
   },
 
+  autorizarSiembra: (data: AutorizarSiembraDto) => {
+    return clientFetch<SiembraPartidaDto>("l-partidas/autorizar-siembra", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
   fetchTratamientos: () => {
     return clientFetch<TratamientoDto[]>("l-tratamiento", { method: "GET" });
+  },
+
+  fetchLegacySustratos: () => {
+    return clientFetch<LegacySustratoDto[]>("l-sustrato", { method: "GET" });
   },
 };

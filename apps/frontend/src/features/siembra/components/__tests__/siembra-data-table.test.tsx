@@ -1,4 +1,5 @@
-import { render, screen, act } from "@testing-library/react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { render, screen, act, fireEvent } from "@testing-library/react";
 
 beforeAll(() => {
   global.ResizeObserver = class {
@@ -20,6 +21,8 @@ jest.mock("../tratamientoSearch", () => ({
   TratamientoSearch: () => <div data-testid="tratamiento-search" />,
 }));
 
+let capturedProps: any = null;
+
 const mockReset = jest.fn();
 jest.mock("react-hook-form", () => ({
   ...jest.requireActual("react-hook-form"),
@@ -38,6 +41,7 @@ jest.mock("react-hook-form", () => ({
     setValue: jest.fn(),
     getValues: jest.fn().mockReturnValue({}),
     watch: jest.fn(),
+    register: jest.fn().mockReturnValue({ name: "", ref: jest.fn(), onChange: jest.fn(), onBlur: jest.fn() }),
   }),
   useWatch: jest.fn().mockReturnValue(true),
 }));
@@ -61,20 +65,16 @@ jest.mock("@/components/data-display/data-table", () => ({
       <button onClick={() => onEdit(mockPartidas[0])}>Edit Row</button>
     </div>
   ),
-  SlideOverForm: ({
-    open,
-    children,
-  }: {
-    open: boolean;
-    children: React.ReactNode;
-  }) =>
-    open ? (
-      <div data-testid="slide-over-form">{children}</div>
-    ) : null,
+  SlideOverForm: (props: any) => {
+    capturedProps = props;
+    return props.open ? (
+      <div data-testid="slide-over-form">{props.children}</div>
+    ) : null;
+  },
 }));
 
 jest.mock("@/features/siembra/hooks/useSiembraPartidaMutation", () => ({
-  useSiembraMutation: () => ({
+  useSiembraAutorizacion: () => ({
     mutateAsync: jest.fn().mockResolvedValue(undefined),
   }),
 }));
@@ -155,25 +155,55 @@ const mockPartidas: SiembraDto[] = [
     nrocont: "100",
     extendido: "Notas de prueba",
     germin: "85",
+    sem_siembra: "S10-2024",
   },
 ];
 
+const mockColumns = [
+  { id: "partidaId", header: "Partida", accessorFn: (row: SiembraDto) => row.partidaId },
+];
+
 describe("SiembraDataTable", () => {
+  beforeEach(() => {
+    capturedProps = null;
+  });
+
   it("renders DataTable with correct title", () => {
-    render(<SiembraDataTable partidas={mockPartidas} />);
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     expect(screen.getByTestId("data-table")).toBeInTheDocument();
     expect(screen.getByText("Siembra")).toBeInTheDocument();
   });
 
   it("renders without crashing with empty data", () => {
-    render(<SiembraDataTable partidas={[]} />);
+    render(
+      <SiembraDataTable
+        partidas={[]}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     expect(screen.getByTestId("data-table")).toBeInTheDocument();
   });
 
   it("opens slide-over in view mode when view is triggered", () => {
-    render(<SiembraDataTable partidas={mockPartidas} />);
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     act(() => {
       screen.getByText("View Row").click();
@@ -183,12 +213,41 @@ describe("SiembraDataTable", () => {
   });
 
   it("opens slide-over in edit mode when edit is triggered", () => {
-    render(<SiembraDataTable partidas={mockPartidas} />);
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
 
     act(() => {
       screen.getByText("Edit Row").click();
     });
 
     expect(screen.getByTestId("slide-over-form")).toBeInTheDocument();
+  });
+
+  it("passes correct summaryFields to SlideOverForm", () => {
+    render(
+      <SiembraDataTable
+        partidas={mockPartidas}
+        columns={mockColumns}
+        aSembrarKeys={new Set()}
+        registradasKeys={new Set()}
+      />,
+    );
+
+    act(() => {
+      fireEvent.click(screen.getByText("Edit Row"));
+    });
+
+    expect(capturedProps).not.toBeNull();
+    expect(capturedProps.confirm.summaryFields).toEqual([
+      "partidaId",
+      "anio",
+      "indice",
+    ]);
   });
 });

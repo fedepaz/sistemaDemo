@@ -2,20 +2,19 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AsignarUbiSiembraCompletaDto } from "@vivero/shared";
 import { toast } from "sonner";
 
 import { invalidateQueries } from "@/lib/query-invalidation-map";
 import { siembraService } from "../api/siembraService";
 
-export const useSiembraMutation = () => {
+export const useSiembraAutorizacion = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<void, Error, AsignarUbiSiembraCompletaDto>({
-    mutationFn: siembraService.asignarUbicacionSiembra,
+  return useMutation({
+    mutationFn: siembraService.autorizarSiembra,
     onSuccess: () => {
       invalidateQueries(queryClient, "siembraPartida");
-      toast.success("Ubicación asignada exitosamente", { duration: 3000 });
+      toast.success("Partida autorizada para siembra", { duration: 3000 });
     },
   });
 };

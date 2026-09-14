@@ -24,7 +24,10 @@ export class SiembraRepository {
     CONCAT(p.sem_siem,'-',p.ano_siem) AS sem_siembra, 
     p.f_siem,
     p.f_siembra,
+    CONCAT(p.sem_ent,'-',p.ano_ent,' ',p.i_f) AS semEntrega,
     p.item,
+    p.f_ent,
+    p.estado,
     l.lote,
     l.ano_lote,
     l.semxgr,
@@ -40,14 +43,9 @@ export class SiembraRepository {
       ON p.partida=p2.partida
       AND p.ano=p2.ano
       AND p.indice=p2.indice
-  WHERE p.estado <> 'ANULADA'
-    AND p.hai<>'A'
-    AND p.ano>=2025
-    AND (p.f_siembra=0
-      OR (p.f_siembra<>0
-        AND p.f_siembra IS NOT NULL
-        AND p2.partida IS NULL))
-  ORDER BY sem_siembra, p.ano, p.partida, p.indice
+  WHERE p.estado <> 'ANULADA' AND p.f_siembra=0 AND p.hai<>'A' 
+	AND p.sem_siem<=WEEK(CURRENT_DATE()) AND p.ano>2025
+	ORDER BY p.ano, p.partida
   `;
     return this.legacyDb.query<LegacySiembra[]>(sql);
   }

@@ -137,10 +137,19 @@ export const siembraQueryKeys = {
   all: () => ["siembra"] as const,
   partidas: () => [...siembraQueryKeys.all(), "partidas"] as const,
   tratamientos: () => [...siembraQueryKeys.all(), "tratamientos"] as const,
+  legacySustratos: () => [...siembraQueryKeys.all(), "legacySustratos"] as const,
 };
 
 export const siembraPartidasRegistradasQueryKeys = {
   all: () => ["siembraPartidasRegistradas"] as const,
+};
+
+// ============================================================================
+// A SEMBRAR
+// ============================================================================
+
+export const aSembrarQueryKeys = {
+  all: () => ["aSembrar"] as const,
 };
 
 // ============================================================================

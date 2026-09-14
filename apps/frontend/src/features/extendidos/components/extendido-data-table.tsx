@@ -217,6 +217,7 @@ export function ExtendidoDataTable({
             description:
               "¿Deseas confirmar la asignación de ubicación para este extendido?",
             label: "Confirmar Extendido",
+            summaryFields: ["ubicacion", "baja", "extendido"],
           }}
         >
           <div className="space-y-2">

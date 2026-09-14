@@ -2,22 +2,20 @@
 "use client";
 
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 
 import {
-  AsignarUbiSiembraCompletaDto,
-  AsignarUbiSiembraCompletaDtoSchema,
+  AutorizarSiembraDto,
+  AutorizarSiembraSchema,
   SiembraDto,
   fieldLabels,
 } from "@vivero/shared";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { partidaSiembraColumns, partidaSiembraExportColumns } from "./columns";
+import { ColumnDef } from "@tanstack/react-table";
+import { partidaSiembraExportColumns, getRowBg } from "./columns";
 import { SiembraViewForm } from "./siembra-view-form";
-import { SiembraEditForm } from "./siembra-edit-form";
-import { useSiembraMutation } from "../hooks/useSiembraPartidaMutation";
-import { useTableByName } from "@/features/permissions";
+import { AutorizarSiembraEditForm } from "./autorizar-siembra-edit-form";
+import { useSiembraAutorizacion } from "../hooks/useSiembraPartidaMutation";
 import {
   Select,
   SelectContent,
@@ -26,12 +24,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CalendarDays } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface SiembraDataTableProps {
   partidas: SiembraDto[];
+  columns: ColumnDef<SiembraDto, unknown>[];
+  aSembrarKeys: Set<string>;
+  registradasKeys: Set<string>;
 }
 
-export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
+export function SiembraDataTable({
+  partidas,
+  columns,
+  aSembrarKeys,
+  registradasKeys,
+}: SiembraDataTableProps) {
   const [slideOverOpen, setSlideOpen] = useState(false);
   const [selectedPartida, setSelectedPartida] = useState<SiembraDto | null>(
     null,
@@ -39,61 +47,58 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [selectedWeek, setSelectedWeek] = useState("all");
 
-  const { mutateAsync: asignarUbicacionSiembra } = useSiembraMutation();
-  const { data: entity } = useTableByName("siembra");
+  const { mutateAsync: autorizarSiembra } = useSiembraAutorizacion();
+
+  const formAutorizarSiembra = useForm<AutorizarSiembraDto>({
+    resolver: zodResolver(AutorizarSiembraSchema),
+  });
+
+  useEffect(() => {
+    if (selectedPartida) {
+      formAutorizarSiembra.reset({
+        partidaId: selectedPartida.partidaId,
+        anio: selectedPartida.anio,
+        indice: selectedPartida.indice,
+      });
+    }
+  }, [selectedPartida, formAutorizarSiembra]);
 
   const availableWeeks = useMemo(
     () => [...new Set(partidas.map((p) => p.sem_siembra))].sort().reverse(),
     [partidas],
   );
 
-  const filteredPartidas = useMemo(
-    () =>
+  const filteredPartidas = useMemo(() => {
+    const rows =
       selectedWeek === "all"
         ? partidas
-        : partidas.filter((p) => p.sem_siembra === selectedWeek),
-    [partidas, selectedWeek],
+        : partidas.filter((p) => p.sem_siembra === selectedWeek);
+
+    const catOrder = (c: string) =>
+      c === "bg-yellow-500/10" ? 0 : c === "bg-green-500/10" ? 1 : 2;
+
+    return [...rows].sort((a, b) => {
+      const catA = getRowBg(a, aSembrarKeys, registradasKeys);
+      const catB = getRowBg(b, aSembrarKeys, registradasKeys);
+      const catDiff = catOrder(catA) - catOrder(catB);
+      return catDiff !== 0
+        ? catDiff
+        : b.fechaSugeridaSiembra.localeCompare(a.fechaSugeridaSiembra);
+    });
+  }, [partidas, selectedWeek, aSembrarKeys, registradasKeys]);
+
+  const getRowClassName = useCallback(
+    (row: SiembraDto) => getRowBg(row, aSembrarKeys, registradasKeys),
+    [aSembrarKeys, registradasKeys],
   );
 
-  const formAsignarUbicacion = useForm<AsignarUbiSiembraCompletaDto>({
-    resolver: zodResolver(AsignarUbiSiembraCompletaDtoSchema),
-  });
-
-  useEffect(() => {
-    if (selectedPartida) {
-      formAsignarUbicacion.reset({
-        partidaId: selectedPartida.partidaId,
-        anio: selectedPartida.anio,
-        indice: selectedPartida.indice,
-        cantidaNroCont: parseInt(selectedPartida.nrocont),
-        detalleExtendido: "",
-        f_siembra: new Date(),
-        edita: "S",
-        lote: parseInt(selectedPartida.lote),
-        anoLote: parseInt(selectedPartida.anoLote),
-        item: selectedPartida.item,
-        semxgr: parseFloat(selectedPartida.semxgr),
-        ajuste: "",
-        cantidadGrs: 0,
-        presionSemilla: 0,
-        profundidadSemilla: "",
-        metodoMaquina: true,
-        tratamientoSemilla: "",
-        entityId: entity.id,
-      });
-    }
-  }, [selectedPartida, formAsignarUbicacion, entity]);
-
-  const handleAsignarUbicacionSiembra = async (
-    formData: AsignarUbiSiembraCompletaDto,
-  ) => {
-    if (selectedPartida) {
-      try {
-        await asignarUbicacionSiembra(formData);
-        setSlideOpen(false);
-      } catch {}
-    }
-  };
+  const isAlreadyAuthorized = useMemo(
+    () =>
+      selectedPartida
+        ? getRowBg(selectedPartida, aSembrarKeys, registradasKeys) !== ""
+        : false,
+    [selectedPartida, aSembrarKeys, registradasKeys],
+  );
 
   const handleView = useCallback((row: SiembraDto) => {
     setSelectedPartida(row);
@@ -101,11 +106,19 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
     setSlideOpen(true);
   }, []);
 
-  const handleEdit = useCallback((row: SiembraDto) => {
-    setSelectedPartida(row);
-    setMode("edit");
-    setSlideOpen(true);
-  }, []);
+  const handleAutorizar = useCallback(
+    async (data: AutorizarSiembraDto) => {
+      try {
+        await autorizarSiembra({
+          partidaId: data.partidaId,
+          anio: data.anio,
+          indice: data.indice,
+        });
+        setSlideOpen(false);
+      } catch {}
+    },
+    [autorizarSiembra],
+  );
 
   const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
@@ -138,7 +151,7 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
   return (
     <>
       <DataTable
-        columns={partidaSiembraColumns}
+        columns={columns}
         data={filteredPartidas}
         title="Siembra"
         description="Gestión y monitoreo de bandejas en proceso de siembra"
@@ -146,10 +159,15 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
         totalCount={filteredPartidas.length}
         exportColumns={partidaSiembraExportColumns}
         onView={handleView}
-        onEdit={handleEdit}
-        canExecuteLabel="Asignar Ubicación"
+        onEdit={(row) => {
+          setSelectedPartida(row);
+          setMode("edit");
+          setSlideOpen(true);
+        }}
+        canExecuteLabel="Autorizar Siembra"
         columnLabels={fieldLabels.SiembraLegacy}
         toolbarContent={toolbarContent}
+        getRowClassName={getRowClassName}
       />
 
       {selectedPartida && (
@@ -157,27 +175,28 @@ export function SiembraDataTable({ partidas }: SiembraDataTableProps) {
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
           title={`Partida Nº ${selectedPartida.partidaId}`}
-          formId="siembra-form"
+          formId="autorizar-siembra-form"
           mode={mode}
-          form={formAsignarUbicacion}
-          saveLabel="Confirmar Ubicación"
-          fieldLabels={fieldLabels.AsignarUbiSiembraCompleta}
+          form={formAutorizarSiembra}
+          saveLabel="Autorizar Siembra"
+          fieldLabels={fieldLabels.SiembraPartida}
           confirm={{
-            title: "Confirmar ubicación",
-            description:
-              "¿Deseas confirmar la asignación de esta ubicación de siembra?",
-            label: "Confirmar Ubicación",
+            title: "Autorizar siembra",
+            description: "¿Deseas autorizar esta partida para siembra?",
+            label: "Autorizar Siembra",
+            summaryFields: ["partidaId", "anio", "indice"],
           }}
         >
           <div className="space-y-2">
             {mode === "view" ? (
               <SiembraViewForm selectedExtendido={selectedPartida} />
             ) : (
-              <SiembraEditForm
-                form={formAsignarUbicacion}
-                onSubmit={handleAsignarUbicacionSiembra}
+              <AutorizarSiembraEditForm
+                form={formAutorizarSiembra}
+                onSubmit={handleAutorizar}
                 onCancel={() => setSlideOpen(false)}
                 selectedSiembra={selectedPartida}
+                isAlreadyAuthorized={isAlreadyAuthorized}
               />
             )}
           </div>

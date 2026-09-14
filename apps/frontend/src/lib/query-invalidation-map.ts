@@ -12,6 +12,7 @@ import {
   entityQueryKeys,
   extendidosQueryKeys,
   siembraQueryKeys,
+  siembraPartidasRegistradasQueryKeys,
   sustratoQueryKeys,
   mezclaQueryKeys,
   alertCommentsQueryKeys,
@@ -19,6 +20,7 @@ import {
   taskShiftQueryKeys,
   alertsSolvedQueryKeys,
   billboardQueryKeys,
+  aSembrarQueryKeys,
 } from "./queryKeys";
 
 // ============================================================================
@@ -92,6 +94,8 @@ export const mutationInvalidationMap = {
   siembraPartida: {
     queries: () => [
       siembraQueryKeys.partidas(),
+      siembraPartidasRegistradasQueryKeys.all(),
+      aSembrarQueryKeys.all(),
       extendidosQueryKeys.enCamara(),
       alertsQueryKeys.all(),
     ],
@@ -121,6 +125,16 @@ export const mutationInvalidationMap = {
 
   markBillboardRead: {
     queries: () => [billboardQueryKeys.unread()],
+  },
+
+  // --- A Sembrar ---
+  aSembrar: {
+    queries: () => [
+      aSembrarQueryKeys.all(),
+      siembraPartidasRegistradasQueryKeys.all(),
+      extendidosQueryKeys.enCamara(),
+      alertsQueryKeys.all(),
+    ],
   },
 } as const;
 

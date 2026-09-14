@@ -1,15 +1,26 @@
 // src/modules/siembraPartidas/siembraPartidas.service.ts
 
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import {
   SiembraPartidasRepository,
   SiembraPartidasWithRelations,
 } from './repositories/siembraPartidas.repository';
-import { CreateSiembraPartidaDto, SiembraPartidaDto } from '@vivero/shared';
+import {
+  CreateSiembraPartidaDto,
+  SiembraPartidaDto,
+  AsignarUbiSiembraCompletaDto,
+  AutorizarSiembraDto,
+} from '@vivero/shared';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { PartidasRepository } from '../legacy/partidas/repositories/partidas.repository';
 import { TaskShiftsRepository } from '../taskShifts/repositories/taskShifts.repository';
 import { LegacyTratamientoService } from '../legacy/tratamiento/tratamiento.service';
+import { LegacySustratoService } from '../legacy/sustrato/sustrato.service';
 
 const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
 const GENERIC_MEZCLA_SUSTRATO1_ID = 'c00000000000000000000001';
@@ -23,6 +34,7 @@ export class SiembraPartidasService {
     private readonly partidasRepo: PartidasRepository,
     private readonly taskShiftsRepo: TaskShiftsRepository,
     private readonly tratamientoService: LegacyTratamientoService,
+    private readonly sustratoService: LegacySustratoService,
   ) {}
 
   private async getOrCreateGenericMezcla(): Promise<string> {
@@ -78,6 +90,17 @@ export class SiembraPartidasService {
     }
   }
 
+  private async buildSustratoNombre(
+    codigo: string,
+  ): Promise<string | undefined> {
+    try {
+      const sustrato = await this.sustratoService.getByCodigo(codigo);
+      return sustrato.nombre;
+    } catch {
+      return undefined;
+    }
+  }
+
   private async mapToDto(
     row: SiembraPartidasWithRelations,
     legacyData: Awaited<ReturnType<typeof this.partidasRepo.findByComposite>>,
@@ -102,6 +125,11 @@ export class SiembraPartidasService {
     // Resolve treatment name
     const tratamientoNombre = row.tratamientoSemilla
       ? await this.buildTratamientoNombre(row.tratamientoSemilla)
+      : undefined;
+
+    // Resolve sustrato name
+    const sustratoNombre = row.sustrato
+      ? await this.buildSustratoNombre(row.sustrato)
       : undefined;
 
     // Resolve entity name
@@ -130,9 +158,11 @@ export class SiembraPartidasService {
       codigoEspecie,
       nombreEspecie,
       metodoMaquina: row.metodoMaquina,
-      presionSemilla: row.presionSemilla,
+      prensadoSemilla: row.prensadoSemilla.toNumber(),
       profundidadSemilla: row.profundidadSemilla.toString(),
       tratamientoSemilla: row.tratamientoSemilla,
+      sustrato: row.sustrato ?? undefined,
+      sustratoNombre,
       mezclaId: row.mezclaId,
       userId: row.userId,
       mezclaNombre: this.buildMezclaNombre(row.mezcla),
@@ -171,6 +201,8 @@ export class SiembraPartidasService {
       startTime: taskShift?.startTime?.toISOString(),
       endTime: taskShift?.endTime?.toISOString(),
       empleados,
+      createdByNombre: taskShift?.createdByUser?.username,
+      createdAt: row.createdAt.toISOString(),
     };
   }
 
@@ -232,9 +264,10 @@ export class SiembraPartidasService {
       anio: data.anio,
       indice: data.indice,
       metodoMaquina: data.metodoMaquina,
-      presionSemilla: data.presionSemilla,
+      prensadoSemilla: data.prensadoSemilla,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
+      sustrato: data.sustrato,
       stockLote: data.stockLote,
       stockAnio: data.stockAnio,
       stockEntradasAntes: data.stockEntradasAntes,
@@ -256,5 +289,124 @@ export class SiembraPartidasService {
     // Re-fetch with relations for DTO mapping
     const full = await this.repo.findById(row.id, requesterId);
     return this.mapToDto(full as SiembraPartidasWithRelations, null, null);
+  }
+
+  async autorizarSiembra(
+    data: AutorizarSiembraDto,
+    requesterId: string,
+  ): Promise<SiembraPartidaDto> {
+    const existing = await this.prisma.siembraPartidas.findFirst({
+      where: {
+        partidaId: data.partidaId,
+        anio: data.anio,
+        indice: data.indice,
+        deletedAt: null,
+      },
+    });
+    if (existing) {
+      throw new ConflictException(
+        'Esta partida ya fue autorizada para siembra',
+      );
+    }
+
+    const mezclaId = await this.getOrCreateGenericMezcla();
+
+    const row = await this.repo.createSiembraPartida({
+      partidaId: data.partidaId,
+      anio: data.anio,
+      indice: data.indice,
+      metodoMaquina: true,
+      prensadoSemilla: 0,
+      profundidadSemilla: 0,
+      tratamientoSemilla: '',
+      mezcla: { connect: { id: mezclaId } },
+      user: { connect: { id: requesterId } },
+    });
+
+    const full = await this.repo.findById(row.id, requesterId);
+    const [legacyData, taskShift] = await Promise.all([
+      this.partidasRepo.findByComposite(row.partidaId, row.anio, row.indice),
+      this.taskShiftsRepo.findByPartidaComposite(
+        row.partidaId,
+        row.anio,
+        row.indice,
+      ),
+    ]);
+
+    return this.mapToDto(
+      full as SiembraPartidasWithRelations,
+      legacyData,
+      taskShift,
+    );
+  }
+
+  async findPendingSiembraPartidas(
+    requesterId: string,
+  ): Promise<SiembraPartidaDto[]> {
+    const rows = await this.repo.findPendingSiembraPartidas(requesterId);
+
+    const dtos = await Promise.all(
+      rows.map(async (row) => {
+        const [legacyData, taskShift] = await Promise.all([
+          this.partidasRepo.findByComposite(
+            row.partidaId,
+            row.anio,
+            row.indice,
+          ),
+          this.taskShiftsRepo.findByPartidaComposite(
+            row.partidaId,
+            row.anio,
+            row.indice,
+          ),
+        ]);
+        return this.mapToDto(row, legacyData, taskShift);
+      }),
+    );
+
+    return dtos;
+  }
+
+  async completarSiembraPartida(
+    id: string,
+    data: AsignarUbiSiembraCompletaDto,
+    requesterId: string,
+  ): Promise<SiembraPartidaDto> {
+    const existing = await this.repo.findById(id, requesterId);
+    if (!existing) {
+      throw new NotFoundException('Registro de siembra no encontrado');
+    }
+
+    if (existing.profundidadSemilla.toNumber() !== 0) {
+      throw new ConflictException('Esta partida ya fue completada');
+    }
+
+    await this.repo.update(id, {
+      metodoMaquina: data.metodoMaquina,
+      prensadoSemilla: data.prensadoSemilla,
+      profundidadSemilla: data.profundidadSemilla,
+      tratamientoSemilla: data.tratamientoSemilla,
+      sustrato: data.sustrato,
+      ...(data.mezclaId ? { mezcla: { connect: { id: data.mezclaId } } } : {}),
+    });
+
+    const full = await this.repo.findById(id, requesterId);
+    const [legacyData, taskShift] = await Promise.all([
+      this.partidasRepo.findByComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+      this.taskShiftsRepo.findByPartidaComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+    ]);
+
+    return this.mapToDto(
+      full as SiembraPartidasWithRelations,
+      legacyData,
+      taskShift,
+    );
   }
 }

@@ -7,9 +7,10 @@ import { SiembraPartidasRepository } from './repositories/siembraPartidas.reposi
 import { PartidasRepository } from '../legacy/partidas/repositories/partidas.repository';
 import { TaskShiftsModule } from '../taskShifts/taskShifts.module';
 import { LegacyTratamientoModule } from '../legacy/tratamiento/tratamiento.module';
+import { LegacySustratoModule } from '../legacy/sustrato/sustrato.module';
 
 @Module({
-  imports: [TaskShiftsModule, LegacyTratamientoModule],
+  imports: [TaskShiftsModule, LegacyTratamientoModule, LegacySustratoModule],
   controllers: [SiembraPartidasController],
   providers: [
     SiembraPartidasService,
