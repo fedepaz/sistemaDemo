@@ -109,17 +109,29 @@ export class SiembraPartidasService {
     >,
   ): Promise<SiembraPartidaDto> {
     // Resolve employee usernames
-    let empleados: { userId: string; username: string }[] | undefined;
+    let empleados:
+      | {
+          userId: string;
+          username: string;
+          firstName?: string;
+          lastName?: string;
+        }[]
+      | undefined;
     if (taskShift?.employees?.length) {
       const userIds = taskShift.employees.map((e) => e.userId);
       const users = await this.prisma.user.findMany({
         where: { id: { in: userIds } },
-        select: { id: true, username: true },
+        select: { id: true, username: true, firstName: true, lastName: true },
       });
-      empleados = taskShift.employees.map((e) => ({
-        userId: e.userId,
-        username: users.find((u) => u.id === e.userId)?.username ?? e.userId,
-      }));
+      empleados = taskShift.employees.map((e) => {
+        const user = users.find((u) => u.id === e.userId);
+        return {
+          userId: e.userId,
+          username: user?.username ?? e.userId,
+          firstName: user?.firstName ?? undefined,
+          lastName: user?.lastName ?? undefined,
+        };
+      });
     }
 
     // Resolve treatment name

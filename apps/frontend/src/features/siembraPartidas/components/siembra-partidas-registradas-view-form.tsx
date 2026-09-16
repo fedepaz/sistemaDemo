@@ -259,27 +259,6 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Cantidad (gr)"
                     value={selectedPartida.cantidadGrs}
                   />
-
-                  <InfoRow
-                    icon={Activity}
-                    label="Entradas Antes"
-                    value={selectedPartida.stockEntradasAntes}
-                  />
-                  <InfoRow
-                    icon={Activity}
-                    label="Salidas Antes"
-                    value={selectedPartida.stockSalidasAntes}
-                  />
-                  <InfoRow
-                    icon={Activity}
-                    label="Entradas Después"
-                    value={selectedPartida.stockEntradasDespues}
-                  />
-                  <InfoRow
-                    icon={Activity}
-                    label="Salidas Después"
-                    value={selectedPartida.stockSalidasDespues}
-                  />
                 </div>
               </CardContent>
             </Card>
@@ -313,17 +292,57 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Encargado"
                     value={selectedPartida.createdByNombre}
                   />
-                  <InfoRow
-                    icon={Package}
-                    label="Empleados"
-                    value={
-                      selectedPartida.empleados?.length
-                        ? selectedPartida.empleados
-                            .map((e) => e.username)
-                            .join(", ")
-                        : "-"
-                    }
-                  />
+                  <div className="col-span-2">
+                    <div className="flex items-center gap-3 md:gap-4 py-2 md:py-3 border-b border-border/40">
+                      <div className="p-1.5 md:p-2 bg-primary/5 rounded-lg border border-primary/10">
+                        <Package className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1 md:mb-1.5">
+                          Empleados
+                        </p>
+                      </div>
+                    </div>
+                    {selectedPartida.empleados?.length ? (
+                      <div className="ml-7 md:ml-10">
+                        <table className="w-full text-xs md:text-sm">
+                          <thead>
+                            <tr className="border-b border-border/40">
+                              <th className="text-left py-1 font-bold text-[8px] md:text-[9px] uppercase tracking-widest text-muted-foreground/60">
+                                Usuario
+                              </th>
+                              <th className="text-left py-1 font-bold text-[8px] md:text-[9px] uppercase tracking-widest text-muted-foreground/60">
+                                Nombre
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {selectedPartida.empleados.map((e) => (
+                              <tr
+                                key={e.userId}
+                                className="border-b border-border/20 last:border-0"
+                              >
+                                <td className="py-1.5 font-bold text-foreground">
+                                  {e.username}
+                                </td>
+                                <td className="py-1.5 text-foreground">
+                                  {[e.firstName, e.lastName]
+                                    .filter(Boolean)
+                                    .join(" ") || "-"}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : (
+                      <div className="ml-7 md:ml-10 py-2">
+                        <p className="text-xs md:text-base font-bold text-foreground">
+                          -
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>

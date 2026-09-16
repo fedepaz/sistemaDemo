@@ -68,6 +68,8 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   empleados: z.array(z.object({
     userId: z.string(),
     username: z.string(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
   })).optional(),
   createdAt: z.string().optional(),
 });
