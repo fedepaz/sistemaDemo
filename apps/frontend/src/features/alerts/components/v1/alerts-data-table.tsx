@@ -120,6 +120,7 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
             title: "Agregar comentario",
             description: "¿Deseas agregar este comentario a la alerta?",
             label: "Agregar Comentario",
+            summaryFields: ["content"],
           }}
         >
           <div className="space-y-2">

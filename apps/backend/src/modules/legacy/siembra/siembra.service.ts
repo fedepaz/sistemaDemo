@@ -53,6 +53,7 @@ export class SiembraService {
       sem_siembra: row.sem_siembra,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,
+      semEntrega: row.semEntrega,
       lote: row.lote,
       anoLote: row.ano_lote,
       item: row.item,

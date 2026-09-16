@@ -8,6 +8,7 @@ import { TaskShift } from '../../../generated/prisma/client';
 export type TaskShiftWithEmployees = {
   id: string;
   createdByUserId: string;
+  createdByUser?: { username: string } | null;
   entityId: string;
   partidaId: number;
   anio: number;
@@ -73,7 +74,10 @@ export class TaskShiftsRepository extends BaseRepository<TaskShift> {
         deletedAt: null,
         isActive: true,
       },
-      include: { employees: { select: { userId: true } } },
+      include: {
+        employees: { select: { userId: true } },
+        createdByUser: { select: { username: true } },
+      },
     });
   }
 

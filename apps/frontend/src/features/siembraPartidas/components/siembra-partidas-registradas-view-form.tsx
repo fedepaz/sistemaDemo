@@ -168,8 +168,8 @@ export function SiembraPartidasRegistradasViewForm({
                   />
                   <InfoRow
                     icon={Activity}
-                    label="Presion"
-                    value={`${selectedPartida.presionSemilla} PSI`}
+                    label="Prensado"
+                    value={`${selectedPartida.prensadoSemilla}`}
                   />
                   <InfoRow
                     icon={Activity}
@@ -182,6 +182,15 @@ export function SiembraPartidasRegistradasViewForm({
                     value={
                       selectedPartida.tratamientoNombre ||
                       selectedPartida.tratamientoSemilla ||
+                      "-"
+                    }
+                  />
+                  <InfoRow
+                    icon={FlaskConical}
+                    label="Sustrato"
+                    value={
+                      selectedPartida.sustratoNombre ||
+                      selectedPartida.sustrato ||
                       "-"
                     }
                   />
@@ -298,6 +307,11 @@ export function SiembraPartidasRegistradasViewForm({
                     icon={Clock}
                     label="Hora Fin"
                     value={utcToLocalTime(selectedPartida.endTime)}
+                  />
+                  <InfoRow
+                    icon={ClipboardList}
+                    label="Encargado"
+                    value={selectedPartida.createdByNombre}
                   />
                   <InfoRow
                     icon={Package}

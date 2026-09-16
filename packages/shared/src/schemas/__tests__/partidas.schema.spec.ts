@@ -94,21 +94,21 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     indice: 1,
     cg: 92,
     cantidaNroCont: 120,
-    f_siembra: new Date("2026-01-15"),
     detalleExtendido: "Test",
     lote: 1001,
     anoLote: 2025,
     item: 1,
     semxgr: 2352,
-    ajuste: "86.00",
-    cantidadGrs: 500,
   };
 
-  it("accepts valid assignment", () => {
+  it("accepts valid assignment without f_siembra, cantidadGrs, ajuste", () => {
     const result = AsignarUbiSiembraDtoSchema.parse(valid);
     expect(result.partidaId).toBe(1);
     expect(result.cg).toBe(92);
     expect(result.cantidaNroCont).toBe(120);
+    expect(result).not.toHaveProperty("f_siembra");
+    expect(result).not.toHaveProperty("cantidadGrs");
+    expect(result).not.toHaveProperty("ajuste");
   });
 
   it("applies default values for omitted fields", () => {
@@ -117,25 +117,13 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     expect(result.detalleExtendido).toBe("");
   });
 
-  it("accepts with optional fields", () => {
-    const result = AsignarUbiSiembraDtoSchema.parse({
-      ...valid,
-      baja: 5,
-      detalleExtendido: "Test",
-      extendido: "Notes",
-      edita: "admin",
-    });
-
-    expect(result.edita).toBe("admin");
-  });
-
-  it("rejects negative ubicacion", () => {
+  it("rejects negative cg", () => {
     expect(() =>
       AsignarUbiSiembraDtoSchema.parse({ ...valid, cg: -1 }),
     ).toThrow();
   });
 
-  it("rejects non-integer ubicacion", () => {
+  it("rejects non-integer cg", () => {
     expect(() =>
       AsignarUbiSiembraDtoSchema.parse({ ...valid, cg: 1.5 }),
     ).toThrow();

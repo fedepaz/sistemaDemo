@@ -10,6 +10,7 @@ export const SiembraDtoSchema = LegacyHeaderSchema.extend({
   sem_siembra: z.string(),
   fechaSugeridaSiembra: z.string(), // f_siem
   fechaSiembraReal: z.string(), // f_siembra
+  semEntrega: z.string(),
   lote: z.string(),
   anoLote: z.string(),
   item: z.number(),
@@ -27,3 +28,11 @@ export const TratamientoDtoSchema = z.object({
 });
 
 export type TratamientoDto = z.infer<typeof TratamientoDtoSchema>;
+
+export const LegacySustratoDtoSchema = z.object({
+  codigo: z.string(),
+  nombre: z.string(),
+  unidad: z.string(),
+});
+
+export type LegacySustratoDto = z.infer<typeof LegacySustratoDtoSchema>;

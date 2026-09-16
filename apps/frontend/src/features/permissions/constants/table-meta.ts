@@ -21,6 +21,7 @@ import {
   MessageSquare,
   Settings,
   Users,
+  Sprout,
 } from "lucide-react";
 import { PermissionScope } from "@vivero/shared";
 
@@ -37,6 +38,8 @@ export const TABLE_META: Record<string, { icon: LucideIcon }> = {
   environment: { icon: Thermometer },
   tasks: { icon: ClipboardList },
   extendidos: { icon: Package },
+  siembra: { icon: Sprout },
+  a_sembrar: { icon: Sprout },
   agentes: { icon: UserCheck },
 
   // System Resources

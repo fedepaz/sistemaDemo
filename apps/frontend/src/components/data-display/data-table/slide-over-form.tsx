@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { UseFormReturn } from "react-hook-form";
 import { Eye, Plus, Pencil, Loader2, HelpCircle, AlertTriangle } from "lucide-react";
+import { formatShortDate } from "@/lib/date-utils";
 
 type SlideOverMode = "create" | "edit" | "view";
 
@@ -32,6 +33,7 @@ export type ConfirmConfig = {
   title: string;
   description: string;
   label?: string;
+  summaryFields: string[];
 };
 
 interface SlideOverFormProps {
@@ -101,6 +103,18 @@ export function SlideOverForm({
   const getFieldLabel = (field: string) =>
     fieldLabels?.[field] ??
     field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+
+  const formatSummaryValue = (value: unknown): string => {
+    if (value === null || value === undefined || value === "") return "—";
+    if (typeof value === "boolean") return value ? "Si" : "No";
+    if (value instanceof Date) return formatShortDate(value);
+    if (typeof value === "number") return value.toLocaleString("es-AR");
+    if (typeof value === "string") {
+      if (value.match(/^\d{4}-\d{2}-\d{2}(T|$)/)) return formatShortDate(value);
+      return value;
+    }
+    return String(value);
+  };
 
   const submitForm = () => {
     if (formId) {
@@ -249,6 +263,23 @@ export function SlideOverForm({
               <AlertDialogDescription className="text-base pt-2">
                 {confirm.description}
               </AlertDialogDescription>
+              {confirm.summaryFields.length > 0 && (
+                <div className="mt-4 rounded-lg border bg-muted/50 p-3">
+                  <p className="text-xs font-medium text-muted-foreground mb-2">Resumen:</p>
+                  <dl className="space-y-1">
+                    {confirm.summaryFields.map((field) => {
+                      const values = form?.getValues() ?? {};
+                      const value = values[field];
+                      return (
+                        <div key={field} className="flex justify-between text-sm">
+                          <dt className="text-muted-foreground">{getFieldLabel(field)}</dt>
+                          <dd className="font-medium text-right">{formatSummaryValue(value)}</dd>
+                        </div>
+                      );
+                    })}
+                  </dl>
+                </div>
+              )}
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel
