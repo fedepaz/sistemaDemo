@@ -144,6 +144,29 @@ export function partidaSiembraColumns(
       ),
     },
     {
+      accessorKey: "diasCamara",
+      header: ({ column }) => (
+        <SortableHeader column={column}>D. Cámara</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <span className="font-mono font-bold text-sm tabular-nums">
+          {row.original.diasCamara || "-"}
+        </span>
+      ),
+      size: 60,
+    },
+    {
+      accessorKey: "rubroNombre",
+      header: ({ column }) => (
+        <SortableHeader column={column}>Rubro</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <span className="text-sm font-semibold">
+          {row.original.rubroNombre || "-"}
+        </span>
+      ),
+    },
+    {
       accessorKey: "fechaSugeridaSiembra",
       header: ({ column }) => {
         return <SortableHeader column={column}>Siembra Sug.</SortableHeader>;
@@ -255,5 +278,15 @@ export const partidaSiembraExportColumns: ExportColumn<ProgramacionSiembraDto>[]
     accessorKey: "g",
     exportHeader: "G",
     pdfWidth: "5%",
+  },
+  {
+    accessorKey: "diasCamara",
+    exportHeader: "D. Cámara",
+    pdfWidth: "8%",
+  },
+  {
+    accessorKey: "rubroNombre",
+    exportHeader: "Rubro",
+    pdfWidth: "12%",
   },
 ];

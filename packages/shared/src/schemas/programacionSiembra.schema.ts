@@ -17,6 +17,8 @@ export const ProgramacionSiembraDtoSchema = LegacyHeaderSchema.extend({
   semxgr: z.string(),
   c: z.string(),
   g: z.string(),
+  diasCamara: z.string().optional(),
+  rubroNombre: z.string().optional(),
 });
 
 export type ProgramacionSiembraDto = z.infer<typeof ProgramacionSiembraDtoSchema>;

@@ -32,10 +32,18 @@ export class ProgramacionSiembraRepository {
     l.ano_lote,
     l.semxgr,
     l.c,
-    l.g
+    l.g,
+    l.camara AS diasCamara,
+        DATE_ADD(p.f_siembra, INTERVAL l.camara DAY) AS fechaEgresoCamara,
+    rubro.nombre AS rubroNombre
   FROM partidas p
-  LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)  
-  LEFT JOIN partidas1 l
+  LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)
+   LEFT JOIN (
+     SELECT codigo, MIN(nombre) AS nombre
+     FROM rubro
+     GROUP BY codigo
+   ) rubro ON rubro.codigo = articulo.rubro 
+   LEFT JOIN partidas1 l
       ON p.partida=l.partida
       AND p.ano=l.ano
       AND p.indice=l.indice

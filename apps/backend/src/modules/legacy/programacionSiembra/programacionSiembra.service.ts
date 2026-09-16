@@ -62,6 +62,8 @@ export class ProgramacionSiembraService {
       semxgr: row.semxgr,
       c: row.c,
       g: row.g,
+      diasCamara: row.diasCamara || undefined,
+      rubroNombre: row.rubroNombre || undefined,
     };
   }
 

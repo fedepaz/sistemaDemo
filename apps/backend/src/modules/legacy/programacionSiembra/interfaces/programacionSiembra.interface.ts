@@ -22,6 +22,9 @@ export interface LegacyProgramacionSiembra extends RowDataPacket {
   semxgr: string;
   c: string;
   g: string;
+  diasCamara: string;
+  fechaEgresoCamara: string;
+  rubroNombre: string;
 }
 
 export interface LegacyProgramacionSiembraFecha extends RowDataPacket {
