@@ -332,7 +332,9 @@ describe('SiembraPartidasService', () => {
       repo.findById.mockResolvedValue(activeRow);
       repo.update.mockResolvedValue({ ...activeRow, isActive: false });
       const deactivatedRow = { ...activeRow, isActive: false };
-      repo.findById.mockResolvedValueOnce(activeRow).mockResolvedValueOnce(deactivatedRow);
+      repo.findById
+        .mockResolvedValueOnce(activeRow)
+        .mockResolvedValueOnce(deactivatedRow);
       partidasRepoMock.findByComposite.mockResolvedValue(null);
       taskShiftsRepoMock.findByPartidaComposite.mockResolvedValue(null);
 
