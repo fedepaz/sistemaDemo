@@ -1,5 +1,5 @@
 // prisma/seed-billboard.ts
-// Usage: pnpm ts-node prisma/seed-billboard.ts
+// Usage: pnpm tsx prisma/seed-billboard.ts
 
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import 'dotenv/config';

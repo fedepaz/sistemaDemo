@@ -53,14 +53,15 @@ export function partidaSiembraColumns(
         </span>
       ),
     },
+
     {
-      accessorKey: "nombreEspecie",
+      accessorKey: "rubroNombre",
       header: ({ column }) => (
-        <SortableHeader column={column}>Especie</SortableHeader>
+        <SortableHeader column={column}>Rubro</SortableHeader>
       ),
       cell: ({ row }) => (
         <span className="text-sm font-semibold">
-          {row.original.nombreEspecie}
+          {row.original.rubroNombre || "-"}
         </span>
       ),
     },
@@ -79,7 +80,9 @@ export function partidaSiembraColumns(
         <SortableHeader column={column}>Sem Siem</SortableHeader>
       ),
       cell: ({ row }) => (
-        <span className="text-sm font-semibold">{row.original.sem_siembra}</span>
+        <span className="text-sm font-semibold">
+          {row.original.sem_siembra}
+        </span>
       ),
     },
     {
@@ -155,17 +158,7 @@ export function partidaSiembraColumns(
       ),
       size: 60,
     },
-    {
-      accessorKey: "rubroNombre",
-      header: ({ column }) => (
-        <SortableHeader column={column}>Rubro</SortableHeader>
-      ),
-      cell: ({ row }) => (
-        <span className="text-sm font-semibold">
-          {row.original.rubroNombre || "-"}
-        </span>
-      ),
-    },
+
     {
       accessorKey: "fechaSugeridaSiembra",
       header: ({ column }) => {
@@ -234,59 +227,62 @@ export function partidaSiembraColumns(
         return <SortableHeader column={column}>Sem Entrega</SortableHeader>;
       },
       cell: ({ row }) => (
-        <span className="text-sm font-semibold">{row.original.semEntrega || "-"}</span>
+        <span className="text-sm font-semibold">
+          {row.original.semEntrega || "-"}
+        </span>
       ),
     },
   ];
 }
 
-export const partidaSiembraExportColumns: ExportColumn<ProgramacionSiembraDto>[] = [
-  { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
-  { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
-  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
-  { accessorKey: "propiedad", exportHeader: "Propiedad", pdfWidth: "10%" },
-  { accessorKey: "sem_siembra", exportHeader: "Semilla", pdfWidth: "10%" },
-  { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
-  {
-    accessorKey: "fechaSugeridaSiembra",
-    exportHeader: "Siembra Sugerida",
-    exportValue: (value) => formatShortDate(value as string),
-    pdfWidth: "13%",
-  },
-  {
-    accessorKey: "semEntrega",
-    exportHeader: "Sem. Entrega",
-    pdfWidth: "13%",
-  },
-  {
-    accessorKey: "anoLote",
-    exportHeader: "Año/Lote",
-    exportValue: (_value, row) => `${row.anoLote} - ${row.lote}`,
-    pdfWidth: "10%",
-  },
-  {
-    accessorKey: "semxgr",
-    exportHeader: "Sem/Gr",
-    pdfWidth: "8%",
-  },
-  {
-    accessorKey: "c",
-    exportHeader: "C",
-    pdfWidth: "5%",
-  },
-  {
-    accessorKey: "g",
-    exportHeader: "G",
-    pdfWidth: "5%",
-  },
-  {
-    accessorKey: "diasCamara",
-    exportHeader: "D. Cámara",
-    pdfWidth: "8%",
-  },
-  {
-    accessorKey: "rubroNombre",
-    exportHeader: "Rubro",
-    pdfWidth: "12%",
-  },
-];
+export const partidaSiembraExportColumns: ExportColumn<ProgramacionSiembraDto>[] =
+  [
+    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
+    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
+    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
+    { accessorKey: "propiedad", exportHeader: "Propiedad", pdfWidth: "10%" },
+    { accessorKey: "sem_siembra", exportHeader: "Semilla", pdfWidth: "10%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
+    {
+      accessorKey: "fechaSugeridaSiembra",
+      exportHeader: "Siembra Sugerida",
+      exportValue: (value) => formatShortDate(value as string),
+      pdfWidth: "13%",
+    },
+    {
+      accessorKey: "semEntrega",
+      exportHeader: "Sem. Entrega",
+      pdfWidth: "13%",
+    },
+    {
+      accessorKey: "anoLote",
+      exportHeader: "Año/Lote",
+      exportValue: (_value, row) => `${row.anoLote} - ${row.lote}`,
+      pdfWidth: "10%",
+    },
+    {
+      accessorKey: "semxgr",
+      exportHeader: "Sem/Gr",
+      pdfWidth: "8%",
+    },
+    {
+      accessorKey: "c",
+      exportHeader: "C",
+      pdfWidth: "5%",
+    },
+    {
+      accessorKey: "g",
+      exportHeader: "G",
+      pdfWidth: "5%",
+    },
+    {
+      accessorKey: "diasCamara",
+      exportHeader: "D. Cámara",
+      pdfWidth: "8%",
+    },
+    {
+      accessorKey: "rubroNombre",
+      exportHeader: "Rubro",
+      pdfWidth: "12%",
+    },
+  ];

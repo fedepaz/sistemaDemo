@@ -15,7 +15,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { partidaSiembraExportColumns, getRowBg } from "./columns";
 import { ProgramacionSiembraViewForm } from "./programacionSiembra-view-form";
 import { AutorizarProgramacionSiembraEditForm } from "./autorizar-programacionSiembra-edit-form";
-import { useProgramacionSiembraAutorizacion, useProgramacionSiembraDesautorizacion } from "../hooks/useProgramacionSiembraPartidaMutation";
+import {
+  useProgramacionSiembraAutorizacion,
+  useProgramacionSiembraDesautorizacion,
+} from "../hooks/useProgramacionSiembraPartidaMutation";
 import {
   Select,
   SelectContent,
@@ -170,7 +173,7 @@ export function ProgramacionSiembraDataTable({
       <DataTable
         columns={columns}
         data={filteredPartidas}
-        title="Siembra"
+        title="Programación de siembra"
         description="Gestión y monitoreo de bandejas en proceso de siembra"
         tableName="programacion_siembra"
         totalCount={filteredPartidas.length}
@@ -216,7 +219,9 @@ export function ProgramacionSiembraDataTable({
             ) : (
               <AutorizarProgramacionSiembraEditForm
                 form={formAutorizarSiembra}
-                onSubmit={isAlreadyAuthorized ? handleDesautorizar : handleAutorizar}
+                onSubmit={
+                  isAlreadyAuthorized ? handleDesautorizar : handleAutorizar
+                }
                 onCancel={() => setSlideOpen(false)}
                 selectedSiembra={selectedPartida}
                 isAlreadyAuthorized={isAlreadyAuthorized}

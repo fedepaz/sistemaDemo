@@ -73,8 +73,11 @@ jest.mock("@/components/data-display/data-table", () => ({
   },
 }));
 
-jest.mock("../hooks/useProgramacionSiembraPartidaMutation", () => ({
+jest.mock("../../hooks/useProgramacionSiembraPartidaMutation", () => ({
   useProgramacionSiembraAutorizacion: () => ({
+    mutateAsync: jest.fn().mockResolvedValue(undefined),
+  }),
+  useProgramacionSiembraDesautorizacion: () => ({
     mutateAsync: jest.fn().mockResolvedValue(undefined),
   }),
 }));
@@ -179,7 +182,7 @@ describe("ProgramacionSiembraDataTable", () => {
     );
 
     expect(screen.getByTestId("data-table")).toBeInTheDocument();
-    expect(screen.getByText("Siembra")).toBeInTheDocument();
+    expect(screen.getByText("Programación de siembra")).toBeInTheDocument();
   });
 
   it("renders without crashing with empty data", () => {

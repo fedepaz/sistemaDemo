@@ -106,11 +106,15 @@ export function ASembrarEditForm({
     );
   }, [selectedEmployees, form]);
 
+  const handleSubmit = async (data: AsignarUbiSiembraCompletaDto) => {
+    await onSubmit(data);
+  };
+
   return (
     <Form {...form}>
       <form
         id="a-sembrar-form"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* PRODUCT HEADER */}

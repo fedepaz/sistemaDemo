@@ -113,8 +113,11 @@ describe("ASembrarDataTable", () => {
       "prensadoSustrato",
       "profundidadSemilla",
       "tratamientoSemilla",
+      "sustrato",
       "metodoMaquina",
       "detalleExtendido",
+      "startTime",
+      "endTime",
     ]);
   });
 });

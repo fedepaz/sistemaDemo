@@ -100,6 +100,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     prensadoSustrato: "Prensado",
     profundidadSemilla: "Profundidad de semilla",
     tratamientoSemilla: "Tratamiento de semilla",
+    sustrato: "Sustrato",
     mezclaId: "Mezcla",
     entityId: "Entidad",
     startTime: "Hora de inicio",

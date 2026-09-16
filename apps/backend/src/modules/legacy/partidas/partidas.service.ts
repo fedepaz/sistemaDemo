@@ -94,6 +94,9 @@ export class PartidasService {
       prensadoSustrato: data.prensadoSustrato,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
+      sustrato: data.sustrato,
+      startTime: data.startTime,
+      endTime: data.endTime,
       mezclaId: data.mezclaId,
     };
 
