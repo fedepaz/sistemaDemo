@@ -10,7 +10,7 @@ const mockPartida: SiembraPartidaDto = {
   codigoEspecie: "ABCOM",
   nombreEspecie: "PLA.ALBAHACA COMPACTA M009",
   metodoMaquina: true,
-  prensadoSemilla: 45,
+  prensadoSustrato: 45,
   profundidadSemilla: "1.5",
   tratamientoSemilla: "T",
   mezclaId: "mezcla-1",

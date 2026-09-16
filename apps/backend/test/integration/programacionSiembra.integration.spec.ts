@@ -64,7 +64,7 @@ describe('ProgramacionSiembra (integration)', () => {
           cantidaNroCont: 50,
           f_siembra: new Date('2026-01-15'),
           metodoMaquina: true,
-          prensadoSemilla: 1,
+          prensadoSustrato: 1,
           profundidadSemilla: '1.5',
           tratamientoSemilla: '1',
           mezclaId: 'clmocksiembra0000000000000',

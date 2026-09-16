@@ -30,7 +30,7 @@ import {
   AsignarUbiSiembraCompletaDto,
   SiembraPartidaDto,
   UserProfileDto,
-  PrensadoSemillaValues,
+  PrensadoSustratoValues,
 } from "@vivero/shared";
 import { UseFormReturn } from "react-hook-form";
 import {
@@ -209,10 +209,10 @@ export function ASembrarEditForm({
         {/* TECHNICAL FIELDS */}
         <div className="space-y-3 md:space-y-4 shrink-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {/* PRESNSADO DE SEMILLA */}
+            {/* PRESNSADO DE SUSTRATO */}
             <FormField
               control={form.control}
-              name="prensadoSemilla"
+              name="prensadoSustrato"
               render={({ field }) => (
                 <FormItem className="space-y-2 md:space-y-3">
                   <div className="flex items-center gap-2">
@@ -220,7 +220,7 @@ export function ASembrarEditForm({
                       <Gauge className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                     </div>
                     <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
-                      Prensado de Semilla
+                      Prensado de Sustrato
                     </FormLabel>
                   </div>
                   <Select
@@ -229,11 +229,11 @@ export function ASembrarEditForm({
                   >
                     <FormControl>
                       <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
-                        <SelectValue placeholder="Seleccionar prensado" />
+                        <SelectValue placeholder="Seleccionar prensado sustrato" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="rounded-xl border-border/60 shadow-2xl">
-                      {PrensadoSemillaValues.map((v) => (
+                      {PrensadoSustratoValues.map((v) => (
                         <SelectItem
                           key={v}
                           value={String(v)}
