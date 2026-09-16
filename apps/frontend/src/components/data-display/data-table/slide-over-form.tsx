@@ -171,7 +171,7 @@ export function SlideOverForm({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="w-full sm:max-w-xl flex flex-col h-dvh p-0">
+        <SheetContent className="w-full sm:max-w-xl md:max-w-2xl flex flex-col h-dvh p-0">
           <SheetHeader className="px-6 py-4 border-b shrink-0">
             <SheetTitle className="text-xl">{title}</SheetTitle>
             {description ? (
