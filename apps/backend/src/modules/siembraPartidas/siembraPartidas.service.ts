@@ -315,9 +315,35 @@ export class SiembraPartidasService {
         deletedAt: null,
       },
     });
+
     if (existing) {
-      throw new ConflictException(
-        'Esta partida ya fue autorizada para siembra',
+      if (existing.isActive) {
+        throw new ConflictException(
+          'Esta partida ya fue autorizada para siembra',
+        );
+      }
+      // Re-authorize: row exists but isActive = false
+      await this.repo.update(existing.id, {
+        isActive: true,
+        profundidadSemilla: 0,
+      });
+      const full = await this.repo.findById(existing.id, requesterId);
+      const [legacyData, taskShift] = await Promise.all([
+        this.partidasRepo.findByComposite(
+          existing.partidaId,
+          existing.anio,
+          existing.indice,
+        ),
+        this.taskShiftsRepo.findByPartidaComposite(
+          existing.partidaId,
+          existing.anio,
+          existing.indice,
+        ),
+      ]);
+      return this.mapToDto(
+        full as SiembraPartidasWithRelations,
+        legacyData,
+        taskShift,
       );
     }
 
@@ -376,6 +402,48 @@ export class SiembraPartidasService {
     );
 
     return dtos;
+  }
+
+  async desautorizarSiembra(
+    id: string,
+    requesterId: string,
+  ): Promise<SiembraPartidaDto> {
+    const existing = await this.repo.findById(id, requesterId);
+    if (!existing) {
+      throw new NotFoundException('Registro de siembra no encontrado');
+    }
+
+    if (existing.profundidadSemilla.toNumber() !== 0) {
+      throw new ConflictException(
+        'No se puede desautorizar una partida ya completada',
+      );
+    }
+
+    if (!existing.isActive) {
+      throw new ConflictException('Esta partida ya fue desautorizada');
+    }
+
+    await this.repo.update(id, { isActive: false });
+
+    const full = await this.repo.findById(id, requesterId);
+    const [legacyData, taskShift] = await Promise.all([
+      this.partidasRepo.findByComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+      this.taskShiftsRepo.findByPartidaComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+    ]);
+
+    return this.mapToDto(
+      full as SiembraPartidasWithRelations,
+      legacyData,
+      taskShift,
+    );
   }
 
   async completarSiembraPartida(

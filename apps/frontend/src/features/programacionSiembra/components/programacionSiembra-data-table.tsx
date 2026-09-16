@@ -15,7 +15,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { partidaSiembraExportColumns, getRowBg } from "./columns";
 import { ProgramacionSiembraViewForm } from "./programacionSiembra-view-form";
 import { AutorizarProgramacionSiembraEditForm } from "./autorizar-programacionSiembra-edit-form";
-import { useProgramacionSiembraAutorizacion } from "../hooks/useProgramacionSiembraPartidaMutation";
+import { useProgramacionSiembraAutorizacion, useProgramacionSiembraDesautorizacion } from "../hooks/useProgramacionSiembraPartidaMutation";
 import {
   Select,
   SelectContent,
@@ -31,6 +31,7 @@ interface ProgramacionSiembraDataTableProps {
   partidas: ProgramacionSiembraDto[];
   columns: ColumnDef<ProgramacionSiembraDto, unknown>[];
   aSembrarKeys: Set<string>;
+  aSembrarIdMap: Map<string, string>;
   registradasKeys: Set<string>;
 }
 
@@ -38,6 +39,7 @@ export function ProgramacionSiembraDataTable({
   partidas,
   columns,
   aSembrarKeys,
+  aSembrarIdMap,
   registradasKeys,
 }: ProgramacionSiembraDataTableProps) {
   const [slideOverOpen, setSlideOpen] = useState(false);
@@ -48,6 +50,9 @@ export function ProgramacionSiembraDataTable({
 
   const { mutateAsync: autorizarSiembra } =
     useProgramacionSiembraAutorizacion();
+
+  const { mutateAsync: desautorizarSiembra } =
+    useProgramacionSiembraDesautorizacion();
 
   const formAutorizarSiembra = useForm<AutorizarSiembraDto>({
     resolver: zodResolver(AutorizarSiembraSchema),
@@ -121,6 +126,17 @@ export function ProgramacionSiembraDataTable({
     [autorizarSiembra],
   );
 
+  const handleDesautorizar = useCallback(async () => {
+    if (!selectedPartida) return;
+    const key = `${selectedPartida.partidaId}-${selectedPartida.anio}-${selectedPartida.indice}`;
+    const siembraId = aSembrarIdMap.get(key);
+    if (!siembraId) return;
+    try {
+      await desautorizarSiembra(siembraId);
+      setSlideOpen(false);
+    } catch {}
+  }, [selectedPartida, aSembrarIdMap, desautorizarSiembra]);
+
   const handleOpenChange = useCallback((open: boolean) => {
     setSlideOpen(open);
     if (!open) {
@@ -179,12 +195,16 @@ export function ProgramacionSiembraDataTable({
           formId="autorizar-siembra-form"
           mode={mode}
           form={formAutorizarSiembra}
-          saveLabel="Autorizar Siembra"
+          saveLabel={isAlreadyAuthorized ? "Desautorizar" : "Autorizar Siembra"}
           fieldLabels={fieldLabels.SiembraPartida}
           confirm={{
-            title: "Autorizar siembra",
-            description: "¿Deseas autorizar esta partida para siembra?",
-            label: "Autorizar Siembra",
+            title: isAlreadyAuthorized
+              ? "Desautorizar siembra"
+              : "Autorizar siembra",
+            description: isAlreadyAuthorized
+              ? "¿Deseas desautorizar esta partida? Volverá a programación de siembra."
+              : "¿Deseas autorizar esta partida para siembra?",
+            label: isAlreadyAuthorized ? "Desautorizar" : "Autorizar Siembra",
             summaryFields: ["partidaId", "anio", "indice"],
           }}
         >
@@ -196,7 +216,7 @@ export function ProgramacionSiembraDataTable({
             ) : (
               <AutorizarProgramacionSiembraEditForm
                 form={formAutorizarSiembra}
-                onSubmit={handleAutorizar}
+                onSubmit={isAlreadyAuthorized ? handleDesautorizar : handleAutorizar}
                 onCancel={() => setSlideOpen(false)}
                 selectedSiembra={selectedPartida}
                 isAlreadyAuthorized={isAlreadyAuthorized}

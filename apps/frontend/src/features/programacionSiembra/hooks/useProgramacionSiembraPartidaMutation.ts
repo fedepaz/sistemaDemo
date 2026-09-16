@@ -18,3 +18,16 @@ export const useProgramacionSiembraAutorizacion = () => {
     },
   });
 };
+
+export const useProgramacionSiembraDesautorizacion = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      programacionSiembraService.desautorizarSiembra(id),
+    onSuccess: () => {
+      invalidateQueries(queryClient, "siembraPartida");
+      toast.success("Partida desautorizada", { duration: 3000 });
+    },
+  });
+};

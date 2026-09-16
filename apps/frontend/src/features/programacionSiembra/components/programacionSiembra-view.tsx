@@ -30,6 +30,17 @@ function ProgramacionSiembraList({ camaraId }: { camaraId: string }) {
     [aSembrarPartidas],
   );
 
+  const aSembrarIdMap = useMemo(
+    () =>
+      new Map(
+        (aSembrarPartidas || []).map((p) => [
+          `${p.partidaId}-${p.anio}-${p.indice}`,
+          p.id,
+        ]),
+      ),
+    [aSembrarPartidas],
+  );
+
   const registradasKeys = useMemo(
     () =>
       new Set(
@@ -61,6 +72,7 @@ function ProgramacionSiembraList({ camaraId }: { camaraId: string }) {
       partidas={siembraPartidas || []}
       columns={columns}
       aSembrarKeys={aSembrarKeys}
+      aSembrarIdMap={aSembrarIdMap}
       registradasKeys={registradasKeys}
     />
   );

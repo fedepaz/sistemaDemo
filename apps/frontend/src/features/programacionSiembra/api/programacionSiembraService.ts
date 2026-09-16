@@ -31,6 +31,12 @@ export const programacionSiembraService = {
     });
   },
 
+  desautorizarSiembra: (id: string) => {
+    return clientFetch<SiembraPartidaDto>(`siembra-partidas/${id}/desautorizar`, {
+      method: "PATCH",
+    });
+  },
+
   fetchTratamientos: () => {
     return clientFetch<TratamientoDto[]>("l-tratamiento", { method: "GET" });
   },
