@@ -57,24 +57,24 @@ describe('ProgramacionSiembra (integration)', () => {
       await request(app.getHttpServer())
         .patch('/l-partidas/asignar-siembra/sp-1')
         .send({
+          entityId: 'cltaskshiftpayload0000000',
           partidaId: 1,
           anio: 2026,
           indice: 1,
-          cg: 1,
-          cantidaNroCont: 50,
-          f_siembra: new Date('2026-01-15'),
           metodoMaquina: true,
           prensadoSustrato: 1,
           profundidadSemilla: '1.5',
           tratamientoSemilla: '1',
-          mezclaId: 'clmocksiembra0000000000000',
+          sustrato: 'sustrato1',
+          cg: 1,
           lote: 272,
           anoLote: 2026,
           item: 1,
-          semxgr: 421,
-          entityId: 'cltaskshiftpayload0000000',
+          cantidaNroCont: 50,
           startTime: '2026-01-15T08:00:00.000Z',
           endTime: '2026-01-15T17:00:00.000Z',
+          mezclaId: 'clmocksiembra0000000000000',
+          semxgr: 421,
           employeeUserIds: [],
         })
         .expect(200);
