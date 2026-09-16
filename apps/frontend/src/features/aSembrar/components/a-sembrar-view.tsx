@@ -1,11 +1,11 @@
 "use client";
 
-import { EmptyState } from "@/features/siembra/components/empty-state";
 import { DataTableSkeleton } from "@/components/data-display/data-table";
 import { aSembrarColumns } from "./columns";
 import { ASembrarDataTable } from "./a-sembrar-data-table";
 import { useASembrarPartidas } from "../hooks/useASembrarPartidas";
 import { LoadingBoundary } from "@/components/common/loading-boundary";
+import { EmptyState } from "@/features/programacionSiembra/components/empty-state";
 
 function ASembrarList() {
   const { data: partidas, isFetching } = useASembrarPartidas();
@@ -27,9 +27,7 @@ export function ASembrarView() {
   return (
     <div className="space-y-2">
       <LoadingBoundary
-        skeleton={
-          <DataTableSkeleton columnCount={aSembrarColumns.length} />
-        }
+        skeleton={<DataTableSkeleton columnCount={aSembrarColumns.length} />}
       >
         <ASembrarList />
       </LoadingBoundary>

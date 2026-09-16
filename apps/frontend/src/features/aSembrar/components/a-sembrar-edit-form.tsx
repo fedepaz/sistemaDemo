@@ -43,11 +43,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { TaskShift } from "@/features/taskshift/components/taskShift";
-import { TratamientoSearch } from "@/features/siembra/components/tratamientoSearch";
+import { TratamientoSearch } from "@/features/programacionSiembra/components/tratamientoSearch";
 import { useDepositos } from "@/features/extendidos";
 
 import { Textarea } from "@/components/ui/textarea";
-import { SustratoSearch } from "@/features/siembra/components/sustratoSearch";
+import { SustratoSearch } from "@/features/programacionSiembra/components/sustratoSearch";
 
 interface ASembrarEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;

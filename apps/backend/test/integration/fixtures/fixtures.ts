@@ -28,7 +28,7 @@ export const validEntityPayload = () => ({
   description: 'Test entity',
 });
 
-export const validSiembraPayload = () => ({
+export const validProgramacionSiembraPayload = () => ({
   partida: 1,
   ano: 2026,
   indice: 1,
@@ -76,7 +76,7 @@ export const mockEntity = () => ({
   updatedAt: new Date('2026-01-01'),
 });
 
-export const mockSiembra = () => ({
+export const mockProgramacionSiembra = () => ({
   id: 'clmocksiembra0000000000000',
   fecha: '2026-01-15',
   camara: 'C1',

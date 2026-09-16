@@ -12,7 +12,11 @@ export class SiembraPartidasController {
   constructor(private readonly service: SiembraPartidasService) {}
 
   @Get()
-  @RequirePermission({ tableName: 'siembra', action: 'read', scope: 'ALL' })
+  @RequirePermission({
+    tableName: 'programacion_siembra',
+    action: 'read',
+    scope: 'ALL',
+  })
   async getAllSiembraPartidas(
     @CurrentUser() user: AuthUser,
   ): Promise<SiembraPartidaDto[]> {
@@ -28,7 +32,11 @@ export class SiembraPartidasController {
   }
 
   @Get(':id')
-  @RequirePermission({ tableName: 'siembra', action: 'read', scope: 'ALL' })
+  @RequirePermission({
+    tableName: 'programacion_siembra',
+    action: 'read',
+    scope: 'ALL',
+  })
   async getSiembraPartida(
     @CurrentUser() user: AuthUser,
     @Param('id') id: string,
