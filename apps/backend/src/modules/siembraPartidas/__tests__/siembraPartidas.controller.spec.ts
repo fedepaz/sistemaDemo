@@ -9,6 +9,7 @@ describe('SiembraPartidasController', () => {
   let service: {
     getAllSiembraPartidas: jest.Mock;
     getSiembraPartidaById: jest.Mock;
+    desautorizarSiembra: jest.Mock;
   };
 
   const mockUser = { id: 'user-1', username: 'admin', tenantId: 'tenant-1' };
@@ -18,7 +19,7 @@ describe('SiembraPartidasController', () => {
     anio: 2026,
     indice: 1,
     metodoMaquina: true,
-    prensadoSemilla: 25,
+    prensadoSustrato: 25,
     profundidadSemilla: '1.525',
     tratamientoSemilla: '',
     mezclaId: 'mezcla-1',
@@ -29,6 +30,7 @@ describe('SiembraPartidasController', () => {
     service = {
       getAllSiembraPartidas: jest.fn(),
       getSiembraPartidaById: jest.fn(),
+      desautorizarSiembra: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -62,6 +64,20 @@ describe('SiembraPartidasController', () => {
 
       expect(result).toEqual(mockDto);
       expect(service.getSiembraPartidaById).toHaveBeenCalledWith(
+        'sp-1',
+        'user-1',
+      );
+    });
+  });
+
+  describe('desautorizarSiembra', () => {
+    it('delegates to service with id and user id', async () => {
+      service.desautorizarSiembra.mockResolvedValue(mockDto);
+
+      const result = await controller.desautorizarSiembra(mockUser, 'sp-1');
+
+      expect(result).toEqual(mockDto);
+      expect(service.desautorizarSiembra).toHaveBeenCalledWith(
         'sp-1',
         'user-1',
       );

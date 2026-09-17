@@ -54,7 +54,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
         item: row.item ?? 0,
         semxgr: row.semxgr ?? 0,
         cg: row.cg ?? 0,
-        prensadoSemilla: row.prensadoSemilla,
+        prensadoSustrato: undefined,
         profundidadSemilla: row.profundidadSemilla,
         metodoMaquina: row.metodoMaquina,
         tratamientoSemilla: row.tratamientoSemilla,
@@ -110,7 +110,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
             title: "Confirmar siembra",
             description: "¿Deseas confirmar siembra?",
             label: "Completar Siembra",
-            summaryFields: ["cg", "cantidaNroCont", "prensadoSemilla", "profundidadSemilla", "tratamientoSemilla", "metodoMaquina", "detalleExtendido"],
+            summaryFields: ["cg", "cantidaNroCont", "prensadoSustrato", "profundidadSemilla", "tratamientoSemilla", "sustrato", "metodoMaquina", "detalleExtendido", "startTime", "endTime"],
           }}
         >
           <div className="space-y-2">

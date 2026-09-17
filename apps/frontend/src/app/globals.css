@@ -184,6 +184,11 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  --breakpoint-md: 1280px;
+  --breakpoint-lg: 1536px;
+  --breakpoint-xl: 1920px;
+  --breakpoint-2xl: 2560px;
+
   --shadow-2xs: var(--shadow-2xs);
   --shadow-xs: var(--shadow-xs);
   --shadow-sm: var(--shadow-sm);

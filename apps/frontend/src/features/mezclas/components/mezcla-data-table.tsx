@@ -80,7 +80,7 @@ export function MezclaDataTable() {
         data={mezclas}
         title="Mezclas"
         description="Gestión de mezclas del sistema"
-        tableName="siembra"
+        tableName="programacion_siembra"
         totalCount={mezclas.length}
         onCreate={handleNewMezcla}
         createLabel="Nueva Mezcla"

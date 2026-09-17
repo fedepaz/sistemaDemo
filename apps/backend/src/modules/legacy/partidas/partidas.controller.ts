@@ -52,7 +52,7 @@ export class PartidasController {
 
   @Post('autorizar-siembra')
   @RequirePermission({
-    tableName: 'siembra',
+    tableName: 'programacion_siembra',
     action: 'create',
     scope: 'ALL',
   })

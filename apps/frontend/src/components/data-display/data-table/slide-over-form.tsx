@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { UseFormReturn } from "react-hook-form";
-import { Eye, Plus, Pencil, Loader2, HelpCircle, AlertTriangle } from "lucide-react";
+import { Eye, Plus, Pencil, Loader2, HelpCircle, AlertTriangle, Check, X } from "lucide-react";
 import { formatShortDate } from "@/lib/date-utils";
 
 type SlideOverMode = "create" | "edit" | "view";
@@ -104,9 +104,21 @@ export function SlideOverForm({
     fieldLabels?.[field] ??
     field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
 
-  const formatSummaryValue = (value: unknown): string => {
+  const formatSummaryValue = (value: unknown): React.ReactNode => {
     if (value === null || value === undefined || value === "") return "—";
-    if (typeof value === "boolean") return value ? "Si" : "No";
+    if (typeof value === "boolean") {
+      return value ? (
+        <span className="inline-flex items-center gap-1 text-primary font-bold">
+          <Check className="h-3.5 w-3.5" />
+          Método Máquina
+        </span>
+      ) : (
+        <span className="inline-flex items-center gap-1 text-muted-foreground font-bold">
+          <X className="h-3.5 w-3.5" />
+          Método Manual
+        </span>
+      );
+    }
     if (value instanceof Date) return formatShortDate(value);
     if (typeof value === "number") return value.toLocaleString("es-AR");
     if (typeof value === "string") {
@@ -171,7 +183,7 @@ export function SlideOverForm({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="w-full sm:max-w-xl flex flex-col h-dvh p-0">
+        <SheetContent className="w-full sm:max-w-xl md:max-w-2xl flex flex-col h-dvh p-0">
           <SheetHeader className="px-6 py-4 border-b shrink-0">
             <SheetTitle className="text-xl">{title}</SheetTitle>
             {description ? (

@@ -46,7 +46,7 @@ function DashboardKPI() {
       <CardContent className="p-0">
         <div className="flex flex-col xl:flex-row xl:items-center px-0.5">
           {/* Middle: Current conditions */}
-          <div className="grid grid-cols-2 md:grid-cols-4 xl:flex xl:flex-nowrap items-center gap-2 px-2 py-2 flex-1 min-w-0">
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:flex xl:flex-nowrap items-center gap-2 px-2 py-2 flex-1 min-w-0">
             {data.map((kpi, index) => {
               const colors = kpiChartColors[index % kpiChartColors.length];
               return (
@@ -60,7 +60,7 @@ function DashboardKPI() {
                   <div
                     className={cn(
                       colors.icon,
-                      "hidden md:flex h-7 w-7 sm:h-9 sm:w-9 rounded-lg bg-background/50 items-center justify-center shrink-0 shadow-sm",
+                      "hidden lg:flex h-7 w-7 sm:h-9 sm:w-9 rounded-lg bg-background/50 items-center justify-center shrink-0 shadow-sm",
                     )}
                   >
                     <div className="[&>svg]:h-3.5 [&>svg]:w-3.5 sm:[&>svg]:h-5 sm:[&>svg]:w-5 drop-shadow-sm">

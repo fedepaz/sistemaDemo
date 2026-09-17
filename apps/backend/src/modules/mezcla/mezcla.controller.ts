@@ -13,7 +13,11 @@ export class MezclaController {
   constructor(private readonly service: MezclaService) {}
 
   @Get()
-  @RequirePermission({ tableName: 'siembra', action: 'create', scope: 'ALL' })
+  @RequirePermission({
+    tableName: 'programacion_siembra',
+    action: 'create',
+    scope: 'ALL',
+  })
   async getAllMezcla(@CurrentUser() user: AuthUser): Promise<MezclaDto[]> {
     return this.service.getAllMezcla(user.id);
   }

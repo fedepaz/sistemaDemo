@@ -22,9 +22,8 @@ export function SiembraPartidasRegistradasDataTable({
 
   const sortedPartidas = useMemo(
     () =>
-      [...partidas].sort(
-        (a, b) =>
-          (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
+      [...partidas].sort((a, b) =>
+        (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
       ),
     [partidas],
   );
@@ -48,7 +47,7 @@ export function SiembraPartidasRegistradasDataTable({
         data={sortedPartidas}
         title="Partidas Registradas"
         description="Partidas con datos de siembra registrados en el sistema"
-        tableName="siembra"
+        tableName="programacion_siembra"
         totalCount={sortedPartidas.length}
         onView={handleView}
         exportColumns={siembraPartidasRegistradasExportColumns}

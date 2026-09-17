@@ -7,10 +7,10 @@ export function useBreakpoint() {
 
   useEffect(() => {
     const sm = window.matchMedia("(min-width: 640px)");
-    const md = window.matchMedia("(min-width: 768px)");
-    const lg = window.matchMedia("(min-width: 1024px)");
-    const xl = window.matchMedia("(min-width: 1280px)");
-    const xxl = window.matchMedia("(min-width: 1536px)");
+    const md = window.matchMedia("(min-width: 1280px)");
+    const lg = window.matchMedia("(min-width: 1536px)");
+    const xl = window.matchMedia("(min-width: 1920px)");
+    const xxl = window.matchMedia("(min-width: 2560px)");
 
     const update = () => {
       if (xxl.matches) setBreakpoint("2xl");

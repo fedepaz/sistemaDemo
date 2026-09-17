@@ -30,7 +30,7 @@ import { LegacyPartidasModule } from './modules/legacy/partidas/partidas.module'
 import { LegacyExtendidosModule } from './modules/legacy/extendidos/extendidos.module';
 
 import { AuditCrudInterceptor } from './shared/interceptors/audit-crud.interceptor';
-import { LegacySiembraModule } from './modules/legacy/siembra/siembra.module';
+import { LegacyProgramacionSiembraModule } from './modules/legacy/programacionSiembra/programacionSiembra.module';
 import { LegacyAlertsModule } from './modules/legacy/alerts/alerts.module';
 import { AlertCommentsModule } from './modules/alertComments/alertComments.module';
 import { TaskShiftsModule } from './modules/taskShifts/taskShifts.module';
@@ -102,7 +102,7 @@ import { BillboardModule } from './modules/billboard/billboard.module';
     LegacyDepositosModule,
     LegacyPartidasModule,
     LegacyExtendidosModule,
-    LegacySiembraModule,
+    LegacyProgramacionSiembraModule,
     LegacyAlertsModule,
     LegacyTratamientoModule,
     LegacySustratoModule,

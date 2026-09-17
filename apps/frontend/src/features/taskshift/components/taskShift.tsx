@@ -9,7 +9,14 @@ import { Button } from "@/components/ui/button";
 import { getLocalDateStr, utcToLocalTime } from "@/lib/date-utils";
 import { EmployeeSearch } from "./employee-search";
 import type { UserProfileDto } from "@vivero/shared";
-import { Clock, User2, Play, Square, RotateCcw } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Clock, User2, Play, Square } from "lucide-react";
 
 
 
@@ -20,6 +27,15 @@ function toDateTimeString(date: string, time: string): string {
   const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
   const minutes = String(Math.abs(offset) % 60).padStart(2, "0");
   return `${date}T${time}:00.000${sign}${hours}:${minutes}`;
+}
+
+const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
+const MINUTES = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
+
+function extractTimeParts(isoString: string): { hour: string; minute: string } {
+  const localTime = utcToLocalTime(isoString);
+  const [hour, minute] = localTime.split(":");
+  return { hour, minute };
 }
 
 interface TaskShiftProps {
@@ -44,9 +60,6 @@ export function TaskShift({
   const hasStarted = startTime !== "";
   const hasEnded = endTime !== "";
 
-  const formattedStart = hasStarted ? utcToLocalTime(startTime) : null;
-  const formattedEnd = hasEnded ? utcToLocalTime(endTime) : null;
-
   function handleStart() {
     const now = new Date();
     const startStr = toDateTimeString(today, `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`);
@@ -57,11 +70,6 @@ export function TaskShift({
     const now = new Date();
     const endStr = toDateTimeString(today, `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`);
     onEndTimeChange(endStr);
-  }
-
-  function handleReset() {
-    onStartTimeChange("");
-    onEndTimeChange("");
   }
 
   return (
@@ -83,21 +91,90 @@ export function TaskShift({
           </p>
         </div>
 
-        {/* Time Display */}
-        {(hasStarted || hasEnded) && (
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            {formattedStart && (
-              <span className="flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5" />
-                Inicio: <span className="font-bold text-foreground">{formattedStart}</span>
-              </span>
-            )}
-            {formattedEnd && (
-              <span className="flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5" />
-                Fin: <span className="font-bold text-foreground">{formattedEnd}</span>
-              </span>
-            )}
+        {/* Time Selects (visible after Finalizar) */}
+        {hasStarted && hasEnded && (
+          <div className="space-y-2">
+            {/* Inicio */}
+            <div className="flex items-center gap-2">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs font-bold text-muted-foreground w-12">Inicio</span>
+              <div className="flex items-center gap-1">
+                <Select
+                  value={extractTimeParts(startTime).hour}
+                  onValueChange={(val) => {
+                    const { minute } = extractTimeParts(startTime);
+                    onStartTimeChange(toDateTimeString(today, `${val}:${minute}`));
+                  }}
+                >
+                  <SelectTrigger className="w-[70px] h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {HOURS.map((h) => (
+                      <SelectItem key={h} value={h} className="text-xs">{h}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span className="text-xs font-bold">:</span>
+                <Select
+                  value={extractTimeParts(startTime).minute}
+                  onValueChange={(val) => {
+                    const { hour } = extractTimeParts(startTime);
+                    onStartTimeChange(toDateTimeString(today, `${hour}:${val}`));
+                  }}
+                >
+                  <SelectTrigger className="w-[70px] h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MINUTES.map((m) => (
+                      <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Fin */}
+            <div className="flex items-center gap-2">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs font-bold text-muted-foreground w-12">Fin</span>
+              <div className="flex items-center gap-1">
+                <Select
+                  value={extractTimeParts(endTime).hour}
+                  onValueChange={(val) => {
+                    const { minute } = extractTimeParts(endTime);
+                    onEndTimeChange(toDateTimeString(today, `${val}:${minute}`));
+                  }}
+                >
+                  <SelectTrigger className="w-[70px] h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {HOURS.map((h) => (
+                      <SelectItem key={h} value={h} className="text-xs">{h}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span className="text-xs font-bold">:</span>
+                <Select
+                  value={extractTimeParts(endTime).minute}
+                  onValueChange={(val) => {
+                    const { hour } = extractTimeParts(endTime);
+                    onEndTimeChange(toDateTimeString(today, `${hour}:${val}`));
+                  }}
+                >
+                  <SelectTrigger className="w-[70px] h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MINUTES.map((m) => (
+                      <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         )}
 
@@ -121,21 +198,11 @@ export function TaskShift({
             className="w-full h-10 md:h-14 rounded-xl text-xs md:text-sm font-bold"
           >
             <Square className="h-4 w-4 mr-2" />
-            Detener
+            Finalizar
           </Button>
         )}
 
-        {hasStarted && hasEnded && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleReset}
-            className="w-full h-10 md:h-14 rounded-xl text-xs md:text-sm font-bold"
-          >
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reiniciar
-          </Button>
-        )}
+
       </div>
 
       {/* Employee Search */}

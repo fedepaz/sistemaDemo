@@ -3,11 +3,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiembraPartidaDto } from "@vivero/shared";
 import { siembraPartidasRegistradasService } from "../api/siembraPartidasRegistradasService";
-import { siembraPartidasRegistradasQueryKeys } from "@/lib/queryKeys";
+import { programacionSiembraPartidasRegistradasQueryKeys } from "@/lib/queryKeys";
 
 export function useSiembraPartidasRegistradas() {
   return useSuspenseQuery<SiembraPartidaDto[]>({
-    queryKey: siembraPartidasRegistradasQueryKeys.all(),
+    queryKey: programacionSiembraPartidasRegistradasQueryKeys.all(),
     queryFn: siembraPartidasRegistradasService.fetchAll,
   });
 }
