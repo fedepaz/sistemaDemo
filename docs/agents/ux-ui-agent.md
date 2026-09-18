@@ -67,8 +67,9 @@ All tokens are defined as CSS custom properties in `apps/frontend/src/app/global
 
 | Token | Header | Row | Cell padding | Font | Use case |
 |-------|--------|-----|-------------|------|----------|
-| Compact | 32px | 32px | 6px 8px | 12px | < 1280px viewports |
-| Default | 36px | 40px | 4px 12px | 14px | >= 1280px viewports |
+| Compact | 32px | 32px | 4px 8px | 12px | < 1280px viewports |
+| Standard | 36px | 40px | 4px 12px | 14px | 1280px–1535px viewports |
+| Spacious | 36px | 40px | 4px 12px | 14px | >= 1536px viewports |
 
 **Typography tokens**:
 
@@ -86,16 +87,20 @@ All tokens are defined as CSS custom properties in `apps/frontend/src/app/global
 
 | Token | Value | Use case |
 |-------|-------|----------|
-| `--sidebar-width-compact` | 192px | md (768px–1279px) |
-| `--sidebar-width` | 224px | xl (1280px+) |
+| `--sidebar-width-compact` | 176px | lg (1024px–1279px) |
+| `--sidebar-width` | 224px | 2xl (1536px+) |
 | `--sidebar-width-collapsed` | 56px | Collapsed state |
+
+Sidebar widths at each breakpoint: `w-14` (56px collapsed) → `w-44` (176px, lg) → `w-48` (192px, xl) → `w-56` (224px, 2xl)
 
 **Header tokens**:
 
 | Token | Value | Use case |
 |-------|-------|----------|
-| `--header-height-compact` | 48px | md (768px–1279px) |
-| `--header-height` | 56px | xl (1280px+) |
+| `--header-height-compact` | 44px | lg (1024px–1279px) |
+| `--header-height` | 48px | 2xl (1536px+) |
+
+Header heights at each breakpoint: `h-11` (44px, default) → `h-12` (48px, xl) → `h-14` (56px, 2xl)
 
 ### Responsive Breakpoints (Standard Tailwind)
 
@@ -103,11 +108,13 @@ All tokens are defined as CSS custom properties in `apps/frontend/src/app/global
 |------|-------|----------|
 | `sm` | 640px | Mobile phone |
 | `md` | 768px | Tablet / sidebar appears |
-| `lg` | 1024px | Small laptop / 4 table columns |
-| `xl` | 1280px | Standard desktop / full density, 5 columns |
-| `2xl` | 1536px | Large desktop |
+| `lg` | 1024px | Small laptop / sidebar at 176px |
+| `xl` | 1280px | Standard desktop / sidebar 192px, header 48px, padding 24px |
+| `2xl` | 1536px | Large desktop / sidebar 224px, header 56px, padding 32px |
 
 **Density principle**: As the viewport shrinks, components become MORE DENSER (smaller padding, shorter rows, tighter gaps) — not less. The goal is efficient use of available space at every viewport size.
+
+**Width-aware column visibility**: DataTable columns are hidden/shown based on container width, not fixed breakpoint indexes. Fixed columns (select, actions) always show. Data columns hide from right to left when space is insufficient (< 124px per column). This ensures optimal column count at any viewport size.
 
 ### Current Design System Reference
 
@@ -177,6 +184,7 @@ Focus on these proven interface patterns:
     - For `READ_ONLY` types: All mutation actions and selection are hidden.
 - **Descriptive Action Labels:** Always use specific, context-aware labels for action buttons (e.g., "Asignar Ubicación" instead of "Ejecutar") to improve operational clarity.
 - **Global Search Bar:** Real-time client-side filtering across all columns with clear button (X) and results count badge. Opt-out per table via `enableSearch={false}`.
+- **Width-Aware Column Visibility:** Columns are hidden/shown based on container width via `ResizeObserver`, not fixed breakpoint indexes. Fixed columns (select checkbox, actions) always visible. Data columns hide from right to left when space is insufficient (~124px per column including padding). Fallback: 5 columns if `ResizeObserver` unavailable (SSR).
 
 ## Feature Design Process
 

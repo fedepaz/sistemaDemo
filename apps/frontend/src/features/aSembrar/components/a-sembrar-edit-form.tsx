@@ -119,16 +119,16 @@ export function ASembrarEditForm({
       >
         {/* PRODUCT HEADER */}
         <div className="space-y-3 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
+          <div className="flex items-center justify-between bg-primary/5 p-2.5 md:p-3 rounded-xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+              <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Activity className="h-5 w-5 md:h-6 md:w-6" />
               </div>
               <div>
-                <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+                <h2 className="text-base md:text-lg font-bold tracking-tight leading-none text-foreground uppercase">
                   {selectedPartida.codigoEspecie}
                 </h2>
-                <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
                   {selectedPartida.nombreEspecie}
                 </p>
               </div>
@@ -147,7 +147,7 @@ export function ASembrarEditForm({
                   <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                     <Warehouse className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
-                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                     Cámara de Destino
                   </FormLabel>
                 </div>
@@ -190,7 +190,7 @@ export function ASembrarEditForm({
                   <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                     <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
-                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                     Bandejas Confirmadas
                   </FormLabel>
                 </div>
@@ -223,7 +223,7 @@ export function ASembrarEditForm({
                     <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                       <Gauge className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                     </div>
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                    <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                       Prensado de Sustrato
                     </FormLabel>
                   </div>
@@ -248,7 +248,7 @@ export function ASembrarEditForm({
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription className="text-[9px] md:text-[10px] text-muted-foreground">
+                  <FormDescription className="text-[9px] md:text-[11px] text-muted-foreground">
                     Seleccionar de 0 a 6 (incrementos de 0.5)
                   </FormDescription>
                   <FormMessage />
@@ -266,7 +266,7 @@ export function ASembrarEditForm({
                     <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                       <Ruler className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                     </div>
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                    <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                       Profundidad de Semilla
                     </FormLabel>
                   </div>
@@ -277,7 +277,7 @@ export function ASembrarEditForm({
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-[9px] md:text-[10px] text-muted-foreground">
+                  <FormDescription className="text-[9px] md:text-[11px] text-muted-foreground">
                     Valor en cm - Por ej: 1.3, 1.525, 2
                   </FormDescription>
                   <FormMessage />
@@ -292,7 +292,7 @@ export function ASembrarEditForm({
               <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                 <TestTubes className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
               </div>
-              <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+              <Label className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                 Tratamiento
               </Label>
             </div>
@@ -307,7 +307,7 @@ export function ASembrarEditForm({
               <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                 <TestTubes className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
               </div>
-              <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+              <Label className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                 Sustrato
               </Label>
             </div>
@@ -324,11 +324,11 @@ export function ASembrarEditForm({
                 <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                   <Wrench className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                 </div>
-                <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                   Método
                 </p>
                 <span
-                  className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
+                  className={`text-[9px] md:text-[11px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
                     metodoMaquina
                       ? "text-primary border-primary/20 bg-primary/10"
                       : "text-muted-foreground border-border/40 bg-muted/50"
@@ -377,7 +377,7 @@ export function ASembrarEditForm({
                 <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                   <FileText className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                 </div>
-                <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                   Observaciones
                 </FormLabel>
               </div>

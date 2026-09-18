@@ -101,7 +101,7 @@ export function SustratoDataTable() {
               : undefined
           }
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             {mode === "create" ? (
               <SustratoCreateForm
                 form={formCreateSustrato}

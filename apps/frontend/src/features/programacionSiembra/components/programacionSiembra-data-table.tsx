@@ -211,7 +211,7 @@ export function ProgramacionSiembraDataTable({
             summaryFields: ["partidaId", "anio", "indice"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             {mode === "view" ? (
               <ProgramacionSiembraViewForm
                 selectedExtendido={selectedPartida}

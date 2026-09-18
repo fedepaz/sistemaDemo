@@ -2,7 +2,7 @@
 // src/components/data-display/data-table/data-table.tsx
 "use client";
 
-import { Fragment, memo, ReactNode, useEffect, useMemo, useState } from "react";
+import { Fragment, memo, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   type ColumnDef,
@@ -335,36 +335,49 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
     },
   });
 
+  const [containerWidth, setContainerWidth] = useState(0);
+  const tableContainerRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setContainerWidth(entry.contentRect.width);
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const allColumns = table.getAllColumns();
     const columnsId = allColumns.map((column) => column.id);
 
+    const fixedWidth = 140;
+    const minColumnWidth = 100;
+    const cellPadding = 24;
+
+    const availableForData = Math.max(containerWidth - fixedWidth, 0);
+    const maxDataColumns =
+      containerWidth > 0
+        ? Math.floor(availableForData / (minColumnWidth + cellPadding))
+        : 5;
+
+    const dataColumnCount = columnsId.filter(
+      (id) => id !== "actions" && id !== "select",
+    ).length;
+    const visibleCount = Math.min(
+      Math.max(maxDataColumns, 2),
+      dataColumnCount,
+    );
+
     const visibility: VisibilityState = {};
-
-    // 768px (md) target: Squeeze the data to fit
-    // We prioritize keeping core data and the actions column
-    let visibleCount = columnsId.length;
-
-    if (breakpoint === "sm") {
-      visibleCount = 2; // Mobile: Minimal data
-    } else if (breakpoint === "md") {
-      visibleCount = 3; // Tablet (768px): Focus on the essentials
-    } else if (breakpoint === "lg") {
-      visibleCount = 4; // Small laptop (1024px)
-    } else if (breakpoint === "xl") {
-      visibleCount = 5; // Standard laptop (1280px)
-    }
-
     columnsId.forEach((id, index) => {
       if (id === "actions" || id === "select") {
-        visibility[id] = true; // Never hide actions or selection
+        visibility[id] = true;
       } else {
         visibility[id] = index < visibleCount;
       }
     });
 
     setColumnVisibility(visibility);
-  }, [breakpoint, table]);
+  }, [containerWidth, table]);
 
   const handleDeleteSingle = (item: TData) => {
     setIsBulkDelete(false);
@@ -566,7 +579,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                 </Tooltip>
               )}
           </div>
-          <div className="flex-1 overflow-auto px-4">
+          <div ref={tableContainerRef} className="flex-1 overflow-auto px-4">
             <div className="rounded-md border">
               <Table className="min-w-full">
                 <TableHeader>
@@ -634,14 +647,14 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3 xl:gap-4 px-3 xl:px-4 py-1.5 xl:py-2 shrink-0 border-t mt-auto">
             {" "}
-            <div className="flex-1 text-[10px] xl:text-[11px] text-muted-foreground">
+            <div className="flex-1 text-xs text-muted-foreground">
               {`${table.getFilteredSelectedRowModel().rows.length} de ${table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).`}
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center space-x-2">
                 <label
                   htmlFor="pagination-page-size"
-                  className="text-[10px] xl:text-[11px] font-medium"
+                  className="text-xs font-medium"
                 >
                   Filas por página
                 </label>
@@ -651,7 +664,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                   onChange={(e) => {
                     table.setPageSize(Number(e.target.value));
                   }}
-                  className="h-6 xl:h-7 w-[60px] rounded border border-input bg-background px-1 text-[10px] xl:text-[11px]"
+                  className="h-6 xl:h-7 w-[60px] rounded border border-input bg-background px-1 text-xs"
                 >
                   {[10, 20, 30, 40, 50, 100].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
@@ -660,7 +673,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                   ))}
                 </select>
               </div>
-              <div className="flex w-[80px] items-center justify-center text-[10px] xl:text-[11px] font-medium">
+              <div className="flex w-[80px] items-center justify-center text-xs font-medium">
                 {`Página ${table.getState().pagination.pageIndex + 1} de ${table.getPageCount()}`}
               </div>
               <div className="flex items-center space-x-1">

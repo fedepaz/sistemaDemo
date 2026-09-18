@@ -106,13 +106,13 @@
   --text-heading: 24px;
 
   /* Sidebar tokens */
-  --sidebar-width-compact: 192px;
+  --sidebar-width-compact: 176px;
   --sidebar-width: 224px;
   --sidebar-width-collapsed: 56px;
 
   /* Header tokens */
-  --header-height-compact: 48px;
-  --header-height: 56px;
+  --header-height-compact: 44px;
+  --header-height: 48px;
 }
 
 .dark {

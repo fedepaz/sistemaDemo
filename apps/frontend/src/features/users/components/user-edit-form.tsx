@@ -49,7 +49,7 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
             name="firstName"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">Nombre</FormLabel>
+                <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Nombre</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
@@ -67,7 +67,7 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
             name="lastName"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">Apellido</FormLabel>
+                <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Apellido</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
@@ -85,14 +85,14 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
           name="email"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">Correo electrónico</FormLabel>
+              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Correo electrónico</FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   placeholder="Correo electrónico"
                 />
               </FormControl>
-              <FormDescription className="text-[9px] md:text-[10px] font-medium italic opacity-60">Email oficial para notificaciones.</FormDescription>
+              <FormDescription className="text-[9px] md:text-[11px] font-medium italic opacity-60">Email oficial para notificaciones.</FormDescription>
               <FormMessage className="text-[10px]" />
             </FormItem>
           )}

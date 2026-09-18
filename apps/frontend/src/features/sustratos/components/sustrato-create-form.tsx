@@ -32,7 +32,7 @@ export function SustratoCreateForm({ onSubmit, formId, form }: FormProps) {
           name="nombre"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">
+              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                 Nombre
               </FormLabel>
               <FormControl>
@@ -43,7 +43,7 @@ export function SustratoCreateForm({ onSubmit, formId, form }: FormProps) {
                   required
                 />
               </FormControl>
-              <FormDescription className="text-[9px] md:text-[10px] font-medium leading-tight">
+              <FormDescription className="text-[9px] md:text-[11px] font-medium leading-tight">
                 Nombre descriptivo del sustrato. Ej: &quot;Sustrato Turba&quot;.
               </FormDescription>
               <FormMessage className="text-[10px]" />

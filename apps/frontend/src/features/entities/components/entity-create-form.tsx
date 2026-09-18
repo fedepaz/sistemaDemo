@@ -40,7 +40,7 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
           name="name"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">Nombre de Tabla</FormLabel>
+              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Nombre de Tabla</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -49,7 +49,7 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
                   required
                 />
               </FormControl>
-              <FormDescription className="text-[9px] md:text-[10px] font-medium leading-tight">
+              <FormDescription className="text-[9px] md:text-[11px] font-medium leading-tight">
                 Debe ser único y sin espacios.
               </FormDescription>
               <FormMessage className="text-[10px]" />
@@ -61,7 +61,7 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
           name="label"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">Etiqueta Visual</FormLabel>
+              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Etiqueta Visual</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -69,7 +69,7 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
                   required
                 />
               </FormControl>
-              <FormDescription className="text-[9px] md:text-[10px] font-medium leading-tight">
+              <FormDescription className="text-[9px] md:text-[11px] font-medium leading-tight">
                 Nombre que verá el usuario final.
               </FormDescription>
               <FormMessage className="text-[10px]" />
@@ -81,7 +81,7 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
           name="permissionType"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">Tipo de Permiso</FormLabel>
+              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Tipo de Permiso</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>

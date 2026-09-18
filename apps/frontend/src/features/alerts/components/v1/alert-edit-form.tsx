@@ -72,11 +72,11 @@ export function AlertEditForm({
                 <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                   {config.label}
                 </h2>
-                <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
                   Partida #{selectedAlert.partidaId}/{selectedAlert.indice} ·
                   Año {selectedAlert.anio}
                 </p>
-                <p className="text-[9px] md:text-[10px] font-mono text-primary mt-0.5">
+                <p className="text-[9px] md:text-[11px] font-mono text-primary mt-0.5">
                   {selectedAlert.codigoEspecie} · {selectedAlert.nombreEspecie}
                 </p>
               </div>
@@ -179,14 +179,14 @@ export function AlertEditForm({
                 <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                   <MessageSquare className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                 </div>
-                <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                   Nuevo Comentario
                 </FormLabel>
               </div>
               <FormControl>
                 <Textarea
                   placeholder="Escribe tu comentario..."
-                  className="min-h-[80px] md:min-h-[120px] rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base p-4 leading-relaxed focus:ring-primary/20"
+                  className="min-h-[60px] md:min-h-[100px] rounded-xl border-border/60 bg-background shadow-sm text-sm p-3 leading-relaxed focus:ring-primary/20"
                   {...field}
                 />
               </FormControl>

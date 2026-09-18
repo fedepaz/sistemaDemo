@@ -54,7 +54,7 @@ export function DashboardHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
       <div className="w-full px-1 sm:px-2 md:px-3 lg:px-4">
-        <div className="flex h-12 xl:h-14 items-center justify-between">
+        <div className="flex h-11 xl:h-12 2xl:h-14 items-center justify-between">
           {/* Logo and Mobile Navigation */}
           <div className="flex items-center space-x-3">
             <MobileNavigation />

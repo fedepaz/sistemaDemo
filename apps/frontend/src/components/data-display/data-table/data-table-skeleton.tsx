@@ -59,7 +59,7 @@ export function DataTableSkeleton({
                     <TableHead
                       key={index}
                       className={cn(
-                        "h-9 py-1 text-xs font-semibold",
+                        "h-8 xl:h-9 py-1 text-xs font-semibold",
                         index >= 2 && "hidden sm:table-cell",
                       )}
                     >
@@ -67,7 +67,7 @@ export function DataTableSkeleton({
                     </TableHead>
                   ))}
                   {/* Actions column */}
-                  <TableHead className="h-9 py-1 text-xs font-semibold">
+                  <TableHead className="h-8 xl:h-9 py-1 text-xs font-semibold">
                     <Skeleton className="h-4 w-[60px]" />
                   </TableHead>
                 </TableRow>
@@ -79,7 +79,7 @@ export function DataTableSkeleton({
                       <TableCell
                         key={cellIndex}
                         className={cn(
-                          "py-1 px-3 text-sm h-10",
+                          "h-8 xl:h-10 py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm",
                           cellIndex >= 2 && "hidden sm:table-cell",
                         )}
                       >
@@ -87,7 +87,7 @@ export function DataTableSkeleton({
                       </TableCell>
                     ))}
                     {/* Actions cell */}
-                    <TableCell className="py-1 px-3 h-10">
+                    <TableCell className="h-8 xl:h-10 py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm">
                       <div className="flex items-center justify-center gap-2">
                         <Skeleton className="h-8 w-8" />
                         <Skeleton className="h-8 w-8" />

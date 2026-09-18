@@ -51,16 +51,16 @@ export function ExtendidosEditForm({
       >
         {/* 🚀 PRODUCT HEADER (Context) */}
         <div className="space-y-3 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
+          <div className="flex items-center justify-between bg-primary/5 p-2.5 md:p-3 rounded-xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+              <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Package className="h-5 w-5 md:h-6 md:w-6" />
               </div>
               <div>
-                <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+                <h2 className="text-base md:text-lg font-bold tracking-tight leading-none text-foreground uppercase">
                   {selectedExtendido.codigoEspecie}
                 </h2>
-                <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
                   {selectedExtendido.nombreEspecie}
                 </p>
               </div>
@@ -79,7 +79,7 @@ export function ExtendidosEditForm({
                   <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                     <Warehouse className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
-                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                     Depósito de Destino
                   </FormLabel>
                 </div>
@@ -116,11 +116,11 @@ export function ExtendidosEditForm({
             {/* 📦 STOCK INICIAL (solo lectura) */}
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                   Bandejas Recibidas
                 </p>
               </div>
-              <p className="h-9 rounded-md border border-border/60 bg-muted/50 shadow-sm text-lg md:text-xl font-black px-4 flex items-center text-foreground/80">
+              <p className="h-9 rounded-md border border-border/60 bg-muted/50 shadow-sm text-base md:text-lg font-black px-4 flex items-center text-foreground/80">
                 {originalStock}
               </p>
             </div>
@@ -132,7 +132,7 @@ export function ExtendidosEditForm({
               render={({ field }) => (
                 <FormItem className="space-y-1.5">
                   <div className="flex items-center gap-2">
-                    <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors text-destructive">
+                    <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider transition-colors text-destructive">
                       Baja
                     </FormLabel>
                   </div>
@@ -143,7 +143,7 @@ export function ExtendidosEditForm({
                         inputMode="numeric"
                         {...field}
                         onChange={(e) => field.onChange(Number(e.target.value))}
-                        className="h-9 rounded-md shadow-sm text-lg md:text-xl font-bold px-4 transition-all duration-300 border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
+                        className="h-9 rounded-md shadow-sm text-base md:text-lg font-bold px-4 transition-all duration-300 border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
                       />
                     </div>
                   </FormControl>
@@ -163,7 +163,7 @@ export function ExtendidosEditForm({
                   <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                     <FileText className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
-                  <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                  <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
                     Observaciones
                   </FormLabel>
                 </div>

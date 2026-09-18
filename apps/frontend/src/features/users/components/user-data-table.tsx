@@ -168,7 +168,7 @@ export function UsersDataTable() {
             summaryFields: ["firstName", "lastName", "email"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             <UserEditForm
               form={formEditUser}
               onSubmit={handleUpdate}

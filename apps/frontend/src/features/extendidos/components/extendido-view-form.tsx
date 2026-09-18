@@ -48,7 +48,7 @@ const InfoRow = ({
       <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1 md:mb-1.5">
+      <p className="text-[9px] md:text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1 md:mb-1.5">
         {label}
       </p>
       <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
               <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                 {selectedExtendido.codigoEspecie}
               </h2>
-              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+              <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
                 {formatPartidaHeader(selectedExtendido)}
               </p>
             </div>
@@ -153,7 +153,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
         <TabsList className="grid grid-cols-2 bg-muted/80 p-1 rounded-xl md:rounded-2xl shrink-0 h-10 md:h-14 border border-border/40 gap-1 md:gap-2 shadow-inner">
           <TabsTrigger
             value="produccion"
-            className="rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg md:rounded-xl text-[9px] md:text-[11px] font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
@@ -163,7 +163,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
 
           <TabsTrigger
             value="notas"
-            className="rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg md:rounded-xl text-[9px] md:text-[11px] font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
@@ -203,14 +203,14 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                       isToday ? (
                         <Badge
                           variant="outline"
-                          className="text-warning border-warning/20 bg-warning/10 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
+                          className="text-warning border-warning/20 bg-warning/10 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[11px]"
                         >
                           Hoy
                         </Badge>
                       ) : isTomorrow ? (
                         <Badge
                           variant="default"
-                          className="bg-primary/10 text-primary border-primary/20 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[10px]"
+                          className="bg-primary/10 text-primary border-primary/20 font-bold px-1.5 md:px-2 py-0 h-4 md:h-5 text-[9px] md:text-[11px]"
                         >
                           Mañana
                         </Badge>
@@ -228,7 +228,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                           <Thermometer className="h-4 w-4 md:h-5 md:w-5" />
                         </div>
                         <div>
-                          <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 block leading-none mb-1 md:mb-2">
+                          <span className="text-[8px] md:text-[11px] font-black uppercase tracking-widest text-muted-foreground/60 block leading-none mb-1 md:mb-2">
                             Estadía Sugerida
                           </span>
                           <p className="text-xs md:text-sm font-bold text-foreground">
@@ -238,7 +238,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                       </div>
 
                       <div>
-                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary/70 block leading-none mb-1">
+                        <span className="text-[8px] md:text-[11px] font-black uppercase tracking-widest text-primary/70 block leading-none mb-1">
                           Cámara Germinación
                         </span>
 
@@ -267,14 +267,14 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                     <p className="text-xs md:text-sm font-bold text-foreground">
                       Nota de Extendido
                     </p>
-                    <p className="text-xs md:text-sm font-black uppercase tracking-widest text-muted-foreground">
+                    <p className="text-xs md:text-xs font-bold uppercase tracking-wider text-muted-foreground">
                       {selectedExtendido.extendido || "Sin observaciones."}
                     </p>
                   </div>
                 </div>
                 {selectedExtendido.detalle ? (
                   <div className="space-y-2 md:space-y-3">
-                    <div className="flex items-center gap-2 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary/70">
+                    <div className="flex items-center gap-2 text-[8px] md:text-[11px] font-black uppercase tracking-widest text-primary/70">
                       <ClipboardList className="h-3 w-3 md:h-4 md:w-4" />{" "}
                       Detalle Técnico
                     </div>
@@ -288,7 +288,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                   <div className="p-3 md:p-4 bg-destructive/10 border border-destructive/20 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4">
                     <AlertCircle className="h-5 w-5 md:h-7 md:w-7 text-destructive" />
                     <div>
-                      <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-destructive leading-none mb-1">
+                      <p className="text-[8px] md:text-[11px] font-black uppercase tracking-widest text-destructive leading-none mb-1">
                         Baja
                       </p>
                       <p className="text-xs md:text-sm font-bold text-destructive/80 leading-tight">

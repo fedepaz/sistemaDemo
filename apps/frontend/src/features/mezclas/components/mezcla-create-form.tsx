@@ -52,7 +52,7 @@ function SustratoSlot({
         name={sustratoField}
         render={({ field }) => (
           <FormItem className="space-y-1.5">
-            <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">
+            <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
               {label} {isRequired && "*"}
             </FormLabel>
             <Select
@@ -81,7 +81,7 @@ function SustratoSlot({
         name={porcentajeField}
         render={({ field }) => (
           <FormItem className="space-y-1.5">
-            <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">
+            <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
               %
             </FormLabel>
             <FormControl>
@@ -134,7 +134,7 @@ export function MezclaCreateForm({
         {/* Real-time calculator */}
         <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border/40 pt-3 pb-1">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] md:text-sm font-black uppercase tracking-widest text-muted-foreground">
+            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Total
             </span>
             <Badge
@@ -153,7 +153,7 @@ export function MezclaCreateForm({
               {totalPorcentaje}%
             </Badge>
           </div>
-          <FormDescription className="text-[9px] md:text-[10px] font-medium leading-tight mt-1">
+          <FormDescription className="text-[9px] md:text-[11px] font-medium leading-tight mt-1">
             Los porcentajes deben sumar 100% para poder crear la mezcla.
           </FormDescription>
         </div>

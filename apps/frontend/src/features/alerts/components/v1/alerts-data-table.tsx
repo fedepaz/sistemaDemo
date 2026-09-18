@@ -123,14 +123,14 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
             summaryFields: ["content"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             {mode === "view" ? (
               <AlertsViewForm
                 selectedAlert={selectedAlert}
                 alertType={resolvedAlertType}
               />
             ) : (
-              <div className="space-y-2">
+              <div className="flex flex-col gap-3">
                 <AlertEditForm
                   selectedAlert={selectedAlert}
                   alertType={resolvedAlertType}
