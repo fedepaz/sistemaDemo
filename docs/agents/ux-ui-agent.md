@@ -33,6 +33,82 @@ Your designs embody:
 - Spacing systems (use current Tailwind spacing)
 - Component variants (extend existing shadcn/ui patterns)
 
+### Design Token System
+
+All tokens are defined as CSS custom properties in `apps/frontend/src/app/globals.css` and mapped to Tailwind via `@theme inline`.
+
+**Spacing tokens** (4px base grid, based on Fluent 2):
+
+| Token | Value | Tailwind | Use case |
+|-------|-------|---------|----------|
+| `--space-0` | 0px | `p-0` / `gap-0` | Reset |
+| `--space-0-5` | 2px | `p-0.5` / `gap-0.5` | Tight (icon badge) |
+| `--space-1` | 4px | `p-1` / `gap-1` | Minimal (icon-text gap) |
+| `--space-1-5` | 6px | `p-1.5` / `gap-1.5` | Nav item padding |
+| `--space-2` | 8px | `p-2` / `gap-2` | Component internal (default) |
+| `--space-3` | 12px | `p-3` / `gap-3` | Between related elements |
+| `--space-4` | 16px | `p-4` / `gap-4` | Between sections |
+| `--space-5` | 20px | `p-5` / `gap-5` | Card header padding |
+| `--space-6` | 24px | `p-6` / `gap-6` | Major section spacing |
+| `--space-8` | 32px | `p-8` / `gap-8` | Page-level spacing |
+| `--space-10` | 40px | `p-10` / `gap-10` | Hero spacing |
+
+**Control height tokens**:
+
+| Token | Value | Use case |
+|-------|-------|----------|
+| `--control-height-xs` | 24px | Pagination buttons, compact badges |
+| `--control-height-sm` | 28px | Sidebar collapse button, inline actions |
+| `--control-height` | 32px | Buttons (sm), toolbar buttons |
+| `--control-height-md` | 36px | Buttons (default), inputs, selects |
+| `--control-height-lg` | 40px | Buttons (lg) |
+
+**Table density tokens**:
+
+| Token | Header | Row | Cell padding | Font | Use case |
+|-------|--------|-----|-------------|------|----------|
+| Compact | 32px | 32px | 6px 8px | 12px | < 1280px viewports |
+| Default | 36px | 40px | 4px 12px | 14px | >= 1280px viewports |
+
+**Typography tokens**:
+
+| Token | Size | Use case |
+|-------|------|----------|
+| `--text-caption` | 11px | KPI titles, pagination |
+| `--text-body-sm` | 12px | Table headers, labels, nav items |
+| `--text-body` | 14px | Body text, table cells, inputs |
+| `--text-body-lg` | 16px | Dialog descriptions |
+| `--text-subtitle` | 18px | Card titles, section headings |
+| `--text-title` | 20px | Page titles, KPI values |
+| `--text-heading` | 24px | DataTable titles |
+
+**Sidebar tokens**:
+
+| Token | Value | Use case |
+|-------|-------|----------|
+| `--sidebar-width-compact` | 192px | md (768px–1279px) |
+| `--sidebar-width` | 224px | xl (1280px+) |
+| `--sidebar-width-collapsed` | 56px | Collapsed state |
+
+**Header tokens**:
+
+| Token | Value | Use case |
+|-------|-------|----------|
+| `--header-height-compact` | 48px | md (768px–1279px) |
+| `--header-height` | 56px | xl (1280px+) |
+
+### Responsive Breakpoints (Standard Tailwind)
+
+| Name | Value | Behavior |
+|------|-------|----------|
+| `sm` | 640px | Mobile phone |
+| `md` | 768px | Tablet / sidebar appears |
+| `lg` | 1024px | Small laptop / 4 table columns |
+| `xl` | 1280px | Standard desktop / full density, 5 columns |
+| `2xl` | 1536px | Large desktop |
+
+**Density principle**: As the viewport shrinks, components become MORE DENSER (smaller padding, shorter rows, tighter gaps) — not less. The goal is efficient use of available space at every viewport size.
+
 ### Current Design System Reference
 
 **Colors**: Use the established OKLCH variables defined in `apps/frontend/src/app/globals.css`:
@@ -172,16 +248,21 @@ For each interface state:
 - **Scaled Elements**: Shrink icons (`h-4` max) and use compact typography (`text-xs` for labels, `text-sm` for values).
 - **Smart Grids**: Multi-column layouts for short numeric inputs to save vertical space.
 
-**2. Adaptive Scaling (MD, LG, XL)**:
+**2. Adaptive Density Scaling (MD, LG, XL, 2XL)**:
 - **Information Density**: As the screen grows, increase the amount of information visible rather than increasing the size of elements.
 - **Compact Layouts**: Maintain tight spacing even on large screens. Avoid "oversized" components that force content below the fold.
 - **Flexible Containers**: Use `flex-1 overflow-hidden` patterns to ensure data areas (like tables or dashboard grids) stay within the viewport and provide internal scrolling (via `ScrollArea`) only when necessary.
+- **Table Density**: At < 1280px, tables use compact mode (32px rows, 12px cell padding, text-xs). At >= 1280px, tables use default mode (40px rows, 12px cell padding, text-sm).
+- **Sidebar**: 192px at md (768px+), 224px at xl (1280px+).
+- **Header**: 48px at md (768px+), 56px at xl (1280px+).
 
 **3. Implementation Checklist**:
 - [ ] Use `dvh` for full-height layouts.
 - [ ] Apply `pb-safe-area-inset-bottom` for mobile navigation clearance.
 - [ ] Ensure `DataTable` and `Dashboard` grids fit within 100dvh.
 - [ ] Minimize vertical margins and headers to prioritize content.
+- [ ] Use density tokens for table row heights and cell padding.
+- [ ] Use responsive sidebar/header tokens.
 
 **Tablet (Facility Managers)**:
 

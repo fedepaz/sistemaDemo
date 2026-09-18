@@ -6,7 +6,7 @@ import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 export function MezclasDashboard() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 xl:gap-4">
       <LoadingBoundary
         skeleton={<DataTableSkeleton columnCount={mezclaColumns.length} />}
       >

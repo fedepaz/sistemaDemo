@@ -183,8 +183,8 @@ export function SlideOverForm({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="w-full sm:max-w-xl md:max-w-2xl flex flex-col h-dvh p-0">
-          <SheetHeader className="px-6 py-4 border-b shrink-0">
+        <SheetContent className="w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col h-dvh p-0">
+          <SheetHeader className="px-4 md:px-6 py-3 md:py-4 border-b shrink-0">
             <SheetTitle className="text-xl">{title}</SheetTitle>
             {description ? (
               <SheetDescription className="text-xs">
@@ -212,13 +212,13 @@ export function SlideOverForm({
             </div>
           )}
           <div className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full px-6 py-4" tabIndex={-1}>
+            <ScrollArea className="h-full px-4 md:px-6 py-3 md:py-4" tabIndex={-1}>
               <div className="space-y-4" tabIndex={-1}>
                 {children}
               </div>
             </ScrollArea>
           </div>
-          <SheetFooter className="px-6 py-3 border-t shrink-0">
+          <SheetFooter className="px-4 md:px-6 py-2 md:py-3 border-t shrink-0">
             {isViewMode ? (
               <Button
                 onClick={handleCancel}

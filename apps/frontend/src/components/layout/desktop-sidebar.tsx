@@ -311,7 +311,7 @@ export function DesktopSidebar() {
     <aside
       className={cn(
         "hidden md:flex flex-col bg-card border-r transition-all duration-300",
-        isCollapsed ? "w-14" : "w-56",
+        isCollapsed ? "w-14" : "w-48 xl:w-56",
       )}
     >
       <div className="p-2 border-b">

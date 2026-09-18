@@ -32,7 +32,7 @@ export function KPICard({
         {Icon && <Icon className="size-3.5 text-muted-foreground/50" />}
       </CardHeader>
       <CardContent className="px-3 pb-3 pt-0">
-        <div className="text-xl font-black tracking-tight">{value}</div>
+        <div className="text-lg xl:text-xl font-black tracking-tight">{value}</div>
         {description && (
           <p className="text-[10px] text-muted-foreground/60 leading-none mt-0.5">{description}</p>
         )}
