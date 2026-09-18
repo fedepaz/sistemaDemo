@@ -59,9 +59,9 @@ export function MezclaViewForm({ selectedMezcla }: MezclaViewFormProps) {
     .join(" / ");
 
   return (
-    <div className="flex flex-col gap-3 md:gap-6 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* Header */}
-      <div className="space-y-3 md:space-y-4 shrink-0">
+      <div className="space-y-3 shrink-0">
         <div className="flex items-center justify-between bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
@@ -88,7 +88,7 @@ export function MezclaViewForm({ selectedMezcla }: MezclaViewFormProps) {
 
       {/* Details Card */}
       <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50 flex-1 min-h-0">
-        <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6 h-full overflow-y-auto no-scrollbar">
+        <CardContent className="p-4 space-y-3 h-full overflow-y-auto no-scrollbar">
           <div className="space-y-0.5">
             <CompositionRow
               label="Sustrato 1"

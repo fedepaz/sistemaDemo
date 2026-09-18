@@ -60,9 +60,9 @@ function SustratoSlot({
               value={field.value ?? ""}
             >
               <FormControl>
-                <SelectTrigger className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
-                  <SelectValue placeholder="Seleccionar sustrato" />
-                </SelectTrigger>
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar sustrato" />
+                  </SelectTrigger>
               </FormControl>
               <SelectContent>
                 {sustratos.map((s) => (
@@ -97,7 +97,7 @@ function SustratoSlot({
                 }}
                 disabled={!form.watch(sustratoField)}
                 placeholder="0"
-                className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-mono font-bold px-4 text-center"
+                className="h-9 rounded-md px-4 text-center font-mono"
               />
             </FormControl>
             <FormMessage className="text-[10px]" />
@@ -122,7 +122,7 @@ export function MezclaCreateForm({
       <form
         id={formId}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4 md:pb-6"
+        className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
       >
         <div className="space-y-3">
           <SustratoSlot form={form} index={1} sustratos={sustratos} label="Sustrato 1" />

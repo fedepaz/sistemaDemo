@@ -69,7 +69,7 @@ export function RegisterForm() {
           </p>
         </div>
         <Button
-          className="w-full h-11 sm:h-12 bg-primary rounded-lg p-2 cursor-pointer mt-2 gap-2 text-sm sm:text-base font-medium"
+          className="w-full h-9 bg-primary rounded-md cursor-pointer mt-2 gap-2 text-sm font-medium"
           onClick={() => router.push(ROUTES.LOGIN)}
           tabIndex={0}
         >
@@ -84,7 +84,7 @@ export function RegisterForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 sm:gap-4"
+        className="flex flex-col gap-3"
       >
         {/* Title */}
         <h1 className="font-sans text-sm sm:text-base font-black uppercase tracking-widest text-foreground opacity-80">
@@ -98,20 +98,20 @@ export function RegisterForm() {
           control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem className="space-y-1 sm:space-y-2">
+            <FormItem className="space-y-1.5">
               <FormLabel className="font-sans text-xs sm:text-sm uppercase tracking-widest opacity-70">
                 Nombre de usuario
               </FormLabel>
               <FormControl>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
+                    <User className="h-3.5 w-3.5 text-primary" />
                   </div>
                   <Input
                     {...field}
                     placeholder="juanperez007"
                     disabled={isCreatingUser}
-                    className="pl-11 sm:pl-14 h-11 sm:h-12 text-sm sm:text-base"
+                    className="pl-10 h-9 text-sm"
                     autoFocus
                     tabIndex={0}
                   />
@@ -134,20 +134,20 @@ export function RegisterForm() {
           control={form.control}
           name="firstName"
           render={({ field }) => (
-            <FormItem className="space-y-1 sm:space-y-2">
+            <FormItem className="space-y-1.5">
               <FormLabel className="font-sans text-xs sm:text-sm uppercase tracking-widest opacity-70">
                 Nombre
               </FormLabel>
               <FormControl>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
+                    <User className="h-3.5 w-3.5 text-primary" />
                   </div>
                   <Input
                     {...field}
                     placeholder="Nombre"
                     disabled={isCreatingUser}
-                    className="pl-11 sm:pl-14 h-11 sm:h-12 text-sm sm:text-base"
+                    className="pl-10 h-9 text-sm"
                     tabIndex={0}
                   />
                 </div>
@@ -166,20 +166,20 @@ export function RegisterForm() {
           control={form.control}
           name="lastName"
           render={({ field }) => (
-            <FormItem className="space-y-1 sm:space-y-2">
+            <FormItem className="space-y-1.5">
               <FormLabel className="font-sans text-xs sm:text-sm uppercase tracking-widest opacity-70">
                 Apellido
               </FormLabel>
               <FormControl>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
+                    <User className="h-3.5 w-3.5 text-primary" />
                   </div>
                   <Input
                     {...field}
                     placeholder="Apellido"
                     disabled={isCreatingUser}
-                    className="pl-11 sm:pl-14 h-11 sm:h-12 text-sm sm:text-base"
+                    className="pl-10 h-9 text-sm"
                     tabIndex={0}
                   />
                 </div>

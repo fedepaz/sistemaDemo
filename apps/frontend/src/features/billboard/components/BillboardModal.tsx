@@ -71,7 +71,7 @@ export function BillboardModal({
               <div className="p-2 rounded-lg bg-primary/10">
                 <Megaphone className="h-5 w-5 text-primary" />
               </div>
-              <DialogTitle className="text-xl md:text-2xl font-black uppercase tracking-widest">
+              <DialogTitle className="text-xl font-black uppercase tracking-widest">
                 Actualizaciones
               </DialogTitle>
             </div>
@@ -88,7 +88,7 @@ export function BillboardModal({
               <article
                 key={msg.id}
                 // 🚀 Added more padding for that spacious, premium feel
-                className="rounded-lg border bg-card p-4 sm:p-5 md:p-6 space-y-2"
+                className="rounded-lg border bg-card p-4 space-y-2"
               >
                 <h3 className="font-semibold text-base md:text-lg">
                   {msg.title}

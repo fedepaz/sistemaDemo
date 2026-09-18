@@ -25,13 +25,13 @@ export function SustratoCreateForm({ onSubmit, formId, form }: FormProps) {
       <form
         id={formId}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4 md:pb-6"
+        className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
       >
         <FormField
           control={form.control}
           name="nombre"
           render={({ field }) => (
-            <FormItem className="space-y-1.5 md:space-y-2">
+            <FormItem className="space-y-1.5">
               <FormLabel className="text-[10px] md:text-sm font-black uppercase tracking-widest text-foreground">
                 Nombre
               </FormLabel>
@@ -39,7 +39,6 @@ export function SustratoCreateForm({ onSubmit, formId, form }: FormProps) {
                 <Input
                   {...field}
                   placeholder="ej: Sustrato Premium"
-                  className="h-10 md:h-12 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4"
                   autoFocus
                   required
                 />

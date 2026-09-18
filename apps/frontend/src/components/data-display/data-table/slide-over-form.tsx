@@ -185,7 +185,7 @@ export function SlideOverForm({
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent className="w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col h-dvh p-0">
           <SheetHeader className="px-4 md:px-6 py-3 md:py-4 border-b shrink-0">
-            <SheetTitle className="text-xl">{title}</SheetTitle>
+            <SheetTitle className="text-lg">{title}</SheetTitle>
             {description ? (
               <SheetDescription className="text-xs">
                 {description}
@@ -296,14 +296,14 @@ export function SlideOverForm({
             <AlertDialogFooter>
               <AlertDialogCancel
                 disabled={isLoading}
-                className="min-h-[48px] min-w-[100px]"
+                className="h-9"
               >
                 Cancelar
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleConfirmSubmit}
                 disabled={isLoading}
-                className="min-h-[48px] min-w-[100px] bg-primary text-primary-foreground hover:bg-primary/90"
+                className="h-9 bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {isLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

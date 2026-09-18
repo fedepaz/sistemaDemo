@@ -37,9 +37,9 @@ export function AlertsViewForm({
   const TypeIcon = config.icon;
 
   return (
-    <div className="flex flex-col gap-3 md:gap-6 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* FIXED TOP SECTION: TYPE HEADER */}
-      <div className="space-y-3 md:space-y-4 shrink-0">
+      <div className="space-y-3 shrink-0">
         <div
           className={cn(
             "flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
