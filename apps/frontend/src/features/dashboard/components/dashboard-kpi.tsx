@@ -68,7 +68,7 @@ function DashboardKPI() {
                     </div>
                   </div>
                   <div className="flex flex-col min-w-0 justify-center">
-                    <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.12em] text-muted-foreground/70 truncate">
+                    <span className="text-xs sm:text-xs font-black uppercase tracking-[0.12em] text-muted-foreground/70 truncate">
                       {kpi.label}
                     </span>
                     <div className="flex items-baseline gap-1 min-w-0">
@@ -82,7 +82,7 @@ function DashboardKPI() {
                       </span>
                       <span
                         className={cn(
-                          "text-[9px] sm:text-[10px] font-bold opacity-70 shrink-0",
+                          "text-xs sm:text-xs font-bold opacity-70 shrink-0",
                           colors.text,
                         )}
                       >
@@ -115,7 +115,7 @@ function DashboardKPI() {
                 >
                   <p
                     className={cn(
-                      "text-[8px] sm:text-[9px] font-black uppercase tracking-widest mb-0.5",
+                      "text-xs sm:text-xs font-black uppercase tracking-widest mb-0.5",
                       today
                         ? "text-primary-foreground/90"
                         : "text-muted-foreground",
@@ -134,7 +134,7 @@ function DashboardKPI() {
                     </p>
                     <p
                       className={cn(
-                        "text-[9px] sm:text-[10px] font-bold",
+                        "text-xs sm:text-xs font-bold",
                         today
                           ? "text-primary-foreground/70"
                           : "text-muted-foreground/60",

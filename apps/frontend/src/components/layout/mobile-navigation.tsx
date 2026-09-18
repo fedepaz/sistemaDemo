@@ -60,12 +60,12 @@ function MobileNavItemLink({
       >
         <Icon className="h-4.5 w-4.5" />
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-[13px] truncate">{item.title}</p>
+          <p className="font-medium text-sm truncate">{item.title}</p>
         </div>
         {"badge" in item && item.badge && (
           <Badge
             variant={item.badgeVariant || "secondary"}
-            className="text-[9px] h-4 px-1"
+            className="text-xs h-4 px-1"
           >
             {item.badge}
           </Badge>
@@ -100,7 +100,7 @@ function MobileGroupSection({
       <Button
         variant="ghost"
         onClick={() => toggleGroup(group.id)}
-        className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
+        className="w-full justify-start gap-2 font-bold text-xs uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
       >
         <GroupIcon className="h-4 w-4 shrink-0" />
         <span className="flex-1 text-left">{group.title}</span>
@@ -150,7 +150,7 @@ function MobileNestedGroupSection({
       <Button
         variant="ghost"
         onClick={() => toggleGroup(group.id)}
-        className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
+        className="w-full justify-start gap-2 font-bold text-xs uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
       >
         <GroupIcon className="h-4 w-4 shrink-0" />
         <span className="flex-1 text-left">{group.title}</span>
@@ -174,20 +174,20 @@ function MobileNestedGroupSection({
                   key={item.id}
                   className="mb-0.5 bg-muted/30 rounded-md px-1"
                 >
-                  <Button
-                    variant="ghost"
-                    onClick={() => toggleSubGroup(item.id)}
-                    className="w-full justify-start gap-2 font-bold text-[10px] uppercase tracking-widest text-muted-foreground/50 p-2 h-7"
-                  >
-                    <SubGroupIcon className="h-3.5 w-3.5 shrink-0" />
-                    <span className="flex-1 text-left pl-3">{item.title}</span>
-                    <ChevronDown
-                      className={cn(
-                        "h-3.5 w-3.5 transition-transform",
-                        isSubExpanded && "rotate-180",
-                      )}
-                    />
-                  </Button>
+      <Button
+        variant="ghost"
+        onClick={() => toggleGroup(group.id)}
+        className="w-full justify-start gap-2 font-bold text-xs uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
+      >
+        <GroupIcon className="h-4 w-4 shrink-0" />
+        <span className="flex-1 text-left">{group.title}</span>
+        <ChevronDown
+          className={cn(
+            "h-3.5 w-3.5 transition-transform",
+            isExpanded && "rotate-180",
+          )}
+        />
+      </Button>
                   {isSubExpanded && (
                     <div className="space-y-0.5 ml-4 mt-0.5 pb-0.5">
                       {item.items.map((subItem) => (

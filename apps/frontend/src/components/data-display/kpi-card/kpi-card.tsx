@@ -28,16 +28,16 @@ export function KPICard({
   return (
     <Card className={cn("overflow-hidden", className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 px-3 py-2">
-        <CardTitle className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70">{title}</CardTitle>
+        <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70">{title}</CardTitle>
         {Icon && <Icon className="size-3.5 text-muted-foreground/50" />}
       </CardHeader>
       <CardContent className="px-3 pb-3 pt-0">
         <div className="text-lg xl:text-xl font-black tracking-tight">{value}</div>
         {description && (
-          <p className="text-[10px] text-muted-foreground/60 leading-none mt-0.5">{description}</p>
+          <p className="text-xs text-muted-foreground/60 leading-none mt-0.5">{description}</p>
         )}
         {trend && (
-          <div className="mt-1 flex items-center gap-1 text-[10px]">
+          <div className="mt-1 flex items-center gap-1 text-xs">
             <span
               className={cn(
                 "font-bold",
