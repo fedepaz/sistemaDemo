@@ -43,7 +43,7 @@ export function MezclaSelector({ form, fieldName = "mezclaId" }: MezclaSelectorP
             <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
               <Beaker className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
             </div>
-            <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+            <FormLabel className="text-xs md:text-xs font-black uppercase tracking-widest text-foreground">
               Mezcla
             </FormLabel>
           </div>

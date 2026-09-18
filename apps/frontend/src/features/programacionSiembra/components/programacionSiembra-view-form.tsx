@@ -39,7 +39,7 @@ const InfoRow = ({
       <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-[9px] md:text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1 md:mb-1.5">
+      <p className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1 md:mb-1.5">
         {label}
       </p>
       <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export function ProgramacionSiembraViewForm({
               <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                 {selectedExtendido.codigoEspecie}
               </h2>
-              <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+              <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
                 {selectedExtendido.nombreEspecie}
               </p>
             </div>
@@ -90,10 +90,10 @@ export function ProgramacionSiembraViewForm({
                 <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
               </div>
               <div className="min-w-0">
-                <p className="text-[7px] md:text-[8px] font-bold uppercase leading-none mb-0.5">
+                <p className="text-xs md:text-xs font-bold uppercase leading-none mb-0.5">
                   {item.label}
                 </p>
-                <p className="text-[10px] md:text-xs truncate uppercase font-bold">
+                <p className="text-xs md:text-xs truncate uppercase font-bold">
                   {item.value}
                 </p>
               </div>
@@ -148,10 +148,10 @@ export function ProgramacionSiembraViewForm({
                     <item.icon className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[7px] md:text-[8px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-0.5">
+                    <p className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-0.5">
                       {item.label}
                     </p>
-                    <p className="text-[10px] md:text-xs font-bold truncate text-foreground">
+                    <p className="text-xs md:text-xs font-bold truncate text-foreground">
                       {item.value ?? "-"}
                     </p>
                   </div>

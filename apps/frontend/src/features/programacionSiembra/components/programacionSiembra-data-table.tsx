@@ -151,7 +151,7 @@ export function ProgramacionSiembraDataTable({
     <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
       <CalendarDays className="h-3 w-3 text-muted-foreground" />
       <Select value={selectedWeek} onValueChange={setSelectedWeek}>
-        <SelectTrigger className="h-8 w-[140px] rounded-full bg-background border-border/40 focus:ring-primary/20 text-[10px] font-bold uppercase tracking-tight">
+        <SelectTrigger className="h-8 w-[140px] rounded-full bg-background border-border/40 focus:ring-primary/20 text-xs font-bold uppercase tracking-tight">
           <SelectValue placeholder="Semana" />
         </SelectTrigger>
         <SelectContent className="rounded-xl border-border/60 shadow-2xl">

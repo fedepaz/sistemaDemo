@@ -20,10 +20,10 @@ export function AuthLayoutSkeleton() {
               />
             </div>
             <div className="text-center space-y-1">
-              <h1 className="text-[11px] sm:text-xs font-black uppercase tracking-[0.3em] text-primary">
+              <h1 className="text-xs sm:text-xs font-black uppercase tracking-[0.3em] text-primary">
                 El mejor comienzo para sus cultivos
               </h1>
-              <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
+              <p className="text-xs sm:text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
                 Sistema de Gestión Web
               </p>
             </div>

@@ -17,7 +17,7 @@ interface AutorizarProgramacionSiembraEditFormProps {
 function InfoRow({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="flex items-center justify-between py-1.5 border-b border-border/30 last:border-0">
-      <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground">
+      <span className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </span>
       <span className="text-xs md:text-sm font-bold text-foreground">
@@ -81,7 +81,7 @@ export function AutorizarProgramacionSiembraEditForm({
                 <h2 className="text-base md:text-lg font-bold tracking-tight leading-none text-foreground uppercase">
                   {selectedSiembra.codigoEspecie}
                 </h2>
-                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
                   {selectedSiembra.nombreEspecie}
                 </p>
               </div>
@@ -95,7 +95,7 @@ export function AutorizarProgramacionSiembraEditForm({
             <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
               <Leaf className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
             </div>
-            <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
+            <p className="text-xs md:text-xs font-bold uppercase tracking-wider text-foreground">
               Detalle Partida
             </p>
           </div>
