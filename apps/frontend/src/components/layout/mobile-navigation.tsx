@@ -174,20 +174,20 @@ function MobileNestedGroupSection({
                   key={item.id}
                   className="mb-0.5 bg-muted/30 rounded-md px-1"
                 >
-      <Button
-        variant="ghost"
-        onClick={() => toggleGroup(group.id)}
-        className="w-full justify-start gap-2 font-bold text-xs uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
-      >
-        <GroupIcon className="h-4 w-4 shrink-0" />
-        <span className="flex-1 text-left">{group.title}</span>
-        <ChevronDown
-          className={cn(
-            "h-3.5 w-3.5 transition-transform",
-            isExpanded && "rotate-180",
-          )}
-        />
-      </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => toggleSubGroup(item.id)}
+                    className="w-full justify-start gap-2 font-bold text-xs uppercase tracking-widest text-muted-foreground/60 p-2 h-8"
+                  >
+                    <SubGroupIcon className="h-4 w-4 shrink-0" />
+                    <span className="flex-1 text-left">{item.title}</span>
+                    <ChevronDown
+                      className={cn(
+                        "h-3.5 w-3.5 transition-transform",
+                        isSubExpanded && "rotate-180",
+                      )}
+                    />
+                  </Button>
                   {isSubExpanded && (
                     <div className="space-y-0.5 ml-4 mt-0.5 pb-0.5">
                       {item.items.map((subItem) => (
