@@ -58,8 +58,8 @@ export function DataTableSkeleton({
                   {Array.from({ length: columnCount }).map((_, index) => (
                     <TableHead
                       key={index}
-                      className={cn(
-                        "h-8 xl:h-9 py-1 text-xs font-semibold",
+                       className={cn(
+                        "h-(--table-compact-header-height) xl:h-(--table-header-height) py-1 text-xs font-semibold",
                         index >= 2 && "hidden sm:table-cell",
                       )}
                     >
@@ -67,7 +67,7 @@ export function DataTableSkeleton({
                     </TableHead>
                   ))}
                   {/* Actions column */}
-                  <TableHead className="h-8 xl:h-9 py-1 text-xs font-semibold">
+                   <TableHead className="h-(--table-compact-header-height) xl:h-(--table-header-height) py-1 text-xs font-semibold">
                     <Skeleton className="h-4 w-[60px]" />
                   </TableHead>
                 </TableRow>
@@ -79,7 +79,7 @@ export function DataTableSkeleton({
                       <TableCell
                         key={cellIndex}
                         className={cn(
-                          "h-8 xl:h-10 py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm",
+                          "h-(--table-compact-row-height) xl:h-(--table-row-height) py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm",
                           cellIndex >= 2 && "hidden sm:table-cell",
                         )}
                       >
@@ -87,7 +87,7 @@ export function DataTableSkeleton({
                       </TableCell>
                     ))}
                     {/* Actions cell */}
-                    <TableCell className="h-8 xl:h-10 py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm">
+                     <TableCell className="h-(--table-compact-row-height) xl:h-(--table-row-height) py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm">
                       <div className="flex items-center justify-center gap-2">
                         <Skeleton className="h-8 w-8" />
                         <Skeleton className="h-8 w-8" />
@@ -102,7 +102,7 @@ export function DataTableSkeleton({
 
         {/* Pagination */}
         <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-2 shrink-0 border-t mt-auto">
-          <div className="flex-1 text-[11px] text-muted-foreground">
+           <div className="flex-1 text-xs text-muted-foreground">
             <Skeleton className="h-4 w-[200px]" />
           </div>
           <div className="flex flex-wrap items-center gap-4">

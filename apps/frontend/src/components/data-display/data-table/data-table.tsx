@@ -464,7 +464,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                   placeholder={breakpoint === "sm" ? "Buscar..." : "Buscar en la tabla..."}
                   value={globalFilter ?? ""}
                   onChange={(e) => setGlobalFilter(e.target.value)}
-                  className="h-7 xl:h-8 w-full rounded-md border border-input bg-background pl-8 pr-8 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                   className="h-(--control-height-sm) xl:h-(--control-height) w-full rounded-md border border-input bg-background pl-8 pr-8 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
                 {globalFilter && (
                   <button
@@ -476,7 +476,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                   </button>
                 )}
               </div>
-              <Badge variant="secondary" className="text-[11px] shrink-0 hidden md:inline-flex">
+               <Badge variant="secondary" className="text-xs shrink-0 hidden md:inline-flex">
                 {`${table.getFilteredRowModel().rows.length} de ${data.length}`}
               </Badge>
             </div>
@@ -485,7 +485,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
           <div className="flex items-center px-4 py-2 space-x-2 shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-7 xl:h-8 text-xs">
+                 <Button variant="outline" size="sm" className="h-(--control-height-sm) xl:h-(--control-height) text-xs">
                   <Filter className="mr-2 h-3.5 w-3.5" />
                   {breakpoint === "sm" ? "" : "Columnas"}
 
@@ -526,10 +526,10 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
             {dataTablePermissions.canCreate && onCreate && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
+                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-7 xl:h-8 text-xs bg-transparent"
+                    className="h-(--control-height-sm) xl:h-(--control-height) text-xs bg-transparent"
                     onClick={onCreate}
                     aria-label={createLabel}
                   >
@@ -557,10 +557,10 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
               !allowedActions.canExecute && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
+                     <Button
                       variant="destructive"
                       size="sm"
-                      className="h-7 xl:h-8 text-xs animate-in fade-in zoom-in duration-200"
+                      className="h-(--control-height-sm) xl:h-(--control-height) text-xs animate-in fade-in zoom-in duration-200"
                       onClick={handleBulkDelete}
                       aria-label={`Eliminar ${selectedCount} seleccionados`}
                     >
@@ -590,9 +590,9 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                     >
                       {headerGroup.headers.map((header) => {
                         return (
-                          <TableHead
+                           <TableHead
                             key={header.id}
-                            className="h-8 xl:h-9 py-1 text-xs"
+                            className="h-(--table-compact-header-height) xl:h-(--table-header-height) py-1 text-xs"
                           >
                             {header.isPlaceholder
                               ? null
@@ -620,7 +620,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                           {row.getVisibleCells().map((cell) => (
                             <TableCell
                               key={cell.id}
-                              className="py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm h-8 xl:h-10"
+                              className="py-(--table-compact-cell-py) xl:py-(--table-cell-py) px-(--table-compact-cell-px) xl:px-(--table-cell-px) text-xs xl:text-sm h-(--table-compact-row-height) xl:h-(--table-row-height)"
                             >
                               {flexRender(
                                 cell.column.columnDef.cell,
@@ -664,7 +664,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                   onChange={(e) => {
                     table.setPageSize(Number(e.target.value));
                   }}
-                  className="h-6 xl:h-7 w-[60px] rounded border border-input bg-background px-1 text-xs"
+                   className="h-(--control-height-xs) xl:h-(--control-height-sm) w-[60px] rounded border border-input bg-background px-1 text-xs"
                 >
                   {[10, 20, 30, 40, 50, 100].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
@@ -679,9 +679,9 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
               <div className="flex items-center space-x-1">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
+                     <Button
                       variant="outline"
-                      className="hidden h-6 xl:h-7 w-7 p-0 md:flex bg-transparent"
+                      className="hidden h-(--control-height-xs) xl:h-(--control-height-sm) w-7 p-0 md:flex bg-transparent"
                       onClick={() => table.setPageIndex(0)}
                       disabled={!table.getCanPreviousPage()}
                       aria-label="Ir a la primera página"
@@ -699,9 +699,9 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
+                     <Button
                       variant="outline"
-                      className="h-6 xl:h-7 w-7 p-0 bg-transparent"
+                      className="h-(--control-height-xs) xl:h-(--control-height-sm) w-7 p-0 bg-transparent"
                       onClick={() => table.previousPage()}
                       disabled={!table.getCanPreviousPage()}
                       aria-label="Ir a la página anterior"
@@ -719,9 +719,9 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
+                     <Button
                       variant="outline"
-                      className="h-6 xl:h-7 w-7 p-0 bg-transparent"
+                      className="h-(--control-height-xs) xl:h-(--control-height-sm) w-7 p-0 bg-transparent"
                       onClick={() => table.nextPage()}
                       disabled={!table.getCanNextPage()}
                       aria-label="Ir a la página siguiente"
@@ -739,9 +739,9 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
+                     <Button
                       variant="outline"
-                      className="hidden h-6 xl:h-7 w-7 p-0 md:flex bg-transparent"
+                      className="hidden h-(--control-height-xs) xl:h-(--control-height-sm) w-7 p-0 md:flex bg-transparent"
                       onClick={() =>
                         table.setPageIndex(table.getPageCount() - 1)
                       }
