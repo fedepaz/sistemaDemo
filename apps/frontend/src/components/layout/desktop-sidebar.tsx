@@ -64,7 +64,7 @@ function NavItemLink({
               {"badge" in item && item.badge && isCollapsed && (
                 <Badge
                   variant={item.badgeVariant || "secondary"}
-                  className="absolute -top-1 -right-1 h-3.5 w-3.5 p-0 flex items-center justify-center text-[8px]"
+                  className="absolute -top-1 -right-1 h-3.5 w-3.5 p-0 flex items-center justify-center text-xs"
                 >
                   {item.badge.length > 2 ? "99+" : item.badge}
                 </Badge>
@@ -73,14 +73,14 @@ function NavItemLink({
             {!isCollapsed && (
               <>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-[12px] truncate">
+                  <p className="font-medium text-sm truncate">
                     {item.title}
                   </p>
                 </div>
                 {"badge" in item && item.badge && (
                   <Badge
                     variant={item.badgeVariant || "secondary"}
-                    className="text-[9px] h-4 px-1"
+                    className="text-xs h-4 px-1"
                   >
                     {item.badge}
                   </Badge>
@@ -99,7 +99,7 @@ function NavItemLink({
           <div className="flex flex-col gap-1">
             <p className="font-semibold">{item.title}</p>
             {"description" in item && item.description && (
-              <p className="text-[10px] opacity-80">{item.description}</p>
+              <p className="text-xs opacity-80">{item.description}</p>
             )}
           </div>
         </TooltipContent>
@@ -134,7 +134,7 @@ function NavGroupSection({
         <Button
           variant="ghost"
           onClick={() => toggleGroup(group.id)}
-          className="h-8 w-full justify-start gap-2 font-medium text-[10px] uppercase tracking-widest text-muted-foreground/60 hover:text-foreground"
+          className="h-8 w-full justify-start gap-2 font-medium text-xs uppercase tracking-widest text-muted-foreground/60 hover:text-foreground"
         >
           <GroupIcon className="h-3.5 w-3.5 shrink-0" />
           <span className="flex-1 text-left">{group.title}</span>
@@ -186,7 +186,7 @@ function NavNestedGroupSection({
         <Button
           variant="ghost"
           onClick={() => toggleGroup(group.id)}
-          className="h-8 w-full justify-start gap-2 font-medium text-[10px] uppercase tracking-widest text-muted-foreground/60 hover:text-foreground"
+          className="h-8 w-full justify-start gap-2 font-medium text-xs uppercase tracking-widest text-muted-foreground/60 hover:text-foreground"
         >
           <GroupIcon className="h-3.5 w-3.5 shrink-0" />
           <span className="flex-1 text-left">{group.title}</span>
@@ -228,7 +228,7 @@ function NavNestedGroupSection({
                   <Button
                     variant="ghost"
                     onClick={() => toggleSubGroup(item.id)}
-                    className="h-7 w-full justify-start gap-2 font-medium text-[10px] uppercase tracking-widest text-muted-foreground/50 hover:text-foreground"
+                    className="h-7 w-full justify-start gap-2 font-medium text-xs uppercase tracking-widest text-muted-foreground/50 hover:text-foreground"
                   >
                     <SubGroupIcon className="h-3 w-3 shrink-0" />
                     <span className="flex-1 text-left pl-4">{item.title}</span>
@@ -311,7 +311,7 @@ export function DesktopSidebar() {
     <aside
       className={cn(
         "hidden md:flex flex-col bg-card border-r transition-all duration-300",
-        isCollapsed ? "w-14" : "w-44 xl:w-48 2xl:w-56",
+        isCollapsed ? "w-14" : "w-40 xl:w-48 2xl:w-56",
       )}
     >
       <div className="p-2 border-b">
