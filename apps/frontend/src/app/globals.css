@@ -106,12 +106,12 @@
   --text-heading: 24px;
 
   /* Sidebar tokens */
-  --sidebar-width-compact: 176px;
+  --sidebar-width-compact: 160px;
   --sidebar-width: 224px;
   --sidebar-width-collapsed: 56px;
 
   /* Header tokens */
-  --header-height-compact: 44px;
+  --header-height-compact: 40px;
   --header-height: 48px;
 }
 
@@ -228,6 +228,15 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+
+  /* Typography: remap Tailwind text sizes to token values */
+  --text-xs: var(--text-caption);      /* 11px (was 12px) */
+  --text-sm: var(--text-body-sm);      /* 12px (was 14px) */
+  --text-base: var(--text-body);       /* 14px (was 16px) */
+  --text-lg: var(--text-body-lg);      /* 16px (was 18px) */
+  --text-xl: var(--text-subtitle);     /* 18px (was 20px) */
+  --text-2xl: var(--text-title);       /* 20px (was 24px) */
+  --text-3xl: var(--text-heading);     /* 24px (was 30px) */
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
