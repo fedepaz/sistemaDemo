@@ -42,7 +42,7 @@ export function AlertsViewForm({
       <div className="space-y-2 shrink-0">
         <div
           className={cn(
-            "flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
+            "flex items-center justify-between bg-primary/5 p-2 md:p-3 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
             config.bgColor,
             config.borderColor,
           )}

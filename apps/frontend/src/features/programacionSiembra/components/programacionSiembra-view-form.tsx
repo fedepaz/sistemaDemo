@@ -31,7 +31,7 @@ const InfoRow = ({
 }) => (
   <div
     className={cn(
-      "flex items-center gap-2 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
+      "flex items-center gap-2 md:gap-4 py-1.5 md:py-2 border-b border-border/40 last:border-0",
       className,
     )}
   >
@@ -58,7 +58,7 @@ export function ProgramacionSiembraViewForm({
     <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* FIXED TOP SECTION: PRODUCTO (Always Visible) */}
       <div className="space-y-2 shrink-0">
-        <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
+        <div className="flex items-center justify-between bg-primary/5 p-2 md:p-3 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-2 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <Package className="h-5 w-5 md:h-6 md:w-6" />
@@ -105,7 +105,7 @@ export function ProgramacionSiembraViewForm({
       {/* DATA CONTENT */}
       <div className="flex-1 overflow-y-auto no-scrollbar pb-2">
         <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-          <CardContent className="p-4 space-y-2">
+          <CardContent className="p-3 space-y-2">
             <InfoRow
               icon={ClipboardList}
               label="Semilla"
