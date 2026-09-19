@@ -40,7 +40,7 @@ export function PermissionsEntityManager({
       <CardContent className="p-0 bg-background">
         <div className="flex flex-col">
           {/* Header con búsqueda */}
-          <div className="sticky top-0 z-10 flex flex-col gap-3 md:gap-4 border-b bg-background/95 backdrop-blur-md px-3 py-3 md:px-6 md:py-4 lg:flex-row lg:items-center">
+          <div className="sticky top-0 z-10 flex flex-col gap-2 md:gap-4 border-b bg-background/95 backdrop-blur-md px-3 py-3 md:px-6 md:py-4 lg:flex-row lg:items-center">
             <div className="relative flex-1 group">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
               <Input
@@ -60,7 +60,7 @@ export function PermissionsEntityManager({
           </div>
 
           <ScrollArea className="flex flex-col bg-muted/5">
-            <div className="flex flex-col gap-3 p-3 md:p-6">
+            <div className="flex flex-col gap-2 p-3 md:p-6">
               {filteredUsers.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 md:py-12 text-center">
                   <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-muted flex items-center justify-center mb-3">
@@ -82,7 +82,7 @@ export function PermissionsEntityManager({
                     className="group relative flex flex-col gap-4 md:gap-6 rounded-xl border border-border/50 bg-background p-3 md:p-5 transition-all hover:bg-muted/30 lg:flex-row lg:items-center lg:gap-8"
                   >
                     {/* User Info */}
-                    <div className="flex items-center gap-3 md:gap-4 lg:w-64 lg:shrink-0">
+                    <div className="flex items-center gap-2 md:gap-4 lg:w-64 lg:shrink-0">
                       <UserAvatar
                         name={`${up.firstName ?? ""} ${up.lastName ?? ""}`}
                         size="lg"

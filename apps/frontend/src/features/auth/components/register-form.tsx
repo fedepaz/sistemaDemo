@@ -84,7 +84,7 @@ export function RegisterForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-2"
       >
         {/* Title */}
         <h1 className="font-sans text-sm sm:text-base font-black uppercase tracking-widest text-foreground opacity-80">

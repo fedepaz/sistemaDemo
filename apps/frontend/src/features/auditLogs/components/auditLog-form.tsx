@@ -72,7 +72,7 @@ const InfoRow = ({
 }) => (
   <div
     className={cn(
-      "flex items-center gap-3 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
+      "flex items-center gap-2 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
       className,
     )}
   >
@@ -125,11 +125,11 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
   const changes = selectedAuditLog.changes as any;
 
   return (
-    <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* Hero Section: Action + Entity */}
       <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               {actionIcon}
             </div>
@@ -244,7 +244,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                     <div className="flex items-center gap-2 text-xs md:text-xs font-black uppercase tracking-widest text-primary/70">
                       <User className="h-3 w-3 md:h-4 md:w-4" /> Responsable
                     </div>
-                    <div className="grid grid-cols-2 gap-3 md:gap-4">
+                    <div className="grid grid-cols-2 gap-2 md:gap-4">
                       <InfoRow
                         icon={User}
                         label="Nombre Completo"
@@ -291,7 +291,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                             ([key, value]) => (
                               <div
                                 key={key}
-                                className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 py-1.5 border-b border-border/30 last:border-0"
+                                className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 py-1.5 border-b border-border/30 last:border-0"
                               >
                                 <span className="text-xs md:text-xs font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[80px] md:min-w-[100px]">
                                   {key}
@@ -339,7 +339,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-4 space-y-2">
-                <div className="grid gap-3 md:gap-4">
+                <div className="grid gap-2 md:gap-4">
                   <InfoRow
                     icon={Route}
                     label="Ruta / Endpoint"

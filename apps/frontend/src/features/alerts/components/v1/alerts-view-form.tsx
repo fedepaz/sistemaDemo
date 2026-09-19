@@ -37,7 +37,7 @@ export function AlertsViewForm({
   const TypeIcon = config.icon;
 
   return (
-    <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* FIXED TOP SECTION: TYPE HEADER */}
       <div className="space-y-2 shrink-0">
         <div
@@ -47,7 +47,7 @@ export function AlertsViewForm({
             config.borderColor,
           )}
         >
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
             </div>
@@ -77,7 +77,7 @@ export function AlertsViewForm({
         {commentsLoading ? (
           <div className="space-y-2">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="flex items-start gap-3">
+              <div key={i} className="flex items-start gap-2">
                 <Skeleton className="h-8 w-8 rounded-full" />
                 <div className="flex-1 space-y-1">
                   <Skeleton className="h-3 w-24" />
@@ -93,7 +93,7 @@ export function AlertsViewForm({
               <div
                 key={comment.id}
                 className={cn(
-                  "flex items-start gap-3",
+                  "flex items-start gap-2",
                   isMe && "flex-row-reverse",
                 )}
               >

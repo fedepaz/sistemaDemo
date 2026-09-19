@@ -267,7 +267,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                     return (
                       <div key={type} className="space-y-2 md:space-y-3">
                         {/* Header del grupo */}
-                        <div className="flex items-center gap-2 md:gap-3 px-1 py-1 md:py-2">
+                        <div className="flex items-center gap-2 md:gap-2 px-1 py-1 md:py-2">
                           <div
                             className={cn(
                               "h-4 md:h-6 w-1 md:w-1.5 rounded-full",
@@ -337,7 +337,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
       {tables.length > 0 && canEdit ? (
         <>
           <Separator className="opacity-50" />
-          <CardFooter className="flex flex-col gap-3 md:gap-4 items-center justify-between px-4 py-4 md:px-6 md:py-6 bg-muted/5 sm:flex-row">
+          <CardFooter className="flex flex-col gap-2 md:gap-4 items-center justify-between px-4 py-4 md:px-6 md:py-6 bg-muted/5 sm:flex-row">
             <div className="flex items-center gap-2">
               <div
                 className={cn(

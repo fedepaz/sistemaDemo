@@ -48,7 +48,7 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-2"
       >
         {/* Username Field */}
         <FormField

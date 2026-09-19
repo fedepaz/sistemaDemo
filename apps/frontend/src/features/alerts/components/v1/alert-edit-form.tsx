@@ -53,7 +53,7 @@ export function AlertEditForm({
       <form
         id="alert-comment-form"
         onSubmit={alertCommentsForm.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* Type-specific header */}
         <div className="space-y-2 shrink-0">
@@ -64,7 +64,7 @@ export function AlertEditForm({
               config.borderColor,
             )}
           >
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
               </div>
@@ -99,7 +99,7 @@ export function AlertEditForm({
                 <div
                   key={i}
                   className={cn(
-                    "flex items-start gap-3",
+                    "flex items-start gap-2",
                     i % 2 === 0 ? "" : "flex-row-reverse",
                   )}
                 >
@@ -118,7 +118,7 @@ export function AlertEditForm({
                 <div
                   key={comment.id}
                   className={cn(
-                    "flex items-start gap-3",
+                    "flex items-start gap-2",
                     isMe && "flex-row-reverse",
                   )}
                 >

@@ -25,7 +25,7 @@ export function SustratoCreateForm({ onSubmit, formId, form }: FormProps) {
       <form
         id={formId}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
       >
         <FormField
           control={form.control}

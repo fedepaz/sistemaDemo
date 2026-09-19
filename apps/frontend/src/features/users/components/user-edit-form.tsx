@@ -30,10 +30,10 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
       <form
         id={formId}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
       >
         {user && (
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10 mb-2">
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-primary/5 border border-primary/10 mb-2">
             <div className="p-2 bg-primary/10 rounded-lg">
               <User className="h-5 w-5 text-primary" />
             </div>
@@ -43,7 +43,7 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
             </div>
           </div>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <FormField
             control={form.control}
             name="firstName"

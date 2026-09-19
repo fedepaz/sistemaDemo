@@ -40,7 +40,7 @@ const InfoRow = ({
 }) => (
   <div
     className={cn(
-      "flex items-center gap-3 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
+      "flex items-center gap-2 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
       className,
     )}
   >
@@ -84,11 +84,11 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
   };
 
   return (
-    <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* 🚀 FIXED TOP SECTION: PRODUCTO (Always Visible) */}
       <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <Package className="h-5 w-5 md:h-6 md:w-6" />
             </div>
@@ -223,7 +223,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                 <div className="p-4 md:p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-xl md:rounded-[2rem] relative overflow-hidden group shadow-md">
                   <div className="relative z-10 flex items-center justify-between">
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 md:gap-3">
+                      <div className="flex items-center gap-2 md:gap-2">
                         <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                           <Thermometer className="h-4 w-4 md:h-5 md:w-5" />
                         </div>
@@ -259,7 +259,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
               <CardContent className="p-4 space-y-2">
-                <div className="flex items-center gap-3 md:gap-5 bg-muted/40 p-3 md:p-5 rounded-xl md:rounded-2xl border border-border/40">
+                <div className="flex items-center gap-2 md:gap-5 bg-muted/40 p-3 md:p-5 rounded-xl md:rounded-2xl border border-border/40">
                   <div className="p-2 md:p-3 bg-background rounded-lg md:rounded-xl border border-border/60 shadow-sm">
                     <Activity className="h-4 w-4 md:h-6 md:w-6 text-primary/60" />
                   </div>
@@ -285,7 +285,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                 ) : null}
 
                 {selectedExtendido.baja ? (
-                  <div className="p-3 md:p-4 bg-destructive/10 border border-destructive/20 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4">
+                  <div className="p-3 md:p-4 bg-destructive/10 border border-destructive/20 rounded-xl md:rounded-2xl flex items-center gap-2 md:gap-4">
                     <AlertCircle className="h-5 w-5 md:h-7 md:w-7 text-destructive" />
                     <div>
                       <p className="text-[8px] md:text-[11px] font-black uppercase tracking-widest text-destructive leading-none mb-1">

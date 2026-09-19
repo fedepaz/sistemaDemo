@@ -47,12 +47,12 @@ export function ExtendidosEditForm({
       <form
         id="extendido-form"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] overflow-y-auto no-scrollbar pb-6"
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* 🚀 PRODUCT HEADER (Context) */}
         <div className="space-y-2 shrink-0">
           <div className="flex items-center justify-between bg-primary/5 p-2.5 md:p-3 rounded-xl border border-primary/20 shadow-sm">
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Package className="h-5 w-5 md:h-6 md:w-6" />
               </div>
@@ -69,7 +69,7 @@ export function ExtendidosEditForm({
         </div>
 
         {/* 📍 UBICACION SELECTION */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <FormField
             control={form.control}
             name="ubicacion"
@@ -112,7 +112,7 @@ export function ExtendidosEditForm({
             )}
           />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             {/* 📦 STOCK INICIAL (solo lectura) */}
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">

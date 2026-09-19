@@ -24,7 +24,7 @@ const InfoRow = ({
 }) => (
   <div
     className={cn(
-      "flex items-center gap-3 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
+      "flex items-center gap-2 md:gap-4 py-2 md:py-3 border-b border-border/40 last:border-0",
       className,
     )}
   >
@@ -47,11 +47,11 @@ const InfoRow = ({
 
 export function SustratoViewForm({ selectedSustrato }: SustratoViewFormProps) {
   return (
-    <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* Header */}
       <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <Package className="h-5 w-5 md:h-6 md:w-6" />
             </div>
