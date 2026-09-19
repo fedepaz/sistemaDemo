@@ -62,23 +62,23 @@ export function MezclaViewForm({ selectedMezcla }: MezclaViewFormProps) {
     <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* Header */}
       <div className="space-y-2 shrink-0">
-        <div className="flex items-center justify-between bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-2 md:p-3 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+        <div className="flex items-center justify-between bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-2 rounded-xl border border-primary/20 shadow-sm">
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <Blend className="h-5 w-5 md:h-6 md:w-6" />
             </div>
             <div>
               <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                 Mezcla
               </h2>
-              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5 truncate max-w-[200px] md:max-w-none">
+              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 truncate max-w-[200px] md:max-w-none">
                 {compositionSummary}
               </p>
             </div>
           </div>
           <Badge
             variant="outline"
-            className="text-success border-success/20 bg-success/10 font-bold px-2 md:px-3 py-0.5 h-5 md:h-6 text-[9px] md:text-[10px]"
+            className="text-success border-success/20 bg-success/10 font-bold px-2 py-0.5 h-5 md:h-6 text-[9px] md:text-[10px]"
           >
             <CheckCircle className="h-2.5 w-2.5 md:h-3 md:w-3 mr-1" />
             Activo
@@ -87,7 +87,7 @@ export function MezclaViewForm({ selectedMezcla }: MezclaViewFormProps) {
       </div>
 
       {/* Details Card */}
-      <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50 flex-1 min-h-0">
+      <Card className="border-border/60 shadow-sm rounded-xl overflow-hidden bg-card/50 flex-1 min-h-0">
         <CardContent className="p-3 space-y-2 h-full overflow-y-auto no-scrollbar">
           <div className="space-y-0.5">
             <CompositionRow

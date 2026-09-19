@@ -31,15 +31,15 @@ const InfoRow = ({
 }) => (
   <div
     className={cn(
-      "flex items-center gap-2 md:gap-4 py-1.5 md:py-2 border-b border-border/40 last:border-0",
+      "flex items-center gap-2 py-1.5 border-b border-border/40 last:border-0",
       className,
     )}
   >
-    <div className="p-1.5 md:p-2 bg-primary/5 rounded-lg border border-primary/10">
+    <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
       <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1 md:mb-1.5">
+      <p className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
         {label}
       </p>
       <div className="flex items-center gap-2">
@@ -58,16 +58,16 @@ export function ProgramacionSiembraViewForm({
     <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* FIXED TOP SECTION: PRODUCTO (Always Visible) */}
       <div className="space-y-2 shrink-0">
-        <div className="flex items-center justify-between bg-primary/5 p-2 md:p-3 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+        <div className="flex items-center justify-between bg-primary/5 p-2 rounded-xl border border-primary/20 shadow-sm">
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <Package className="h-5 w-5 md:h-6 md:w-6" />
             </div>
             <div>
               <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                 {selectedExtendido.codigoEspecie}
               </h2>
-              <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+              <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 {selectedExtendido.nombreEspecie}
               </p>
             </div>
@@ -84,9 +84,9 @@ export function ProgramacionSiembraViewForm({
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-background border border-border/60 p-1.5 md:p-2.5 rounded-lg md:rounded-xl flex items-center gap-1.5 md:gap-2.5 shadow-sm overflow-hidden"
+              className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
             >
-              <div className="p-1 md:p-1.5 bg-muted rounded-md shrink-0">
+              <div className="p-1 bg-muted rounded-md shrink-0">
                 <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
               </div>
               <div className="min-w-0">
@@ -104,7 +104,7 @@ export function ProgramacionSiembraViewForm({
 
       {/* DATA CONTENT */}
       <div className="flex-1 overflow-y-auto no-scrollbar pb-2">
-        <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
+        <Card className="border-border/60 shadow-sm rounded-xl overflow-hidden bg-card/50">
           <CardContent className="p-3 space-y-2">
             <InfoRow
               icon={ClipboardList}
@@ -112,7 +112,7 @@ export function ProgramacionSiembraViewForm({
               value={selectedExtendido.propiedad}
               className="border-primary/5"
             />
-            <div className="grid grid-cols-2 gap-2 md:gap-4">
+            <div className="grid grid-cols-2 gap-2">
               {[
                 {
                   icon: Calendar,
@@ -142,9 +142,9 @@ export function ProgramacionSiembraViewForm({
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-2 md:gap-2 py-2 border-b border-border/40 last:border-0"
+                  className="flex items-center gap-2 py-2 border-b border-border/40 last:border-0"
                 >
-                  <div className="p-1 md:p-1.5 bg-primary/5 rounded-md border border-primary/10 shrink-0">
+                  <div className="p-1 bg-primary/5 rounded-md border border-primary/10 shrink-0">
                     <item.icon className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
                   </div>
                   <div className="min-w-0">

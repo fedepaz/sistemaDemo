@@ -42,20 +42,20 @@ export function AlertsViewForm({
       <div className="space-y-2 shrink-0">
         <div
           className={cn(
-            "flex items-center justify-between bg-primary/5 p-2 md:p-3 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
+            "flex items-center justify-between bg-primary/5 p-2 rounded-xl border border-primary/20 shadow-sm",
             config.bgColor,
             config.borderColor,
           )}
         >
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
             </div>
             <div>
               <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                 {config.label}
               </h2>
-              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 {formatPartidaHeader(selectedAlert)}
               </p>
             </div>
