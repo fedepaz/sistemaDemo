@@ -11,10 +11,10 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="h-dvh flex flex-col bg-background overflow-hidden">
       <AuthHeader />
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        <div className="max-w-md w-full space-y-6 sm:space-y-8">
+      <div className="flex-1 flex items-center justify-center p-4 overflow-y-auto">
+        <div className="max-w-md w-full space-y-6">
           {/* Logo */}
-          <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+          <div className="flex flex-col items-center space-y-2">
             <div className="relative group">
               <div className="absolute -inset-4 bg-primary/5 blur-2xl group-hover:bg-primary/10 transition-colors duration-300 rounded-full" />
               <Logo
@@ -33,7 +33,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           </div>
 
           {/* Form Card */}
-          <div className="bg-card/80 dark:bg-card/40 backdrop-blur-xl border border-border/40 p-5 sm:p-8 md:p-10 shadow-2xl rounded-xl relative overflow-hidden group">
+          <div className="bg-card/80 dark:bg-card/40 backdrop-blur-xl border border-border/40 p-5 shadow-2xl rounded-xl relative overflow-hidden group">
             {children}
           </div>
         </div>

@@ -76,7 +76,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-2 md:gap-3 rounded-lg border-l-4 p-2 md:p-3 transition-all lg:flex-row lg:items-center lg:gap-4",
+        "group relative flex flex-col gap-2 rounded-lg border-l-4 p-2 transition-all lg:flex-row lg:items-center",
         isDirty
           ? "border-primary/40 bg-primary/[0.04] shadow-sm"
           : "border-border/50 bg-muted/30 hover:bg-muted/50",

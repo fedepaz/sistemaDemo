@@ -8,7 +8,7 @@ import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 export function UsersDashboard() {
   return (
-    <div className="flex flex-col gap-2 md:gap-3">
+    <div className="flex flex-col gap-2">
       <LoadingBoundary
         skeleton={
           <DataTableSkeleton

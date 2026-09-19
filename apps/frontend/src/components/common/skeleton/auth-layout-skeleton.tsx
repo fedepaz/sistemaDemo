@@ -8,10 +8,10 @@ export function AuthLayoutSkeleton() {
   return (
     <div className="h-dvh flex flex-col bg-background overflow-hidden">
       <AuthHeader />
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        <div className="max-w-md w-full space-y-6 sm:space-y-8">
+      <div className="flex-1 flex items-center justify-center p-4 overflow-y-auto">
+        <div className="max-w-md w-full space-y-6">
           {/* Logo — idéntico al AuthLayout real, sin skeleton (carga instantánea, evita parpadeo) */}
-          <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+          <div className="flex flex-col items-center space-y-2">
             <div className="relative group">
               <div className="absolute -inset-4 bg-primary/5 blur-2xl rounded-full" />
               <Logo
@@ -30,7 +30,7 @@ export function AuthLayoutSkeleton() {
           </div>
 
           {/* Form Card — misma caja, contenido interno reemplazado por placeholders */}
-          <div className="bg-card/80 dark:bg-card/40 backdrop-blur-xl border border-border/40 p-5 sm:p-8 md:p-10 shadow-2xl rounded-xl relative overflow-hidden">
+          <div className="bg-card/80 dark:bg-card/40 backdrop-blur-xl border border-border/40 p-5 shadow-2xl rounded-xl relative overflow-hidden">
             <div className="space-y-6">
               {/* Título del form */}
               <div className="space-y-2">
