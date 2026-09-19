@@ -51,8 +51,8 @@ export function ExtendidosEditForm({
       >
         {/* 🚀 PRODUCT HEADER (Context) */}
         <div className="space-y-2 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-2.5 md:p-3 rounded-xl border border-primary/20 shadow-sm">
-            <div className="flex items-center gap-2 md:gap-4">
+          <div             className="flex items-center justify-between bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
+            <div className="flex items-center gap-2">
               <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Package className="h-5 w-5 md:h-6 md:w-6" />
               </div>
@@ -60,7 +60,7 @@ export function ExtendidosEditForm({
                 <h2 className="text-base md:text-lg font-bold tracking-tight leading-none text-foreground uppercase">
                   {selectedExtendido.codigoEspecie}
                 </h2>
-                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                   {selectedExtendido.nombreEspecie}
                 </p>
               </div>
@@ -76,7 +76,7 @@ export function ExtendidosEditForm({
             render={({ field }) => (
               <FormItem className="space-y-1.5">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                  <div className="p-1.5 bg-primary/10 rounded-lg">
                     <Warehouse className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
                   <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
@@ -160,7 +160,7 @@ export function ExtendidosEditForm({
             render={({ field }) => (
               <FormItem className="space-y-1.5">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                  <div className="p-1.5 bg-primary/10 rounded-lg">
                     <FileText className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                   </div>
                   <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">

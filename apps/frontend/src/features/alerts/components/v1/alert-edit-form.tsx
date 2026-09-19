@@ -59,12 +59,12 @@ export function AlertEditForm({
         <div className="space-y-2 shrink-0">
           <div
             className={cn(
-              "flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
+              "flex items-center justify-between bg-primary/5 p-3 rounded-xl border border-primary/20 shadow-sm",
               config.bgColor,
               config.borderColor,
             )}
           >
-            <div className="flex items-center gap-2 md:gap-4">
+            <div className="flex items-center gap-2">
               <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
               </div>
@@ -72,7 +72,7 @@ export function AlertEditForm({
                 <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
                   {config.label}
                 </h2>
-                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-[9px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                   Partida #{selectedAlert.partidaId}/{selectedAlert.indice} ·
                   Año {selectedAlert.anio}
                 </p>
@@ -174,9 +174,9 @@ export function AlertEditForm({
           control={alertCommentsForm.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="space-y-1.5 md:space-y-2">
+            <FormItem className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+                <div className="p-1.5 bg-primary/10 rounded-lg">
                   <MessageSquare className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
                 </div>
                 <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
@@ -186,7 +186,7 @@ export function AlertEditForm({
               <FormControl>
                 <Textarea
                   placeholder="Escribe tu comentario..."
-                  className="min-h-[60px] md:min-h-[100px] rounded-xl border-border/60 bg-background shadow-sm text-sm p-3 leading-relaxed focus:ring-primary/20"
+                  className="min-h-[60px] rounded-xl border-border/60 bg-background shadow-sm text-sm p-3 leading-relaxed focus:ring-primary/20"
                   {...field}
                 />
               </FormControl>

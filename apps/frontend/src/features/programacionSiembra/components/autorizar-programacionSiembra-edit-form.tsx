@@ -62,7 +62,7 @@ export function AutorizarProgramacionSiembraEditForm({
         />
 
         {isAlreadyAuthorized && (
-          <div className="flex items-center gap-2 bg-warning/10 border border-warning/30 rounded-xl p-3 md:p-4">
+          <div className="flex items-center gap-2 bg-warning/10 border border-warning/30 rounded-xl p-3">
             <AlertTriangle className="h-4 w-4 text-warning shrink-0" />
             <p className="text-xs md:text-sm font-bold text-warning">
               Esta partida ya fue autorizada para siembra
@@ -72,8 +72,8 @@ export function AutorizarProgramacionSiembraEditForm({
 
         {/* PRODUCT HEADER */}
         <div className="space-y-2 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-2.5 md:p-3 rounded-xl border border-primary/20 shadow-sm">
-            <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center justify-between bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
+            <div className="flex items-center gap-2">
               <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <Package className="h-5 w-5 md:h-6 md:w-6" />
               </div>
@@ -81,7 +81,7 @@ export function AutorizarProgramacionSiembraEditForm({
                 <h2 className="text-base md:text-lg font-bold tracking-tight leading-none text-foreground uppercase">
                   {selectedSiembra.codigoEspecie}
                 </h2>
-                <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
                   {selectedSiembra.nombreEspecie}
                 </p>
               </div>
@@ -90,16 +90,16 @@ export function AutorizarProgramacionSiembraEditForm({
         </div>
 
         {/* DETALLE PARTIDA */}
-        <div className="space-y-1.5 md:space-y-2 shrink-0">
+        <div className="space-y-1.5 shrink-0">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+            <div className="p-1.5 bg-primary/10 rounded-lg">
               <Leaf className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
             </div>
             <p className="text-xs md:text-xs font-bold uppercase tracking-wider text-foreground">
               Detalle Partida
             </p>
           </div>
-          <div className="bg-muted/20 rounded-xl border border-border/40 p-3 md:p-4 space-y-0">
+          <div className="bg-muted/20 rounded-xl border border-border/40 p-3 space-y-0">
             <InfoRow label="Contenedores" value={selectedSiembra.nrocont} />
             <InfoRow label="Propiedad" value={selectedSiembra.propiedad} />
             <InfoRow label="Sem / Gr" value={selectedSiembra.semxgr} />
