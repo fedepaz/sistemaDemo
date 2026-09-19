@@ -11,7 +11,7 @@ export function AuthLayoutSkeleton() {
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
         <div className="max-w-md w-full space-y-6 sm:space-y-8">
           {/* Logo — idéntico al AuthLayout real, sin skeleton (carga instantánea, evita parpadeo) */}
-          <div className="flex flex-col items-center space-y-3 sm:space-y-4">
+          <div className="flex flex-col items-center space-y-2 sm:space-y-3">
             <div className="relative group">
               <div className="absolute -inset-4 bg-primary/5 blur-2xl rounded-full" />
               <Logo

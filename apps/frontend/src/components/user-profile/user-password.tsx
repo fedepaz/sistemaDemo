@@ -49,7 +49,7 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-3"
+        className="space-y-2"
       >
         <FormField
           control={form.control}

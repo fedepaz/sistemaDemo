@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
         <div className="max-w-md w-full space-y-6 sm:space-y-8">
           {/* Logo */}
-          <div className="flex flex-col items-center space-y-3 sm:space-y-4">
+          <div className="flex flex-col items-center space-y-2 sm:space-y-3">
             <div className="relative group">
               <div className="absolute -inset-4 bg-primary/5 blur-2xl group-hover:bg-primary/10 transition-colors duration-300 rounded-full" />
               <Logo

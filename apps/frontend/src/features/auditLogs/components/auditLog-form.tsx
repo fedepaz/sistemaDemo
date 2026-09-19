@@ -127,7 +127,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
   return (
     <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* Hero Section: Action + Entity */}
-      <div className="space-y-3 shrink-0">
+      <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
@@ -237,10 +237,10 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="p-4 space-y-2">
                 {/* User Info */}
                 {selectedAuditLog.user ? (
-                  <div className="space-y-2 md:space-y-3">
+                  <div className="space-y-1.5 md:space-y-2">
                     <div className="flex items-center gap-2 text-xs md:text-xs font-black uppercase tracking-widest text-primary/70">
                       <User className="h-3 w-3 md:h-4 md:w-4" /> Responsable
                     </div>
@@ -268,7 +268,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                 ) : null}
 
                 {/* Changes */}
-                <div className="space-y-2 md:space-y-3">
+                <div className="space-y-1.5 md:space-y-2">
                   <div className="flex items-center gap-2 text-xs md:text-xs font-black uppercase tracking-widest text-primary/70">
                     <Database className="h-3 w-3 md:h-4 md:w-4" /> Registro de
                     Cambios
@@ -286,7 +286,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                         );
                       }
                       return (
-                        <div className="space-y-2 md:space-y-3">
+                        <div className="space-y-1.5 md:space-y-2">
                           {Object.entries(displayChanges).map(
                             ([key, value]) => (
                               <div
@@ -338,7 +338,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="p-4 space-y-2">
                 <div className="grid gap-3 md:gap-4">
                   <InfoRow
                     icon={Route}

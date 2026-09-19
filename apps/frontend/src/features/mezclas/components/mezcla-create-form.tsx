@@ -124,7 +124,7 @@ export function MezclaCreateForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
       >
-        <div className="space-y-3">
+        <div className="space-y-2">
           <SustratoSlot form={form} index={1} sustratos={sustratos} label="Sustrato 1" />
           <SustratoSlot form={form} index={2} sustratos={sustratos} label="Sustrato 2" />
           <SustratoSlot form={form} index={3} sustratos={sustratos} label="Sustrato 3" />

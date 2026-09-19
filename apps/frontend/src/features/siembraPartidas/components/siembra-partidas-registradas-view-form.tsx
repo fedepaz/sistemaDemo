@@ -59,7 +59,7 @@ export function SiembraPartidasRegistradasViewForm({
   return (
     <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* HEADER */}
-      <div className="space-y-3 shrink-0">
+      <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
@@ -151,7 +151,7 @@ export function SiembraPartidasRegistradasViewForm({
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="p-4 space-y-2">
                 <div className="grid grid-cols-2 gap-0.5 md:gap-1">
                   {/* until we implement mezcla
                   <InfoRow
@@ -227,7 +227,7 @@ export function SiembraPartidasRegistradasViewForm({
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="p-4 space-y-2">
                 <div className="grid grid-cols-2 gap-0.5 md:gap-1">
                   <InfoRow
                     icon={Layers}
@@ -270,7 +270,7 @@ export function SiembraPartidasRegistradasViewForm({
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="p-4 space-y-2">
                 <div className="grid grid-cols-1 gap-0.5 md:gap-1">
                   <InfoRow
                     icon={ClipboardList}

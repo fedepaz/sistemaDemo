@@ -71,7 +71,7 @@ export function AutorizarProgramacionSiembraEditForm({
         )}
 
         {/* PRODUCT HEADER */}
-        <div className="space-y-3 shrink-0">
+        <div className="space-y-2 shrink-0">
           <div className="flex items-center justify-between bg-primary/5 p-2.5 md:p-3 rounded-xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-3 md:gap-4">
               <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
@@ -90,7 +90,7 @@ export function AutorizarProgramacionSiembraEditForm({
         </div>
 
         {/* DETALLE PARTIDA */}
-        <div className="space-y-2 md:space-y-3 shrink-0">
+        <div className="space-y-1.5 md:space-y-2 shrink-0">
           <div className="flex items-center gap-2">
             <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
               <Leaf className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />

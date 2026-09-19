@@ -118,7 +118,7 @@ export function ASembrarEditForm({
         className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* PRODUCT HEADER */}
-        <div className="space-y-3 shrink-0">
+        <div className="space-y-2 shrink-0">
           <div className="flex items-center justify-between bg-primary/5 p-2.5 md:p-3 rounded-xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-3 md:gap-4">
               <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
@@ -211,7 +211,7 @@ export function ASembrarEditForm({
         </div>
 
         {/* TECHNICAL FIELDS */}
-        <div className="space-y-3 shrink-0">
+        <div className="space-y-2 shrink-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* PRESNSADO DE SUSTRATO */}
             <FormField

@@ -11,7 +11,7 @@ import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 export function RootDashboard() {
   return (
-    <div className="w-full space-y-2 md:space-y-3 xl:space-y-4">
+    <div className="w-full space-y-1.5 md:space-y-2 xl:space-y-3">
       <div className="shrink-0">
         <LoadingBoundary skeleton={<DashboardKPISkeleton />}>
           <DashboardKPI />

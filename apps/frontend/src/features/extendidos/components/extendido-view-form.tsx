@@ -86,7 +86,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
   return (
     <div className="flex flex-col gap-3 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
       {/* 🚀 FIXED TOP SECTION: PRODUCTO (Always Visible) */}
-      <div className="space-y-3 shrink-0">
+      <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
@@ -179,7 +179,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="p-4 space-y-2">
                 <div className="grid grid-cols-1 gap-0.5 md:gap-1">
                   <InfoRow
                     icon={Calendar}
@@ -222,7 +222,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
 
                 <div className="p-4 md:p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-xl md:rounded-[2rem] relative overflow-hidden group shadow-md">
                   <div className="relative z-10 flex items-center justify-between">
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <div className="flex items-center gap-2 md:gap-3">
                         <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                           <Thermometer className="h-4 w-4 md:h-5 md:w-5" />
@@ -258,7 +258,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
             className="mt-0 outline-none animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Card className="border-border/60 shadow-sm rounded-xl md:rounded-[1.5rem] overflow-hidden bg-card/50">
-              <CardContent className="p-4 space-y-3">
+              <CardContent className="p-4 space-y-2">
                 <div className="flex items-center gap-3 md:gap-5 bg-muted/40 p-3 md:p-5 rounded-xl md:rounded-2xl border border-border/40">
                   <div className="p-2 md:p-3 bg-background rounded-lg md:rounded-xl border border-border/60 shadow-sm">
                     <Activity className="h-4 w-4 md:h-6 md:w-6 text-primary/60" />
@@ -273,7 +273,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                   </div>
                 </div>
                 {selectedExtendido.detalle ? (
-                  <div className="space-y-2 md:space-y-3">
+                  <div className="space-y-1.5 md:space-y-2">
                     <div className="flex items-center gap-2 text-[8px] md:text-[11px] font-black uppercase tracking-widest text-primary/70">
                       <ClipboardList className="h-3 w-3 md:h-4 md:w-4" />{" "}
                       Detalle Técnico

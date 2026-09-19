@@ -56,7 +56,7 @@ export function AlertEditForm({
         className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* Type-specific header */}
-        <div className="space-y-3 shrink-0">
+        <div className="space-y-2 shrink-0">
           <div
             className={cn(
               "flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
@@ -85,7 +85,7 @@ export function AlertEditForm({
         </div>
 
         {/* Conversation message thread */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium">
@@ -174,7 +174,7 @@ export function AlertEditForm({
           control={alertCommentsForm.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="space-y-2 md:space-y-3">
+            <FormItem className="space-y-1.5 md:space-y-2">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
                   <MessageSquare className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
