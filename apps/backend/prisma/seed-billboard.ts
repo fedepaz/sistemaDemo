@@ -33,6 +33,7 @@ const adapter = new PrismaMariaDb({
 
 const prisma = new PrismaClient({ adapter });
 
+// IMPORTANT: Each message body MUST be 500 characters or less (VarChar(500) in schema).
 const messages = [
   {
     title: 'Actualizaciones del sistema',
@@ -76,21 +77,6 @@ const messages = [
     tag: 'siembra-tablas',
     permissionTable: 'programacion_siembra',
     permissionAction: 'read',
-    permissionScope: 'ALL',
-    targetNewUsers: true,
-  },
-  {
-    title: 'Autorizar y desautorizar siembra',
-    body: `En la pantalla de Programación de Siembra, podés autorizar o desautorizar una programación:
-
-• Autorizar: Al presionar "Autorizar", se crean automáticamente las partidas asociadas a esa programación. Una vez autorizada, la programación aparece como autorizada y las partidas quedan listas para ser sembradas.
-
-• Desautorizar: Si necesitás revertir una autorización, podés presionar "Desautorizar". Esto desactiva la autorización y las partidas dejan de estar disponibles para sembrar. La programación vuelve a estado pendiente.
-
-• Re-autorizar: Si desautorizaste por error, podés volver a presionar "Autorizar" para reactivar la misma autorización sin crear partidas duplicadas.`,
-    tag: 'siembra-autorizar-desautorizar',
-    permissionTable: 'programacion_siembra',
-    permissionAction: 'create',
     permissionScope: 'ALL',
     targetNewUsers: true,
   },
