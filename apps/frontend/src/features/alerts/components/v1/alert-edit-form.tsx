@@ -65,7 +65,7 @@ export function AlertEditForm({
             )}
           >
             <div className="flex items-center gap-2">
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+              <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
                 <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
               </div>
               <div>

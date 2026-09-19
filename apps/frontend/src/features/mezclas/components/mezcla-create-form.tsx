@@ -141,8 +141,8 @@ export function MezclaCreateForm({
               variant="outline"
               className={
                 isValid
-                  ? "text-success border-success/20 bg-success/10 font-bold px-2 md:px-3 py-0.5 h-5 md:h-6 text-[10px] md:text-xs"
-                  : "text-destructive border-destructive/20 bg-destructive/10 font-bold px-2 md:px-3 py-0.5 h-5 md:h-6 text-[10px] md:text-xs"
+                  ? "text-success border-success/20 bg-success/10 font-bold px-2 py-0.5 h-5 md:h-6 text-[10px] md:text-xs"
+                  : "text-destructive border-destructive/20 bg-destructive/10 font-bold px-2 py-0.5 h-5 md:h-6 text-[10px] md:text-xs"
               }
             >
               {isValid ? (
