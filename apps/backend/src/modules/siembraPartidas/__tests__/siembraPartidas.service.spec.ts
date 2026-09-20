@@ -16,10 +16,12 @@ describe('SiembraPartidasService', () => {
     findAll: jest.Mock;
     findById: jest.Mock;
     createSiembraPartida: jest.Mock;
+    update: jest.Mock;
   };
   let prismaMock: {
     sustratos: { upsert: jest.Mock };
     mezcla: { upsert: jest.Mock };
+    siembraPartidas: { findFirst: jest.Mock };
   };
   let partidasRepoMock: { findByComposite: jest.Mock };
   let taskShiftsRepoMock: { findByPartidaComposite: jest.Mock };
@@ -32,7 +34,7 @@ describe('SiembraPartidasService', () => {
     anio: 2026,
     indice: 1,
     metodoMaquina: true,
-    prensadoSemilla: { toNumber: () => 25 },
+    prensadoSustrato: { toNumber: () => 25 },
     profundidadSemilla: { toString: () => '1.525' },
     tratamientoSemilla: '',
     mezclaId: 'mezcla-1',
@@ -68,7 +70,7 @@ describe('SiembraPartidasService', () => {
     codigoEspecie: '',
     nombreEspecie: '',
     metodoMaquina: true,
-    prensadoSemilla: 25,
+    prensadoSustrato: 25,
     profundidadSemilla: '1.525',
     tratamientoSemilla: '',
     mezclaId: 'mezcla-1',
@@ -105,11 +107,13 @@ describe('SiembraPartidasService', () => {
       findAll: jest.fn(),
       findById: jest.fn(),
       createSiembraPartida: jest.fn(),
+      update: jest.fn(),
     };
 
     prismaMock = {
       sustratos: { upsert: jest.fn() },
       mezcla: { upsert: jest.fn() },
+      siembraPartidas: { findFirst: jest.fn() },
     };
 
     partidasRepoMock = { findByComposite: jest.fn() };
@@ -188,9 +192,12 @@ describe('SiembraPartidasService', () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
-        prensadoSemilla: 25,
+        prensadoSustrato: 25,
         profundidadSemilla: '1.525',
         tratamientoSemilla: '',
+        sustrato: 'Sustrato A',
+        startTime: '2026-09-15T08:00:00.000-03:00',
+        endTime: '2026-09-15T12:00:00.000-03:00',
         mezclaId: 'mezcla-1',
         userId: 'user-1',
         stockLote: 42,
@@ -208,9 +215,10 @@ describe('SiembraPartidasService', () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
-        prensadoSemilla: 25,
+        prensadoSustrato: 25,
         profundidadSemilla: '1.525',
         tratamientoSemilla: '',
+        sustrato: 'Sustrato A',
         stockLote: 42,
         stockAnio: 2026,
         stockEntradasAntes: 1000,
@@ -242,9 +250,12 @@ describe('SiembraPartidasService', () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
-        prensadoSemilla: 25,
+        prensadoSustrato: 25,
         profundidadSemilla: '1.525',
         tratamientoSemilla: '',
+        sustrato: 'Sustrato A',
+        startTime: '2026-09-15T08:00:00.000-03:00',
+        endTime: '2026-09-15T12:00:00.000-03:00',
         mezclaId: 'mezcla-1',
       };
       await service.createSiembraPartida(data, 'user-1');
@@ -254,9 +265,10 @@ describe('SiembraPartidasService', () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
-        prensadoSemilla: 25,
+        prensadoSustrato: 25,
         profundidadSemilla: '1.525',
         tratamientoSemilla: '',
+        sustrato: 'Sustrato A',
         stockLote: undefined,
         stockAnio: undefined,
         stockEntradasAntes: undefined,
@@ -266,6 +278,112 @@ describe('SiembraPartidasService', () => {
         mezcla: { connect: { id: 'mezcla-1' } },
         user: { connect: { id: 'user-1' } },
       });
+    });
+  });
+
+  describe('autorizarSiembra', () => {
+    const autorizarData = {
+      partidaId: 100,
+      anio: 2026,
+      indice: 1,
+    };
+
+    it('creates a new row when no existing row', async () => {
+      prismaMock.siembraPartidas.findFirst.mockResolvedValue(null);
+      prismaMock.sustratos.upsert.mockResolvedValue({ id: 'sustrato-1' });
+      prismaMock.mezcla.upsert.mockResolvedValue({ id: 'mezcla-1' });
+      repo.createSiembraPartida.mockResolvedValue(mockRow);
+      repo.findById.mockResolvedValue(mockRow);
+      partidasRepoMock.findByComposite.mockResolvedValue(null);
+      taskShiftsRepoMock.findByPartidaComposite.mockResolvedValue(null);
+
+      const result = await service.autorizarSiembra(autorizarData, 'user-1');
+
+      expect(result).toEqual(mockDto);
+      expect(repo.createSiembraPartida).toHaveBeenCalled();
+    });
+
+    it('re-authorizes when row exists with isActive = false', async () => {
+      const deactivatedRow = { ...mockRow, isActive: false };
+      prismaMock.siembraPartidas.findFirst.mockResolvedValue(deactivatedRow);
+      repo.update.mockResolvedValue({ ...mockRow, isActive: true });
+      repo.findById.mockResolvedValue({ ...mockRow, isActive: true });
+      partidasRepoMock.findByComposite.mockResolvedValue(null);
+      taskShiftsRepoMock.findByPartidaComposite.mockResolvedValue(null);
+
+      const result = await service.autorizarSiembra(autorizarData, 'user-1');
+
+      expect(result).toEqual(mockDto);
+      expect(repo.update).toHaveBeenCalledWith('sp-1', {
+        isActive: true,
+        profundidadSemilla: 0,
+      });
+    });
+
+    it('throws ConflictException when row exists with isActive = true', async () => {
+      const activeRow = { ...mockRow, isActive: true };
+      prismaMock.siembraPartidas.findFirst.mockResolvedValue(activeRow);
+
+      await expect(
+        service.autorizarSiembra(autorizarData, 'user-1'),
+      ).rejects.toThrow('Esta partida ya fue autorizada para siembra');
+    });
+  });
+
+  describe('desautorizarSiembra', () => {
+    it('sets isActive = false on an authorized row', async () => {
+      const activeRow = {
+        ...mockRow,
+        isActive: true,
+        profundidadSemilla: { toNumber: () => 0 },
+      };
+      repo.findById.mockResolvedValue(activeRow);
+      repo.update.mockResolvedValue({ ...activeRow, isActive: false });
+      const deactivatedRow = { ...activeRow, isActive: false };
+      repo.findById
+        .mockResolvedValueOnce(activeRow)
+        .mockResolvedValueOnce(deactivatedRow);
+      partidasRepoMock.findByComposite.mockResolvedValue(null);
+      taskShiftsRepoMock.findByPartidaComposite.mockResolvedValue(null);
+
+      const result = await service.desautorizarSiembra('sp-1', 'user-1');
+
+      expect(repo.update).toHaveBeenCalledWith('sp-1', { isActive: false });
+      expect(result).toBeDefined();
+    });
+
+    it('throws NotFoundException when row not found', async () => {
+      repo.findById.mockResolvedValue(null);
+
+      await expect(
+        service.desautorizarSiembra('nonexistent', 'user-1'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('throws ConflictException when profundidadSemilla > 0', async () => {
+      const completedRow = {
+        ...mockRow,
+        isActive: true,
+        profundidadSemilla: { toNumber: () => 1.5 },
+      };
+      repo.findById.mockResolvedValue(completedRow);
+
+      await expect(
+        service.desautorizarSiembra('sp-1', 'user-1'),
+      ).rejects.toThrow('No se puede desautorizar una partida ya completada');
+    });
+
+    it('throws ConflictException when already de-authorized', async () => {
+      const deactivatedRow = {
+        ...mockRow,
+        isActive: false,
+        profundidadSemilla: { toNumber: () => 0 },
+      };
+      repo.findById.mockResolvedValue(deactivatedRow);
+
+      await expect(
+        service.desautorizarSiembra('sp-1', 'user-1'),
+      ).rejects.toThrow('Esta partida ya fue desautorizada');
     });
   });
 });

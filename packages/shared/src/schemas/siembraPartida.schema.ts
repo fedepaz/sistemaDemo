@@ -17,17 +17,17 @@ export const ProfundidadSemillaSchema = z
     message: "La profundidad debe ser mayor a 0",
   });
 
-export const PrensadoSemillaValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] as const;
+export const PrensadoSustratoValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] as const;
 
 export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   id: requiredCuid("El registro de siembra"),
   metodoMaquina: z.boolean({ message: "El método/máquina es requerido" }),
-  prensadoSemilla: z
-    .number({ message: "El prensado de semilla es requerido" })
-    .min(0, { message: "El prensado de semilla debe ser mayor o igual a 0" })
-    .max(6, { message: "El prensado de semilla debe ser menor o igual a 6" })
-    .refine((v) => PrensadoSemillaValues.includes(v as any), {
-      message: "El prensado de semilla debe ser un múltiplo de 0.5 (0, 0.5, 1, ... 6)",
+  prensadoSustrato: z
+    .number({ message: "El prensado de sustrato es requerido" })
+    .min(0, { message: "El prensado de sustrato debe ser mayor o igual a 0" })
+    .max(6, { message: "El prensado de sustrato debe ser menor o igual a 6" })
+    .refine((v) => PrensadoSustratoValues.includes(v as any), {
+      message: "El prensado de sustrato debe ser un múltiplo de 0.5 (0, 0.5, 1, ... 6)",
     }),
   profundidadSemilla: ProfundidadSemillaSchema,
   tratamientoSemilla: z.string({
@@ -68,6 +68,8 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   empleados: z.array(z.object({
     userId: z.string(),
     username: z.string(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
   })).optional(),
   createdAt: z.string().optional(),
 });
@@ -82,19 +84,21 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
   metodoMaquina: z.boolean({
     message: "El método/máquina es requerido",
   }),
-  prensadoSemilla: z
-    .number({ message: "El prensado de semilla es requerido" })
-    .min(0, { message: "El prensado de semilla debe ser mayor o igual a 0" })
-    .max(6, { message: "El prensado de semilla debe ser menor o igual a 6" })
-    .refine((v) => PrensadoSemillaValues.includes(v as any), {
-      message: "El prensado de semilla debe ser un múltiplo de 0.5 (0, 0.5, 1, ... 6)",
+  prensadoSustrato: z
+    .number({ message: "El prensado de sustrato es requerido" })
+    .min(0, { message: "El prensado de sustrato debe ser mayor o igual a 0" })
+    .max(6, { message: "El prensado de sustrato debe ser menor o igual a 6" })
+    .refine((v) => PrensadoSustratoValues.includes(v as any), {
+      message: "El prensado de sustrato debe ser un múltiplo de 0.5 (0, 0.5, 1, ... 6)",
     }),
 
   profundidadSemilla: ProfundidadSemillaSchema,
   tratamientoSemilla: z.string({
     message: "El tratamiento de semilla es requerido",
   }).min(1, { message: "El tratamiento de semilla es requerido" }),
-  sustrato: z.string().optional(),
+  sustrato: z.string({ message: "El sustrato es requerido" }).min(1, { message: "El sustrato es requerido" }),
+  startTime: z.string({ message: "La hora de inicio es requerida" }).min(1, { message: "La hora de inicio es requerida" }),
+  endTime: z.string({ message: "La hora de fin es requerida" }).min(1, { message: "La hora de fin es requerida" }),
   mezclaId: cuidSchema.optional(),
   // Stock traceability
   stockLote: z.number().optional(),

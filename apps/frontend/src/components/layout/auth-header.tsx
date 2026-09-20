@@ -22,7 +22,7 @@ export function AuthHeader() {
   const targetLabel = isLoginPage ? "Crear una cuenta" : "Ya tienes cuenta?";
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/60 backdrop-blur-md supports-backdrop-filter:bg-background/40 shrink-0">
-      <div className="container mx-auto px-2">
+      <div className="w-full px-2">
         <div className="flex h-12 items-center justify-between">
           <TooltipProvider>
             <Tooltip>

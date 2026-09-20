@@ -14,7 +14,7 @@ describe("SiembraPartidaSchema", () => {
     codigoEspecie: "ABCOM",
     nombreEspecie: "PLA.ALBAHACA COMPACTA M009",
     metodoMaquina: true,
-    prensadoSemilla: 3,
+    prensadoSustrato: 3,
     profundidadSemilla: "1.525",
     tratamientoSemilla: "1",
     mezclaId: "clx1234567890abcdef123467",
@@ -28,7 +28,7 @@ describe("SiembraPartidaSchema", () => {
     expect(result.id).toBe("clx1234567890abcdef123456");
     expect(result.partidaId).toBe(100);
     expect(result.metodoMaquina).toBe(true);
-    expect(result.prensadoSemilla).toBe(3);
+    expect(result.prensadoSustrato).toBe(3);
     expect(result.profundidadSemilla).toBe("1.525");
     expect(result.tratamientoSemilla).toBe("1");
   });
@@ -72,7 +72,9 @@ describe("SiembraPartidaSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages.some((m) => m.includes("registro de siembra"))).toBe(true);
+      expect(messages.some((m) => m.includes("registro de siembra"))).toBe(
+        true,
+      );
     }
   });
 
@@ -82,7 +84,10 @@ describe("SiembraPartidaSchema", () => {
   });
 
   it("rejects invalid mezclaId with Spanish message", () => {
-    const result = SiembraPartidaSchema.safeParse({ ...valid, mezclaId: "bad" });
+    const result = SiembraPartidaSchema.safeParse({
+      ...valid,
+      mezclaId: "bad",
+    });
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
@@ -96,20 +101,23 @@ describe("SiembraPartidaSchema", () => {
     ).toThrow();
   });
 
-  it("rejects prensadoSemilla greater than 6", () => {
+  it("rejects prensadoSustrato greater than 6", () => {
     expect(() =>
-      SiembraPartidaSchema.parse({ ...valid, prensadoSemilla: 25 }),
+      SiembraPartidaSchema.parse({ ...valid, prensadoSustrato: 25 }),
     ).toThrow();
   });
 
-  it("accepts prensadoSemilla with 0.5 increment", () => {
-    const result = SiembraPartidaSchema.parse({ ...valid, prensadoSemilla: 3.5 });
-    expect(result.prensadoSemilla).toBe(3.5);
+  it("accepts prensadoSustrato with 0.5 increment", () => {
+    const result = SiembraPartidaSchema.parse({
+      ...valid,
+      prensadoSustrato: 3.5,
+    });
+    expect(result.prensadoSustrato).toBe(3.5);
   });
 
-  it("rejects prensadoSemilla with invalid increment", () => {
+  it("rejects prensadoSustrato with invalid increment", () => {
     expect(() =>
-      SiembraPartidaSchema.parse({ ...valid, prensadoSemilla: 1.3 }),
+      SiembraPartidaSchema.parse({ ...valid, prensadoSustrato: 1.3 }),
     ).toThrow();
   });
 
@@ -127,10 +135,13 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      prensadoSemilla: 4,
+      prensadoSustrato: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
       mezclaId: "clx1234567890abcdef123489",
+      sustrato: "sustrato1",
+      startTime: "2026-01-15T08:00:00.000Z",
+      endTime: "2026-01-15T17:00:00.000Z",
     });
     expect(result.partidaId).toBe(200);
     expect(result.metodoMaquina).toBe(false);
@@ -143,9 +154,12 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      prensadoSemilla: 4,
+      prensadoSustrato: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
+      sustrato: "sustrato1",
+      startTime: "2026-01-15T08:00:00.000Z",
+      endTime: "2026-01-15T17:00:00.000Z",
     });
     expect(result.mezclaId).toBeUndefined();
   });
@@ -156,7 +170,7 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      prensadoSemilla: 4,
+      prensadoSustrato: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
       stockLote: 42,
@@ -165,6 +179,9 @@ describe("CreateSiembraPartidaSchema", () => {
       stockSalidasAntes: 100,
       stockEntradasDespues: 500,
       stockSalidasDespues: 100,
+      sustrato: "sustrato1",
+      startTime: "2026-01-15T08:00:00.000Z",
+      endTime: "2026-01-15T17:00:00.000Z",
     });
     expect(result.stockLote).toBe(42);
     expect(result.stockEntradasAntes).toBe(500);
@@ -176,9 +193,12 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 2,
       metodoMaquina: false,
-      prensadoSemilla: 4,
+      prensadoSustrato: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
+      sustrato: "sustrato1",
+      startTime: "2026-01-15T08:00:00.000Z",
+      endTime: "2026-01-15T17:00:00.000Z",
     });
     expect(result.stockLote).toBeUndefined();
     expect(result.stockEntradasAntes).toBeUndefined();
@@ -190,9 +210,9 @@ describe("CreateSiembraPartidaSchema", () => {
         anio: 2026,
         indice: 1,
         metodoMaquina: true,
-        prensadoSemilla: 2,
+        prensadoSustrato: 2,
         profundidadSemilla: "1.5",
-    tratamientoSemilla: "1",
+        tratamientoSemilla: "1",
         mezclaId: "clx1234567890abcdef123467",
       }),
     ).toThrow();
@@ -204,7 +224,7 @@ describe("CreateSiembraPartidaSchema", () => {
       anio: 2026,
       indice: 1,
       metodoMaquina: true,
-      prensadoSemilla: 20,
+      prensadoSustrato: 20,
       profundidadSemilla: "1.5",
       tratamientoSemilla: "1",
       mezclaId: "bad",

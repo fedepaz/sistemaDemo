@@ -32,12 +32,12 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
     icon: Layers,
     items: [
       {
-        title: "Siembra",
-        href: ROUTES.SIEMBRA,
+        title: "Programación Siembra",
+        href: ROUTES.PROGRAMACION_SIEMBRA,
         icon: Sprout,
         description: "Gestión de partidas a siembrar",
         dashboard: { statsLabel: "Partidas a siembrar" },
-        requiredPermission: { table: "siembra", action: "read" },
+        requiredPermission: { table: "programacion_siembra", action: "read" },
       },
       {
         title: "A Extender",
@@ -61,7 +61,7 @@ export const NAVIGATION_CONFIG: NavigationConfig = [
         icon: ClipboardList,
         description: "Partidas con siembra registrada en el sistema web",
         dashboard: { statsLabel: "Partidas registradas" },
-        requiredPermission: { table: "siembra", action: "read" },
+        requiredPermission: { table: "programacion_siembra", action: "read" },
       },
       {
         kind: "subGroup",

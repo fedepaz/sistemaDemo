@@ -7,8 +7,8 @@ import { UsersController } from '../../../src/modules/users/users.controller';
 import { UsersService } from '../../../src/modules/users/users.service';
 import { EntitiesController } from '../../../src/modules/entities/entities.controller';
 import { EntitiesService } from '../../../src/modules/entities/entities.service';
-import { SiembraController } from '../../../src/modules/legacy/siembra/siembra.controller';
-import { SiembraService } from '../../../src/modules/legacy/siembra/siembra.service';
+import { ProgramacionSiembraController } from '../../../src/modules/legacy/programacionSiembra/programacionSiembra.controller';
+import { ProgramacionSiembraService } from '../../../src/modules/legacy/programacionSiembra/programacionSiembra.service';
 import { PermissionsController } from '../../../src/modules/permissions/permissions.controller';
 import { PermissionsService } from '../../../src/modules/permissions/permissions.service';
 import { TenantsService } from '../../../src/modules/tenants/tenants.service';
@@ -21,7 +21,7 @@ import {
   createAuthMock,
   createUsersMock,
   createEntitiesMock,
-  createSiembraMock,
+  createProgramacionSiembraMock,
   createPermissionsMock,
   createTenantsMock,
   createAlertsMock,
@@ -32,7 +32,7 @@ export interface ServiceOverrides {
   auth?: ReturnType<typeof createAuthMock>;
   users?: ReturnType<typeof createUsersMock>;
   entities?: ReturnType<typeof createEntitiesMock>;
-  siembra?: ReturnType<typeof createSiembraMock>;
+  programacionSiembra?: ReturnType<typeof createProgramacionSiembraMock>;
   permissions?: ReturnType<typeof createPermissionsMock>;
   tenants?: ReturnType<typeof createTenantsMock>;
   alerts?: ReturnType<typeof createAlertsMock>;
@@ -45,7 +45,8 @@ export async function createTestApp(
   const authMock = overrides?.auth ?? createAuthMock();
   const usersMock = overrides?.users ?? createUsersMock();
   const entitiesMock = overrides?.entities ?? createEntitiesMock();
-  const siembraMock = overrides?.siembra ?? createSiembraMock();
+  const programacionSiembraMock =
+    overrides?.programacionSiembra ?? createProgramacionSiembraMock();
   const permissionsMock = overrides?.permissions ?? createPermissionsMock();
   const tenantsMock = overrides?.tenants ?? createTenantsMock();
   const alertsMock = overrides?.alerts ?? createAlertsMock();
@@ -56,7 +57,7 @@ export async function createTestApp(
       AuthController,
       UsersController,
       EntitiesController,
-      SiembraController,
+      ProgramacionSiembraController,
       PermissionsController,
       AlertsController,
       TaskShiftsController,
@@ -67,7 +68,10 @@ export async function createTestApp(
       { provide: AuthService, useValue: authMock },
       { provide: UsersService, useValue: usersMock },
       { provide: EntitiesService, useValue: entitiesMock },
-      { provide: SiembraService, useValue: siembraMock },
+      {
+        provide: ProgramacionSiembraService,
+        useValue: programacionSiembraMock,
+      },
       { provide: PermissionsService, useValue: permissionsMock },
       { provide: TenantsService, useValue: tenantsMock },
       { provide: AlertsService, useValue: alertsMock },

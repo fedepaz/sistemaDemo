@@ -133,15 +133,15 @@ export const depositosQueryKeys = {
 // SIEMBRA
 // ============================================================================
 
-export const siembraQueryKeys = {
-  all: () => ["siembra"] as const,
-  partidas: () => [...siembraQueryKeys.all(), "partidas"] as const,
-  tratamientos: () => [...siembraQueryKeys.all(), "tratamientos"] as const,
-  legacySustratos: () => [...siembraQueryKeys.all(), "legacySustratos"] as const,
+export const programacionSiembraQueryKeys = {
+  all: () => ["programacionSiembra"] as const,
+  partidas: () => [...programacionSiembraQueryKeys.all(), "partidas"] as const,
+  tratamientos: () => [...programacionSiembraQueryKeys.all(), "tratamientos"] as const,
+  legacySustratos: () => [...programacionSiembraQueryKeys.all(), "legacySustratos"] as const,
 };
 
-export const siembraPartidasRegistradasQueryKeys = {
-  all: () => ["siembraPartidasRegistradas"] as const,
+export const programacionSiembraPartidasRegistradasQueryKeys = {
+  all: () => ["programacionSiembraPartidasRegistradas"] as const,
 };
 
 // ============================================================================

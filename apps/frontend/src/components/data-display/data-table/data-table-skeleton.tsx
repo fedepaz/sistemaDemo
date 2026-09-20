@@ -114,10 +114,10 @@ export function DataTableSkeleton({
               <Skeleton className="h-4 w-[100px]" />
             </div>
             <div className="flex items-center space-x-1">
-              <Skeleton className="hidden lg:block h-7 w-7" />
+              <Skeleton className="hidden md:block h-7 w-7" />
               <Skeleton className="h-7 w-7" />
               <Skeleton className="h-7 w-7" />
-              <Skeleton className="hidden lg:block h-7 w-7" />
+              <Skeleton className="hidden md:block h-7 w-7" />
             </div>
           </div>
         </div>

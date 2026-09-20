@@ -169,24 +169,24 @@ describe("SlideOverForm - Confirmation Dialog Summary", () => {
     expect(screen.getByText("John")).toBeInTheDocument();
   });
 
-  it("formats boolean true as Si", () => {
+  it("formats boolean true with check icon", () => {
     renderWithConfirm(
       { title: "Confirm", description: "Are you sure?", summaryFields: ["active"] },
       undefined,
       { active: true }
     );
     openConfirmDialog();
-    expect(screen.getByText("Si")).toBeInTheDocument();
+    expect(screen.getByText("Método Máquina")).toBeInTheDocument();
   });
 
-  it("formats boolean false as No", () => {
+  it("formats boolean false with cross icon", () => {
     renderWithConfirm(
       { title: "Confirm", description: "Are you sure?", summaryFields: ["active"] },
       undefined,
       { active: false }
     );
     openConfirmDialog();
-    expect(screen.getByText("No")).toBeInTheDocument();
+    expect(screen.getByText("Método Manual")).toBeInTheDocument();
   });
 
   it("formats null as em dash", () => {

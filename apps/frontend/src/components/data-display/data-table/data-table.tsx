@@ -666,7 +666,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      className="hidden h-7 w-7 p-0 lg:flex bg-transparent"
+                      className="hidden h-7 w-7 p-0 md:flex bg-transparent"
                       onClick={() => table.setPageIndex(0)}
                       disabled={!table.getCanPreviousPage()}
                       aria-label="Ir a la primera página"
@@ -726,7 +726,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                   <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      className="hidden h-7 w-7 p-0 lg:flex bg-transparent"
+                      className="hidden h-7 w-7 p-0 md:flex bg-transparent"
                       onClick={() =>
                         table.setPageIndex(table.getPageCount() - 1)
                       }

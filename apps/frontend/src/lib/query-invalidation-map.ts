@@ -11,8 +11,8 @@ import {
   adminPermissionsQueryKeys,
   entityQueryKeys,
   extendidosQueryKeys,
-  siembraQueryKeys,
-  siembraPartidasRegistradasQueryKeys,
+  programacionSiembraQueryKeys,
+  programacionSiembraPartidasRegistradasQueryKeys,
   sustratoQueryKeys,
   mezclaQueryKeys,
   alertCommentsQueryKeys,
@@ -85,7 +85,7 @@ export const mutationInvalidationMap = {
   partidaUbicacion: {
     queries: () => [
       extendidosQueryKeys.enCamara(),
-      siembraQueryKeys.partidas(),
+      programacionSiembraQueryKeys.partidas(),
       alertsQueryKeys.all(),
     ],
   },
@@ -93,8 +93,8 @@ export const mutationInvalidationMap = {
   // --- Siembra ---
   siembraPartida: {
     queries: () => [
-      siembraQueryKeys.partidas(),
-      siembraPartidasRegistradasQueryKeys.all(),
+      programacionSiembraQueryKeys.partidas(),
+      programacionSiembraPartidasRegistradasQueryKeys.all(),
       aSembrarQueryKeys.all(),
       extendidosQueryKeys.enCamara(),
       alertsQueryKeys.all(),
@@ -131,7 +131,7 @@ export const mutationInvalidationMap = {
   aSembrar: {
     queries: () => [
       aSembrarQueryKeys.all(),
-      siembraPartidasRegistradasQueryKeys.all(),
+      programacionSiembraPartidasRegistradasQueryKeys.all(),
       extendidosQueryKeys.enCamara(),
       alertsQueryKeys.all(),
     ],

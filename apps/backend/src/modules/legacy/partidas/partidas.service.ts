@@ -91,9 +91,12 @@ export class PartidasService {
       anio: data.anio,
       indice: data.indice,
       metodoMaquina: data.metodoMaquina,
-      prensadoSemilla: data.prensadoSemilla,
+      prensadoSustrato: data.prensadoSustrato,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
+      sustrato: data.sustrato,
+      startTime: data.startTime,
+      endTime: data.endTime,
       mezclaId: data.mezclaId,
     };
 

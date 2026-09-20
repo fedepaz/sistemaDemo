@@ -109,17 +109,29 @@ export class SiembraPartidasService {
     >,
   ): Promise<SiembraPartidaDto> {
     // Resolve employee usernames
-    let empleados: { userId: string; username: string }[] | undefined;
+    let empleados:
+      | {
+          userId: string;
+          username: string;
+          firstName?: string;
+          lastName?: string;
+        }[]
+      | undefined;
     if (taskShift?.employees?.length) {
       const userIds = taskShift.employees.map((e) => e.userId);
       const users = await this.prisma.user.findMany({
         where: { id: { in: userIds } },
-        select: { id: true, username: true },
+        select: { id: true, username: true, firstName: true, lastName: true },
       });
-      empleados = taskShift.employees.map((e) => ({
-        userId: e.userId,
-        username: users.find((u) => u.id === e.userId)?.username ?? e.userId,
-      }));
+      empleados = taskShift.employees.map((e) => {
+        const user = users.find((u) => u.id === e.userId);
+        return {
+          userId: e.userId,
+          username: user?.username ?? e.userId,
+          firstName: user?.firstName ?? undefined,
+          lastName: user?.lastName ?? undefined,
+        };
+      });
     }
 
     // Resolve treatment name
@@ -158,7 +170,7 @@ export class SiembraPartidasService {
       codigoEspecie,
       nombreEspecie,
       metodoMaquina: row.metodoMaquina,
-      prensadoSemilla: row.prensadoSemilla.toNumber(),
+      prensadoSustrato: row.prensadoSustrato.toNumber(),
       profundidadSemilla: row.profundidadSemilla.toString(),
       tratamientoSemilla: row.tratamientoSemilla,
       sustrato: row.sustrato ?? undefined,
@@ -264,7 +276,7 @@ export class SiembraPartidasService {
       anio: data.anio,
       indice: data.indice,
       metodoMaquina: data.metodoMaquina,
-      prensadoSemilla: data.prensadoSemilla,
+      prensadoSustrato: data.prensadoSustrato,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
       sustrato: data.sustrato,
@@ -303,9 +315,35 @@ export class SiembraPartidasService {
         deletedAt: null,
       },
     });
+
     if (existing) {
-      throw new ConflictException(
-        'Esta partida ya fue autorizada para siembra',
+      if (existing.isActive) {
+        throw new ConflictException(
+          'Esta partida ya fue autorizada para siembra',
+        );
+      }
+      // Re-authorize: row exists but isActive = false
+      await this.repo.update(existing.id, {
+        isActive: true,
+        profundidadSemilla: 0,
+      });
+      const full = await this.repo.findById(existing.id, requesterId);
+      const [legacyData, taskShift] = await Promise.all([
+        this.partidasRepo.findByComposite(
+          existing.partidaId,
+          existing.anio,
+          existing.indice,
+        ),
+        this.taskShiftsRepo.findByPartidaComposite(
+          existing.partidaId,
+          existing.anio,
+          existing.indice,
+        ),
+      ]);
+      return this.mapToDto(
+        full as SiembraPartidasWithRelations,
+        legacyData,
+        taskShift,
       );
     }
 
@@ -316,7 +354,7 @@ export class SiembraPartidasService {
       anio: data.anio,
       indice: data.indice,
       metodoMaquina: true,
-      prensadoSemilla: 0,
+      prensadoSustrato: 0,
       profundidadSemilla: 0,
       tratamientoSemilla: '',
       mezcla: { connect: { id: mezclaId } },
@@ -366,6 +404,48 @@ export class SiembraPartidasService {
     return dtos;
   }
 
+  async desautorizarSiembra(
+    id: string,
+    requesterId: string,
+  ): Promise<SiembraPartidaDto> {
+    const existing = await this.repo.findById(id, requesterId);
+    if (!existing) {
+      throw new NotFoundException('Registro de siembra no encontrado');
+    }
+
+    if (existing.profundidadSemilla.toNumber() !== 0) {
+      throw new ConflictException(
+        'No se puede desautorizar una partida ya completada',
+      );
+    }
+
+    if (!existing.isActive) {
+      throw new ConflictException('Esta partida ya fue desautorizada');
+    }
+
+    await this.repo.update(id, { isActive: false });
+
+    const full = await this.repo.findById(id, requesterId);
+    const [legacyData, taskShift] = await Promise.all([
+      this.partidasRepo.findByComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+      this.taskShiftsRepo.findByPartidaComposite(
+        existing.partidaId,
+        existing.anio,
+        existing.indice,
+      ),
+    ]);
+
+    return this.mapToDto(
+      full as SiembraPartidasWithRelations,
+      legacyData,
+      taskShift,
+    );
+  }
+
   async completarSiembraPartida(
     id: string,
     data: AsignarUbiSiembraCompletaDto,
@@ -382,7 +462,7 @@ export class SiembraPartidasService {
 
     await this.repo.update(id, {
       metodoMaquina: data.metodoMaquina,
-      prensadoSemilla: data.prensadoSemilla,
+      prensadoSustrato: data.prensadoSustrato,
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
       sustrato: data.sustrato,

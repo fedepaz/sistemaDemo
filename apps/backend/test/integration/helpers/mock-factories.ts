@@ -42,10 +42,10 @@ export function createEntitiesMock() {
   };
 }
 
-export function createSiembraMock() {
+export function createProgramacionSiembraMock() {
   return {
-    getAllSiembra: jest.fn(),
-    asignarUbicacionSiembra: jest.fn(),
+    getAllProgramacionSiembra: jest.fn(),
+    asignarUbicacionProgramacionSiembra: jest.fn(),
   };
 }
 
