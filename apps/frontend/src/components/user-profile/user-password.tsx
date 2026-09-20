@@ -49,7 +49,7 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
+        className="space-y-2"
       >
         <FormField
           control={form.control}
@@ -70,14 +70,14 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
                     type={showCurrent ? "text" : "password"}
                     {...field}
                     disabled={isLoading}
-                    className="pl-9 pr-11 h-11 sm:h-12 text-sm sm:text-base"
+                    className="pl-9 pr-10 h-9 text-sm"
                   />
 
                   {/* Botón toggle - SIN tabIndex={-1} para accesibilidad */}
                   <button
                     type="button"
                     onClick={() => setShowCurrent(!showCurrent)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg cursor-pointer"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary rounded-md cursor-pointer"
                     aria-label={
                       showCurrent
                         ? "Ocultar contraseña actual"
@@ -114,13 +114,13 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
                     type={showNew ? "text" : "password"}
                     {...field}
                     disabled={isLoading}
-                    className="pl-9 pr-11 h-11 sm:h-12 text-sm sm:text-base"
+                    className="pl-9 pr-10 h-9 text-sm"
                   />
 
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg cursor-pointer"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary rounded-md cursor-pointer"
                     aria-label={
                       showNew
                         ? "Ocultar nueva contraseña"
@@ -141,7 +141,7 @@ export function ChangePasswordForm({ onClose }: ChangePasswordFormProps) {
         />
         <Button
           type="submit"
-          className="w-full h-11 sm:h-12 bg-primary rounded-lg p-2 cursor-pointer text-sm sm:text-base font-medium"
+          className="w-full h-9 bg-primary rounded-md cursor-pointer text-sm font-medium"
           disabled={isLoading || !form.formState.isDirty}
         >
           Actualizar

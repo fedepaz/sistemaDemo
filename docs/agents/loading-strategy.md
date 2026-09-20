@@ -127,6 +127,10 @@ A skeleton must match its real component in:
 4. **Visual elements** — Avatar circles, icon placeholders, badge widths
 5. **Responsive breakpoints** — Same column count at each breakpoint
 6. **Container constraints** — Same max-width, overflow behavior
+7. **Density mode** — Skeleton row heights must match the density mode:
+   - Compact (< 1280px): table rows 32px, headers 32px, cells `py-0.5 px-2 text-xs`
+   - Standard (1280px–1535px): table rows 40px, headers 36px, cells `py-1 px-3 text-xs`
+   - Spacious (>= 1536px): table rows 40px, headers 36px, cells `py-1 px-3 text-sm`
 
 **How to verify:**
 1. Place skeleton and real component side-by-side

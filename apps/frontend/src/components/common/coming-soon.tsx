@@ -7,8 +7,8 @@ export default function ComingSoonPage() {
   const { name, initials } = useCompanyData();
 
   return (
-    <div className="min-h-dvh flex items-center justify-center bg-background p-4 sm:p-6 md:p-8">
-      <div className="max-w-2xl w-full text-center space-y-6 md:space-y-8">
+    <div className="min-h-dvh flex items-center justify-center bg-background p-4">
+      <div className="max-w-2xl w-full text-center space-y-6">
         <div className="flex justify-center">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">

@@ -109,7 +109,7 @@ export function CompanyInfoCard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
             {/* Left Column - Location */}
             <div>
-              <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">
+              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">
                 Ubicación Operativa
               </h3>
               <InfoRow
@@ -131,7 +131,7 @@ export function CompanyInfoCard() {
 
             {/* Right Column - Contact & Legal */}
             <div>
-              <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">
+              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">
                 Contacto & Legal
               </h3>
               <InfoRow
@@ -158,7 +158,7 @@ export function CompanyInfoCard() {
           <Separator className="my-6 opacity-50" />
           <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-medium text-muted-foreground/80">
             <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-[10px] text-muted-foreground/60">
+              <span className="uppercase tracking-wider text-xs text-muted-foreground/60">
                 Ing. Brutos:
               </span>
               <span className="text-foreground">
@@ -166,7 +166,7 @@ export function CompanyInfoCard() {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wider text-[10px] text-muted-foreground/60">
+              <span className="uppercase tracking-wider text-xs text-muted-foreground/60">
                 Situación IVA:
               </span>
               <span className="text-foreground">

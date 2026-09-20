@@ -94,6 +94,12 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # =========================
 .agents/
 .skills/
+.commits/
+.superpowers/
+.gemini/
+.opencode/
+.playwright-mcp/
+skills-lock.json
 
 # =========================
 # Backups & Session Dumps

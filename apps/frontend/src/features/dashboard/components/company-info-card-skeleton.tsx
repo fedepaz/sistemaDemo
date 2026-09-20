@@ -12,7 +12,7 @@ export function CompanyInfoCardSkeleton() {
         <div className="p-8 pb-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <Skeleton className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl" />
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-2">
               <Skeleton className="h-8 w-3/4 mx-auto sm:mx-0" />
               <Skeleton className="h-4 w-1/2 mx-auto sm:mx-0" />
               <div className="flex justify-center sm:justify-start gap-2 pt-2">

@@ -220,7 +220,7 @@ export function ExtendidoDataTable({
             summaryFields: ["ubicacion", "baja", "extendido"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             {mode === "view" ? (
               <ExtendidosViewForm selectedExtendido={selectedPartida} />
             ) : (

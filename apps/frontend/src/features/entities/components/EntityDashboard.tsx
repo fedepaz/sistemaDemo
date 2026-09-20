@@ -9,7 +9,7 @@ import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 export function EntityDashboard() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 xl:gap-4">
       <LoadingBoundary
         skeleton={
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

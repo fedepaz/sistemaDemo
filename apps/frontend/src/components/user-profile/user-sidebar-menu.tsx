@@ -64,7 +64,7 @@ export function UserSidebarMenu({ isCollapsed = false }: UserSidebarMenuProps) {
                       <p className="text-sm font-black text-foreground truncate leading-tight tracking-tight w-full text-left">
                         {userProfile?.firstName} {userProfile?.lastName}
                       </p>
-                      <p className="text-[10px] font-bold text-muted-foreground truncate leading-tight tracking-wider uppercase opacity-70 w-full text-left">
+                      <p className="text-xs font-bold text-muted-foreground truncate leading-tight tracking-wider uppercase opacity-70 w-full text-left">
                         {userProfile?.username}
                       </p>
                     </div>
@@ -79,7 +79,7 @@ export function UserSidebarMenu({ isCollapsed = false }: UserSidebarMenuProps) {
               >
                 <div className="flex flex-col gap-0.5">
                   <p className="font-black text-xs text-primary">{userProfile?.firstName} {userProfile?.lastName}</p>
-                  <p className="text-[10px] text-muted-foreground font-bold">{userProfile?.username}</p>
+                  <p className="text-xs text-muted-foreground font-bold">{userProfile?.username}</p>
                 </div>
               </TooltipContent>
             )}

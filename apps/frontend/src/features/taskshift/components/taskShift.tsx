@@ -73,13 +73,13 @@ export function TaskShift({
   }
 
   return (
-    <div className="space-y-3 md:space-y-4 shrink-0">
+    <div className="space-y-2 shrink-0">
 
 
       {/* Time Control */}
-      <div className="space-y-3 md:space-y-4">
+      <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+          <div className="p-1.5 bg-primary/10 rounded-lg">
             <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
           </div>
           <h3 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
@@ -206,9 +206,9 @@ export function TaskShift({
       </div>
 
       {/* Employee Search */}
-      <div className="space-y-2 md:space-y-3">
+      <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
+          <div className="p-1.5 bg-primary/10 rounded-lg">
             <User2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
           </div>
           <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">

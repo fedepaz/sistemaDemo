@@ -63,13 +63,13 @@ function DashboardAlerts() {
               <DollarSign className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-primary-foreground" />
             </div>
             <div>
-              <h2 className="text-[11px] sm:text-xs font-bold text-primary-foreground tracking-tight">
+              <h2 className="text-xs sm:text-xs font-bold text-primary-foreground tracking-tight">
                 Cotizaciones
               </h2>
-              <p className="text-[8px] sm:text-[9px] text-primary-foreground/70 font-medium leading-none">ARS • En Vivo</p>
+              <p className="text-xs sm:text-xs text-primary-foreground/70 font-medium leading-none">ARS • En Vivo</p>
             </div>
           </div>
-          <div className="flex items-center gap-1 text-primary-foreground/60 text-[8px] sm:text-[9px] font-bold">
+          <div className="flex items-center gap-1 text-primary-foreground/60 text-xs sm:text-xs font-bold">
             <RefreshCw className="h-2 w-2 animate-spin-slow" />
             <span>{currentTime}</span>
           </div>
@@ -92,13 +92,13 @@ function DashboardAlerts() {
                     <div
                       className={`h-4 w-4 sm:h-5 sm:w-5 rounded-md ${colors.accent} flex items-center justify-center shadow-sm shrink-0`}
                     >
-                      <span className="text-primary-foreground text-[8px] sm:text-[9px] font-black">
+                      <span className="text-primary-foreground text-xs sm:text-xs font-black">
                         {currency.code === "BLUE"
                           ? "B"
                           : currency.code.charAt(0)}
                       </span>
                     </div>
-                    <p className={`text-[9px] sm:text-[10px] font-bold ${colors.text} uppercase tracking-tight truncate`}>
+                    <p className={`text-xs sm:text-xs font-bold ${colors.text} uppercase tracking-tight truncate`}>
                       {currency.name}
                     </p>
                   </div>
@@ -108,7 +108,7 @@ function DashboardAlerts() {
                 <div className="flex gap-1">
                   <div className="bg-background/80 dark:bg-background/40 rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1 text-center flex-1 border border-border/50">
                     <p
-                      className={`text-[7px] sm:text-[8px] font-bold ${colors.text} opacity-60 uppercase tracking-widest leading-none mb-0.5`}
+                      className={`text-xs sm:text-xs font-bold ${colors.text} opacity-60 uppercase tracking-widest leading-none mb-0.5`}
                     >
                       Compra
                     </p>
@@ -118,7 +118,7 @@ function DashboardAlerts() {
                   </div>
                   <div className="bg-background/80 dark:bg-background/40 rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1 text-center flex-1 border border-border/50">
                     <p
-                      className={`text-[7px] sm:text-[8px] font-bold ${colors.text} opacity-60 uppercase tracking-widest leading-none mb-0.5`}
+                      className={`text-xs sm:text-xs font-bold ${colors.text} opacity-60 uppercase tracking-widest leading-none mb-0.5`}
                     >
                       Venta
                     </p>

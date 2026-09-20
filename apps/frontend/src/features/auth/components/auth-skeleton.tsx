@@ -33,30 +33,30 @@ export function AuthSkeleton({
       )}
 
       {/* Username field — mirrors FormItem > FormLabel + Input with icon */}
-      <div className="space-y-1 sm:space-y-2">
+      <div className="space-y-1.5">
         <Skeleton className="h-3 sm:h-4 w-28" />
-        <div className="relative h-11 sm:h-12 w-full">
-          <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-lg" />
+        <div className="relative h-9 w-full">
+          <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md" />
           <Skeleton className="h-full w-full rounded-md" />
         </div>
       </div>
 
       {/* Password field — mirrors FormItem > FormLabel + Input with icon + toggle */}
-      <div className="space-y-1 sm:space-y-2">
+      <div className="space-y-1.5">
         <Skeleton className="h-3 sm:h-4 w-16" />
-        <div className="relative h-11 sm:h-12 w-full">
-          <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-lg" />
+        <div className="relative h-9 w-full">
+          <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md" />
           <Skeleton className="h-full w-full rounded-md" />
-          <Skeleton className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-lg" />
+          <Skeleton className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md" />
         </div>
       </div>
 
       {/* First name field (register only) */}
       {type === "register" && (
-        <div className="space-y-1 sm:space-y-2">
+        <div className="space-y-1.5">
           <Skeleton className="h-3 sm:h-4 w-16" />
-          <div className="relative h-11 sm:h-12 w-full">
-            <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-lg" />
+          <div className="relative h-9 w-full">
+            <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md" />
             <Skeleton className="h-full w-full rounded-md" />
           </div>
         </div>
@@ -64,17 +64,17 @@ export function AuthSkeleton({
 
       {/* Last name field (register only) */}
       {type === "register" && (
-        <div className="space-y-1 sm:space-y-2">
+        <div className="space-y-1.5">
           <Skeleton className="h-3 sm:h-4 w-18" />
-          <div className="relative h-11 sm:h-12 w-full">
-            <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 rounded-lg" />
+          <div className="relative h-9 w-full">
+            <Skeleton className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md" />
             <Skeleton className="h-full w-full rounded-md" />
           </div>
         </div>
       )}
 
       {/* Submit button */}
-      <Skeleton className="h-11 sm:h-12 w-full rounded-lg mt-2" />
+      <Skeleton className="h-9 w-full rounded-md mt-2" />
 
       <span className="sr-only">Loading...</span>
     </div>

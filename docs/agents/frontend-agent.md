@@ -126,11 +126,27 @@ src/
 - **`SlideOverForm`** is the standard pattern for create/edit forms (slide-over panel).
 - **`DataTable`** (`components/data-display/data-table/data-table.tsx`):
   - TanStack Table v8; premium style (`bg-card/40`, `border-border/40`, `shadow-premium`, `rounded-none`).
+  - **Density mode**: Compact at < 1280px (32px rows, 8px cell padding, `text-xs`), default at >= 1280px (40px rows, 12px cell padding, `text-sm`). Header: 32px compact, 36px default.
+  - **Column visibility**: 2 cols at sm, 3 at md, 4 at lg (1024px+), 5 at xl (1280px+), all at 2xl.
+  - **Action buttons**: `min-h-[32px]` on desktop (< 1280px), `min-h-[40px]` at xl (1280px+). Not 44px — that's mobile-only.
+  - **Pagination**: `h-6` buttons at < 1280px, `h-7` at xl+. Text: `text-[10px]` at < 1280px, `text-[11px]` at xl+.
   - Bulk selection + actions.
   - Permission-aware: `PROCESS` types hide row selection when execution is allowed; `READ_ONLY` hides mutations and selection.
   - Descriptive action labels (e.g., "Asignar Ubicación", not "Ejecutar").
   - Global search bar (optional via `enableSearch` prop, default `true`): real-time client-side filtering with clear button and results count badge.
 - No FAB; the "Nuevo" button in the DataTable toolbar creates entities.
+
+## Design Tokens
+
+All design tokens are defined as CSS custom properties in `apps/frontend/src/app/globals.css` and mapped to Tailwind via `@theme inline`. See `docs/agents/ux-ui-agent.md` for the full token reference.
+
+**Key rules for new components:**
+- Use standard spacing tokens (`gap-2`, `gap-3`, `gap-4`, `p-3`, `p-4`, etc.) — never arbitrary values like `p-[18px]` or `gap-[22px]`.
+- Use control height tokens: `h-7` (28px), `h-8` (32px), `h-9` (36px), `h-10` (40px).
+- Use responsive density: `h-7 xl:h-8` for toolbar buttons, `text-xs xl:text-sm` for table cells.
+- Table rows: `h-8 xl:h-10` (32px compact, 40px default).
+- Table cells: `py-0.5 xl:py-1 px-2 xl:px-3 text-xs xl:text-sm`.
+- Never use `min-h-[44px]` on desktop — that's a mobile touch target. Use `min-h-[32px] xl:min-h-[40px]` instead.
 
 ## Data Export
 

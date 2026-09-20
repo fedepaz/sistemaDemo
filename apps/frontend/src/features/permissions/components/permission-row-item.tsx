@@ -76,7 +76,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-2 md:gap-3 rounded-lg border-l-4 p-2 md:p-3 transition-all lg:flex-row lg:items-center lg:gap-4",
+        "group relative flex flex-col gap-2 rounded-lg border-l-4 p-2 transition-all lg:flex-row lg:items-center",
         isDirty
           ? "border-primary/40 bg-primary/[0.04] shadow-sm"
           : "border-border/50 bg-muted/30 hover:bg-muted/50",
@@ -99,10 +99,10 @@ export const PermissionRowItem = memo(function PermissionRowItem({
           <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
         </div>
         <div className="flex flex-col gap-0 min-w-0">
-          <span className="text-[11px] md:text-xs font-bold text-foreground truncate">
+          <span className="text-xs md:text-xs font-bold text-foreground truncate">
             {row.label}
           </span>
-          <span className="text-[8px] md:text-[9px] font-mono uppercase tracking-wider text-muted-foreground/60">
+          <span className="text-xs md:text-xs font-mono uppercase tracking-wider text-muted-foreground/60">
             {row.tableName}
           </span>
         </div>
@@ -130,7 +130,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                   />
                   <span
                     className={cn(
-                      "text-[8px] md:text-[9px] font-bold uppercase tracking-widest",
+                      "text-xs md:text-xs font-bold uppercase tracking-widest",
                       isActive ? "text-foreground" : "text-muted-foreground/30",
                     )}
                   >
@@ -204,7 +204,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
                 className="bg-popover border border-border shadow-md text-foreground px-2 py-1 rounded-md" // ✅ Padding + color explícito
                 sideOffset={5}
               >
-                <p className="text-[10px] font-medium">
+                <p className="text-xs font-medium">
                   {!requesterHasThisAction
                     ? `No tienes permiso para conceder "${col.label.toLowerCase()}"`
                     : canEdit
@@ -227,7 +227,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
         <Badge
           variant={activeCrudCount > 0 ? "default" : "secondary"}
           className={cn(
-            "h-5 md:h-6 min-w-[1.75rem] md:min-w-[2rem] justify-center text-[8px] md:text-[10px] font-bold tabular-nums rounded-full shadow-sm transition-all",
+            "h-5 md:h-6 min-w-[1.75rem] md:min-w-[2rem] justify-center text-xs md:text-xs font-bold tabular-nums rounded-full shadow-sm transition-all",
             activeCrudCount === 4
               ? "bg-primary/10 text-primary border border-primary/20"
               : "",

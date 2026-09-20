@@ -40,7 +40,7 @@ export function PermissionsEntityManager({
       <CardContent className="p-0 bg-background">
         <div className="flex flex-col">
           {/* Header con búsqueda */}
-          <div className="sticky top-0 z-10 flex flex-col gap-3 md:gap-4 border-b bg-background/95 backdrop-blur-md px-3 py-3 md:px-6 md:py-4 lg:flex-row lg:items-center">
+          <div className="sticky top-0 z-10 flex flex-col gap-2 border-b bg-background/95 backdrop-blur-md px-3 py-3 lg:flex-row lg:items-center">
             <div className="relative flex-1 group">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
               <Input
@@ -52,7 +52,7 @@ export function PermissionsEntityManager({
             </div>
             <Badge
               variant="outline"
-              className="h-8 md:h-9 px-3 md:px-4 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[9px] md:text-[10px] uppercase tracking-widest gap-2"
+              className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[9px] md:text-[10px] uppercase tracking-widest gap-2"
             >
               <Shield className="h-3 md:h-3.5 w-3 md:h-3.5" />
               {userPermissions.length} accesos
@@ -60,9 +60,9 @@ export function PermissionsEntityManager({
           </div>
 
           <ScrollArea className="flex flex-col bg-muted/5">
-            <div className="flex flex-col gap-3 p-3 md:p-6">
+            <div className="flex flex-col gap-2 p-3">
               {filteredUsers.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8 md:py-12 text-center">
+                <div className="flex flex-col items-center justify-center py-8 text-center">
                   <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-muted flex items-center justify-center mb-3">
                     <User className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground/40" />
                   </div>
@@ -79,10 +79,10 @@ export function PermissionsEntityManager({
                 filteredUsers.map((up) => (
                   <div
                     key={up.userId}
-                    className="group relative flex flex-col gap-4 md:gap-6 rounded-xl border border-border/50 bg-background p-3 md:p-5 transition-all hover:bg-muted/30 lg:flex-row lg:items-center lg:gap-8"
+                    className="group relative flex flex-col gap-4 rounded-xl border border-border/50 bg-background p-3 transition-all hover:bg-muted/30 lg:flex-row lg:items-center"
                   >
                     {/* User Info */}
-                    <div className="flex items-center gap-3 md:gap-4 lg:w-64 lg:shrink-0">
+                    <div className="flex items-center gap-2 lg:w-64 lg:shrink-0">
                       <UserAvatar
                         name={`${up.firstName ?? ""} ${up.lastName ?? ""}`}
                         size="lg"
@@ -100,7 +100,7 @@ export function PermissionsEntityManager({
                     </div>
 
                     {/* Permissions Grid */}
-                    <div className="flex flex-1 items-center justify-around gap-1 md:gap-2 px-2 md:px-4">
+                    <div className="flex flex-1 items-center justify-around gap-1 px-2">
                       {CRUD_COLUMNS.map((col) => {
                         const hasPerm = (up.permissions as TablePermission)[
                           col.key
@@ -108,7 +108,7 @@ export function PermissionsEntityManager({
                         return (
                           <div
                             key={col.key}
-                            className="flex flex-col items-center gap-1 md:gap-2"
+                            className="flex flex-col items-center gap-1"
                           >
                             <col.icon
                               className={cn(
@@ -148,14 +148,14 @@ export function PermissionsEntityManager({
                     </div>
 
                     {/* Scope Badge */}
-                    <div className="flex items-center justify-between lg:flex-col gap-2 lg:w-40 lg:shrink-0 lg:items-end border-t lg:border-t-0 pt-3 lg:pt-0 mt-1 lg:mt-0">
-                      <span className="text-[9px] md:text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 lg:mr-1">
+                      <div className="flex items-center justify-between lg:flex-col gap-2 lg:w-40 lg:shrink-0 lg:items-end border-t lg:border-t-0 pt-3 mt-1">
+                      <span className="text-[9px] md:text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
                         Alcance
                       </span>
                       <Badge
                         variant="outline"
                         className={cn(
-                          "h-6 md:h-8 rounded-lg px-2 md:px-4 text-[9px] md:text-[11px] font-bold uppercase tracking-widest border-2",
+                          "h-6 md:h-8 rounded-lg px-2 text-[9px] md:text-[11px] font-bold uppercase tracking-widest border-2",
                           up.permissions.scope === "ALL" &&
                             "border-primary/20 bg-primary/5 text-primary",
                           up.permissions.scope === "OWN" &&
