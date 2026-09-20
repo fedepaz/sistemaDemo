@@ -38,14 +38,14 @@ const InfoRow = ({
     )}
   >
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+      <Icon className="h-3.5 w-3.5 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+      <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
         {label}
       </p>
       <div className="flex items-center gap-2">
-        <p className="text-xs md:text-base font-bold truncate text-foreground">
+        <p className="text-xs font-bold truncate text-foreground">
           {value ?? "-"}
         </p>
       </div>
@@ -57,19 +57,19 @@ export function SiembraPartidasRegistradasViewForm({
   selectedPartida,
 }: SiembraPartidasRegistradasViewFormProps) {
   return (
-    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] overflow-hidden">
       {/* HEADER */}
       <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-2 rounded-xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-2">
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-              <Package className="h-5 w-5 md:h-6 md:w-6" />
+              <Package className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+              <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
                 Partida #{selectedPartida.partidaId}
               </h2>
-              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 {selectedPartida.mezclaNombre}
               </p>
             </div>
@@ -92,13 +92,13 @@ export function SiembraPartidasRegistradasViewForm({
               className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
             >
                 <div className="p-1 bg-muted rounded-md shrink-0">
-                <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
+                <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
               </div>
               <div className="min-w-0">
-                <p className="text-[7px] md:text-[8px] font-bold uppercase leading-none mb-0.5">
+                <p className="text-[7px] font-bold uppercase leading-none mb-0.5">
                   {item.label}
                 </p>
-                <p className="text-[10px] md:text-xs truncate uppercase font-bold">
+                <p className="text-[10px] truncate uppercase font-bold">
                   {item.value}
                 </p>
               </div>
@@ -115,31 +115,31 @@ export function SiembraPartidasRegistradasViewForm({
         <TabsList className="grid grid-cols-3 bg-muted/80 p-1 rounded-xl shrink-0 h-10 border border-border/40 gap-1 shadow-inner">
           <TabsTrigger
             value="siembra"
-            className="rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <FlaskConical className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 hidden sm:inline-block" />
+            <FlaskConical className="h-3 w-3.5.5 mr-1 hidden sm:inline-block" />
             Siembra
           </TabsTrigger>
 
           <TabsTrigger
             value="lote"
-            className="rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <Layers className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 hidden sm:inline-block" />
+            <Layers className="h-3 w-3.5.5 mr-1 hidden sm:inline-block" />
             Lote
           </TabsTrigger>
 
           <TabsTrigger
             value="turno"
-            className="rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <Clock className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 hidden sm:inline-block" />
+            <Clock className="h-3 w-3.5.5 mr-1 hidden sm:inline-block" />
             Turno
           </TabsTrigger>
         </TabsList>
@@ -295,23 +295,23 @@ export function SiembraPartidasRegistradasViewForm({
                   <div className="col-span-2">
                     <div className="flex items-center gap-2 py-1.5 border-b border-border/40">
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-                        <Package className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                        <Package className="h-3.5 w-3.5 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-      <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+      <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
                           Empleados
                         </p>
                       </div>
                     </div>
                     {selectedPartida.empleados?.length ? (
                       <div className="ml-7">
-                        <table className="w-full text-xs md:text-sm">
+                        <table className="w-full text-xs">
                           <thead>
                             <tr className="border-b border-border/40">
-                              <th className="text-left py-1 font-bold text-[8px] md:text-[9px] uppercase tracking-widest text-muted-foreground/60">
+                              <th className="text-left py-1 font-bold text-[8px] uppercase tracking-widest text-muted-foreground/60">
                                 Usuario
                               </th>
-                              <th className="text-left py-1 font-bold text-[8px] md:text-[9px] uppercase tracking-widest text-muted-foreground/60">
+                              <th className="text-left py-1 font-bold text-[8px] uppercase tracking-widest text-muted-foreground/60">
                                 Nombre
                               </th>
                             </tr>
@@ -337,7 +337,7 @@ export function SiembraPartidasRegistradasViewForm({
                       </div>
                     ) : (
                       <div className="ml-7 py-2">
-                        <p className="text-xs md:text-base font-bold text-foreground">
+                        <p className="text-xs font-bold text-foreground">
                           -
                         </p>
                       </div>

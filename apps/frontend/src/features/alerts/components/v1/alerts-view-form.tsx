@@ -37,7 +37,7 @@ export function AlertsViewForm({
   const TypeIcon = config.icon;
 
   return (
-    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] overflow-hidden">
       {/* FIXED TOP SECTION: TYPE HEADER */}
       <div className="space-y-2 shrink-0">
         <div
@@ -49,13 +49,13 @@ export function AlertsViewForm({
         >
           <div className="flex items-center gap-2">
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-              <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
+              <TypeIcon className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+              <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
                 {config.label}
               </h2>
-              <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 {formatPartidaHeader(selectedAlert)}
               </p>
             </div>

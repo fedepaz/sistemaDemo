@@ -36,14 +36,14 @@ const InfoRow = ({
     )}
   >
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+      <Icon className="h-3.5 w-3.5 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
         {label}
       </p>
       <div className="flex items-center gap-2">
-        <p className="text-xs md:text-base font-bold truncate text-foreground">
+        <p className="text-xs font-bold truncate text-foreground">
           {value ?? "-"}
         </p>
       </div>
@@ -55,19 +55,19 @@ export function ProgramacionSiembraViewForm({
   selectedExtendido,
 }: ProgramacionSiembraFormProps) {
   return (
-    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] overflow-hidden">
       {/* FIXED TOP SECTION: PRODUCTO (Always Visible) */}
       <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-2 rounded-xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-2">
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-              <Package className="h-5 w-5 md:h-6 md:w-6" />
+              <Package className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+              <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
                 {selectedExtendido.codigoEspecie}
               </h2>
-              <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 {selectedExtendido.nombreEspecie}
               </p>
             </div>
@@ -75,7 +75,7 @@ export function ProgramacionSiembraViewForm({
         </div>
 
         {/* BASIC SPECS GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {[
             { label: "Año", value: selectedExtendido.anio, icon: Calendar },
             { label: "Índice", value: selectedExtendido.indice, icon: Hash },
@@ -87,13 +87,13 @@ export function ProgramacionSiembraViewForm({
               className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
             >
               <div className="p-1 bg-muted rounded-md shrink-0">
-                <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
+                <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs md:text-xs font-bold uppercase leading-none mb-0.5">
+                <p className="text-xs font-bold uppercase leading-none mb-0.5">
                   {item.label}
                 </p>
-                <p className="text-xs md:text-xs truncate uppercase font-bold">
+                <p className="text-xs truncate uppercase font-bold">
                   {item.value}
                 </p>
               </div>
@@ -145,13 +145,13 @@ export function ProgramacionSiembraViewForm({
                   className="flex items-center gap-2 py-2 border-b border-border/40 last:border-0"
                 >
                   <div className="p-1 bg-primary/5 rounded-md border border-primary/10 shrink-0">
-                    <item.icon className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
+                    <item.icon className="h-3 w-3.5.5 text-primary" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-0.5">
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-0.5">
                       {item.label}
                     </p>
-                    <p className="text-xs md:text-xs font-bold truncate text-foreground">
+                    <p className="text-xs font-bold truncate text-foreground">
                       {item.value ?? "-"}
                     </p>
                   </div>
