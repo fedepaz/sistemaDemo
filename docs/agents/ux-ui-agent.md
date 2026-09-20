@@ -112,7 +112,9 @@ Header heights at each breakpoint: `h-11` (44px, default) → `h-12` (48px, xl) 
 | `xl` | 1280px | Standard desktop / sidebar 192px, header 48px, padding 24px |
 | `2xl` | 1536px | Large desktop / sidebar 224px, header 56px, padding 32px |
 
-**Density principle**: As the viewport shrinks, components become MORE DENSER (smaller padding, shorter rows, tighter gaps) — not less. The goal is efficient use of available space at every viewport size.
+**Density principle**: Spacing classes (`p-*`, `gap-*`, `space-y-*`, `rounded-*`) are NOT responsive — they use the same value at all breakpoints. The wider viewport provides natural breathing room through width, not padding. Typography and icon sizes scale via `md:` prefix. This is the opposite of traditional responsive design where everything grows proportionally.
+
+**SlideOverForm exception**: The slide-over form and ALL its children are locked to mobile density at ALL viewports. Width is fixed at `max-w-lg` (512px). All `md:` prefixes removed from children — text, icons, layout, everything stays at mobile values. The compact feel is intentional.
 
 **Width-aware column visibility**: DataTable columns are hidden/shown based on container width, not fixed breakpoint indexes. Fixed columns (select, actions) always show. Data columns hide from right to left when space is insufficient (< 124px per column). This ensures optimal column count at any viewport size.
 

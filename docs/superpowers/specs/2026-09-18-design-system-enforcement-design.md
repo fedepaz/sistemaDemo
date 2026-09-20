@@ -178,7 +178,31 @@ Also update `data-table-skeleton.tsx` to match.
 
 ---
 
-## 6. What Does NOT Change
+## 6. Responsive Spacing Lock (Final Approach)
+
+**Rule:** Spacing classes (`p-*`, `gap-*`, `space-y-*`, `rounded-*`, `min-h-*`) are NOT responsive. They use the same value at all breakpoints. The wider viewport provides natural breathing room through width, not padding.
+
+**What is responsive (keeps `md:` prefix):**
+- Typography: `text-*` scales up at md
+- Icon sizes: `h-*/w-*` on icons scale up at md
+- Layout: `grid-cols-*`, `flex*`, `hidden`, `col-span-*`
+- Constraints: `max-h-*`, `max-w-*`
+
+**What is NOT responsive (no `md:` prefix):**
+- Padding: `p-*`, `px-*`, `py-*`, `pt-*`, `pb-*`, `pl-*`, `pr-*`
+- Margins: `mt-*`, `mb-*`, `ml-*`, `mr-*`, `mx-*`, `my-*`
+- Gaps: `gap-*`, `space-y-*`
+- Border-radius: `rounded-*`
+- Min-height: `min-h-*`
+
+**SlideOverForm exception:**
+- Width: locked at `max-w-lg` (512px) — no responsive width scaling
+- Children: ALL `md:` prefixes removed — text, icons, layout all at mobile values
+- The compact, dense feel is intentional at all viewports
+
+**Files affected:** 29 files, 163 class instances modified.
+
+## 7. What Does NOT Change
 
 - **Mobile experience** — already works, preserved
 - **Color system** — OKLCH tokens, semantic colors, all stay
@@ -187,6 +211,7 @@ Also update `data-table-skeleton.tsx` to match.
 - **Dark mode** — still disabled via `forcedTheme="light"`
 - **Component APIs** — no prop changes, no breaking changes to component interfaces
 - **Icon sizing** — `h-4 w-4` etc. stay as-is (icon sizes are functional, not density-related)
+- **Data tables** — excluded from spacing lock (already dense)
 
 ---
 
