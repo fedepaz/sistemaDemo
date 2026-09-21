@@ -154,7 +154,7 @@ export function ProgramacionSiembraDataTable({
         <SelectTrigger className="h-8 w-[140px] rounded-full bg-background border-border/40 focus:ring-primary/20 text-xs font-bold uppercase tracking-tight">
           <SelectValue placeholder="Semana" />
         </SelectTrigger>
-        <SelectContent className="rounded-xl border-border/60 shadow-2xl">
+        <SelectContent className="rounded-xl border-border/60 shadow-2xl max-h-[250px] md:max-h-[300px]">
           <SelectItem value="all" className="font-bold text-primary italic">
             Todas
           </SelectItem>
