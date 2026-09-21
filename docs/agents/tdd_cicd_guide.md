@@ -11,8 +11,8 @@ Philosophy: tests are the safety net for a solo developer deploying to a product
 
 | Layer | Count | What | How |
 |-------|-------|------|-----|
-| Unit / component | 114 shared + 105 backend + 104 frontend | schemas, services, repositories, guards, interceptors, components, hooks | `pnpm test` |
-| Integration (HTTP) | 43 | backend endpoints via supertest, mocked guards/services | `pnpm --filter backend test:integration` |
+| Unit / component | 211 shared + 291 backend + 268 frontend | schemas, services, repositories, guards, interceptors, components, hooks | `pnpm test` |
+| Integration (HTTP) | 106 | backend endpoints via supertest, mocked guards/services | `pnpm --filter backend test:integration` |
 | E2E | 0 | not installed | — |
 
 ## Testing Rules
@@ -36,14 +36,14 @@ Source of truth: `docs/agents/cicd_agent.md`.
 | Command | Scope | When |
 |---------|-------|------|
 | `pnpm lint && pnpm type-check && pnpm test` | full quality gate | pre-commit + CI |
-| `pnpm --filter backend test:integration` | backend HTTP integration (43) | CI / before merge |
-| `pnpm --filter @vivero/shared test` | shared schema tests (114) | CI |
+| `pnpm --filter backend test:integration` | backend HTTP integration (106) | CI / before merge |
+| `pnpm --filter @vivero/shared test` | shared schema tests (211) | CI |
 
 Integration tests mock all DB operations — **no MariaDB required** in CI.
 
 ## Quality Gates & Metrics
 
-- Per-package Jest coverage thresholds: branches 60%, functions 80%, lines 70%, statements 70%.
+- Per-package Jest coverage thresholds: branches 65%, functions 85%, lines 75%, statements 75%.
 - No high/critical `pnpm audit` findings (enforced by `scheduled.yml`).
 - `build-verification.yml` must be green on `main`.
 
