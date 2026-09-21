@@ -109,7 +109,7 @@ export function TaskShift({
                   <SelectTrigger className="w-[70px] h-8 text-xs">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {HOURS.map((h) => (
                       <SelectItem key={h} value={h} className="text-xs">{h}</SelectItem>
                     ))}
@@ -126,7 +126,7 @@ export function TaskShift({
                   <SelectTrigger className="w-[70px] h-8 text-xs">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {MINUTES.map((m) => (
                       <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>
                     ))}
@@ -150,7 +150,7 @@ export function TaskShift({
                   <SelectTrigger className="w-[70px] h-8 text-xs">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {HOURS.map((h) => (
                       <SelectItem key={h} value={h} className="text-xs">{h}</SelectItem>
                     ))}
@@ -167,7 +167,7 @@ export function TaskShift({
                   <SelectTrigger className="w-[70px] h-8 text-xs">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {MINUTES.map((m) => (
                       <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>
                     ))}

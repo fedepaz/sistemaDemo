@@ -161,7 +161,7 @@ export function ASembrarEditForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent
-                    className="rounded-md"
+                    className="rounded-md max-h-[250px] md:max-h-[300px]"
                     position="popper"
                   >
                     {depositos?.map((dep) => (
@@ -236,7 +236,7 @@ export function ASembrarEditForm({
                         <SelectValue placeholder="Seleccionar prensado sustrato" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="rounded-md">
+                    <SelectContent className="rounded-md max-h-[250px] md:max-h-[300px]">
                       {PrensadoSustratoValues.map((v) => (
                         <SelectItem
                           key={v}

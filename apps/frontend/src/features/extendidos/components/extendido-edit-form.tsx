@@ -93,7 +93,7 @@ export function ExtendidosEditForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent
-                    className="rounded-md"
+                    className="rounded-md max-h-[250px] md:max-h-[300px]"
                     position="popper"
                   >
                     {depositos?.map((dep) => (
