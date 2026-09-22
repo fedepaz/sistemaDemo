@@ -83,7 +83,7 @@ export function EntityDataTable() {
             summaryFields: ["name", "label", "permissionType"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             <EntityCreateForm
               form={formCreateEntity}
               onSubmit={handleCreate}

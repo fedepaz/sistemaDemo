@@ -151,10 +151,10 @@ export function ProgramacionSiembraDataTable({
     <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
       <CalendarDays className="h-3 w-3 text-muted-foreground" />
       <Select value={selectedWeek} onValueChange={setSelectedWeek}>
-        <SelectTrigger className="h-8 w-[140px] rounded-full bg-background border-border/40 focus:ring-primary/20 text-[10px] font-bold uppercase tracking-tight">
+        <SelectTrigger className="h-8 w-[140px] rounded-full bg-background border-border/40 focus:ring-primary/20 text-xs font-bold uppercase tracking-tight">
           <SelectValue placeholder="Semana" />
         </SelectTrigger>
-        <SelectContent className="rounded-xl border-border/60 shadow-2xl">
+        <SelectContent className="rounded-xl border-border/60 shadow-2xl max-h-[250px] md:max-h-[300px]">
           <SelectItem value="all" className="font-bold text-primary italic">
             Todas
           </SelectItem>
@@ -211,7 +211,7 @@ export function ProgramacionSiembraDataTable({
             summaryFields: ["partidaId", "anio", "indice"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             {mode === "view" ? (
               <ProgramacionSiembraViewForm
                 selectedExtendido={selectedPartida}

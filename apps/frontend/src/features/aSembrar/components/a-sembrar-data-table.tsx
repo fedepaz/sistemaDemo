@@ -113,7 +113,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
             summaryFields: ["cg", "cantidaNroCont", "prensadoSustrato", "profundidadSemilla", "tratamientoSemilla", "sustrato", "metodoMaquina", "detalleExtendido", "startTime", "endTime"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             <ASembrarEditForm
               form={formCompletar}
               onSubmit={handleCompletar}

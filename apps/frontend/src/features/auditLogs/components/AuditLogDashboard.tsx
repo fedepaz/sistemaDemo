@@ -7,7 +7,7 @@ import { LoadingBoundary } from "@/components/common/loading-boundary";
 
 export function AuditLogDashboard() {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       <ErrorBoundary>
         <LoadingBoundary skeleton={<AuditLogDashboardSkeleton />}>
           <AuditLogDataTable />

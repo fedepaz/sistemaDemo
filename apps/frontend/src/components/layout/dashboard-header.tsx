@@ -53,8 +53,8 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
-      <div className="w-full px-1 sm:px-2 md:px-3 lg:px-4">
-        <div className="flex h-14 items-center justify-between">
+      <div className="w-full px-1">
+        <div className="flex h-10 xl:h-12 2xl:h-14 items-center justify-between">
           {/* Logo and Mobile Navigation */}
           <div className="flex items-center space-x-3">
             <MobileNavigation />
@@ -129,12 +129,12 @@ export function DashboardHeader() {
             {/* Week Display with Tooltip */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex items-center px-3 border-r border-border/50 h-14 cursor-help">
+                <div className="flex items-center px-3 border-r border-border/50 h-(--header-height-compact) xl:h-12 cursor-help">
                   <div className="flex flex-col items-end">
-                    <p className="text-xl font-black text-foreground tracking-tighter leading-none">
+                    <p className="text-lg xl:text-xl font-black text-foreground tracking-tighter leading-none">
                       S{weekNum}
                     </p>
-                    <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
                       Semana
                     </p>
                   </div>

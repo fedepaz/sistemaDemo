@@ -63,6 +63,56 @@
   --shadow-premium: 0px 4px 12px -2px hsl(0 0% 0% / 0.08), 0px 2px 4px -2px hsl(0 0% 0% / 0.06);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
+
+  /* Density spacing tokens */
+  --space-0: 0px;
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Control height tokens */
+  --control-height-xs: 24px;
+  --control-height-sm: 28px;
+  --control-height: 32px;
+  --control-height-md: 36px;
+  --control-height-lg: 40px;
+
+  /* Table density tokens */
+  --table-header-height: 36px;
+  --table-row-height: 40px;
+  --table-cell-px: 12px;
+  --table-cell-py: 4px;
+
+  /* Compact table density (for intermediate viewports) */
+  --table-compact-header-height: 32px;
+  --table-compact-row-height: 32px;
+  --table-compact-cell-px: 8px;
+  --table-compact-cell-py: 2px;
+
+  /* Typography tokens */
+  --text-caption: 11px;
+  --text-body-sm: 12px;
+  --text-body: 14px;
+  --text-body-lg: 16px;
+  --text-subtitle: 18px;
+  --text-title: 20px;
+  --text-heading: 24px;
+
+  /* Sidebar tokens */
+  --sidebar-width-compact: 160px;
+  --sidebar-width: 224px;
+  --sidebar-width-collapsed: 56px;
+
+  /* Header tokens */
+  --header-height-compact: 40px;
+  --header-height: 48px;
 }
 
 .dark {
@@ -179,15 +229,21 @@
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
 
+  /* Typography: remap Tailwind text sizes to token values */
+  --text-xs: var(--text-caption);      /* 11px (was 12px) */
+  --text-sm: var(--text-body-sm);      /* 12px (was 14px) */
+  --text-base: var(--text-body);       /* 14px (was 16px) */
+  --text-lg: var(--text-body-lg);      /* 16px (was 18px) */
+  --text-xl: var(--text-subtitle);     /* 18px (was 20px) */
+  --text-2xl: var(--text-title);       /* 20px (was 24px) */
+  --text-3xl: var(--text-heading);     /* 24px (was 30px) */
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --breakpoint-md: 1280px;
-  --breakpoint-lg: 1536px;
-  --breakpoint-xl: 1920px;
-  --breakpoint-2xl: 2560px;
+
 
   --shadow-2xs: var(--shadow-2xs);
   --shadow-xs: var(--shadow-xs);

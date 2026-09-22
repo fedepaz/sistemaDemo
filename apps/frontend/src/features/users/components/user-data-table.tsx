@@ -115,7 +115,7 @@ export function UsersDataTable() {
                 Activar usuarios
                 <Badge
                   variant="destructive"
-                  className="ml-1.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold justify-center rounded-full"
+                  className="ml-1.5 h-4 min-w-[1rem] px-1 text-xs font-bold justify-center rounded-full"
                 >
                   {usersToActivate.length}
                 </Badge>
@@ -168,7 +168,7 @@ export function UsersDataTable() {
             summaryFields: ["firstName", "lastName", "email"],
           }}
         >
-          <div className="space-y-2">
+          <div className="flex flex-col gap-3">
             <UserEditForm
               form={formEditUser}
               onSubmit={handleUpdate}

@@ -210,7 +210,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
         ) : (
           <div className="flex flex-col">
             {/* Search + column headers */}
-            <div className="sticky top-0 z-10 flex flex-col gap-2 md:gap-4 border-b bg-background/95 backdrop-blur-md px-3 py-3 md:px-6 md:py-4 lg:flex-row lg:items-center">
+            <div className="sticky top-0 z-10 flex flex-col gap-2 border-b bg-background/95 backdrop-blur-md px-3 py-3 lg:flex-row lg:items-center">
               <div className="relative flex-1 group">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
                 <Input
@@ -223,7 +223,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
               {!canEdit ? (
                 <Badge
                   variant="outline"
-                  className="h-8 md:h-9 px-3 md:px-4 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[9px] md:text-[10px] uppercase tracking-widest gap-2"
+                  className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[9px] md:text-[10px] uppercase tracking-widest gap-2"
                 >
                   <Shield className="h-3 md:h-3.5 w-3 md:h-3.5" />
                   Modo lectura
@@ -233,10 +233,10 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
 
             {/* Rows */}
             <ScrollArea className="flex flex-col bg-muted/5">
-              <div className="flex flex-col gap-4 md:gap-6 p-3 md:p-6">
+              <div className="flex flex-col gap-4 p-3">
                 {totalResults === 0 ? (
                   // ✅ Empty state mejorado
-                  <div className="flex flex-col items-center justify-center py-8 md:py-12 text-center">
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
                     <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-muted flex items-center justify-center mb-3">
                       <Search className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground/40" />
                     </div>
@@ -250,7 +250,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="mt-3 md:mt-4 h-8 text-[10px]"
+                        className="mt-3 h-8 text-[10px]"
                         onClick={() => setSearchQuery("")}
                       >
                         <RotateCcw className="h-3 w-3 mr-1.5" />
@@ -265,9 +265,9 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                     if (rows.length === 0) return null;
 
                     return (
-                      <div key={type} className="space-y-2 md:space-y-3">
+                      <div key={type} className="space-y-2">
                         {/* Header del grupo */}
-                        <div className="flex items-center gap-2 md:gap-3 px-1 py-1 md:py-2">
+                        <div className="flex items-center gap-2 px-1 py-1">
                           <div
                             className={cn(
                               "h-4 md:h-6 w-1 md:w-1.5 rounded-full",
@@ -283,7 +283,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                             <Badge
                               variant="secondary"
                               className={cn(
-                                "text-[10px] md:text-xs font-bold px-1.5 md:px-2 py-0.5 rounded-md",
+                                "text-[10px] md:text-xs font-bold px-1.5 py-0.5 rounded-md",
                                 GROUP_COLORS[type],
                               )}
                             >
@@ -296,7 +296,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                         <div className="h-px bg-border/30 mx-1" />
 
                         {/* Filas del grupo */}
-                        <div className="space-y-2 md:space-y-3">
+                        <div className="space-y-2">
                           {rows.map((row) => {
                             const originalRow = userPermissions[
                               row.tableName
@@ -337,7 +337,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
       {tables.length > 0 && canEdit ? (
         <>
           <Separator className="opacity-50" />
-          <CardFooter className="flex flex-col gap-3 md:gap-4 items-center justify-between px-4 py-4 md:px-6 md:py-6 bg-muted/5 sm:flex-row">
+          <CardFooter className="flex flex-col gap-2 items-center justify-between px-4 py-4 bg-muted/5 sm:flex-row">
             <div className="flex items-center gap-2">
               <div
                 className={cn(
@@ -359,7 +359,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                 size="sm"
                 onClick={handleDiscard}
                 disabled={!isDirty || !canEdit}
-                className="flex-1 md:h-11 h-9 gap-1.5 md:gap-2 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
+                className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
               >
                 <RotateCcw className="h-3.5 md:h-4 w-3.5 md:w-4" />
                 Descartar
@@ -368,7 +368,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                 size="sm"
                 onClick={handleSave}
                 disabled={!isDirty || isSaving || !canEdit}
-                className="flex-1 md:h-11 h-9 gap-1.5 md:gap-2 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
+                className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
               >
                 {isSaving ? (
                   <div className="h-3.5 md:h-4 w-3.5 md:w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />

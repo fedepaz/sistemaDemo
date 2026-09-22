@@ -53,30 +53,30 @@ export function AlertEditForm({
       <form
         id="alert-comment-form"
         onSubmit={alertCommentsForm.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 md:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* Type-specific header */}
-        <div className="space-y-3 md:space-y-4 shrink-0">
+        <div className="space-y-2 shrink-0">
           <div
             className={cn(
-              "flex items-center justify-between bg-primary/5 p-3 md:p-4 rounded-xl md:rounded-2xl border border-primary/20 shadow-sm",
+              "flex items-center justify-between bg-primary/5 p-3 rounded-xl border border-primary/20 shadow-sm",
               config.bgColor,
               config.borderColor,
             )}
           >
-            <div className="flex items-center gap-3 md:gap-4">
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg md:rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-                <TypeIcon className="h-5 w-5 md:h-6 md:w-6" />
+            <div className="flex items-center gap-2">
+              <div className="h-10 w-10 h-12 w-12 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                <TypeIcon className="h-5 w-5 h-6 w-6" />
               </div>
               <div>
-                <h2 className="text-base md:text-xl font-black tracking-tight leading-none text-foreground uppercase">
+                <h2 className="text-base text-xl font-black tracking-tight leading-none text-foreground uppercase">
                   {config.label}
                 </h2>
-                <p className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 md:mt-1.5">
+                <p className="text-[9px] text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                   Partida #{selectedAlert.partidaId}/{selectedAlert.indice} ·
                   Año {selectedAlert.anio}
                 </p>
-                <p className="text-[9px] md:text-[10px] font-mono text-primary mt-0.5">
+                <p className="text-[9px] text-[11px] font-mono text-primary mt-0.5">
                   {selectedAlert.codigoEspecie} · {selectedAlert.nombreEspecie}
                 </p>
               </div>
@@ -85,7 +85,7 @@ export function AlertEditForm({
         </div>
 
         {/* Conversation message thread */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium">
@@ -99,7 +99,7 @@ export function AlertEditForm({
                 <div
                   key={i}
                   className={cn(
-                    "flex items-start gap-3",
+                    "flex items-start gap-2",
                     i % 2 === 0 ? "" : "flex-row-reverse",
                   )}
                 >
@@ -118,7 +118,7 @@ export function AlertEditForm({
                 <div
                   key={comment.id}
                   className={cn(
-                    "flex items-start gap-3",
+                    "flex items-start gap-2",
                     isMe && "flex-row-reverse",
                   )}
                 >
@@ -174,19 +174,19 @@ export function AlertEditForm({
           control={alertCommentsForm.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="space-y-2 md:space-y-3">
+            <FormItem className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg">
-                  <MessageSquare className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                <div className="p-1.5 bg-primary/10 rounded-lg">
+                  <MessageSquare className="h-3.5 w-3.5 h-4 w-4 text-primary" />
                 </div>
-                <FormLabel className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
                   Nuevo Comentario
                 </FormLabel>
               </div>
               <FormControl>
                 <Textarea
                   placeholder="Escribe tu comentario..."
-                  className="min-h-[80px] md:min-h-[120px] rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base p-4 leading-relaxed focus:ring-primary/20"
+                  className="min-h-[60px] rounded-xl border-border/60 bg-background shadow-sm text-sm p-3 leading-relaxed focus:ring-primary/20"
                   {...field}
                 />
               </FormControl>

@@ -183,9 +183,9 @@ export function SlideOverForm({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="w-full sm:max-w-xl md:max-w-2xl flex flex-col h-dvh p-0">
-          <SheetHeader className="px-6 py-4 border-b shrink-0">
-            <SheetTitle className="text-xl">{title}</SheetTitle>
+        <SheetContent className="w-full max-w-lg flex flex-col h-dvh p-0">
+          <SheetHeader className="px-3 py-2 border-b shrink-0">
+            <SheetTitle className="text-lg">{title}</SheetTitle>
             {description ? (
               <SheetDescription className="text-xs">
                 {description}
@@ -197,7 +197,7 @@ export function SlideOverForm({
             )}
           </SheetHeader>
           {validationErrors.length > 0 && (
-            <div className="mx-6 mt-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+            <div className="mx-3 mt-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
               <div className="flex items-center gap-2 mb-2">
                 <AlertTriangle className="h-4 w-4 text-destructive" />
                 <span className="text-sm font-medium text-destructive">
@@ -212,13 +212,13 @@ export function SlideOverForm({
             </div>
           )}
           <div className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full px-6 py-4" tabIndex={-1}>
-              <div className="space-y-4" tabIndex={-1}>
+              <ScrollArea className="h-full px-3 py-2" tabIndex={-1}>
+              <div className="space-y-2" tabIndex={-1}>
                 {children}
               </div>
             </ScrollArea>
           </div>
-          <SheetFooter className="px-6 py-3 border-t shrink-0">
+          <SheetFooter className="px-3 py-2 border-t shrink-0">
             {isViewMode ? (
               <Button
                 onClick={handleCancel}
@@ -265,14 +265,14 @@ export function SlideOverForm({
           <AlertDialogContent className="border-primary/80">
             <AlertDialogHeader>
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20">
-                  <HelpCircle className="h-6 w-6 text-primary" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+                  <HelpCircle className="h-5 w-5 text-primary" />
                 </div>
-                <AlertDialogTitle className="text-xl">
+                <AlertDialogTitle className="text-lg">
                   {confirm.title}
                 </AlertDialogTitle>
               </div>
-              <AlertDialogDescription className="text-base pt-2">
+              <AlertDialogDescription className="text-sm pt-1">
                 {confirm.description}
               </AlertDialogDescription>
               {confirm.summaryFields.length > 0 && (
@@ -296,14 +296,14 @@ export function SlideOverForm({
             <AlertDialogFooter>
               <AlertDialogCancel
                 disabled={isLoading}
-                className="min-h-[48px] min-w-[100px]"
+                className="h-9"
               >
                 Cancelar
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleConfirmSubmit}
                 disabled={isLoading}
-                className="min-h-[48px] min-w-[100px] bg-primary text-primary-foreground hover:bg-primary/90"
+                className="h-9 bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {isLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
