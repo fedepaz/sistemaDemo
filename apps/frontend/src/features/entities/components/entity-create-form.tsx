@@ -88,7 +88,7 @@ export function EntityCreateForm({ onSubmit, formId, form }: FormProps) {
                     <SelectValue placeholder="Selecciona tipo" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="rounded-xl border-border/60 shadow-2xl p-1">
+                <SelectContent className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]">
                   <SelectItem value="CRUD" className="font-bold">CRUD (Estándar)</SelectItem>
                   <SelectItem value="READ_ONLY" className="font-bold">Solo Lectura</SelectItem>
                   <SelectItem value="PROCESS" className="font-bold">Proceso (Ejecución)</SelectItem>

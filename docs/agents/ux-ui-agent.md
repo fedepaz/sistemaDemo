@@ -165,6 +165,23 @@ Focus on these proven interface patterns:
 - **Batch Management Interfaces** - Handling multiple records as cohesive groups
 - **Mobile Data Entry Forms** - Optimized input patterns
 
+#### Select Dropdowns (Critical)
+
+**SelectContent MUST always include `max-h-[250px] md:max-h-[300px]`** to prevent dropdown truncation when option lists exceed viewport height. The Radix UI `--radix-select-content-available-height` CSS variable can compute incorrect values when Select components are nested inside containers with `overflow-hidden` or `overflow-y-auto` (common in form layouts with `max-h-[calc(100dvh-130px)]`).
+
+```tsx
+// ✅ Correct — always add max-h
+<SelectContent className="rounded-md max-h-[250px] md:max-h-[300px]">
+
+// ✅ Correct — works with existing classes
+<SelectContent className="rounded-xl border-border/60 shadow-2xl max-h-[250px] md:max-h-[300px]">
+
+// ❌ Broken — dropdown clips when options overflow
+<SelectContent className="rounded-md">
+```
+
+This applies to ALL SelectContent instances: edit forms, create forms, data table filters, and time pickers.
+
 #### Sidebar Navigation
 
 - **Grouped and Collapsible:** To manage complexity and improve scannability, primary navigation in sidebars should be organized into collapsible groups based on user workflow (e.g., "Operations," "Management").

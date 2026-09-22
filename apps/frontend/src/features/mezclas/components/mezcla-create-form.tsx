@@ -64,7 +64,7 @@ function SustratoSlot({
                     <SelectValue placeholder="Seleccionar sustrato" />
                   </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="max-h-[250px] md:max-h-[300px]">
                 {sustratos.map((s) => (
                   <SelectItem key={s.id} value={s.id}>
                     {s.nombre}
