@@ -89,3 +89,51 @@ export function createTaskShiftsMock() {
     updateTaskShift: jest.fn(),
   };
 }
+
+export function createAlertSolvedMock() {
+  return {
+    getSolvedAlerts: jest.fn(),
+    createSolvedAlert: jest.fn(),
+  };
+}
+
+export function createBillboardMock() {
+  return {
+    getUnreadMessages: jest.fn(),
+    markAsRead: jest.fn(),
+  };
+}
+
+export function createMezclaMock() {
+  return {
+    getAllMezcla: jest.fn(),
+    getMezclaById: jest.fn(),
+    createMezcla: jest.fn(),
+  };
+}
+
+export function createSiembraPartidasMock() {
+  return {
+    getAllSiembraPartidas: jest.fn(),
+    getSiembraPartidaById: jest.fn(),
+    findPendingSiembraPartidas: jest.fn(),
+    desautorizarSiembra: jest.fn(),
+  };
+}
+
+export function createSustratosMock() {
+  return {
+    getAllSustratos: jest.fn(),
+    getSustratoById: jest.fn(),
+    createSustrato: jest.fn(),
+    updateSustrato: jest.fn(),
+  };
+}
+
+export function createAuditLogMock() {
+  return {
+    getAllAuditLogs: jest.fn(),
+    getAllByTenantName: jest.fn(),
+    getAllByUserId: jest.fn(),
+  };
+}
