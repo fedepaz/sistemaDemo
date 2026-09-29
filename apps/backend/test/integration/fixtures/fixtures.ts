@@ -108,3 +108,126 @@ export const mockTaskShift = () => ({
   updatedAt: '2026-08-10T12:00:00.000Z',
   employees: [{ userId: 'clemployee000000000000000' }],
 });
+
+// ── AlertSolved ──────────────────────────────────────────────────────────────
+
+export const validCreateAlertSolvedPayload = () => ({
+  partidaId: 1,
+  anio: 2026,
+  indice: 1,
+});
+
+export const mockAlertSolvedDto = () => ({
+  id: 'clalertsov0000000000000000',
+  partidaId: 1,
+  anio: 2026,
+  indice: 1,
+  userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  userName: 'testuser',
+  createdAt: '2026-09-01T10:00:00.000Z',
+});
+
+// ── Billboard ────────────────────────────────────────────────────────────────
+
+export const mockBillboardMessage = () => ({
+  id: 'clbillbmsg000000000000000',
+  title: 'System Update',
+  body: 'Scheduled maintenance tonight',
+  tag: 'maintenance',
+  createdAt: '2026-09-01T10:00:00.000Z',
+});
+
+export const validMarkBillboardReadPayload = () => ({
+  messageIds: ['clbillbmsg000000000000000'],
+});
+
+// ── Mezcla ───────────────────────────────────────────────────────────────────
+
+export const validCreateMezclaPayload = () => ({
+  sustrato1Id: 'c000000000000000000000001',
+  porcentaje1: 60,
+  sustrato2Id: 'c000000000000000000000002',
+  porcentaje2: 40,
+  sustrato3Id: null,
+  porcentaje3: null,
+  sustrato4Id: null,
+  porcentaje4: null,
+});
+
+export const mockMezclaDto = () => ({
+  id: 'clmezclamoc000000000000',
+  sustrato1Id: 'c00000000000000000000001',
+  sustrato1Nombre: 'Turf',
+  porcentaje1: 60,
+  sustrato2Id: 'c00000000000000000000002',
+  sustrato2Nombre: 'Perlite',
+  porcentaje2: 40,
+  sustrato3Id: null,
+  sustrato3Nombre: null,
+  porcentaje3: null,
+  sustrato4Id: null,
+  sustrato4Nombre: null,
+  porcentaje4: null,
+  isActive: true,
+  createdAt: new Date('2026-01-01'),
+});
+
+// ── SiembraPartidas ──────────────────────────────────────────────────────────
+
+export const mockSiembraPartidaDto = () => ({
+  id: 'clsiepmoc0000000000000000',
+  partidaId: 1,
+  anio: 2026,
+  indice: 1,
+  codigoEspecie: 'TOM',
+  nombreEspecie: 'Tomate',
+  metodoMaquina: true,
+  prensadoSustrato: 10,
+  profundidadSemilla: '2.5',
+  tratamientoSemilla: 'TMT01',
+  sustrato: null,
+  sustratoNombre: undefined,
+  mezclaId: 'c00000000000000000000002',
+  userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  mezclaNombre: 'Turf (100%)',
+  usuarioNombre: 'testuser',
+  createdAt: new Date('2026-01-01').toISOString(),
+});
+
+// ── Sustratos ─────────────────────────────────────────────────────────────────
+
+export const validCreateSustratoPayload = () => ({
+  nombre: 'Perlita',
+});
+
+export const validUpdateSustratoPayload = () => ({
+  nombre: 'Perlita Actualizada',
+});
+
+export const mockSustratoDto = () => ({
+  id: 'clsusmoc0000000000000000',
+  nombre: 'Perlita',
+  createdAt: new Date('2026-01-01'),
+});
+
+// ── AuditLog ──────────────────────────────────────────────────────────────────
+
+export const mockAuditLogEntry = () => ({
+  id: 'claudmoc0000000000000000',
+  tenantId: '12345678-1234-1234-1234-123456789012',
+  userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  action: 'CREATE',
+  entityType: 'USER',
+  entityId: 'clmockuser000000000000000',
+  changes: { endpoint: '/users', method: 'POST' },
+  ipAddress: '127.0.0.1',
+  userAgent: 'test-agent',
+  createdAt: new Date('2026-09-01T10:00:00.000Z'),
+});
+
+export const mockAuditLogPaginatedResponse = () => ({
+  data: [mockAuditLogEntry()],
+  total: 1,
+  page: 1,
+  limit: 50,
+});

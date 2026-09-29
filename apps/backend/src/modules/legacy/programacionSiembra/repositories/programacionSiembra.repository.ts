@@ -35,25 +35,19 @@ export class ProgramacionSiembraRepository {
     l.g,
     l.camara AS diasCamara,
         DATE_ADD(p.f_siembra, INTERVAL l.camara DAY) AS fechaEgresoCamara,
+      rubro.codigo,
     rubro.nombre AS rubroNombre
   FROM partidas p
   LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)
-   LEFT JOIN (
-     SELECT codigo, MIN(nombre) AS nombre
-     FROM rubro
-     GROUP BY codigo
-   ) rubro ON rubro.codigo = articulo.rubro 
+  LEFT JOIN especie ON especie.codigo = p.espvar
+  LEFT JOIN rubro ON especie.rubro = rubro.codigo
    LEFT JOIN partidas1 l
       ON p.partida=l.partida
       AND p.ano=l.ano
       AND p.indice=l.indice
-  LEFT JOIN partidas2 p2
-      ON p.partida=p2.partida
-      AND p.ano=p2.ano
-      AND p.indice=p2.indice
   WHERE p.estado <> 'ANULADA' AND p.f_siembra=0 AND p.hai<>'A' 
-	AND p.sem_siem<=WEEK(CURRENT_DATE()) AND p.ano>2025
-	ORDER BY p.ano, p.partida
+        AND p.sem_siem<=WEEK(CURRENT_DATE()) AND p.ano>2025
+        ORDER BY p.ano, p.partida
   `;
     return this.legacyDb.query<LegacyProgramacionSiembra[]>(sql);
   }

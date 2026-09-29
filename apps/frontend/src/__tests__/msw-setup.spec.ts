@@ -1,10 +1,6 @@
 import { server } from './setup';
 import { http, HttpResponse } from 'msw';
 
-beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
 describe('MSW Setup', () => {
   it('intercepts API requests', async () => {
     const response = await fetch('http://localhost/api/users');

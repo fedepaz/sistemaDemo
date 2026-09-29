@@ -16,13 +16,13 @@ Guarantee AgriManage's backend, frontend, and shared packages stay green across 
 
 | Package | Runner | Suite | Count | Where |
 |---------|--------|-------|-------|-------|
-| Shared | Jest | schema/unit | **114** (12 suites) | `packages/shared/src/**/__tests__` |
-| Backend | Jest | unit | **105** (13 suites) | `apps/backend/src/**/*.spec.ts` |
-| Backend | Jest + supertest | HTTP integration | **43** (6 suites) | `apps/backend/test/integration/*.spec.ts` |
-| Frontend | Jest + Testing Library | unit/component | **104** (28 suites) | `apps/frontend/src/**/*.test.*` |
+| Shared | Jest | schema/unit | **211** (19 suites) | `packages/shared/src/**/__tests__` |
+| Backend | Jest | unit | **291** (41 suites) | `apps/backend/src/**/*.spec.ts` |
+| Backend | Jest + supertest | HTTP integration | **106** (13 suites) | `apps/backend/test/integration/*.spec.ts` |
+| Frontend | Jest + Testing Library | unit/component | **268** (69 suites) | `apps/frontend/src/**/*.test.*` |
 
 - **No Vitest, no Playwright, no k6, no OWASP ZAP.**
-- Coverage thresholds per package (`branches 60%`, `functions 80%`, `lines 70%`, `statements 70%`).
+- Coverage thresholds per package (`branches 65%`, `functions 85%`, `lines 75%`, `statements 75%`).
 
 ## Context-Driven Operation
 
@@ -33,11 +33,13 @@ Guarantee AgriManage's backend, frontend, and shared packages stay green across 
   - Guards (AuthGuard, PermissionsGuard) mocked at module level — no real JWT/DB needed.
   - Services mocked for deterministic responses.
   - Run with `pnpm --filter backend test:integration` (from the root).
-  - Integration suites: alerts (4), auth (18), entities (6), permissions (5), siembra (3), users (7).
+  - Integration suites: alerts (4), alertSolved (6), auth (18), auditLog (14), billboard (5), entities (6), mezcla (8), permissions (5), siembraPartidas (10), siembra (3), sustratos (8), taskShifts (10), users (7).
 
 ### Frontend Testing
 
 - Component tests with `@testing-library/react`: DataTable, forms (React Hook Form + Zod), hooks, query invalidation, auth flows, modals, error handling.
+- MSW wired globally in `jest.setup.ts` for API mocking.
+- Accessibility testing with `jest-axe` (see `src/lib/testing/accessibility-utils.ts`).
 
 ### Shared Testing
 
@@ -70,7 +72,7 @@ Deployment is **manual** (Windows server + Cloudflare Tunnel) — GitHub Actions
 ## Quality Gates
 
 - [ ] `pnpm lint && pnpm type-check && pnpm test` green (root).
-- [ ] `pnpm --filter backend test:integration` green (43 tests).
+- [ ] `pnpm --filter backend test:integration` green (106 tests).
 - [ ] No new high/critical findings from `pnpm audit`.
 - [ ] New features ship with tests written first (TDD).
 
