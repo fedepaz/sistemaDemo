@@ -237,52 +237,32 @@ export function partidaSiembraColumns(
 
 export const partidaSiembraExportColumns: ExportColumn<ProgramacionSiembraDto>[] =
   [
-    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
-    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
-    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
-    { accessorKey: "propiedad", exportHeader: "Propiedad", pdfWidth: "10%" },
-    { accessorKey: "sem_siembra", exportHeader: "Semilla", pdfWidth: "10%" },
-    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
-    {
-      accessorKey: "fechaSugeridaSiembra",
-      exportHeader: "Siembra Sugerida",
-      exportValue: (value) => formatShortDate(value as string),
-      pdfWidth: "13%",
-    },
-    {
-      accessorKey: "semEntrega",
-      exportHeader: "Sem. Entrega",
-      pdfWidth: "13%",
-    },
+    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "7%" },
+    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "8%" },
+    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "12%" },
+    { accessorKey: "rubroNombre", exportHeader: "Rubro", pdfWidth: "10%" },
+    { accessorKey: "propiedad", exportHeader: "P/L", pdfWidth: "4%" },
+    { accessorKey: "sem_siembra", exportHeader: "Sem Siem", pdfWidth: "7%" },
+    { accessorKey: "nrocont", exportHeader: "Cant", pdfWidth: "6%" },
     {
       accessorKey: "anoLote",
       exportHeader: "Año/Lote",
       exportValue: (_value, row) => `${row.anoLote} - ${row.lote}`,
+      pdfWidth: "7%",
+    },
+    { accessorKey: "semxgr", exportHeader: "Gr Sem", pdfWidth: "6%" },
+    { accessorKey: "c", exportHeader: "C", pdfWidth: "4%" },
+    { accessorKey: "g", exportHeader: "G", pdfWidth: "4%" },
+    { accessorKey: "diasCamara", exportHeader: "D. Cámara", pdfWidth: "6%" },
+    {
+      accessorKey: "fechaSugeridaSiembra",
+      exportHeader: "Siembra Sug.",
+      exportValue: (value) => formatShortDate(value as string),
+      pdfWidth: "9%",
+    },
+    {
+      accessorKey: "semEntrega",
+      exportHeader: "Sem Entrega",
       pdfWidth: "10%",
-    },
-    {
-      accessorKey: "semxgr",
-      exportHeader: "Sem/Gr",
-      pdfWidth: "8%",
-    },
-    {
-      accessorKey: "c",
-      exportHeader: "C",
-      pdfWidth: "5%",
-    },
-    {
-      accessorKey: "g",
-      exportHeader: "G",
-      pdfWidth: "5%",
-    },
-    {
-      accessorKey: "diasCamara",
-      exportHeader: "D. Cámara",
-      pdfWidth: "8%",
-    },
-    {
-      accessorKey: "rubroNombre",
-      exportHeader: "Rubro",
-      pdfWidth: "12%",
     },
   ];

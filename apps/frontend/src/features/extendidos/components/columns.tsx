@@ -166,35 +166,35 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
 export const partidaExportColumns: ExportColumn<ExtendidoDto>[] = [
   { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
   { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
-  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
+  { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "16%" },
   { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
 
   {
     accessorKey: "codigoCamaraGerminacion",
-    exportHeader: "Cámara",
+    exportHeader: "Nª Cámara",
     pdfWidth: "8%",
   },
   {
     accessorKey: "fechaSugeridaSiembra",
-    exportHeader: "Siembra Sugerida",
+    exportHeader: "Siembra Sug.",
     exportValue: (value) => formatShortDate(value as string),
-    pdfWidth: "10%",
+    pdfWidth: "11%",
   },
   {
     accessorKey: "fechaSiembraReal",
     exportHeader: "Siembra Real",
     exportValue: (value) => formatShortDate(value as string),
-    pdfWidth: "10%",
+    pdfWidth: "11%",
   },
   {
     accessorKey: "fechaEgresoCamara",
     exportHeader: "Fecha a Extender",
     exportValue: (value) => formatShortDate(value as string),
-    pdfWidth: "10%",
+    pdfWidth: "16%",
   },
   {
     accessorKey: "diasEnCamara",
-    exportHeader: "Días en Cámara",
-    pdfWidth: "7%",
+    exportHeader: "Días",
+    pdfWidth: "10%",
   },
 ];
