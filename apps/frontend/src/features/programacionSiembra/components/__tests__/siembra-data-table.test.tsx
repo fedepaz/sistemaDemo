@@ -13,8 +13,8 @@ jest.mock("@/features/permissions", () => ({
   useTableByName: () => ({ data: { permissionType: "CRUD", id: "cperm001entitysiembrat" } }),
 }));
 
-jest.mock("../mezclaSelector", () => ({
-  MezclaSelector: () => <div data-testid="mezcla-selector" />,
+jest.mock("../formulaSelector", () => ({
+  FormulaSelector: () => <div data-testid="formula-selector" />,
 }));
 
 jest.mock("../tratamientoSearch", () => ({

@@ -23,7 +23,7 @@ import { LegacyTratamientoService } from '../legacy/tratamiento/tratamiento.serv
 import { LegacySustratoService } from '../legacy/sustrato/sustrato.service';
 
 const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
-const GENERIC_MEZCLA_SUSTRATO1_ID = 'c00000000000000000000001';
+const GENERIC_PRODUCTO1_ID = 'c00000000000000000000001';
 
 @Injectable()
 export class SiembraPartidasService {
@@ -37,46 +37,46 @@ export class SiembraPartidasService {
     private readonly sustratoService: LegacySustratoService,
   ) {}
 
-  private async getOrCreateGenericMezcla(): Promise<string> {
-    const sustrato = await this.prisma.sustratos.upsert({
+  private async getOrCreateGenericFormula(): Promise<string> {
+    const producto = await this.prisma.producto.upsert({
       where: { nombre: GENERIC_SUSTRATO_NAME },
       update: {},
       create: {
-        id: GENERIC_MEZCLA_SUSTRATO1_ID,
+        id: GENERIC_PRODUCTO1_ID,
         nombre: GENERIC_SUSTRATO_NAME,
       },
     });
 
-    const mezcla = await this.prisma.mezcla.upsert({
+    const formula = await this.prisma.formula.upsert({
       where: { id: 'c00000000000000000000002' },
       update: {},
       create: {
         id: 'c00000000000000000000002',
-        sustrato1Id: sustrato.id,
+        producto1Id: producto.id,
         porcentaje1: 100,
       },
     });
 
-    return mezcla.id;
+    return formula.id;
   }
 
-  private buildMezclaNombre(
-    mezcla: SiembraPartidasWithRelations['mezcla'],
+  private buildFormulaNombre(
+    formula: SiembraPartidasWithRelations['formula'],
   ): string {
     const parts: string[] = [];
-    if (mezcla.sustrato1 && mezcla.porcentaje1 != null) {
-      parts.push(`${mezcla.sustrato1.nombre} (${mezcla.porcentaje1}%)`);
+    if (formula.producto1 && formula.porcentaje1 != null) {
+      parts.push(`${formula.producto1.nombre} (${formula.porcentaje1}%)`);
     }
-    if (mezcla.sustrato2 && mezcla.porcentaje2 != null) {
-      parts.push(`${mezcla.sustrato2.nombre} (${mezcla.porcentaje2}%)`);
+    if (formula.producto2 && formula.porcentaje2 != null) {
+      parts.push(`${formula.producto2.nombre} (${formula.porcentaje2}%)`);
     }
-    if (mezcla.sustrato3 && mezcla.porcentaje3 != null) {
-      parts.push(`${mezcla.sustrato3.nombre} (${mezcla.porcentaje3}%)`);
+    if (formula.producto3 && formula.porcentaje3 != null) {
+      parts.push(`${formula.producto3.nombre} (${formula.porcentaje3}%)`);
     }
-    if (mezcla.sustrato4 && mezcla.porcentaje4 != null) {
-      parts.push(`${mezcla.sustrato4.nombre} (${mezcla.porcentaje4}%)`);
+    if (formula.producto4 && formula.porcentaje4 != null) {
+      parts.push(`${formula.producto4.nombre} (${formula.porcentaje4}%)`);
     }
-    return parts.length > 0 ? parts.join(' + ') : 'Sin mezcla';
+    return parts.length > 0 ? parts.join(' + ') : 'Sin fórmula';
   }
 
   private async buildTratamientoNombre(
@@ -175,9 +175,9 @@ export class SiembraPartidasService {
       tratamientoSemilla: row.tratamientoSemilla,
       sustrato: row.sustrato ?? undefined,
       sustratoNombre,
-      mezclaId: row.mezclaId,
+      formulaId: row.formulaId,
       userId: row.userId,
-      mezclaNombre: this.buildMezclaNombre(row.mezcla),
+      formulaNombre: this.buildFormulaNombre(row.formula),
       usuarioNombre: row.user.username,
       // Legacy fields
       cg: legacyData?.cg,
@@ -269,7 +269,8 @@ export class SiembraPartidasService {
     data: CreateSiembraPartidaDto,
     requesterId: string,
   ): Promise<SiembraPartidaDto> {
-    const mezclaId = data.mezclaId ?? (await this.getOrCreateGenericMezcla());
+    const formulaId =
+      data.formulaId ?? (await this.getOrCreateGenericFormula());
 
     const row = await this.repo.createSiembraPartida({
       partidaId: data.partidaId,
@@ -286,9 +287,9 @@ export class SiembraPartidasService {
       stockSalidasAntes: data.stockSalidasAntes,
       stockEntradasDespues: data.stockEntradasDespues,
       stockSalidasDespues: data.stockSalidasDespues,
-      mezcla: {
+      formula: {
         connect: {
-          id: mezclaId,
+          id: formulaId,
         },
       },
       user: {
@@ -347,7 +348,7 @@ export class SiembraPartidasService {
       );
     }
 
-    const mezclaId = await this.getOrCreateGenericMezcla();
+    const formulaId = await this.getOrCreateGenericFormula();
 
     const row = await this.repo.createSiembraPartida({
       partidaId: data.partidaId,
@@ -357,7 +358,7 @@ export class SiembraPartidasService {
       prensadoSustrato: 0,
       profundidadSemilla: 0,
       tratamientoSemilla: '',
-      mezcla: { connect: { id: mezclaId } },
+      formula: { connect: { id: formulaId } },
       user: { connect: { id: requesterId } },
     });
 
@@ -466,7 +467,9 @@ export class SiembraPartidasService {
       profundidadSemilla: data.profundidadSemilla,
       tratamientoSemilla: data.tratamientoSemilla,
       sustrato: data.sustrato,
-      ...(data.mezclaId ? { mezcla: { connect: { id: data.mezclaId } } } : {}),
+      ...(data.formulaId
+        ? { formula: { connect: { id: data.formulaId } } }
+        : {}),
     });
 
     const full = await this.repo.findById(id, requesterId);

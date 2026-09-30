@@ -3,8 +3,8 @@ import { partidaSiembraExportColumns } from "@/features/programacionSiembra/comp
 import { aSembrarExportColumns } from "@/features/aSembrar/components/columns";
 import { partidaExportColumns } from "@/features/extendidos/components/columns";
 import { siembraPartidasRegistradasExportColumns } from "@/features/siembraPartidas/components/columns";
-import { sustratoExportColumns } from "@/features/sustratos/components/columns";
-import { mezclaExportColumns } from "@/features/mezclas/components/columns";
+import { productoExportColumns } from "@/features/productos/components/columns";
+import { formulaExportColumns } from "@/features/formulas/components/columns";
 import { userExportColumns } from "@/features/users/components/columns";
 import { auditLogExportColumns } from "@/features/auditLogs/components/columns";
 import {
@@ -25,8 +25,8 @@ const exportArrays: Array<[string, ExportColumn<never>[]]> = [
     "siembraPartidasRegistradas",
     siembraPartidasRegistradasExportColumns as ExportColumn<never>[],
   ],
-  ["sustratos", sustratoExportColumns as ExportColumn<never>[]],
-  ["mezclas", mezclaExportColumns as ExportColumn<never>[]],
+  ["productos", productoExportColumns as ExportColumn<never>[]],
+  ["formulas", formulaExportColumns as ExportColumn<never>[]],
   ["users", userExportColumns as ExportColumn<never>[]],
   ["auditLogs", auditLogExportColumns as ExportColumn<never>[]],
   ["alerts/siembraRetrasada", siembraRetrasadaExportColumns as ExportColumn<never>[]],

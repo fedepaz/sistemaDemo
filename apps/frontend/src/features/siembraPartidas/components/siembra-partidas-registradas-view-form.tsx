@@ -155,11 +155,11 @@ export function SiembraPartidasRegistradasViewForm({
             <Card className="border-border/60 shadow-sm rounded-xl overflow-hidden bg-card/50">
               <CardContent className="p-3 space-y-2">
                 <div className="grid grid-cols-2 gap-0.5">
-                  {/* until we implement mezcla
+                  {/* until we implement fórmula
                   <InfoRow
                     icon={FlaskConical}
-                    label="Mezcla"
-                    value={selectedPartida.mezclaNombre}
+                    label="Fórmula"
+                    value={selectedPartida.formulaNombre}
                     className="border-primary/5"
                   />
                   */}

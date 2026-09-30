@@ -1,0 +1,20 @@
+model Producto {
+    id          String @id @default(cuid())
+    nombre      String @unique
+
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  formulaProducto1 Formula[] @relation("producto1")
+  formulaProducto2 Formula[] @relation("producto2")
+  formulaProducto3 Formula[] @relation("producto3")
+  formulaProducto4 Formula[] @relation("producto4")
+
+
+  deletedByUserId String?
+    deletedByUser User? @relation("deleted_productos", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  deletedAt DateTime? @db.Timestamp(0)
+}

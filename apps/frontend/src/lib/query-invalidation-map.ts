@@ -13,8 +13,8 @@ import {
   extendidosQueryKeys,
   programacionSiembraQueryKeys,
   programacionSiembraPartidasRegistradasQueryKeys,
-  sustratoQueryKeys,
-  mezclaQueryKeys,
+  productoQueryKeys,
+  formulaQueryKeys,
   alertCommentsQueryKeys,
   alertsQueryKeys,
   taskShiftQueryKeys,
@@ -101,14 +101,14 @@ export const mutationInvalidationMap = {
     ],
   },
 
-  // --- Sustratos ---
-  createSustrato: {
-    queries: () => [sustratoQueryKeys.all()],
+  // --- Productos ---
+  createProducto: {
+    queries: () => [productoQueryKeys.all()],
   },
 
-  // --- Mezclas ---
-  createMezcla: {
-    queries: () => [mezclaQueryKeys.all()],
+  // --- Fórmulas ---
+  createFormula: {
+    queries: () => [formulaQueryKeys.all()],
   },
 
   // --- Alert Comments ---

@@ -97,7 +97,7 @@ export class PartidasService {
       sustrato: data.sustrato,
       startTime: data.startTime,
       endTime: data.endTime,
-      mezclaId: data.mezclaId,
+      formulaId: data.formulaId,
     };
 
     if (data.lote === 0 || data.anoLote === 0) {

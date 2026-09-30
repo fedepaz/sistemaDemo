@@ -33,20 +33,20 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     permissionType: "Tipo de permiso",
   },
 
-  // ── Sustratos ─────────────────────────────────────────────────────
-  CreateSustrato: {
+  // ── Productos ─────────────────────────────────────────────────────
+  CreateProducto: {
     nombre: "Nombre",
   },
 
-  // ── Mezclas ───────────────────────────────────────────────────────
-  CreateMezcla: {
-    sustrato1Id: "Sustrato 1",
+  // ── Fórmulas ──────────────────────────────────────────────────────
+  CreateFormula: {
+    producto1Id: "Producto 1",
     porcentaje1: "Porcentaje 1",
-    sustrato2Id: "Sustrato 2",
+    producto2Id: "Producto 2",
     porcentaje2: "Porcentaje 2",
-    sustrato3Id: "Sustrato 3",
+    producto3Id: "Producto 3",
     porcentaje3: "Porcentaje 3",
-    sustrato4Id: "Sustrato 4",
+    producto4Id: "Producto 4",
     porcentaje4: "Porcentaje 4",
   },
 
@@ -79,7 +79,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     prensadoSustrato: "Prensado",
     profundidadSemilla: "Profundidad de semilla",
     tratamientoSemilla: "Tratamiento de semilla",
-    mezclaId: "Mezcla",
+    formulaId: "Fórmula",
   },
   AsignarUbiSiembraCompleta: {
     partidaId: "Partida",
@@ -101,7 +101,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     profundidadSemilla: "Profundidad de semilla",
     tratamientoSemilla: "Tratamiento de semilla",
     sustrato: "Sustrato",
-    mezclaId: "Mezcla",
+    formulaId: "Fórmula",
     entityId: "Entidad",
     startTime: "Hora de inicio",
     endTime: "Hora de fin",
@@ -124,7 +124,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     profundidadSemilla: "Profundidad",
     tratamientoSemilla: "Tratamiento",
     tratamientoNombre: "Tratamiento",
-    mezclaNombre: "Mezcla",
+    formulaNombre: "Fórmula",
     detalleExtendido: "Detalle",
     stockLote: "Stock Lote",
     stockAnio: "Stock Año",
@@ -178,15 +178,15 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     diasEnCamara: "Días",
   },
 
-  // ── Mezclas (data table columns) ──────────────────────────────────
-  Mezcla: {
-    sustrato1Nombre: "Sustrato 1",
+  // ── Fórmulas (data table columns) ─────────────────────────────────
+  Formula: {
+    producto1Nombre: "Producto 1",
     porcentaje1: "% 1",
-    sustrato2Nombre: "Sustrato 2",
+    producto2Nombre: "Producto 2",
     porcentaje2: "% 2",
-    sustrato3Nombre: "Sustrato 3",
+    producto3Nombre: "Producto 3",
     porcentaje3: "% 3",
-    sustrato4Nombre: "Sustrato 4",
+    producto4Nombre: "Producto 4",
     porcentaje4: "% 4",
     createdAt: "Fecha de creación",
   },
@@ -221,8 +221,8 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     profundidadSemilla: "Profundidad",
     tratamientoSemilla: "Tratamiento",
     tratamientoNombre: "Tratamiento",
-    mezclaId: "Mezcla",
-    mezclaNombre: "Mezcla",
+    formulaId: "Fórmula",
+    formulaNombre: "Fórmula",
     entityId: "Entidad",
     entityNombre: "Entidad",
     startTime: "Hora Inicio",
@@ -247,8 +247,8 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     fPreexp: "Pre-exp.",
   },
 
-  // ── Sustratos (data table columns) ────────────────────────────────
-  Sustrato: {
+  // ── Productos (data table columns) ────────────────────────────────
+  Producto: {
     nombre: "Nombre",
     createdAt: "Fecha de creación",
   },

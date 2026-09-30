@@ -141,32 +141,32 @@ export const validMarkBillboardReadPayload = () => ({
   messageIds: ['clbillbmsg000000000000000'],
 });
 
-// ── Mezcla ───────────────────────────────────────────────────────────────────
+// ── Formula ───────────────────────────────────────────────────────────────────
 
-export const validCreateMezclaPayload = () => ({
-  sustrato1Id: 'c000000000000000000000001',
+export const validCreateFormulaPayload = () => ({
+  producto1Id: 'c000000000000000000000001',
   porcentaje1: 60,
-  sustrato2Id: 'c000000000000000000000002',
+  producto2Id: 'c000000000000000000000002',
   porcentaje2: 40,
-  sustrato3Id: null,
+  producto3Id: null,
   porcentaje3: null,
-  sustrato4Id: null,
+  producto4Id: null,
   porcentaje4: null,
 });
 
-export const mockMezclaDto = () => ({
-  id: 'clmezclamoc000000000000',
-  sustrato1Id: 'c00000000000000000000001',
-  sustrato1Nombre: 'Turf',
+export const mockFormulaDto = () => ({
+  id: 'clformulamoc000000000000',
+  producto1Id: 'c00000000000000000000001',
+  producto1Nombre: 'Turf',
   porcentaje1: 60,
-  sustrato2Id: 'c00000000000000000000002',
-  sustrato2Nombre: 'Perlite',
+  producto2Id: 'c00000000000000000000002',
+  producto2Nombre: 'Perlite',
   porcentaje2: 40,
-  sustrato3Id: null,
-  sustrato3Nombre: null,
+  producto3Id: null,
+  producto3Nombre: null,
   porcentaje3: null,
-  sustrato4Id: null,
-  sustrato4Nombre: null,
+  producto4Id: null,
+  producto4Nombre: null,
   porcentaje4: null,
   isActive: true,
   createdAt: new Date('2026-01-01'),
@@ -187,24 +187,24 @@ export const mockSiembraPartidaDto = () => ({
   tratamientoSemilla: 'TMT01',
   sustrato: null,
   sustratoNombre: undefined,
-  mezclaId: 'c00000000000000000000002',
+  formulaId: 'c00000000000000000000002',
   userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-  mezclaNombre: 'Turf (100%)',
+  formulaNombre: 'Turf (100%)',
   usuarioNombre: 'testuser',
   createdAt: new Date('2026-01-01').toISOString(),
 });
 
-// ── Sustratos ─────────────────────────────────────────────────────────────────
+// ── Productos ────────────────────────────────────────────────────────────────
 
-export const validCreateSustratoPayload = () => ({
+export const validCreateProductoPayload = () => ({
   nombre: 'Perlita',
 });
 
-export const validUpdateSustratoPayload = () => ({
+export const validUpdateProductoPayload = () => ({
   nombre: 'Perlita Actualizada',
 });
 
-export const mockSustratoDto = () => ({
+export const mockProductoDto = () => ({
   id: 'clsusmoc0000000000000000',
   nombre: 'Perlita',
   createdAt: new Date('2026-01-01'),

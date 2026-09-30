@@ -73,7 +73,7 @@ describe('ProgramacionSiembra (integration)', () => {
           cantidaNroCont: 50,
           startTime: '2026-01-15T08:00:00.000Z',
           endTime: '2026-01-15T17:00:00.000Z',
-          mezclaId: 'clmocksiembra0000000000000',
+          formulaId: 'clmocksiembra0000000000000',
           semxgr: 421,
           employeeUserIds: [],
         })

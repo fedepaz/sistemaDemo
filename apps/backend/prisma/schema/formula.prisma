@@ -1,0 +1,30 @@
+model Formula {
+    id          String @id @default(cuid())
+    producto1Id String
+    porcentaje1  Int
+    producto1   Producto @relation("producto1", fields: [producto1Id], references: [id])
+
+    producto2Id String?
+    porcentaje2  Int?
+    producto2   Producto? @relation("producto2", fields: [producto2Id], references: [id])
+
+    producto3Id String?
+    porcentaje3  Int?
+    producto3   Producto? @relation("producto3", fields: [producto3Id], references: [id])
+
+    producto4Id String?
+    porcentaje4  Int?
+    producto4   Producto? @relation("producto4", fields: [producto4Id], references: [id])
+
+    siembraPartidas SiembraPartidas[]
+
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  deletedByUserId String?
+    deletedByUser User? @relation("deleted_formulas", fields: [deletedByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  deletedAt DateTime? @db.Timestamp(0)
+}

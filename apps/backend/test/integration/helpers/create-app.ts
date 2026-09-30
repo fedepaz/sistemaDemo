@@ -20,12 +20,12 @@ import { AlertSolvedController } from '../../../src/modules/alertSolved/alertSol
 import { AlertSolvedService } from '../../../src/modules/alertSolved/alertSolved.service';
 import { BillboardController } from '../../../src/modules/billboard/billboard.controller';
 import { BillboardService } from '../../../src/modules/billboard/billboard.service';
-import { MezclaController } from '../../../src/modules/mezcla/mezcla.controller';
-import { MezclaService } from '../../../src/modules/mezcla/mezcla.service';
+import { FormulaController } from '../../../src/modules/formula/formula.controller';
+import { FormulaService } from '../../../src/modules/formula/formula.service';
 import { SiembraPartidasController } from '../../../src/modules/siembraPartidas/siembraPartidas.controller';
 import { SiembraPartidasService } from '../../../src/modules/siembraPartidas/siembraPartidas.service';
-import { SustratosController } from '../../../src/modules/sustratos/sustratos.controller';
-import { SustratosService } from '../../../src/modules/sustratos/sustratos.service';
+import { ProductosController } from '../../../src/modules/productos/productos.controller';
+import { ProductosService } from '../../../src/modules/productos/productos.service';
 import { AuditLogController } from '../../../src/modules/auditLog/auditLog.controller';
 import { AuditLogService } from '../../../src/modules/auditLog/auditLog.service';
 import { MockAuthGuard, MockPermissionsGuard } from './mock-guards';
@@ -40,9 +40,9 @@ import {
   createTaskShiftsMock,
   createAlertSolvedMock,
   createBillboardMock,
-  createMezclaMock,
+  createFormulaMock,
   createSiembraPartidasMock,
-  createSustratosMock,
+  createProductosMock,
   createAuditLogMock,
 } from './mock-factories';
 
@@ -57,9 +57,9 @@ export interface ServiceOverrides {
   taskShifts?: ReturnType<typeof createTaskShiftsMock>;
   alertSolved?: ReturnType<typeof createAlertSolvedMock>;
   billboard?: ReturnType<typeof createBillboardMock>;
-  mezcla?: ReturnType<typeof createMezclaMock>;
+  formula?: ReturnType<typeof createFormulaMock>;
   siembraPartidas?: ReturnType<typeof createSiembraPartidasMock>;
-  sustratos?: ReturnType<typeof createSustratosMock>;
+  productos?: ReturnType<typeof createProductosMock>;
   auditLog?: ReturnType<typeof createAuditLogMock>;
 }
 
@@ -77,10 +77,10 @@ export async function createTestApp(
   const taskShiftsMock = overrides?.taskShifts ?? createTaskShiftsMock();
   const alertSolvedMock = overrides?.alertSolved ?? createAlertSolvedMock();
   const billboardMock = overrides?.billboard ?? createBillboardMock();
-  const mezclaMock = overrides?.mezcla ?? createMezclaMock();
+  const formulaMock = overrides?.formula ?? createFormulaMock();
   const siembraPartidasMock =
     overrides?.siembraPartidas ?? createSiembraPartidasMock();
-  const sustratosMock = overrides?.sustratos ?? createSustratosMock();
+  const productosMock = overrides?.productos ?? createProductosMock();
   const auditLogMock = overrides?.auditLog ?? createAuditLogMock();
 
   const module: TestingModule = await Test.createTestingModule({
@@ -94,9 +94,9 @@ export async function createTestApp(
       TaskShiftsController,
       AlertSolvedController,
       BillboardController,
-      MezclaController,
+      FormulaController,
       SiembraPartidasController,
-      SustratosController,
+      ProductosController,
       AuditLogController,
     ],
     providers: [
@@ -115,9 +115,9 @@ export async function createTestApp(
       { provide: TaskShiftsService, useValue: taskShiftsMock },
       { provide: AlertSolvedService, useValue: alertSolvedMock },
       { provide: BillboardService, useValue: billboardMock },
-      { provide: MezclaService, useValue: mezclaMock },
+      { provide: FormulaService, useValue: formulaMock },
       { provide: SiembraPartidasService, useValue: siembraPartidasMock },
-      { provide: SustratosService, useValue: sustratosMock },
+      { provide: ProductosService, useValue: productosMock },
       { provide: AuditLogService, useValue: auditLogMock },
     ],
   }).compile();

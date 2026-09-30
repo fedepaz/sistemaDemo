@@ -22,7 +22,7 @@ describe('SiembraPartidasController', () => {
     prensadoSustrato: 25,
     profundidadSemilla: '1.525',
     tratamientoSemilla: '',
-    mezclaId: 'mezcla-1',
+    formulaId: 'formula-1',
     userId: 'user-1',
   };
 
