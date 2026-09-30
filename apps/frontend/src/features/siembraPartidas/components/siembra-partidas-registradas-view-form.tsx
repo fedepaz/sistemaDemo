@@ -70,7 +70,9 @@ export function SiembraPartidasRegistradasViewForm({
                 Partida #{selectedPartida.partidaId}
               </h2>
               <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                {selectedPartida.mezclaNombre}
+                {selectedPartida.sustratoNombre ||
+                  selectedPartida.sustrato ||
+                  "-"}
               </p>
             </div>
           </div>
@@ -91,7 +93,7 @@ export function SiembraPartidasRegistradasViewForm({
               key={idx}
               className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
             >
-                <div className="p-1 bg-muted rounded-md shrink-0">
+              <div className="p-1 bg-muted rounded-md shrink-0">
                 <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
               </div>
               <div className="min-w-0">
@@ -294,11 +296,11 @@ export function SiembraPartidasRegistradasViewForm({
                   />
                   <div className="col-span-2">
                     <div className="flex items-center gap-2 py-1.5 border-b border-border/40">
-    <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
+                      <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
                         <Package className="h-3.5 w-3.5 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-      <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
                           Empleados
                         </p>
                       </div>
@@ -337,9 +339,7 @@ export function SiembraPartidasRegistradasViewForm({
                       </div>
                     ) : (
                       <div className="ml-7 py-2">
-                        <p className="text-xs font-bold text-foreground">
-                          -
-                        </p>
+                        <p className="text-xs font-bold text-foreground">-</p>
                       </div>
                     )}
                   </div>

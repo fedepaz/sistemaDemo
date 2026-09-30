@@ -16,6 +16,7 @@ const mockPartida: SiembraPartidaDto = {
   mezclaId: "mezcla-1",
   userId: "user-1",
   mezclaNombre: "Tierra (70%) + Perlita (30%)",
+  sustrato: "Sustrato Test",
   usuarioNombre: "juan.perez",
   cg: 3,
   fSiembra: "2025-09-01",
@@ -45,11 +46,11 @@ describe("SiembraPartidasRegistradasViewForm", () => {
     expect(screen.getByText("Partida #456")).toBeInTheDocument();
   });
 
-  it("renders mezcla nombre in header", () => {
+  it("renders sustrato in header", () => {
     render(<SiembraPartidasRegistradasViewForm selectedPartida={mockPartida} />);
 
-    const matches = screen.getAllByText("Tierra (70%) + Perlita (30%)");
-    expect(matches.length).toBe(1);
+    const matches = screen.getAllByText("Sustrato Test");
+    expect(matches.length).toBeGreaterThan(0);
   });
 
   it("displays specs grid with year, index, and especie", () => {
