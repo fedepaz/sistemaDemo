@@ -10,7 +10,7 @@ export const EXPORT_CONFIG = {
   pdf: {
     ...PDF_THEME,
     fontSize: 6,
-    margins: { top: 85, bottom: 30, left: 30, right: 30 },
+    margins: { top: 85, bottom: 30, left: 5, right: 5 },
     pageSize: "A4" as const,
   },
   csv: {

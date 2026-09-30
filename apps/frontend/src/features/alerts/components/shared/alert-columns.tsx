@@ -388,47 +388,47 @@ export const faltaPreExpedicionColumns: ColumnDef<FaltaPreExpedicionDto>[] = [
 
 export const siembraRetrasadaExportColumns: ExportColumn<SiembraRetrasadaDto>[] =
   [
-    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
-    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
-    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
-    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
+    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
+    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
+    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "22%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "12%" },
 
     {
       accessorKey: "fechaSugeridaSiembra",
       exportHeader: "Fecha Sug. Siembra",
-      pdfWidth: "12%",
+      pdfWidth: "16%",
     },
-    { accessorKey: "semEntrega", exportHeader: "Sem Entrega", pdfWidth: "12%" },
-    { accessorKey: "propiedad", exportHeader: "Propiedad", pdfWidth: "8%" },
+    { accessorKey: "semSiembra", exportHeader: "Sem Siembra", pdfWidth: "14%" },
+    { accessorKey: "propiedad", exportHeader: "Propiedad", pdfWidth: "14%" },
   ];
 
 export const faltaGerminacionExportColumns: ExportColumn<FaltaGerminacionDto>[] =
   [
-    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
-    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
-    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
-    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "12%" },
-    { accessorKey: "fPrimer", exportHeader: "Fecha Primer", pdfWidth: "15%" },
-    { accessorKey: "pr", exportHeader: "PR", pdfWidth: "10%" },
+    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "12%" },
+    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "14%" },
+    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "26%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "14%" },
+    { accessorKey: "fPrimer", exportHeader: "Fecha Primer", pdfWidth: "20%" },
+    { accessorKey: "pr", exportHeader: "PR", pdfWidth: "14%" },
   ];
 
 export const faltantePlantasExportColumns: ExportColumn<FaltantePlantasDto>[] =
   [
-    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "8%" },
-    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "10%" },
-    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "15%" },
-    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "10%" },
-    { accessorKey: "solicito", exportHeader: "Solicitadas", pdfWidth: "10%" },
-    { accessorKey: "producido", exportHeader: "Producido", pdfWidth: "10%" },
-    { accessorKey: "diferencia", exportHeader: "Diferencia", pdfWidth: "10%" },
+    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
+    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
+    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "20%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "12%" },
+    { accessorKey: "solicito", exportHeader: "Solicitadas", pdfWidth: "14%" },
+    { accessorKey: "producido", exportHeader: "Producido", pdfWidth: "14%" },
+    { accessorKey: "diferencia", exportHeader: "Diferencia", pdfWidth: "18%" },
   ];
 
 export const faltaPreExpedicionExportColumns: ExportColumn<FaltaPreExpedicionDto>[] =
   [
-    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "10%" },
-    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "12%" },
-    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "18%" },
-    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "12%" },
-    { accessorKey: "fPreexp", exportHeader: "Fecha Pre-Exp", pdfWidth: "15%" },
-    { accessorKey: "pe", exportHeader: "PE", pdfWidth: "10%" },
+    { accessorKey: "partidaId", exportHeader: "Partida", pdfWidth: "12%" },
+    { accessorKey: "codigoEspecie", exportHeader: "Código", pdfWidth: "14%" },
+    { accessorKey: "nombreEspecie", exportHeader: "Especie", pdfWidth: "26%" },
+    { accessorKey: "nrocont", exportHeader: "Cantidad", pdfWidth: "14%" },
+    { accessorKey: "fPreexp", exportHeader: "Fecha Pre-Exp", pdfWidth: "20%" },
+    { accessorKey: "pe", exportHeader: "PE", pdfWidth: "14%" },
   ];

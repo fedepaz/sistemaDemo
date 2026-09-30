@@ -23,6 +23,7 @@ const mockPartidas: SiembraPartidaDto[] = [
     mezclaId: "mezcla-1",
     userId: "user-1",
     mezclaNombre: "Tierra (70%) + Perlita (30%)",
+    sustratoNombre: "Sustrato Test",
     usuarioNombre: "juan.perez",
     cg: 3,
     fSiembra: "2025-09-01",
@@ -103,6 +104,6 @@ describe("SiembraPartidasRegistradasDataTable", () => {
     });
 
     expect(screen.getByText("Partida #456")).toBeInTheDocument();
-    expect(screen.getAllByText("Tierra (70%) + Perlita (30%)").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("Sustrato Test").length).toBeGreaterThanOrEqual(1);
   });
 });
