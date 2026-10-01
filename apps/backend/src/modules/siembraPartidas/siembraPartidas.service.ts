@@ -24,6 +24,7 @@ import { LegacySustratoService } from '../legacy/sustrato/sustrato.service';
 
 const GENERIC_SUSTRATO_NAME = 'Sustrato Genérico';
 const GENERIC_PRODUCTO1_ID = 'c00000000000000000000001';
+const GENERIC_FORMULA_ID = 'c00000000000000000000002';
 
 @Injectable()
 export class SiembraPartidasService {
@@ -37,7 +38,13 @@ export class SiembraPartidasService {
     private readonly sustratoService: LegacySustratoService,
   ) {}
 
-  private async getOrCreateGenericFormula(): Promise<string> {
+  async ensureGenericFormula(): Promise<string> {
+    const existing = await this.prisma.formula.findUnique({
+      where: { id: GENERIC_FORMULA_ID },
+      select: { id: true },
+    });
+    if (existing) return existing.id;
+
     const producto = await this.prisma.producto.upsert({
       where: { nombre: GENERIC_SUSTRATO_NAME },
       update: {},
@@ -48,10 +55,10 @@ export class SiembraPartidasService {
     });
 
     const formula = await this.prisma.formula.upsert({
-      where: { id: 'c00000000000000000000002' },
+      where: { id: GENERIC_FORMULA_ID },
       update: {},
       create: {
-        id: 'c00000000000000000000002',
+        id: GENERIC_FORMULA_ID,
         producto1Id: producto.id,
         porcentaje1: 100,
       },
@@ -269,8 +276,7 @@ export class SiembraPartidasService {
     data: CreateSiembraPartidaDto,
     requesterId: string,
   ): Promise<SiembraPartidaDto> {
-    const formulaId =
-      data.formulaId ?? (await this.getOrCreateGenericFormula());
+    const formulaId = data.formulaId ?? (await this.ensureGenericFormula());
 
     const row = await this.repo.createSiembraPartida({
       partidaId: data.partidaId,
@@ -348,7 +354,7 @@ export class SiembraPartidasService {
       );
     }
 
-    const formulaId = await this.getOrCreateGenericFormula();
+    const formulaId = await this.ensureGenericFormula();
 
     const row = await this.repo.createSiembraPartida({
       partidaId: data.partidaId,
