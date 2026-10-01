@@ -65,7 +65,7 @@ describe("FormulaSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages.some((m) => m.includes("sustrato 1"))).toBe(true);
+      expect(messages.some((m) => m.includes("producto 1"))).toBe(true);
     }
   });
 
@@ -89,7 +89,7 @@ describe("CreateFormulaSchema", () => {
     expect(result.producto1Id).toBe("clx1234567890abcdef123467");
   });
 
-  it("accepts single sustrato with 100%", () => {
+  it("accepts single producto with 100%", () => {
     const result = CreateFormulaSchema.parse({
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: 100,
@@ -146,7 +146,7 @@ describe("CreateFormulaSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages.some((m) => m.includes("sustrato 1"))).toBe(true);
+      expect(messages.some((m) => m.includes("producto 1"))).toBe(true);
     }
   });
 
@@ -162,5 +162,99 @@ describe("CreateFormulaSchema", () => {
         porcentaje4: null,
       }),
     ).toThrow();
+  });
+
+  it("rejects negative porcentaje1", () => {
+    const result = CreateFormulaSchema.safeParse({
+      producto1Id: "clx1234567890abcdef123467",
+      porcentaje1: -5,
+      producto2Id: null,
+      porcentaje2: null,
+      producto3Id: null,
+      porcentaje3: null,
+      producto4Id: null,
+      porcentaje4: null,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((i) => i.path.includes("porcentaje1"))).toBe(true);
+    }
+  });
+
+  it("rejects non-integer porcentaje1", () => {
+    const result = CreateFormulaSchema.safeParse({
+      producto1Id: "clx1234567890abcdef123467",
+      porcentaje1: 33.3,
+      producto2Id: null,
+      porcentaje2: null,
+      producto3Id: null,
+      porcentaje3: null,
+      producto4Id: null,
+      porcentaje4: null,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((i) => i.path.includes("porcentaje1"))).toBe(true);
+    }
+  });
+
+  it("rejects a slot with a product but no percentage", () => {
+    const result = CreateFormulaSchema.safeParse({
+      producto1Id: "clx1234567890abcdef123467",
+      porcentaje1: 100,
+      producto2Id: "clx1234567890abcdef123478",
+      porcentaje2: null,
+      producto3Id: null,
+      porcentaje3: null,
+      producto4Id: null,
+      porcentaje4: null,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const issue = result.error.issues.find(
+        (i) => i.message === "Cada producto debe tener su porcentaje",
+      );
+      expect(issue?.path).toEqual(["porcentaje2"]);
+    }
+  });
+
+  it("rejects a slot with a percentage but no product", () => {
+    const result = CreateFormulaSchema.safeParse({
+      producto1Id: "clx1234567890abcdef123467",
+      porcentaje1: 70,
+      producto2Id: null,
+      porcentaje2: 30,
+      producto3Id: null,
+      porcentaje3: null,
+      producto4Id: null,
+      porcentaje4: null,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const issue = result.error.issues.find(
+        (i) => i.message === "Cada producto debe tener su porcentaje",
+      );
+      expect(issue?.path).toEqual(["producto2Id"]);
+    }
+  });
+
+  it("rejects the same product in two slots", () => {
+    const result = CreateFormulaSchema.safeParse({
+      producto1Id: "clx1234567890abcdef123467",
+      porcentaje1: 60,
+      producto2Id: "clx1234567890abcdef123467",
+      porcentaje2: 40,
+      producto3Id: null,
+      porcentaje3: null,
+      producto4Id: null,
+      porcentaje4: null,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const issue = result.error.issues.find(
+        (i) => i.message === "No se puede repetir el mismo producto",
+      );
+      expect(issue?.path).toEqual(["producto2Id"]);
+    }
   });
 });

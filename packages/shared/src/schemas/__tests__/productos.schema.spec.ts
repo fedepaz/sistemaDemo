@@ -20,7 +20,7 @@ describe("ProductoSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages.some((m) => m.includes("sustrato"))).toBe(true);
+      expect(messages.some((m) => m.includes("producto"))).toBe(true);
     }
   });
 
@@ -46,7 +46,7 @@ describe("CreateProductoSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages).toContain("El nombre del sustrato es requerido");
+      expect(messages).toContain("El nombre del producto es requerido");
     }
   });
 });
@@ -67,7 +67,7 @@ describe("UpdateProductoSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages).toContain("El nombre del sustrato es requerido");
+      expect(messages).toContain("El nombre del producto es requerido");
     }
   });
 });
