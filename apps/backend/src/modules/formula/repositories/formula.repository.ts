@@ -2,75 +2,87 @@
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
+import { BaseRepository } from '../../../shared/baseModule/base.repository';
 import { CreateFormulaDto, FormulaDto } from '@vivero/shared';
+import { Formula } from '../../../generated/prisma/client';
+
+export type FormulaWithRelations = Formula & {
+  producto1: { nombre: string } | null;
+  producto2: { nombre: string } | null;
+  producto3: { nombre: string } | null;
+  producto4: { nombre: string } | null;
+};
+
+export type FormulaRecord = Formula & FormulaDto;
+
+const PRODUCTO_INCLUDE = {
+  producto1: { select: { nombre: true } },
+  producto2: { select: { nombre: true } },
+  producto3: { select: { nombre: true } },
+  producto4: { select: { nombre: true } },
+};
 
 @Injectable()
-export class FormulaRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
-  async findAll(_requesterId: string): Promise<FormulaDto[]> {
-    const rows = await this.prisma.formula.findMany({
-      where: { deletedAt: null },
-      include: {
-        producto1: { select: { nombre: true } },
-        producto2: { select: { nombre: true } },
-        producto3: { select: { nombre: true } },
-        producto4: { select: { nombre: true } },
-      },
-    });
-
-    return rows.map((r) => ({
-      id: r.id,
-      producto1Id: r.producto1Id,
-      producto1Nombre: r.producto1.nombre,
-      porcentaje1: r.porcentaje1,
-      producto2Id: r.producto2Id,
-      producto2Nombre: r.producto2?.nombre ?? null,
-      porcentaje2: r.porcentaje2,
-      producto3Id: r.producto3Id,
-      producto3Nombre: r.producto3?.nombre ?? null,
-      porcentaje3: r.porcentaje3,
-      producto4Id: r.producto4Id,
-      producto4Nombre: r.producto4?.nombre ?? null,
-      porcentaje4: r.porcentaje4,
-      isActive: r.isActive,
-      createdAt: r.createdAt,
-    }));
+export class FormulaRepository extends BaseRepository<Formula> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.formula);
   }
 
-  async findById(id: string, _requesterId: string): Promise<FormulaDto | null> {
-    const row = await this.prisma.formula.findUnique({
-      where: { id },
-      include: {
-        producto1: { select: { nombre: true } },
-        producto2: { select: { nombre: true } },
-        producto3: { select: { nombre: true } },
-        producto4: { select: { nombre: true } },
-      },
-    });
-
-    if (!row || row.deletedAt) return null;
-
+  private mapRow(row: FormulaWithRelations): FormulaRecord {
+    const { producto1, producto2, producto3, producto4, ...formula } = row;
     return {
-      id: row.id,
-      producto1Id: row.producto1Id,
-      producto1Nombre: row.producto1.nombre,
-      porcentaje1: row.porcentaje1,
-      producto2Id: row.producto2Id,
-      producto2Nombre: row.producto2?.nombre ?? null,
-      porcentaje2: row.porcentaje2,
-      producto3Id: row.producto3Id,
-      producto3Nombre: row.producto3?.nombre ?? null,
-      porcentaje3: row.porcentaje3,
-      producto4Id: row.producto4Id,
-      producto4Nombre: row.producto4?.nombre ?? null,
-      porcentaje4: row.porcentaje4,
-      isActive: row.isActive,
-      createdAt: row.createdAt,
+      ...formula,
+      producto1Nombre: producto1!.nombre,
+      producto2Nombre: producto2?.nombre ?? null,
+      producto3Nombre: producto3?.nombre ?? null,
+      producto4Nombre: producto4?.nombre ?? null,
     };
   }
 
-  async create(data: CreateFormulaDto) {
-    return this.prisma.formula.create({ data });
+  override async findAll(requesterId: string): Promise<FormulaRecord[]> {
+    const devIds = await this.getDevAccounts();
+    const isDev = devIds.includes(requesterId);
+
+    const rows: FormulaWithRelations[] = await this.prisma.formula.findMany({
+      where: isDev
+        ? {}
+        : { deletedAt: null, isActive: true, id: { notIn: devIds } },
+      include: PRODUCTO_INCLUDE,
+    });
+
+    return rows.map((r) => this.mapRow(r));
+  }
+
+  override async findById(
+    id: string,
+    requesterId: string,
+  ): Promise<FormulaRecord | null> {
+    const devIds = await this.getDevAccounts();
+    const isDev = devIds.includes(requesterId);
+
+    const row = (await this.prisma.formula.findUnique({
+      where: { id },
+      include: PRODUCTO_INCLUDE,
+    })) as FormulaWithRelations | null;
+
+    if (!row) return null;
+    if (!isDev && (row.deletedAt !== null || !row.isActive)) return null;
+
+    return this.mapRow(row);
+  }
+
+  override async create(data: CreateFormulaDto): Promise<FormulaRecord> {
+    const created = await this.prisma.formula.create({ data });
+
+    const row = (await this.prisma.formula.findUnique({
+      where: { id: created.id },
+      include: PRODUCTO_INCLUDE,
+    })) as FormulaWithRelations | null;
+
+    if (!row) {
+      throw new Error(`Formula ${created.id} not found right after create`);
+    }
+
+    return this.mapRow(row);
   }
 }
