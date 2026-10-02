@@ -364,6 +364,8 @@ describe('SiembraPartidasService', () => {
           formula: { connect: { id: GENERIC_FORMULA_ID } },
         }),
       );
+      expect(prismaMock.producto.upsert).not.toHaveBeenCalled();
+      expect(prismaMock.formula.upsert).not.toHaveBeenCalled();
     });
 
     it('never touches the generic lookup when formulaId is provided', async () => {
