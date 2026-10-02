@@ -46,4 +46,12 @@ describe("formulaService", () => {
       body: JSON.stringify(data),
     });
   });
+
+  it("remove calls DELETE /formula/:id", async () => {
+    mockClientFetch.mockResolvedValue(undefined);
+    await formulaService.remove("formula-1");
+    expect(mockClientFetch).toHaveBeenCalledWith("formula/formula-1", {
+      method: "DELETE",
+    });
+  });
 });

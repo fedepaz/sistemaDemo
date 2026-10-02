@@ -11,18 +11,23 @@ beforeAll(() => {
 import { FormulaDataTable } from "../formula-data-table";
 import type { FormulaDto } from "@vivero/shared";
 
+const mockDeleteFormula = jest.fn().mockResolvedValue(undefined);
+
 jest.mock("@/components/data-display/data-table", () => ({
   DataTable: ({
     title,
     onView,
+    onDelete,
   }: {
     title: string;
     onView: (row: FormulaDto) => void;
+    onDelete: (row: FormulaDto) => void;
     onCreate: () => void;
   }) => (
     <div data-testid="data-table">
       <h1>{title}</h1>
       <button onClick={() => onView(mockFormulas[0])}>View Row</button>
+      <button onClick={() => onDelete(mockFormulas[0])}>Delete Row</button>
     </div>
   ),
   SlideOverForm: ({
@@ -44,6 +49,9 @@ jest.mock("@/features/formulas/hooks/useFormulas", () => ({
   useCreateFormula: () => ({
     mutateAsync: jest.fn().mockResolvedValue(undefined),
     isPending: false,
+  }),
+  useDeleteFormula: () => ({
+    mutateAsync: mockDeleteFormula,
   }),
 }));
 
@@ -86,5 +94,16 @@ describe("FormulaDataTable", () => {
       screen.getByText("View Row").click();
     });
     expect(screen.getByTestId("slide-over-form")).toBeInTheDocument();
+  });
+
+  it("deletes formula when delete is triggered", async () => {
+    mockDeleteFormula.mockClear();
+    render(<FormulaDataTable />);
+
+    await act(async () => {
+      screen.getByText("Delete Row").click();
+    });
+
+    expect(mockDeleteFormula).toHaveBeenCalledWith("1");
   });
 });

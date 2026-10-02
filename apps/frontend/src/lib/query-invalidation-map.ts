@@ -110,6 +110,9 @@ export const mutationInvalidationMap = {
   createFormula: {
     queries: () => [formulaQueryKeys.all()],
   },
+  deleteFormula: {
+    queries: () => [formulaQueryKeys.all()],
+  },
 
   // --- Alert Comments ---
   createAlertComment: {

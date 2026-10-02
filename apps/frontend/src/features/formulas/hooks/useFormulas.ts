@@ -27,3 +27,17 @@ export const useCreateFormula = () => {
     },
   });
 };
+
+export const useDeleteFormula = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, string>({
+    mutationFn: formulaService.remove,
+    onSuccess: () => {
+      toast.success("Fórmula eliminada exitosamente", {
+        duration: 3000,
+      });
+      invalidateQueries(queryClient, "deleteFormula");
+    },
+  });
+};

@@ -2,7 +2,11 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { useCreateFormula, useFormulas } from "../hooks/useFormulas";
+import {
+  useCreateFormula,
+  useDeleteFormula,
+  useFormulas,
+} from "../hooks/useFormulas";
 import { useProductos } from "@/features/productos/hooks/useProductos";
 import {
   CreateFormulaDto,
@@ -26,6 +30,12 @@ export function FormulaDataTable() {
 
   const { mutateAsync: createFormula, isPending: isCreatingFormula } =
     useCreateFormula();
+
+  const { mutateAsync: deleteFormula } = useDeleteFormula();
+
+  const handleDelete = useCallback(async (row: FormulaDto) => {
+    await deleteFormula(row.id);
+  }, [deleteFormula]);
 
   const formCreateFormula = useForm<CreateFormulaDto>({
     resolver: zodResolver(CreateFormulaSchema),
@@ -80,11 +90,12 @@ export function FormulaDataTable() {
         data={formulas}
         title="Fórmulas"
         description="Gestión de fórmulas del sistema"
-        tableName="programacion_siembra"
+        tableName="formulas"
         totalCount={formulas.length}
         onCreate={handleNewFormula}
         createLabel="Nueva Fórmula"
         onView={handleView}
+        onDelete={handleDelete}
         columnLabels={fieldLabels.Formula}
       />
       {slideOverOpen && (

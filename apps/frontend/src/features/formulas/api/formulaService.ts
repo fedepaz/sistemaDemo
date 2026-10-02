@@ -13,4 +13,8 @@ export const formulaService = {
       body: JSON.stringify(data),
     });
   },
+
+  remove: (id: string) => {
+    return clientFetch<void>(`formula/${id}`, { method: "DELETE" });
+  },
 };
