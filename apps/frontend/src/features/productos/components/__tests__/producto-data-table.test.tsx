@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // apps/frontend/src/features/productos/components/__tests__/producto-data-table.test.tsx
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 
 beforeAll(() => {
   global.ResizeObserver = class {
@@ -142,5 +142,27 @@ describe("ProductoDataTable", () => {
     expect(capturedProps).not.toBeNull();
     expect(capturedProps.formId).toBe("edit");
     expect(capturedProps.confirm.summaryFields).toEqual(["nombre"]);
+  });
+
+  it("updates producto when edit form is submitted", async () => {
+    mockUpdateProducto.mockClear();
+    render(<ProductoDataTable />);
+
+    await act(async () => {
+      screen.getByText("Edit Row").click();
+    });
+
+    const editForm = document.getElementById("edit");
+    expect(editForm).not.toBeNull();
+
+    await act(async () => {
+      fireEvent.submit(editForm as HTMLFormElement);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(mockUpdateProducto).toHaveBeenCalledWith({
+      id: "1",
+      data: { nombre: "Producto Test" },
+    });
   });
 });
