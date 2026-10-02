@@ -1,5 +1,5 @@
 // apps/backend/test/integration/productos.integration.spec.ts
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, NotFoundException } from '@nestjs/common';
 import request from 'supertest';
 import { createTestApp } from './helpers/create-app';
 import { createProductosMock } from './helpers/mock-factories';
@@ -154,6 +154,31 @@ describe('Productos (integration)', () => {
         'clsusmoc0000000000000000',
         expect.any(Object),
       );
+    });
+  });
+
+  describe('DELETE /productos/:id', () => {
+    it('returns 200 + soft-deleted producto', async () => {
+      productosMock.deleteProducto.mockResolvedValue(mockProductoDto());
+
+      await request(app.getHttpServer())
+        .delete('/productos/clsusmoc0000000000000000')
+        .expect(200);
+
+      expect(productosMock.deleteProducto).toHaveBeenCalledWith(
+        expect.any(String),
+        'clsusmoc0000000000000000',
+      );
+    });
+
+    it('returns 404 when producto is not found', async () => {
+      productosMock.deleteProducto.mockRejectedValue(
+        new NotFoundException('Producto not found'),
+      );
+
+      await request(app.getHttpServer())
+        .delete('/productos/missing-producto')
+        .expect(404);
     });
   });
 });

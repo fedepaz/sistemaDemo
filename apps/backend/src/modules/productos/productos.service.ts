@@ -1,6 +1,10 @@
 // src/modules/productos/productos.service.ts
 
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { ProductosRepository } from './repositories/productos.repository';
 import {
@@ -53,5 +57,11 @@ export class ProductosService {
     return await this.repo.update(id, {
       nombre: data.nombre,
     });
+  }
+
+  async deleteProducto(requesterId: string, id: string) {
+    const row = await this.repo.findById(id, requesterId);
+    if (!row) throw new NotFoundException('Producto not found');
+    return this.repo.softDelete(id, requesterId);
   }
 }

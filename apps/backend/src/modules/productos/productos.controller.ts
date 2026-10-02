@@ -1,6 +1,14 @@
 // src/modules/productos/productos.controller.ts
 
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
@@ -51,5 +59,11 @@ export class ProductosController {
     data: UpdateProductoDto,
   ) {
     return this.service.updateProducto(user.id, id, data);
+  }
+
+  @Delete(':id')
+  @RequirePermission({ tableName: 'productos', action: 'delete', scope: 'ALL' })
+  async deleteProducto(@CurrentUser() user: AuthUser, @Param('id') id: string) {
+    return this.service.deleteProducto(user.id, id);
   }
 }

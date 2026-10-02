@@ -1,6 +1,7 @@
 // src/modules/productos/__tests__/productos.service.spec.ts
 
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { ProductosService } from '../productos.service';
 import { ProductosRepository } from '../repositories/productos.repository';
 
@@ -11,6 +12,7 @@ describe('ProductosService', () => {
     findById: jest.Mock;
     create: jest.Mock;
     update: jest.Mock;
+    softDelete: jest.Mock;
   };
 
   const mockProducto = {
@@ -35,6 +37,7 @@ describe('ProductosService', () => {
       findById: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      softDelete: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -122,6 +125,28 @@ describe('ProductosService', () => {
       });
 
       expect(result.nombre).toBe('Actualizado');
+    });
+  });
+
+  describe('deleteProducto', () => {
+    it('soft-deletes when found', async () => {
+      repo.findById.mockResolvedValue(mockProducto);
+      repo.softDelete.mockResolvedValue(mockProducto);
+
+      const result = await service.deleteProducto('user-1', 'sust-1');
+
+      expect(result).toEqual(mockProducto);
+      expect(repo.findById).toHaveBeenCalledWith('sust-1', 'user-1');
+      expect(repo.softDelete).toHaveBeenCalledWith('sust-1', 'user-1');
+    });
+
+    it('throws NotFoundException when not found', async () => {
+      repo.findById.mockResolvedValue(null);
+
+      await expect(service.deleteProducto('user-1', 'missing')).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(repo.softDelete).not.toHaveBeenCalled();
     });
   });
 });

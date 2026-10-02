@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 // src/modules/productos/__tests__/productos.controller.spec.ts
 
 import { Test, TestingModule } from '@nestjs/testing';
+import { REQUIRE_PERMISSION_KEY } from '../../permissions/decorators/require-permission.decorator';
 import { ProductosController } from '../productos.controller';
 import { ProductosService } from '../productos.service';
 
@@ -11,6 +13,7 @@ describe('ProductosController', () => {
     getProductoById: jest.Mock;
     createProducto: jest.Mock;
     updateProducto: jest.Mock;
+    deleteProducto: jest.Mock;
   };
 
   const mockUser = { id: 'user-1', username: 'admin', tenantId: 'tenant-1' };
@@ -26,6 +29,7 @@ describe('ProductosController', () => {
       getProductoById: jest.fn(),
       createProducto: jest.fn(),
       updateProducto: jest.fn(),
+      deleteProducto: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -99,6 +103,32 @@ describe('ProductosController', () => {
       expect(result).toEqual(updated);
       expect(service.updateProducto).toHaveBeenCalledWith('user-1', 'sust-1', {
         nombre: 'Perlita',
+      });
+    });
+  });
+
+  describe('deleteProducto', () => {
+    it('delegates to service with user id and id', async () => {
+      service.deleteProducto.mockResolvedValue(mockDto);
+
+      const result = await controller.deleteProducto(mockUser, 'sust-1');
+
+      expect(result).toEqual(mockDto);
+      expect(service.deleteProducto).toHaveBeenCalledWith('user-1', 'sust-1');
+    });
+  });
+
+  describe('permission metadata', () => {
+    it('DELETE /productos/:id requires productos:delete', () => {
+      const meta = Reflect.getMetadata(
+        REQUIRE_PERMISSION_KEY,
+        ProductosController.prototype.deleteProducto,
+      );
+
+      expect(meta).toEqual({
+        tableName: 'productos',
+        action: 'delete',
+        scope: 'ALL',
       });
     });
   });

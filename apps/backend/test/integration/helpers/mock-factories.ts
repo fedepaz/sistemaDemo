@@ -128,6 +128,7 @@ export function createProductosMock() {
     getProductoById: jest.fn(),
     createProducto: jest.fn(),
     updateProducto: jest.fn(),
+    deleteProducto: jest.fn(),
   };
 }
 
