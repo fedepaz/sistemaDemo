@@ -83,6 +83,10 @@ Zero changes.
 
 **Gates:** `pnpm lint && pnpm type-check && pnpm test`, `pnpm --filter backend test:integration`.
 
+## Known Limitations
+
+Formula/producto audit entries are recorded by the global `AuditCrudInterceptor` but carry `entityType: UNKNOWN` because the Prisma `EntityType` enum has no `FORMULA`/`PRODUCTO` members; fixing requires a schema enum change (out of scope for this plan).
+
 ## Acceptance
 
 - Formula has C/R/D, producto C/R/U/D, end to end (API + UI).

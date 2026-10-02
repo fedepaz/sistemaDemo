@@ -1265,6 +1265,14 @@ SELECT name, permissionType FROM entities WHERE name IN ('formulas', 'productos'
 
 If either is `READ_ONLY`, flag it — changing it is an admin/data action outside this plan's code scope (buttons stay hidden until then; lists/create/reads still work).
 
-- [ ] **Step 5: Report completion**
+- [ ] **Step 5: Pre-release operations note**
+
+Before release, the operator must:
+
+- [ ] Run the Step 4 SQL and confirm `formulas`/`productos` report `CRUD` or `PROCESS`.
+- [ ] Grant `formulas:read` plus the intended `formulas:delete`/`productos:delete` (and `productos:update` for edit) via the permissions admin UI — `GET /formula` moved from `programacion_siembra:create` to `formulas:read`, so users of `formulaSelector` on the programación de siembras page need the new grant or they will get 403.
+- [ ] Add both items (permissionType check and the new permission grants) to the deploy/release notes.
+
+- [ ] **Step 6: Report completion**
 
 Summarize: 4 feature commits + this verification, gates output, and the permissionType result from Step 4. No commit (verification only).
