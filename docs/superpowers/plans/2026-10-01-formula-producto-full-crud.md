@@ -1178,7 +1178,7 @@ export function ProductoDataTable() {
                   title: "Crear producto",
                   description: "¿Deseas crear este nuevo producto?",
                   label: "Crear",
-                  summaryFields: ["partidaId", "anio", "indice"],
+                  summaryFields: ["nombre"],
                 }
               : mode === "edit"
                 ? {
@@ -1216,7 +1216,7 @@ export function ProductoDataTable() {
 }
 ```
 
-(`mode` matches `SlideOverMode = "create" | "edit" | "view"`; the pre-existing create-confirm `summaryFields` are intentionally left untouched.)
+(`mode` matches `SlideOverMode = "create" | "edit" | "view"`; the create-confirm `summaryFields` are fixed to `["nombre"]` per the pre-flight decision — the previous `["partidaId", "anio", "indice"]` values were a copy-paste bug referencing fields that don't exist on productos.)
 
 - [ ] **Step 8: Run productos frontend tests**
 
