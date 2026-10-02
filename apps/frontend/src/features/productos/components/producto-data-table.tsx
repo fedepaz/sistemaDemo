@@ -2,11 +2,18 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useCreateProducto, useProductos } from "../hooks/useProductos";
+import {
+  useCreateProducto,
+  useDeleteProducto,
+  useProductos,
+  useUpdateProducto,
+} from "../hooks/useProductos";
 import {
   CreateProductoDto,
   CreateProductoSchema,
   ProductoDto,
+  UpdateProductoDto,
+  UpdateProductoSchema,
   fieldLabels,
 } from "@vivero/shared";
 import { useForm } from "react-hook-form";
@@ -14,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
 import { productoColumns, productoExportColumns } from "./columns";
 import { ProductoCreateForm } from "./producto-create-form";
+import { ProductoEditForm } from "./producto-edit-form";
 import { ProductoViewForm } from "./producto-view-form";
 
 export function ProductoDataTable() {
@@ -22,13 +30,23 @@ export function ProductoDataTable() {
   const [selectedProducto, setSelectedProducto] = useState<ProductoDto | null>(
     null,
   );
-  const [mode, setMode] = useState<"view" | "create">("create");
+  const [mode, setMode] = useState<"view" | "create" | "edit">("create");
 
   const { mutateAsync: createProducto, isPending: isCreatingProducto } =
     useCreateProducto();
+  const { mutateAsync: updateProducto, isPending: isUpdatingProducto } =
+    useUpdateProducto();
+  const { mutateAsync: deleteProducto } = useDeleteProducto();
 
   const formCreateProducto = useForm<CreateProductoDto>({
     resolver: zodResolver(CreateProductoSchema),
+    defaultValues: {
+      nombre: "",
+    },
+  });
+
+  const formEditProducto = useForm<UpdateProductoDto>({
+    resolver: zodResolver(UpdateProductoSchema),
     defaultValues: {
       nombre: "",
     },
@@ -47,12 +65,39 @@ export function ProductoDataTable() {
     setSlideOverOpen(true);
   }, []);
 
+  const handleEdit = useCallback(
+    (row: ProductoDto) => {
+      setSelectedProducto(row);
+      setMode("edit");
+      formEditProducto.reset({ nombre: row.nombre });
+      setSlideOverOpen(true);
+    },
+    [formEditProducto],
+  );
+
+  const handleDelete = useCallback(
+    async (row: ProductoDto) => {
+      await deleteProducto(row.id);
+    },
+    [deleteProducto],
+  );
+
   const handleCreate = async (formData: CreateProductoDto) => {
     try {
       await createProducto(formData);
     } catch {}
 
     if (!isCreatingProducto) setSlideOverOpen(false);
+  };
+
+  const handleUpdate = async (formData: UpdateProductoDto) => {
+    if (selectedProducto) {
+      try {
+        await updateProducto({ id: selectedProducto.id, data: formData });
+      } catch {}
+
+      if (!isUpdatingProducto) setSlideOverOpen(false);
+    }
   };
 
   return (
@@ -68,27 +113,43 @@ export function ProductoDataTable() {
         onCreate={handleNewProducto}
         createLabel="Nuevo Producto"
         onView={handleView}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
         columnLabels={fieldLabels.Producto}
       />
       {slideOverOpen && (
         <SlideOverForm
-          formId={mode === "create" ? "create" : "view"}
+          formId={
+            mode === "create" ? "create" : mode === "edit" ? "edit" : "view"
+          }
           open={slideOverOpen}
           onOpenChange={setSlideOverOpen}
           title={
             mode === "create"
               ? "Crear producto"
-              : `Producto: ${selectedProducto?.nombre}`
+              : mode === "edit"
+                ? `Editar producto: ${selectedProducto?.nombre}`
+                : `Producto: ${selectedProducto?.nombre}`
           }
           description={
             mode === "create"
               ? "Rellena los campos para crear un nuevo producto."
-              : undefined
+              : mode === "edit"
+                ? `Edita el nombre del producto ${selectedProducto?.nombre}.`
+                : undefined
           }
           onCancel={() => setSlideOverOpen(false)}
-          saveLabel="Crear Producto"
-          form={mode === "create" ? formCreateProducto : undefined}
-          mode={mode === "create" ? "create" : "view"}
+          saveLabel={
+            mode === "edit" ? "Actualizar Producto" : "Crear Producto"
+          }
+          form={
+            mode === "create"
+              ? formCreateProducto
+              : mode === "edit"
+                ? formEditProducto
+                : undefined
+          }
+          mode={mode}
           fieldLabels={fieldLabels.CreateProducto}
           confirm={
             mode === "create"
@@ -96,9 +157,16 @@ export function ProductoDataTable() {
                   title: "Crear producto",
                   description: "¿Deseas crear este nuevo producto?",
                   label: "Crear",
-                  summaryFields: ["partidaId", "anio", "indice"],
+                  summaryFields: ["nombre"],
                 }
-              : undefined
+              : mode === "edit"
+                ? {
+                    title: "Actualizar producto",
+                    description: `¿Deseas guardar los cambios en ${selectedProducto?.nombre}?`,
+                    label: "Actualizar",
+                    summaryFields: ["nombre"],
+                  }
+                : undefined
           }
         >
           <div className="flex flex-col gap-3">
@@ -108,6 +176,13 @@ export function ProductoDataTable() {
                 onSubmit={handleCreate}
                 onCancel={() => setSlideOverOpen(false)}
                 formId="create"
+              />
+            ) : mode === "edit" ? (
+              <ProductoEditForm
+                form={formEditProducto}
+                onSubmit={handleUpdate}
+                onCancel={() => setSlideOverOpen(false)}
+                formId="edit"
               />
             ) : selectedProducto ? (
               <ProductoViewForm selectedProducto={selectedProducto} />

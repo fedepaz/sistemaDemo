@@ -105,6 +105,12 @@ export const mutationInvalidationMap = {
   createProducto: {
     queries: () => [productoQueryKeys.all()],
   },
+  updateProducto: {
+    queries: () => [productoQueryKeys.all()],
+  },
+  deleteProducto: {
+    queries: () => [productoQueryKeys.all()],
+  },
 
   // --- Fórmulas ---
   createFormula: {

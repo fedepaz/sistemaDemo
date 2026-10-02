@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // apps/frontend/src/features/productos/components/__tests__/producto-data-table.test.tsx
 import { render, screen, act } from "@testing-library/react";
 
@@ -11,30 +12,36 @@ beforeAll(() => {
 import { ProductoDataTable } from "../producto-data-table";
 import type { ProductoDto } from "@vivero/shared";
 
+const mockUpdateProducto = jest.fn().mockResolvedValue(undefined);
+const mockDeleteProducto = jest.fn().mockResolvedValue(undefined);
+let capturedProps: any = null;
+
 jest.mock("@/components/data-display/data-table", () => ({
   DataTable: ({
     title,
     onView,
+    onEdit,
+    onDelete,
   }: {
     title: string;
     onView: (row: ProductoDto) => void;
+    onEdit: (row: ProductoDto) => void;
+    onDelete: (row: ProductoDto) => void;
     onCreate: () => void;
   }) => (
     <div data-testid="data-table">
       <h1>{title}</h1>
       <button onClick={() => onView(mockProductos[0])}>View Row</button>
+      <button onClick={() => onEdit(mockProductos[0])}>Edit Row</button>
+      <button onClick={() => onDelete(mockProductos[0])}>Delete Row</button>
     </div>
   ),
-  SlideOverForm: ({
-    open,
-    children,
-  }: {
-    open: boolean;
-    children: React.ReactNode;
-  }) =>
-    open ? (
-      <div data-testid="slide-over-form">{children}</div>
-    ) : null,
+  SlideOverForm: (props: any) => {
+    capturedProps = props;
+    return props.open ? (
+      <div data-testid="slide-over-form">{props.children}</div>
+    ) : null;
+  },
 }));
 
 jest.mock("@/features/productos/hooks/useProductos", () => ({
@@ -44,6 +51,13 @@ jest.mock("@/features/productos/hooks/useProductos", () => ({
   useCreateProducto: () => ({
     mutateAsync: jest.fn().mockResolvedValue(undefined),
     isPending: false,
+  }),
+  useUpdateProducto: () => ({
+    mutateAsync: mockUpdateProducto,
+    isPending: false,
+  }),
+  useDeleteProducto: () => ({
+    mutateAsync: mockDeleteProducto,
   }),
 }));
 
@@ -86,6 +100,10 @@ const mockProductos: ProductoDto[] = [
 ];
 
 describe("ProductoDataTable", () => {
+  beforeEach(() => {
+    capturedProps = null;
+  });
+
   it("renders DataTable with correct title", () => {
     render(<ProductoDataTable />);
 
@@ -101,5 +119,28 @@ describe("ProductoDataTable", () => {
     });
 
     expect(screen.getByTestId("slide-over-form")).toBeInTheDocument();
+  });
+
+  it("deletes producto when delete is triggered", async () => {
+    mockDeleteProducto.mockClear();
+    render(<ProductoDataTable />);
+
+    await act(async () => {
+      screen.getByText("Delete Row").click();
+    });
+
+    expect(mockDeleteProducto).toHaveBeenCalledWith("1");
+  });
+
+  it("opens slide-over in edit mode with nombre summaryFields", async () => {
+    render(<ProductoDataTable />);
+
+    await act(async () => {
+      screen.getByText("Edit Row").click();
+    });
+
+    expect(capturedProps).not.toBeNull();
+    expect(capturedProps.formId).toBe("edit");
+    expect(capturedProps.confirm.summaryFields).toEqual(["nombre"]);
   });
 });
