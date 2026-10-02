@@ -109,6 +109,7 @@ export function createFormulaMock() {
     getAllFormula: jest.fn(),
     getFormulaById: jest.fn(),
     createFormula: jest.fn(),
+    deleteFormula: jest.fn(),
   };
 }
 

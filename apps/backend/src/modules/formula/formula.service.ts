@@ -21,4 +21,10 @@ export class FormulaService {
   async createFormula(data: CreateFormulaDto) {
     return this.repo.create(data);
   }
+
+  async deleteFormula(id: string, requesterId: string) {
+    const formula = await this.repo.findById(id, requesterId);
+    if (!formula) throw new NotFoundException('Formula not found');
+    return this.repo.softDelete(id, requesterId);
+  }
 }

@@ -11,6 +11,7 @@ describe('FormulaService', () => {
     findAll: jest.Mock;
     findById: jest.Mock;
     create: jest.Mock;
+    softDelete: jest.Mock;
   };
 
   const mockFormula = {
@@ -36,6 +37,7 @@ describe('FormulaService', () => {
       findAll: jest.fn(),
       findById: jest.fn(),
       create: jest.fn(),
+      softDelete: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -106,6 +108,28 @@ describe('FormulaService', () => {
 
       expect(result).toEqual(mockFormula);
       expect(repo.create).toHaveBeenCalledWith(data);
+    });
+  });
+
+  describe('deleteFormula', () => {
+    it('delegates to repository softDelete', async () => {
+      repo.findById.mockResolvedValue(mockFormula);
+      repo.softDelete.mockResolvedValue(mockFormula);
+
+      const result = await service.deleteFormula('formula-1', 'user-1');
+
+      expect(result).toEqual(mockFormula);
+      expect(repo.findById).toHaveBeenCalledWith('formula-1', 'user-1');
+      expect(repo.softDelete).toHaveBeenCalledWith('formula-1', 'user-1');
+    });
+
+    it('throws NotFoundException when formula not found', async () => {
+      repo.findById.mockResolvedValue(null);
+
+      await expect(
+        service.deleteFormula('nonexistent', 'user-1'),
+      ).rejects.toThrow(NotFoundException);
+      expect(repo.softDelete).not.toHaveBeenCalled();
     });
   });
 });

@@ -1,6 +1,6 @@
 // src/modules/formula/formula.controller.ts
 
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
@@ -18,8 +18,8 @@ export class FormulaController {
 
   @Get()
   @RequirePermission({
-    tableName: 'programacion_siembra',
-    action: 'create',
+    tableName: 'formulas',
+    action: 'read',
     scope: 'ALL',
   })
   async getAllFormula(@CurrentUser() user: AuthUser): Promise<FormulaDto[]> {
@@ -42,5 +42,11 @@ export class FormulaController {
     @Param('id') id: string,
   ): Promise<FormulaDto> {
     return this.service.getFormulaById(id, user.id);
+  }
+
+  @Delete(':id')
+  @RequirePermission({ tableName: 'formulas', action: 'delete', scope: 'ALL' })
+  async deleteFormula(@CurrentUser() user: AuthUser, @Param('id') id: string) {
+    return this.service.deleteFormula(id, user.id);
   }
 }

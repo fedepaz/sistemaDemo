@@ -132,4 +132,29 @@ describe('Formula (integration)', () => {
         .expect(400);
     });
   });
+
+  describe('DELETE /formula/:id', () => {
+    it('returns 200 + soft-deleted fórmula', async () => {
+      formulaMock.deleteFormula.mockResolvedValue(mockFormulaDto());
+
+      await request(app.getHttpServer())
+        .delete('/formula/clformulamoc000000000000')
+        .expect(200);
+
+      expect(formulaMock.deleteFormula).toHaveBeenCalledWith(
+        'clformulamoc000000000000',
+        expect.any(String),
+      );
+    });
+
+    it('returns 404 when fórmula is not found', async () => {
+      formulaMock.deleteFormula.mockRejectedValue(
+        new NotFoundException('Formula not found'),
+      );
+
+      await request(app.getHttpServer())
+        .delete('/formula/missing-formula')
+        .expect(404);
+    });
+  });
 });
