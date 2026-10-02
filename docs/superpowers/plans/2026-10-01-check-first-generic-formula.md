@@ -33,7 +33,7 @@
 - Consumes: existing `prismaMock = { producto: { upsert }, formula: { upsert }, siembraPartidas: { findFirst } }` (adds `formula.findUnique`); existing `repo`, `mockRow`, `mockDto` fixtures; `SiembraPartidasService` constructor injection of `PrismaService`.
 - Produces: public method `ensureGenericFormula(): Promise<string>` on `SiembraPartidasService`; constant `GENERIC_FORMULA_ID = 'c00000000000000000000002'`. Task 1 is self-contained; nothing else consumes the new name beyond the two in-file call sites.
 
-- [ ] **Step 1: Add `findUnique` to the prismaMock and write the failing tests**
+- [x] **Step 1: Add `findUnique` to the prismaMock and write the failing tests**
 
 In `__tests__/siembraPartidas.service.spec.ts`, extend the mock (lines 113-117):
 
@@ -187,12 +187,12 @@ Insert this `describe` immediately before `describe('autorizarSiembra', () => {`
   });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail (compile-level RED)**
+- [x] **Step 2: Run the tests to verify they fail (compile-level RED)**
 
 Run: `pnpm --filter backend test -- siembraPartidas.service`
 Expected: **FAIL** — TS error `Property 'ensureGenericFormula' does not exist on type 'SiembraPartidasService'` (ts-jest compile failure). This is the expected RED: the method does not exist yet. The 6 new tests are the red signal; no other test fails for a different reason.
 
-- [ ] **Step 3: Implement the check-first method**
+- [x] **Step 3: Implement the check-first method**
 
 In `siembraPartidas.service.ts`, add the constant after line 26:
 
@@ -238,17 +238,17 @@ Update the two call sites (only the method reference changes):
 - Line 273: `const formulaId = data.formulaId ?? (await this.ensureGenericFormula());`
 - Line 351: `const formulaId = await this.ensureGenericFormula();`
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `pnpm --filter backend test -- siembraPartidas.service`
 Expected: PASS — all tests in the file green (6 new + all pre-existing), 0 failed.
 
-- [ ] **Step 5: Run the full verification order**
+- [x] **Step 5: Run the full verification order**
 
 Run: `pnpm lint && pnpm type-check && pnpm test`
 Expected: all three commands exit 0 (5 pre-existing frontend lint warnings are non-blocking).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add apps/backend/src/modules/siembraPartidas/siembraPartidas.service.ts apps/backend/src/modules/siembraPartidas/__tests__/siembraPartidas.service.spec.ts

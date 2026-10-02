@@ -41,7 +41,7 @@ async ensureGenericFormula(): Promise<string> {
 ```
 
 - New constant `GENERIC_FORMULA_ID = 'c00000000000000000000002'` replaces the two inline literals (byte-identical value).
-- Miss path is today's two upserts verbatim; no transaction (each upsert targets a unique key, so MySQL's native upsert is race-safe, and a half-created pair self-heals on the next call).
+- Miss path is today's two upserts verbatim; no transaction (each upsert targets a unique key, so MySQL's native upsert is race-safe, and a half-created pair self-heals on the next call). Self-healing covers a half-created pair produced by this code (producto written, formula not); a formula row whose producto was later hard-deleted externally is no longer repaired on the hit path, unlike the old always-upserts version — accepted, since Goal 1 defines hit = zero writes.
 - Hit semantics match today's upsert: a soft-deleted generic formula is still returned (no `deletedAt` filter).
 - Call sites keep their existing logic; only the method reference updates: `createSiembraPartida` (`data.formulaId ?? await this.ensureGenericFormula()`) and `autorizarSiembra`.
 
