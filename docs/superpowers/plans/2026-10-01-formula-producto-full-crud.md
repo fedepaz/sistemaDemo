@@ -57,7 +57,7 @@
 
 **Interfaces:**
 - Consumes: `BaseRepository.softDelete(id: string, deletedByUserId: string): Promise<T>` (`apps/backend/src/shared/baseModule/base.repository.ts:74`); `FormulaRepository.findById(id, requesterId)` (inherited); `REQUIRE_PERMISSION_KEY` from `apps/backend/src/modules/permissions/decorators/require-permission.decorator`.
-- Produces: `FormulaService.deleteFormula(id: string, requesterId: string): Promise<FormulaDto>` — soft-deletes and returns the row, throws `NotFoundException('Formula not found')` when `findById` returns `null`; HTTP `DELETE /formula/:id` → `200` + row or `404`; integration mock `createFormulaMock()` gains `deleteFormula: jest.Mock`.
+- Produces: `FormulaService.deleteFormula(id: string, requesterId: string)` (no return annotation — inherited `softDelete` returns the raw Prisma `Formula` row, which lacks the `producto*Nombre` fields `FormulaDto` requires; same shape as the `users` DELETE response, and the Task 3 hook ignores the body). Soft-deletes and returns the row, throws `NotFoundException('Formula not found')` when `findById` returns `null`; HTTP `DELETE /formula/:id` → `200` + row or `404`; integration mock `createFormulaMock()` gains `deleteFormula: jest.Mock`.
 
 - [ ] **Step 1: Write the failing service tests**
 
