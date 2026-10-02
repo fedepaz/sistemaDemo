@@ -46,7 +46,7 @@ Zero changes.
 ### Frontend — formulas
 
 - `api/formulaService.ts`: `remove(id)` → `DELETE formula/:id`.
-- `hooks/useFormulas.ts`: `useDeleteFormula` → invalidates the formulas list and the new `deleteFormula` query key; add the key in `lib/queryKeys.ts` and the entry in `lib/query-invalidation-map.ts`.
+- `hooks/useFormulas.ts`: `useDeleteFormula` → invalidates the formulas list via the new `deleteFormula` entry in `lib/query-invalidation-map.ts` (mirroring `deleteUser`; no per-id query key needed).
 - `formula-data-table.tsx`: `tableName="formulas"` (was `programacion_siembra`); wire `onDelete` with the DataTable's built-in `DeleteDialog` exactly like `features/users`; **no edit action**; no new form components.
 
 ### Frontend — productos
@@ -69,18 +69,17 @@ Zero changes.
 ## Test Plan (TDD — red first)
 
 **Backend unit:**
-- Formula: controller spec (decorator metadata for GET `formulas:read` + new DELETE `formulas:delete`, 404 path), service spec (delegates to `softDelete`, throws `NotFoundException`), repository spec (`softDelete` behavior).
-- Productos: controller (DELETE metadata, 404), service (delegate/throw), repository (`softDelete`).
+- Formula: controller spec (delegation for DELETE; new metadata assertions pinning GET → `formulas:read` and DELETE → `formulas:delete` — no existing spec asserts decorator metadata), service spec (delegates to `softDelete`, throws `NotFoundException`). No new repository specs — `softDelete` is inherited `BaseRepository` code, mocked at the service layer like the existing suites.
+- Productos: controller (DELETE delegation + metadata), service (delegate/throw).
 - Update existing specs that assert the old `GET /formula` permission key.
 
 **Integration:**
-- `DELETE /formula/:id`: success, 404, 403 (wrong/missing permission); `GET /formula` reflects `formulas:read`.
-- `DELETE /productos/:id`: success, 404, 403; existing PATCH cases stay green.
+- `DELETE /formula/:id`: success and 404; `DELETE /productos/:id`: success and 404; existing GET/POST/PATCH cases stay green.
+- Permission keys are covered by the unit metadata assertions above — integration replaces the guard with `MockPermissionsGuard` (always `true`), so no integration 403 cases are possible.
 
 **Frontend:**
 - `formulaService.remove`, `productoService.update/remove` service tests.
-- Data-table wiring tests for formula delete and producto edit+delete (mirroring users' tests).
-- Hook invalidation assertions per existing hook-test patterns.
+- Data-table wiring tests for formula delete and producto edit+delete (mirroring users' tests). Mutation hooks have no test pattern in this codebase (users' hooks are untested); they are covered indirectly through the data-table wiring tests.
 
 **Gates:** `pnpm lint && pnpm type-check && pnpm test`, `pnpm --filter backend test:integration`.
 
