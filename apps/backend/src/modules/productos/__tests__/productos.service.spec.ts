@@ -28,6 +28,7 @@ describe('ProductosService', () => {
   const mockDto = {
     id: 'sust-1',
     nombre: 'Turba',
+    isActive: true,
     createdAt: new Date('2026-01-15'),
   };
 

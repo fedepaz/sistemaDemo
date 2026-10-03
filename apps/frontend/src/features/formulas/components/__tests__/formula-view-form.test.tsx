@@ -30,9 +30,20 @@ describe("FormulaViewForm", () => {
     expect(screen.getByText("40%")).toBeInTheDocument();
   });
 
-  it("should display active badge", () => {
+  it("should not display any status badge when active", () => {
     render(<FormulaViewForm selectedFormula={mockFormula} />);
-    expect(screen.getByText("Activo")).toBeInTheDocument();
+    expect(screen.queryByText("Activo")).toBeNull();
+    expect(screen.queryByText("Inactivo")).toBeNull();
+  });
+
+  it("should display Inactivo badge when inactive", () => {
+    render(
+      <FormulaViewForm
+        selectedFormula={{ ...mockFormula, isActive: false }}
+      />,
+    );
+    expect(screen.getByText("Inactivo")).toBeInTheDocument();
+    expect(screen.queryByText("Activo")).toBeNull();
   });
 
   it("should display formatted creation date", () => {

@@ -22,6 +22,7 @@ export class ProductosService {
     return rows.map((r) => ({
       id: r.id,
       nombre: r.nombre,
+      isActive: r.isActive,
       createdAt: r.createdAt,
     }));
   }
@@ -35,6 +36,7 @@ export class ProductosService {
     return {
       id: row.id,
       nombre: row.nombre,
+      isActive: row.isActive,
       createdAt: row.createdAt,
     };
   }

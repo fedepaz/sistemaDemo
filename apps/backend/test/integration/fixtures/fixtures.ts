@@ -207,6 +207,7 @@ export const validUpdateProductoPayload = () => ({
 export const mockProductoDto = () => ({
   id: 'clsusmoc0000000000000000',
   nombre: 'Perlita',
+  isActive: true,
   createdAt: new Date('2026-01-01'),
 });
 

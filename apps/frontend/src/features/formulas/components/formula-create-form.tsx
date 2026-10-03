@@ -66,8 +66,17 @@ function ProductoSlot({
               </FormControl>
               <SelectContent className="max-h-[250px] md:max-h-[300px]">
                 {productos.map((s) => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.nombre}
+                  <SelectItem key={s.id} value={s.id} disabled={!s.isActive}>
+                    {s.isActive ? (
+                      s.nombre
+                    ) : (
+                      <>
+                        <span className="text-muted-foreground line-through">{s.nombre}</span>
+                        <span className="ml-2 font-bold uppercase text-muted-foreground/70">
+                          Eliminado
+                        </span>
+                      </>
+                    )}
                   </SelectItem>
                 ))}
               </SelectContent>

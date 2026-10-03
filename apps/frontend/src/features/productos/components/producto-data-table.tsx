@@ -116,6 +116,9 @@ export function ProductoDataTable() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         columnLabels={fieldLabels.Producto}
+        getRowClassName={(row) =>
+          !row.isActive ? "opacity-60 text-muted-foreground" : ""
+        }
       />
       {slideOverOpen && (
         <SlideOverForm

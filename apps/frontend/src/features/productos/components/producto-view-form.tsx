@@ -1,7 +1,7 @@
 // apps/frontend/src/features/productos/components/producto-view-form.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductoDto } from "@vivero/shared";
-import { Package, Calendar, CheckCircle } from "lucide-react";
+import { Package, Calendar, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
@@ -64,13 +64,15 @@ export function ProductoViewForm({ selectedProducto }: ProductoViewFormProps) {
               </p>
             </div>
           </div>
-          <Badge
-            variant="outline"
-            className="text-success border-success/20 bg-success/10 font-bold px-2 py-0.5 h-5 text-[9px]"
-          >
-            <CheckCircle className="h-2.5 w-2.5 mr-1" />
-            Activo
-          </Badge>
+          {!selectedProducto.isActive && (
+            <Badge
+              variant="outline"
+              className="text-destructive border-destructive/20 bg-destructive/10 font-bold px-2 py-0.5 h-5 text-xs"
+            >
+              <AlertTriangle className="h-2.5 w-2.5 mr-1" />
+              Inactivo
+            </Badge>
+          )}
         </div>
       </div>
 

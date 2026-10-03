@@ -12,14 +12,32 @@ import {
   CreateFormulaDto,
   CreateFormulaSchema,
   FormulaDto,
+  ProductoDto,
   fieldLabels,
 } from "@vivero/shared";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTable, SlideOverForm } from "@/components/data-display/data-table";
-import { formulaColumns, formulaExportColumns } from "./columns";
+import { createFormulaColumns, formulaExportColumns } from "./columns";
 import { FormulaCreateForm } from "./formula-create-form";
 import { FormulaViewForm } from "./formula-view-form";
+
+export function computeInactiveProductoIds(
+  formulas: FormulaDto[],
+  productos: ProductoDto[],
+): Set<string> {
+  const byId = new Map(productos.map((p) => [p.id, p] as const));
+  const ids = new Set<string>();
+  for (const f of formulas) {
+    for (const n of [1, 2, 3, 4] as const) {
+      const id = f[`producto${n}Id`];
+      if (!id) continue;
+      const producto = byId.get(id);
+      if (!producto || !producto.isActive) ids.add(id);
+    }
+  }
+  return ids;
+}
 
 export function FormulaDataTable() {
   const { data: formulas = [] } = useFormulas();
@@ -61,6 +79,16 @@ export function FormulaDataTable() {
     );
   }, [watchedValues]);
 
+  const inactiveProductoIds = useMemo(
+    () => computeInactiveProductoIds(formulas, productos),
+    [formulas, productos],
+  );
+
+  const columns = useMemo(
+    () => createFormulaColumns(inactiveProductoIds),
+    [inactiveProductoIds],
+  );
+
   const handleNewFormula = useCallback(() => {
     setSelectedFormula(null);
     setMode("create");
@@ -85,7 +113,7 @@ export function FormulaDataTable() {
   return (
     <>
       <DataTable
-        columns={formulaColumns}
+        columns={columns}
         exportColumns={formulaExportColumns}
         data={formulas}
         title="Fórmulas"
@@ -97,6 +125,9 @@ export function FormulaDataTable() {
         onView={handleView}
         onDelete={handleDelete}
         columnLabels={fieldLabels.Formula}
+        getRowClassName={(row) =>
+          !row.isActive ? "opacity-60 text-muted-foreground" : ""
+        }
       />
       {slideOverOpen && (
         <SlideOverForm

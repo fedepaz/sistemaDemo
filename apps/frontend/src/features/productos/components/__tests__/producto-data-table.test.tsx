@@ -15,27 +15,21 @@ import type { ProductoDto } from "@vivero/shared";
 const mockUpdateProducto = jest.fn().mockResolvedValue(undefined);
 const mockDeleteProducto = jest.fn().mockResolvedValue(undefined);
 let capturedProps: any = null;
+let capturedTableProps: any = null;
 
 jest.mock("@/components/data-display/data-table", () => ({
-  DataTable: ({
-    title,
-    onView,
-    onEdit,
-    onDelete,
-  }: {
-    title: string;
-    onView: (row: ProductoDto) => void;
-    onEdit: (row: ProductoDto) => void;
-    onDelete: (row: ProductoDto) => void;
-    onCreate: () => void;
-  }) => (
-    <div data-testid="data-table">
-      <h1>{title}</h1>
-      <button onClick={() => onView(mockProductos[0])}>View Row</button>
-      <button onClick={() => onEdit(mockProductos[0])}>Edit Row</button>
-      <button onClick={() => onDelete(mockProductos[0])}>Delete Row</button>
-    </div>
-  ),
+  DataTable: (props: any) => {
+    capturedTableProps = props;
+    const { title, onView, onEdit, onDelete } = props;
+    return (
+      <div data-testid="data-table">
+        <h1>{title}</h1>
+        <button onClick={() => onView(mockProductos[0])}>View Row</button>
+        <button onClick={() => onEdit(mockProductos[0])}>Edit Row</button>
+        <button onClick={() => onDelete(mockProductos[0])}>Delete Row</button>
+      </div>
+    );
+  },
   SlideOverForm: (props: any) => {
     capturedProps = props;
     return props.open ? (
@@ -95,6 +89,7 @@ const mockProductos: ProductoDto[] = [
   {
     id: "1",
     nombre: "Producto Test",
+    isActive: true,
     createdAt: "2024-03-15T00:00:00.000Z",
   },
 ];
@@ -102,6 +97,7 @@ const mockProductos: ProductoDto[] = [
 describe("ProductoDataTable", () => {
   beforeEach(() => {
     capturedProps = null;
+    capturedTableProps = null;
   });
 
   it("renders DataTable with correct title", () => {
@@ -164,5 +160,15 @@ describe("ProductoDataTable", () => {
       id: "1",
       data: { nombre: "Producto Test" },
     });
+  });
+
+  it("dims inactive rows and leaves active rows untouched", () => {
+    render(<ProductoDataTable />);
+    expect(capturedTableProps.getRowClassName).toBeDefined();
+    const inactiveRow = { ...mockProductos[0], isActive: false };
+    expect(capturedTableProps.getRowClassName(inactiveRow)).toContain(
+      "opacity-60",
+    );
+    expect(capturedTableProps.getRowClassName(mockProductos[0])).toBe("");
   });
 });

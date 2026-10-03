@@ -2,7 +2,12 @@
 import { ProductoSchema, CreateProductoSchema, UpdateProductoSchema } from "../productos.schema";
 
 describe("ProductoSchema", () => {
-  const valid = { id: "clx1234567890abcdef123456", nombre: "Turba", createdAt: new Date("2026-01-15") };
+  const valid = {
+    id: "clx1234567890abcdef123456",
+    nombre: "Turba",
+    isActive: true,
+    createdAt: new Date("2026-01-15"),
+  };
 
   it("accepts valid producto", () => {
     const result = ProductoSchema.parse(valid);
@@ -27,6 +32,20 @@ describe("ProductoSchema", () => {
   it("rejects missing nombre", () => {
     const { nombre, ...withoutNombre } = valid;
     expect(() => ProductoSchema.parse(withoutNombre)).toThrow();
+  });
+
+  it("rejects missing isActive", () => {
+    const withoutIsActive = {
+      id: valid.id,
+      nombre: valid.nombre,
+      createdAt: valid.createdAt,
+    };
+    expect(() => ProductoSchema.parse(withoutIsActive)).toThrow();
+  });
+
+  it("accepts isActive false", () => {
+    const result = ProductoSchema.parse({ ...valid, isActive: false });
+    expect(result.isActive).toBe(false);
   });
 });
 

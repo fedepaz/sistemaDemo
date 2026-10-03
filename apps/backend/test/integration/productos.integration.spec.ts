@@ -39,6 +39,7 @@ describe('Productos (integration)', () => {
       expect(body).toHaveLength(1);
       expect(body[0]).toHaveProperty('id');
       expect(body[0]).toHaveProperty('nombre');
+      expect(body[0]).toHaveProperty('isActive', true);
       expect(productosMock.getAllProductos).toHaveBeenCalledWith(
         expect.any(String),
       );
@@ -64,9 +65,14 @@ describe('Productos (integration)', () => {
         .send(validCreateProductoPayload())
         .expect(201);
 
-      const body = response.body as { id: string; nombre: string };
+      const body = response.body as {
+        id: string;
+        nombre: string;
+        isActive: boolean;
+      };
       expect(body).toHaveProperty('id');
       expect(body).toHaveProperty('nombre', 'Perlita');
+      expect(body).toHaveProperty('isActive', true);
       expect(productosMock.createProducto).toHaveBeenCalledWith(
         expect.objectContaining({ nombre: 'Perlita' }),
       );
@@ -98,6 +104,7 @@ describe('Productos (integration)', () => {
       const body = response.body as { id: string; nombre: string };
       expect(body).toHaveProperty('id');
       expect(body).toHaveProperty('nombre');
+      expect(body).toHaveProperty('isActive', true);
       expect(productosMock.getProductoById).toHaveBeenCalledWith(
         expect.any(String),
         'clsusmoc0000000000000000',
@@ -125,8 +132,9 @@ describe('Productos (integration)', () => {
         .send(validUpdateProductoPayload())
         .expect(200);
 
-      const body = response.body as { nombre: string };
+      const body = response.body as { nombre: string; isActive: boolean };
       expect(body).toHaveProperty('nombre', 'Perlita Actualizada');
+      expect(body).toHaveProperty('isActive', true);
       expect(productosMock.updateProducto).toHaveBeenCalledWith(
         expect.any(String),
         'clsusmoc0000000000000000',
