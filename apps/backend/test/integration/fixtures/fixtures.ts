@@ -76,6 +76,11 @@ export const mockEntity = () => ({
   updatedAt: new Date('2026-01-01'),
 });
 
+export const validUpdateEntityPayload = () => ({
+  label: 'Usuarios Actualizado',
+  permissionType: 'CRUD',
+});
+
 export const mockProgramacionSiembra = () => ({
   id: 'clmocksiembra0000000000000',
   fecha: '2026-01-15',

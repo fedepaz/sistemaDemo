@@ -1,0 +1,84 @@
+// src/features/entities/components/entity-edit-form.tsx
+
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { UpdateEntityDto } from "@vivero/shared";
+import { UseFormReturn } from "react-hook-form";
+
+interface FormProps {
+  onSubmit: (data: UpdateEntityDto) => Promise<void>;
+  onCancel: () => void;
+  formId: string;
+  form: UseFormReturn<UpdateEntityDto>;
+}
+
+export function EntityEditForm({ onSubmit, formId, form }: FormProps) {
+  return (
+    <Form {...form}>
+      <form
+        id={formId}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
+      >
+        <FormField
+          control={form.control}
+          name="label"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Etiqueta Visual</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="ej: Gestión de Usuarios"
+                  autoFocus
+                  required
+                />
+              </FormControl>
+              <FormDescription className="text-[9px] md:text-[11px] font-medium leading-tight">
+                Nombre que verá el usuario final.
+              </FormDescription>
+              <FormMessage className="text-[10px]" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="permissionType"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Tipo de Permiso</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona tipo" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="rounded-xl border-border/60 shadow-2xl p-1 max-h-[250px] md:max-h-[300px]">
+                  <SelectItem value="CRUD" className="font-bold">CRUD (Estándar)</SelectItem>
+                  <SelectItem value="READ_ONLY" className="font-bold">Solo Lectura</SelectItem>
+                  <SelectItem value="PROCESS" className="font-bold">Proceso (Ejecución)</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage className="text-[10px]" />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}

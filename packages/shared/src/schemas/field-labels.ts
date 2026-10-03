@@ -33,6 +33,11 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     permissionType: "Tipo de permiso",
   },
 
+  UpdateEntity: {
+    label: "Etiqueta",
+    permissionType: "Tipo de permiso",
+  },
+
   // ── Productos ─────────────────────────────────────────────────────
   CreateProducto: {
     nombre: "Nombre",

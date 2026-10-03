@@ -69,3 +69,10 @@ export const CreateEntitySchema = z.object({
 });
 
 export type CreateEntityDto = z.infer<typeof CreateEntitySchema>;
+
+export const UpdateEntitySchema = z.object({
+  label: z.string().min(1).max(50).optional(),
+  permissionType: PermissionTypeSchema.optional(),
+});
+
+export type UpdateEntityDto = z.infer<typeof UpdateEntitySchema>;

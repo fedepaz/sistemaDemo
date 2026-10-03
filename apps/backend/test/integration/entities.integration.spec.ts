@@ -1,9 +1,13 @@
 // apps/backend/test/integration/entities.integration.spec.ts
-import { INestApplication, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  INestApplication,
+  NotFoundException,
+} from '@nestjs/common';
 import request from 'supertest';
 import { createTestApp } from './helpers/create-app';
 import { createEntitiesMock } from './helpers/mock-factories';
-import { mockEntity } from './fixtures/fixtures';
+import { mockEntity, validUpdateEntityPayload } from './fixtures/fixtures';
 
 describe('Entities (integration)', () => {
   let app: INestApplication;
@@ -88,6 +92,81 @@ describe('Entities (integration)', () => {
     });
   });
 
+  describe('GET /entities/:id', () => {
+    it('returns 200 + entity by id', async () => {
+      entitiesMock.getTableById.mockResolvedValue(mockEntity());
+
+      const response = await request(app.getHttpServer())
+        .get('/entities/clmockentity0000000000000')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('name', 'users');
+      expect(entitiesMock.getTableById).toHaveBeenCalledWith(
+        expect.any(String),
+        'clmockentity0000000000000',
+      );
+    });
+
+    it('returns 404 when entity not found', async () => {
+      entitiesMock.getTableById.mockRejectedValue(
+        new NotFoundException('Entity missing not found'),
+      );
+
+      await request(app.getHttpServer()).get('/entities/missing').expect(404);
+    });
+  });
+
+  describe('PATCH /entities/:id', () => {
+    it('returns 200 + updated entity on valid payload', async () => {
+      const updated = {
+        ...mockEntity(),
+        label: 'Usuarios Actualizado',
+        permissionType: 'CRUD',
+        isActive: true,
+      };
+      entitiesMock.updateEntity.mockResolvedValue(updated);
+
+      const response = await request(app.getHttpServer())
+        .patch('/entities/clmockentity0000000000000')
+        .send(validUpdateEntityPayload())
+        .expect(200);
+
+      expect(response.body).toHaveProperty('label', 'Usuarios Actualizado');
+      expect(entitiesMock.updateEntity).toHaveBeenCalledWith(
+        'clmockentity0000000000000',
+        expect.objectContaining({ label: 'Usuarios Actualizado' }),
+        expect.any(String),
+      );
+    });
+
+    it('returns 400 on invalid payload (empty label)', async () => {
+      await request(app.getHttpServer())
+        .patch('/entities/clmockentity0000000000000')
+        .send({ label: '' })
+        .expect(400);
+    });
+
+    it('returns 200 on empty body (fields are optional in update schema)', async () => {
+      entitiesMock.updateEntity.mockResolvedValue(mockEntity());
+
+      await request(app.getHttpServer())
+        .patch('/entities/clmockentity0000000000000')
+        .send({})
+        .expect(200);
+    });
+
+    it('returns 404 when entity not found', async () => {
+      entitiesMock.updateEntity.mockRejectedValue(
+        new NotFoundException('Entity missing not found'),
+      );
+
+      await request(app.getHttpServer())
+        .patch('/entities/missing')
+        .send(validUpdateEntityPayload())
+        .expect(404);
+    });
+  });
+
   describe('DELETE /entities/:id', () => {
     it('returns 200 on successful soft delete', async () => {
       entitiesMock.softRemove.mockResolvedValue({ success: true });
@@ -97,6 +176,16 @@ describe('Entities (integration)', () => {
         .expect(200);
 
       expect(entitiesMock.softRemove).toHaveBeenCalled();
+    });
+
+    it('returns 403 when deleting a system entity', async () => {
+      entitiesMock.softRemove.mockRejectedValue(
+        new ForbiddenException('Cannot delete system entity audit_logs'),
+      );
+
+      await request(app.getHttpServer())
+        .delete('/entities/audit_logs')
+        .expect(403);
     });
   });
 });

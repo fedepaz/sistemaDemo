@@ -1,7 +1,7 @@
 // src/features/entities/hooks/useEntities.ts
 
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { CreateEntityDto, Entity } from "@vivero/shared";
+import { CreateEntityDto, Entity, UpdateEntityDto } from "@vivero/shared";
 import { toast } from "sonner";
 import { entityService } from "../api/entityService";
 import { entityQueryKeys } from "@/lib/queryKeys";
@@ -26,6 +26,21 @@ export const useCreateEntity = () => {
         duration: 3000,
       });
       invalidateQueries(queryClient, "createEntity");
+    },
+  });
+};
+
+export const useUpdateEntity = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<Entity, Error, { id: string; data: UpdateEntityDto }>({
+    mutationFn: ({ id, data }) => entityService.update(id, data),
+    onSuccess: (data) => {
+      const toastMessage = `Entidad ${data.name} actualizada exitosamente`;
+      toast.success(toastMessage, {
+        duration: 3000,
+      });
+      invalidateQueries(queryClient, "updateEntity");
     },
   });
 };

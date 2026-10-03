@@ -54,7 +54,7 @@ mv src/<feature-name> src/modules/
 
 ### BaseRepository
 
-`BaseRepository<TEntity>` centralizes common operations (`findById`, `findAll`, `create`, `update`, `softDelete`, `recover`, ...), applies soft-delete (`deletedAt`) and dev-account filtering, and reduces boilerplate. New repositories extend it and use `this.model` for Prisma operations.
+`BaseRepository<TEntity>` centralizes common operations (`findById`, `findAll`, `create`, `softDelete`, `recover`, ...), applies soft-delete (`deletedAt`) and dev-account filtering, and reduces boilerplate. New repositories extend it and use `this.model` for Prisma operations. It does **not** provide `update` — repositories that support editing implement their own `update(id, data)` with a `where: { id, deletedAt: null, isActive: true }` clause (see `productos.repository.ts`, `entities.repository.ts`).
 
 ### Password safety
 

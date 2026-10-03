@@ -77,6 +77,9 @@ export const mutationInvalidationMap = {
   createEntity: {
     queries: () => [entityQueryKeys.all()],
   },
+  updateEntity: {
+    queries: () => [entityQueryKeys.all()],
+  },
   deleteEntity: {
     queries: () => [entityQueryKeys.all()],
   },

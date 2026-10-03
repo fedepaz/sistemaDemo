@@ -37,7 +37,9 @@ export function createEntitiesMock() {
   return {
     getAllTables: jest.fn(),
     getTableByName: jest.fn(),
+    getTableById: jest.fn(),
     createEntity: jest.fn(),
+    updateEntity: jest.fn(),
     softRemove: jest.fn(),
   };
 }
