@@ -19,6 +19,9 @@ const mockFormula: FormulaDto = {
   porcentaje4: null,
   isActive: true,
   createdAt: new Date("2024-03-14"),
+  deletedAt: null,
+  deletedByUserId: null,
+  deletedByUsername: null,
 };
 
 describe("FormulaViewForm", () => {
@@ -55,5 +58,41 @@ describe("FormulaViewForm", () => {
     render(<FormulaViewForm selectedFormula={mockFormula} />);
     const dashes = screen.getAllByText("-");
     expect(dashes.length).toBe(4);
+  });
+
+  it("should show deletion date and deleter when deleted", () => {
+    render(
+      <FormulaViewForm
+        selectedFormula={{
+          ...mockFormula,
+          isActive: false,
+          deletedAt: new Date("2026-10-01T12:00:00.000Z"),
+          deletedByUserId: "u1",
+          deletedByUsername: "admin",
+        }}
+      />,
+    );
+    expect(screen.getByText(/de octubre de 2026/)).toBeInTheDocument();
+    expect(screen.getByText(/por admin/)).toBeInTheDocument();
+  });
+
+  it("should omit the deleter clause when username is null", () => {
+    render(
+      <FormulaViewForm
+        selectedFormula={{
+          ...mockFormula,
+          deletedAt: new Date("2026-10-01T12:00:00.000Z"),
+          deletedByUserId: "u1",
+          deletedByUsername: null,
+        }}
+      />,
+    );
+    expect(screen.getByText(/de octubre de 2026/)).toBeInTheDocument();
+    expect(screen.queryByText(/por admin/)).toBeNull();
+  });
+
+  it("should not show a deletion line for active records", () => {
+    render(<FormulaViewForm selectedFormula={mockFormula} />);
+    expect(screen.queryByText(/Eliminado/)).toBeNull();
   });
 });

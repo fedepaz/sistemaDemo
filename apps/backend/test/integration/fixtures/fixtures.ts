@@ -175,6 +175,9 @@ export const mockFormulaDto = () => ({
   porcentaje4: null,
   isActive: true,
   createdAt: new Date('2026-01-01'),
+  deletedAt: null,
+  deletedByUserId: null,
+  deletedByUsername: null,
 });
 
 // ── SiembraPartidas ──────────────────────────────────────────────────────────
@@ -214,6 +217,9 @@ export const mockProductoDto = () => ({
   nombre: 'Perlita',
   isActive: true,
   createdAt: new Date('2026-01-01'),
+  deletedAt: null,
+  deletedByUserId: null,
+  deletedByUsername: null,
 });
 
 // ── AuditLog ──────────────────────────────────────────────────────────────────

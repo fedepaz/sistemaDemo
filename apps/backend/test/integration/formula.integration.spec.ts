@@ -36,6 +36,9 @@ describe('Formula (integration)', () => {
             producto1Id: expect.any(String),
             porcentaje1: expect.any(Number),
             isActive: expect.any(Boolean),
+            deletedAt: null,
+            deletedByUserId: null,
+            deletedByUsername: null,
           }),
         ]),
       );

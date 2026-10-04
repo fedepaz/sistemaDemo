@@ -2,7 +2,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FormulaDto } from "@vivero/shared";
-import { Blend, Calendar, AlertTriangle } from "lucide-react";
+import { Blend, Calendar, AlertTriangle, Trash2 } from "lucide-react";
 
 interface FormulaViewFormProps {
   selectedFormula: FormulaDto;
@@ -131,6 +131,21 @@ export function FormulaViewForm({ selectedFormula }: FormulaViewFormProps) {
               })}
             </span>
           </div>
+
+          {selectedFormula.deletedAt && (
+            <div className="flex items-center gap-2 pt-2 border-t border-border/40">
+              <Trash2 className="h-3.5 w-3.5 text-destructive/60" />
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                Eliminado:
+              </span>
+              <span className="text-xs font-bold text-foreground">
+                {`el ${new Date(selectedFormula.deletedAt).toLocaleDateString(
+                  "es-AR",
+                  { year: "numeric", month: "long", day: "numeric" },
+                )}${selectedFormula.deletedByUsername ? ` por ${selectedFormula.deletedByUsername}` : ""}`}
+              </span>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

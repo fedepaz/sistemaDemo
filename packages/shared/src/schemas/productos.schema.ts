@@ -8,6 +8,9 @@ export const ProductoSchema = z.object({
   nombre: z.string(),
   isActive: z.boolean(),
   createdAt: z.date(),
+  deletedAt: z.date().nullable(),
+  deletedByUserId: z.string().nullable(),
+  deletedByUsername: z.string().nullable(),
 });
 
 export type ProductoDto = z.infer<typeof ProductoSchema>;

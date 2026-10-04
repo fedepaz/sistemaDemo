@@ -24,6 +24,9 @@ export class ProductosService {
       nombre: r.nombre,
       isActive: r.isActive,
       createdAt: r.createdAt,
+      deletedAt: r.deletedAt,
+      deletedByUserId: r.deletedByUserId,
+      deletedByUsername: r.deletedByUsername,
     }));
   }
 
@@ -38,27 +41,48 @@ export class ProductosService {
       nombre: row.nombre,
       isActive: row.isActive,
       createdAt: row.createdAt,
+      deletedAt: row.deletedAt,
+      deletedByUserId: row.deletedByUserId,
+      deletedByUsername: row.deletedByUsername,
     };
   }
 
-  async createProducto(data: CreateProductoDto) {
-    return await this.repo.create({
+  async createProducto(data: CreateProductoDto): Promise<ProductoDto> {
+    const row = await this.repo.create({
       nombre: data.nombre,
     });
+    return {
+      id: row.id,
+      nombre: row.nombre,
+      isActive: row.isActive,
+      createdAt: row.createdAt,
+      deletedAt: null,
+      deletedByUserId: null,
+      deletedByUsername: null,
+    };
   }
 
   async updateProducto(
     requesterId: string,
     id: string,
     data: UpdateProductoDto,
-  ) {
+  ): Promise<ProductoDto> {
     if (!data.nombre) {
       throw new BadRequestException('nombre is required');
     }
 
-    return await this.repo.update(id, {
+    const row = await this.repo.update(id, {
       nombre: data.nombre,
     });
+    return {
+      id: row.id,
+      nombre: row.nombre,
+      isActive: row.isActive,
+      createdAt: row.createdAt,
+      deletedAt: null,
+      deletedByUserId: null,
+      deletedByUsername: null,
+    };
   }
 
   async deleteProducto(requesterId: string, id: string) {

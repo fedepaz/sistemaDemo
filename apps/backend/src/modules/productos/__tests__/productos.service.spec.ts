@@ -23,6 +23,7 @@ describe('ProductosService', () => {
     updatedAt: new Date('2026-01-15'),
     deletedAt: null,
     deletedByUserId: null,
+    deletedByUsername: null,
   };
 
   const mockDto = {
@@ -30,6 +31,9 @@ describe('ProductosService', () => {
     nombre: 'Turba',
     isActive: true,
     createdAt: new Date('2026-01-15'),
+    deletedAt: null,
+    deletedByUserId: null,
+    deletedByUsername: null,
   };
 
   beforeEach(async () => {
@@ -70,6 +74,24 @@ describe('ProductosService', () => {
 
       expect(result).toEqual([]);
     });
+
+    it('passes deletion info through to the DTO', async () => {
+      repo.findAll.mockResolvedValue([
+        {
+          ...mockProducto,
+          isActive: false,
+          deletedAt: new Date('2026-10-01'),
+          deletedByUserId: 'u1',
+          deletedByUsername: 'admin',
+        },
+      ]);
+
+      const result = await service.getAllProductos('dev-1');
+
+      expect(result[0].deletedAt).toEqual(new Date('2026-10-01'));
+      expect(result[0].deletedByUserId).toBe('u1');
+      expect(result[0].deletedByUsername).toBe('admin');
+    });
   });
 
   describe('getProductoById', () => {
@@ -97,7 +119,15 @@ describe('ProductosService', () => {
 
       const result = await service.createProducto({ nombre: 'Turba' });
 
-      expect(result).toEqual(mockProducto);
+      expect(result).toEqual({
+        id: 'sust-1',
+        nombre: 'Turba',
+        isActive: true,
+        createdAt: new Date('2026-01-15'),
+        deletedAt: null,
+        deletedByUserId: null,
+        deletedByUsername: null,
+      });
       expect(repo.create).toHaveBeenCalledWith({ nombre: 'Turba' });
     });
   });
@@ -111,7 +141,15 @@ describe('ProductosService', () => {
         nombre: 'Perlita',
       });
 
-      expect(result).toEqual(updated);
+      expect(result).toEqual({
+        id: 'sust-1',
+        nombre: 'Perlita',
+        isActive: true,
+        createdAt: new Date('2026-01-15'),
+        deletedAt: null,
+        deletedByUserId: null,
+        deletedByUsername: null,
+      });
       expect(repo.update).toHaveBeenCalledWith('sust-1', {
         nombre: 'Perlita',
       });

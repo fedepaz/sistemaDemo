@@ -56,6 +56,8 @@ mv src/<feature-name> src/modules/
 
 `BaseRepository<TEntity>` centralizes common operations (`findById`, `findAll`, `create`, `softDelete`, `recover`, ...), applies soft-delete (`deletedAt`) and dev-account filtering, and reduces boilerplate. New repositories extend it and use `this.model` for Prisma operations. It does **not** provide `update` — repositories that support editing implement their own `update(id, data)` with a `where: { id, deletedAt: null, isActive: true }` clause (see `productos.repository.ts`, `entities.repository.ts`).
 
+It also exposes the protected `enrichDeletedBy(rows)` helper (and the exported `WithDeletedBy<T>` type): it batch-resolves `deletedByUserId` to `deletedByUsername` with a single `prisma.user.findMany({ id: { in } })`, appends `deletedByUsername: null` when there is nothing to resolve, and issues **no** query at all when no row has a deleter. It needs no Prisma relation, so it works for every soft-deletable model. Opt-in call sites only (`productos.repository.ts`, `formula.repository.ts`) — entities that do not call it see no API response change.
+
 ### Password safety
 
 - `passwordHash` must never be returned by the API or be writable through a profile update. `users.repository.ts` overrides its queries with `omit: { passwordHash: true }`, and `UpdateUserProfileSchema` does not include the field.
@@ -72,7 +74,7 @@ mv src/<feature-name> src/modules/
 
 ### recoverById
 
-Restores a soft-deleted entity by clearing `deletedAt` and setting `isActive` back to `true`.
+Restores a soft-deleted entity by clearing `deletedAt` and `deletedByUserId` and setting `isActive` back to `true`.
 
 ## Import Conventions
 

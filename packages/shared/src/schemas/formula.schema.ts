@@ -19,6 +19,9 @@ export const FormulaSchema = z.object({
   porcentaje4: z.number().nullable(),
   isActive: z.boolean(),
   createdAt: z.date(),
+  deletedAt: z.date().nullable(),
+  deletedByUserId: z.string().nullable(),
+  deletedByUsername: z.string().nullable(),
 });
 
 export type FormulaDto = z.infer<typeof FormulaSchema>;

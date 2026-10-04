@@ -1,14 +1,17 @@
 // packages/shared/src/schemas/__tests__/productos.schema.spec.ts
 import { ProductoSchema, CreateProductoSchema, UpdateProductoSchema } from "../productos.schema";
 
-describe("ProductoSchema", () => {
-  const valid = {
-    id: "clx1234567890abcdef123456",
-    nombre: "Turba",
-    isActive: true,
-    createdAt: new Date("2026-01-15"),
-  };
+const valid = {
+  id: "clx1234567890abcdef123456",
+  nombre: "Turba",
+  isActive: true,
+  createdAt: new Date("2026-01-15"),
+  deletedAt: null,
+  deletedByUserId: null,
+  deletedByUsername: null,
+};
 
+describe("ProductoSchema", () => {
   it("accepts valid producto", () => {
     const result = ProductoSchema.parse(valid);
     expect(result.id).toBe("clx1234567890abcdef123456");
@@ -88,5 +91,42 @@ describe("UpdateProductoSchema", () => {
       const messages = result.error.issues.map((i) => i.message);
       expect(messages).toContain("El nombre del producto es requerido");
     }
+  });
+});
+
+describe("ProductoSchema deletion fields", () => {
+  it("accepts null deletion fields", () => {
+    const result = ProductoSchema.parse({
+      ...valid,
+      deletedAt: null,
+      deletedByUserId: null,
+      deletedByUsername: null,
+    });
+    expect(result.deletedAt).toBeNull();
+    expect(result.deletedByUserId).toBeNull();
+    expect(result.deletedByUsername).toBeNull();
+  });
+
+  it("accepts populated deletion fields", () => {
+    const result = ProductoSchema.parse({
+      ...valid,
+      deletedAt: new Date("2026-10-01"),
+      deletedByUserId: "user-1",
+      deletedByUsername: "admin",
+    });
+    expect(result.deletedAt).toEqual(new Date("2026-10-01"));
+    expect(result.deletedByUserId).toBe("user-1");
+    expect(result.deletedByUsername).toBe("admin");
+  });
+
+  it("rejects missing deletion fields", () => {
+    const { deletedAt, ...missing } = valid;
+    expect(() => ProductoSchema.parse(missing)).toThrow();
+  });
+
+  it("rejects deletedAt that is not a date", () => {
+    expect(() =>
+      ProductoSchema.parse({ ...valid, deletedAt: "nope" }),
+    ).toThrow();
   });
 });

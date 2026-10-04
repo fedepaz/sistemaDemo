@@ -1,25 +1,28 @@
 // packages/shared/src/schemas/__tests__/formula.schema.spec.ts
 import { FormulaSchema, CreateFormulaSchema } from "../formula.schema";
 
-describe("FormulaSchema", () => {
-  const valid = {
-    id: "clx1234567890abcdef123456",
-    producto1Id: "clx1234567890abcdef123467",
-    producto1Nombre: "Turba",
-    porcentaje1: 60,
-    producto2Id: "clx1234567890abcdef123478",
-    producto2Nombre: "Perlita",
-    porcentaje2: 40,
-    producto3Id: null,
-    producto3Nombre: null,
-    porcentaje3: null,
-    producto4Id: null,
-    producto4Nombre: null,
-    porcentaje4: null,
-    isActive: true,
-    createdAt: new Date("2024-03-14"),
-  };
+const valid = {
+  id: "clx1234567890abcdef123456",
+  producto1Id: "clx1234567890abcdef123467",
+  producto1Nombre: "Turba",
+  porcentaje1: 60,
+  producto2Id: "clx1234567890abcdef123478",
+  producto2Nombre: "Perlita",
+  porcentaje2: 40,
+  producto3Id: null,
+  producto3Nombre: null,
+  porcentaje3: null,
+  producto4Id: null,
+  producto4Nombre: null,
+  porcentaje4: null,
+  isActive: true,
+  createdAt: new Date("2024-03-14"),
+  deletedAt: null,
+  deletedByUserId: null,
+  deletedByUsername: null,
+};
 
+describe("FormulaSchema", () => {
   it("accepts valid fórmula with all fields", () => {
     const result = FormulaSchema.parse(valid);
     expect(result.id).toBe("clx1234567890abcdef123456");
@@ -45,6 +48,9 @@ describe("FormulaSchema", () => {
       porcentaje4: null,
       isActive: true,
       createdAt: new Date("2024-03-14"),
+      deletedAt: null,
+      deletedByUserId: null,
+      deletedByUsername: null,
     };
     const result = FormulaSchema.parse(minimal);
     expect(result.producto1Id).toBe("clx1234567890abcdef123467");
@@ -256,5 +262,38 @@ describe("CreateFormulaSchema", () => {
       );
       expect(issue?.path).toEqual(["producto2Id"]);
     }
+  });
+});
+
+describe("FormulaSchema deletion fields", () => {
+  it("accepts null deletion fields", () => {
+    const result = FormulaSchema.parse({
+      ...valid,
+      deletedAt: null,
+      deletedByUserId: null,
+      deletedByUsername: null,
+    });
+    expect(result.deletedAt).toBeNull();
+    expect(result.deletedByUserId).toBeNull();
+    expect(result.deletedByUsername).toBeNull();
+  });
+
+  it("accepts populated deletion fields", () => {
+    const result = FormulaSchema.parse({
+      ...valid,
+      deletedAt: new Date("2026-10-01"),
+      deletedByUserId: "user-1",
+      deletedByUsername: "admin",
+    });
+    expect(result.deletedByUsername).toBe("admin");
+  });
+
+  it("rejects missing deletion fields", () => {
+    const { deletedAt, ...missing } = valid;
+    expect(() => FormulaSchema.parse(missing)).toThrow();
+  });
+
+  it("rejects deletedAt that is not a date", () => {
+    expect(() => FormulaSchema.parse({ ...valid, deletedAt: "nope" })).toThrow();
   });
 });

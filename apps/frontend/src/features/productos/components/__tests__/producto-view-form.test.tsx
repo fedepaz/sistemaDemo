@@ -9,7 +9,39 @@ describe("ProductoViewForm", () => {
     nombre: "Producto Test",
     isActive: true,
     createdAt: "2024-03-15T00:00:00.000Z",
+    deletedAt: null,
+    deletedByUserId: null,
+    deletedByUsername: null,
   };
+
+  const deletedProducto: ProductoDto = {
+    ...mockProducto,
+    isActive: false,
+    deletedAt: new Date("2026-10-01T12:00:00.000Z"),
+    deletedByUserId: "u1",
+    deletedByUsername: "admin",
+  };
+
+  it("should show deletion date and deleter when deleted", () => {
+    render(<ProductoViewForm selectedProducto={deletedProducto} />);
+    expect(screen.getByText(/de octubre de 2026/)).toBeInTheDocument();
+    expect(screen.getByText(/por admin/)).toBeInTheDocument();
+  });
+
+  it("should omit the deleter clause when username is null", () => {
+    render(
+      <ProductoViewForm
+        selectedProducto={{ ...deletedProducto, deletedByUsername: null }}
+      />,
+    );
+    expect(screen.getByText(/de octubre de 2026/)).toBeInTheDocument();
+    expect(screen.queryByText(/por admin/)).toBeNull();
+  });
+
+  it("should not show a deletion line for active records", () => {
+    render(<ProductoViewForm selectedProducto={mockProducto} />);
+    expect(screen.queryByText(/Eliminado/)).toBeNull();
+  });
 
   it("should display producto nombre in header", () => {
     render(<ProductoViewForm selectedProducto={mockProducto} />);

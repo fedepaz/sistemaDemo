@@ -36,6 +36,7 @@ export class FormulaRepository extends BaseRepository<Formula> {
       producto2Nombre: producto2?.nombre ?? null,
       producto3Nombre: producto3?.nombre ?? null,
       producto4Nombre: producto4?.nombre ?? null,
+      deletedByUsername: null,
     };
   }
 
@@ -50,7 +51,7 @@ export class FormulaRepository extends BaseRepository<Formula> {
       include: PRODUCTO_INCLUDE,
     });
 
-    return rows.map((r) => this.mapRow(r));
+    return this.enrichDeletedBy(rows.map((r) => this.mapRow(r)));
   }
 
   override async findById(
@@ -68,7 +69,7 @@ export class FormulaRepository extends BaseRepository<Formula> {
     if (!row) return null;
     if (!isDev && (row.deletedAt !== null || !row.isActive)) return null;
 
-    return this.mapRow(row);
+    return (await this.enrichDeletedBy([this.mapRow(row)]))[0];
   }
 
   override async create(data: CreateFormulaDto): Promise<FormulaRecord> {
@@ -83,6 +84,6 @@ export class FormulaRepository extends BaseRepository<Formula> {
       throw new Error(`Formula ${created.id} not found right after create`);
     }
 
-    return this.mapRow(row);
+    return (await this.enrichDeletedBy([this.mapRow(row)]))[0];
   }
 }

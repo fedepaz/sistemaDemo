@@ -16,6 +16,9 @@ describe('ProductosRepository', () => {
     devAccount: {
       findMany: jest.Mock;
     };
+    user: {
+      findMany: jest.Mock;
+    };
   };
 
   const mockProducto = {
@@ -26,6 +29,7 @@ describe('ProductosRepository', () => {
     updatedAt: new Date('2026-01-15'),
     deletedAt: null,
     deletedByUserId: null,
+    deletedByUsername: null,
   };
 
   beforeEach(async () => {
@@ -37,6 +41,9 @@ describe('ProductosRepository', () => {
         update: jest.fn(),
       },
       devAccount: {
+        findMany: jest.fn().mockResolvedValue([]),
+      },
+      user: {
         findMany: jest.fn().mockResolvedValue([]),
       },
     };
@@ -78,6 +85,27 @@ describe('ProductosRepository', () => {
       expect(result).toEqual([mockProducto]);
       expect(prisma.producto.findMany).toHaveBeenCalledWith();
     });
+
+    it('resolves deleter username on deleted rows for dev users', async () => {
+      prisma.devAccount.findMany.mockResolvedValue([{ userId: 'dev-1' }]);
+      prisma.producto.findMany.mockResolvedValue([
+        {
+          ...mockProducto,
+          isActive: false,
+          deletedAt: new Date('2026-10-01'),
+          deletedByUserId: 'u1',
+        },
+      ]);
+      prisma.user.findMany.mockResolvedValue([{ id: 'u1', username: 'admin' }]);
+
+      const result = await repository.findAll('dev-1');
+
+      expect(result[0].deletedByUsername).toBe('admin');
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        where: { id: { in: ['u1'] } },
+        select: { id: true, username: true },
+      });
+    });
   });
 
   describe('findById', () => {
@@ -114,6 +142,21 @@ describe('ProductosRepository', () => {
       expect(prisma.producto.findFirst).toHaveBeenCalledWith({
         where: { id: 'sust-1' },
       });
+    });
+
+    it('resolves deleter username for a deleted record found by id', async () => {
+      prisma.devAccount.findMany.mockResolvedValue([{ userId: 'dev-1' }]);
+      prisma.producto.findFirst.mockResolvedValue({
+        ...mockProducto,
+        isActive: false,
+        deletedAt: new Date('2026-10-01'),
+        deletedByUserId: 'u1',
+      });
+      prisma.user.findMany.mockResolvedValue([{ id: 'u1', username: 'admin' }]);
+
+      const result = await repository.findById('sust-1', 'dev-1');
+
+      expect(result?.deletedByUsername).toBe('admin');
     });
   });
 

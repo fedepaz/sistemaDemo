@@ -40,6 +40,9 @@ describe('Productos (integration)', () => {
       expect(body[0]).toHaveProperty('id');
       expect(body[0]).toHaveProperty('nombre');
       expect(body[0]).toHaveProperty('isActive', true);
+      expect(body[0]).toHaveProperty('deletedAt', null);
+      expect(body[0]).toHaveProperty('deletedByUserId', null);
+      expect(body[0]).toHaveProperty('deletedByUsername', null);
       expect(productosMock.getAllProductos).toHaveBeenCalledWith(
         expect.any(String),
       );

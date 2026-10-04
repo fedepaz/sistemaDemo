@@ -170,6 +170,7 @@ describe('TenantsRepository', () => {
           deletedAt: null,
           isActive: true,
           updatedAt: expect.any(Date),
+          deletedByUserId: null,
         },
       });
     });

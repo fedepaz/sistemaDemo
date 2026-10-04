@@ -2,7 +2,10 @@
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
-import { BaseRepository } from '../../../shared/baseModule/base.repository';
+import {
+  BaseRepository,
+  WithDeletedBy,
+} from '../../../shared/baseModule/base.repository';
 import { Producto } from '../../../generated/prisma/client';
 
 @Injectable()
@@ -24,5 +27,20 @@ export class ProductosRepository extends BaseRepository<Producto> {
         updatedAt: new Date(),
       },
     });
+  }
+
+  override async findAll(
+    requesterId: string,
+  ): Promise<WithDeletedBy<Producto>[]> {
+    return this.enrichDeletedBy(await super.findAll(requesterId));
+  }
+
+  override async findById(
+    id: string,
+    requesterId: string,
+  ): Promise<WithDeletedBy<Producto> | null> {
+    const row = await super.findById(id, requesterId);
+    if (!row) return null;
+    return (await this.enrichDeletedBy([row]))[0];
   }
 }

@@ -1,7 +1,7 @@
 // apps/frontend/src/features/productos/components/producto-view-form.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductoDto } from "@vivero/shared";
-import { Package, Calendar, AlertTriangle } from "lucide-react";
+import { Package, Calendar, AlertTriangle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
@@ -94,6 +94,20 @@ export function ProductoViewForm({ selectedProducto }: ProductoViewFormProps) {
                 day: "numeric",
               })}
             />
+            {selectedProducto.deletedAt && (
+              <InfoRow
+                icon={Trash2}
+                label="Eliminado"
+                value={`el ${new Date(selectedProducto.deletedAt).toLocaleDateString(
+                  "es-AR",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  },
+                )}${selectedProducto.deletedByUsername ? ` por ${selectedProducto.deletedByUsername}` : ""}`}
+              />
+            )}
           </div>
         </CardContent>
       </Card>

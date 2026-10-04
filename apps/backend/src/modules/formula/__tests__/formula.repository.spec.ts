@@ -17,6 +17,9 @@ describe('FormulaRepository', () => {
     devAccount: {
       findMany: jest.Mock;
     };
+    user: {
+      findMany: jest.Mock;
+    };
   };
 
   const mockRecordWithRelations = {
@@ -59,6 +62,7 @@ describe('FormulaRepository', () => {
     updatedAt: new Date('2026-08-01'),
     deletedAt: null,
     deletedByUserId: null,
+    deletedByUsername: null,
   };
 
   const productoInclude = {
@@ -78,6 +82,9 @@ describe('FormulaRepository', () => {
         update: jest.fn(),
       },
       devAccount: {
+        findMany: jest.fn().mockResolvedValue([]),
+      },
+      user: {
         findMany: jest.fn().mockResolvedValue([]),
       },
     };
@@ -147,6 +154,23 @@ describe('FormulaRepository', () => {
 
       expect(result).toEqual([]);
     });
+
+    it('dev user: resolves deleter username on deleted rows', async () => {
+      prisma.devAccount.findMany.mockResolvedValue([{ userId: 'dev-1' }]);
+      prisma.formula.findMany.mockResolvedValue([
+        {
+          ...mockRecordWithRelations,
+          isActive: false,
+          deletedAt: new Date('2026-08-02'),
+          deletedByUserId: 'u1',
+        },
+      ]);
+      prisma.user.findMany.mockResolvedValue([{ id: 'u1', username: 'admin' }]);
+
+      const result = await repository.findAll('dev-1');
+
+      expect(result[0].deletedByUsername).toBe('admin');
+    });
   });
 
   describe('findById', () => {
@@ -203,6 +227,21 @@ describe('FormulaRepository', () => {
       const result = await repository.findById('nonexistent', 'user-1');
 
       expect(result).toBeNull();
+    });
+
+    it('resolves deleter username for a deleted record found by id', async () => {
+      prisma.devAccount.findMany.mockResolvedValue([{ userId: 'dev-1' }]);
+      prisma.formula.findUnique.mockResolvedValue({
+        ...mockRecordWithRelations,
+        isActive: false,
+        deletedAt: new Date('2026-08-02'),
+        deletedByUserId: 'u1',
+      });
+      prisma.user.findMany.mockResolvedValue([{ id: 'u1', username: 'admin' }]);
+
+      const result = await repository.findById('formula-1', 'dev-1');
+
+      expect(result?.deletedByUsername).toBe('admin');
     });
   });
 

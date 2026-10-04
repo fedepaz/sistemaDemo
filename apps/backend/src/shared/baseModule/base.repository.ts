@@ -17,6 +17,8 @@ interface PrismaModelDelegate<T> {
   create(args: any): Promise<T>;
 }
 
+export type WithDeletedBy<T> = T & { deletedByUsername: string | null };
+
 export abstract class BaseRepository<T extends SoftDeletableModel> {
   constructor(
     protected readonly prisma: PrismaService,
@@ -94,8 +96,35 @@ export abstract class BaseRepository<T extends SoftDeletableModel> {
         deletedAt: null,
         isActive: true,
         updatedAt: new Date(),
+        deletedByUserId: null,
       },
     });
+  }
+
+  protected async enrichDeletedBy<R extends { deletedByUserId: string | null }>(
+    rows: R[],
+  ): Promise<WithDeletedBy<R>[]> {
+    const ids = [
+      ...new Set(
+        rows
+          .map((r) => r.deletedByUserId)
+          .filter((id): id is string => id !== null),
+      ),
+    ];
+    if (ids.length === 0) {
+      return rows.map((r) => ({ ...r, deletedByUsername: null }));
+    }
+    const users = await this.prisma.user.findMany({
+      where: { id: { in: ids } },
+      select: { id: true, username: true },
+    });
+    const byId = new Map(users.map((u) => [u.id, u.username]));
+    return rows.map((r) => ({
+      ...r,
+      deletedByUsername: r.deletedByUserId
+        ? (byId.get(r.deletedByUserId) ?? null)
+        : null,
+    }));
   }
 
   async create(data: Partial<T>): Promise<T> {
