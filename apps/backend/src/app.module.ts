@@ -44,6 +44,7 @@ import { LegacyTratamientoModule } from './modules/legacy/tratamiento/tratamient
 import { LegacySustratoModule } from './modules/legacy/sustrato/sustrato.module';
 import { LegacyStockModule } from './modules/legacy/stock/stock.module';
 import { BillboardModule } from './modules/billboard/billboard.module';
+import { LegacyTipoContenedorModule } from './modules/legacy/tipoContenedor/tipoContenedor.module';
 
 @Module({
   imports: [
@@ -107,6 +108,7 @@ import { BillboardModule } from './modules/billboard/billboard.module';
     LegacyTratamientoModule,
     LegacySustratoModule,
     LegacyStockModule,
+    LegacyTipoContenedorModule,
     AlertCommentsModule,
     TaskShiftsModule,
     AlertSolvedModule,

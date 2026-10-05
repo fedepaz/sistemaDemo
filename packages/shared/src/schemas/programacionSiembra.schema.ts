@@ -41,3 +41,18 @@ export const LegacySustratoDtoSchema = z.object({
 });
 
 export type LegacySustratoDto = z.infer<typeof LegacySustratoDtoSchema>;
+
+export const LegacyTipoContenedorDtoSchema = z.object({
+  codigo: z.string(),
+  nombre: z.string(),
+  cantidad: z.number(),
+  semillas: z.number(),
+  siembra: z.string(),
+  entrega: z.number(),
+  rubro: z.string(),
+  stock: z.string(),
+});
+
+export type LegacyTipoContenedorDto = z.infer<
+  typeof LegacyTipoContenedorDtoSchema
+>;
