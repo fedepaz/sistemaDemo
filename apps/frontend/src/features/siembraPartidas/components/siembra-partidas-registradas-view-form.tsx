@@ -10,10 +10,10 @@ import {
   Layers,
   Clock,
   ClipboardList,
-  Sprout,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatShortDate, utcToLocalTime } from "@/lib/date-utils";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 
 interface SiembraPartidasRegistradasViewFormProps {
   selectedPartida: SiembraPartidaDto;
@@ -67,62 +67,13 @@ export function SiembraPartidasRegistradasViewForm({
             </div>
             <div>
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
-                Partida #{selectedPartida.partidaId}
+                {formatSpecies(selectedPartida)}
               </h2>
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                {formatPartidaNumber(selectedPartida)}
+              </p>
             </div>
           </div>
-        </div>
-
-        {/* SPECS GRID */}
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { label: "Año", value: selectedPartida.anio, icon: Hash },
-            { label: "Índice", value: selectedPartida.indice, icon: Hash },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
-            >
-              <div className="p-1 bg-muted rounded-md shrink-0">
-                <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[7px] font-bold uppercase leading-none mb-0.5">
-                  {item.label}
-                </p>
-                <p className="text-[10px] truncate uppercase font-bold">
-                  {item.value}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 gap-2">
-          {[
-            {
-              label: "Especie",
-              value: selectedPartida.nombreEspecie,
-              icon: Sprout,
-            },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
-            >
-              <div className="p-1 bg-muted rounded-md shrink-0">
-                <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[7px] font-bold uppercase leading-none mb-0.5">
-                  {item.label}
-                </p>
-                <p className="text-[10px] truncate uppercase font-bold">
-                  {item.value}
-                </p>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 

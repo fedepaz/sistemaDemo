@@ -40,25 +40,20 @@ const mockPartida: SiembraPartidaDto = {
 };
 
 describe("SiembraPartidasRegistradasViewForm", () => {
-  it("renders header with partida number", () => {
+  it("renders header with species and partida number", () => {
     render(<SiembraPartidasRegistradasViewForm selectedPartida={mockPartida} />);
 
-    expect(screen.getByText("Partida #456")).toBeInTheDocument();
+    expect(
+      screen.getByText("ABCOM · PLA.ALBAHACA COMPACTA M009"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("#456/2")).toBeInTheDocument();
   });
 
-  it("renders sustrato in header", () => {
+  it("renders sustrato in siembra tab", () => {
     render(<SiembraPartidasRegistradasViewForm selectedPartida={mockPartida} />);
 
     const matches = screen.getAllByText("Sustrato Test");
     expect(matches.length).toBeGreaterThan(0);
-  });
-
-  it("displays specs grid with year, index, and especie", () => {
-    render(<SiembraPartidasRegistradasViewForm selectedPartida={mockPartida} />);
-
-    expect(screen.getByText("2025")).toBeInTheDocument();
-    expect(screen.getByText("2")).toBeInTheDocument();
-    expect(screen.getByText("PLA.ALBAHACA COMPACTA M009")).toBeInTheDocument();
   });
 
   it("displays siembra tab content by default", () => {
