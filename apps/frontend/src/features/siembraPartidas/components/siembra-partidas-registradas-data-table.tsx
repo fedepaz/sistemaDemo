@@ -58,7 +58,7 @@ export function SiembraPartidasRegistradasDataTable({
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={`Partida Nº ${selectedPartida.partidaId}`}
+          title={`Partida Registrada`}
           formId="siembra-partidas-registradas-form"
           mode="view"
           fieldLabels={fieldLabels.SiembraPartida}

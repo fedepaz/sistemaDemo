@@ -69,20 +69,37 @@ export function SiembraPartidasRegistradasViewForm({
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
                 Partida #{selectedPartida.partidaId}
               </h2>
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                {selectedPartida.sustratoNombre ||
-                  selectedPartida.sustrato ||
-                  "-"}
-              </p>
             </div>
           </div>
         </div>
 
         {/* SPECS GRID */}
-        <div className="grid grid-cols-2  gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {[
             { label: "Año", value: selectedPartida.anio, icon: Hash },
             { label: "Índice", value: selectedPartida.indice, icon: Hash },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
+            >
+              <div className="p-1 bg-muted rounded-md shrink-0">
+                <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[7px] font-bold uppercase leading-none mb-0.5">
+                  {item.label}
+                </p>
+                <p className="text-[10px] truncate uppercase font-bold">
+                  {item.value}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 gap-2">
+          {[
             {
               label: "Especie",
               value: selectedPartida.nombreEspecie,
@@ -241,19 +258,10 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Año Lote"
                     value={selectedPartida.anoLote}
                   />
-                  <InfoRow
-                    icon={Hash}
-                    label="Item"
-                    value={selectedPartida.item}
-                  />
-                  <InfoRow
-                    icon={Activity}
-                    label="Semillas/gr"
-                    value={selectedPartida.semxgr}
-                  />
+
                   <InfoRow
                     icon={ClipboardList}
-                    label="Ajuste"
+                    label="Germ. Estimada"
                     value={selectedPartida.ajuste}
                   />
                   <InfoRow
