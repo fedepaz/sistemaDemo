@@ -18,7 +18,7 @@ interface AutorizarProgramacionSiembraEditFormProps {
 function InfoRow({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="flex items-center justify-between py-1.5 border-b border-border/30 last:border-0">
-      <span className="text-xs text-xs font-bold uppercase tracking-widest text-muted-foreground">
+      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </span>
       <span className="text-xs text-sm font-bold text-foreground">
@@ -43,7 +43,7 @@ export function AutorizarProgramacionSiembraEditForm({
       <form
         id="autorizar-siembra-form"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* Hidden required fields for form validity */}
         <FormField
@@ -73,16 +73,16 @@ export function AutorizarProgramacionSiembraEditForm({
 
         {/* PRODUCT HEADER */}
         <div className="space-y-2 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
+          <div className="flex items-center bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-                <Package className="h-5 w-5 h-6 w-6" />
+              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                <Package className="h-5 w-5" />
               </div>
-              <div>
-                <h2 className="text-base text-lg font-bold tracking-tight leading-none text-foreground uppercase">
+              <div className="min-w-0">
+                <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase break-words">
                   {formatSpecies(selectedSiembra)}
                 </h2>
-                <p className="text-xs text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
                   {formatPartidaNumber(selectedSiembra)}
                 </p>
               </div>
@@ -96,7 +96,7 @@ export function AutorizarProgramacionSiembraEditForm({
             <div className="p-1.5 bg-primary/10 rounded-lg">
               <Leaf className="h-3.5 w-3.5 h-4 w-4 text-primary" />
             </div>
-            <p className="text-xs text-xs font-bold uppercase tracking-wider text-foreground">
+            <p className="text-xs font-bold uppercase tracking-wider text-foreground">
               Detalle Partida
             </p>
           </div>

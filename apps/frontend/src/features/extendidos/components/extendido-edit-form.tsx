@@ -52,16 +52,16 @@ export function ExtendidosEditForm({
       >
         {/* 🚀 PRODUCT HEADER (Context) */}
         <div className="space-y-2 shrink-0">
-          <div             className="flex items-center justify-between bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
+          <div             className="flex items-center bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-                <Package className="h-5 w-5 h-6 w-6" />
+              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                <Package className="h-5 w-5" />
               </div>
-              <div>
-                <h2 className="text-base text-lg font-bold tracking-tight leading-none text-foreground uppercase">
+              <div className="min-w-0">
+                <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase break-words">
                   {formatSpecies(selectedExtendido)}
                 </h2>
-                <p className="text-[9px] text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
                   {formatPartidaNumber(selectedExtendido)}
                 </p>
               </div>
