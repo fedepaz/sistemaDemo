@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 
 import { AsignarUbiExtendidoDto, ExtendidoDto } from "@vivero/shared";
 
@@ -58,10 +59,10 @@ export function ExtendidosEditForm({
               </div>
               <div>
                 <h2 className="text-base text-lg font-bold tracking-tight leading-none text-foreground uppercase">
-                  {selectedExtendido.codigoEspecie}
+                  {formatSpecies(selectedExtendido)}
                 </h2>
                 <p className="text-[9px] text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                  {selectedExtendido.nombreEspecie}
+                  {formatPartidaNumber(selectedExtendido)}
                 </p>
               </div>
             </div>

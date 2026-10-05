@@ -205,5 +205,6 @@ describe('AlertsDataTable', () => {
 
     expect(capturedProps).not.toBeNull();
     expect(capturedProps.confirm.summaryFields).toEqual(["content"]);
+    expect(capturedProps.title).toBe("Partida #1/1");
   });
 });

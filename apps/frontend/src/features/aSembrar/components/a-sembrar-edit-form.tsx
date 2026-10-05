@@ -48,6 +48,7 @@ import { useDepositos } from "@/features/extendidos";
 
 import { Textarea } from "@/components/ui/textarea";
 import { SustratoSearch } from "@/features/programacionSiembra/components/sustratoSearch";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 
 interface ASembrarEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -126,10 +127,10 @@ export function ASembrarEditForm({
               </div>
               <div>
                 <h2 className="text-base text-lg font-bold tracking-tight leading-none text-foreground uppercase">
-                  {selectedPartida.codigoEspecie}
+                  {formatSpecies(selectedPartida)}
                 </h2>
                 <p className="text-[9px] text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                  {selectedPartida.nombreEspecie}
+                  {formatPartidaNumber(selectedPartida)}
                 </p>
               </div>
             </div>

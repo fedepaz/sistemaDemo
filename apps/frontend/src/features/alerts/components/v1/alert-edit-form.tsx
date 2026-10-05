@@ -11,6 +11,7 @@ import type { AlertBaseDto, CreateAlertCommentDto } from "@vivero/shared";
 import type { AlertType } from "@/features/alerts/types";
 import { ALERT_TYPE_CONFIGS } from "./alert-type-config";
 import { formatRelativeTime } from "../../utils/format-relative-time";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 import { UseFormReturn } from "react-hook-form";
 import {
   Form,
@@ -73,11 +74,10 @@ export function AlertEditForm({
                   {config.label}
                 </h2>
                 <p className="text-[9px] text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                  Partida #{selectedAlert.partidaId}/{selectedAlert.indice} ·
-                  Año {selectedAlert.anio}
+                  Partida {formatPartidaNumber(selectedAlert)} · Año {selectedAlert.anio}
                 </p>
                 <p className="text-[9px] text-[11px] font-mono text-primary mt-0.5">
-                  {selectedAlert.codigoEspecie} · {selectedAlert.nombreEspecie}
+                  {formatSpecies(selectedAlert)}
                 </p>
               </div>
             </div>

@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { formatShortDate, getLocalDateStr } from "@/lib/date-utils";
-import { formatPartidaHeader } from "@/features/shared/utils/header";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 
 interface ExtendidosFormProps {
   selectedExtendido: ExtendidoDto;
@@ -94,10 +94,10 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
             </div>
             <div>
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
-                {selectedExtendido.codigoEspecie}
+                {formatSpecies(selectedExtendido)}
               </h2>
               <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                {formatPartidaHeader(selectedExtendido)}
+                {formatPartidaNumber(selectedExtendido)}
               </p>
             </div>
           </div>

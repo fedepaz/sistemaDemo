@@ -5,6 +5,7 @@ import { Package, Leaf, AlertTriangle } from "lucide-react";
 import { AutorizarSiembraDto, ProgramacionSiembraDto } from "@vivero/shared";
 import { UseFormReturn } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 
 interface AutorizarProgramacionSiembraEditFormProps {
   onSubmit: (data: AutorizarSiembraDto) => Promise<void>;
@@ -79,10 +80,10 @@ export function AutorizarProgramacionSiembraEditForm({
               </div>
               <div>
                 <h2 className="text-base text-lg font-bold tracking-tight leading-none text-foreground uppercase">
-                  {selectedSiembra.codigoEspecie}
+                  {formatSpecies(selectedSiembra)}
                 </h2>
                 <p className="text-xs text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                  {selectedSiembra.nombreEspecie}
+                  {formatPartidaNumber(selectedSiembra)}
                 </p>
               </div>
             </div>

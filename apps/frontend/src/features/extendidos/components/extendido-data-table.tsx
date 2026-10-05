@@ -31,6 +31,7 @@ import { usePartidaMutation } from "../hooks/usePartidaMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { getLocalDateStr } from "@/lib/date-utils";
+import { formatPartidaNumber } from "@/features/shared/utils/header";
 
 interface ExtendidoDataTableProps {
   partidas: ExtendidoDto[];
@@ -205,7 +206,7 @@ export function ExtendidoDataTable({
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={`Partida Nº ${selectedPartida.partidaId}`}
+          title={`Partida ${formatPartidaNumber(selectedPartida)}`}
           formId="extendido-form"
           mode={mode}
           form={formAsignarUbicacion}

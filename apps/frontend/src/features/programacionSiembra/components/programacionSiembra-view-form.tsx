@@ -2,16 +2,10 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { ProgramacionSiembraDto } from "@vivero/shared";
-import {
-  Package,
-  Calendar,
-  Info,
-  Hash,
-  Activity,
-  ClipboardList,
-} from "lucide-react";
+import { Package, Calendar, Hash, Activity, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatShortDate } from "@/lib/date-utils";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 
 interface ProgramacionSiembraFormProps {
   selectedExtendido: ProgramacionSiembraDto;
@@ -65,10 +59,10 @@ export function ProgramacionSiembraViewForm({
             </div>
             <div>
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
-                {selectedExtendido.codigoEspecie}
+                {formatSpecies(selectedExtendido)}
               </h2>
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                {selectedExtendido.nombreEspecie}
+                {formatPartidaNumber(selectedExtendido)}
               </p>
             </div>
           </div>

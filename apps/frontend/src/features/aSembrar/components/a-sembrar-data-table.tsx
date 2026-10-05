@@ -14,6 +14,7 @@ import { aSembrarColumns, aSembrarExportColumns } from "./columns";
 import { ASembrarEditForm } from "./a-sembrar-edit-form";
 import { useASembrarMutation } from "../hooks/useASembrarMutation";
 import { useTableByName } from "@/features/permissions";
+import { formatPartidaNumber } from "@/features/shared/utils/header";
 
 interface ASembrarDataTableProps {
   partidas: SiembraPartidaDto[];
@@ -100,7 +101,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={`Completar Siembra — Partida Nº ${selectedPartida.partidaId}`}
+          title={`Completar Siembra — Partida ${formatPartidaNumber(selectedPartida)}`}
           formId="a-sembrar-form"
           mode="edit"
           form={formCompletar}
