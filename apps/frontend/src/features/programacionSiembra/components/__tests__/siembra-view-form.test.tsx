@@ -23,11 +23,11 @@ const mockSiembra: ProgramacionSiembraDto = {
 };
 
 describe("ProgramacionSiembraViewForm", () => {
-  it("renders header with species code and name", () => {
+  it("renders header with species identity and partida number", () => {
     render(<ProgramacionSiembraViewForm selectedExtendido={mockSiembra} />);
 
-    expect(screen.getByText("ESP001")).toBeInTheDocument();
-    expect(screen.getByText("Especie Test")).toBeInTheDocument();
+    expect(screen.getByText("ESP001 · Especie Test")).toBeInTheDocument();
+    expect(screen.getByText("#123/1")).toBeInTheDocument();
   });
 
   it("displays data content by default", () => {

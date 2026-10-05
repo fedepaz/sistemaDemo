@@ -10,10 +10,10 @@ import {
   Layers,
   Clock,
   ClipboardList,
-  Sprout,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatShortDate, utcToLocalTime } from "@/lib/date-utils";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 
 interface SiembraPartidasRegistradasViewFormProps {
   selectedPartida: SiembraPartidaDto;
@@ -41,7 +41,7 @@ const InfoRow = ({
       <Icon className="h-3.5 w-3.5 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-none mb-1">
         {label}
       </p>
       <div className="flex items-center gap-2">
@@ -60,52 +60,20 @@ export function SiembraPartidasRegistradasViewForm({
     <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] overflow-hidden">
       {/* HEADER */}
       <div className="space-y-2 shrink-0">
-        <div className="flex items-center justify-between bg-primary/5 p-2 rounded-xl border border-primary/20 shadow-sm">
+        <div className="flex items-center bg-primary/5 p-2 rounded-xl border border-primary/20 shadow-sm">
           <div className="flex items-center gap-2">
             <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
               <Package className="h-5 w-5" />
             </div>
-            <div>
-              <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
-                Partida #{selectedPartida.partidaId}
+            <div className="min-w-0">
+              <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase break-words">
+                {formatSpecies(selectedPartida)}
               </h2>
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                {selectedPartida.sustratoNombre ||
-                  selectedPartida.sustrato ||
-                  "-"}
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                {formatPartidaNumber(selectedPartida)}
               </p>
             </div>
           </div>
-        </div>
-
-        {/* SPECS GRID */}
-        <div className="grid grid-cols-2  gap-2">
-          {[
-            { label: "Año", value: selectedPartida.anio, icon: Hash },
-            { label: "Índice", value: selectedPartida.indice, icon: Hash },
-            {
-              label: "Especie",
-              value: selectedPartida.nombreEspecie,
-              icon: Sprout,
-            },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
-            >
-              <div className="p-1 bg-muted rounded-md shrink-0">
-                <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[7px] font-bold uppercase leading-none mb-0.5">
-                  {item.label}
-                </p>
-                <p className="text-[10px] truncate uppercase font-bold">
-                  {item.value}
-                </p>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -117,31 +85,31 @@ export function SiembraPartidasRegistradasViewForm({
         <TabsList className="grid grid-cols-3 bg-muted/80 p-1 rounded-xl shrink-0 h-10 border border-border/40 gap-1 shadow-inner">
           <TabsTrigger
             value="siembra"
-            className="rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-xs font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <FlaskConical className="h-3 w-3.5.5 mr-1 hidden sm:inline-block" />
+            <FlaskConical className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
             Siembra
           </TabsTrigger>
 
           <TabsTrigger
             value="lote"
-            className="rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-xs font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <Layers className="h-3 w-3.5.5 mr-1 hidden sm:inline-block" />
+            <Layers className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
             Lote
           </TabsTrigger>
 
           <TabsTrigger
             value="turno"
-            className="rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-xs font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <Clock className="h-3 w-3.5.5 mr-1 hidden sm:inline-block" />
+            <Clock className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
             Turno
           </TabsTrigger>
         </TabsList>
@@ -241,19 +209,10 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Año Lote"
                     value={selectedPartida.anoLote}
                   />
-                  <InfoRow
-                    icon={Hash}
-                    label="Item"
-                    value={selectedPartida.item}
-                  />
-                  <InfoRow
-                    icon={Activity}
-                    label="Semillas/gr"
-                    value={selectedPartida.semxgr}
-                  />
+
                   <InfoRow
                     icon={ClipboardList}
-                    label="Ajuste"
+                    label="Germ. Estimada"
                     value={selectedPartida.ajuste}
                   />
                   <InfoRow
@@ -300,7 +259,7 @@ export function SiembraPartidasRegistradasViewForm({
                         <Package className="h-3.5 w-3.5 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+                        <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-none mb-1">
                           Empleados
                         </p>
                       </div>
@@ -310,10 +269,10 @@ export function SiembraPartidasRegistradasViewForm({
                         <table className="w-full text-xs">
                           <thead>
                             <tr className="border-b border-border/40">
-                              <th className="text-left py-1 font-bold text-[8px] uppercase tracking-widest text-muted-foreground/60">
+                              <th className="text-left py-1 font-bold text-xs uppercase tracking-widest text-muted-foreground">
                                 Usuario
                               </th>
-                              <th className="text-left py-1 font-bold text-[8px] uppercase tracking-widest text-muted-foreground/60">
+                              <th className="text-left py-1 font-bold text-xs uppercase tracking-widest text-muted-foreground">
                                 Nombre
                               </th>
                             </tr>

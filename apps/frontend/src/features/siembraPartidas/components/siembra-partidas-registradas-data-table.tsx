@@ -8,6 +8,7 @@ import {
   siembraPartidasRegistradasExportColumns,
 } from "./columns";
 import { SiembraPartidasRegistradasViewForm } from "./siembra-partidas-registradas-view-form";
+import { formatPartidaNumber } from "@/features/shared/utils/header";
 
 interface SiembraPartidasRegistradasDataTableProps {
   partidas: SiembraPartidaDto[];
@@ -58,7 +59,7 @@ export function SiembraPartidasRegistradasDataTable({
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={`Partida Nº ${selectedPartida.partidaId}`}
+          title={`Partida ${formatPartidaNumber(selectedPartida)}`}
           formId="siembra-partidas-registradas-form"
           mode="view"
           fieldLabels={fieldLabels.SiembraPartida}

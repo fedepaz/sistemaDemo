@@ -119,5 +119,6 @@ describe("ASembrarDataTable", () => {
       "startTime",
       "endTime",
     ]);
+    expect(capturedProps.title).toBe("Completar Siembra — Partida #1/1");
   });
 });

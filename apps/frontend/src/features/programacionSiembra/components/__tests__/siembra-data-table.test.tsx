@@ -253,5 +253,6 @@ describe("ProgramacionSiembraDataTable", () => {
       "anio",
       "indice",
     ]);
+    expect(capturedProps.title).toBe("Partida #1/1");
   });
 });

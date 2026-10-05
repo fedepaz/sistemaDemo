@@ -30,6 +30,7 @@ describe('ExtendidosViewForm', () => {
       <ExtendidosViewForm selectedExtendido={mockExtendido} />
     );
 
-    expect(screen.getByText('#123/1 - ESP001 · Especie Test')).toBeInTheDocument();
+    expect(screen.getByText('ESP001 · Especie Test')).toBeInTheDocument();
+    expect(screen.getByText('#123/1')).toBeInTheDocument();
   });
 });

@@ -12,6 +12,7 @@ import {
 } from "@vivero/shared";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { formatPartidaNumber } from "@/features/shared/utils/header";
 import { partidaSiembraExportColumns, getRowBg } from "./columns";
 import { ProgramacionSiembraViewForm } from "./programacionSiembra-view-form";
 import { AutorizarProgramacionSiembraEditForm } from "./autorizar-programacionSiembra-edit-form";
@@ -194,7 +195,7 @@ export function ProgramacionSiembraDataTable({
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={`Partida Nº ${selectedPartida.partidaId}`}
+          title={`Partida ${formatPartidaNumber(selectedPartida)}`}
           formId="autorizar-siembra-form"
           mode={mode}
           form={formAutorizarSiembra}
