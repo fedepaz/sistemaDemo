@@ -52,6 +52,7 @@ export class ProgramacionSiembraService {
       propiedad: row.propiedad,
       injerto: row.injerto,
       nrocont: row.nrocont,
+      tipocont: row.contenedor,
       sem_siembra: row.sem_siembra,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,

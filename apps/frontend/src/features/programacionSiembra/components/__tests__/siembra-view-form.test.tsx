@@ -11,6 +11,7 @@ const mockSiembra: ProgramacionSiembraDto = {
   propiedad: "Propiedad A",
   injerto: "N",
   nrocont: "100",
+  tipocont: "CJ",
   sem_siembra: "S1-2024",
   fechaSugeridaSiembra: "2024-03-15",
   fechaSiembraReal: "2024-03-16",

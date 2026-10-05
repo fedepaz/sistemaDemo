@@ -7,6 +7,7 @@ export const ProgramacionSiembraDtoSchema = LegacyHeaderSchema.extend({
   propiedad: z.string(),
   injerto: z.string(),
   nrocont: z.string(),
+  tipocont: z.string(),
   sem_siembra: z.string(),
   fechaSugeridaSiembra: z.string(), // f_siem
   fechaSiembraReal: z.string(), // f_siembra
@@ -21,7 +22,9 @@ export const ProgramacionSiembraDtoSchema = LegacyHeaderSchema.extend({
   rubroNombre: z.string().optional(),
 });
 
-export type ProgramacionSiembraDto = z.infer<typeof ProgramacionSiembraDtoSchema>;
+export type ProgramacionSiembraDto = z.infer<
+  typeof ProgramacionSiembraDtoSchema
+>;
 
 export const TratamientoDtoSchema = z.object({
   codigo: z.string(),

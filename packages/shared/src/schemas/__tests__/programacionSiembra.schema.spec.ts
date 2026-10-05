@@ -11,6 +11,7 @@ describe("ProgramacionSiembraDtoSchema", () => {
     propiedad: "Propiedad A",
     injerto: "Injerto A",
     nrocont: "100",
+    tipocont: "CJ",
     sem_siembra: "S1-2026",
     fechaSugeridaSiembra: "2026-07-15",
     fechaSiembraReal: "2026-07-16",

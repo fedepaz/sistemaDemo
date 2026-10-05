@@ -156,6 +156,7 @@ const mockPartidas: ProgramacionSiembraDto[] = [
     anoLote: "2024",
     ajuste: "Ninguno",
     nrocont: "100",
+    tipocont: "CJ",
     extendido: "Notas de prueba",
     germin: "85",
     sem_siembra: "S10-2024",

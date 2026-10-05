@@ -21,6 +21,7 @@ export class ProgramacionSiembraRepository {
     p.propiedad,
     p.injerto, 
     p.nrocont,
+    p.contenedor,
     CONCAT(p.sem_siem,'-',p.ano_siem) AS sem_siembra, 
     p.f_siem,
     p.f_siembra,
