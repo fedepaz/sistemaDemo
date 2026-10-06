@@ -40,7 +40,7 @@ export function EntityEditForm({ onSubmit, formId, form }: FormProps) {
           name="label"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Etiqueta Visual</FormLabel>
+              <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">Etiqueta Visual</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -49,10 +49,10 @@ export function EntityEditForm({ onSubmit, formId, form }: FormProps) {
                   required
                 />
               </FormControl>
-              <FormDescription className="text-[9px] md:text-[11px] font-medium leading-tight">
+              <FormDescription className="text-xs font-medium leading-tight">
                 Nombre que verá el usuario final.
               </FormDescription>
-              <FormMessage className="text-[10px]" />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
@@ -61,7 +61,7 @@ export function EntityEditForm({ onSubmit, formId, form }: FormProps) {
           name="permissionType"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">Tipo de Permiso</FormLabel>
+              <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">Tipo de Permiso</FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -74,7 +74,7 @@ export function EntityEditForm({ onSubmit, formId, form }: FormProps) {
                   <SelectItem value="PROCESS" className="font-bold">Proceso (Ejecución)</SelectItem>
                 </SelectContent>
               </Select>
-              <FormMessage className="text-[10px]" />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />

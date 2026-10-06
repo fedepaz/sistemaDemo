@@ -216,7 +216,7 @@ export function ASembrarEditForm({
 
         {/* TECHNICAL FIELDS */}
         <div className="space-y-2 shrink-0">
-          <div className="grid grid-cols-1 grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {/* PRESNSADO DE SUSTRATO */}
             <FormField
               control={form.control}

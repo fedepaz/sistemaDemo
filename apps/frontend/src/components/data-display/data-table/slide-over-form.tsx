@@ -109,12 +109,12 @@ export function SlideOverForm({
     if (typeof value === "boolean") {
       return value ? (
         <span className="inline-flex items-center gap-1 text-primary font-bold">
-          <Check className="h-3.5 w-3.5" />
+          <Check className="h-4 w-4" />
           Método Máquina
         </span>
       ) : (
         <span className="inline-flex items-center gap-1 text-muted-foreground font-bold">
-          <X className="h-3.5 w-3.5" />
+          <X className="h-4 w-4" />
           Método Manual
         </span>
       );
@@ -244,7 +244,7 @@ export function SlideOverForm({
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       {isCreateMode ? saveLabel || "Creando" : "Actualizando"}
                     </>
                   ) : (

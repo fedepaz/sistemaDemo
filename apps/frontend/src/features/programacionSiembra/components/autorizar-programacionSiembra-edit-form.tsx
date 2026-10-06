@@ -27,7 +27,7 @@ function InfoRow({ label, value }: { label: string; value: string | number }) {
       <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </span>
-      <span className="text-xs text-sm font-bold text-foreground">{value}</span>
+      <span className="text-sm font-bold text-foreground">{value}</span>
     </div>
   );
 }
@@ -75,7 +75,7 @@ export function AutorizarProgramacionSiembraEditForm({
         {isAlreadyAuthorized && (
           <div className="flex items-center gap-2 bg-warning/10 border border-warning/30 rounded-xl p-3">
             <AlertTriangle className="h-4 w-4 text-warning shrink-0" />
-            <p className="text-xs text-sm font-bold text-warning">
+            <p className="text-sm font-bold text-warning">
               Esta partida ya fue autorizada para siembra
             </p>
           </div>

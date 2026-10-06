@@ -45,7 +45,7 @@ const InfoRow = ({
     )}
   >
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-3.5 w-3.5 text-primary" />
+      <Icon className="h-4 w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
       <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-none mb-1">
@@ -136,7 +136,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                 <p className="text-xs font-bold uppercase leading-none mb-0.5">
                   {item.label}
                 </p>
-                <p className="text-[10px] truncate uppercase font-bold">
+                <p className="text-xs truncate uppercase font-bold">
                   {item.value}
                 </p>
               </div>
@@ -157,7 +157,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <History className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
+            <History className="h-4 w-4 mr-1 hidden sm:inline-block" />
             Producción
           </TabsTrigger>
 
@@ -167,7 +167,7 @@ export function ExtendidosViewForm({ selectedExtendido }: ExtendidosFormProps) {
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <ClipboardList className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
+            <ClipboardList className="h-4 w-4 mr-1 hidden sm:inline-block" />
             Notas
           </TabsTrigger>
         </TabsList>

@@ -78,9 +78,9 @@ export function ExtendidosEditForm({
               <FormItem className="space-y-1.5">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 bg-primary/10 rounded-lg">
-                    <Warehouse className="h-3.5 w-3.5 h-4 w-4 text-primary" />
+                    <Warehouse className="h-4 w-4 text-primary" />
                   </div>
-                  <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                  <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">
                     Depósito de Destino
                   </FormLabel>
                 </div>
@@ -117,11 +117,11 @@ export function ExtendidosEditForm({
             {/* 📦 STOCK INICIAL (solo lectura) */}
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <p className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                <p className="text-xs font-bold uppercase tracking-wider text-foreground">
                   Bandejas Recibidas
                 </p>
               </div>
-              <p className="h-9 rounded-md border border-border/60 bg-muted/50 shadow-sm text-base text-lg font-black px-4 flex items-center text-foreground/80">
+              <p className="h-9 rounded-md border border-border/60 bg-muted/50 shadow-sm text-base font-black px-4 flex items-center text-foreground/80">
                 {originalStock}
               </p>
             </div>
@@ -133,7 +133,7 @@ export function ExtendidosEditForm({
               render={({ field }) => (
                 <FormItem className="space-y-1.5">
                   <div className="flex items-center gap-2">
-                    <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider transition-colors text-destructive">
+                    <FormLabel className="text-xs font-bold uppercase tracking-wider transition-colors text-destructive">
                       Baja
                     </FormLabel>
                   </div>
@@ -144,7 +144,7 @@ export function ExtendidosEditForm({
                         inputMode="numeric"
                         {...field}
                         onChange={(e) => field.onChange(Number(e.target.value))}
-                        className="h-9 rounded-md shadow-sm text-base text-lg font-bold px-4 transition-all duration-300 border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
+                        className="h-9 rounded-md shadow-sm text-base font-bold px-4 transition-all duration-300 border-destructive/20 bg-destructive/5 text-destructive focus-visible:ring-destructive/20"
                       />
                     </div>
                   </FormControl>
@@ -162,9 +162,9 @@ export function ExtendidosEditForm({
               <FormItem className="space-y-1.5">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 bg-primary/10 rounded-lg">
-                    <FileText className="h-3.5 w-3.5 h-4 w-4 text-primary" />
+                    <FileText className="h-4 w-4 text-primary" />
                   </div>
-                  <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                  <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">
                     Observaciones
                   </FormLabel>
                 </div>

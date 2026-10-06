@@ -52,7 +52,7 @@ function ProductoSlot({
         name={productoField}
         render={({ field }) => (
           <FormItem className="space-y-1.5">
-            <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+            <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">
               {label} {isRequired && "*"}
             </FormLabel>
             <Select
@@ -81,7 +81,7 @@ function ProductoSlot({
                 ))}
               </SelectContent>
             </Select>
-            <FormMessage className="text-[10px]" />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
@@ -90,7 +90,7 @@ function ProductoSlot({
         name={porcentajeField}
         render={({ field }) => (
           <FormItem className="space-y-1.5">
-            <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+            <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">
               %
             </FormLabel>
             <FormControl>
@@ -109,7 +109,7 @@ function ProductoSlot({
                 className="h-9 rounded-md px-4 text-center font-mono"
               />
             </FormControl>
-            <FormMessage className="text-[10px]" />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
@@ -143,26 +143,26 @@ export function FormulaCreateForm({
         {/* Real-time calculator */}
         <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border/40 pt-3 pb-1">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Total
             </span>
             <Badge
               variant="outline"
               className={
                 isValid
-                  ? "text-success border-success/20 bg-success/10 font-bold px-2 py-0.5 h-5 h-6 text-[10px] text-xs"
-                  : "text-destructive border-destructive/20 bg-destructive/10 font-bold px-2 py-0.5 h-5 h-6 text-[10px] text-xs"
+                  ? "text-success border-success/20 bg-success/10 font-bold px-2 py-0.5 h-6 text-xs"
+                  : "text-destructive border-destructive/20 bg-destructive/10 font-bold px-2 py-0.5 h-6 text-xs"
               }
             >
               {isValid ? (
-                <CheckCircle className="h-2.5 w-2.5 h-3 w-3 mr-1" />
+                <CheckCircle className="h-3 w-3 mr-1" />
               ) : (
-                <AlertTriangle className="h-2.5 w-2.5 h-3 w-3 mr-1" />
+                <AlertTriangle className="h-3 w-3 mr-1" />
               )}
               {totalPorcentaje}%
             </Badge>
           </div>
-          <FormDescription className="text-[9px] text-[11px] font-medium leading-tight mt-1">
+          <FormDescription className="text-xs font-medium leading-tight mt-1">
             Los porcentajes deben sumar 100% para poder crear la fórmula.
           </FormDescription>
         </div>

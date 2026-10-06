@@ -32,7 +32,7 @@ export function ProductoEditForm({ onSubmit, formId, form }: FormProps) {
           name="nombre"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-foreground">
+              <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">
                 Nombre
               </FormLabel>
               <FormControl>
@@ -43,10 +43,10 @@ export function ProductoEditForm({ onSubmit, formId, form }: FormProps) {
                   required
                 />
               </FormControl>
-              <FormDescription className="text-[9px] md:text-[11px] font-medium leading-tight">
+              <FormDescription className="text-xs font-medium leading-tight">
                 Nombre descriptivo del producto. Ej: &quot;Producto Turba&quot;.
               </FormDescription>
-              <FormMessage className="text-[10px]" />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />

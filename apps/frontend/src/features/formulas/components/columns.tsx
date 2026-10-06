@@ -32,7 +32,7 @@ function ProductoCell({
               aria-label="Producto eliminado"
               title="Producto eliminado"
             >
-              <AlertTriangle className="h-3.5 w-3.5 text-warning" />
+              <AlertTriangle className="h-4 w-4 text-warning" />
             </span>
           )}
         </span>

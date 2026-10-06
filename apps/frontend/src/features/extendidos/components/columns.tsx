@@ -154,7 +154,7 @@ export const partidaColumns: ColumnDef<ExtendidoDto>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="flex justify-center text-foreground/70 text-[10px] font-black">
+        <div className="flex justify-center text-foreground/70 text-xs font-black">
           {row.original.diasEnCamara}
         </div>
       );

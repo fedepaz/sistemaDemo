@@ -132,7 +132,7 @@ export function ExtendidoDataTable({
         variant={filterToday ? "default" : "outline"}
         size="sm"
         onClick={() => setFilterToday(!filterToday)}
-        className={`h-8 rounded-full px-3 text-[10px] font-black uppercase tracking-tight gap-1.5 transition-all flex-1 sm:flex-none ${
+        className={`h-8 rounded-full px-3 text-xs font-black uppercase tracking-tight gap-1.5 transition-all flex-1 sm:flex-none ${
           filterToday
             ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 border-primary"
             : "hover:bg-accent hover:text-accent-foreground border-border/40"
@@ -147,7 +147,7 @@ export function ExtendidoDataTable({
       <div className="relative flex-1 sm:min-w-[160px] group">
         <Building2 className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
         <Select value={currentCamaraId} onValueChange={handleCamaraChange}>
-          <SelectTrigger className="h-8 pl-8 rounded-full bg-background border-border/40 focus:ring-primary/20 text-[10px] font-bold uppercase tracking-tight">
+          <SelectTrigger className="h-8 pl-8 rounded-full bg-background border-border/40 focus:ring-primary/20 text-xs font-bold uppercase tracking-tight">
             <SelectValue placeholder="Cámara" />
           </SelectTrigger>
           <SelectContent className="rounded-xl border-border/60 shadow-2xl max-h-[250px] md:max-h-[300px]">
@@ -176,7 +176,7 @@ export function ExtendidoDataTable({
               onClick={handleClear}
               className="h-8 w-8 rounded-full bg-destructive/5 text-destructive hover:bg-destructive/10 transition-all"
             >
-              <RotateCcw className="h-3.5 w-3.5" />
+              <RotateCcw className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top">Limpiar filtros</TooltipContent>

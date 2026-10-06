@@ -30,7 +30,7 @@ const InfoRow = ({
     )}
   >
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-3.5 w-3.5 text-primary" />
+      <Icon className="h-4 w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
       <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-none mb-1">
@@ -139,7 +139,7 @@ export function ProgramacionSiembraViewForm({
                   className="flex items-center gap-2 py-2 border-b border-border/40 last:border-0"
                 >
                   <div className="p-1 bg-primary/5 rounded-md border border-primary/10 shrink-0">
-                    <item.icon className="h-3 w-3.5 text-primary" />
+                    <item.icon className="h-4 w-4 text-primary" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-none mb-0.5">

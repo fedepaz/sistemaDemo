@@ -141,10 +141,10 @@ export function AlertEditForm({
                         isMe && "flex-row-reverse",
                       )}
                     >
-                      <span className="text-[10px] font-mono text-muted-foreground">
+                      <span className="text-xs font-mono text-muted-foreground">
                         @{comment.userName}
                       </span>
-                      <span className="text-[10px] font-mono text-muted-foreground shrink-0">
+                      <span className="text-xs font-mono text-muted-foreground shrink-0">
                         {formatRelativeTime(comment.createdAt)}
                       </span>
                     </div>
@@ -177,9 +177,9 @@ export function AlertEditForm({
             <FormItem className="space-y-1.5">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 bg-primary/10 rounded-lg">
-                  <MessageSquare className="h-3.5 w-3.5 h-4 w-4 text-primary" />
+                  <MessageSquare className="h-4 w-4 text-primary" />
                 </div>
-                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">
                   Nuevo Comentario
                 </FormLabel>
               </div>

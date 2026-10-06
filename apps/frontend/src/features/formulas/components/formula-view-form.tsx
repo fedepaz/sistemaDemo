@@ -21,7 +21,7 @@ const CompositionRow = ({
 }) => (
   <div className="flex items-center gap-2 py-1.5 border-b border-border/40 last:border-0">
     <div className="w-20 shrink-0">
-      <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
         {label} {isRequired && "*"}
       </span>
     </div>
@@ -71,7 +71,7 @@ export function FormulaViewForm({ selectedFormula }: FormulaViewFormProps) {
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
                 Fórmula
               </h2>
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 truncate max-w-[200px]">
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1 truncate max-w-[200px]">
                 {compositionSummary}
               </p>
             </div>
@@ -119,8 +119,8 @@ export function FormulaViewForm({ selectedFormula }: FormulaViewFormProps) {
           </div>
 
           <div className="flex items-center gap-2 pt-2 border-t border-border/40">
-            <Calendar className="h-3.5 w-3.5 text-muted-foreground/60" />
-            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+            <Calendar className="h-4 w-4 text-muted-foreground/60" />
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
               Creado:
             </span>
             <span className="text-xs font-bold text-foreground">
@@ -134,8 +134,8 @@ export function FormulaViewForm({ selectedFormula }: FormulaViewFormProps) {
 
           {selectedFormula.deletedAt && (
             <div className="flex items-center gap-2 pt-2 border-t border-border/40">
-              <Trash2 className="h-3.5 w-3.5 text-destructive/60" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+              <Trash2 className="h-4 w-4 text-destructive/60" />
+              <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
                 Eliminado:
               </span>
               <span className="text-xs font-bold text-foreground">

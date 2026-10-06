@@ -41,15 +41,15 @@ export function FormulaSelector({ form, fieldName = "formulaId" }: FormulaSelect
         <FormItem className="space-y-2">
           <div className="flex items-center gap-2">
             <div className="p-1.5 bg-primary/10 rounded-lg">
-              <Beaker className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+              <Beaker className="h-4 w-4 text-primary" />
             </div>
-            <FormLabel className="text-xs md:text-xs font-black uppercase tracking-widest text-foreground">
+            <FormLabel className="text-xs font-black uppercase tracking-widest text-foreground">
               Fórmula
             </FormLabel>
           </div>
           <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
-              <SelectTrigger className="h-10 md:h-14 rounded-xl border-border/60 bg-background shadow-sm text-sm md:text-base font-bold px-4">
+              <SelectTrigger className="h-10 rounded-xl border-border/60 bg-background shadow-sm text-sm font-bold px-4">
                 <SelectValue placeholder="Seleccione fórmula" />
               </SelectTrigger>
             </FormControl>
@@ -61,7 +61,7 @@ export function FormulaSelector({ form, fieldName = "formulaId" }: FormulaSelect
                 <SelectItem
                   key={formula.id}
                   value={formula.id}
-                  className="font-bold py-2 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm md:text-base"
+                  className="font-bold py-2 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm"
                 >
                   {getCompositionLabel(formula)}
                 </SelectItem>

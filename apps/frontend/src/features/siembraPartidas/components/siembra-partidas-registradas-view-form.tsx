@@ -38,7 +38,7 @@ const InfoRow = ({
     )}
   >
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-3.5 w-3.5 text-primary" />
+      <Icon className="h-4 w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
       <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-none mb-1">
@@ -89,7 +89,7 @@ export function SiembraPartidasRegistradasViewForm({
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <FlaskConical className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
+            <FlaskConical className="h-4 w-4 mr-1 hidden sm:inline-block" />
             Siembra
           </TabsTrigger>
 
@@ -99,7 +99,7 @@ export function SiembraPartidasRegistradasViewForm({
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <Layers className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
+            <Layers className="h-4 w-4 mr-1 hidden sm:inline-block" />
             Lote
           </TabsTrigger>
 
@@ -109,7 +109,7 @@ export function SiembraPartidasRegistradasViewForm({
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <Clock className="h-3 w-3.5 mr-1 hidden sm:inline-block" />
+            <Clock className="h-4 w-4 mr-1 hidden sm:inline-block" />
             Turno
           </TabsTrigger>
         </TabsList>
@@ -256,7 +256,7 @@ export function SiembraPartidasRegistradasViewForm({
                   <div className="col-span-2">
                     <div className="flex items-center gap-2 py-1.5 border-b border-border/40">
                       <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-                        <Package className="h-3.5 w-3.5 text-primary" />
+                        <Package className="h-4 w-4 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-none mb-1">

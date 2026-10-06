@@ -29,10 +29,10 @@ const InfoRow = ({
     )}
   >
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-3.5 w-3.5 text-primary" />
+      <Icon className="h-4 w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
         {label}
       </p>
       <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export function ProductoViewForm({ selectedProducto }: ProductoViewFormProps) {
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
                 {selectedProducto.nombre}
               </h2>
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 Producto
               </p>
             </div>
