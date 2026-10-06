@@ -10,6 +10,7 @@ import {
   formatSpecies,
 } from "@/features/shared/utils/header";
 import { VolumeCalculator } from "./volumeCalculator";
+import { FormulaSelector } from "./formulaSelector";
 
 interface AutorizarProgramacionSiembraEditFormProps {
   onSubmit: (data: AutorizarSiembraDto) => Promise<void>;
@@ -119,6 +120,7 @@ export function AutorizarProgramacionSiembraEditForm({
           </div>
         </div>
 
+        <FormulaSelector form={form} fieldName="formulaId" />
         {/* DETALLE FORMULA */}
         <div className="space-y-1.5 shrink-0">
           <div className="flex items-center gap-2">
