@@ -139,6 +139,7 @@ export function AutorizarProgramacionSiembraEditForm({
             <VolumeCalculator
               key={`${selectedSiembra.partidaId}-${selectedSiembra.anio}-${selectedSiembra.indice}`}
               qty={selectedSiembra.cantTipoCont ?? null}
+              totalQty={selectedSiembra.nrocont ?? null}
             />
           </div>
         </div>
