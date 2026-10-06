@@ -223,7 +223,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
               {!canEdit ? (
                 <Badge
                   variant="outline"
-                  className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[9px] md:text-[10px] uppercase tracking-widest gap-2"
+                  className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-xs uppercase tracking-widest gap-2"
                 >
                   <Shield className="h-3 md:h-3.5 w-3 md:h-3.5" />
                   Modo lectura
@@ -243,14 +243,14 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                     <p className="text-xs md:text-sm font-bold text-foreground">
                       No hay coincidencias
                     </p>
-                    <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       No encontramos ningún recurso.
                     </p>
                     {searchQuery.trim() && (
                       <Button
                         variant="outline"
                         size="sm"
-                        className="mt-3 h-8 text-[10px]"
+                        className="mt-3 h-8 text-xs"
                         onClick={() => setSearchQuery("")}
                       >
                         <RotateCcw className="h-3 w-3 mr-1.5" />
@@ -283,7 +283,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                             <Badge
                               variant="secondary"
                               className={cn(
-                                "text-[10px] md:text-xs font-bold px-1.5 py-0.5 rounded-md",
+                                "text-xs font-bold px-1.5 py-0.5 rounded-md",
                                 GROUP_COLORS[type],
                               )}
                             >
@@ -347,7 +347,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                     : "bg-muted-foreground/20",
                 )}
               />
-              <p className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest">
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
                 {isDirty
                   ? `${changedCount} ${changedCount === 1 ? "pendiente" : "pendientes"}`
                   : "Actualizado"}
@@ -359,7 +359,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                 size="sm"
                 onClick={handleDiscard}
                 disabled={!isDirty || !canEdit}
-                className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
+                className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-xs uppercase tracking-widest"
               >
                 <RotateCcw className="h-3.5 md:h-4 w-3.5 md:w-4" />
                 Descartar
@@ -368,7 +368,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                 size="sm"
                 onClick={handleSave}
                 disabled={!isDirty || isSaving || !canEdit}
-                className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-[10px] md:text-xs uppercase tracking-widest"
+                className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-xs uppercase tracking-widest"
               >
                 {isSaving ? (
                   <div className="h-3.5 md:h-4 w-3.5 md:w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />

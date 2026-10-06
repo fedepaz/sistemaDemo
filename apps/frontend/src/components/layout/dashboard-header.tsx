@@ -29,11 +29,11 @@ function WeekInfoContent({
   return (
     <div className="space-y-1">
       <p className="text-xs font-bold text-foreground">{formattedDate}</p>
-      <p className="text-[10px] text-muted-foreground leading-tight">
+      <p className="text-xs text-muted-foreground leading-tight">
         Semana {weekNum} de {totalWeeks}
       </p>
       <div className="pt-1 border-t border-border/50">
-        <p className="text-[10px] text-muted-foreground leading-tight">
+        <p className="text-xs text-muted-foreground leading-tight">
           Mendoza, Argentina
         </p>
       </div>
@@ -98,12 +98,12 @@ export function DashboardHeader() {
                           Alertas Activas
                         </p>
                       </div>
-                      <p className="text-[10px] text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         Hay partidas que requieren tu atención. Haz click para
                         ver el detalle completo.
                       </p>
                       <div className="pt-1 border-t border-border/50">
-                        <p className="text-[10px] font-medium text-warning">
+                        <p className="text-xs font-medium text-warning">
                           Ver alertas →
                         </p>
                       </div>
@@ -116,7 +116,7 @@ export function DashboardHeader() {
                           Sin Alertas
                         </p>
                       </div>
-                      <p className="text-[10px] text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         Todas las partidas están dentro de los parámetros
                         esperados.
                       </p>

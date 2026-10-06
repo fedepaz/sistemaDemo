@@ -9,7 +9,7 @@ interface UserAvatarProps {
 }
 
 const SIZE_CLASSES = {
-  sm: "h-6 w-6 text-[10px]",
+  sm: "h-6 w-6 text-xs",
   md: "h-8 w-8 text-xs",
   lg: "h-11 w-11 text-sm",
 } as const;

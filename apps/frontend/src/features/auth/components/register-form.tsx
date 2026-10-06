@@ -105,7 +105,7 @@ export function RegisterForm() {
               <FormControl>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
-                    <User className="h-3.5 w-3.5 text-primary" />
+                    <User className="h-4 w-4 text-primary" />
                   </div>
                   <Input
                     {...field}
@@ -117,7 +117,7 @@ export function RegisterForm() {
                   />
                 </div>
               </FormControl>
-              <FormMessage className="text-[10px] font-bold font-sans text-xs sm:text-sm leading-tight sm:leading-relaxed opacity-70" />
+              <FormMessage className="font-bold font-sans text-xs sm:text-sm leading-tight sm:leading-relaxed opacity-70" />
               <FormDescription className="font-sans text-xs sm:text-sm font-medium leading-tight sm:leading-relaxed opacity-70">
                 El nombre de usuario debe ser único. Va a ser usado para
                 identificarte en el sistema.
@@ -141,7 +141,7 @@ export function RegisterForm() {
               <FormControl>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
-                    <User className="h-3.5 w-3.5 text-primary" />
+                    <User className="h-4 w-4 text-primary" />
                   </div>
                   <Input
                     {...field}
@@ -152,7 +152,7 @@ export function RegisterForm() {
                   />
                 </div>
               </FormControl>
-              <FormMessage className="text-[10px] font-bold font-sans text-xs sm:text-sm leading-tight sm:leading-relaxed opacity-70" />
+              <FormMessage className="font-bold font-sans text-xs sm:text-sm leading-tight sm:leading-relaxed opacity-70" />
 
               <FormDescription className="font-sans text-xs sm:text-sm font-medium leading-tight sm:leading-relaxed opacity-70">
                 Admite nombre o nombres hasta 50 caracteres.
@@ -173,7 +173,7 @@ export function RegisterForm() {
               <FormControl>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
-                    <User className="h-3.5 w-3.5 text-primary" />
+                    <User className="h-4 w-4 text-primary" />
                   </div>
                   <Input
                     {...field}
@@ -184,7 +184,7 @@ export function RegisterForm() {
                   />
                 </div>
               </FormControl>
-              <FormMessage className="text-[10px] font-bold font-sans text-xs sm:text-sm leading-tight sm:leading-relaxed opacity-70" />
+              <FormMessage className="font-bold font-sans text-xs sm:text-sm leading-tight sm:leading-relaxed opacity-70" />
 
               <FormDescription className="font-sans text-xs sm:text-sm font-medium leading-tight sm:leading-relaxed opacity-70">
                 Admite apellidos o apellidos hasta 50 caracteres.

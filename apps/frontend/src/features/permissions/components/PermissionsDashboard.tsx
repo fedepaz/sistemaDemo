@@ -59,7 +59,7 @@ export function PermissionsDashboard() {
             <ToggleGroupItem
               value="user"
               className={cn(
-                "rounded-md px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest gap-1.5 transition-all",
+                "rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-widest gap-1.5 transition-all",
                 viewMode === "user" && "bg-background shadow-sm text-primary"
               )}
             >
@@ -69,7 +69,7 @@ export function PermissionsDashboard() {
             <ToggleGroupItem
               value="entity"
               className={cn(
-                "rounded-md px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest gap-1.5 transition-all",
+                "rounded-md px-3 py-1.5 text-xs font-bold uppercase tracking-widest gap-1.5 transition-all",
                 viewMode === "entity" && "bg-background shadow-sm text-primary"
               )}
             >

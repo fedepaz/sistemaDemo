@@ -96,7 +96,7 @@ export const PermissionRowItem = memo(function PermissionRowItem({
       {/* Resource label */}
       <div className="flex items-center gap-2.5 lg:w-48 lg:shrink-0">
         <div className="flex h-8 w-8 md:h-9 md:w-9 shrink-0 items-center justify-center rounded-lg bg-background shadow-sm border border-border/50">
-          <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+          <Icon className="h-4 w-4 text-primary" />
         </div>
         <div className="flex flex-col gap-0 min-w-0">
           <span className="text-xs md:text-xs font-bold text-foreground truncate">

@@ -110,14 +110,14 @@ export function UserSelector({ onSelectedUserId }: UserSelectorProps) {
                           <span className="text-sm font-semibold truncate">
                             {getDisplayName(user)}
                           </span>
-                          <span className="text-[10px] font-mono text-muted-foreground">
+                          <span className="text-xs font-mono text-muted-foreground">
                             @{user.username}
                           </span>
                         </div>
                         {!user.isActive && (
                           <Badge
                             variant="secondary"
-                            className="h-4 text-[9px] uppercase tracking-tighter"
+                            className="h-4 text-xs uppercase tracking-tighter"
                           >
                             Inactivo
                           </Badge>

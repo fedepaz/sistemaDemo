@@ -52,7 +52,7 @@ export function PermissionsEntityManager({
             </div>
             <Badge
               variant="outline"
-              className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-[9px] md:text-[10px] uppercase tracking-widest gap-2"
+              className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-xs uppercase tracking-widest gap-2"
             >
               <Shield className="h-3 md:h-3.5 w-3 md:h-3.5" />
               {userPermissions.length} accesos
@@ -69,7 +69,7 @@ export function PermissionsEntityManager({
                   <p className="text-xs md:text-sm font-bold text-foreground">
                     No hay usuarios
                   </p>
-                  <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {searchQuery.trim()
                       ? "Sin coincidencias."
                       : "Sin permisos asignados."}
@@ -93,7 +93,7 @@ export function PermissionsEntityManager({
                             ? `${up.firstName} ${up.lastName}`
                             : up.username}
                         </span>
-                        <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70">
+                        <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground/70">
                           @{up.username}
                         </span>
                       </div>
@@ -120,7 +120,7 @@ export function PermissionsEntityManager({
                             />
                             <span
                               className={cn(
-                                "text-[8px] md:text-[10px] font-bold uppercase tracking-widest",
+                                "text-xs font-bold uppercase tracking-widest",
                                 hasPerm
                                   ? "text-foreground"
                                   : "text-muted-foreground/30",
@@ -149,13 +149,13 @@ export function PermissionsEntityManager({
 
                     {/* Scope Badge */}
                       <div className="flex items-center justify-between lg:flex-col gap-2 lg:w-40 lg:shrink-0 lg:items-end border-t lg:border-t-0 pt-3 mt-1">
-                      <span className="text-[9px] md:text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
                         Alcance
                       </span>
                       <Badge
                         variant="outline"
                         className={cn(
-                          "h-6 md:h-8 rounded-lg px-2 text-[9px] md:text-[11px] font-bold uppercase tracking-widest border-2",
+                          "h-6 md:h-8 rounded-lg px-2 text-xs font-bold uppercase tracking-widest border-2",
                           up.permissions.scope === "ALL" &&
                             "border-primary/20 bg-primary/5 text-primary",
                           up.permissions.scope === "OWN" &&
