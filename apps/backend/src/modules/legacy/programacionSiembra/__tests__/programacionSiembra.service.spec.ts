@@ -44,6 +44,8 @@ describe('ProgramacionSiembraService', () => {
           propiedad: 'Propiedad A',
           injerto: 'No',
           nrocont: '100',
+          contenedor: 'C01',
+          cantTipoCont: 120,
           sem_siembra: 'S1-2024',
           f_siem: '2024-01-15',
           f_siembra: '2024-01-16',
@@ -70,6 +72,8 @@ describe('ProgramacionSiembraService', () => {
         propiedad: 'Propiedad A',
         injerto: 'No',
         nrocont: '100',
+        tipocont: 'C01',
+        cantTipoCont: 120,
         sem_siembra: 'S1-2024',
         fechaSugeridaSiembra: '2024-01-15',
         fechaSiembraReal: '2024-01-16',
@@ -79,6 +83,38 @@ describe('ProgramacionSiembraService', () => {
         c: '3',
         g: '4',
       });
+    });
+
+    it('should map a null cantTipoCont (LEFT JOIN miss) to undefined', async () => {
+      const rows = [
+        {
+          partida: 2,
+          ano: 2024,
+          indice: 1,
+          planta: 'PIN',
+          nombre: 'Pino',
+          propiedad: 'Propiedad A',
+          injerto: 'No',
+          nrocont: '100',
+          contenedor: 'C99',
+          cantTipoCont: null,
+          sem_siembra: 'S1-2024',
+          f_siem: '2024-01-15',
+          f_siembra: '2024-01-16',
+          lote: 'L001',
+          ano_lote: '2024',
+          semxgr: '2',
+          c: '3',
+          g: '4',
+        },
+      ];
+      programacionSiembraRepo.findAllProgramacionSiembra.mockResolvedValue(
+        rows,
+      );
+
+      const result = await service.getAllProgramacionSiembra();
+
+      expect(result[0].cantTipoCont).toBeUndefined();
     });
 
     it('should return empty array when no data', async () => {

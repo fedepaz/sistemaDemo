@@ -8,6 +8,7 @@ export const ProgramacionSiembraDtoSchema = LegacyHeaderSchema.extend({
   injerto: z.string(),
   nrocont: z.string(),
   tipocont: z.string(),
+  cantTipoCont: z.number().optional(),
   sem_siembra: z.string(),
   fechaSugeridaSiembra: z.string(), // f_siem
   fechaSiembraReal: z.string(), // f_siembra

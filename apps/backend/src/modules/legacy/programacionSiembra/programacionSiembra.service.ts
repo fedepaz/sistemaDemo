@@ -53,6 +53,7 @@ export class ProgramacionSiembraService {
       injerto: row.injerto,
       nrocont: row.nrocont,
       tipocont: row.contenedor,
+      cantTipoCont: row.cantTipoCont ?? undefined,
       sem_siembra: row.sem_siembra,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,

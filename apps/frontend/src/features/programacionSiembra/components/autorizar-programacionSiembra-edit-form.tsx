@@ -5,7 +5,10 @@ import { Package, Leaf, AlertTriangle } from "lucide-react";
 import { AutorizarSiembraDto, ProgramacionSiembraDto } from "@vivero/shared";
 import { UseFormReturn } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
-import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
+import {
+  formatPartidaNumber,
+  formatSpecies,
+} from "@/features/shared/utils/header";
 
 interface AutorizarProgramacionSiembraEditFormProps {
   onSubmit: (data: AutorizarSiembraDto) => Promise<void>;
@@ -21,9 +24,7 @@ function InfoRow({ label, value }: { label: string; value: string | number }) {
       <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </span>
-      <span className="text-xs text-sm font-bold text-foreground">
-        {value}
-      </span>
+      <span className="text-xs text-sm font-bold text-foreground">{value}</span>
     </div>
   );
 }
@@ -128,6 +129,11 @@ export function AutorizarProgramacionSiembraEditForm({
           </div>
           <div className="bg-muted/20 rounded-xl border border-border/40 p-3 space-y-0">
             <InfoRow label="Tipo Contenedor" value={selectedSiembra.tipocont} />
+
+            <InfoRow
+              label="Cantidad Tipo Contenedor"
+              value={selectedSiembra.cantTipoCont ?? '—'}
+            />
           </div>
         </div>
       </form>

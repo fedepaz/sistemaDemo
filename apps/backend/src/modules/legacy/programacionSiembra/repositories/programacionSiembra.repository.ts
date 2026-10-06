@@ -37,11 +37,13 @@ export class ProgramacionSiembraRepository {
     l.camara AS diasCamara,
         DATE_ADD(p.f_siembra, INTERVAL l.camara DAY) AS fechaEgresoCamara,
       rubro.codigo,
-    rubro.nombre AS rubroNombre
+    rubro.nombre AS rubroNombre,
+    contenedor.cantidad AS cantTipoCont
   FROM partidas p
   LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)
   LEFT JOIN especie ON especie.codigo = p.espvar
   LEFT JOIN rubro ON especie.rubro = rubro.codigo
+  LEFT JOIN contenedor ON contenedor.codigo = p.contenedor
    LEFT JOIN partidas1 l
       ON p.partida=l.partida
       AND p.ano=l.ano

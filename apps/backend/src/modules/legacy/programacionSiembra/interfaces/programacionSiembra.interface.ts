@@ -13,6 +13,7 @@ export interface LegacyProgramacionSiembra extends RowDataPacket {
   injerto: string;
   nrocont: string;
   contenedor: string;
+  cantTipoCont: number;
   sem_siembra: string;
   f_siem: string;
   f_siembra: string;
