@@ -48,6 +48,42 @@ export function isLossy(value: number): boolean {
   return Math.abs(value * 1000 - Math.round(value * 1000)) > EPSILON;
 }
 
+export interface ProductRow {
+  label: string;
+  value: string;
+}
+
+export interface FormulaComposition {
+  producto1Nombre: string;
+  porcentaje1: number;
+  producto2Nombre: string | null;
+  porcentaje2: number | null;
+  producto3Nombre: string | null;
+  porcentaje3: number | null;
+  producto4Nombre: string | null;
+  porcentaje4: number | null;
+}
+
+export function buildProductRows(
+  formula: FormulaComposition,
+  totalPartida: number | null,
+): ProductRow[] {
+  const rows: ProductRow[] = [];
+  for (let i = 1; i <= 4; i++) {
+    const nombre = formula[`producto${i}Nombre` as keyof FormulaComposition];
+    const pct = formula[`porcentaje${i}` as keyof FormulaComposition];
+    if (typeof nombre !== "string" || !nombre || typeof pct !== "number") {
+      continue;
+    }
+    rows.push({
+      label: `${nombre} (${pct}%)`,
+      value:
+        totalPartida != null ? formatL((totalPartida * pct) / 100) : DASH,
+    });
+  }
+  return rows;
+}
+
 export function resolvePair(input: ResolvePairInput): ResolvePairResult {
   const { unitRaw, totalRaw, qty, source } = input;
   if (isCalcDisabled(qty)) {

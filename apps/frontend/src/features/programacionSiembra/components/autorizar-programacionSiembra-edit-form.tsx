@@ -11,6 +11,7 @@ import {
 } from "@/features/shared/utils/header";
 import { VolumeCalculator } from "./volumeCalculator";
 import { FormulaSelector } from "./formulaSelector";
+import { useFormulas } from "@/features/formulas";
 
 interface AutorizarProgramacionSiembraEditFormProps {
   onSubmit: (data: AutorizarSiembraDto) => Promise<void>;
@@ -41,6 +42,11 @@ export function AutorizarProgramacionSiembraEditForm({
     selectedSiembra.lote !== null || selectedSiembra.anoLote !== null
       ? `${selectedSiembra.anoLote} / ${selectedSiembra.lote}`
       : "Sin Lote Asignado";
+
+  const formulaId = form.watch("formulaId");
+  const { data: formulas = [] } = useFormulas();
+  const formula =
+    formulas.find((f) => f.id === formulaId && f.isActive) ?? null;
 
   return (
     <Form {...form}>
@@ -142,6 +148,7 @@ export function AutorizarProgramacionSiembraEditForm({
               key={`${selectedSiembra.partidaId}-${selectedSiembra.anio}-${selectedSiembra.indice}`}
               qty={selectedSiembra.cantTipoCont ?? null}
               totalQty={selectedSiembra.nrocont ?? null}
+              formula={formula}
             />
           </div>
         </div>

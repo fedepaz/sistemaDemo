@@ -5,6 +5,7 @@ import {
   isLossy,
   isCalcDisabled,
   resolvePair,
+  buildProductRows,
 } from "../volumeCalculatorMath";
 
 describe("parseNumber", () => {
@@ -138,5 +139,57 @@ describe("resolvePair", () => {
     expect(
       resolvePair({ unitRaw: "5", totalRaw: "", qty: null, source: "unit" }),
     ).toEqual({ unit: "1", total: "—", lossy: false });
+  });
+});
+
+describe("buildProductRows", () => {
+  const twoProducts = {
+    producto1Nombre: "Turba",
+    porcentaje1: 60,
+    producto2Nombre: "Perlita",
+    porcentaje2: 40,
+    producto3Nombre: null,
+    porcentaje3: null,
+    producto4Nombre: null,
+    porcentaje4: null,
+  };
+
+  it("builds a labeled row per product with its share of the total", () => {
+    expect(buildProductRows(twoProducts, 2000)).toEqual([
+      { label: "Turba (60%)", value: "1200" },
+      { label: "Perlita (40%)", value: "800" },
+    ]);
+  });
+
+  it("skips empty product slots", () => {
+    const oneProduct = {
+      ...twoProducts,
+      producto2Nombre: null,
+      porcentaje2: null,
+    };
+    expect(buildProductRows(oneProduct, 2000)).toEqual([
+      { label: "Turba (60%)", value: "1200" },
+    ]);
+  });
+
+  it("skips slots with a name but no percentage", () => {
+    const missingPct = { ...twoProducts, porcentaje2: null };
+    expect(buildProductRows(missingPct, 2000)).toEqual([
+      { label: "Turba (60%)", value: "1200" },
+    ]);
+  });
+
+  it("returns dashes when the total is unavailable", () => {
+    expect(buildProductRows(twoProducts, null)).toEqual([
+      { label: "Turba (60%)", value: "—" },
+      { label: "Perlita (40%)", value: "—" },
+    ]);
+  });
+
+  it("formats shares with formatL rounding and comma", () => {
+    expect(buildProductRows(twoProducts, 100 / 3)).toEqual([
+      { label: "Turba (60%)", value: "20" },
+      { label: "Perlita (40%)", value: "13,333" },
+    ]);
   });
 });

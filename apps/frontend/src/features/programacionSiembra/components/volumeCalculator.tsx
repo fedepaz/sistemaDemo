@@ -3,15 +3,18 @@
 
 import { useState } from "react";
 import {
+  buildProductRows,
   formatL,
   isCalcDisabled,
   parseNumber,
   resolvePair,
+  type FormulaComposition,
 } from "./volumeCalculatorMath";
 
 interface VolumeCalculatorProps {
   qty: number | null;
   totalQty: string | number | null;
+  formula?: FormulaComposition | null;
 }
 
 interface CalcState {
@@ -68,7 +71,7 @@ function CalcRow({ label, value, disabled, lossy, onChange }: CalcRowProps) {
   );
 }
 
-export function VolumeCalculator({ qty, totalQty }: VolumeCalculatorProps) {
+export function VolumeCalculator({ qty, totalQty, formula }: VolumeCalculatorProps) {
   const [state, setState] = useState<CalcState>({
     unitRaw: "1",
     totalRaw: "",
@@ -79,8 +82,10 @@ export function VolumeCalculator({ qty, totalQty }: VolumeCalculatorProps) {
   const { unit, total, lossy } = resolvePair({ ...state, qty });
   const totalNum = parseNumber(total);
   const traysNum = parseNumber(totalQty);
-  const totalPartida =
-    totalNum != null && traysNum != null ? formatL(totalNum * traysNum) : "—";
+  const partidaNum =
+    totalNum != null && traysNum != null ? totalNum * traysNum : null;
+  const totalPartida = partidaNum != null ? formatL(partidaNum) : "—";
+  const productRows = formula ? buildProductRows(formula, partidaNum) : [];
 
   return (
     <>
@@ -103,6 +108,12 @@ export function VolumeCalculator({ qty, totalQty }: VolumeCalculatorProps) {
         }
       />
       <InfoRow label="Valor Total Partida (L)" value={totalPartida} />
+      {productRows.map((row, i) => (
+        <InfoRow key={`${i}:${row.label}`} label={row.label} value={row.value} />
+      ))}
+      {formula && (
+        <InfoRow label="Total Productos (L)" value={totalPartida} />
+      )}
       {disabled && (
         <p className="px-3 pt-1 text-xs font-medium text-muted-foreground">
           Sin cantidad de contenedor

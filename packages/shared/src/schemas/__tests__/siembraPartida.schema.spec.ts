@@ -1,6 +1,7 @@
 // packages/shared/src/schemas/__tests__/siembraPartida.schema.spec.ts
 import {
   SiembraPartidaSchema,
+  AutorizarSiembraSchema,
   CreateSiembraPartidaSchema,
   ProfundidadSemillaSchema,
 } from "../siembraPartida.schema";
@@ -125,6 +126,38 @@ describe("SiembraPartidaSchema", () => {
     expect(() =>
       SiembraPartidaSchema.parse({ ...valid, tratamientoSemilla: "" }),
     ).toThrow();
+  });
+});
+
+describe("AutorizarSiembraSchema", () => {
+  const header = { partidaId: 100, anio: 2026, indice: 1 };
+
+  it("accepts header without formulaId", () => {
+    const result = AutorizarSiembraSchema.parse(header);
+    expect(result.partidaId).toBe(100);
+    expect(result.anio).toBe(2026);
+    expect(result.indice).toBe(1);
+  });
+
+  it("keeps optional formulaId when provided", () => {
+    const result = AutorizarSiembraSchema.parse({
+      ...header,
+      formulaId: "clx1234567890abcdef123467",
+    });
+    expect(result.formulaId).toBe("clx1234567890abcdef123467");
+  });
+
+  it("leaves formulaId undefined when omitted", () => {
+    const result = AutorizarSiembraSchema.parse(header);
+    expect(result.formulaId).toBeUndefined();
+  });
+
+  it("rejects invalid formulaId", () => {
+    const result = AutorizarSiembraSchema.safeParse({
+      ...header,
+      formulaId: "bad",
+    });
+    expect(result.success).toBe(false);
   });
 });
 

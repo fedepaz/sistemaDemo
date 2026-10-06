@@ -17,6 +17,10 @@ jest.mock("../formulaSelector", () => ({
   FormulaSelector: () => <div data-testid="formula-selector" />,
 }));
 
+jest.mock("@/features/formulas", () => ({
+  useFormulas: () => ({ data: [] }),
+}));
+
 jest.mock("../tratamientoSearch", () => ({
   TratamientoSearch: () => <div data-testid="tratamiento-search" />,
 }));

@@ -76,7 +76,9 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
 
 export type SiembraPartidaDto = z.infer<typeof SiembraPartidaSchema>;
 
-export const AutorizarSiembraSchema = PartidaHeaderSchema;
+export const AutorizarSiembraSchema = PartidaHeaderSchema.extend({
+  formulaId: cuidSchema.optional(),
+});
 
 export type AutorizarSiembraDto = z.infer<typeof AutorizarSiembraSchema>;
 
