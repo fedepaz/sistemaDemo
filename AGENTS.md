@@ -48,6 +48,7 @@ pnpm --filter backend db:studio         # Open Prisma Studio
 5. **Loading strategy:** See `docs/agents/loading-strategy.md` for skeleton and loading state patterns
 6. **Design system tokens:** All spacing, typography, control heights, and table density must use tokens from `globals.css`. See `docs/agents/ux-ui-agent.md` for the full token reference. No arbitrary values (`p-[18px]`, `gap-[22px]`, etc.).
 7. **Pull Requests:** Titles follow `PULL_REQUEST_CONVENTIONS.md` (Conventional Commits + `release`, enforced by the `PR Title Check` CI job); bodies use `.github/PULL_REQUEST_TEMPLATE.md`. Use the `pull-request-workflow` skill when asked to create a PR.
+8. **Frontend reviews are docs-driven:** Judge UX/UI and frontend styling ONLY against `docs/agents/ux-ui-agent.md` (including its Legacy Class Normalization table), `docs/agents/loading-strategy.md`, and the tokens in `globals.css` — read them **before** any review or frontend change. Never substitute generic UI best practices for project rules, and never ask the user what their own docs say.
 
 ## Verification Order
 

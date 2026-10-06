@@ -83,6 +83,28 @@ All tokens are defined as CSS custom properties in `apps/frontend/src/app/global
 | `--text-title` | 20px | Page titles, KPI values |
 | `--text-heading` | 24px | DataTable titles |
 
+#### Legacy Class Normalization (mandatory)
+
+Older files contain legacy utility pairs left over from responsive-era code
+(commit `044b2ef` stripped `md:` prefixes textually and created double-rendered
+classes). When touching any of these files, normalize with this table — and
+never introduce new instances of any pattern below:
+
+| Legacy pattern | Replace with | Rule |
+|---|---|---|
+| `text-[9px]` / `text-[10px]` / `text-[11px]` | `text-xs` | Only token sizes exist (`--text-xs`=11px … `--text-3xl`=24px); no arbitrary font sizes |
+| `text-[9px] text-[11px]`, `text-[10px] text-xs`, `text-[9px] md:text-[11px]`, `text-[10px] md:text-xs` | `text-xs` | Collapse double font-sizes to one token |
+| `text-xs text-sm` (value spans) | `text-sm` | Zero-Scroll: `text-xs` labels, `text-sm` values |
+| `text-base text-lg` | `text-base` | Keep base value when a responsive pair was flattened |
+| `h-3.5 w-3.5` (icons) | `h-4 w-4` | Icons normalize to `h-4` (Zero-Scroll icon size) |
+| `h-3 w-3.5` (icons) | `h-4 w-4` | Normalize asymmetric icon pairs |
+| `h-3.5 w-3.5 h-4 w-4`, `h-3.5 w-3.5 md:h-4 md:w-4` | `h-4 w-4` | Collapse double icon sizes |
+| `h-2.5 w-2.5 h-3 w-3` | `h-3 w-3` | Collapse double icon sizes, keep larger |
+| `h-5 h-6` (badges) | `h-6` | `--control-height-xs` = 24px compact badges |
+| `grid-cols-1 grid-cols-2` | `grid-cols-2` | Collapse flattened responsive grids |
+| `md:` / `lg:` / `xl:` anywhere inside a SlideOverForm child | remove prefix, keep base | SlideOver children are locked to one density (see Responsive Design above) |
+| Control heights on buttons/inputs/selects | one of `h-6`/`h-7`/`h-8`/`h-9`/`h-10` | Must map to `--control-height-*` (24/28/32/36/40px) |
+
 **Sidebar tokens**:
 
 | Token | Value | Use case |
@@ -311,22 +333,21 @@ For each interface state:
 
 Skeleton loading screens improve perceived performance by showing placeholder UI that mimics the final layout structure while data loads, reducing cognitive load and providing visual continuity.
 
-#### The Multi-Level Loading Strategy: The Golden Path
+#### The Two-Tier Loading Strategy (source of truth: `loading-strategy.md`)
 
-To provide the best possible user experience and perceived performance, we will implement a two-tiered loading strategy that combines Next.js's file-based conventions with granular component-level control.
+Loading is handled exclusively by component-level boundaries — **route-level
+`loading.tsx` files are NOT used in this project** (see the Pre-Merge Checklist
+in `docs/agents/loading-strategy.md`).
 
-**Level 1: Instant Route Skeleton (`loading.tsx`)**
+**Tier 1: Section-Level (`<LoadingBoundary>`)**
 
-This is the first and most important loading UI the user sees.
+- Every data-fetching section wraps its content in `<LoadingBoundary>` with a
+  required skeleton prop that mirrors the real component's dimensions (prevents CLS).
+- Keep fast content (headers, nav) outside the boundary.
 
-- **Convention**: For any route segment, create a corresponding `loading.tsx` file.
-- **Behavior**: Next.js will automatically render this instantly while the server prepares the actual page.
+**Tier 2: Inline (Button States)**
 
-**Level 2: Granular Content Streaming (In-Page `<Suspense>`)**
-
-This is for handling dynamic content _within_ a page that has already rendered its initial skeleton.
-
-- **Convention**: Wrap data-fetching components in a `<Suspense>` boundary.
+- Mutations and small operations show progress via button/spinner states, not skeletons.
 
 ### Implementation Requirements
 
