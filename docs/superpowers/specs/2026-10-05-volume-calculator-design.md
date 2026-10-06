@@ -33,7 +33,7 @@ only the total (e.g. `126`) types it and gets the unit (`126 ÷ 200 = 0,63`).
 | File | Responsibility |
 |------|----------------|
 | `apps/frontend/src/features/programacionSiembra/components/volumeCalculatorMath.ts` | Pure logic, zero React: `parseNumber`, `formatL`, `isLossy`, `isCalcDisabled`, `resolvePair` |
-| `apps/frontend/src/features/programacionSiembra/components/volumeCalculator.tsx` | Self-contained component; owns both inputs and state; props: `{ qty: number \| null }` only |
+| `apps/frontend/src/features/programacionSiembra/components/volumeCalculator.tsx` | Self-contained component; owns both inputs and state; props: `{ qty: number \| null; totalQty: string \| null }` (`totalQty` = `nrocont`, container count for the partida row) |
 | `apps/frontend/src/features/programacionSiembra/components/__tests__/volumeCalculatorMath.test.ts` | Jest unit tests for the pure logic |
 | `apps/frontend/src/features/programacionSiembra/components/__tests__/volumeCalculator.test.tsx` | Jest component tests (RTL) |
 | `apps/frontend/src/features/programacionSiembra/components/autorizar-programacionSiembra-edit-form.tsx` | Replaces the two sketch `InfoRow`s with `<VolumeCalculator />`; removes the unused `useState`/handlers |
@@ -86,13 +86,17 @@ Testing Library, existing convention).
 - Inputs: `type="text"` + `inputMode="decimal"` (comma-capable), compact,
   right-aligned, row layout matching `InfoRow` (same flex/label styles);
   disabled state dims (`disabled:opacity-50`).
-- Labels: `Valor Unitario (L)` / `Valor Total (L)`; hint line
-  `Sin cantidad de contenedor` when disabled.
+- Labels: `Valor Unitario (L)` / `Valor Total Por Bandeja (L)`; a third
+  read-only row `Valor Total Partida (L)` shows
+  `formatL(parse(total) × parse(totalQty))`, with `—` when either operand is
+  missing/null (no `number × string` coercion — guards against `0`/`NaN`);
+  hint line `Sin cantidad de contenedor` when disabled.
 - Warning: minimal amber `≈` span next to the derived input,
   `text-warning`, `title`/`aria-label` = `Valor aproximado (redondeado a 3 decimales)`.
 - Parent integration: the edit form replaces its two `InfoRow`s with
   `<VolumeCalculator key={\`${partidaId}-${anio}-${indice}\`}
-  qty={selectedSiembra.cantTipoCont ?? null} />` — the `key` resets calculator
+  qty={selectedSiembra.cantTipoCont ?? null}
+  totalQty={selectedSiembra.nrocont ?? null} />` — the `key` resets calculator
   state when the slide-over switches partidas.
 
 ## Testing
@@ -105,7 +109,8 @@ Testing Library, existing convention).
   updates total (`0,740` → `148` at qty 200); typing in total updates unit
   (`126` → `0,63`); disabled when `qty` null (+hint visible, inputs disabled);
   `≈` appears exactly once and only on the derived side when lossy
-  (`qty 3`, total `100` → unit `33,333`).
+  (`qty 3`, total `100` → unit `33,333`); partida row shows
+  `200 × 10 → 2000` and `—` when `totalQty` is null.
 - **Gates:** `pnpm lint && pnpm type-check && pnpm test` (all green; current
   sketch fails type-check `TS18048` — fixed by this design removing the
   offending handlers).

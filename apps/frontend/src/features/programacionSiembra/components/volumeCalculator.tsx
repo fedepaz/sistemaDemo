@@ -2,10 +2,16 @@
 "use client";
 
 import { useState } from "react";
-import { isCalcDisabled, resolvePair } from "./volumeCalculatorMath";
+import {
+  formatL,
+  isCalcDisabled,
+  parseNumber,
+  resolvePair,
+} from "./volumeCalculatorMath";
 
 interface VolumeCalculatorProps {
   qty: number | null;
+  totalQty: string | null;
 }
 
 interface CalcState {
@@ -20,6 +26,16 @@ interface CalcRowProps {
   disabled: boolean;
   lossy: boolean;
   onChange: (raw: string) => void;
+}
+function InfoRow({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="flex items-center justify-between py-1.5 border-b border-border/30 last:border-0">
+      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+        {label}
+      </span>
+      <span className="text-xs text-sm font-bold text-foreground">{value}</span>
+    </div>
+  );
 }
 
 function CalcRow({ label, value, disabled, lossy, onChange }: CalcRowProps) {
@@ -52,7 +68,7 @@ function CalcRow({ label, value, disabled, lossy, onChange }: CalcRowProps) {
   );
 }
 
-export function VolumeCalculator({ qty }: VolumeCalculatorProps) {
+export function VolumeCalculator({ qty, totalQty }: VolumeCalculatorProps) {
   const [state, setState] = useState<CalcState>({
     unitRaw: "1",
     totalRaw: "",
@@ -61,6 +77,10 @@ export function VolumeCalculator({ qty }: VolumeCalculatorProps) {
 
   const disabled = isCalcDisabled(qty);
   const { unit, total, lossy } = resolvePair({ ...state, qty });
+  const totalNum = parseNumber(total);
+  const traysNum = parseNumber(totalQty ?? "");
+  const totalPartida =
+    totalNum != null && traysNum != null ? formatL(totalNum * traysNum) : "—";
 
   return (
     <>
@@ -74,7 +94,7 @@ export function VolumeCalculator({ qty }: VolumeCalculatorProps) {
         }
       />
       <CalcRow
-        label="Valor Total (L)"
+        label="Valor Total Por Bandeja (L)"
         value={total}
         disabled={disabled}
         lossy={state.source === "unit" && lossy}
@@ -82,6 +102,7 @@ export function VolumeCalculator({ qty }: VolumeCalculatorProps) {
           setState((s) => ({ ...s, totalRaw: raw, source: "total" }))
         }
       />
+      <InfoRow label="Valor Total Partida (L)" value={totalPartida} />
       {disabled && (
         <p className="px-3 pt-1 text-xs font-medium text-muted-foreground">
           Sin cantidad de contenedor
