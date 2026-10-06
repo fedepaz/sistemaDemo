@@ -293,7 +293,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                                 key={key}
                                 className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 py-1.5 border-b border-border/30 last:border-0"
                               >
-                                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[80px] min-w-[100px]">
+                                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[80px]">
                                   {key}
                                 </span>
                                 <div className="flex-1">
