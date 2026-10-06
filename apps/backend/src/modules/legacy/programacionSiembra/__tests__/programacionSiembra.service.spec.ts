@@ -117,6 +117,36 @@ describe('ProgramacionSiembraService', () => {
       expect(result[0].cantTipoCont).toBeUndefined();
     });
 
+    it('stringifies numeric nrocont coming from the legacy row', async () => {
+      const rows = [
+        {
+          partida: 1,
+          ano: 2024,
+          indice: 1,
+          planta: 'PIN',
+          nombre: 'Pino',
+          propiedad: 'Propiedad A',
+          injerto: 'No',
+          nrocont: 100,
+          sem_siembra: 'S1-2024',
+          f_siem: '2024-01-15',
+          f_siembra: '2024-01-16',
+          lote: 'L001',
+          ano_lote: '2024',
+          semxgr: '2',
+          c: '3',
+          g: '4',
+        },
+      ];
+      programacionSiembraRepo.findAllProgramacionSiembra.mockResolvedValue(
+        rows,
+      );
+
+      const result = await service.getAllProgramacionSiembra();
+
+      expect(result[0].nrocont).toBe('100');
+    });
+
     it('should return empty array when no data', async () => {
       programacionSiembraRepo.findAllProgramacionSiembra.mockResolvedValue([]);
 

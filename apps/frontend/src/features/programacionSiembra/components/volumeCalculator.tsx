@@ -11,7 +11,7 @@ import {
 
 interface VolumeCalculatorProps {
   qty: number | null;
-  totalQty: string | null;
+  totalQty: string | number | null;
 }
 
 interface CalcState {
@@ -78,7 +78,7 @@ export function VolumeCalculator({ qty, totalQty }: VolumeCalculatorProps) {
   const disabled = isCalcDisabled(qty);
   const { unit, total, lossy } = resolvePair({ ...state, qty });
   const totalNum = parseNumber(total);
-  const traysNum = parseNumber(totalQty ?? "");
+  const traysNum = parseNumber(totalQty);
   const totalPartida =
     totalNum != null && traysNum != null ? formatL(totalNum * traysNum) : "—";
 

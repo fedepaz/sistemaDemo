@@ -51,7 +51,7 @@ export class ProgramacionSiembraService {
 
       propiedad: row.propiedad,
       injerto: row.injerto,
-      nrocont: row.nrocont,
+      nrocont: row.nrocont == null ? row.nrocont : String(row.nrocont),
       tipocont: row.contenedor,
       cantTipoCont: row.cantTipoCont ?? undefined,
       sem_siembra: row.sem_siembra,

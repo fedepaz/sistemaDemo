@@ -31,6 +31,18 @@ describe("parseNumber", () => {
   it("returns null for non-numeric input", () => {
     expect(parseNumber("abc")).toBeNull();
   });
+
+  it("accepts numeric input", () => {
+    expect(parseNumber(10)).toBe(10);
+    expect(parseNumber(42.5)).toBe(42.5);
+  });
+
+  it("returns null for non-finite numbers and nullish", () => {
+    expect(parseNumber(NaN)).toBeNull();
+    expect(parseNumber(Infinity)).toBeNull();
+    expect(parseNumber(null)).toBeNull();
+    expect(parseNumber(undefined)).toBeNull();
+  });
 });
 
 describe("formatL", () => {

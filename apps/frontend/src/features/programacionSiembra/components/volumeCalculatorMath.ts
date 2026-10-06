@@ -21,7 +21,11 @@ export function isCalcDisabled(qty: number | null | undefined): boolean {
   return qty == null || qty <= 0;
 }
 
-export function parseNumber(raw: string): number | null {
+export function parseNumber(
+  raw: string | number | null | undefined,
+): number | null {
+  if (raw == null) return null;
+  if (typeof raw === "number") return Number.isFinite(raw) ? raw : null;
   const trimmed = raw.trim();
   if (!trimmed) return null;
   const normalized = trimmed.includes(",")

@@ -71,4 +71,11 @@ describe("VolumeCalculator", () => {
     const row = screen.getByText("Valor Total Partida (L)").closest("div");
     expect(row).toHaveTextContent("—");
   });
+
+  it("computes partida total when containers arrive as a number", () => {
+    render(<VolumeCalculator qty={200} totalQty={10} />);
+
+    const row = screen.getByText("Valor Total Partida (L)").closest("div");
+    expect(row).toHaveTextContent("2000");
+  });
 });
