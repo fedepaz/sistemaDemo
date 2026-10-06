@@ -77,14 +77,14 @@ const InfoRow = ({
     )}
   >
     <div className="p-1.5 bg-primary/5 rounded-lg border border-primary/10">
-      <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+      <Icon className="h-4 w-4 text-primary" />
     </div>
     <div className="flex-1 min-w-0">
-        <p className="text-xs md:text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
+        <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1">
         {label}
       </p>
       <div className="flex items-center gap-2">
-        <p className="text-xs md:text-base font-bold truncate text-foreground">
+        <p className="text-xs font-bold truncate text-foreground">
           {value ?? "-"}
         </p>
         {badge}
@@ -125,7 +125,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
   const changes = selectedAuditLog.changes as any;
 
   return (
-    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] md:max-h-[calc(100dvh-140px)] overflow-hidden">
+    <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] overflow-hidden">
       {/* Hero Section: Action + Entity */}
       <div className="space-y-2 shrink-0">
         <div className="flex items-center justify-between bg-primary/5 p-3 rounded-xl border border-primary/20 shadow-sm">
@@ -136,7 +136,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
             <div>
               <Badge
                 variant="outline"
-                className={`${getActionBadge(selectedAuditLog.action)} font-bold uppercase tracking-widest text-xs md:text-xs h-5 px-2 flex items-center gap-1.5 mb-1`}
+                className={`${getActionBadge(selectedAuditLog.action)} font-bold uppercase tracking-widest text-xs h-5 px-2 flex items-center gap-1.5 mb-1`}
               >
                 {actionIcon}
                 {selectedAuditLog.action}
@@ -144,7 +144,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
               <div className="flex items-center gap-2">
                 <Badge
                   variant="outline"
-                  className="bg-primary/5 text-primary border-primary/20 font-bold uppercase tracking-widest text-xs md:text-xs h-4 md:h-5 px-1.5"
+                  className="bg-primary/5 text-primary border-primary/20 font-bold uppercase tracking-widest text-xs h-4 px-1.5"
                 >
                   {selectedAuditLog.entityType}
                 </Badge>
@@ -152,10 +152,10 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
             </div>
           </div>
           <div className="text-right pr-1">
-            <p className="text-xs md:text-xs font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-0.5">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-tighter leading-none mb-0.5">
               ID
             </p>
-            <p className="text-xs md:text-xs font-mono font-bold text-foreground truncate max-w-[100px] md:max-w-[140px]">
+            <p className="text-xs font-mono font-bold text-foreground truncate max-w-[100px]">
               {selectedAuditLog.entityId}
             </p>
           </div>
@@ -188,13 +188,13 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
               className="bg-background border border-border/60 p-1.5 rounded-lg flex items-center gap-1.5 shadow-sm overflow-hidden"
             >
               <div className="p-1 bg-muted rounded-md shrink-0">
-                <item.icon className="h-2.5 w-2.5 md:h-3 md:w-3 text-muted-foreground" />
+                <item.icon className="h-2.5 w-2.5 text-muted-foreground" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs md:text-xs font-bold uppercase leading-none mb-0.5">
+                <p className="text-xs font-bold uppercase leading-none mb-0.5">
                   {item.label}
                 </p>
-                <p className="text-xs md:text-xs truncate uppercase font-bold">
+                <p className="text-xs truncate uppercase font-bold">
                   {item.value}
                 </p>
               </div>
@@ -208,24 +208,24 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
         defaultValue="details"
         className="flex-1 flex flex-col overflow-hidden min-h-0"
       >
-        <TabsList className="grid grid-cols-2 bg-muted/80 p-1 rounded-xl shrink-0 h-10 md:h-14 border border-border/40 gap-1 shadow-inner">
+        <TabsList className="grid grid-cols-2 bg-muted/80 p-1 rounded-xl shrink-0 h-10 border border-border/40 gap-1 shadow-inner">
           <TabsTrigger
             value="details"
-            className="rounded-lg text-xs md:text-xs font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-xs font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <History className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 hidden sm:inline-block" />
+            <History className="h-3 w-3 mr-1 hidden sm:inline-block" />
             Detalles
           </TabsTrigger>
 
           <TabsTrigger
             value="technical"
-            className="rounded-lg text-xs md:text-xs font-black uppercase tracking-widest transition-all duration-300
+            className="rounded-lg text-xs font-black uppercase tracking-widest transition-all duration-300
                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
                        data-[state=inactive]:text-muted-foreground"
           >
-            <Shield className="h-3 w-3 md:h-3.5 md:w-3.5 mr-1 hidden sm:inline-block" />
+            <Shield className="h-3 w-3 mr-1 hidden sm:inline-block" />
             Técnico
           </TabsTrigger>
         </TabsList>
@@ -241,8 +241,8 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                 {/* User Info */}
                 {selectedAuditLog.user ? (
                   <div className="space-y-1.5">
-                    <div className="flex items-center gap-2 text-xs md:text-xs font-black uppercase tracking-widest text-primary/70">
-                      <User className="h-3 w-3 md:h-4 md:w-4" /> Responsable
+                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary/70">
+                      <User className="h-3 w-3" /> Responsable
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <InfoRow
@@ -269,8 +269,8 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
 
                 {/* Changes */}
                 <div className="space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs md:text-xs font-black uppercase tracking-widest text-primary/70">
-                    <Database className="h-3 w-3 md:h-4 md:w-4" /> Registro de
+                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary/70">
+                    <Database className="h-3 w-3" /> Registro de
                     Cambios
                   </div>
                   <div className="p-3 rounded-xl bg-muted/30 border border-border/40">
@@ -280,7 +280,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                       );
                       if (!displayChanges) {
                         return (
-                          <p className="text-xs md:text-sm text-muted-foreground italic">
+                          <p className="text-xs text-muted-foreground italic">
                             No hay cambios registrados para esta acción
                           </p>
                         );
@@ -293,7 +293,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                                 key={key}
                                 className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 py-1.5 border-b border-border/30 last:border-0"
                               >
-                                <span className="text-xs md:text-xs font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[80px] md:min-w-[100px]">
+                                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 min-w-[80px] min-w-[100px]">
                                   {key}
                                 </span>
                                 <div className="flex-1">
@@ -301,7 +301,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                                   value !== null &&
                                   "before" in value &&
                                   "after" in value ? (
-                                    <div className="flex items-center gap-2 text-xs md:text-sm">
+                                    <div className="flex items-center gap-2 text-xs">
                                       <span className="text-muted-foreground line-through">
                                         {String(value.before)}
                                       </span>
@@ -313,7 +313,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                                       </span>
                                     </div>
                                   ) : (
-                                    <span className="text-xs md:text-sm font-medium text-foreground">
+                                    <span className="text-xs font-medium text-foreground">
                                       {typeof value === "object"
                                         ? JSON.stringify(value, null, 2)
                                         : String(value)}
@@ -348,7 +348,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                       changes?.method ? (
                         <Badge
                           variant="secondary"
-                          className="font-mono font-bold text-xs md:text-xs h-4 md:h-5"
+                          className="font-mono font-bold text-xs h-4"
                         >
                           {changes.method}
                         </Badge>
@@ -375,7 +375,7 @@ export function AuditLogForm({ selectedAuditLog }: AuditLogFormProps) {
                     badge={
                       <Badge
                         variant="secondary"
-                        className="font-semibold text-xs md:text-xs h-4 md:h-5"
+                        className="font-semibold text-xs h-4"
                       >
                         {selectedAuditLog.userAgent
                           ? `${selectedAuditLog.userAgent.substring(0, 30)}...`

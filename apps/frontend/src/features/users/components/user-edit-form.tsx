@@ -43,13 +43,13 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
             </div>
           </div>
         )}
-        <div className="grid grid-cols-1 grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <FormField
             control={form.control}
             name="firstName"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">Nombre</FormLabel>
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">Nombre</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
@@ -57,7 +57,7 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
                     autoFocus 
                   />
                 </FormControl>
-                <FormMessage className="text-[10px]" />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
@@ -67,14 +67,14 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
             name="lastName"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">Apellido</FormLabel>
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">Apellido</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
                     placeholder="Apellido" 
                   />
                 </FormControl>
-                <FormMessage className="text-[10px]" />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
@@ -85,15 +85,15 @@ export function UserEditForm({ onSubmit, formId, form, user }: FormProps) {
           name="email"
           render={({ field }) => (
             <FormItem className="space-y-1.5">
-              <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">Correo electrónico</FormLabel>
+              <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">Correo electrónico</FormLabel>
               <FormControl>
                 <Input
                   {...field}
                   placeholder="Correo electrónico"
                 />
               </FormControl>
-              <FormDescription className="text-[9px] text-[11px] font-medium italic opacity-60">Email oficial para notificaciones.</FormDescription>
-              <FormMessage className="text-[10px]" />
+              <FormDescription className="text-xs font-medium italic opacity-60">Email oficial para notificaciones.</FormDescription>
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />

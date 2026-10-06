@@ -55,7 +55,7 @@ export function AlertsViewForm({
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
                 {config.label}
               </h2>
-              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
                 {formatPartidaHeader(selectedAlert)}
               </p>
             </div>
@@ -116,10 +116,10 @@ export function AlertsViewForm({
                       isMe && "flex-row-reverse",
                     )}
                   >
-                    <span className="text-[10px] font-mono text-muted-foreground">
+                    <span className="text-xs font-mono text-muted-foreground">
                       @{comment.userName}
                     </span>
-                    <span className="text-[10px] font-mono text-muted-foreground shrink-0">
+                    <span className="text-xs font-mono text-muted-foreground shrink-0">
                       {formatRelativeTime(comment.createdAt)}
                     </span>
                   </div>

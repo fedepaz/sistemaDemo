@@ -80,12 +80,12 @@ export function TaskShift({
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-primary/10 rounded-lg">
-            <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+            <Clock className="h-4 w-4 text-primary" />
           </div>
-          <h3 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+          <h3 className="text-xs font-black uppercase tracking-widest text-foreground">
             Tiempo de tarea
           </h3>
-          <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+          <p className="font-sans text-xs font-medium leading-tight opacity-70">
             Selecciona el horario de la tarea para hoy
             <br />({today}).
           </p>
@@ -183,7 +183,7 @@ export function TaskShift({
           <Button
             type="button"
             onClick={handleStart}
-            className="w-full h-10 md:h-14 rounded-xl text-xs md:text-sm font-bold"
+            className="w-full h-10 rounded-xl text-xs font-bold"
           >
             <Play className="h-4 w-4 mr-2" />
             Iniciar
@@ -195,7 +195,7 @@ export function TaskShift({
             type="button"
             variant="destructive"
             onClick={handleStop}
-            className="w-full h-10 md:h-14 rounded-xl text-xs md:text-sm font-bold"
+            className="w-full h-10 rounded-xl text-xs font-bold"
           >
             <Square className="h-4 w-4 mr-2" />
             Finalizar
@@ -209,9 +209,9 @@ export function TaskShift({
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-primary/10 rounded-lg">
-            <User2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+            <User2 className="h-4 w-4 text-primary" />
           </div>
-          <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-foreground">
+          <Label className="text-xs font-black uppercase tracking-widest text-foreground">
             Empleados
           </Label>
         </div>
