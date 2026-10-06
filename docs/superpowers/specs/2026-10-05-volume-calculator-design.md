@@ -115,8 +115,66 @@ Testing Library, existing convention).
   sketch fails type-check `TS18048` — fixed by this design removing the
   offending handlers).
 
+## Product Breakdown (formula allocation) — Addendum 2026-10-06
+
+**Status:** Approved (brainstorming session, 2026-10-06)
+
+When a formula is selected via `FormulaSelector` (rendered above
+*Detalle Fórmula*), the calculator shows how many litres of each product
+are needed for the partida — visual only for now.
+
+### Data flow
+
+- `AutorizarSiembraSchema` extends `PartidaHeaderSchema` with
+  `formulaId: cuidSchema.optional()` (same pattern as
+  `CreateSiembraPartidaSchema`) → typed `form.watch("formulaId")`,
+  auto-reset via the data-table's `form.reset()`, zero selector changes.
+- Edit form: `formulaId` lookup in `useFormulas()` (same query key as the
+  selector → no extra request), keeping only `isActive` matches, passed as
+  `<VolumeCalculator formula={formula}>`.
+- Payload unchanged: `handleAutorizar` still sends only
+  `{ partidaId, anio, indice }`.
+
+### Layout (Option A)
+
+After `Valor Total Partida (L)`, one row per product, closed by a
+trailing `Total Productos (L)` row equal to the partida total
+(`totalValue × nrocont`):
+
+```
+Valor Total Partida (L)          2000
+Turba (60%)                      1200
+Perlita (40%)                     800
+Total Productos (L)              2000
+```
+
+### Math (`buildProductRows(formula, totalPartida): ProductRow[]`)
+
+- Slots 1–4; a slot renders only when `productoNNombre` is a non-empty
+  string **and** `porcentajeNNumber` is a number (nulls skipped).
+- Label: `${nombre} (${pct}%)`. Value: `formatL(totalPartida × pct / 100)`
+  or `—` when `totalPartida` is null (disabled/unavailable).
+- No `≈` on breakdown rows (consistent with the partida row). Independent
+  3-decimal rounding can make the displayed sum drift ≤0.001 from the
+  displayed total — accepted (visual only). Percentages sum to 100% by
+  `CreateFormulaSchema`'s refine, so the shares add up to
+  `totalValue × nrocont`.
+
+## Testing (addendum)
+
+- **Math:** labeled rows, empty-slot skipping, name-without-percentage
+  skipping, `—` when total null, `formatL` rounding/comma of shares.
+- **Component:** product rows + trailing total with formula; no breakdown
+  without formula; `—` rows when qty disabled; values recompute when the
+  unit is edited (`0,740` → `888`/`592` at qty 200 × 10).
+- **Edit form (wiring):** breakdown renders from `defaultValues.formulaId`;
+  absent/unknown `formulaId` renders none; data-table test mocks
+  `@/features/formulas` (edit form now calls `useFormulas`).
+
 ## Open Follow-ups (explicitly out of scope)
 
 - Persisting unit/total with the autorizar payload (future DTO extension).
+- Forwarding the selected `formulaId` in the autorizar payload and
+  persisting it server-side (schema is already ready).
 - Using `GET /l-contenedor` (`LegacyTipoContenedorModule`, commit `b3f1626`)
   to validate `cantTipoCont` against container catalog data.
