@@ -9,6 +9,7 @@ import {
   formatPartidaNumber,
   formatSpecies,
 } from "@/features/shared/utils/header";
+import { VolumeCalculator } from "./volumeCalculator";
 
 interface AutorizarProgramacionSiembraEditFormProps {
   onSubmit: (data: AutorizarSiembraDto) => Promise<void>;
@@ -39,6 +40,7 @@ export function AutorizarProgramacionSiembraEditForm({
     selectedSiembra.lote !== null || selectedSiembra.anoLote !== null
       ? `${selectedSiembra.anoLote} / ${selectedSiembra.lote}`
       : "Sin Lote Asignado";
+
   return (
     <Form {...form}>
       <form
@@ -132,7 +134,11 @@ export function AutorizarProgramacionSiembraEditForm({
 
             <InfoRow
               label="Cantidad Tipo Contenedor"
-              value={selectedSiembra.cantTipoCont ?? '—'}
+              value={selectedSiembra.cantTipoCont ?? "—"}
+            />
+            <VolumeCalculator
+              key={`${selectedSiembra.partidaId}-${selectedSiembra.anio}-${selectedSiembra.indice}`}
+              qty={selectedSiembra.cantTipoCont ?? null}
             />
           </div>
         </div>
