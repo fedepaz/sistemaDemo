@@ -28,39 +28,31 @@
       "viewportDvh": "Uses dynamic viewport height (dvh) where full-screen height is needed"
     },
     "reviewed": {
-      "lastReview": "2026-07-23",
+      "lastReview": "2026-10-07",
       "reviewer": "opencode"
     },
     "categories": {
       "Pages": {
-        "_note": "Route-level page components and their loading/error boundaries",
+        "_note": "Route-level page components (no route-level loading.tsx — forbidden by loading-strategy.md)",
         "RootLayout": { "path": "app/layout" },
         "DashboardLayout": { "path": "app/(dashboard)/layout" },
         "DashboardPage": { "path": "app/(dashboard)/page" },
-        "DashboardLoading": { "path": "app/(dashboard)/loading" },
         "DashboardNotFound": { "path": "app/(dashboard)/not-found" },
         "CatchAllPage": { "path": "app/(dashboard)/[...rest]/page" },
         "AuthLayout": { "path": "app/(auth)/layout" },
         "LoginPage": { "path": "app/(auth)/login/page" },
-        "LoginLoading": { "path": "app/(auth)/login/loading" },
+        "RegisterPage": { "path": "app/(auth)/register/page" },
         "AlertsV1Page": { "path": "app/(dashboard)/alerts/v1/page" },
-        "AlertsV1Loading": { "path": "app/(dashboard)/alerts/v1/loading" },
-        "AlertsV2Page": { "path": "app/(dashboard)/alerts/v2/page" },
-        "AlertsV2Loading": { "path": "app/(dashboard)/alerts/v2/loading" },
-        "AlertsV3Page": { "path": "app/(dashboard)/alerts/v3/page" },
-        "AlertsV3Loading": { "path": "app/(dashboard)/alerts/v3/loading" },
         "AuditLogsPage": { "path": "app/(dashboard)/audit-logs/page" },
-        "AuditLogsLoading": { "path": "app/(dashboard)/audit-logs/loading" },
         "EntitiesPage": { "path": "app/(dashboard)/entities/page" },
-        "EntitiesLoading": { "path": "app/(dashboard)/entities/loading" },
         "ExtendidosPage": { "path": "app/(dashboard)/extendidos/page" },
-        "ExtendidosLoading": { "path": "app/(dashboard)/extendidos/loading" },
         "PermissionsPage": { "path": "app/(dashboard)/user-permissions/page" },
-        "PermissionsLoading": { "path": "app/(dashboard)/user-permissions/loading" },
-        "SiembraPage": { "path": "app/(dashboard)/siembra/page" },
-        "SiembraLoading": { "path": "app/(dashboard)/siembra/loading" },
         "UsersPage": { "path": "app/(dashboard)/users/page" },
-        "UsersLoading": { "path": "app/(dashboard)/users/loading" }
+        "FormulasPage": { "path": "app/(dashboard)/formulas/page" },
+        "ProductosPage": { "path": "app/(dashboard)/productos/page" },
+        "ASembrarPage": { "path": "app/(dashboard)/a-sembrar/page" },
+        "ProgramacionSiembraPage": { "path": "app/(dashboard)/programacion-siembra/page" },
+        "ProgramacionSiembraPartidasRegistradasPage": { "path": "app/(dashboard)/programacion-siembra/partidas-registradas/page" }
       },
       "Layout": {
         "_note": "Layout structural components: headers, sidebars, navigation",
@@ -335,6 +327,44 @@
           "AuthSkeleton": { "path": "features/auth/components/auth-skeleton" },
           "LoginForm": { "path": "features/auth/components/login-form" }
         },
+        "formulas": {
+          "_note": "Formula management",
+          "FormulasDashboard": { "path": "features/formulas/components/FormulasDashboard" },
+          "FormulaDataTable": { "path": "features/formulas/components/formula-data-table" },
+          "FormulaCreateForm": { "path": "features/formulas/components/formula-create-form" },
+          "FormulaViewForm": { "path": "features/formulas/components/formula-view-form" },
+          "_columns": {
+            "formulaColumns": { "path": "features/formulas/components/columns", "type": "columns" }
+          }
+        },
+        "productos": {
+          "_note": "Product management",
+          "ProductosDashboard": { "path": "features/productos/components/ProductosDashboard" },
+          "ProductoDataTable": { "path": "features/productos/components/producto-data-table" },
+          "ProductoCreateForm": { "path": "features/productos/components/producto-create-form" },
+          "ProductoEditForm": { "path": "features/productos/components/producto-edit-form" },
+          "ProductoViewForm": { "path": "features/productos/components/producto-view-form" },
+          "_columns": {
+            "productoColumns": { "path": "features/productos/components/columns", "type": "columns" }
+          }
+        },
+        "programacionSiembra": {
+          "_note": "Sowing programming: volume calculator, selectors, authorization flow",
+          "ProgramacionSiembraDashboard": { "path": "features/programacionSiembra/components/ProgramacionSiembraDashboard" },
+          "ProgramacionSiembraDashboardSkeleton": { "path": "features/programacionSiembra/components/programacionSiembra-dashboard-skeleton" },
+          "ProgramacionSiembraDataTable": { "path": "features/programacionSiembra/components/programacionSiembra-data-table" },
+          "ProgramacionSiembraView": { "path": "features/programacionSiembra/components/programacionSiembra-view" },
+          "ProgramacionSiembraViewForm": { "path": "features/programacionSiembra/components/programacionSiembra-view-form" },
+          "AutorizarProgramacionSiembraEditForm": { "path": "features/programacionSiembra/components/autorizar-programacionSiembra-edit-form" },
+          "FormulaSelector": { "path": "features/programacionSiembra/components/formulaSelector" },
+          "VolumeCalculator": { "path": "features/programacionSiembra/components/volumeCalculator" },
+          "SustratoSearch": { "path": "features/programacionSiembra/components/sustratoSearch" },
+          "TratamientoSearch": { "path": "features/programacionSiembra/components/tratamientoSearch" },
+          "EmptyState": { "path": "features/programacionSiembra/components/empty-state" },
+          "_columns": {
+            "programacionSiembraColumns": { "path": "features/programacionSiembra/components/columns", "type": "columns" }
+          }
+        },
         "users": {
           "_note": "User management",
           "UsersDashboard": { "path": "features/users/components/UsersDashboard" },
@@ -369,9 +399,10 @@
         "entities": {
           "_note": "Business entity management",
           "EntityDashboard": { "path": "features/entities/components/EntityDashboard" },
-          "EntityDashboardSkeleton": { "path": "features/entities/components/entity-dashboard-skeleton" },
           "EntityDataTable": { "path": "features/entities/components/entity-data-table" },
           "EntityCreateForm": { "path": "features/entities/components/entity-create-form" },
+          "EntityEditForm": { "path": "features/entities/components/entity-edit-form" },
+          "EntityViewForm": { "path": "features/entities/components/entity-view-form" },
           "EntitiesKPIs": { "path": "features/entities/components/entities-kpi" },
           "_columns": {
             "entityColumns": { "path": "features/entities/components/columns", "type": "columns" }

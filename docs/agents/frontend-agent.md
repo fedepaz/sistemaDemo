@@ -76,12 +76,25 @@ export const useDeleteUser = () => {
 };
 ```
 
+## Global Error Handling (Mandatory)
+
+- All TanStack Query errors are handled **globally**: `QueryCache.onError` and
+  `MutationCache.onError` in `src/providers/query-client-provider.tsx` route every
+  failed request/mutation through `ErrorProvider.handleError` → sonner `toast.error`
+  (labelled with `meta.context` / `meta.operation`).
+- A `catch {}` in a component that swallows a **query/mutation** rejection is NOT a
+  silent error — the global layer already surfaced it. Do not add redundant toasts
+  or rethrows there; `onSuccess` toasts are for confirmation only.
+- Only catches **outside** the query layer (event handlers, effects, plain helpers)
+  must log, rethrow, or surface the error explicitly.
+- Code reviews must not flag query-layer `catch {}` blocks as "silent errors".
+
 ## Data Fetching & Loading Rules
 
 1. **GET requests use `useSuspenseQuery`** (TanStack Query v5) for declarative Suspense loading.
    - **Exception**: auth-related queries that depend on `isSignedIn` use `useQuery` with `enabled: isSignedIn` (e.g., `use-authUser.ts`, `use-permissions.ts`).
-2. **Route-level `loading.tsx`** skeleton for every route segment (Level 1).
-3. **In-page `<Suspense>`** wrapping data-fetching components with colocated `*Skeleton.tsx` fallbacks (Level 2).
+2. **Tier 1 — Section-level**: every data-fetching section inside `<LoadingBoundary skeleton={<XSkeleton />} />` with a colocated, mirroring `*Skeleton.tsx` (see `docs/agents/loading-strategy.md`).
+3. **Tier 2 — Button states**: mutations surface loading via disabled/`animate-spin` button states. **Route-level `loading.tsx` files are forbidden** (the auth gate in `DashboardProtectedLayout` already covers the full-page case).
 4. Avoid frequent background polling. `refetchInterval` is a last resort — prefer `staleTime` + refetch on focus/remount (e.g., the alerts header badge uses `staleTime: 5min`, no polling).
 
 ## Component Hierarchy

@@ -24,11 +24,20 @@ This document tracks all React components within the `apps/frontend/src` directo
 | `RegisterPage` | [x] | [x] | [ ] | [x] |
 | `CatchAllPage` | [ ] | [ ] | [ ] | [ ] |
 | `DashboardLayout` | [x] | [ ] | [ ] | [ ] |
-| `Loading` | [ ] | [ ] | [ ] | [ ] |
 | `NotFound` | [ ] | [ ] | [ ] | [ ] |
 | `DashboardPage` | [ ] | [ ] | [ ] | [ ] |
 | `UsersPage` | [ ] | [ ] | [ ] | [ ] |
 | `RootLayout` | [ ] | [ ] | [ ] | [ ] |
+| `AlertsV1Page` | [ ] | [ ] | [ ] | [ ] |
+| `AuditLogsPage` | [ ] | [ ] | [ ] | [ ] |
+| `EntitiesPage` | [ ] | [ ] | [ ] | [ ] |
+| `ExtendidosPage` | [ ] | [ ] | [ ] | [ ] |
+| `PermissionsPage` | [ ] | [ ] | [ ] | [ ] |
+| `FormulasPage` | [ ] | [ ] | [ ] | [ ] |
+| `ProductosPage` | [ ] | [ ] | [ ] | [ ] |
+| `ASembrarPage` | [ ] | [ ] | [ ] | [ ] |
+| `ProgramacionSiembraPage` | [ ] | [ ] | [ ] | [ ] |
+| `ProgramacionSiembraPartidasRegistradasPage` | [ ] | [ ] | [ ] | [ ] |
 
 ## Common Components
 
@@ -173,14 +182,13 @@ Without memoized callbacks, `React.memo` cannot prevent re-renders.
 | `AuthDashboard` | [x] | [x] | [ ] | [x] |
 | `LoginForm` | [x] | [x] | [x] | [x] |
 | `RegisterForm` | [x] | [x] | [x] | [x] |
-| `RegisterLoading` | [x] | [x] | [x] | [x] |
-| `LoginLoading` | [x] | [x] | [x] | [x] |
 
 ### Entities
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
 | :--- | :---: | :---: | :---: | :---: |
 | `EntityCreateForm` | [ ] | [ ] | [ ] | [ ] |
-| `EntityDashboardSkeleton` | [ ] | [ ] | [ ] | [ ] |
+| `EntityEditForm` | [ ] | [ ] | [ ] | [ ] |
+| `EntityViewForm` | [ ] | [ ] | [ ] | [ ] |
 | `EntityDataTable` | [ ] | [ ] | [ ] | [ ] |
 | `EntitiesKPIs` | [ ] | [ ] | [ ] | [ ] |
 | `EntityDashboard` | [x] | [ ] | [ ] | [ ] |
@@ -225,6 +233,37 @@ Without memoized callbacks, `React.memo` cannot prevent re-renders.
 | `ExtendidoDashboard` | [ ] | [ ] | [ ] | [ ] |
 | `ExtendidoView` | [ ] | [ ] | [ ] | [ ] |
 | `EmptyState` | [ ] | [ ] | [ ] | [ ] |
+
+### Formulas
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `FormulasDashboard` | [ ] | [ ] | [ ] | [ ] |
+| `FormulaDataTable` | [ ] | [ ] | [ ] | [ ] |
+| `FormulaCreateForm` | [ ] | [ ] | [ ] | [ ] |
+| `FormulaViewForm` | [ ] | [ ] | [ ] | [ ] |
+
+### Productos
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `ProductosDashboard` | [ ] | [ ] | [ ] | [ ] |
+| `ProductoDataTable` | [ ] | [ ] | [ ] | [ ] |
+| `ProductoCreateForm` | [ ] | [ ] | [ ] | [ ] |
+| `ProductoEditForm` | [ ] | [ ] | [ ] | [ ] |
+| `ProductoViewForm` | [ ] | [ ] | [ ] | [ ] |
+
+### Programacion Siembra
+| Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
+| :--- | :---: | :---: | :---: | :---: |
+| `ProgramacionSiembraDashboard` | [ ] | [ ] | [ ] | [ ] |
+| `ProgramacionSiembraDashboardSkeleton` | [ ] | [ ] | [ ] | [ ] |
+| `ProgramacionSiembraDataTable` | [ ] | [ ] | [ ] | [ ] |
+| `ProgramacionSiembraView` | [ ] | [ ] | [ ] | [ ] |
+| `ProgramacionSiembraViewForm` | [ ] | [ ] | [ ] | [ ] |
+| `AutorizarProgramacionSiembraEditForm` | [ ] | [ ] | [ ] | [ ] |
+| `FormulaSelector` | [ ] | [ ] | [ ] | [ ] |
+| `VolumeCalculator` | [ ] | [ ] | [ ] | [ ] |
+| `SustratoSearch` | [ ] | [ ] | [ ] | [ ] |
+| `TratamientoSearch` | [ ] | [ ] | [ ] | [ ] |
 
 ## Users
 | Component | Responsive | Color Tokens | UX Helpers | Viewport dvh |
