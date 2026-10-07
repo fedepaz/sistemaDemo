@@ -64,7 +64,7 @@ function NavItemLink({
               {"badge" in item && item.badge && isCollapsed && (
                 <Badge
                   variant={item.badgeVariant || "secondary"}
-                  className="absolute -top-1 -right-1 h-3.5 w-3.5 p-0 flex items-center justify-center text-xs"
+                  className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs"
                 >
                   {item.badge.length > 2 ? "99+" : item.badge}
                 </Badge>
@@ -136,7 +136,7 @@ function NavGroupSection({
           onClick={() => toggleGroup(group.id)}
           className="h-8 w-full justify-start gap-2 font-medium text-xs uppercase tracking-widest text-muted-foreground/60 hover:text-foreground"
         >
-          <GroupIcon className="h-3.5 w-3.5 shrink-0" />
+          <GroupIcon className="h-4 w-4 shrink-0" />
           <span className="flex-1 text-left">{group.title}</span>
           <ChevronDown
             className={cn(
@@ -188,7 +188,7 @@ function NavNestedGroupSection({
           onClick={() => toggleGroup(group.id)}
           className="h-8 w-full justify-start gap-2 font-medium text-xs uppercase tracking-widest text-muted-foreground/60 hover:text-foreground"
         >
-          <GroupIcon className="h-3.5 w-3.5 shrink-0" />
+          <GroupIcon className="h-4 w-4 shrink-0" />
           <span className="flex-1 text-left">{group.title}</span>
           <ChevronDown
             className={cn(
@@ -343,9 +343,9 @@ export function DesktopSidebar() {
                 }
               >
                 {isCollapsed ? (
-                  <ChevronRight className="h-3.5 w-3.5 ml-1" />
+                  <ChevronRight className="h-4 w-4 ml-1" />
                 ) : (
-                  <ChevronLeft className="h-3.5 w-3.5" />
+                  <ChevronLeft className="h-4 w-4" />
                 )}
               </Button>
             </TooltipTrigger>

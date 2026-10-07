@@ -111,7 +111,7 @@ export function UsersDataTable() {
                 onClick={() => setShowActivate(true)}
                 aria-label={`Activar usuarios (${usersToActivate.length})`}
               >
-                <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+                <UserPlus className="mr-1.5 h-4 w-4" />
                 Activar usuarios
                 <Badge
                   variant="destructive"
@@ -143,7 +143,7 @@ export function UsersDataTable() {
               onClick={() => setShowActivate(false)}
               aria-label="Usuarios Activos"
             >
-              <UserCheck className="mr-1.5 h-3.5 w-3.5" />
+              <UserCheck className="mr-1.5 h-4 w-4" />
               Usuarios Activos
             </Button>
           }

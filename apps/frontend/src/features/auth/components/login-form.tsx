@@ -60,7 +60,7 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
               <FormControl>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
-                    <User className="h-3.5 w-3.5 text-primary" />
+                    <User className="h-4 w-4 text-primary" />
                   </div>
                   <Input
                     {...field}
@@ -86,7 +86,7 @@ export function LoginForm({ onDefaultPassword }: LoginFormProps) {
               <FormControl>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center">
-                    <Lock className="h-3.5 w-3.5 text-primary" />
+                    <Lock className="h-4 w-4 text-primary" />
                   </div>
                   <Input
                     id="password"

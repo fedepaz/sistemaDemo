@@ -106,7 +106,7 @@ function MobileGroupSection({
         <span className="flex-1 text-left">{group.title}</span>
         <ChevronDown
           className={cn(
-            "h-3.5 w-3.5 transition-transform",
+            "h-4 w-4 transition-transform",
             isExpanded && "rotate-180",
           )}
         />
@@ -156,7 +156,7 @@ function MobileNestedGroupSection({
         <span className="flex-1 text-left">{group.title}</span>
         <ChevronDown
           className={cn(
-            "h-3.5 w-3.5 transition-transform",
+            "h-4 w-4 transition-transform",
             isExpanded && "rotate-180",
           )}
         />
@@ -183,7 +183,7 @@ function MobileNestedGroupSection({
                     <span className="flex-1 text-left">{item.title}</span>
                     <ChevronDown
                       className={cn(
-                        "h-3.5 w-3.5 transition-transform",
+                        "h-4 w-4 transition-transform",
                         isSubExpanded && "rotate-180",
                       )}
                     />

@@ -458,7 +458,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
           {enableSearch && (
             <div className="flex items-center gap-2 px-4 py-2 shrink-0 border-b">
               <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder={breakpoint === "sm" ? "Buscar..." : "Buscar en la tabla..."}
@@ -472,7 +472,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
                     aria-label="Limpiar búsqueda"
                   >
-                    <X className="h-3.5 w-3.5" />
+                    <X className="h-4 w-4" />
                   </button>
                 )}
               </div>
@@ -486,10 +486,10 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                  <Button variant="outline" size="sm" className="h-(--control-height-sm) xl:h-(--control-height) text-xs">
-                  <Filter className="mr-2 h-3.5 w-3.5" />
+                  <Filter className="mr-2 h-4 w-4" />
                   {breakpoint === "sm" ? "" : "Columnas"}
 
-                  <ChevronDown className="ml-1 h-3.5 w-3.5" />
+                  <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -533,7 +533,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                     onClick={onCreate}
                     aria-label={createLabel}
                   >
-                    <Plus className="h-3.5 w-3.5 mr-1" />
+                    <Plus className="h-4 w-4 mr-1" />
                     {breakpoint === "sm" ? "" : createLabel}
                   </Button>
                 </TooltipTrigger>
@@ -564,7 +564,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                       onClick={handleBulkDelete}
                       aria-label={`Eliminar ${selectedCount} seleccionados`}
                     >
-                      <Trash2 className="mr-1.5 h-3.5 w-3.5" />
+                      <Trash2 className="mr-1.5 h-4 w-4" />
                       {breakpoint === "sm"
                         ? selectedCount
                         : `Eliminar (${selectedCount})`}
@@ -706,7 +706,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                       disabled={!table.getCanPreviousPage()}
                       aria-label="Ir a la página anterior"
                     >
-                      <ChevronLeft className="h-3.5 w-3.5" />
+                      <ChevronLeft className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent
@@ -726,7 +726,7 @@ function DataTableInner<TData extends Record<string, unknown>, TValue>({
                       disabled={!table.getCanNextPage()}
                       aria-label="Ir a la página siguiente"
                     >
-                      <ChevronRight className="h-3.5 w-3.5" />
+                      <ChevronRight className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent
