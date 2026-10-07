@@ -96,7 +96,7 @@ export function TaskShift({
           <div className="space-y-2">
             {/* Inicio */}
             <div className="flex items-center gap-2">
-              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <Clock className="h-4 w-4 text-muted-foreground" />
               <span className="text-xs font-bold text-muted-foreground w-12">Inicio</span>
               <div className="flex items-center gap-1">
                 <Select
@@ -137,7 +137,7 @@ export function TaskShift({
 
             {/* Fin */}
             <div className="flex items-center gap-2">
-              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <Clock className="h-4 w-4 text-muted-foreground" />
               <span className="text-xs font-bold text-muted-foreground w-12">Fin</span>
               <div className="flex items-center gap-1">
                 <Select

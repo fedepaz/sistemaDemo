@@ -58,7 +58,7 @@ export function UserSelector({ onSelectedUserId }: UserSelectorProps) {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
         <div className="space-y-1.5 lg:flex-1">
           <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground/80 ml-1">
-            <Users className="h-3.5 w-3.5" />
+            <Users className="h-4 w-4" />
             Seleccionar Usuario
           </label>
           <Popover open={open} onOpenChange={setOpen}>

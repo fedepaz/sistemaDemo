@@ -54,7 +54,7 @@ export function PermissionsEntityManager({
               variant="outline"
               className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-xs uppercase tracking-widest gap-2"
             >
-              <Shield className="h-3 md:h-3.5 w-3 md:h-3.5" />
+              <Shield className="h-3 w-3 md:h-3.5 md:w-3.5" />
               {userPermissions.length} accesos
             </Badge>
           </div>
@@ -112,7 +112,7 @@ export function PermissionsEntityManager({
                           >
                             <col.icon
                               className={cn(
-                                "h-3.5 w-3.5 md:h-4 md:w-4",
+                                "h-4 w-4",
                                 hasPerm
                                   ? col.color
                                   : "text-muted-foreground/20",

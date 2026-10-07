@@ -225,7 +225,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                   variant="outline"
                   className="h-8 md:h-9 px-3 rounded-xl border-dashed border-muted-foreground/30 bg-muted/30 text-muted-foreground font-bold text-xs uppercase tracking-widest gap-2"
                 >
-                  <Shield className="h-3 md:h-3.5 w-3 md:h-3.5" />
+                  <Shield className="h-3 w-3 md:h-3.5 md:w-3.5" />
                   Modo lectura
                 </Badge>
               ) : null}
@@ -361,7 +361,7 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                 disabled={!isDirty || !canEdit}
                 className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl border-border/60 hover:bg-background sm:flex-none font-bold text-xs uppercase tracking-widest"
               >
-                <RotateCcw className="h-3.5 md:h-4 w-3.5 md:w-4" />
+                <RotateCcw className="h-4 w-4" />
                 Descartar
               </Button>
               <Button
@@ -371,9 +371,9 @@ export function PermissionsUserManager({ userId }: PermissionsManagerProps) {
                 className="flex-1 md:h-11 h-9 gap-1.5 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 sm:flex-none font-bold text-xs uppercase tracking-widest"
               >
                 {isSaving ? (
-                  <div className="h-3.5 md:h-4 w-3.5 md:w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                 ) : (
-                  <Save className="h-3.5 md:h-4 w-3.5 md:w-4" />
+                  <Save className="h-4 w-4" />
                 )}
                 Guardar
               </Button>
