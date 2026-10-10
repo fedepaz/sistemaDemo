@@ -10,7 +10,6 @@ import { PrismaService } from '../../../infra/prisma/prisma.service';
 import { SiembraPartidasService } from '../../siembraPartidas/siembraPartidas.service';
 import { TaskShiftsService } from '../../taskShifts/taskShifts.service';
 import { LegacyStockService } from '../stock/stock.service';
-import { AuditEventEmitter } from '../../auditLog/events/audit-event.emitter';
 
 @Injectable()
 export class PartidasService {
@@ -22,7 +21,6 @@ export class PartidasService {
     private readonly siembraPartidaService: SiembraPartidasService,
     private readonly taskShiftsService: TaskShiftsService,
     private readonly legacyStockService: LegacyStockService,
-    private readonly auditEventEmitter: AuditEventEmitter,
   ) {}
 
   async getAllPartidas() {
@@ -60,108 +58,6 @@ export class PartidasService {
     await this.partidasRepository.asignarExtendido(repoData);
   }
 
-  async asignarSiembra(
-    data: AsignarUbiSiembraCompletaDto,
-    requesterId: string,
-  ): Promise<void> {
-    if (data.edita === 'N') {
-      throw new BadRequestException('La partida no se puede editar');
-    }
-
-    if (!data.cg || data.cg === 0) {
-      throw new BadRequestException('Debe seleccionar una ubicación válida');
-    }
-
-    const legacyData = {
-      partida: data.partidaId,
-      ano: data.anio,
-      indice: data.indice,
-      f_siembra: new Date(),
-      cg: data.cg,
-      cantidaNroCont: data.cantidaNroCont,
-      lote: data.lote,
-      anoLote: data.anoLote,
-      item: data.item,
-      semxgr: data.semxgr,
-      detalle: data.detalleExtendido,
-    };
-
-    const newSiembraData = {
-      partidaId: data.partidaId,
-      anio: data.anio,
-      indice: data.indice,
-      metodoMaquina: data.metodoMaquina,
-      prensadoSustrato: data.prensadoSustrato,
-      profundidadSemilla: data.profundidadSemilla,
-      tratamientoSemilla: data.tratamientoSemilla,
-      sustrato: data.sustrato,
-      startTime: data.startTime,
-      endTime: data.endTime,
-      formulaId: data.formulaId,
-    };
-
-    if (data.lote === 0 || data.anoLote === 0) {
-      this.logger.warn(
-        `Stock update skipped: lote=${data.lote}, anoLote=${data.anoLote}, item=${data.item} — no matching rows in legacy stock tables`,
-      );
-      this.auditEventEmitter.emitCrud({
-        tenantId: 'unknown',
-        userId: requesterId,
-        action: 'UPDATE',
-        entityType: 'SIEMBRA',
-        entityId: `partida:${data.partidaId}|ano:${data.anio}|indice:${data.indice}`,
-        timestamp: new Date(),
-        changes: {
-          requestId: 'unknown',
-          endpoint: '/l-partidas/asignar-siembra',
-          method: 'POST',
-          params: {},
-          query: {},
-          body: {
-            anomaly: 'LOTE_OR_ANO_ZERO',
-            lote: data.lote,
-            anoLote: data.anoLote,
-            item: data.item,
-            message:
-              'Stock update will not match any rows — lote or anoLote is 0',
-          },
-          affected: null,
-          durationMs: 0,
-        },
-      });
-    }
-
-    await this.prisma.$transaction(async () => {
-      // Write consumption to partidas1
-      await this.partidasRepository.asignarSiembra(legacyData);
-
-      // Store snapshot (stock fields intentionally omitted — not syncing stock for now)
-      await this.siembraPartidaService.createSiembraPartida(
-        {
-          ...newSiembraData,
-          stockLote: data.lote,
-          stockAnio: data.anio,
-        },
-        requesterId,
-      );
-
-      if (data.startTime && data.endTime) {
-        await this.taskShiftsService.createTaskShift(
-          {
-            entityId: data.entityId,
-            partidaId: data.partidaId,
-            anio: data.anio,
-            indice: data.indice,
-            startTime: data.startTime,
-            endTime: data.endTime,
-            employeeUserIds: data.employeeUserIds ?? [],
-          },
-          requesterId,
-        );
-      }
-    });
-  }
-
   async completarSiembraLegacy(
     data: AsignarUbiSiembraCompletaDto,
     requesterId: string,
@@ -181,16 +77,21 @@ export class PartidasService {
       f_siembra: new Date(),
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
-      lote: data.lote,
-      anoLote: data.anoLote,
-      item: data.item,
-      semxgr: data.semxgr,
+      g: data.cantidadGrs,
+      c: Math.floor(data.cantidadGrs * data.semxgr),
       detalle: data.detalleExtendido,
     };
 
     await this.prisma.$transaction(async () => {
-      // Write consumption to partidas1
+      // Write grams (g, hand input) and computed seed count (c) to partidas1
       await this.partidasRepository.asignarSiembra(legacyData);
+
+      // Sync st_sem_item / st_sem salidas (SUM(partidas1.c)) — must run after the write
+      await this.legacyStockService.updateStock(
+        data.lote,
+        data.anoLote,
+        data.item,
+      );
 
       // Create TaskShift
       if (data.startTime && data.endTime) {

@@ -142,17 +142,15 @@ export class PartidasRepository {
     f_siembra: Date;
     cg: number;
     cantidaNroCont: number;
-    lote: number;
-    anoLote: number;
-    item: number;
-    semxgr: number;
+    g: number;
+    c: number;
     detalle?: string;
   }): Promise<void> {
     await this.legacyDb.transaction(async (conn) => {
       const parsedDate = new Date(data.f_siembra);
 
       const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`;
-      const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE lote = ? AND ano_lote= ? AND item= ?`;
+      const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE partida = ? AND ano = ? AND indice = ?`;
 
       await conn.query(updatePartidasSql, [
         parsedDate.toISOString().slice(0, 10),
@@ -164,11 +162,11 @@ export class PartidasRepository {
         data.indice,
       ]);
       await conn.query(updatePartidas1Sql, [
-        data.semxgr,
-        data.semxgr,
-        data.lote,
-        data.anoLote,
-        data.item,
+        data.c,
+        data.g,
+        data.partida,
+        data.ano,
+        data.indice,
       ]);
     });
   }
