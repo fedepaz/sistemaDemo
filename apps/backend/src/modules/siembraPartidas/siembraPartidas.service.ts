@@ -194,7 +194,7 @@ export class SiembraPartidasService {
       item: legacyData?.item,
       semxgr: legacyData?.semxgr ? Number(legacyData.semxgr) : undefined,
       ajuste: legacyData?.ajuste || undefined,
-      cantidadGrs: legacyData?.cantidad,
+      cantidadGrs: legacyData?.g ? Number(legacyData.g) : undefined,
       cantidaNroCont: legacyData?.con,
       detalleExtendido: legacyData?.extendido || undefined,
       // Stock traceability

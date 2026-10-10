@@ -213,10 +213,6 @@ export function SiembraPartidasRegistradasViewForm({
                     value={selectedPartida.anoLote}
                   />
 
-                  {/* ok i need to fix this, the information showed isn't consistent with the information needed to show
-                  so, can you help me to check where this two values come off? ajuste, cantidadGrs?
-                   */}
-
                   <InfoRow
                     icon={ClipboardList}
                     label="Germ. Estimada"
