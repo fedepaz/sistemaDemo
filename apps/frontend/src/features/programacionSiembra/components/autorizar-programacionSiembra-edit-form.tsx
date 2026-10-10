@@ -5,7 +5,10 @@ import { Package, Leaf, AlertTriangle } from "lucide-react";
 import { AutorizarSiembraDto, ProgramacionSiembraDto } from "@vivero/shared";
 import { UseFormReturn } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
-import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
+import {
+  formatPartidaNumber,
+  formatSpecies,
+} from "@/features/shared/utils/header";
 
 interface AutorizarProgramacionSiembraEditFormProps {
   onSubmit: (data: AutorizarSiembraDto) => Promise<void>;
@@ -21,9 +24,7 @@ function InfoRow({ label, value }: { label: string; value: string | number }) {
       <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </span>
-      <span className="text-xs text-sm font-bold text-foreground">
-        {value}
-      </span>
+      <span className="text-xs text-sm font-bold text-foreground">{value}</span>
     </div>
   );
 }
@@ -106,8 +107,7 @@ export function AutorizarProgramacionSiembraEditForm({
             <InfoRow label="Sem / Gr" value={selectedSiembra.semxgr} />
             <InfoRow label="Año / Lote" value={loteLabel} />
             <InfoRow label="Item" value={selectedSiembra.item} />
-            <InfoRow label="C" value={selectedSiembra.c} />
-            <InfoRow label="G" value={selectedSiembra.g} />
+
             <InfoRow
               label="Siembra Sugerida"
               value={selectedSiembra.fechaSugeridaSiembra}

@@ -13,7 +13,10 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatShortDate, utcToLocalTime } from "@/lib/date-utils";
-import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
+import {
+  formatPartidaNumber,
+  formatSpecies,
+} from "@/features/shared/utils/header";
 
 interface SiembraPartidasRegistradasViewFormProps {
   selectedPartida: SiembraPartidaDto;
@@ -209,6 +212,10 @@ export function SiembraPartidasRegistradasViewForm({
                     label="Año Lote"
                     value={selectedPartida.anoLote}
                   />
+
+                  {/* ok i need to fix this, the information showed isn't consistent with the information needed to show
+                  so, can you help me to check where this two values come off? ajuste, cantidadGrs?
+                   */}
 
                   <InfoRow
                     icon={ClipboardList}
