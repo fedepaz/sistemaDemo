@@ -55,6 +55,11 @@ export const AsignarUbiSiembraDtoSchema = PartidaHeaderSchema.extend({
   anoLote: z.number({ message: "El año del lote es requerido" }),
   item: z.number({ message: "El item es requerido" }),
   semxgr: z.number({ message: "Las semillas por gramo son requeridas" }),
+  cantidadGrs: z
+    .number({ message: "Los gramos utilizados son requeridos" })
+    .positive({
+      message: "Los gramos utilizados deben ser mayores a 0",
+    }),
   edita: z.string().optional(),
 });
 

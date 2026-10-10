@@ -99,16 +99,34 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     anoLote: 2025,
     item: 1,
     semxgr: 2352,
+    cantidadGrs: 2.58,
   };
 
-  it("accepts valid assignment without f_siembra, cantidadGrs, ajuste", () => {
+  it("accepts valid assignment with required cantidadGrs, without f_siembra and ajuste", () => {
     const result = AsignarUbiSiembraDtoSchema.parse(valid);
     expect(result.partidaId).toBe(1);
     expect(result.cg).toBe(92);
     expect(result.cantidaNroCont).toBe(120);
+    expect(result.cantidadGrs).toBe(2.58);
     expect(result).not.toHaveProperty("f_siembra");
-    expect(result).not.toHaveProperty("cantidadGrs");
     expect(result).not.toHaveProperty("ajuste");
+  });
+
+  it("rejects missing cantidadGrs", () => {
+    const { cantidadGrs: _, ...withoutGrams } = valid;
+    expect(() => AsignarUbiSiembraDtoSchema.parse(withoutGrams)).toThrow();
+  });
+
+  it("rejects zero cantidadGrs", () => {
+    expect(() =>
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, cantidadGrs: 0 }),
+    ).toThrow();
+  });
+
+  it("rejects negative cantidadGrs", () => {
+    expect(() =>
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, cantidadGrs: -1.5 }),
+    ).toThrow();
   });
 
   it("applies default values for omitted fields", () => {

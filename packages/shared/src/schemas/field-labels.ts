@@ -99,7 +99,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     item: "Item",
     semxgr: "Semillas/gr",
     ajuste: "Ajuste",
-    cantidadGrs: "Cantidad (gr)",
+    cantidadGrs: "Gramos utilizados",
     edita: "Edita",
     metodoMaquina: "Método",
     prensadoSustrato: "Prensado",
