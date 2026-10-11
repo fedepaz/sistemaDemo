@@ -6,7 +6,7 @@ import {
   AsignarUbiExtendidoDto,
   AsignarUbiSiembraCompletaDto,
 } from '@vivero/shared';
-import { PrismaService } from '../../../infra/prisma/prisma.service';
+import { LegacyMysqlService } from '../../../infra/legacy-mysql/legacy-mysql.service';
 import { SiembraPartidasService } from '../../siembraPartidas/siembraPartidas.service';
 import { TaskShiftsService } from '../../taskShifts/taskShifts.service';
 import { LegacyStockService } from '../stock/stock.service';
@@ -17,7 +17,7 @@ export class PartidasService {
 
   constructor(
     private readonly partidasRepository: PartidasRepository,
-    private readonly prisma: PrismaService,
+    private readonly legacyDb: LegacyMysqlService,
     private readonly siembraPartidaService: SiembraPartidasService,
     private readonly taskShiftsService: TaskShiftsService,
     private readonly legacyStockService: LegacyStockService,
@@ -82,32 +82,33 @@ export class PartidasService {
       detalle: data.detalleExtendido,
     };
 
-    await this.prisma.$transaction(async () => {
+    await this.legacyDb.transaction(async (conn) => {
       // Write grams (g, hand input) and computed seed count (c) to partidas1
-      await this.partidasRepository.asignarSiembra(legacyData);
+      await this.partidasRepository.asignarSiembra(legacyData, conn);
 
       // Sync st_sem_item / st_sem salidas (SUM(partidas1.c)) — must run after the write
       await this.legacyStockService.updateStock(
         data.lote,
         data.anoLote,
         data.item,
+        conn,
       );
-
-      // Create TaskShift
-      if (data.startTime && data.endTime) {
-        await this.taskShiftsService.createTaskShift(
-          {
-            entityId: data.entityId,
-            partidaId: data.partidaId,
-            anio: data.anio,
-            indice: data.indice,
-            startTime: data.startTime,
-            endTime: data.endTime,
-            employeeUserIds: data.employeeUserIds ?? [],
-          },
-          requesterId,
-        );
-      }
     });
+
+    // TaskShift lives in Prisma (separate DB) — runs after the legacy transaction commits
+    if (data.startTime && data.endTime) {
+      await this.taskShiftsService.createTaskShift(
+        {
+          entityId: data.entityId,
+          partidaId: data.partidaId,
+          anio: data.anio,
+          indice: data.indice,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          employeeUserIds: data.employeeUserIds ?? [],
+        },
+        requesterId,
+      );
+    }
   }
 }

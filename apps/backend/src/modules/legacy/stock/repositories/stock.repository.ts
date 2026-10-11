@@ -1,6 +1,7 @@
 // src/modules/legacy/stock/repositories/stock.repository.ts
 
 import { Inject, Injectable } from '@nestjs/common';
+import type { PoolConnection } from 'mysql2/promise';
 import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
 import { StockTotal } from '../interfaces/stock.interface';
 
@@ -15,6 +16,7 @@ export class StockRepository {
     lote: number,
     anio: number,
     item: number,
+    conn?: PoolConnection,
   ): Promise<StockTotal[]> {
     const totalesSql = `
         SELECT 
@@ -34,22 +36,22 @@ export class StockRepository {
             WHERE lote = ? AND ano_lote = ? AND item = ?
         ) AS unificado
       `;
-    return this.legacyDb.query<StockTotal[]>(totalesSql, [
-      lote,
-      anio,
-      item,
-      lote,
-      anio,
-      item,
-    ]);
+    const params = [lote, anio, item, lote, anio, item];
+
+    if (conn) {
+      const [rows] = await conn.query<StockTotal[]>(totalesSql, params);
+      return rows;
+    }
+    return this.legacyDb.query<StockTotal[]>(totalesSql, params);
   }
 
   async updateStock(
     lote: number,
     anio: number,
     item: number,
+    conn?: PoolConnection,
   ): Promise<{ entradas: number; salidas: number }> {
-    const stockTotal = await this.stockTotal(lote, anio, item);
+    const stockTotal = await this.stockTotal(lote, anio, item, conn);
     const entradas = Number(stockTotal[0].total_entradas);
     const salidas = Number(stockTotal[0].total_salidas);
 
@@ -63,9 +65,22 @@ export class StockRepository {
           SET entrada = ?, salida = ?
           WHERE lote = ? AND ano = ?
         `;
-    await this.legacyDb.transaction(async (conn) => {
-      await conn.query(updateItemSql, [entradas, salidas, lote, anio, item]);
-      await conn.query(updateSemSql, [entradas, salidas, lote, anio]);
+    const statements: Array<[string, unknown[]]> = [
+      [updateItemSql, [entradas, salidas, lote, anio, item]],
+      [updateSemSql, [entradas, salidas, lote, anio]],
+    ];
+
+    if (conn) {
+      for (const [sql, params] of statements) {
+        await conn.query(sql, params);
+      }
+      return { entradas, salidas };
+    }
+
+    await this.legacyDb.transaction(async (txConn) => {
+      for (const [sql, params] of statements) {
+        await txConn.query(sql, params);
+      }
     });
 
     return { entradas, salidas };

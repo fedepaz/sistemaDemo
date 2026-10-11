@@ -5,7 +5,7 @@ import { BadRequestException } from '@nestjs/common';
 import type { AsignarUbiSiembraCompletaDto } from '@vivero/shared';
 import { PartidasService } from '../partidas.service';
 import { PartidasRepository } from '../repositories/partidas.repository';
-import { PrismaService } from '../../../../infra/prisma/prisma.service';
+import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
 import { SiembraPartidasService } from '../../../siembraPartidas/siembraPartidas.service';
 import { TaskShiftsService } from '../../../taskShifts/taskShifts.service';
 import { LegacyStockService } from '../../stock/stock.service';
@@ -13,10 +13,12 @@ import { LegacyStockService } from '../../stock/stock.service';
 describe('PartidasService', () => {
   let service: PartidasService;
   let partidasRepoMock: { asignarSiembra: jest.Mock };
-  let prismaMock: { $transaction: jest.Mock };
+  let legacyMysqlMock: { transaction: jest.Mock };
   let siembraPartidasMock: { createSiembraPartida: jest.Mock };
   let taskShiftsMock: { createTaskShift: jest.Mock };
   let stockMock: { updateStock: jest.Mock };
+
+  const connMock = {};
 
   const dto = {
     partidaId: 100,
@@ -42,10 +44,12 @@ describe('PartidasService', () => {
     partidasRepoMock = {
       asignarSiembra: jest.fn().mockResolvedValue(undefined),
     };
-    prismaMock = {
-      $transaction: jest
+    legacyMysqlMock = {
+      transaction: jest
         .fn()
-        .mockImplementation(async (fn: () => Promise<unknown>) => fn()),
+        .mockImplementation(async (fn: (c: unknown) => Promise<unknown>) =>
+          fn(connMock),
+        ),
     };
     siembraPartidasMock = { createSiembraPartida: jest.fn() };
     taskShiftsMock = {
@@ -59,7 +63,7 @@ describe('PartidasService', () => {
       providers: [
         PartidasService,
         { provide: PartidasRepository, useValue: partidasRepoMock },
-        { provide: PrismaService, useValue: prismaMock },
+        { provide: LegacyMysqlService, useValue: legacyMysqlMock },
         { provide: SiembraPartidasService, useValue: siembraPartidasMock },
         { provide: TaskShiftsService, useValue: taskShiftsMock },
         { provide: LegacyStockService, useValue: stockMock },
@@ -75,23 +79,26 @@ describe('PartidasService', () => {
     it('writes g = cantidadGrs and c = floor(cantidadGrs * semxgr) to partidas1', async () => {
       await service.completarSiembraLegacy(dto, 'user-1');
 
-      expect(partidasRepoMock.asignarSiembra).toHaveBeenCalledWith({
-        partida: 100,
-        ano: 2026,
-        indice: 1,
-        f_siembra: expect.any(Date),
-        cg: 5,
-        cantidaNroCont: 12,
-        g: 2.58,
-        c: 626,
-        detalle: '',
-      });
+      expect(partidasRepoMock.asignarSiembra).toHaveBeenCalledWith(
+        {
+          partida: 100,
+          ano: 2026,
+          indice: 1,
+          f_siembra: expect.any(Date),
+          cg: 5,
+          cantidaNroCont: 12,
+          g: 2.58,
+          c: 626,
+          detalle: '',
+        },
+        connMock,
+      );
     });
 
     it('calls updateStock with lote/anoLote/item AFTER writing partidas1', async () => {
       await service.completarSiembraLegacy(dto, 'user-1');
 
-      expect(stockMock.updateStock).toHaveBeenCalledWith(29, 2022, 1);
+      expect(stockMock.updateStock).toHaveBeenCalledWith(29, 2022, 1, connMock);
       expect(
         partidasRepoMock.asignarSiembra.mock.invocationCallOrder[0],
       ).toBeLessThan(stockMock.updateStock.mock.invocationCallOrder[0]);
@@ -129,6 +136,25 @@ describe('PartidasService', () => {
 
     it('skips task shift when times are absent', async () => {
       await service.completarSiembraLegacy(dto, 'user-1');
+
+      expect(taskShiftsMock.createTaskShift).not.toHaveBeenCalled();
+    });
+
+    it('propagates updateStock failure without creating a task shift', async () => {
+      stockMock.updateStock.mockRejectedValueOnce(new Error('stock failed'));
+
+      await expect(
+        service.completarSiembraLegacy(
+          {
+            ...dto,
+            startTime: '2026-09-15T08:00:00.000-03:00',
+            endTime: '2026-09-15T12:00:00.000-03:00',
+            entityId: 'cltaskshiftpayload0000000',
+            employeeUserIds: [],
+          },
+          'user-1',
+        ),
+      ).rejects.toThrow('stock failed');
 
       expect(taskShiftsMock.createTaskShift).not.toHaveBeenCalled();
     });
