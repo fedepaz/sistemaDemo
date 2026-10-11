@@ -73,6 +73,12 @@ export class PartidasService {
       throw new BadRequestException('Debe seleccionar una ubicación válida');
     }
 
+    if (!data.semxgr || data.semxgr <= 0) {
+      throw new BadRequestException(
+        'La partida no tiene una tasa de semillas válida (semxgr)',
+      );
+    }
+
     const c = Math.floor(data.cantidadGrs * data.semxgr);
 
     const legacyData = {
@@ -99,22 +105,6 @@ export class PartidasService {
         conn,
       );
     });
-
-    // TaskShift lives in Prisma (separate DB) — runs after the legacy transaction commits
-    if (data.startTime && data.endTime) {
-      await this.taskShiftsService.createTaskShift(
-        {
-          entityId: data.entityId,
-          partidaId: data.partidaId,
-          anio: data.anio,
-          indice: data.indice,
-          startTime: data.startTime,
-          endTime: data.endTime,
-          employeeUserIds: data.employeeUserIds ?? [],
-        },
-        requesterId,
-      );
-    }
 
     this.auditEventEmitter.emitCrud({
       tenantId,
@@ -143,5 +133,21 @@ export class PartidasService {
         durationMs: 0,
       },
     });
+
+    // TaskShift lives in Prisma (separate DB) — runs after the legacy transaction commits
+    if (data.startTime && data.endTime) {
+      await this.taskShiftsService.createTaskShift(
+        {
+          entityId: data.entityId,
+          partidaId: data.partidaId,
+          anio: data.anio,
+          indice: data.indice,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          employeeUserIds: data.employeeUserIds ?? [],
+        },
+        requesterId,
+      );
+    }
   }
 }

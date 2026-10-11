@@ -211,5 +211,37 @@ describe('PartidasService', () => {
 
       expect(auditMock.emitCrud).not.toHaveBeenCalled();
     });
+
+    it('emits the CRUD audit event even when the task shift fails', async () => {
+      taskShiftsMock.createTaskShift.mockRejectedValueOnce(
+        new Error('taskshift failed'),
+      );
+
+      await expect(
+        service.completarSiembraLegacy(
+          {
+            ...dto,
+            startTime: '2026-09-15T08:00:00.000-03:00',
+            endTime: '2026-09-15T12:00:00.000-03:00',
+            entityId: 'cltaskshiftpayload0000000',
+            employeeUserIds: [],
+          },
+          'user-1',
+          'tenant-1',
+        ),
+      ).rejects.toThrow('taskshift failed');
+
+      expect(auditMock.emitCrud).toHaveBeenCalledTimes(1);
+    });
+
+    it('throws BadRequestException when semxgr is 0', async () => {
+      await expect(
+        service.completarSiembraLegacy(
+          { ...dto, semxgr: 0 },
+          'user-1',
+          'tenant-1',
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
   });
 });
