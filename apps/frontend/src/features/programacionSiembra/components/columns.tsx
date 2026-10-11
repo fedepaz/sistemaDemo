@@ -127,7 +127,7 @@ export function partidaSiembraColumns(
     {
       accessorKey: "c",
       header: ({ column }) => (
-        <SortableHeader column={column}>C</SortableHeader>
+        <SortableHeader column={column}>Cant. Semillas</SortableHeader>
       ),
       cell: ({ row }) => (
         <span className="font-mono font-bold text-sm tabular-nums">
@@ -138,7 +138,7 @@ export function partidaSiembraColumns(
     {
       accessorKey: "g",
       header: ({ column }) => (
-        <SortableHeader column={column}>G</SortableHeader>
+        <SortableHeader column={column}>Gramos</SortableHeader>
       ),
       cell: ({ row }) => (
         <span className="font-mono font-bold text-sm tabular-nums">
