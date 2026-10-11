@@ -9,6 +9,7 @@ import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.
 import { SiembraPartidasService } from '../../../siembraPartidas/siembraPartidas.service';
 import { TaskShiftsService } from '../../../taskShifts/taskShifts.service';
 import { LegacyStockService } from '../../stock/stock.service';
+import { AuditEventEmitter } from '../../../auditLog/events/audit-event.emitter';
 
 describe('PartidasService', () => {
   let service: PartidasService;
@@ -17,6 +18,7 @@ describe('PartidasService', () => {
   let siembraPartidasMock: { createSiembraPartida: jest.Mock };
   let taskShiftsMock: { createTaskShift: jest.Mock };
   let stockMock: { updateStock: jest.Mock };
+  let auditMock: { emitCrud: jest.Mock };
 
   const connMock = {};
 
@@ -58,6 +60,7 @@ describe('PartidasService', () => {
     stockMock = {
       updateStock: jest.fn().mockResolvedValue({ entradas: 0, salidas: 0 }),
     };
+    auditMock = { emitCrud: jest.fn() };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -67,6 +70,7 @@ describe('PartidasService', () => {
         { provide: SiembraPartidasService, useValue: siembraPartidasMock },
         { provide: TaskShiftsService, useValue: taskShiftsMock },
         { provide: LegacyStockService, useValue: stockMock },
+        { provide: AuditEventEmitter, useValue: auditMock },
       ],
     }).compile();
 
@@ -77,7 +81,7 @@ describe('PartidasService', () => {
 
   describe('completarSiembraLegacy', () => {
     it('writes g = cantidadGrs and c = floor(cantidadGrs * semxgr) to partidas1', async () => {
-      await service.completarSiembraLegacy(dto, 'user-1');
+      await service.completarSiembraLegacy(dto, 'user-1', 'tenant-1');
 
       expect(partidasRepoMock.asignarSiembra).toHaveBeenCalledWith(
         {
@@ -96,7 +100,7 @@ describe('PartidasService', () => {
     });
 
     it('calls updateStock with lote/anoLote/item AFTER writing partidas1', async () => {
-      await service.completarSiembraLegacy(dto, 'user-1');
+      await service.completarSiembraLegacy(dto, 'user-1', 'tenant-1');
 
       expect(stockMock.updateStock).toHaveBeenCalledWith(29, 2022, 1, connMock);
       expect(
@@ -106,13 +110,17 @@ describe('PartidasService', () => {
 
     it('throws BadRequestException when edita is N', async () => {
       await expect(
-        service.completarSiembraLegacy({ ...dto, edita: 'N' }, 'user-1'),
+        service.completarSiembraLegacy(
+          { ...dto, edita: 'N' },
+          'user-1',
+          'tenant-1',
+        ),
       ).rejects.toThrow(BadRequestException);
     });
 
     it('throws BadRequestException when cg is 0', async () => {
       await expect(
-        service.completarSiembraLegacy({ ...dto, cg: 0 }, 'user-1'),
+        service.completarSiembraLegacy({ ...dto, cg: 0 }, 'user-1', 'tenant-1'),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -126,6 +134,7 @@ describe('PartidasService', () => {
           employeeUserIds: [],
         },
         'user-1',
+        'tenant-1',
       );
 
       expect(taskShiftsMock.createTaskShift).toHaveBeenCalledWith(
@@ -135,7 +144,7 @@ describe('PartidasService', () => {
     });
 
     it('skips task shift when times are absent', async () => {
-      await service.completarSiembraLegacy(dto, 'user-1');
+      await service.completarSiembraLegacy(dto, 'user-1', 'tenant-1');
 
       expect(taskShiftsMock.createTaskShift).not.toHaveBeenCalled();
     });
@@ -153,10 +162,54 @@ describe('PartidasService', () => {
             employeeUserIds: [],
           },
           'user-1',
+          'tenant-1',
         ),
       ).rejects.toThrow('stock failed');
 
       expect(taskShiftsMock.createTaskShift).not.toHaveBeenCalled();
+    });
+
+    it('emits a SIEMBRA CRUD audit event after a successful completar', async () => {
+      await service.completarSiembraLegacy(dto, 'user-1', 'tenant-1');
+
+      expect(auditMock.emitCrud).toHaveBeenCalledTimes(1);
+      expect(auditMock.emitCrud).toHaveBeenCalledWith({
+        tenantId: 'tenant-1',
+        userId: 'user-1',
+        action: 'UPDATE',
+        entityType: 'SIEMBRA',
+        entityId: 'partida:100|ano:2026|indice:1',
+        timestamp: expect.any(Date),
+        changes: {
+          requestId: 'unknown',
+          endpoint: '/l-partidas/asignar-siembra',
+          method: 'PATCH',
+          params: {},
+          query: {},
+          body: {
+            lote: 29,
+            anoLote: 2022,
+            item: 1,
+            cantidadGrs: 2.58,
+            semxgr: 243,
+            c: 626,
+            cg: 5,
+            cantidaNroCont: 12,
+          },
+          affected: null,
+          durationMs: 0,
+        },
+      });
+    });
+
+    it('does not emit a CRUD audit event when the legacy transaction fails', async () => {
+      stockMock.updateStock.mockRejectedValueOnce(new Error('stock failed'));
+
+      await expect(
+        service.completarSiembraLegacy(dto, 'user-1', 'tenant-1'),
+      ).rejects.toThrow('stock failed');
+
+      expect(auditMock.emitCrud).not.toHaveBeenCalled();
     });
   });
 });

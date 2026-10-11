@@ -91,7 +91,7 @@ export class PartidasController {
       user.id,
     );
     // 2. Write legacy data + stock + TaskShift
-    await this.service.completarSiembraLegacy(data, user.id);
+    await this.service.completarSiembraLegacy(data, user.id, user.tenantId);
     return {
       success: true,
       message: 'Siembra completada correctamente',

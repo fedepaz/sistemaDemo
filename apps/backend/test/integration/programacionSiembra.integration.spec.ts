@@ -83,6 +83,7 @@ describe('ProgramacionSiembra (integration)', () => {
       expect(partidasMock.completarSiembraLegacy).toHaveBeenCalledWith(
         expect.objectContaining({ partidaId: 1, anio: 2026 }),
         expect.any(String),
+        expect.any(String),
       );
     });
   });

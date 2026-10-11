@@ -10,6 +10,7 @@ import { LegacyMysqlService } from '../../../infra/legacy-mysql/legacy-mysql.ser
 import { SiembraPartidasService } from '../../siembraPartidas/siembraPartidas.service';
 import { TaskShiftsService } from '../../taskShifts/taskShifts.service';
 import { LegacyStockService } from '../stock/stock.service';
+import { AuditEventEmitter } from '../../auditLog/events/audit-event.emitter';
 
 @Injectable()
 export class PartidasService {
@@ -17,10 +18,11 @@ export class PartidasService {
 
   constructor(
     private readonly partidasRepository: PartidasRepository,
-    private readonly legacyDb: LegacyMysqlService,
     private readonly siembraPartidaService: SiembraPartidasService,
     private readonly taskShiftsService: TaskShiftsService,
     private readonly legacyStockService: LegacyStockService,
+    private readonly legacyDb: LegacyMysqlService,
+    private readonly auditEventEmitter: AuditEventEmitter,
   ) {}
 
   async getAllPartidas() {
@@ -61,6 +63,7 @@ export class PartidasService {
   async completarSiembraLegacy(
     data: AsignarUbiSiembraCompletaDto,
     requesterId: string,
+    tenantId: string,
   ): Promise<void> {
     if (data.edita === 'N') {
       throw new BadRequestException('La partida no se puede editar');
@@ -70,6 +73,8 @@ export class PartidasService {
       throw new BadRequestException('Debe seleccionar una ubicación válida');
     }
 
+    const c = Math.floor(data.cantidadGrs * data.semxgr);
+
     const legacyData = {
       partida: data.partidaId,
       ano: data.anio,
@@ -78,7 +83,7 @@ export class PartidasService {
       cg: data.cg,
       cantidaNroCont: data.cantidaNroCont,
       g: data.cantidadGrs,
-      c: Math.floor(data.cantidadGrs * data.semxgr),
+      c,
       detalle: data.detalleExtendido,
     };
 
@@ -110,5 +115,33 @@ export class PartidasService {
         requesterId,
       );
     }
+
+    this.auditEventEmitter.emitCrud({
+      tenantId,
+      userId: requesterId,
+      action: 'UPDATE',
+      entityType: 'SIEMBRA',
+      entityId: `partida:${data.partidaId}|ano:${data.anio}|indice:${data.indice}`,
+      timestamp: new Date(),
+      changes: {
+        requestId: 'unknown',
+        endpoint: '/l-partidas/asignar-siembra',
+        method: 'PATCH',
+        params: {},
+        query: {},
+        body: {
+          lote: data.lote,
+          anoLote: data.anoLote,
+          item: data.item,
+          cantidadGrs: data.cantidadGrs,
+          semxgr: data.semxgr,
+          c,
+          cg: data.cg,
+          cantidaNroCont: data.cantidaNroCont,
+        },
+        affected: null,
+        durationMs: 0,
+      },
+    });
   }
 }

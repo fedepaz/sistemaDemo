@@ -8,9 +8,15 @@ import { EspecieRepository } from '../especie/repositories/especie.repository';
 import { SiembraPartidasModule } from '../../siembraPartidas/siembraPartidas.module';
 import { TaskShiftsModule } from '../../taskShifts/taskShifts.module';
 import { LegacyStockModule } from '../stock/stock.module';
+import { AuditLogModule } from '../../auditLog/auditLog.module';
 
 @Module({
-  imports: [SiembraPartidasModule, TaskShiftsModule, LegacyStockModule],
+  imports: [
+    SiembraPartidasModule,
+    TaskShiftsModule,
+    LegacyStockModule,
+    AuditLogModule,
+  ],
   controllers: [PartidasController],
   providers: [PartidasService, PartidasRepository, EspecieRepository],
   exports: [PartidasRepository],
