@@ -7,6 +7,7 @@ import {
   FileText,
   Gauge,
   Ruler,
+  Scale,
   TestTubes,
   Warehouse,
   Wrench,
@@ -213,6 +214,44 @@ export function ASembrarEditForm({
             )}
           />
         </div>
+
+        {/* GRAMOS UTILIZADOS (hoja de siembra) */}
+        <FormField
+          control={form.control}
+          name="cantidadGrs"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-primary/10 rounded-lg">
+                  <Scale className="h-4 w-4 text-primary" />
+                </div>
+                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                  Gramos Utilizados
+                </FormLabel>
+              </div>
+              <FormControl>
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  step="any"
+                  placeholder="Ej: 2.58"
+                  {...field}
+                  value={field.value ?? ""}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === "" ? undefined : Number(e.target.value),
+                    )
+                  }
+                  className="h-9 rounded-md px-4"
+                />
+              </FormControl>
+              <FormDescription className="text-xs text-muted-foreground">
+                Gramos de semilla cargados en la hoja de siembra
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* TECHNICAL FIELDS */}
         <div className="space-y-2 shrink-0">

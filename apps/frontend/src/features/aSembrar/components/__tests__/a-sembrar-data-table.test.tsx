@@ -110,6 +110,7 @@ describe("ASembrarDataTable", () => {
     expect(capturedProps.confirm.summaryFields).toEqual([
       "cg",
       "cantidaNroCont",
+      "cantidadGrs",
       "prensadoSustrato",
       "profundidadSemilla",
       "tratamientoSemilla",
