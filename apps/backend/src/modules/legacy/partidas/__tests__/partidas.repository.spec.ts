@@ -16,7 +16,7 @@ describe('PartidasRepository', () => {
     partida: 100,
     ano: 2026,
     indice: 1,
-    f_siembra: new Date('2026-09-15'),
+    f_siembra: '2026-09-15',
     cg: 5,
     cantidaNroCont: 12,
     g: 2.58,
@@ -69,6 +69,7 @@ describe('PartidasRepository', () => {
         'WHERE partida = ? AND ano = ? AND indice = ?',
       );
       expect(partidasCall![1].slice(-3)).toEqual([100, 2026, 1]);
+      expect(partidasCall![1][0]).toBe('2026-09-15');
     });
 
     it('reuses the provided connection without opening a nested transaction', async () => {

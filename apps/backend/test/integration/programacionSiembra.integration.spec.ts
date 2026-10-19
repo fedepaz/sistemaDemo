@@ -76,6 +76,7 @@ describe('ProgramacionSiembra (integration)', () => {
           formulaId: 'clmocksiembra0000000000000',
           semxgr: 421,
           cantidadGrs: 2.58,
+          fSiembra: '2026-10-10',
           employeeUserIds: [],
         })
         .expect(200);

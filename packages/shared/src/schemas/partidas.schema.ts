@@ -60,6 +60,31 @@ export const AsignarUbiSiembraDtoSchema = PartidaHeaderSchema.extend({
     .positive({
       message: "Los gramos utilizados deben ser mayores a 0",
     }),
+  fSiembra: z
+    .string({ message: "La fecha de siembra es requerida" })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "La fecha de siembra debe tener formato YYYY-MM-DD",
+    })
+    .refine(
+      (s) => {
+        const [y, m, d] = s.split("-").map(Number);
+        const t = new Date(Date.UTC(y, m - 1, d));
+        return (
+          t.getUTCFullYear() === y &&
+          t.getUTCMonth() === m - 1 &&
+          t.getUTCDate() === d
+        );
+      },
+      { message: "La fecha de siembra no es una fecha válida" },
+    )
+    .refine(
+      (s) => {
+        const d = new Date();
+        const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        return s <= today;
+      },
+      { message: "La fecha de siembra no puede ser futura" },
+    ),
   edita: z.string().optional(),
 });
 

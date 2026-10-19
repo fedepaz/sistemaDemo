@@ -42,6 +42,7 @@ interface TaskShiftProps {
   startTime: string;
   endTime: string;
   employees: UserProfileDto[];
+  workDate?: string;
   onStartTimeChange: (startTime: string) => void;
   onEndTimeChange: (endTime: string) => void;
   onEmployeesChange: (employees: UserProfileDto[]) => void;
@@ -51,11 +52,12 @@ export function TaskShift({
   startTime,
   endTime,
   employees,
+  workDate,
   onStartTimeChange,
   onEndTimeChange,
   onEmployeesChange,
 }: TaskShiftProps) {
-  const today = getLocalDateStr(new Date());
+  const today = workDate || getLocalDateStr(new Date());
 
   const hasStarted = startTime !== "";
   const hasEnded = endTime !== "";
@@ -86,7 +88,7 @@ export function TaskShift({
             Tiempo de tarea
           </h3>
           <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
-            Selecciona el horario de la tarea para hoy
+            Selecciona el horario de la tarea para el
             <br />({today}).
           </p>
         </div>

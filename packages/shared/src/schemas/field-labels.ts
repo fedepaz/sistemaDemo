@@ -92,7 +92,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
     indice: "Índice",
     cg: "Cámara de germinación",
     cantidaNroCont: "Cantidad",
-    f_siembra: "Fecha de siembra",
+    fSiembra: "Fecha de Siembra",
     detalleExtendido: "Detalle extendido",
     lote: "Lote",
     anoLote: "Año lote",

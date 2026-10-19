@@ -141,7 +141,7 @@ export class PartidasRepository {
       partida: number;
       ano: number;
       indice: number;
-      f_siembra: Date;
+      f_siembra: string;
       cg: number;
       cantidaNroCont: number;
       g: number;
@@ -150,8 +150,6 @@ export class PartidasRepository {
     },
     conn?: PoolConnection,
   ): Promise<void> {
-    const parsedDate = new Date(data.f_siembra);
-
     const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`;
     const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE partida = ? AND ano = ? AND indice = ?`;
 
@@ -159,7 +157,7 @@ export class PartidasRepository {
       [
         updatePartidasSql,
         [
-          parsedDate.toISOString().slice(0, 10),
+          data.f_siembra,
           data.cg,
           data.cantidaNroCont,
           data.detalle,

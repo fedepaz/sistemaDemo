@@ -30,7 +30,7 @@ Add to `AsignarUbiSiembraDtoSchema` (alongside `cantidadGrs`, same pattern):
 
 - `fSiembra: z.string()` — required, format `YYYY-MM-DD` (regex `^\d{4}-\d{2}-\d{2}$`), plus a parseability refine (`new Date(s)` is not `NaN`) so calendar-invalid values like `2026-10-99` are rejected despite matching the regex.
 - Hard rule enforced on both sides (browser via zodResolver, server via `ZodValidationPipe`): **not in the future** (the parsed date, compared against today, must be `<= today`).
-- The 14-day lower bound is a **UI constraint only** (native input `min`/`max`), not a schema refinement, so a pre-filled legacy date older than 14 days can still be submitted as-is. Typing an older date is discouraged by the picker, not blocked by the server.
+- The 14-day lower bound is a **UI constraint only** (native input `min`/`max`), not a schema refinement, so a pre-filled legacy date older than 14 days can still be submitted as-is. Typing an older date is discouraged by the picker, not blocked by the server. Implementation requirement: the form element carries `noValidate` so `requestSubmit()` never lets native `min`/`max` constraint validation block an out-of-window prefill.
 - Spanish validation messages, matching the rest of the schema.
 - `field-labels.ts`: `fSiembra: "Fecha de Siembra"`.
 
