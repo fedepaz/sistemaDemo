@@ -46,7 +46,7 @@ export class ProgramacionSiembraRepository {
       AND p.ano=l.ano
       AND p.indice=l.indice
   WHERE p.estado <> 'ANULADA' AND p.f_siembra=0 AND p.hai<>'A' 
-        AND p.sem_siem<=WEEK(CURRENT_DATE()) AND p.ano>2025
+        AND p.sem_siem<=WEEK(CURRENT_DATE(),1) AND p.ano>2025
         ORDER BY p.ano, p.partida
   `;
     return this.legacyDb.query<LegacyProgramacionSiembra[]>(sql);

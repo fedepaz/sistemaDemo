@@ -48,12 +48,12 @@ export const sustratoExportColumns: ExportColumn<SustratoDto>[] = [
     accessorKey: "nombre",
     exportHeader: "Nombre",
     exportValue: (_, row) => row.nombre || "",
-    pdfWidth: "15%",
+    pdfWidth: "75%",
   },
   {
     accessorKey: "createdAt",
     exportHeader: "Creado",
     exportValue: (value) => new Date(value as Date).toLocaleDateString("es-AR"),
-    pdfWidth: "20%",
+    pdfWidth: "25%",
   },
 ];

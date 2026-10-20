@@ -110,7 +110,7 @@ export async function exportToPDF<T extends Record<string, unknown>>(
     }),
   );
 
-  const HEADER_INSET = 15; // tighter than body margins — logo/title sit closer to the edge
+  const HEADER_INSET = 5; // matches pageMargins left/right (5pt) for a consistent edge
 
   // Right column: company name + address/tagline
   const rightColumn: Array<Record<string, unknown>> = [
@@ -266,7 +266,7 @@ export async function exportToPDF<T extends Record<string, unknown>>(
       },
     },
     footer: ((currentPage: number, pageCount: number) => ({
-      margin: [30, 0, 30, 15] as [number, number, number, number],
+      margin: [5, 0, 5, 15] as [number, number, number, number],
       stack: [
         {
           canvas: [
