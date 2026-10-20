@@ -2,8 +2,6 @@
 
 "use client";
 
-
-
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { getLocalDateStr, utcToLocalTime } from "@/lib/date-utils";
@@ -18,8 +16,6 @@ import {
 } from "@/components/ui/select";
 import { Clock, User2, Play, Square } from "lucide-react";
 
-
-
 function toDateTimeString(date: string, time: string): string {
   const localDate = new Date(`${date}T${time}:00`);
   const offset = -localDate.getTimezoneOffset();
@@ -30,7 +26,20 @@ function toDateTimeString(date: string, time: string): string {
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
-const MINUTES = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
+const MINUTES = [
+  "00",
+  "05",
+  "10",
+  "15",
+  "20",
+  "25",
+  "30",
+  "35",
+  "40",
+  "45",
+  "50",
+  "55",
+];
 
 function extractTimeParts(isoString: string): { hour: string; minute: string } {
   const localTime = utcToLocalTime(isoString);
@@ -42,6 +51,7 @@ interface TaskShiftProps {
   startTime: string;
   endTime: string;
   employees: UserProfileDto[];
+  workDate?: string;
   onStartTimeChange: (startTime: string) => void;
   onEndTimeChange: (endTime: string) => void;
   onEmployeesChange: (employees: UserProfileDto[]) => void;
@@ -51,31 +61,36 @@ export function TaskShift({
   startTime,
   endTime,
   employees,
+  workDate,
   onStartTimeChange,
   onEndTimeChange,
   onEmployeesChange,
 }: TaskShiftProps) {
-  const today = getLocalDateStr(new Date());
+  const today = workDate || getLocalDateStr(new Date());
 
   const hasStarted = startTime !== "";
   const hasEnded = endTime !== "";
 
   function handleStart() {
     const now = new Date();
-    const startStr = toDateTimeString(today, `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`);
+    const startStr = toDateTimeString(
+      today,
+      `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`,
+    );
     onStartTimeChange(startStr);
   }
 
   function handleStop() {
     const now = new Date();
-    const endStr = toDateTimeString(today, `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`);
+    const endStr = toDateTimeString(
+      today,
+      `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`,
+    );
     onEndTimeChange(endStr);
   }
 
   return (
     <div className="space-y-2 shrink-0">
-
-
       {/* Time Control */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
@@ -85,8 +100,8 @@ export function TaskShift({
           <h3 className="text-xs font-black uppercase tracking-widest text-foreground">
             Tiempo de tarea
           </h3>
-          <p className="font-sans text-xs font-medium leading-tight opacity-70">
-            Selecciona el horario de la tarea para hoy
+          <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+            Selecciona el horario de la tarea para el
             <br />({today}).
           </p>
         </div>
@@ -97,13 +112,17 @@ export function TaskShift({
             {/* Inicio */}
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs font-bold text-muted-foreground w-12">Inicio</span>
+              <span className="text-xs font-bold text-muted-foreground w-12">
+                Inicio
+              </span>
               <div className="flex items-center gap-1">
                 <Select
                   value={extractTimeParts(startTime).hour}
                   onValueChange={(val) => {
                     const { minute } = extractTimeParts(startTime);
-                    onStartTimeChange(toDateTimeString(today, `${val}:${minute}`));
+                    onStartTimeChange(
+                      toDateTimeString(today, `${val}:${minute}`),
+                    );
                   }}
                 >
                   <SelectTrigger className="w-[70px] h-8 text-xs">
@@ -111,7 +130,9 @@ export function TaskShift({
                   </SelectTrigger>
                   <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {HOURS.map((h) => (
-                      <SelectItem key={h} value={h} className="text-xs">{h}</SelectItem>
+                      <SelectItem key={h} value={h} className="text-xs">
+                        {h}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -120,7 +141,9 @@ export function TaskShift({
                   value={extractTimeParts(startTime).minute}
                   onValueChange={(val) => {
                     const { hour } = extractTimeParts(startTime);
-                    onStartTimeChange(toDateTimeString(today, `${hour}:${val}`));
+                    onStartTimeChange(
+                      toDateTimeString(today, `${hour}:${val}`),
+                    );
                   }}
                 >
                   <SelectTrigger className="w-[70px] h-8 text-xs">
@@ -128,7 +151,9 @@ export function TaskShift({
                   </SelectTrigger>
                   <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {MINUTES.map((m) => (
-                      <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>
+                      <SelectItem key={m} value={m} className="text-xs">
+                        {m}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -138,13 +163,17 @@ export function TaskShift({
             {/* Fin */}
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs font-bold text-muted-foreground w-12">Fin</span>
+              <span className="text-xs font-bold text-muted-foreground w-12">
+                Fin
+              </span>
               <div className="flex items-center gap-1">
                 <Select
                   value={extractTimeParts(endTime).hour}
                   onValueChange={(val) => {
                     const { minute } = extractTimeParts(endTime);
-                    onEndTimeChange(toDateTimeString(today, `${val}:${minute}`));
+                    onEndTimeChange(
+                      toDateTimeString(today, `${val}:${minute}`),
+                    );
                   }}
                 >
                   <SelectTrigger className="w-[70px] h-8 text-xs">
@@ -152,7 +181,9 @@ export function TaskShift({
                   </SelectTrigger>
                   <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {HOURS.map((h) => (
-                      <SelectItem key={h} value={h} className="text-xs">{h}</SelectItem>
+                      <SelectItem key={h} value={h} className="text-xs">
+                        {h}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -169,7 +200,9 @@ export function TaskShift({
                   </SelectTrigger>
                   <SelectContent className="max-h-[250px] md:max-h-[300px]">
                     {MINUTES.map((m) => (
-                      <SelectItem key={m} value={m} className="text-xs">{m}</SelectItem>
+                      <SelectItem key={m} value={m} className="text-xs">
+                        {m}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -201,8 +234,6 @@ export function TaskShift({
             Finalizar
           </Button>
         )}
-
-
       </div>
 
       {/* Employee Search */}

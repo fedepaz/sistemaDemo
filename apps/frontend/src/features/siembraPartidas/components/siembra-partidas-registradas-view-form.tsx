@@ -13,7 +13,10 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatShortDate, utcToLocalTime } from "@/lib/date-utils";
-import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
+import {
+  formatPartidaNumber,
+  formatSpecies,
+} from "@/features/shared/utils/header";
 
 interface SiembraPartidasRegistradasViewFormProps {
   selectedPartida: SiembraPartidaDto;

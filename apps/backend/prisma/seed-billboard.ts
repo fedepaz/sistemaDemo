@@ -92,6 +92,15 @@ Al presionar "Finalizar", se asigna el horario de fin, y se activan los campos d
     permissionScope: 'ALL',
     targetNewUsers: true,
   },
+  {
+    title: 'Novedades en Completar Siembra',
+    body: 'El formulario de completar siembra ahora tiene dos novedades. Gramos Utilizados: cargá los gramos de semilla de la hoja de siembra (ej: 2,58); la cantidad de semillas se calcula automáticamente con ese valor. Fecha de Siembra: elegí el día en que se sembró (hasta 14 días atrás); los horarios de la tarea se marcan con esa fecha.',
+    tag: 'completar-siembra-novedades',
+    permissionTable: 'a_sembrar',
+    permissionAction: 'create',
+    permissionScope: 'ALL',
+    targetNewUsers: true,
+  },
 ];
 
 async function main() {

@@ -116,8 +116,7 @@ export function AutorizarProgramacionSiembraEditForm({
             <InfoRow label="Sem / Gr" value={selectedSiembra.semxgr} />
             <InfoRow label="Año / Lote" value={loteLabel} />
             <InfoRow label="Item" value={selectedSiembra.item} />
-            <InfoRow label="C" value={selectedSiembra.c} />
-            <InfoRow label="G" value={selectedSiembra.g} />
+
             <InfoRow
               label="Siembra Sugerida"
               value={selectedSiembra.fechaSugeridaSiembra}

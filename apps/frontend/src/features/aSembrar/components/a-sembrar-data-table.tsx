@@ -15,6 +15,7 @@ import { ASembrarEditForm } from "./a-sembrar-edit-form";
 import { useASembrarMutation } from "../hooks/useASembrarMutation";
 import { useTableByName } from "@/features/permissions";
 import { formatPartidaNumber } from "@/features/shared/utils/header";
+import { toISODateString } from "@/lib/date-utils";
 
 interface ASembrarDataTableProps {
   partidas: SiembraPartidaDto[];
@@ -54,6 +55,8 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
         anoLote: row.anoLote ?? 0,
         item: row.item ?? 0,
         semxgr: row.semxgr ?? 0,
+        cantidadGrs: row.cantidadGrs ?? undefined,
+        fSiembra: toISODateString(row.fSiembra),
         cg: row.cg ?? 0,
         prensadoSustrato: undefined,
         profundidadSemilla: row.profundidadSemilla,
@@ -111,7 +114,7 @@ export function ASembrarDataTable({ partidas }: ASembrarDataTableProps) {
             title: "Confirmar siembra",
             description: "¿Deseas confirmar siembra?",
             label: "Completar Siembra",
-            summaryFields: ["cg", "cantidaNroCont", "prensadoSustrato", "profundidadSemilla", "tratamientoSemilla", "sustrato", "metodoMaquina", "detalleExtendido", "startTime", "endTime"],
+            summaryFields: ["cg", "cantidaNroCont", "cantidadGrs", "fSiembra", "prensadoSustrato", "profundidadSemilla", "tratamientoSemilla", "sustrato", "metodoMaquina", "detalleExtendido", "startTime", "endTime"],
           }}
         >
           <div className="flex flex-col gap-3">

@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import {
   Activity,
+  CalendarDays,
   FileText,
   Gauge,
   Ruler,
+  Scale,
   TestTubes,
   Warehouse,
   Wrench,
@@ -52,6 +54,7 @@ import {
   formatPartidaNumber,
   formatSpecies,
 } from "@/features/shared/utils/header";
+import { getLocalDateStr } from "@/lib/date-utils";
 
 interface ASembrarEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -88,6 +91,16 @@ export function ASembrarEditForm({
     control: form.control,
   });
 
+  const fSiembra = useWatch({
+    name: "fSiembra",
+    control: form.control,
+  });
+
+  const todayDateStr = getLocalDateStr(new Date());
+  const minDate = new Date();
+  minDate.setDate(minDate.getDate() - 14);
+  const minDateStr = getLocalDateStr(minDate);
+
   useEffect(() => {
     form.setValue("startTime", startTime, {
       shouldValidate: true,
@@ -118,6 +131,7 @@ export function ASembrarEditForm({
     <Form {...form}>
       <form
         id="a-sembrar-form"
+        noValidate
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] overflow-y-auto no-scrollbar pb-6"
       >
@@ -213,6 +227,44 @@ export function ASembrarEditForm({
             )}
           />
         </div>
+
+        {/* GRAMOS UTILIZADOS (hoja de siembra) */}
+        <FormField
+          control={form.control}
+          name="cantidadGrs"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-primary/10 rounded-lg">
+                  <Scale className="h-4 w-4 text-primary" />
+                </div>
+                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                  Gramos Utilizados
+                </FormLabel>
+              </div>
+              <FormControl>
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  step="any"
+                  placeholder="Ej: 2.58"
+                  {...field}
+                  value={field.value ?? ""}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === "" ? undefined : Number(e.target.value),
+                    )
+                  }
+                  className="h-9 rounded-md px-4"
+                />
+              </FormControl>
+              <FormDescription className="text-xs text-muted-foreground">
+                Gramos de semilla cargados en la hoja de siembra
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* TECHNICAL FIELDS */}
         <div className="space-y-2 shrink-0">
@@ -358,8 +410,41 @@ export function ASembrarEditForm({
           </div>
         </div>
 
+        {/* FECHA DE SIEMBRA (hoja de siembra) */}
+        <FormField
+          control={form.control}
+          name="fSiembra"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-primary/10 rounded-lg">
+                  <CalendarDays className="h-4 w-4 text-primary" />
+                </div>
+                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                  Fecha de Siembra
+                </FormLabel>
+              </div>
+              <FormControl>
+                <Input
+                  type="date"
+                  min={minDateStr}
+                  max={todayDateStr}
+                  {...field}
+                  value={field.value ?? ""}
+                  className="h-9 rounded-md px-4"
+                />
+              </FormControl>
+              <FormDescription className="text-xs text-muted-foreground">
+                Día en que se realizó la siembra
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* TASK SHIFT */}
         <TaskShift
+          workDate={fSiembra ?? ""}
           startTime={startTime}
           endTime={endTime}
           employees={selectedEmployees}

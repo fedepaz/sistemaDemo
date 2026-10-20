@@ -64,4 +64,5 @@ export interface LegacyPartidas extends RowDataPacket {
   ctr_visto: string;
   ctr_txt: string;
   nombreEspecie?: string;
+  g?: string;
 }

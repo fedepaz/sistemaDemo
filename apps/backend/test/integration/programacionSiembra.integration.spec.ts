@@ -75,12 +75,15 @@ describe('ProgramacionSiembra (integration)', () => {
           endTime: '2026-01-15T17:00:00.000Z',
           formulaId: 'clmocksiembra0000000000000',
           semxgr: 421,
+          cantidadGrs: 2.58,
+          fSiembra: '2026-10-10',
           employeeUserIds: [],
         })
         .expect(200);
 
       expect(partidasMock.completarSiembraLegacy).toHaveBeenCalledWith(
         expect.objectContaining({ partidaId: 1, anio: 2026 }),
+        expect.any(String),
         expect.any(String),
       );
     });
