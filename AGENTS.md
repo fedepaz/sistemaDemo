@@ -62,6 +62,9 @@ pnpm lint && pnpm type-check && pnpm test
 - Legacy database uses raw MySQL queries (not Prisma) - see `apps/backend/src/infra/legacy-mysql/`
 - Backend port is configured via `PORT` env var (default 3001)
 - `pnpm overrides` in root package.json patches security vulnerabilities - don't remove them
+  - **Never use `>=` in an override value.** It is unbounded, so pnpm may install the next major and silently bypass the caret ranges declared in workspace `package.json` files (this shipped Nest 12 to the server). Use `^X.Y.Z` instead: same security floor, plus an upper bound. Take `X.Y.Z` from the audit report, and pick it from the major the dependents actually declare rather than the newest major available.
+  - `>=` is only valid in a *selector key* (e.g. `picomatch@>=4`), which targets dependency edges instead of constraining resolution - the value on the right is still what gets resolved to.
+  - Prefer `pnpm audit --fix=update` over adding an override: it updates the lockfile within the ranges dependents already declared.
 - Agent profiles in `docs/agents/` are the source of truth for architecture decisions
 - `passwordHash` must NEVER appear in API responses or be updatable via profile schemas (passwords change only via `/auth/password` and `/auth/restore`)
 - Login 401s are uniformly `"Invalid credentials"` (anti-enumeration); specifics go only in audit `changes.reason`

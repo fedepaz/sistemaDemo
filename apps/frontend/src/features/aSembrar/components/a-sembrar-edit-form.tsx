@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
 import {
   Activity,
+  CalendarDays,
   FileText,
   Gauge,
   Ruler,
+  Scale,
   TestTubes,
   Warehouse,
   Wrench,
@@ -48,6 +50,11 @@ import { useDepositos } from "@/features/extendidos";
 
 import { Textarea } from "@/components/ui/textarea";
 import { SustratoSearch } from "@/features/programacionSiembra/components/sustratoSearch";
+import {
+  formatPartidaNumber,
+  formatSpecies,
+} from "@/features/shared/utils/header";
+import { getLocalDateStr } from "@/lib/date-utils";
 
 interface ASembrarEditFormProps {
   onSubmit: (data: AsignarUbiSiembraCompletaDto) => Promise<void>;
@@ -84,6 +91,16 @@ export function ASembrarEditForm({
     control: form.control,
   });
 
+  const fSiembra = useWatch({
+    name: "fSiembra",
+    control: form.control,
+  });
+
+  const todayDateStr = getLocalDateStr(new Date());
+  const minDate = new Date();
+  minDate.setDate(minDate.getDate() - 14);
+  const minDateStr = getLocalDateStr(minDate);
+
   useEffect(() => {
     form.setValue("startTime", startTime, {
       shouldValidate: true,
@@ -114,22 +131,23 @@ export function ASembrarEditForm({
     <Form {...form}>
       <form
         id="a-sembrar-form"
+        noValidate
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* PRODUCT HEADER */}
         <div className="space-y-2 shrink-0">
-          <div className="flex items-center justify-between bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
+          <div className="flex items-center bg-primary/5 p-2.5 rounded-xl border border-primary/20 shadow-sm">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-                <Activity className="h-5 w-5 h-6 w-6" />
+              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                <Activity className="h-5 w-5" />
               </div>
-              <div>
-                <h2 className="text-base text-lg font-bold tracking-tight leading-none text-foreground uppercase">
-                  {selectedPartida.codigoEspecie}
+              <div className="min-w-0">
+                <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase break-words">
+                  {formatSpecies(selectedPartida)}
                 </h2>
-                <p className="text-[9px] text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                  {selectedPartida.nombreEspecie}
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                  {formatPartidaNumber(selectedPartida)}
                 </p>
               </div>
             </div>
@@ -137,7 +155,7 @@ export function ASembrarEditForm({
         </div>
         {/* CAMARA DE DESTINO + FECHA */}
 
-        <div className="grid grid-cols-1 grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <FormField
             control={form.control}
             name="cg"
@@ -145,7 +163,7 @@ export function ASembrarEditForm({
               <FormItem className="space-y-1.5">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 bg-primary/10 rounded-lg">
-                    <Warehouse className="h-3.5 w-3.5 h-4 w-4 text-primary" />
+                    <Warehouse className="h-4 w-4 text-primary" />
                   </div>
                   <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
                     Cámara de Destino
@@ -210,6 +228,44 @@ export function ASembrarEditForm({
           />
         </div>
 
+        {/* GRAMOS UTILIZADOS (hoja de siembra) */}
+        <FormField
+          control={form.control}
+          name="cantidadGrs"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-primary/10 rounded-lg">
+                  <Scale className="h-4 w-4 text-primary" />
+                </div>
+                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                  Gramos Utilizados
+                </FormLabel>
+              </div>
+              <FormControl>
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  step="any"
+                  placeholder="Ej: 2.58"
+                  {...field}
+                  value={field.value ?? ""}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value === "" ? undefined : Number(e.target.value),
+                    )
+                  }
+                  className="h-9 rounded-md px-4"
+                />
+              </FormControl>
+              <FormDescription className="text-xs text-muted-foreground">
+                Gramos de semilla cargados en la hoja de siembra
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* TECHNICAL FIELDS */}
         <div className="space-y-2 shrink-0">
           <div className="grid grid-cols-1 grid-cols-2 gap-2">
@@ -248,7 +304,7 @@ export function ASembrarEditForm({
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription className="text-[9px] text-[11px] text-muted-foreground">
+                  <FormDescription className="text-xs text-muted-foreground">
                     Seleccionar de 0 a 6 (incrementos de 0.5)
                   </FormDescription>
                   <FormMessage />
@@ -271,13 +327,9 @@ export function ASembrarEditForm({
                     </FormLabel>
                   </div>
                   <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="1.525"
-                      {...field}
-                    />
+                    <Input type="text" placeholder="1.525" {...field} />
                   </FormControl>
-                  <FormDescription className="text-[9px] text-[11px] text-muted-foreground">
+                  <FormDescription className="text-xs text-muted-foreground">
                     Valor en cm - Por ej: 1.3, 1.525, 2
                   </FormDescription>
                   <FormMessage />
@@ -328,7 +380,7 @@ export function ASembrarEditForm({
                   Método
                 </p>
                 <span
-                  className={`text-[9px] text-[11px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
+                  className={`text-xs font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border transition-colors ${
                     metodoMaquina
                       ? "text-primary border-primary/20 bg-primary/10"
                       : "text-muted-foreground border-border/40 bg-muted/50"
@@ -358,8 +410,41 @@ export function ASembrarEditForm({
           </div>
         </div>
 
+        {/* FECHA DE SIEMBRA (hoja de siembra) */}
+        <FormField
+          control={form.control}
+          name="fSiembra"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-primary/10 rounded-lg">
+                  <CalendarDays className="h-4 w-4 text-primary" />
+                </div>
+                <FormLabel className="text-[10px] text-xs font-bold uppercase tracking-wider text-foreground">
+                  Fecha de Siembra
+                </FormLabel>
+              </div>
+              <FormControl>
+                <Input
+                  type="date"
+                  min={minDateStr}
+                  max={todayDateStr}
+                  {...field}
+                  value={field.value ?? ""}
+                  className="h-9 rounded-md px-4"
+                />
+              </FormControl>
+              <FormDescription className="text-xs text-muted-foreground">
+                Día en que se realizó la siembra
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* TASK SHIFT */}
         <TaskShift
+          workDate={fSiembra ?? ""}
           startTime={startTime}
           endTime={endTime}
           employees={selectedEmployees}

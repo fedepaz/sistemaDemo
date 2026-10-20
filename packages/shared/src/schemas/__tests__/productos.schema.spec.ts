@@ -1,0 +1,132 @@
+// packages/shared/src/schemas/__tests__/productos.schema.spec.ts
+import { ProductoSchema, CreateProductoSchema, UpdateProductoSchema } from "../productos.schema";
+
+const valid = {
+  id: "clx1234567890abcdef123456",
+  nombre: "Turba",
+  isActive: true,
+  createdAt: new Date("2026-01-15"),
+  deletedAt: null,
+  deletedByUserId: null,
+  deletedByUsername: null,
+};
+
+describe("ProductoSchema", () => {
+  it("accepts valid producto", () => {
+    const result = ProductoSchema.parse(valid);
+    expect(result.id).toBe("clx1234567890abcdef123456");
+    expect(result.nombre).toBe("Turba");
+  });
+
+  it("rejects missing id", () => {
+    const { id, ...withoutId } = valid;
+    expect(() => ProductoSchema.parse(withoutId)).toThrow();
+  });
+
+  it("rejects invalid id with Spanish message", () => {
+    const result = ProductoSchema.safeParse({ ...valid, id: "bad" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages.some((m) => m.includes("producto"))).toBe(true);
+    }
+  });
+
+  it("rejects missing nombre", () => {
+    const { nombre, ...withoutNombre } = valid;
+    expect(() => ProductoSchema.parse(withoutNombre)).toThrow();
+  });
+
+  it("rejects missing isActive", () => {
+    const withoutIsActive = {
+      id: valid.id,
+      nombre: valid.nombre,
+      createdAt: valid.createdAt,
+    };
+    expect(() => ProductoSchema.parse(withoutIsActive)).toThrow();
+  });
+
+  it("accepts isActive false", () => {
+    const result = ProductoSchema.parse({ ...valid, isActive: false });
+    expect(result.isActive).toBe(false);
+  });
+});
+
+describe("CreateProductoSchema", () => {
+  it("accepts valid create data", () => {
+    const result = CreateProductoSchema.parse({ nombre: "Perlita" });
+    expect(result.nombre).toBe("Perlita");
+  });
+
+  it("rejects missing nombre", () => {
+    const result = CreateProductoSchema.safeParse({});
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects empty nombre with Spanish message", () => {
+    const result = CreateProductoSchema.safeParse({ nombre: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages).toContain("El nombre del producto es requerido");
+    }
+  });
+});
+
+describe("UpdateProductoSchema", () => {
+  it("accepts partial update", () => {
+    const result = UpdateProductoSchema.parse({ nombre: "Updated" });
+    expect(result.nombre).toBe("Updated");
+  });
+
+  it("accepts empty update", () => {
+    const result = UpdateProductoSchema.parse({});
+    expect(result).toEqual({});
+  });
+
+  it("rejects empty nombre with Spanish message", () => {
+    const result = UpdateProductoSchema.safeParse({ nombre: "" });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages).toContain("El nombre del producto es requerido");
+    }
+  });
+});
+
+describe("ProductoSchema deletion fields", () => {
+  it("accepts null deletion fields", () => {
+    const result = ProductoSchema.parse({
+      ...valid,
+      deletedAt: null,
+      deletedByUserId: null,
+      deletedByUsername: null,
+    });
+    expect(result.deletedAt).toBeNull();
+    expect(result.deletedByUserId).toBeNull();
+    expect(result.deletedByUsername).toBeNull();
+  });
+
+  it("accepts populated deletion fields", () => {
+    const result = ProductoSchema.parse({
+      ...valid,
+      deletedAt: new Date("2026-10-01"),
+      deletedByUserId: "user-1",
+      deletedByUsername: "admin",
+    });
+    expect(result.deletedAt).toEqual(new Date("2026-10-01"));
+    expect(result.deletedByUserId).toBe("user-1");
+    expect(result.deletedByUsername).toBe("admin");
+  });
+
+  it("rejects missing deletion fields", () => {
+    const { deletedAt, ...missing } = valid;
+    expect(() => ProductoSchema.parse(missing)).toThrow();
+  });
+
+  it("rejects deletedAt that is not a date", () => {
+    expect(() =>
+      ProductoSchema.parse({ ...valid, deletedAt: "nope" }),
+    ).toThrow();
+  });
+});

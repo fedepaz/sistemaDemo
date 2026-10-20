@@ -19,7 +19,7 @@ export const nullableCuidSchema = cuidSchema.nullable();
 
 /**
  * CUID with a friendly Spanish label for required fields.
- * @example mezclaId: requiredCuid("La mezcla")
+ * @example formulaId: requiredCuid("La fórmula")
  */
 export function requiredCuid(label: string) {
   return z

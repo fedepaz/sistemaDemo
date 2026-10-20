@@ -6,7 +6,7 @@ export { EntityDashboardSkeleton } from "./components/entity-dashboard-skeleton"
 export { EntitiesKPIs } from "./components/entities-kpi";
 
 // Hooks
-export { useEntities, useCreateEntity, useDeleteEntity } from "./hooks/useEntities";
+export { useEntities, useCreateEntity, useUpdateEntity, useDeleteEntity } from "./hooks/useEntities";
 
 // Services
 export { entityService } from "./api/entityService";

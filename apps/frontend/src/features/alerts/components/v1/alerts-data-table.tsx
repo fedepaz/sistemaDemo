@@ -13,6 +13,7 @@ import { AlertEditForm } from "./alert-edit-form";
 import type { AlertType } from "@/features/alerts/types";
 import { useAlertCommentsMutation } from "@/features/alerts/hooks/useAlertCommentsMutation";
 import { usePermission } from "@/hooks/usePermission";
+import { formatPartidaNumber } from "@/features/shared/utils/header";
 import { AlertSolvedButton } from "../shared/alert-solved-button";
 
 const ALERT_TYPE_SLUG_TO_ENUM: Record<string, AlertType> = {
@@ -111,7 +112,7 @@ export function AlertsDataTable<TData extends AlertBaseDto>({
         <SlideOverForm
           open={slideOverOpen}
           onOpenChange={handleOpenChange}
-          title={`Partida #${selectedAlert.partidaId}/${selectedAlert.indice}`}
+          title={`Partida ${formatPartidaNumber(selectedAlert)}`}
           formId="alert-comment-form"
           mode={mode}
           form={form}

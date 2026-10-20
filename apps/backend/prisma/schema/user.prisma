@@ -36,8 +36,8 @@ model User {
   deletedAlertsSolved AlertsSolved[] @relation("deleted_solved_alerts")
     deletedSiembraPartidas SiembraPartidas[] @relation("deleted_siembra_partdas")
     deletedBillboardMessages BillboardMessage[] @relation("deleted_billboard_messages")
-    deletedMezcla Mezcla[] @relation("deleted_mezclas")
-    deletedSustratos Sustratos[] @relation("deleted_sustratos")
+    deletedFormula Formula[] @relation("deleted_formulas")
+    deletedProducto Producto[] @relation("deleted_productos")
   
   deletedAt DateTime? @db.Timestamp(0)
 

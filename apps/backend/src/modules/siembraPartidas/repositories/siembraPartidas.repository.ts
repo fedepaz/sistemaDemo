@@ -4,14 +4,14 @@ import { BaseRepository } from '../../../shared/baseModule/base.repository';
 import { Prisma, SiembraPartidas } from '../../../generated/prisma/client';
 
 export type SiembraPartidasWithRelations = SiembraPartidas & {
-  mezcla: {
-    sustrato1: { nombre: string } | null;
+  formula: {
+    producto1: { nombre: string } | null;
     porcentaje1: number | null;
-    sustrato2: { nombre: string } | null;
+    producto2: { nombre: string } | null;
     porcentaje2: number | null;
-    sustrato3: { nombre: string } | null;
+    producto3: { nombre: string } | null;
     porcentaje3: number | null;
-    sustrato4: { nombre: string } | null;
+    producto4: { nombre: string } | null;
     porcentaje4: number | null;
   };
   user: { username: string };
@@ -44,12 +44,12 @@ export class SiembraPartidasRepository extends BaseRepository<SiembraPartidas> {
         ...(devIds.includes(requesterId) ? {} : { id: { notIn: devIds } }),
       },
       include: {
-        mezcla: {
+        formula: {
           include: {
-            sustrato1: { select: { nombre: true } },
-            sustrato2: { select: { nombre: true } },
-            sustrato3: { select: { nombre: true } },
-            sustrato4: { select: { nombre: true } },
+            producto1: { select: { nombre: true } },
+            producto2: { select: { nombre: true } },
+            producto3: { select: { nombre: true } },
+            producto4: { select: { nombre: true } },
           },
         },
         user: { select: { username: true } },
@@ -64,12 +64,12 @@ export class SiembraPartidasRepository extends BaseRepository<SiembraPartidas> {
     return this.prisma.siembraPartidas.findFirst({
       where: { id },
       include: {
-        mezcla: {
+        formula: {
           include: {
-            sustrato1: { select: { nombre: true } },
-            sustrato2: { select: { nombre: true } },
-            sustrato3: { select: { nombre: true } },
-            sustrato4: { select: { nombre: true } },
+            producto1: { select: { nombre: true } },
+            producto2: { select: { nombre: true } },
+            producto3: { select: { nombre: true } },
+            producto4: { select: { nombre: true } },
           },
         },
         user: { select: { username: true } },
@@ -104,12 +104,12 @@ export class SiembraPartidasRepository extends BaseRepository<SiembraPartidas> {
             }),
       },
       include: {
-        mezcla: {
+        formula: {
           include: {
-            sustrato1: { select: { nombre: true } },
-            sustrato2: { select: { nombre: true } },
-            sustrato3: { select: { nombre: true } },
-            sustrato4: { select: { nombre: true } },
+            producto1: { select: { nombre: true } },
+            producto2: { select: { nombre: true } },
+            producto3: { select: { nombre: true } },
+            producto4: { select: { nombre: true } },
           },
         },
         user: { select: { username: true } },

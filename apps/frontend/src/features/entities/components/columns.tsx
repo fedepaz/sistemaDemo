@@ -31,11 +31,10 @@ export const entityColumns: ColumnDef<Entity>[] = [
     ),
     cell: ({ row }) => {
       const isActive = row.original.isActive;
-      return (
-        <StatusBadge status={isActive ? "healthy" : "inactive"}>
-          {isActive ? "Activo" : "Inactivo"}
-        </StatusBadge>
-      );
+      if (isActive) {
+        return <span className="text-muted-foreground">—</span>;
+      }
+      return <StatusBadge status="inactive">Inactivo</StatusBadge>;
     },
   },
   {

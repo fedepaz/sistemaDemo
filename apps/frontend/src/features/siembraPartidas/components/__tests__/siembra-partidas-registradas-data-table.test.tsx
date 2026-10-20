@@ -16,13 +16,15 @@ const mockPartidas: SiembraPartidaDto[] = [
     partidaId: 456,
     anio: 2025,
     indice: 2,
+    codigoEspecie: "ABCOM",
+    nombreEspecie: "PLA.ALBAHACA COMPACTA M009",
     metodoMaquina: true,
     prensadoSustrato: 45,
     profundidadSemilla: "1.5",
     tratamientoSemilla: "T",
-    mezclaId: "mezcla-1",
+    formulaId: "formula-1",
     userId: "user-1",
-    mezclaNombre: "Tierra (70%) + Perlita (30%)",
+    formulaNombre: "Tierra (70%) + Perlita (30%)",
     sustratoNombre: "Sustrato Test",
     usuarioNombre: "juan.perez",
     cg: 3,
@@ -62,13 +64,18 @@ jest.mock("@/components/data-display/data-table", () => ({
   ),
   SlideOverForm: ({
     open,
+    title,
     children,
   }: {
     open: boolean;
+    title: string;
     children: React.ReactNode;
   }) =>
     open ? (
-      <div data-testid="slide-over-form">{children}</div>
+      <div data-testid="slide-over-form">
+        <span data-testid="slide-over-title">{title}</span>
+        {children}
+      </div>
     ) : null,
 }));
 
@@ -103,7 +110,8 @@ describe("SiembraPartidasRegistradasDataTable", () => {
       screen.getByText("View Row").click();
     });
 
-    expect(screen.getByText("Partida #456")).toBeInTheDocument();
+    expect(screen.getByTestId("slide-over-title")).toHaveTextContent(/^Partida #456\/2$/);
+    expect(screen.getByText("ABCOM · PLA.ALBAHACA COMPACTA M009")).toBeInTheDocument();
     expect(screen.getAllByText("Sustrato Test").length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -37,7 +37,12 @@ describe('LegacyStockService', () => {
     it('should return stock totals', async () => {
       const result = await service.stockTotal(15, 2025, 1);
 
-      expect(repository.stockTotal).toHaveBeenCalledWith(15, 2025, 1);
+      expect(repository.stockTotal).toHaveBeenCalledWith(
+        15,
+        2025,
+        1,
+        undefined,
+      );
       expect(result).toEqual([{ total_entradas: 100, total_salidas: 50 }]);
     });
   });
@@ -46,7 +51,12 @@ describe('LegacyStockService', () => {
     it('should return updated stock values', async () => {
       const result = await service.updateStock(15, 2025, 1);
 
-      expect(repository.updateStock).toHaveBeenCalledWith(15, 2025, 1);
+      expect(repository.updateStock).toHaveBeenCalledWith(
+        15,
+        2025,
+        1,
+        undefined,
+      );
       expect(result).toEqual(mockSnapshot);
     });
   });

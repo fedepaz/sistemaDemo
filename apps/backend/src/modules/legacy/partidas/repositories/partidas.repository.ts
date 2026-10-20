@@ -1,6 +1,7 @@
 // src/modules/legacy/partidas/repositories/partidas.repository.ts
 
 import { Inject, Injectable } from '@nestjs/common';
+import type { PoolConnection } from 'mysql2/promise';
 import { LegacyMysqlService } from '../../../../infra/legacy-mysql/legacy-mysql.service';
 import { LegacyPartidas } from '../interfaces/partidas.interface';
 
@@ -33,9 +34,13 @@ export class PartidasRepository {
     indice: number,
   ): Promise<LegacyPartidas | null> {
     const rows = await this.legacyDb.query<LegacyPartidas[]>(
-      `SELECT p.*, articulo.nombre AS nombreEspecie
+      `SELECT p.*, articulo.nombre AS nombreEspecie, l.g
        FROM partidas p
        LEFT JOIN articulo ON articulo.codigo = CONCAT(p.espvar, p.contenedor)
+       LEFT JOIN partidas1 l
+          ON p.partida=l.partida
+          AND p.ano=l.ano
+          AND p.indice=l.indice
        WHERE p.partida = ? AND p.ano = ? AND p.indice = ?`,
       [partida, ano, indice],
     );
@@ -131,41 +136,53 @@ export class PartidasRepository {
     });
   }
 
-  async asignarSiembra(data: {
-    partida: number;
-    ano: number;
-    indice: number;
-    f_siembra: Date;
-    cg: number;
-    cantidaNroCont: number;
-    lote: number;
-    anoLote: number;
-    item: number;
-    semxgr: number;
-    detalle?: string;
-  }): Promise<void> {
-    await this.legacyDb.transaction(async (conn) => {
-      const parsedDate = new Date(data.f_siembra);
+  async asignarSiembra(
+    data: {
+      partida: number;
+      ano: number;
+      indice: number;
+      f_siembra: string;
+      cg: number;
+      cantidaNroCont: number;
+      g: number;
+      c: number;
+      detalle?: string;
+    },
+    conn?: PoolConnection,
+  ): Promise<void> {
+    const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`;
+    const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE partida = ? AND ano = ? AND indice = ?`;
 
-      const updatePartidasSql = `UPDATE partidas SET f_siembra = ?, cg = ?, con = ?, extendido = ? WHERE partida = ? AND ano = ? AND indice = ?`;
-      const updatePartidas1Sql = `UPDATE partidas1 SET c = ?, g = ? WHERE lote = ? AND ano_lote= ? AND item= ?`;
+    const statements: Array<[string, unknown[]]> = [
+      [
+        updatePartidasSql,
+        [
+          data.f_siembra,
+          data.cg,
+          data.cantidaNroCont,
+          data.detalle,
+          data.partida,
+          data.ano,
+          data.indice,
+        ],
+      ],
+      [
+        updatePartidas1Sql,
+        [data.c, data.g, data.partida, data.ano, data.indice],
+      ],
+    ];
 
-      await conn.query(updatePartidasSql, [
-        parsedDate.toISOString().slice(0, 10),
-        data.cg,
-        data.cantidaNroCont,
-        data.detalle,
-        data.partida,
-        data.ano,
-        data.indice,
-      ]);
-      await conn.query(updatePartidas1Sql, [
-        data.semxgr,
-        data.semxgr,
-        data.lote,
-        data.anoLote,
-        data.item,
-      ]);
+    if (conn) {
+      for (const [sql, params] of statements) {
+        await conn.query(sql, params);
+      }
+      return;
+    }
+
+    await this.legacyDb.transaction(async (txConn) => {
+      for (const [sql, params] of statements) {
+        await txConn.query(sql, params);
+      }
     });
   }
 }

@@ -35,9 +35,9 @@ export const SiembraPartidaSchema = LegacyHeaderSchema.extend({
   }).min(1, { message: "El tratamiento de semilla es requerido" }),
   sustrato: z.string().optional(),
   sustratoNombre: z.string().optional(),
-  mezclaId: requiredCuid("La mezcla"),
+  formulaId: requiredCuid("La fórmula"),
   userId: requiredCuid("El usuario"),
-  mezclaNombre: z.string(),
+  formulaNombre: z.string(),
   usuarioNombre: z.string(),
   createdByNombre: z.string().optional(),
   // Legacy siembra fields
@@ -99,7 +99,7 @@ export const CreateSiembraPartidaSchema = PartidaHeaderSchema.extend({
   sustrato: z.string({ message: "El sustrato es requerido" }).min(1, { message: "El sustrato es requerido" }),
   startTime: z.string({ message: "La hora de inicio es requerida" }).min(1, { message: "La hora de inicio es requerida" }),
   endTime: z.string({ message: "La hora de fin es requerida" }).min(1, { message: "La hora de fin es requerida" }),
-  mezclaId: cuidSchema.optional(),
+  formulaId: cuidSchema.optional(),
   // Stock traceability
   stockLote: z.number().optional(),
   stockAnio: z.number().optional(),

@@ -88,6 +88,9 @@ describe("AsignarUbiExtendidoDtoSchema", () => {
 });
 
 describe("AsignarUbiSiembraDtoSchema", () => {
+  const yesterday = new Date(Date.now() - 86_400_000)
+    .toISOString()
+    .slice(0, 10);
   const valid = {
     partidaId: 1,
     anio: 2026,
@@ -99,16 +102,59 @@ describe("AsignarUbiSiembraDtoSchema", () => {
     anoLote: 2025,
     item: 1,
     semxgr: 2352,
+    cantidadGrs: 2.58,
+    fSiembra: yesterday,
   };
 
-  it("accepts valid assignment without f_siembra, cantidadGrs, ajuste", () => {
+  it("accepts valid assignment with required cantidadGrs and fSiembra, without ajuste", () => {
     const result = AsignarUbiSiembraDtoSchema.parse(valid);
     expect(result.partidaId).toBe(1);
     expect(result.cg).toBe(92);
     expect(result.cantidaNroCont).toBe(120);
+    expect(result.cantidadGrs).toBe(2.58);
+    expect(result.fSiembra).toBe(yesterday);
     expect(result).not.toHaveProperty("f_siembra");
-    expect(result).not.toHaveProperty("cantidadGrs");
     expect(result).not.toHaveProperty("ajuste");
+  });
+
+  it("rejects missing fSiembra", () => {
+    const { fSiembra: _, ...withoutDate } = valid;
+    expect(() => AsignarUbiSiembraDtoSchema.parse(withoutDate)).toThrow();
+  });
+
+  it("rejects fSiembra with the wrong format", () => {
+    expect(() =>
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, fSiembra: "16/10/2026" }),
+    ).toThrow();
+  });
+
+  it("rejects calendar-invalid fSiembra", () => {
+    expect(() =>
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, fSiembra: "2026-02-30" }),
+    ).toThrow("La fecha de siembra no es una fecha válida");
+  });
+
+  it("rejects future fSiembra", () => {
+    expect(() =>
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, fSiembra: "2099-01-01" }),
+    ).toThrow();
+  });
+
+  it("rejects missing cantidadGrs", () => {
+    const { cantidadGrs: _, ...withoutGrams } = valid;
+    expect(() => AsignarUbiSiembraDtoSchema.parse(withoutGrams)).toThrow();
+  });
+
+  it("rejects zero cantidadGrs", () => {
+    expect(() =>
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, cantidadGrs: 0 }),
+    ).toThrow();
+  });
+
+  it("rejects negative cantidadGrs", () => {
+    expect(() =>
+      AsignarUbiSiembraDtoSchema.parse({ ...valid, cantidadGrs: -1.5 }),
+    ).toThrow();
   });
 
   it("applies default values for omitted fields", () => {

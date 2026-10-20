@@ -13,8 +13,8 @@ import {
   extendidosQueryKeys,
   programacionSiembraQueryKeys,
   programacionSiembraPartidasRegistradasQueryKeys,
-  sustratoQueryKeys,
-  mezclaQueryKeys,
+  productoQueryKeys,
+  formulaQueryKeys,
   alertCommentsQueryKeys,
   alertsQueryKeys,
   taskShiftQueryKeys,
@@ -77,6 +77,9 @@ export const mutationInvalidationMap = {
   createEntity: {
     queries: () => [entityQueryKeys.all()],
   },
+  updateEntity: {
+    queries: () => [entityQueryKeys.all()],
+  },
   deleteEntity: {
     queries: () => [entityQueryKeys.all()],
   },
@@ -101,14 +104,23 @@ export const mutationInvalidationMap = {
     ],
   },
 
-  // --- Sustratos ---
-  createSustrato: {
-    queries: () => [sustratoQueryKeys.all()],
+  // --- Productos ---
+  createProducto: {
+    queries: () => [productoQueryKeys.all()],
+  },
+  updateProducto: {
+    queries: () => [productoQueryKeys.all()],
+  },
+  deleteProducto: {
+    queries: () => [productoQueryKeys.all()],
   },
 
-  // --- Mezclas ---
-  createMezcla: {
-    queries: () => [mezclaQueryKeys.all()],
+  // --- Fórmulas ---
+  createFormula: {
+    queries: () => [formulaQueryKeys.all()],
+  },
+  deleteFormula: {
+    queries: () => [formulaQueryKeys.all()],
   },
 
   // --- Alert Comments ---

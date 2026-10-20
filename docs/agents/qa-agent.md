@@ -33,7 +33,7 @@ Guarantee AgriManage's backend, frontend, and shared packages stay green across 
   - Guards (AuthGuard, PermissionsGuard) mocked at module level — no real JWT/DB needed.
   - Services mocked for deterministic responses.
   - Run with `pnpm --filter backend test:integration` (from the root).
-  - Integration suites: alerts (4), alertSolved (6), auth (18), auditLog (14), billboard (5), entities (6), mezcla (8), permissions (5), siembraPartidas (10), siembra (3), sustratos (8), taskShifts (10), users (7).
+  - Integration suites: alerts (4), alertSolved (6), auth (18), auditLog (11), billboard (5), entities (6), formula (8), permissions (5), programacionSiembra (1), productos (10), siembraPartidas (10), taskShifts (11), users (11).
 
 ### Frontend Testing
 

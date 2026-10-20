@@ -1,9 +1,22 @@
 // src/modules/entities/entities.controller.ts
 
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { EntitiesService } from './entities.service';
 import { RequirePermission } from '../permissions/decorators/require-permission.decorator';
-import { CreateEntityDto, CreateEntitySchema } from '@vivero/shared';
+import {
+  CreateEntityDto,
+  CreateEntitySchema,
+  UpdateEntityDto,
+  UpdateEntitySchema,
+} from '@vivero/shared';
 import { CurrentUser } from '../auth/decorators/current-user.decorators';
 import { AuthUser } from '../auth/types/auth-user.type';
 import { ZodValidationPipe } from '../../shared/pipes/zod-validation-pipe';
@@ -34,6 +47,32 @@ export class EntitiesController {
   getTableByName(@Param('tableName') tableName: string) {
     const entity = this.entitiesService.getTableByName(tableName);
     return entity;
+  }
+
+  /* GET entity by id (declared after /tables and /table/:tableName) */
+  @Get(':id')
+  @RequirePermission({
+    tableName: 'entities',
+    action: 'read',
+    scope: 'ALL',
+  })
+  getTableById(@CurrentUser() user: AuthUser, @Param('id') id: string) {
+    return this.entitiesService.getTableById(user.id, id);
+  }
+
+  /* PATCH update entity */
+  @Patch(':id')
+  @RequirePermission({
+    tableName: 'entities',
+    action: 'update',
+    scope: 'ALL',
+  })
+  async updateEntity(
+    @CurrentUser() user: AuthUser,
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(UpdateEntitySchema)) data: UpdateEntityDto,
+  ) {
+    return this.entitiesService.updateEntity(id, data, user.id);
   }
 
   /* POST create entity */

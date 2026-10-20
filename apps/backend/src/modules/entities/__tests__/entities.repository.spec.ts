@@ -16,6 +16,7 @@ describe('EntitiesRepository', () => {
     };
     userPermission: {
       createMany: jest.Mock;
+      updateMany: jest.Mock;
     };
   };
 
@@ -32,6 +33,7 @@ describe('EntitiesRepository', () => {
       },
       userPermission: {
         createMany: jest.fn(),
+        updateMany: jest.fn(),
       },
     };
 
@@ -101,6 +103,45 @@ describe('EntitiesRepository', () => {
 
       expect(result).toEqual(entity);
       expect(prisma.userPermission.createMany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('update', () => {
+    it('updates an active, non-deleted entity and stamps updatedAt', async () => {
+      const updated = { id: '1', name: 'products', label: 'Productos' };
+      prisma.entity.update.mockResolvedValue(updated);
+
+      const result = await repository.update('1', { label: 'Productos' });
+
+      expect(result).toEqual(updated);
+      expect(prisma.entity.update).toHaveBeenCalledWith({
+        where: { id: '1', deletedAt: null, isActive: true },
+        data: { label: 'Productos', updatedAt: expect.any(Date) },
+      });
+    });
+
+    it('updates permissionType when provided', async () => {
+      prisma.entity.update.mockResolvedValue({ id: '1' });
+
+      await repository.update('1', { permissionType: 'READ_ONLY' });
+
+      expect(prisma.entity.update).toHaveBeenCalledWith({
+        where: { id: '1', deletedAt: null, isActive: true },
+        data: { permissionType: 'READ_ONLY', updatedAt: expect.any(Date) },
+      });
+    });
+  });
+
+  describe('syncPermissionType', () => {
+    it('updates all userPermission rows for the entity', async () => {
+      prisma.userPermission.updateMany.mockResolvedValue({ count: 2 });
+
+      await repository.syncPermissionType('entity-1', 'READ_ONLY');
+
+      expect(prisma.userPermission.updateMany).toHaveBeenCalledWith({
+        where: { entityId: 'entity-1' },
+        data: { permissionType: 'READ_ONLY' },
+      });
     });
   });
 });

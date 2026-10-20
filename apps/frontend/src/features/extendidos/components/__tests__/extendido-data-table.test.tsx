@@ -152,5 +152,6 @@ describe("ExtendidoDataTable", () => {
       "baja",
       "extendido",
     ]);
+    expect(capturedProps.title).toBe("Partida #1/1");
   });
 });

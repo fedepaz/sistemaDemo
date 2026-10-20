@@ -11,6 +11,7 @@ import type { AlertBaseDto, CreateAlertCommentDto } from "@vivero/shared";
 import type { AlertType } from "@/features/alerts/types";
 import { ALERT_TYPE_CONFIGS } from "./alert-type-config";
 import { formatRelativeTime } from "../../utils/format-relative-time";
+import { formatPartidaNumber, formatSpecies } from "@/features/shared/utils/header";
 import { UseFormReturn } from "react-hook-form";
 import {
   Form,
@@ -53,31 +54,30 @@ export function AlertEditForm({
       <form
         id="alert-comment-form"
         onSubmit={alertCommentsForm.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] max-h-[calc(100dvh-140px)] overflow-y-auto no-scrollbar pb-6"
+        className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full max-h-[calc(100dvh-130px)] overflow-y-auto no-scrollbar pb-6"
       >
         {/* Type-specific header */}
         <div className="space-y-2 shrink-0">
           <div
             className={cn(
-              "flex items-center justify-between bg-primary/5 p-3 rounded-xl border border-primary/20 shadow-sm",
+              "flex items-center bg-primary/5 p-3 rounded-xl border border-primary/20 shadow-sm",
               config.bgColor,
               config.borderColor,
             )}
           >
             <div className="flex items-center gap-2">
-              <div className="h-10 w-10 h-12 w-12 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-                <TypeIcon className="h-5 w-5 h-6 w-6" />
+              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                <TypeIcon className="h-5 w-5" />
               </div>
-              <div>
-                <h2 className="text-base text-xl font-black tracking-tight leading-none text-foreground uppercase">
+              <div className="min-w-0">
+                <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase break-words">
                   {config.label}
                 </h2>
-                <p className="text-[9px] text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
-                  Partida #{selectedAlert.partidaId}/{selectedAlert.indice} ·
-                  Año {selectedAlert.anio}
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                  Partida {formatPartidaNumber(selectedAlert)} · Año {selectedAlert.anio}
                 </p>
-                <p className="text-[9px] text-[11px] font-mono text-primary mt-0.5">
-                  {selectedAlert.codigoEspecie} · {selectedAlert.nombreEspecie}
+                <p className="text-xs font-mono text-primary mt-0.5">
+                  {formatSpecies(selectedAlert)}
                 </p>
               </div>
             </div>

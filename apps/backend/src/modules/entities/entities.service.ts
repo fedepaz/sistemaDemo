@@ -1,12 +1,18 @@
 // src/modules/entities/entities.service.ts
 
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { EntitiesRepository } from './repositories/entities.repository';
-import { CreateEntityDto, Entity, SYSTEM_ENTITIES } from '@vivero/shared';
+import {
+  CreateEntityDto,
+  Entity,
+  SYSTEM_ENTITIES,
+  UpdateEntityDto,
+} from '@vivero/shared';
 import { PermissionsService } from '../permissions/permissions.service';
 
 @Injectable()
@@ -52,6 +58,50 @@ export class EntitiesService {
     };
   }
 
+  async getTableById(requesterId: string, id: string): Promise<Entity> {
+    const entity = await this.entitiesRepo.findById(id, requesterId);
+    if (!entity) {
+      throw new NotFoundException(`Entity ${id} not found`);
+    }
+    return {
+      id: entity.id,
+      name: entity.name,
+      label: entity.label,
+      isActive: entity.isActive,
+      permissionType: entity.permissionType,
+    };
+  }
+
+  async updateEntity(
+    id: string,
+    data: UpdateEntityDto,
+    requesterId: string,
+  ): Promise<Entity> {
+    const existing = await this.entitiesRepo.findById(id, requesterId);
+    if (!existing) {
+      throw new NotFoundException(`Entity ${id} not found`);
+    }
+    if ((SYSTEM_ENTITIES as readonly string[]).includes(existing.name)) {
+      throw new ForbiddenException(
+        `Cannot update system entity ${existing.name}`,
+      );
+    }
+
+    const entity = await this.entitiesRepo.update(id, data);
+
+    if (data.permissionType !== undefined) {
+      await this.entitiesRepo.syncPermissionType(id, data.permissionType);
+    }
+
+    return {
+      id: entity.id,
+      name: entity.name,
+      label: entity.label,
+      isActive: entity.isActive,
+      permissionType: entity.permissionType,
+    };
+  }
+
   async createEntity(
     data: CreateEntityDto,
     creatorId: string,
@@ -79,16 +129,30 @@ export class EntitiesService {
 
   async softRemove(nameOrId: string, deletedByUserId: string) {
     // Try to find by name first to get the actual UUID id
-    let entityId = nameOrId;
+    let entity: Entity | null = null;
     try {
-      const entity = await this.entitiesRepo.findByName(nameOrId);
-      if (entity) {
-        entityId = entity.id;
-      }
+      entity = await this.entitiesRepo.findByName(nameOrId);
     } catch {
-      // If findByName fails, assume nameOrId is already an ID or doesn't exist
+      // nameOrId is not a name; fall through to lookup by id
     }
 
-    return this.entitiesRepo.softDelete(entityId, deletedByUserId);
+    if (!entity) {
+      entity =
+        (await this.entitiesRepo.findById(nameOrId, deletedByUserId)) ?? null;
+    }
+
+    if (
+      entity &&
+      (SYSTEM_ENTITIES as readonly string[]).includes(entity.name)
+    ) {
+      throw new ForbiddenException(
+        `Cannot delete system entity ${entity.name}`,
+      );
+    }
+
+    return this.entitiesRepo.softDelete(
+      entity?.id ?? nameOrId,
+      deletedByUserId,
+    );
   }
 }

@@ -17,9 +17,9 @@ describe("SiembraPartidaSchema", () => {
     prensadoSustrato: 3,
     profundidadSemilla: "1.525",
     tratamientoSemilla: "1",
-    mezclaId: "clx1234567890abcdef123467",
+    formulaId: "clx1234567890abcdef123467",
     userId: "clx1234567890abcdef123478",
-    mezclaNombre: "Sustrato A (100%)",
+    formulaNombre: "Sustrato A (100%)",
     usuarioNombre: "admin",
   };
 
@@ -78,20 +78,20 @@ describe("SiembraPartidaSchema", () => {
     }
   });
 
-  it("rejects missing mezclaId", () => {
-    const { mezclaId, ...withoutMezcla } = valid;
-    expect(() => SiembraPartidaSchema.parse(withoutMezcla)).toThrow();
+  it("rejects missing formulaId", () => {
+    const { formulaId, ...withoutFormula } = valid;
+    expect(() => SiembraPartidaSchema.parse(withoutFormula)).toThrow();
   });
 
-  it("rejects invalid mezclaId with Spanish message", () => {
+  it("rejects invalid formulaId with Spanish message", () => {
     const result = SiembraPartidaSchema.safeParse({
       ...valid,
-      mezclaId: "bad",
+      formulaId: "bad",
     });
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map((i) => i.message);
-      expect(messages.some((m) => m.includes("La mezcla"))).toBe(true);
+      expect(messages.some((m) => m.includes("La fórmula"))).toBe(true);
     }
   });
 
@@ -138,7 +138,7 @@ describe("CreateSiembraPartidaSchema", () => {
       prensadoSustrato: 4,
       profundidadSemilla: "2.000",
       tratamientoSemilla: "1",
-      mezclaId: "clx1234567890abcdef123489",
+      formulaId: "clx1234567890abcdef123489",
       sustrato: "sustrato1",
       startTime: "2026-01-15T08:00:00.000Z",
       endTime: "2026-01-15T17:00:00.000Z",
@@ -148,7 +148,7 @@ describe("CreateSiembraPartidaSchema", () => {
     expect(result.profundidadSemilla).toBe("2.000");
   });
 
-  it("accepts creation without mezclaId", () => {
+  it("accepts creation without formulaId", () => {
     const result = CreateSiembraPartidaSchema.parse({
       partidaId: 200,
       anio: 2026,
@@ -161,7 +161,7 @@ describe("CreateSiembraPartidaSchema", () => {
       startTime: "2026-01-15T08:00:00.000Z",
       endTime: "2026-01-15T17:00:00.000Z",
     });
-    expect(result.mezclaId).toBeUndefined();
+    expect(result.formulaId).toBeUndefined();
   });
 
   it("accepts stock traceability fields", () => {
@@ -213,12 +213,12 @@ describe("CreateSiembraPartidaSchema", () => {
         prensadoSustrato: 2,
         profundidadSemilla: "1.5",
         tratamientoSemilla: "1",
-        mezclaId: "clx1234567890abcdef123467",
+        formulaId: "clx1234567890abcdef123467",
       }),
     ).toThrow();
   });
 
-  it("rejects invalid mezclaId with Spanish message", () => {
+  it("rejects invalid formulaId with Spanish message", () => {
     const result = CreateSiembraPartidaSchema.safeParse({
       partidaId: 100,
       anio: 2026,
@@ -227,7 +227,7 @@ describe("CreateSiembraPartidaSchema", () => {
       prensadoSustrato: 20,
       profundidadSemilla: "1.5",
       tratamientoSemilla: "1",
-      mezclaId: "bad",
+      formulaId: "bad",
     });
     expect(result.success).toBe(false);
     if (!result.success) {

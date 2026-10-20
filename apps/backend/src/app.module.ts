@@ -38,8 +38,8 @@ import { RequestIdMiddleware } from './shared/middleware/request-id.middleware';
 import { getPinoStream } from './config/logger';
 import { AlertSolvedModule } from './modules/alertSolved/alertSolved.module';
 import { SiembraPartidasModule } from './modules/siembraPartidas/siembraPartidas.module';
-import { MezclaModule } from './modules/mezcla/mezcla.module';
-import { SustratosModule } from './modules/sustratos/sustratos.module';
+import { FormulaModule } from './modules/formula/formula.module';
+import { ProductosModule } from './modules/productos/productos.module';
 import { LegacyTratamientoModule } from './modules/legacy/tratamiento/tratamiento.module';
 import { LegacySustratoModule } from './modules/legacy/sustrato/sustrato.module';
 import { LegacyStockModule } from './modules/legacy/stock/stock.module';
@@ -111,8 +111,8 @@ import { BillboardModule } from './modules/billboard/billboard.module';
     TaskShiftsModule,
     AlertSolvedModule,
     SiembraPartidasModule,
-    MezclaModule,
-    SustratosModule,
+    FormulaModule,
+    ProductosModule,
     BillboardModule,
     AuthModule,
     UsersModule,

@@ -10,8 +10,8 @@ export const ROUTES = {
   EXTENDIDOS: "/extendidos",
   PROGRAMACION_SIEMBRA: "/programacion-siembra",
   SIEMBRA_PARTIDAS_REGISTRADAS: "/programacion-siembra/partidas-registradas",
-  SUSTRATOS: "/sustratos",
-  MEZCLAS: "/mezclas",
+  PRODUCTOS: "/productos",
+  FORMULAS: "/formulas",
   A_SEMBRAR: "/a-sembrar",
 } as const;
 

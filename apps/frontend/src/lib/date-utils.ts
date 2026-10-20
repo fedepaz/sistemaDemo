@@ -96,3 +96,21 @@ export function utcToLocalTime(utcString: string | null | undefined): string {
   const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}`;
 }
+
+/**
+ * Normalize a legacy date value (string, ISO datetime, or Date) to the
+ * "YYYY-MM-DD" format required by <input type="date"> and the backend.
+ * Treats null/undefined/empty/'0000-00-00' (legacy sentinel) as no date.
+ */
+export function toISODateString(
+  value: string | Date | null | undefined,
+): string | undefined {
+  if (!value) return undefined;
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? undefined : getLocalDateStr(value);
+  }
+  if (value === "0000-00-00") return undefined;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? undefined : getLocalDateStr(parsed);
+}

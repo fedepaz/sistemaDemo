@@ -19,8 +19,8 @@ describe('SiembraPartidasService', () => {
     update: jest.Mock;
   };
   let prismaMock: {
-    sustratos: { upsert: jest.Mock };
-    mezcla: { upsert: jest.Mock };
+    producto: { upsert: jest.Mock };
+    formula: { upsert: jest.Mock; findUnique: jest.Mock };
     siembraPartidas: { findFirst: jest.Mock };
   };
   let partidasRepoMock: { findByComposite: jest.Mock };
@@ -37,7 +37,7 @@ describe('SiembraPartidasService', () => {
     prensadoSustrato: { toNumber: () => 25 },
     profundidadSemilla: { toString: () => '1.525' },
     tratamientoSemilla: '',
-    mezclaId: 'mezcla-1',
+    formulaId: 'formula-1',
     userId: 'user-1',
     stockLote: 42,
     stockAnio: 2026,
@@ -45,14 +45,14 @@ describe('SiembraPartidasService', () => {
     stockSalidasAntes: 200,
     stockEntradasDespues: 1000,
     stockSalidasDespues: 200,
-    mezcla: {
-      sustrato1: null,
+    formula: {
+      producto1: null,
       porcentaje1: null,
-      sustrato2: null,
+      producto2: null,
       porcentaje2: null,
-      sustrato3: null,
+      producto3: null,
       porcentaje3: null,
-      sustrato4: null,
+      producto4: null,
       porcentaje4: null,
     },
     user: { username: 'admin' },
@@ -73,9 +73,9 @@ describe('SiembraPartidasService', () => {
     prensadoSustrato: 25,
     profundidadSemilla: '1.525',
     tratamientoSemilla: '',
-    mezclaId: 'mezcla-1',
+    formulaId: 'formula-1',
     userId: 'user-1',
-    mezclaNombre: 'Sin mezcla',
+    formulaNombre: 'Sin fórmula',
     usuarioNombre: 'admin',
     cg: undefined,
     fSiembra: undefined,
@@ -111,8 +111,8 @@ describe('SiembraPartidasService', () => {
     };
 
     prismaMock = {
-      sustratos: { upsert: jest.fn() },
-      mezcla: { upsert: jest.fn() },
+      producto: { upsert: jest.fn() },
+      formula: { upsert: jest.fn(), findUnique: jest.fn() },
       siembraPartidas: { findFirst: jest.fn() },
     };
 
@@ -198,7 +198,7 @@ describe('SiembraPartidasService', () => {
         sustrato: 'Sustrato A',
         startTime: '2026-09-15T08:00:00.000-03:00',
         endTime: '2026-09-15T12:00:00.000-03:00',
-        mezclaId: 'mezcla-1',
+        formulaId: 'formula-1',
         userId: 'user-1',
         stockLote: 42,
         stockAnio: 2026,
@@ -225,7 +225,7 @@ describe('SiembraPartidasService', () => {
         stockSalidasAntes: 200,
         stockEntradasDespues: 1000,
         stockSalidasDespues: 200,
-        mezcla: { connect: { id: 'mezcla-1' } },
+        formula: { connect: { id: 'formula-1' } },
         user: { connect: { id: 'user-1' } },
       });
     });
@@ -256,7 +256,7 @@ describe('SiembraPartidasService', () => {
         sustrato: 'Sustrato A',
         startTime: '2026-09-15T08:00:00.000-03:00',
         endTime: '2026-09-15T12:00:00.000-03:00',
-        mezclaId: 'mezcla-1',
+        formulaId: 'formula-1',
       };
       await service.createSiembraPartida(data, 'user-1');
 
@@ -275,9 +275,149 @@ describe('SiembraPartidasService', () => {
         stockSalidasAntes: undefined,
         stockEntradasDespues: undefined,
         stockSalidasDespues: undefined,
-        mezcla: { connect: { id: 'mezcla-1' } },
+        formula: { connect: { id: 'formula-1' } },
         user: { connect: { id: 'user-1' } },
       });
+    });
+  });
+
+  describe('ensureGenericFormula', () => {
+    const GENERIC_FORMULA_ID = 'c00000000000000000000002';
+    const GENERIC_PRODUCTO_ID = 'c00000000000000000000001';
+
+    it('returns the existing formula id without any upserts (check-first)', async () => {
+      prismaMock.formula.findUnique.mockResolvedValue({
+        id: GENERIC_FORMULA_ID,
+      });
+
+      const result = await service.ensureGenericFormula();
+
+      expect(result).toBe(GENERIC_FORMULA_ID);
+      expect(prismaMock.formula.findUnique).toHaveBeenCalledWith({
+        where: { id: GENERIC_FORMULA_ID },
+        select: { id: true },
+      });
+      expect(prismaMock.producto.upsert).not.toHaveBeenCalled();
+      expect(prismaMock.formula.upsert).not.toHaveBeenCalled();
+    });
+
+    it('creates producto and formula on a miss and returns the formula id', async () => {
+      prismaMock.formula.findUnique.mockResolvedValue(null);
+      prismaMock.producto.upsert.mockResolvedValue({ id: GENERIC_PRODUCTO_ID });
+      prismaMock.formula.upsert.mockResolvedValue({ id: GENERIC_FORMULA_ID });
+
+      const result = await service.ensureGenericFormula();
+
+      expect(result).toBe(GENERIC_FORMULA_ID);
+      expect(prismaMock.producto.upsert).toHaveBeenCalledTimes(1);
+      expect(prismaMock.formula.upsert).toHaveBeenCalledTimes(1);
+    });
+
+    it('pins the exact literals and cuids in the miss-path upserts', async () => {
+      prismaMock.formula.findUnique.mockResolvedValue(null);
+      prismaMock.producto.upsert.mockResolvedValue({ id: GENERIC_PRODUCTO_ID });
+      prismaMock.formula.upsert.mockResolvedValue({ id: GENERIC_FORMULA_ID });
+
+      await service.ensureGenericFormula();
+
+      expect(prismaMock.producto.upsert).toHaveBeenCalledWith({
+        where: { nombre: 'Sustrato Genérico' },
+        update: {},
+        create: { id: GENERIC_PRODUCTO_ID, nombre: 'Sustrato Genérico' },
+      });
+      expect(prismaMock.formula.upsert).toHaveBeenCalledWith({
+        where: { id: GENERIC_FORMULA_ID },
+        update: {},
+        create: {
+          id: GENERIC_FORMULA_ID,
+          producto1Id: GENERIC_PRODUCTO_ID,
+          porcentaje1: 100,
+        },
+      });
+    });
+
+    it('connects the generic formula from createSiembraPartida when formulaId is absent', async () => {
+      prismaMock.formula.findUnique.mockResolvedValue({
+        id: GENERIC_FORMULA_ID,
+      });
+      repo.createSiembraPartida.mockResolvedValue(mockRow);
+      repo.findById.mockResolvedValue(mockRow);
+
+      await service.createSiembraPartida(
+        {
+          partidaId: 100,
+          anio: 2026,
+          indice: 1,
+          metodoMaquina: true,
+          prensadoSustrato: 25,
+          profundidadSemilla: '1.525',
+          tratamientoSemilla: '',
+          sustrato: 'Sustrato A',
+          startTime: '2026-09-15T08:00:00.000-03:00',
+          endTime: '2026-09-15T12:00:00.000-03:00',
+        },
+        'user-1',
+      );
+
+      expect(repo.createSiembraPartida).toHaveBeenCalledWith(
+        expect.objectContaining({
+          formula: { connect: { id: GENERIC_FORMULA_ID } },
+        }),
+      );
+      expect(prismaMock.producto.upsert).not.toHaveBeenCalled();
+      expect(prismaMock.formula.upsert).not.toHaveBeenCalled();
+    });
+
+    it('never touches the generic lookup when formulaId is provided', async () => {
+      repo.createSiembraPartida.mockResolvedValue(mockRow);
+      repo.findById.mockResolvedValue(mockRow);
+
+      await service.createSiembraPartida(
+        {
+          partidaId: 100,
+          anio: 2026,
+          indice: 1,
+          metodoMaquina: true,
+          prensadoSustrato: 25,
+          profundidadSemilla: '1.525',
+          tratamientoSemilla: '',
+          sustrato: 'Sustrato A',
+          startTime: '2026-09-15T08:00:00.000-03:00',
+          endTime: '2026-09-15T12:00:00.000-03:00',
+          formulaId: 'formula-1',
+        },
+        'user-1',
+      );
+
+      expect(prismaMock.formula.findUnique).not.toHaveBeenCalled();
+      expect(repo.createSiembraPartida).toHaveBeenCalledWith(
+        expect.objectContaining({
+          formula: { connect: { id: 'formula-1' } },
+        }),
+      );
+    });
+
+    it('uses the generic formula from autorizarSiembra when creating a new row', async () => {
+      prismaMock.siembraPartidas.findFirst.mockResolvedValue(null);
+      prismaMock.formula.findUnique.mockResolvedValue(null);
+      prismaMock.producto.upsert.mockResolvedValue({ id: GENERIC_PRODUCTO_ID });
+      prismaMock.formula.upsert.mockResolvedValue({ id: GENERIC_FORMULA_ID });
+      repo.createSiembraPartida.mockResolvedValue(mockRow);
+      repo.findById.mockResolvedValue(mockRow);
+      partidasRepoMock.findByComposite.mockResolvedValue(null);
+      taskShiftsRepoMock.findByPartidaComposite.mockResolvedValue(null);
+
+      await service.autorizarSiembra(
+        { partidaId: 100, anio: 2026, indice: 1 },
+        'user-1',
+      );
+
+      expect(prismaMock.formula.findUnique).toHaveBeenCalledTimes(1);
+      expect(repo.createSiembraPartida).toHaveBeenCalledWith(
+        expect.objectContaining({
+          formula: { connect: { id: GENERIC_FORMULA_ID } },
+        }),
+      );
     });
   });
 
@@ -290,8 +430,8 @@ describe('SiembraPartidasService', () => {
 
     it('creates a new row when no existing row', async () => {
       prismaMock.siembraPartidas.findFirst.mockResolvedValue(null);
-      prismaMock.sustratos.upsert.mockResolvedValue({ id: 'sustrato-1' });
-      prismaMock.mezcla.upsert.mockResolvedValue({ id: 'mezcla-1' });
+      prismaMock.producto.upsert.mockResolvedValue({ id: 'producto-1' });
+      prismaMock.formula.upsert.mockResolvedValue({ id: 'formula-1' });
       repo.createSiembraPartida.mockResolvedValue(mockRow);
       repo.findById.mockResolvedValue(mockRow);
       partidasRepoMock.findByComposite.mockResolvedValue(null);

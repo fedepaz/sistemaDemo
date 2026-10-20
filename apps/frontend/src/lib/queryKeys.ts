@@ -103,19 +103,19 @@ export const extendidosQueryKeys = {
 };
 
 // ============================================================================
-// SUSTRATOS
+// PRODUCTOS
 // ============================================================================
 
-export const sustratoQueryKeys = {
-  all: () => ["sustratos"] as const,
+export const productoQueryKeys = {
+  all: () => ["productos"] as const,
 };
 
 // ============================================================================
-// MEZCLAS
+// FORMULAS
 // ============================================================================
 
-export const mezclaQueryKeys = {
-  all: () => ["mezclas"] as const,
+export const formulaQueryKeys = {
+  all: () => ["formulas"] as const,
 };
 
 // ============================================================================

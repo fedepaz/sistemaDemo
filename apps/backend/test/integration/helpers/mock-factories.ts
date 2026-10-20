@@ -37,7 +37,9 @@ export function createEntitiesMock() {
   return {
     getAllTables: jest.fn(),
     getTableByName: jest.fn(),
+    getTableById: jest.fn(),
     createEntity: jest.fn(),
+    updateEntity: jest.fn(),
     softRemove: jest.fn(),
   };
 }
@@ -104,11 +106,12 @@ export function createBillboardMock() {
   };
 }
 
-export function createMezclaMock() {
+export function createFormulaMock() {
   return {
-    getAllMezcla: jest.fn(),
-    getMezclaById: jest.fn(),
-    createMezcla: jest.fn(),
+    getAllFormula: jest.fn(),
+    getFormulaById: jest.fn(),
+    createFormula: jest.fn(),
+    deleteFormula: jest.fn(),
   };
 }
 
@@ -121,12 +124,13 @@ export function createSiembraPartidasMock() {
   };
 }
 
-export function createSustratosMock() {
+export function createProductosMock() {
   return {
-    getAllSustratos: jest.fn(),
-    getSustratoById: jest.fn(),
-    createSustrato: jest.fn(),
-    updateSustrato: jest.fn(),
+    getAllProductos: jest.fn(),
+    getProductoById: jest.fn(),
+    createProducto: jest.fn(),
+    updateProducto: jest.fn(),
+    deleteProducto: jest.fn(),
   };
 }
 

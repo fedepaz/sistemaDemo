@@ -32,7 +32,7 @@
     "db:studio": "pnpm prisma studio"
   },
   "dependencies": {
-    "@nestjs/common": "11.1.11",
+    "@nestjs/common": "^11.1.11",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.11",
     "@nestjs/event-emitter": "^3.1.0",

@@ -29,6 +29,8 @@ jest.mock("@/features/aSembrar/components/a-sembrar-edit-form", () => ({
   ),
 }));
 
+const mockReset = jest.fn();
+
 jest.mock("react-hook-form", () => ({
   ...jest.requireActual("react-hook-form"),
   useForm: () => ({
@@ -42,7 +44,7 @@ jest.mock("react-hook-form", () => ({
       fn({});
     },
     formState: { isValid: true, isSubmitting: false },
-    reset: jest.fn(),
+    reset: mockReset,
     setValue: jest.fn(),
     getValues: jest.fn().mockReturnValue({}),
     watch: jest.fn(),
@@ -84,6 +86,7 @@ const mockPartidas: SiembraPartidaDto[] = [
     anoLote: 2024,
     item: 1,
     semxgr: 10,
+    fSiembra: "2024-03-15",
     createdAt: "2024-03-15T10:00:00Z",
   } as SiembraPartidaDto,
 ];
@@ -91,6 +94,7 @@ const mockPartidas: SiembraPartidaDto[] = [
 describe("ASembrarDataTable", () => {
   beforeEach(() => {
     capturedProps = null;
+    mockReset.mockClear();
   });
 
   it("renders DataTable with correct title", () => {
@@ -110,6 +114,8 @@ describe("ASembrarDataTable", () => {
     expect(capturedProps.confirm.summaryFields).toEqual([
       "cg",
       "cantidaNroCont",
+      "cantidadGrs",
+      "fSiembra",
       "prensadoSustrato",
       "profundidadSemilla",
       "tratamientoSemilla",
@@ -119,5 +125,18 @@ describe("ASembrarDataTable", () => {
       "startTime",
       "endTime",
     ]);
+    expect(capturedProps.title).toBe("Completar Siembra — Partida #1/1");
+  });
+
+  it("prefills fSiembra from the row when opening the form", () => {
+    render(<ASembrarDataTable partidas={mockPartidas} />);
+
+    act(() => {
+      fireEvent.click(screen.getByText("Edit Row"));
+    });
+
+    expect(mockReset).toHaveBeenCalledWith(
+      expect.objectContaining({ fSiembra: "2024-03-15" }),
+    );
   });
 });

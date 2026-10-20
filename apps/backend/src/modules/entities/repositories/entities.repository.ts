@@ -4,7 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Entity, PermissionScope } from '../../../generated/prisma/client';
 import { BaseRepository } from '../../../shared/baseModule/base.repository';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
-import { CreateEntityDto } from '@vivero/shared';
+import { CreateEntityDto, UpdateEntityDto } from '@vivero/shared';
 
 @Injectable()
 export class EntitiesRepository extends BaseRepository<Entity> {
@@ -42,6 +42,23 @@ export class EntitiesRepository extends BaseRepository<Entity> {
     }
 
     return entity;
+  }
+
+  async update(id: string, data: UpdateEntityDto): Promise<Entity> {
+    return this.model.update({
+      where: { id, deletedAt: null, isActive: true },
+      data: { ...data, updatedAt: new Date() },
+    });
+  }
+
+  async syncPermissionType(
+    entityId: string,
+    permissionType: Entity['permissionType'],
+  ): Promise<void> {
+    await this.prisma.userPermission.updateMany({
+      where: { entityId },
+      data: { permissionType },
+    });
   }
 
   async findByName(name: string): Promise<Entity> {
