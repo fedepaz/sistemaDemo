@@ -149,6 +149,7 @@ export const validMarkBillboardReadPayload = () => ({
 // ── Formula ───────────────────────────────────────────────────────────────────
 
 export const validCreateFormulaPayload = () => ({
+  nombre: 'Mix A',
   producto1Id: 'c000000000000000000000001',
   porcentaje1: 60,
   producto2Id: 'c000000000000000000000002',
@@ -161,6 +162,7 @@ export const validCreateFormulaPayload = () => ({
 
 export const mockFormulaDto = () => ({
   id: 'clformulamoc000000000000',
+  nombre: 'Mix A',
   producto1Id: 'c00000000000000000000001',
   producto1Nombre: 'Turf',
   porcentaje1: 60,

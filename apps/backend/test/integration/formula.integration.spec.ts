@@ -1,4 +1,8 @@
-import { INestApplication, NotFoundException } from '@nestjs/common';
+import {
+  INestApplication,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import request from 'supertest';
 import { createTestApp } from './helpers/create-app';
 import { createFormulaMock } from './helpers/mock-factories';
@@ -92,12 +96,33 @@ describe('Formula (integration)', () => {
       expect(response.body).toHaveProperty('id');
       expect(formulaMock.createFormula).toHaveBeenCalledWith(
         expect.objectContaining({
+          nombre: 'Mix A',
           producto1Id: 'c000000000000000000000001',
           porcentaje1: 60,
           producto2Id: 'c000000000000000000000002',
           porcentaje2: 40,
         }),
       );
+    });
+
+    it('returns 409 when nombre already exists', async () => {
+      formulaMock.createFormula.mockRejectedValue(
+        new ConflictException('Ya existe una fórmula con ese nombre'),
+      );
+
+      await request(app.getHttpServer())
+        .post('/formula')
+        .send(validCreateFormulaPayload())
+        .expect(409);
+    });
+
+    it('returns 400 when nombre is missing', async () => {
+      const { nombre: _nombre, ...withoutNombre } = validCreateFormulaPayload();
+
+      await request(app.getHttpServer())
+        .post('/formula')
+        .send(withoutNombre)
+        .expect(400);
     });
 
     it('returns 400 on missing required fields', async () => {
