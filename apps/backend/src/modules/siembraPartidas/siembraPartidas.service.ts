@@ -59,6 +59,7 @@ export class SiembraPartidasService {
       update: {},
       create: {
         id: GENERIC_FORMULA_ID,
+        nombre: 'Genérica',
         producto1Id: producto.id,
         porcentaje1: 100,
       },

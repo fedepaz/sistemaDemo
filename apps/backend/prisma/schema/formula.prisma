@@ -1,5 +1,6 @@
 model Formula {
     id          String @id @default(cuid())
+    nombre      String @unique @db.VarChar(50)
     producto1Id String
     porcentaje1  Int
     producto1   Producto @relation("producto1", fields: [producto1Id], references: [id])
