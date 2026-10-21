@@ -43,7 +43,7 @@ nombre String @unique @db.VarChar(50)
 Migration `2026MMDDHHMMSS_add_formula_nombre` (generated via `pnpm --filter backend db:migrate:dev`, SQL reviewed):
 
 1. `ALTER TABLE formula ADD COLUMN nombre VARCHAR(50) NULL;`
-2. Backfill: per row, build `CONCAT(p1.nombre, ' (', f.porcentaje1, '%)', [' / ' || … for slots 2–4])` joining the four producto relations — same format as the current `buildFormulaNombre` — then `LEFT(..., 50)`. Collisions (from truncation or identical compositions) get deterministic numeric suffixes (`" … (2)"`, `" (3)"`, …) via `ROW_NUMBER()` ordered by `createdAt, id`.
+2. Backfill: per row, build `CONCAT(p1.nombre, ' (', f.porcentaje1, '%)', [' + ' || … for slots 2–4])` joining the four producto relations — same format as the current `buildFormulaNombre` (`' + '` join, e.g. `"Turf (60%) + Perlita (40%)"`) — then `LEFT(..., 50)`. Collisions (from truncation or identical compositions) get deterministic numeric suffixes (`" … (2)"`, `" (3)"`, …) via `ROW_NUMBER()` ordered by `createdAt, id`.
 3. `ALTER TABLE formula MODIFY COLUMN nombre VARCHAR(50) NOT NULL;` + unique index.
 
 ### Shared package
@@ -60,6 +60,7 @@ Migration `2026MMDDHHMMSS_add_formula_nombre` (generated via `pnpm --filter back
 - `formula.repository.ts`: no mapping change — `nombre` is a scalar column, it flows through `mapRow`'s spread. `FormulaRecord`/`FormulaWithRelations` pick it up from the Prisma type.
 - `formula.service.ts` `createFormula`: wrap `repo.create(data)` in try/catch; on Prisma `P2002` (target `nombre`) throw `ConflictException('Ya existe una fórmula con ese nombre')`.
 - `siembraPartidas.service.ts`: delete `buildFormulaNombre`; `formulaNombre: row.formula.nombre`. DTO field name `formulaNombre` unchanged (content = the name). The `SiembraPartidasWithRelations` include already loads the formula row.
+- `siembraPartidas.service.ts` `ensureGenericFormula`: the upsert `create` gains `nombre: 'Genérica'` (required column; existing generic row is covered by the backfill).
 
 ### Frontend
 
