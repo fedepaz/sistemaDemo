@@ -100,7 +100,7 @@ export function TaskShift({
           <h3 className="text-xs font-black uppercase tracking-widest text-foreground">
             Tiempo de tarea
           </h3>
-          <p className="font-sans text-xs md:text-sm font-medium leading-tight md:leading-relaxed opacity-70">
+          <p className="font-sans text-xs font-medium leading-tight opacity-70">
             Selecciona el horario de la tarea para el
             <br />({today}).
           </p>
