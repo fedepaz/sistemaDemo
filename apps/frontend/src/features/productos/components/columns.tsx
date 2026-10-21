@@ -4,6 +4,7 @@ import { ProductoDto } from "@vivero/shared";
 import { SortableHeader } from "@/components/data-display/data-table";
 import { formatShortDate } from "@/lib/date-utils";
 import { ExportColumn } from "@/lib/export";
+import { SistemaWebBadge } from "./sistema-web-badge";
 
 interface CellProps {
   row?: Row<ProductoDto>;
@@ -27,10 +28,13 @@ export const productoColumns: ColumnDef<ProductoDto>[] = [
       <SortableHeader column={column}>Nombre</SortableHeader>
     ),
     cell: ({ row }) => (
-      <div className="font-black text-sm text-foreground tracking-tight">
-        <span className="font-bold text-sm truncate leading-tight uppercase">
-          {row.getValue("nombre")}
-        </span>
+      <div className="flex items-center gap-2 min-w-0">
+        <div className="font-black text-sm text-foreground tracking-tight min-w-0">
+          <span className="font-bold text-sm truncate leading-tight uppercase">
+            {row.getValue("nombre")}
+          </span>
+        </div>
+        {!row.original.legacyCodigo && <SistemaWebBadge />}
       </div>
     ),
   },

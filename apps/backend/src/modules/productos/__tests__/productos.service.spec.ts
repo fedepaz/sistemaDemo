@@ -20,6 +20,7 @@ describe('ProductosService', () => {
   const mockProducto = {
     id: 'sust-1',
     nombre: 'Turba',
+    legacyCodigo: 'L001',
     isActive: true,
     createdAt: new Date('2026-01-15'),
     updatedAt: new Date('2026-01-15'),
@@ -31,6 +32,7 @@ describe('ProductosService', () => {
   const mockDto = {
     id: 'sust-1',
     nombre: 'Turba',
+    legacyCodigo: 'L001',
     isActive: true,
     createdAt: new Date('2026-01-15'),
     deletedAt: null,
@@ -131,13 +133,14 @@ describe('ProductosService', () => {
 
   describe('createProducto', () => {
     it('creates producto with nombre', async () => {
-      repo.create.mockResolvedValue(mockProducto);
+      repo.create.mockResolvedValue({ ...mockProducto, legacyCodigo: null });
 
       const result = await service.createProducto({ nombre: 'Turba' });
 
       expect(result).toEqual({
         id: 'sust-1',
         nombre: 'Turba',
+        legacyCodigo: null,
         isActive: true,
         createdAt: new Date('2026-01-15'),
         deletedAt: null,
@@ -160,6 +163,7 @@ describe('ProductosService', () => {
       expect(result).toEqual({
         id: 'sust-1',
         nombre: 'Perlita',
+        legacyCodigo: 'L001',
         isActive: true,
         createdAt: new Date('2026-01-15'),
         deletedAt: null,

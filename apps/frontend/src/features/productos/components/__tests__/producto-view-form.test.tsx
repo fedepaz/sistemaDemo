@@ -3,10 +3,21 @@ import { render, screen } from "@testing-library/react";
 import { ProductoViewForm } from "../producto-view-form";
 import type { ProductoDto } from "@vivero/shared";
 
+jest.mock("@/components/ui/tooltip", () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  TooltipTrigger: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  TooltipContent: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
+
 describe("ProductoViewForm", () => {
   const mockProducto: ProductoDto = {
     id: "1",
     nombre: "Producto Test",
+    legacyCodigo: null,
     isActive: true,
     createdAt: "2024-03-15T00:00:00.000Z",
     deletedAt: null,
@@ -68,5 +79,19 @@ describe("ProductoViewForm", () => {
     );
     expect(screen.getByText("Inactivo")).toBeInTheDocument();
     expect(screen.queryByText("Activo")).toBeNull();
+  });
+
+  it("should show Sistema Web badge for non-legacy productos", () => {
+    render(<ProductoViewForm selectedProducto={mockProducto} />);
+    expect(screen.getByLabelText("Sistema Web")).toBeInTheDocument();
+  });
+
+  it("should not show Sistema Web badge for legacy-synced productos", () => {
+    render(
+      <ProductoViewForm
+        selectedProducto={{ ...mockProducto, legacyCodigo: "L001" }}
+      />,
+    );
+    expect(screen.queryByLabelText("Sistema Web")).toBeNull();
   });
 });

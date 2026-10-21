@@ -38,6 +38,14 @@ jest.mock("@/components/data-display/data-table", () => ({
   },
 }));
 
+jest.mock("@/components/ui/tooltip", () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  TooltipTrigger: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  TooltipContent: () => null,
+}));
+
 jest.mock("@/features/productos/hooks/useProductos", () => ({
   useProductos: () => ({
     data: mockProductos,
@@ -89,8 +97,12 @@ const mockProductos: ProductoDto[] = [
   {
     id: "1",
     nombre: "Producto Test",
+    legacyCodigo: null,
     isActive: true,
     createdAt: "2024-03-15T00:00:00.000Z",
+    deletedAt: null,
+    deletedByUserId: null,
+    deletedByUsername: null,
   },
 ];
 

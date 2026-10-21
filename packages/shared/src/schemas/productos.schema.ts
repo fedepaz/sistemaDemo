@@ -6,6 +6,7 @@ import { requiredCuid } from "./cuid.schema";
 export const ProductoSchema = z.object({
   id: requiredCuid("El producto"),
   nombre: z.string(),
+  legacyCodigo: z.string().nullable(),
   isActive: z.boolean(),
   createdAt: z.date(),
   deletedAt: z.date().nullable(),

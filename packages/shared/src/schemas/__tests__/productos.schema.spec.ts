@@ -4,6 +4,7 @@ import { ProductoSchema, CreateProductoSchema, UpdateProductoSchema } from "../p
 const valid = {
   id: "clx1234567890abcdef123456",
   nombre: "Turba",
+  legacyCodigo: null,
   isActive: true,
   createdAt: new Date("2026-01-15"),
   deletedAt: null,
@@ -16,6 +17,18 @@ describe("ProductoSchema", () => {
     const result = ProductoSchema.parse(valid);
     expect(result.id).toBe("clx1234567890abcdef123456");
     expect(result.nombre).toBe("Turba");
+  });
+
+  it("accepts legacyCodigo null and string", () => {
+    expect(ProductoSchema.parse(valid).legacyCodigo).toBeNull();
+    expect(
+      ProductoSchema.parse({ ...valid, legacyCodigo: "L001" }).legacyCodigo,
+    ).toBe("L001");
+  });
+
+  it("rejects missing legacyCodigo", () => {
+    const { legacyCodigo, ...withoutLegacyCodigo } = valid;
+    expect(() => ProductoSchema.parse(withoutLegacyCodigo)).toThrow();
   });
 
   it("rejects missing id", () => {

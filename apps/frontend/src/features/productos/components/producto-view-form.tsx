@@ -4,6 +4,7 @@ import { ProductoDto } from "@vivero/shared";
 import { Package, Calendar, AlertTriangle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { SistemaWebBadge } from "./sistema-web-badge";
 
 interface ProductoViewFormProps {
   selectedProducto: ProductoDto;
@@ -64,15 +65,18 @@ export function ProductoViewForm({ selectedProducto }: ProductoViewFormProps) {
               </p>
             </div>
           </div>
-          {!selectedProducto.isActive && (
-            <Badge
-              variant="outline"
-              className="text-destructive border-destructive/20 bg-destructive/10 font-bold px-2 py-0.5 h-5 text-xs"
-            >
-              <AlertTriangle className="h-2.5 w-2.5 mr-1" />
-              Inactivo
-            </Badge>
-          )}
+          <div className="flex items-center gap-2">
+            {!selectedProducto.legacyCodigo && <SistemaWebBadge />}
+            {!selectedProducto.isActive && (
+              <Badge
+                variant="outline"
+                className="text-destructive border-destructive/20 bg-destructive/10 font-bold px-2 py-0.5 h-5 text-xs"
+              >
+                <AlertTriangle className="h-2.5 w-2.5 mr-1" />
+                Inactivo
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
 

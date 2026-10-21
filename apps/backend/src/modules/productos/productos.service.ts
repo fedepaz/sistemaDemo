@@ -27,6 +27,7 @@ export class ProductosService {
     return rows.map((r) => ({
       id: r.id,
       nombre: r.nombre,
+      legacyCodigo: r.legacyCodigo,
       isActive: r.isActive,
       createdAt: r.createdAt,
       deletedAt: r.deletedAt,
@@ -44,6 +45,7 @@ export class ProductosService {
     return {
       id: row.id,
       nombre: row.nombre,
+      legacyCodigo: row.legacyCodigo,
       isActive: row.isActive,
       createdAt: row.createdAt,
       deletedAt: row.deletedAt,
@@ -59,6 +61,7 @@ export class ProductosService {
     return {
       id: row.id,
       nombre: row.nombre,
+      legacyCodigo: row.legacyCodigo,
       isActive: row.isActive,
       createdAt: row.createdAt,
       deletedAt: null,
@@ -82,6 +85,7 @@ export class ProductosService {
     return {
       id: row.id,
       nombre: row.nombre,
+      legacyCodigo: row.legacyCodigo,
       isActive: row.isActive,
       createdAt: row.createdAt,
       deletedAt: null,
