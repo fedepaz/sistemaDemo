@@ -36,8 +36,8 @@ export class SustratoRepository {
 
   async findAllProductos(): Promise<LegacyProducto[]> {
     const rows = await this.legacyDb.query<LegacyProducto[]>(
-      'SELECT codigo, nombre, unidad FROM articulo WHERE hai = ? AND tipo = ?',
-      ['0', 'PF'],
+      'SELECT codigo, nombre, unidad FROM articulo WHERE hai = ? AND tipo = ? ORDER BY codigo',
+      ['O', 'PF'],
     );
     return rows.map((row) => ({
       ...row,
@@ -49,7 +49,7 @@ export class SustratoRepository {
   async findOneProducto(codigo: string): Promise<LegacyProducto | null> {
     const rows = await this.legacyDb.query<LegacyProducto[]>(
       'SELECT codigo, nombre, unidad FROM articulo WHERE hai = ? AND tipo = ? AND codigo = ?',
-      ['0', 'PF', codigo],
+      ['O', 'PF', codigo],
     );
     if (!rows.length) return null;
     const row = rows[0];

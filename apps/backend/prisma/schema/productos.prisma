@@ -1,7 +1,7 @@
 model Producto {
     id          String @id @default(cuid())
     nombre      String @unique
-
+    legacyCodigo String? @unique @db.VarChar(50)
 
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())

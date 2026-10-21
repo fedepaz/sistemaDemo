@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 
 import { ProductosRepository } from './repositories/productos.repository';
+import { LegacyProductoSyncService } from './legacy-producto-sync.service';
 import {
   CreateProductoDto,
   ProductoDto,
@@ -15,9 +16,13 @@ import {
 
 @Injectable()
 export class ProductosService {
-  constructor(private readonly repo: ProductosRepository) {}
+  constructor(
+    private readonly repo: ProductosRepository,
+    private readonly legacyProductoSync: LegacyProductoSyncService,
+  ) {}
 
   async getAllProductos(requesterId: string): Promise<ProductoDto[]> {
+    await this.legacyProductoSync.sync();
     const rows = await this.repo.findAll(requesterId);
     return rows.map((r) => ({
       id: r.id,

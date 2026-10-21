@@ -4,9 +4,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { ProductosService } from '../productos.service';
 import { ProductosRepository } from '../repositories/productos.repository';
+import { LegacyProductoSyncService } from '../legacy-producto-sync.service';
 
 describe('ProductosService', () => {
   let service: ProductosService;
+  let legacySync: { sync: jest.Mock };
   let repo: {
     findAll: jest.Mock;
     findById: jest.Mock;
@@ -45,10 +47,13 @@ describe('ProductosService', () => {
       softDelete: jest.fn(),
     };
 
+    legacySync = { sync: jest.fn().mockResolvedValue(undefined) };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProductosService,
         { provide: ProductosRepository, useValue: repo },
+        { provide: LegacyProductoSyncService, useValue: legacySync },
       ],
     }).compile();
 
@@ -91,6 +96,17 @@ describe('ProductosService', () => {
       expect(result[0].deletedAt).toEqual(new Date('2026-10-01'));
       expect(result[0].deletedByUserId).toBe('u1');
       expect(result[0].deletedByUsername).toBe('admin');
+    });
+
+    it('runs legacy sync before reading productos', async () => {
+      repo.findAll.mockResolvedValue([]);
+
+      await service.getAllProductos('user-1');
+
+      expect(legacySync.sync).toHaveBeenCalledTimes(1);
+      expect(legacySync.sync.mock.invocationCallOrder[0]).toBeLessThan(
+        repo.findAll.mock.invocationCallOrder[0],
+      );
     });
   });
 
