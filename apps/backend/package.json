@@ -27,6 +27,7 @@
     "db:seed:admin": "pnpm tsx prisma/seed-admin.ts",
     "db:seed:entity": "pnpm tsx prisma/seed-entity.ts",
     "db:seed:billboard": "pnpm tsx prisma/seed-billboard.ts",
+    "db:seed:devProductos": "pnpm tsx prisma/seed-devProductos.ts",
     "db:status": "pnpm prisma migrate status",
     "db:validate": "pnpm prisma validate",
     "db:studio": "pnpm prisma studio"
