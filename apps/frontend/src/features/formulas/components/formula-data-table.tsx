@@ -138,7 +138,7 @@ export function FormulaDataTable() {
           title={
             mode === "create"
               ? "Crear fórmula"
-              : `Fórmula: ${selectedFormula?.producto1Nombre}`
+              : `Fórmula: ${selectedFormula?.nombre}`
           }
           description={
             mode === "create"

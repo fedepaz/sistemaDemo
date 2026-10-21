@@ -27,8 +27,13 @@ jest.mock("@/components/data-display/data-table", () => ({
       </div>
     );
   },
-  SlideOverForm: ({ open, children }: any) =>
-    open ? <div data-testid="slide-over-form">{children}</div> : null,
+  SlideOverForm: ({ open, title, children }: any) =>
+    open ? (
+      <div data-testid="slide-over-form">
+        <h2>{title}</h2>
+        {children}
+      </div>
+    ) : null,
 }));
 
 jest.mock("@/features/formulas/hooks/useFormulas", () => ({
@@ -88,6 +93,14 @@ describe("FormulaDataTable", () => {
       screen.getByText("View Row").click();
     });
     expect(screen.getByTestId("slide-over-form")).toBeInTheDocument();
+  });
+
+  it("shows the formula nombre as the view slide-over title", () => {
+    render(<FormulaDataTable />);
+    act(() => {
+      screen.getByText("View Row").click();
+    });
+    expect(screen.getByText("Fórmula: Mix A")).toBeInTheDocument();
   });
 
   it("deletes formula when delete is triggered", async () => {
