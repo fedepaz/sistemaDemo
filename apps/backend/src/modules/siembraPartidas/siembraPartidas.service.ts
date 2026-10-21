@@ -83,7 +83,7 @@ export class SiembraPartidasService {
     codigo: string,
   ): Promise<string | undefined> {
     try {
-      const sustrato = await this.sustratoService.getByCodigo(codigo);
+      const sustrato = await this.sustratoService.getSustratoByCodigo(codigo);
       return sustrato.nombre;
     } catch {
       return undefined;
