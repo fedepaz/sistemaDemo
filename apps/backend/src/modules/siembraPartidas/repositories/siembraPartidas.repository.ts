@@ -5,6 +5,7 @@ import { Prisma, SiembraPartidas } from '../../../generated/prisma/client';
 
 export type SiembraPartidasWithRelations = SiembraPartidas & {
   formula: {
+    nombre: string;
     producto1: { nombre: string } | null;
     porcentaje1: number | null;
     producto2: { nombre: string } | null;

@@ -68,25 +68,6 @@ export class SiembraPartidasService {
     return formula.id;
   }
 
-  private buildFormulaNombre(
-    formula: SiembraPartidasWithRelations['formula'],
-  ): string {
-    const parts: string[] = [];
-    if (formula.producto1 && formula.porcentaje1 != null) {
-      parts.push(`${formula.producto1.nombre} (${formula.porcentaje1}%)`);
-    }
-    if (formula.producto2 && formula.porcentaje2 != null) {
-      parts.push(`${formula.producto2.nombre} (${formula.porcentaje2}%)`);
-    }
-    if (formula.producto3 && formula.porcentaje3 != null) {
-      parts.push(`${formula.producto3.nombre} (${formula.porcentaje3}%)`);
-    }
-    if (formula.producto4 && formula.porcentaje4 != null) {
-      parts.push(`${formula.producto4.nombre} (${formula.porcentaje4}%)`);
-    }
-    return parts.length > 0 ? parts.join(' + ') : 'Sin fórmula';
-  }
-
   private async buildTratamientoNombre(
     codigo: string,
   ): Promise<string | undefined> {
@@ -185,7 +166,7 @@ export class SiembraPartidasService {
       sustratoNombre,
       formulaId: row.formulaId,
       userId: row.userId,
-      formulaNombre: this.buildFormulaNombre(row.formula),
+      formulaNombre: row.formula.nombre,
       usuarioNombre: row.user.username,
       // Legacy fields
       cg: legacyData?.cg,

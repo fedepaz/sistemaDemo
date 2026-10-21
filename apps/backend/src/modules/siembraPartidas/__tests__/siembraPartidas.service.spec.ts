@@ -46,6 +46,7 @@ describe('SiembraPartidasService', () => {
     stockEntradasDespues: 1000,
     stockSalidasDespues: 200,
     formula: {
+      nombre: 'Turf + Perlita',
       producto1: null,
       porcentaje1: null,
       producto2: null,
@@ -75,7 +76,7 @@ describe('SiembraPartidasService', () => {
     tratamientoSemilla: '',
     formulaId: 'formula-1',
     userId: 'user-1',
-    formulaNombre: 'Sin fórmula',
+    formulaNombre: 'Turf + Perlita',
     usuarioNombre: 'admin',
     cg: undefined,
     fSiembra: undefined,
@@ -330,6 +331,7 @@ describe('SiembraPartidasService', () => {
         update: {},
         create: {
           id: GENERIC_FORMULA_ID,
+          nombre: 'Genérica',
           producto1Id: GENERIC_PRODUCTO_ID,
           porcentaje1: 100,
         },
