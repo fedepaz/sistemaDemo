@@ -18,6 +18,7 @@ describe('FormulaController', () => {
   const mockUser = { id: 'user-1', username: 'admin', tenantId: 'tenant-1' };
   const mockDto = {
     id: 'formula-1',
+    nombre: 'Mix A',
     producto1Id: 'sust-1',
     porcentaje1: 60,
     producto2Id: 'sust-2',
@@ -76,6 +77,7 @@ describe('FormulaController', () => {
       service.createFormula.mockResolvedValue(mockDto);
 
       const data = {
+        nombre: 'Mix A',
         producto1Id: 'sust-1',
         porcentaje1: 60,
         producto2Id: 'sust-2',

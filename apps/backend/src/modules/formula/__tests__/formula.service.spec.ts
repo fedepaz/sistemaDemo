@@ -3,7 +3,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FormulaService } from '../formula.service';
 import { FormulaRepository } from '../repositories/formula.repository';
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
+import { Prisma } from '../../../generated/prisma/client';
 
 describe('FormulaService', () => {
   let service: FormulaService;
@@ -16,6 +17,7 @@ describe('FormulaService', () => {
 
   const mockFormula = {
     id: 'formula-1',
+    nombre: 'Mix A',
     producto1Id: 'sust-1',
     producto1Nombre: 'Turba',
     porcentaje1: 60,
@@ -95,6 +97,7 @@ describe('FormulaService', () => {
       repo.create.mockResolvedValue(mockFormula);
 
       const data = {
+        nombre: 'Mix A',
         producto1Id: 'sust-1',
         porcentaje1: 60,
         producto2Id: 'sust-2',
@@ -108,6 +111,47 @@ describe('FormulaService', () => {
 
       expect(result).toEqual(mockFormula);
       expect(repo.create).toHaveBeenCalledWith(data);
+    });
+
+    it('maps P2002 unique violation to ConflictException', async () => {
+      repo.create.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError(
+          'Unique constraint failed on nombre',
+          { code: 'P2002', clientVersion: 'test' },
+        ),
+      );
+
+      await expect(
+        service.createFormula({
+          nombre: 'Mix A',
+          producto1Id: 'sust-1',
+          porcentaje1: 100,
+          producto2Id: null,
+          porcentaje2: null,
+          producto3Id: null,
+          porcentaje3: null,
+          producto4Id: null,
+          porcentaje4: null,
+        }),
+      ).rejects.toThrow(ConflictException);
+    });
+
+    it('rethrows non-P2002 errors', async () => {
+      repo.create.mockRejectedValue(new Error('boom'));
+
+      await expect(
+        service.createFormula({
+          nombre: 'Mix A',
+          producto1Id: 'sust-1',
+          porcentaje1: 100,
+          producto2Id: null,
+          porcentaje2: null,
+          producto3Id: null,
+          porcentaje3: null,
+          producto4Id: null,
+          porcentaje4: null,
+        }),
+      ).rejects.toThrow('boom');
     });
   });
 

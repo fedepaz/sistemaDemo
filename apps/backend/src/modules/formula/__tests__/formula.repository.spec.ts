@@ -24,6 +24,7 @@ describe('FormulaRepository', () => {
 
   const mockRecordWithRelations = {
     id: 'formula-1',
+    nombre: 'Mix A',
     producto1Id: 'prod-1',
     producto1: { nombre: 'Turba' },
     porcentaje1: 60,
@@ -45,6 +46,7 @@ describe('FormulaRepository', () => {
 
   const expectedDto = {
     id: 'formula-1',
+    nombre: 'Mix A',
     producto1Id: 'prod-1',
     producto1Nombre: 'Turba',
     porcentaje1: 60,
@@ -251,6 +253,7 @@ describe('FormulaRepository', () => {
       prisma.formula.findUnique.mockResolvedValue(mockRecordWithRelations);
 
       const result = await repository.create({
+        nombre: 'Mix A',
         producto1Id: 'prod-1',
         porcentaje1: 60,
         producto2Id: 'prod-2',
@@ -263,6 +266,7 @@ describe('FormulaRepository', () => {
 
       expect(prisma.formula.create).toHaveBeenCalledWith({
         data: {
+          nombre: 'Mix A',
           producto1Id: 'prod-1',
           porcentaje1: 60,
           producto2Id: 'prod-2',

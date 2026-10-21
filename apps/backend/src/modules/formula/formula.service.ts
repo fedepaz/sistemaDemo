@@ -1,8 +1,13 @@
 // src/modules/formula/formula.service.ts
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { FormulaRepository } from './repositories/formula.repository';
 import { CreateFormulaDto, FormulaDto } from '@vivero/shared';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class FormulaService {
@@ -19,7 +24,17 @@ export class FormulaService {
   }
 
   async createFormula(data: CreateFormulaDto) {
-    return this.repo.create(data);
+    try {
+      return await this.repo.create(data);
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('Ya existe una fórmula con ese nombre');
+      }
+      throw error;
+    }
   }
 
   async deleteFormula(id: string, requesterId: string) {
