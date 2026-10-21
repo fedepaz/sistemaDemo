@@ -6,6 +6,7 @@ import type { FormulaDto } from "@vivero/shared";
 
 const baseFormula: FormulaDto = {
   id: "1",
+  nombre: "Mix A",
   producto1Id: "s1",
   producto1Nombre: "Turba",
   porcentaje1: 60,
@@ -33,6 +34,11 @@ function renderCell(
 }
 
 describe("formulaColumns cell marking", () => {
+  it("puts the nombre column first", () => {
+    expect(createFormulaColumns(new Set())[0]).toMatchObject({
+      accessorKey: "nombre",
+    });
+  });
   it("marks the slot when its producto is in the inactive set", () => {
     renderCell("producto2Nombre", baseFormula, new Set(["s2"]));
     expect(screen.getByTitle("Producto eliminado")).toBeInTheDocument();

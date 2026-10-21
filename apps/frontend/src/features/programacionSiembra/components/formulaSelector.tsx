@@ -23,16 +23,6 @@ export function FormulaSelector({ form, fieldName = "formulaId" }: FormulaSelect
   const { data: formulas = [] } = useFormulas();
   const activeFormulas = formulas.filter((f) => f.isActive);
 
-  const getCompositionLabel = (formula: (typeof activeFormulas)[0]) => {
-    const parts = [
-      formula.producto1Nombre,
-      formula.producto2Nombre,
-      formula.producto3Nombre,
-      formula.producto4Nombre,
-    ].filter(Boolean);
-    return parts.join(" / ");
-  };
-
   return (
     <FormField
       control={form.control}
@@ -63,7 +53,7 @@ export function FormulaSelector({ form, fieldName = "formulaId" }: FormulaSelect
                   value={formula.id}
                   className="font-bold py-2 rounded-lg focus:bg-primary/5 focus:text-primary transition-colors text-sm"
                 >
-                  {getCompositionLabel(formula)}
+                  {formula.nombre}
                 </SelectItem>
               ))}
             </SelectContent>

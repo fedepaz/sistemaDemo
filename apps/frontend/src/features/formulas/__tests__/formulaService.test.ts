@@ -21,6 +21,7 @@ describe("formulaService", () => {
 
   it("create calls POST /formula with body", async () => {
     const data = {
+      nombre: "Mix A",
       producto1Id: "s1",
       porcentaje1: 60,
       producto2Id: null,

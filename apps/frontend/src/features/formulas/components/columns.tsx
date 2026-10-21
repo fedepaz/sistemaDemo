@@ -67,6 +67,17 @@ export function createFormulaColumns(
 ): ColumnDef<FormulaDto>[] {
   return [
     {
+      accessorKey: "nombre",
+      header: ({ column }) => (
+        <SortableHeader column={column}>Nombre</SortableHeader>
+      ),
+      cell: ({ row }) => (
+        <span className="font-black text-sm text-foreground tracking-tight uppercase truncate">
+          {row.original.nombre}
+        </span>
+      ),
+    },
+    {
       accessorKey: "producto1Nombre",
       header: ({ column }) => (
         <SortableHeader column={column}>Producto 1</SortableHeader>

@@ -53,6 +53,7 @@ jest.mock("@/features/productos/hooks/useProductos", () => ({
 const mockFormulas: FormulaDto[] = [
   {
     id: "1",
+    nombre: "Mix A",
     producto1Id: "s1",
     producto1Nombre: "Turba",
     porcentaje1: 60,

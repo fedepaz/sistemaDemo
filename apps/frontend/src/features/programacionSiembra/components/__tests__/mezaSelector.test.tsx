@@ -5,6 +5,7 @@ jest.mock("@/features/formulas", () => ({
     data: [
       {
         id: "m1",
+        nombre: "Mix A",
         producto1Id: "s1",
         producto1Nombre: "Turba",
         porcentaje1: 60,
@@ -22,6 +23,7 @@ jest.mock("@/features/formulas", () => ({
       },
       {
         id: "m2",
+        nombre: "Coco 100%",
         producto1Id: "s3",
         producto1Nombre: "Coco",
         porcentaje1: 100,
@@ -105,9 +107,9 @@ describe("FormulaSelector", () => {
     expect(screen.getByText("Seleccione fórmula")).toBeInTheDocument();
   });
 
-  it("only renders active fórmulas", () => {
+  it("only renders active fórmulas by nombre", () => {
     render(<FormulaSelector form={mockForm} />);
-    expect(screen.getByText("Turba / Perlita")).toBeInTheDocument();
-    expect(screen.queryByText("Coco")).not.toBeInTheDocument();
+    expect(screen.getByText("Mix A")).toBeInTheDocument();
+    expect(screen.queryByText("Coco 100%")).not.toBeInTheDocument();
   });
 });

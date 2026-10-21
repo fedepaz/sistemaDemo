@@ -5,6 +5,7 @@ import type { FormulaDto } from "@vivero/shared";
 
 const mockFormula: FormulaDto = {
   id: "1",
+  nombre: "Mix A",
   producto1Id: "s1",
   producto1Nombre: "Turba",
   porcentaje1: 60,
@@ -25,6 +26,11 @@ const mockFormula: FormulaDto = {
 };
 
 describe("FormulaViewForm", () => {
+  it("shows the nombre as the title", () => {
+    render(<FormulaViewForm selectedFormula={mockFormula} />);
+    expect(screen.getByText("Mix A")).toBeInTheDocument();
+  });
+
   it("should display producto names and percentages", () => {
     render(<FormulaViewForm selectedFormula={mockFormula} />);
     expect(screen.getByText("Turba")).toBeInTheDocument();

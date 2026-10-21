@@ -49,15 +49,6 @@ const CompositionRow = ({
 );
 
 export function FormulaViewForm({ selectedFormula }: FormulaViewFormProps) {
-  const compositionSummary = [
-    selectedFormula.producto1Nombre && `${selectedFormula.producto1Nombre} ${selectedFormula.porcentaje1}%`,
-    selectedFormula.producto2Nombre && `${selectedFormula.producto2Nombre} ${selectedFormula.porcentaje2}%`,
-    selectedFormula.producto3Nombre && `${selectedFormula.producto3Nombre} ${selectedFormula.porcentaje3}%`,
-    selectedFormula.producto4Nombre && `${selectedFormula.producto4Nombre} ${selectedFormula.porcentaje4}%`,
-  ]
-    .filter(Boolean)
-    .join(" / ");
-
   return (
     <div className="flex flex-col gap-2 animate-in fade-in duration-500 h-full max-h-[calc(100dvh-130px)] overflow-hidden">
       {/* Header */}
@@ -69,10 +60,10 @@ export function FormulaViewForm({ selectedFormula }: FormulaViewFormProps) {
             </div>
             <div>
               <h2 className="text-base font-black tracking-tight leading-none text-foreground uppercase">
-                Fórmula
+                {selectedFormula.nombre}
               </h2>
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1 truncate max-w-[200px]">
-                {compositionSummary}
+                Fórmula
               </p>
             </div>
           </div>
