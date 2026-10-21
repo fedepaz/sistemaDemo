@@ -53,6 +53,7 @@ const DATA_TABLE_COLUMNS: Record<string, string[]> = {
     "diasEnCamara",
   ],
   Formula: [
+    "nombre",
     "producto1Nombre",
     "porcentaje1",
     "producto2Nombre",

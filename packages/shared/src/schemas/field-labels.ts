@@ -45,6 +45,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
 
   // ── Fórmulas ──────────────────────────────────────────────────────
   CreateFormula: {
+    nombre: "Nombre",
     producto1Id: "Producto 1",
     porcentaje1: "Porcentaje 1",
     producto2Id: "Producto 2",
@@ -185,6 +186,7 @@ export const fieldLabels: Record<string, Record<string, string>> = {
 
   // ── Fórmulas (data table columns) ─────────────────────────────────
   Formula: {
+    nombre: "Nombre",
     producto1Nombre: "Producto 1",
     porcentaje1: "% 1",
     producto2Nombre: "Producto 2",

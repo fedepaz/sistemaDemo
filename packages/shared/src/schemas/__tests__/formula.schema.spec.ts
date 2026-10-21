@@ -3,6 +3,7 @@ import { FormulaSchema, CreateFormulaSchema } from "../formula.schema";
 
 const valid = {
   id: "clx1234567890abcdef123456",
+  nombre: "Mix A",
   producto1Id: "clx1234567890abcdef123467",
   producto1Nombre: "Turba",
   porcentaje1: 60,
@@ -34,6 +35,7 @@ describe("FormulaSchema", () => {
   it("accepts fórmula with only required producto", () => {
     const minimal = {
       id: "clx1234567890abcdef123501",
+      nombre: "Mix B",
       producto1Id: "clx1234567890abcdef123467",
       producto1Nombre: "Turba",
       porcentaje1: 100,
@@ -54,6 +56,15 @@ describe("FormulaSchema", () => {
     };
     const result = FormulaSchema.parse(minimal);
     expect(result.producto1Id).toBe("clx1234567890abcdef123467");
+  });
+
+  it("rejects missing nombre", () => {
+    const { nombre, ...withoutNombre } = valid;
+    expect(() => FormulaSchema.parse(withoutNombre)).toThrow();
+  });
+
+  it("accepts nombre and keeps it", () => {
+    expect(FormulaSchema.parse(valid).nombre).toBe("Mix A");
   });
 
   it("rejects missing id", () => {
@@ -83,6 +94,7 @@ describe("FormulaSchema", () => {
 describe("CreateFormulaSchema", () => {
   it("accepts valid create data with percentages summing to 100", () => {
     const result = CreateFormulaSchema.parse({
+      nombre: "Mix A",
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: 70,
       producto2Id: "clx1234567890abcdef123478",
@@ -97,6 +109,7 @@ describe("CreateFormulaSchema", () => {
 
   it("accepts single producto with 100%", () => {
     const result = CreateFormulaSchema.parse({
+      nombre: "Mix A",
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: 100,
       producto2Id: null,
@@ -112,6 +125,7 @@ describe("CreateFormulaSchema", () => {
   it("rejects percentages not summing to 100", () => {
     expect(() =>
       CreateFormulaSchema.parse({
+        nombre: "Mix A",
         producto1Id: "clx1234567890abcdef123467",
         porcentaje1: 60,
         producto2Id: "clx1234567890abcdef123478",
@@ -127,6 +141,7 @@ describe("CreateFormulaSchema", () => {
   it("rejects missing producto1Id", () => {
     expect(() =>
       CreateFormulaSchema.parse({
+        nombre: "Mix A",
         porcentaje1: 100,
         producto2Id: null,
         porcentaje2: null,
@@ -140,6 +155,7 @@ describe("CreateFormulaSchema", () => {
 
   it("rejects invalid producto1Id with Spanish message", () => {
     const result = CreateFormulaSchema.safeParse({
+      nombre: "Mix A",
       producto1Id: "bad",
       porcentaje1: 100,
       producto2Id: null,
@@ -159,6 +175,7 @@ describe("CreateFormulaSchema", () => {
   it("rejects missing porcentaje1", () => {
     expect(() =>
       CreateFormulaSchema.parse({
+        nombre: "Mix A",
         producto1Id: "clx1234567890abcdef123467",
         producto2Id: null,
         porcentaje2: null,
@@ -172,6 +189,7 @@ describe("CreateFormulaSchema", () => {
 
   it("rejects negative porcentaje1", () => {
     const result = CreateFormulaSchema.safeParse({
+      nombre: "Mix A",
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: -5,
       producto2Id: null,
@@ -189,6 +207,7 @@ describe("CreateFormulaSchema", () => {
 
   it("rejects non-integer porcentaje1", () => {
     const result = CreateFormulaSchema.safeParse({
+      nombre: "Mix A",
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: 33.3,
       producto2Id: null,
@@ -206,6 +225,7 @@ describe("CreateFormulaSchema", () => {
 
   it("rejects a slot with a product but no percentage", () => {
     const result = CreateFormulaSchema.safeParse({
+      nombre: "Mix A",
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: 100,
       producto2Id: "clx1234567890abcdef123478",
@@ -226,6 +246,7 @@ describe("CreateFormulaSchema", () => {
 
   it("rejects a slot with a percentage but no product", () => {
     const result = CreateFormulaSchema.safeParse({
+      nombre: "Mix A",
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: 70,
       producto2Id: null,
@@ -246,6 +267,7 @@ describe("CreateFormulaSchema", () => {
 
   it("rejects the same product in two slots", () => {
     const result = CreateFormulaSchema.safeParse({
+      nombre: "Mix A",
       producto1Id: "clx1234567890abcdef123467",
       porcentaje1: 60,
       producto2Id: "clx1234567890abcdef123467",
@@ -262,6 +284,40 @@ describe("CreateFormulaSchema", () => {
       );
       expect(issue?.path).toEqual(["producto2Id"]);
     }
+  });
+});
+
+describe("CreateFormulaSchema — nombre", () => {
+  const base = {
+    producto1Id: "clx1234567890abcdef123467",
+    porcentaje1: 100,
+    producto2Id: null,
+    porcentaje2: null,
+    producto3Id: null,
+    porcentaje3: null,
+    producto4Id: null,
+    porcentaje4: null,
+  };
+
+  it("requires nombre", () => {
+    expect(CreateFormulaSchema.safeParse(base).success).toBe(false);
+  });
+
+  it("trims nombre", () => {
+    const result = CreateFormulaSchema.parse({ ...base, nombre: "  Mix A  " });
+    expect(result.nombre).toBe("Mix A");
+  });
+
+  it("rejects blank nombre", () => {
+    expect(CreateFormulaSchema.safeParse({ ...base, nombre: "   " }).success).toBe(false);
+  });
+
+  it("accepts nombre of exactly 50 chars", () => {
+    expect(CreateFormulaSchema.safeParse({ ...base, nombre: "x".repeat(50) }).success).toBe(true);
+  });
+
+  it("rejects nombre longer than 50 chars", () => {
+    expect(CreateFormulaSchema.safeParse({ ...base, nombre: "x".repeat(51) }).success).toBe(false);
   });
 });
 

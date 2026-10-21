@@ -5,6 +5,7 @@ import { requiredCuid } from "./cuid.schema";
 
 export const FormulaSchema = z.object({
   id: requiredCuid("La fórmula"),
+  nombre: z.string(),
   producto1Id: requiredCuid("El producto 1"),
   producto1Nombre: z.string(),
   porcentaje1: z.number(),
@@ -28,6 +29,11 @@ export type FormulaDto = z.infer<typeof FormulaSchema>;
 
 export const CreateFormulaSchema = z
   .object({
+    nombre: z
+      .string({ required_error: "El nombre es requerido" })
+      .trim()
+      .min(1, "El nombre es requerido")
+      .max(50, "Máximo 50 caracteres"),
     producto1Id: requiredCuid("El producto 1"),
     porcentaje1: z
       .number({ required_error: "El porcentaje 1 es requerido" })
