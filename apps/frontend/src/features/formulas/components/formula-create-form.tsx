@@ -133,6 +133,27 @@ export function FormulaCreateForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-4"
       >
+        <FormField
+          control={form.control}
+          name="nombre"
+          render={({ field }) => (
+            <FormItem className="space-y-1.5">
+              <FormLabel className="text-xs font-bold uppercase tracking-wider text-foreground">
+                Nombre *
+              </FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  value={field.value ?? ""}
+                  maxLength={50}
+                  placeholder="Nombre de la fórmula"
+                  className="h-9 rounded-md px-4 text-sm"
+                />
+              </FormControl>
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
+        />
         <div className="space-y-2">
           <ProductoSlot form={form} index={1} productos={productos} label="Producto 1" />
           <ProductoSlot form={form} index={2} productos={productos} label="Producto 2" />

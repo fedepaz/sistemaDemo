@@ -25,6 +25,12 @@ export const useCreateFormula = () => {
       });
       invalidateQueries(queryClient, "createFormula");
     },
+    onError: (error) => {
+      toast.error("No se pudo crear la fórmula", {
+        description: error.message,
+        duration: 5000,
+      });
+    },
   });
 };
 

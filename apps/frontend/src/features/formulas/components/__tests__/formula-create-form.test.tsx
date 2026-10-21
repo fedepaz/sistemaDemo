@@ -51,6 +51,7 @@ const inactiveProducto: ProductoDto = {
 function Harness() {
   const form = useForm<CreateFormulaDto>({
     defaultValues: {
+      nombre: "",
       producto1Id: "",
       porcentaje1: 0,
       producto2Id: null,
@@ -95,5 +96,12 @@ describe("FormulaCreateForm producto options", () => {
     const text = render(<>{active!.children}</>);
     expect(screen.queryByText("Eliminado")).toBeNull();
     expect(text.getByText("Turba")).toBeInTheDocument();
+  });
+
+  it("renders the Nombre input", () => {
+    render(<Harness />);
+    expect(screen.getByText("Nombre *")).toBeInTheDocument();
+    const input = screen.getByPlaceholderText("Nombre de la fórmula");
+    expect(input).toHaveAttribute("maxLength", "50");
   });
 });

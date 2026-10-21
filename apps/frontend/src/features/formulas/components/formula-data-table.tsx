@@ -58,6 +58,7 @@ export function FormulaDataTable() {
   const formCreateFormula = useForm<CreateFormulaDto>({
     resolver: zodResolver(CreateFormulaSchema),
     defaultValues: {
+      nombre: "",
       producto1Id: "",
       porcentaje1: 0,
       producto2Id: null,
