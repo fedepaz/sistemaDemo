@@ -148,6 +148,7 @@ export function AutorizarProgramacionSiembraEditForm({
               qty={selectedSiembra.cantTipoCont ?? null}
               totalQty={selectedSiembra.nrocont ?? null}
               formula={formula}
+              cantTipoContFormula={selectedSiembra.cantTipoContFormula ?? null}
             />
           </div>
         </div>

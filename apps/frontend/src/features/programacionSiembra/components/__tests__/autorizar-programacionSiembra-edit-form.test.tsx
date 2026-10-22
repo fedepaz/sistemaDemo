@@ -49,8 +49,10 @@ const selectedSiembra = {
 
 function Wrapper({
   defaultValues,
+  siembra = selectedSiembra,
 }: {
   defaultValues: Partial<AutorizarSiembraDto>;
+  siembra?: ProgramacionSiembraDto;
 }) {
   const form = useForm<AutorizarSiembraDto>({
     defaultValues: {
@@ -65,7 +67,7 @@ function Wrapper({
       form={form}
       onSubmit={async () => {}}
       onCancel={() => {}}
-      selectedSiembra={selectedSiembra}
+      selectedSiembra={siembra}
     />
   );
 }
@@ -96,5 +98,21 @@ describe("AutorizarProgramacionSiembraEditForm formula breakdown", () => {
 
     expect(screen.queryByText("Total Productos (L)")).not.toBeInTheDocument();
     expect(screen.queryByText("Turba (60%)")).not.toBeInTheDocument();
+  });
+
+  it("prefills the calculator total from the selected siembra formula sum", () => {
+    render(
+      <Wrapper
+        defaultValues={{}}
+        siembra={{
+          ...selectedSiembra,
+          cantTipoContFormula: 3.072,
+        }}
+      />,
+    );
+
+    expect(screen.getByLabelText("Valor Total Por Bandeja (L)")).toHaveValue(
+      "3.072",
+    );
   });
 });

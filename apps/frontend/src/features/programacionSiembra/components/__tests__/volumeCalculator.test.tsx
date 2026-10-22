@@ -30,6 +30,26 @@ describe("VolumeCalculator", () => {
     expect(screen.getByLabelText("Valor Unitario (L)")).toHaveValue("0,63");
   });
 
+  it("prefills the total from cantTipoContFormula and derives the unit", () => {
+    render(
+      <VolumeCalculator qty={200} totalQty="10" cantTipoContFormula={3.072} />,
+    );
+
+    expect(screen.getByLabelText("Valor Total Por Bandeja (L)")).toHaveValue(
+      "3.072",
+    );
+    expect(screen.getByLabelText("Valor Unitario (L)")).toHaveValue("0,015");
+  });
+
+  it("keeps the default source when cantTipoContFormula is null", () => {
+    render(<VolumeCalculator qty={200} totalQty="10" cantTipoContFormula={null} />);
+
+    expect(screen.getByLabelText("Valor Unitario (L)")).toHaveValue("1");
+    expect(screen.getByLabelText("Valor Total Por Bandeja (L)")).toHaveValue(
+      "200",
+    );
+  });
+
   it("disables inputs and shows a hint when qty is null", () => {
     render(<VolumeCalculator qty={null} totalQty="10" />);
 

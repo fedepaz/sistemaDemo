@@ -38,7 +38,12 @@ export class ProgramacionSiembraRepository {
         DATE_ADD(p.f_siembra, INTERVAL l.camara DAY) AS fechaEgresoCamara,
       rubro.codigo,
     rubro.nombre AS rubroNombre,
-    contenedor.cantidad AS cantTipoCont
+    contenedor.cantidad AS cantTipoCont,
+    (
+      SELECT SUM(ab.cant)
+      FROM articulo_base ab
+      WHERE ab.codigo = p.contenedor
+    ) AS cantTipoContFormula
   FROM partidas p
   LEFT JOIN articulo ON articulo.codigo=CONCAT(p.espvar,p.contenedor)
   LEFT JOIN especie ON especie.codigo = p.espvar

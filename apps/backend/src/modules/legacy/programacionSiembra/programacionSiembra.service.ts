@@ -54,6 +54,10 @@ export class ProgramacionSiembraService {
       nrocont: row.nrocont == null ? row.nrocont : String(row.nrocont),
       tipocont: row.contenedor,
       cantTipoCont: row.cantTipoCont ?? undefined,
+      cantTipoContFormula:
+        row.cantTipoContFormula == null
+          ? undefined
+          : Number(row.cantTipoContFormula),
       sem_siembra: row.sem_siembra,
       fechaSugeridaSiembra: row.f_siem,
       fechaSiembraReal: row.f_siembra,

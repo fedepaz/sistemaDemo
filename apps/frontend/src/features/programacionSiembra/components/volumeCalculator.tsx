@@ -15,6 +15,7 @@ interface VolumeCalculatorProps {
   qty: number | null;
   totalQty: string | number | null;
   formula?: FormulaComposition | null;
+  cantTipoContFormula?: number | null;
 }
 
 interface CalcState {
@@ -71,12 +72,21 @@ function CalcRow({ label, value, disabled, lossy, onChange }: CalcRowProps) {
   );
 }
 
-export function VolumeCalculator({ qty, totalQty, formula }: VolumeCalculatorProps) {
-  const [state, setState] = useState<CalcState>({
-    unitRaw: "1",
-    totalRaw: "",
-    source: "unit",
-  });
+export function VolumeCalculator({
+  qty,
+  totalQty,
+  formula,
+  cantTipoContFormula,
+}: VolumeCalculatorProps) {
+  const [state, setState] = useState<CalcState>(() =>
+    cantTipoContFormula != null
+      ? {
+          unitRaw: "1",
+          totalRaw: String(cantTipoContFormula),
+          source: "total",
+        }
+      : { unitRaw: "1", totalRaw: "", source: "unit" },
+  );
 
   const disabled = isCalcDisabled(qty);
   const { unit, total, lossy } = resolvePair({ ...state, qty });
